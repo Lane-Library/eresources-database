@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <bean id="authProcessor" class="edu.stanford.irt.eresources.MARCEresourceProcessor">
+        <property name="inputStream">
+            <bean class="edu.stanford.irt.eresources.AuthInputStream">
+                <property name="dataSource">
+                    <bean class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+                        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+                        <property name="url" value="${eresources.voyagerdb.url}"/>
+                        <property name="username" value="${eresources.voyagerdb.username}"/>
+                        <property name="password" value="${eresources.voyagerdb.password}"/>
+                        <property name="suppressClose" value="true"/>
+                    </bean>
+                </property>
+                <property name="executor" ref="executor"/>
+            </bean>
+        </property>
+        <property name="xmlReader">
+            <bean class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
+                <property name="contentHandler" ref="authBuilder"/>
+            </bean>
+        </property>
+        <property name="eresourceBuilder" ref="authBuilder"/>
+    </bean>
+    <bean id="authBuilder" class="edu.stanford.irt.eresources.AuthEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+</beans>

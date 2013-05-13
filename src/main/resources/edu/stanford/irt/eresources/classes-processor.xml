@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <bean id="classesProcessor"
+        class="edu.stanford.irt.eresources.ClassesEresourceProcessor">
+        <property name="contentHandler" ref="classesTransformer"/>
+        <property name="allClassesURL" value="${eresources.lane-host}/classes/all-data.xml"/>
+        <property name="eresourceBuilder" ref="classesBuilder"/>
+    </bean>
+    <bean id= "classesTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/classes2er.xsl"/>
+        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+        <property name="namespace" value="http://lane.stanford.edu/laneclasses"/>
+        <property name="element" value="classes"/>
+        <property name="contentHandler" ref="classesBuilder"/>
+        <property name="parameters">
+            <map>
+                <entry key="lane-host" value="${eresources.lane-host}"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="classesBuilder" class="edu.stanford.irt.eresources.DefaultEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+</beans>
