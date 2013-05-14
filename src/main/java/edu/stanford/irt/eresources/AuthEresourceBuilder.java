@@ -151,7 +151,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(this.currentText.toString()));
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                throw new EresourceDatabaseException(e);
             }
         }
     }
@@ -258,19 +258,6 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             }
             this.currentVersion.addSubset(subset);
         }
-        // else if ("844".equals(this.tag) && "a".equals(this.code)) {
-        // this.currentVersion.setPublisher(this.currentText.toString());
-        // } else if ("866".equals(this.tag)) {
-        // if ("v".equals(this.code)) {
-        // String holdings = this.currentText.toString();
-        // holdings = holdings.replaceAll(" =", "");
-        // this.currentVersion.setSummaryHoldings(holdings);
-        // } else if ("y".equals(this.code)) {
-        // this.currentVersion.setDates(this.currentText.toString());
-        // } else if ("z".equals(this.code)) {
-        // this.currentVersion.setDescription(this.currentText.toString());
-        // }
-        // }
         else if ("856".equals(this.tag)) {
             if ("q".equals(this.code) && (null == this.q)) {
                 this.q = this.currentText.toString();

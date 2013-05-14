@@ -38,8 +38,6 @@ public class EresourceSQLTranslator {
                 .append(er.getYear() > 0 ? Integer.toString(er.getYear()) : "NULL")
                 .append(er.getDescription() != null ? ",empty_clob()" : ",NULL")
                 .append(", empty_clob())");
-        // , NLSSORT('").append(apostrophizedTitle).append("','NLS_SORT=GENERIC_BASELETTER'), ")
-        // .append("CONVERT(LOWER('").append(apostrophizedTitle).append("'),'US7ASCII'))");
         sql.add(sb.toString());
         sql.add("TEXT:" + keywords);
         if (er.getDescription() != null) {

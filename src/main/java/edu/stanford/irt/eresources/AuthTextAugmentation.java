@@ -34,9 +34,6 @@ public class AuthTextAugmentation extends DefaultHandler {
 
     private Executor executor;
 
-    // private String ind1;
-    //
-    // private String ind2;
     private String tag;
 
     @SuppressWarnings("unchecked")
@@ -52,7 +49,7 @@ public class AuthTextAugmentation extends DefaultHandler {
             } catch (IOException e) {
                 this.augmentations = new HashMap<String, String>();
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                throw new EresourceDatabaseException(e);
             }
         }
     }
@@ -78,9 +75,9 @@ public class AuthTextAugmentation extends DefaultHandler {
                 xmlReader.parse(new InputSource(new AuthAugmentationInputStream(term, lookupTag, this.dataSource,
                         this.executor)));
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new EresourceDatabaseException(e);
             } catch (SAXException e) {
-                throw new RuntimeException(e);
+                throw new EresourceDatabaseException(e);
             }
             result = this.augmentationText.toString().trim();
             this.augmentations.put(term, result);
@@ -109,8 +106,6 @@ public class AuthTextAugmentation extends DefaultHandler {
             this.code = atts.getValue("code");
         } else if ("datafield".equals(localName)) {
             this.tag = atts.getValue("tag");
-            // this.ind1 = atts.getValue("ind1");
-            // this.ind2 = atts.getValue("ind2");
         } else if ("record".equals(localName)) {
             this.augmentationText.setLength(0);
         }

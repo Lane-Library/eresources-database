@@ -22,6 +22,8 @@ import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
+    
+    private static final String ERESOURCES = "eresources";
 
     private String allClassesURL;
 
@@ -46,22 +48,22 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
             Document doc = parser.parse(source);
             Date sometimeEarlier = new Date(1);
             this.contentHandler.startDocument();
-            this.contentHandler.startElement("", "eresources", "eresources", new AttributesImpl());
+            this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             if (sometimeEarlier.getTime() > this.startDate.getTime()) {
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
             }
-            this.contentHandler.endElement("", "eresources", "eresources");
+            this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (SAXException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } catch (TransformerConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } catch (TransformerException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         }
     }
 

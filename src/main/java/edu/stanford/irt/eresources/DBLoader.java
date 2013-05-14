@@ -88,7 +88,7 @@ public class DBLoader {
                     try {
                         this.queue.wait();
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        throw new EresourceDatabaseException(e);
                     }
                 }
             }

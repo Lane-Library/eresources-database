@@ -71,13 +71,13 @@ public class DefaultEresourceHandler implements EresourceHandler {
                             insertEresource(eresource);
                         }
                     } catch (InterruptedException | IOException e) {
-                        throw new RuntimeException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
+                        throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                     }
                 }
                 this.queue.notifyAll();
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         }
     }
 

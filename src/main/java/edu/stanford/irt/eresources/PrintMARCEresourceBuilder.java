@@ -108,7 +108,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                         this.preferredTitle.setLength(0);
                         this.eresourceHandler.handleEresource(clone);
                     } catch (CloneNotSupportedException e) {
-                        throw new RuntimeException(e);
+                        throw new EresourceDatabaseException(e);
                     }
                 }
             } else {
@@ -118,7 +118,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
         try {
             this.authTextAugmentation.save();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         }
     }
 
@@ -153,7 +153,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                                 this.preferredTitle.setLength(0);
                                 this.eresourceHandler.handleEresource(clone);
                             } catch (CloneNotSupportedException e) {
-                                throw new RuntimeException(e);
+                                throw new EresourceDatabaseException(e);
                             }
                         }
                     } else {
@@ -276,7 +276,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
             try {
                 this.updated = this.dateFormat.parse(this.currentText.toString());
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                throw new EresourceDatabaseException(e);
             }
         } else if ("008".equals(this.tag)) {
             String endDate = parseYear(this.currentText.substring(11, 15));
@@ -385,7 +385,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                     this.updated = mfhdDate;
                 }
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                throw new EresourceDatabaseException(e);
             }
         }
     }

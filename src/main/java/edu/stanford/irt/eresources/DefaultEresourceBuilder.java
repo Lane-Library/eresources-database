@@ -79,7 +79,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         } else if ("description".equals(name)) {
             this.currentVersion.setDescription(this.currentText.toString());
         } else if (!"eresources".equals(name)) {
-            throw new RuntimeException("cant handle " + name);
+            throw new EresourceDatabaseException("cant handle " + name);
         }
     }
 
@@ -106,13 +106,12 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(atts.getValue("update")));
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                throw new EresourceDatabaseException(e);
             }
         } else if ("version".equals(name)) {
             this.currentVersion = new DatabaseVersion();
         } else if ("link".equals(name)) {
             this.currentLink = new LinkImpl();
-            // }
         }
     }
 }

@@ -81,12 +81,12 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                 }
             }
         } catch (SQLException | IOException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } finally {
             try {
                 this.output.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new EresourceDatabaseException(e);
             }
         }
     }

@@ -30,9 +30,9 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
             source.setByteStream(this.inputStream);
             this.xmlReader.parse(source);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } catch (SAXException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         }
     }
 

@@ -27,6 +27,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
+    
+    private static final String ERESOURCES = "eresources";
 
     private String basePath;
 
@@ -47,7 +49,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         List<File> filesToParse = getHTMLPages(new File(this.basePath));
         try {
             this.contentHandler.startDocument();
-            this.contentHandler.startElement("", "eresources", "eresources", new AttributesImpl());
+            this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (filesToParse.size() > 0) {
                 File file = filesToParse.remove(0);
                 String fileName = file.getAbsolutePath();
@@ -69,16 +71,16 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                     tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
                 }
             }
-            this.contentHandler.endElement("", "eresources", "eresources");
+            this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (SAXException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } catch (TransformerConfigurationException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } catch (TransformerException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new EresourceDatabaseException(e);
         }
     }
 
