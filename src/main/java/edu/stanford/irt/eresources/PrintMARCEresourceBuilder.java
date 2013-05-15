@@ -92,13 +92,6 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
             this.currentEresource.setUpdated(this.updated);
             createCustomTypes(this.currentEresource);
             if (!this.recordHasError) {
-                DatabaseVersion version = new DatabaseVersion();
-                LinkImpl link = new LinkImpl();
-                link.setLabel("Lane Catalog record");
-                link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
-                        + this.currentEresource.getRecordId());
-                version.addLink(link);
-                this.currentEresource.addVersion(version);
                 this.eresourceHandler.handleEresource(this.currentEresource);
                 if (this.hasPreferredTitle) {
                     try {
@@ -137,13 +130,6 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                     this.updated = null;
                     createCustomTypes(this.currentEresource);
                     if (!this.recordHasError) {
-                        DatabaseVersion version = new DatabaseVersion();
-                        LinkImpl link = new LinkImpl();
-                        link.setLabel("Lane Catalog record");
-                        link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
-                                + this.currentEresource.getRecordId());
-                        version.addLink(link);
-                        this.currentEresource.addVersion(version);
                         this.eresourceHandler.handleEresource(this.currentEresource);
                         if (this.hasPreferredTitle) {
                             try {
@@ -165,6 +151,11 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
             }
         } else if ("record".equals(name)) {
             if (this.isMfhd) {
+                LinkImpl link = new LinkImpl();
+                link.setLabel("Lane Catalog record");
+                link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
+                        + this.currentEresource.getRecordId());
+                this.currentVersion.addLink(link);
                 this.currentEresource.addVersion(this.currentVersion);
             } else if (this.isBib) {
                 if (this.description520.length() > 0) {
@@ -338,7 +329,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                 }
             }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
-                && ("27".indexOf(this.ind2) > -1)) {
+                && ("237".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString().toLowerCase();
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
