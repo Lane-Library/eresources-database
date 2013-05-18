@@ -43,8 +43,7 @@ public class AuthTextAugmentation extends DefaultHandler {
             this.augmentations = new HashMap<String, String>();
             // otherwise use the existing one:
         } else {
-            try {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream("augmentations.obj"));
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("augmentations.obj"))) {
                 this.augmentations = (Map<String, String>) ois.readObject();
             } catch (IOException e) {
                 this.augmentations = new HashMap<String, String>();
@@ -86,8 +85,9 @@ public class AuthTextAugmentation extends DefaultHandler {
     }
 
     public void save() throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("augmentations.obj"));
-        oos.writeObject(this.augmentations);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("augmentations.obj"))) {
+            oos.writeObject(this.augmentations);
+        }
     }
 
     public void setDataSource(final DataSource dataSource) {

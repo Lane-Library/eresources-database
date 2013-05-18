@@ -177,9 +177,9 @@ public class DBLoader {
         pid = ManagementFactory.getRuntimeMXBean().getName();
         int index = pid.indexOf('@');
         pid = pid.substring(0, index);
-        FileOutputStream out = new FileOutputStream(pidFile);
-        out.write(pid.getBytes());
-        out.close();
+        try (FileOutputStream out = new FileOutputStream(pidFile)) {
+            out.write(pid.getBytes());
+        }
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             @Override
