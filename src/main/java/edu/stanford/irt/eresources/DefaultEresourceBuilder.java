@@ -8,8 +8,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.stanford.irt.eresources.impl.LinkImpl;
-
 /**
  * 
  */
@@ -21,7 +19,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
 
     private DatabaseEresource currentEresource;
 
-    private LinkImpl currentLink;
+    private DatabaseLink currentLink;
 
     private StringBuilder currentText;
 
@@ -111,7 +109,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         } else if ("version".equals(name)) {
             this.currentVersion = new DatabaseVersion();
         } else if ("link".equals(name)) {
-            this.currentLink = new LinkImpl();
+            this.currentLink = new DatabaseLink();
         }
     }
 }

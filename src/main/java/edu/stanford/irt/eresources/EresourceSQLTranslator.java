@@ -16,7 +16,7 @@ public class EresourceSQLTranslator {
 
     private static final String INSERT_ERESOURCE = "INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, CORE, YEAR, DESCRIPTION, TEXT) VALUES (";
 
-    private static final String INSERT_LINK = "INSERT INTO LINK (LINK_ID, VERSION_ID, ERESOURCE_ID, LABEL, URL, INSTRUCTION) VALUES (";
+    private static final String INSERT_LINK = "INSERT INTO LINK (LINK_ID, VERSION_ID, ERESOURCE_ID, LABEL, URL, INSTRUCTION, LINK_TEXT) VALUES (";
 
     private static final String INSERT_VERSION = "INSERT INTO VERSION (VERSION_ID, ERESOURCE_ID, PUBLISHER, HOLDINGS, DATES, DESCRIPTION, PROXY, GETPASSWORD, SEQNUM) VALUES (";
 
@@ -56,12 +56,13 @@ public class EresourceSQLTranslator {
         return string.replaceAll("'", "''");
     }
 
-    private String getInsertLinkSQL(final Link link) {
+    private String getInsertLinkSQL(final DatabaseLink link) {
         StringBuilder sb = new StringBuilder(INSERT_LINK)
                 .append("LINK_ID_SEQ.NEXTVAL, VERSION_ID_SEQ.CURRVAL, ERESOURCE_ID_SEQ.CURRVAL, ")
                 .append(null == link.getLabel() ? "NULL," : "'" + apostrophize(link.getLabel()) + "',")
                 .append(null == link.getUrl() ? "NULL," : "'" + apostrophize(link.getUrl()) + "',")
-                .append(null == link.getInstruction() ? "NULL)" : "'" + apostrophize(link.getInstruction()) + "')");
+                .append(null == link.getInstruction() ? "NULL," : "'" + apostrophize(link.getInstruction()) + "',")
+                .append(link.getLinkText() == null ? "NULL)" : "'" + apostrophize(link.getLinkText()) + ")");
         return sb.toString();
     }
 
@@ -103,7 +104,7 @@ public class EresourceSQLTranslator {
         sql.add(sb.toString());
         sql.addAll(getInsertSubsetSQL(vr));
         for (Link link : vr.getLinks()) {
-            sql.add(getInsertLinkSQL(link));
+            sql.add(getInsertLinkSQL((DatabaseLink)link));
         }
         return sql;
     }

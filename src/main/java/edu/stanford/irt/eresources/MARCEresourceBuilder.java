@@ -17,8 +17,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.stanford.irt.eresources.impl.LinkImpl;
-
 /**
  * @author ceyates
  */
@@ -38,7 +36,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private DatabaseEresource currentEresource;
 
-    private LinkImpl currentLink;
+    private DatabaseLink currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
@@ -196,7 +194,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if (this.isMfhd && "856".equals(this.tag)) {
-                this.currentLink = new LinkImpl();
+                this.currentLink = new DatabaseLink();
                 this.q = null;
                 this.z = null;
             }

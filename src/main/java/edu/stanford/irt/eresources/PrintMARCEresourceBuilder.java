@@ -17,8 +17,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.stanford.irt.eresources.impl.LinkImpl;
-
 /**
  * @author ceyates
  */
@@ -38,7 +36,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
 
     private DatabaseEresource currentEresource;
 
-    private LinkImpl currentLink;
+    private DatabaseLink currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
@@ -151,7 +149,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
             }
         } else if ("record".equals(name)) {
             if (this.isMfhd) {
-                LinkImpl link = new LinkImpl();
+                DatabaseLink link = new DatabaseLink();
                 link.setLabel("Lane Catalog record");
                 link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
                         + this.currentEresource.getRecordId());
@@ -201,7 +199,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if (this.isMfhd && "856".equals(this.tag)) {
-                this.currentLink = new LinkImpl();
+                this.currentLink = new DatabaseLink();
                 this.q = null;
                 this.z = null;
             }

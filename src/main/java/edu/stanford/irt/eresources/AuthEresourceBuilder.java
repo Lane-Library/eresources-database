@@ -14,8 +14,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.stanford.irt.eresources.impl.LinkImpl;
-
 /**
  * @author ceyates
  */
@@ -31,7 +29,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private DatabaseEresource currentEresource;
 
-    private LinkImpl currentLink;
+    private DatabaseLink currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
@@ -76,10 +74,15 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             if (!this.recordHasError) {
                 this.eresourceHandler.handleEresource(this.currentEresource);
                 if (this.hasPreferredTitle) {
-                    this.currentEresource.setTitle(this.preferredTitle.toString());
-                    this.eresourceHandler.handleEresource(this.currentEresource);
-                    this.hasPreferredTitle = false;
-                    this.preferredTitle.setLength(0);
+                    try {
+                        DatabaseEresource clone = (DatabaseEresource) this.currentEresource.clone();
+                        clone.setTitle(this.preferredTitle.toString());
+                        this.hasPreferredTitle = false;
+                        this.preferredTitle.setLength(0);
+                        this.eresourceHandler.handleEresource(clone);
+                    } catch (CloneNotSupportedException e) {
+                        throw new EresourceDatabaseException(e);
+                    }
                 }
             } else {
                 this.recordHasError = false;
@@ -116,7 +119,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if ("856".equals(this.tag)) {
-                this.currentLink = new LinkImpl();
+                this.currentLink = new DatabaseLink();
                 this.q = null;
                 this.z = null;
             }

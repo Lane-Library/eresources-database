@@ -51,6 +51,11 @@ public class DefaultEresourceHandler implements EresourceHandler {
     }
 
     public void handleEresource(final DatabaseEresource eresource) {
+        for (Version version : eresource.getVersions()) {
+            for (Link link : version.getLinks()) {
+                ((DatabaseLink)link).setVersion(version);
+            }
+        }
         this.queue.add(eresource);
         this.count++;
     }
