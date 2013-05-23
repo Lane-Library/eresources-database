@@ -16,7 +16,7 @@ public class DatabaseLink extends LinkImpl {
             if (summaryHoldings != null && this.version.getLinks().size() == 1) {
                 sb.append(summaryHoldings);
                 String dates = this.version.getDates();
-                if (dates != null) {
+                if (dates != null && dates.length() > 0) {
                     sb.append(", ").append(dates);
                 }
             } else {
@@ -28,7 +28,7 @@ public class DatabaseLink extends LinkImpl {
                 sb.append(getLabel());
             }
             String description = this.version.getDescription();
-            if (description != null) {
+            if (description != null && description.length() > 0) {
                 sb.append(" ").append(description);
             }
         }

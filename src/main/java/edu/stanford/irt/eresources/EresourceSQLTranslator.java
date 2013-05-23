@@ -62,7 +62,7 @@ public class EresourceSQLTranslator {
                 .append(null == link.getLabel() ? "NULL," : "'" + apostrophize(link.getLabel()) + "',")
                 .append(null == link.getUrl() ? "NULL," : "'" + apostrophize(link.getUrl()) + "',")
                 .append(null == link.getInstruction() ? "NULL," : "'" + apostrophize(link.getInstruction()) + "',")
-                .append(link.getLinkText() == null ? "NULL)" : "'" + apostrophize(link.getLinkText()) + ")");
+                .append(link.getLinkText() == null ? "NULL)" : "'" + apostrophize(link.getLinkText()) + "')");
         return sb.toString();
     }
 
