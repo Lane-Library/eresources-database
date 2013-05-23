@@ -50,7 +50,7 @@ public class DBLoader {
     
     public static void main(final String[] args) throws SQLException, IOException {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-                "edu/stanford/irt/eresources/db-" + args[0] + ".xml");
+                "edu/stanford/irt/eresources/" + args[0] + ".xml");
         DBLoader loader = (DBLoader) context.getBean("dbLoader");
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
         try {
@@ -63,7 +63,8 @@ public class DBLoader {
     public void load() throws SQLException, IOException {
         this.log.info(this.version + " starting up");
         managePIDFile();
-        try (Connection conn = this.dataSource.getConnection(); Statement stmt = conn.createStatement();) {
+        try (Connection conn = this.dataSource.getConnection();
+             Statement stmt = conn.createStatement();) {
             conn.setAutoCommit(false);
             for (String create : this.createStatements) {
                 try {

@@ -19,10 +19,6 @@ import javax.sql.DataSource;
 
 public class DefaultEresourceHandler implements EresourceHandler {
 
-    private static final String DESCRIPTION_SQL = "SELECT DESCRIPTION FROM ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
-
-    private static final String TEXT_SQL = "SELECT TEXT FROM ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
-
     private int count = 0;
 
     private DataSource dataSource;
@@ -38,12 +34,21 @@ public class DefaultEresourceHandler implements EresourceHandler {
     private PreparedStatement textStmt;
 
     private EresourceSQLTranslator translator;
+    
+    private String textSQL;
+    
+    private String descriptionSQL;
+    
+    private String currentIdSQL;
 
     public DefaultEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
-            final EresourceSQLTranslator translator) {
+            final EresourceSQLTranslator translator, String tablePrefix) {
         this.dataSource = dataSource;
         this.queue = queue;
         this.translator = translator;
+        this.currentIdSQL = "SELECT " + tablePrefix + "ERESOURCE_ID_SEQ.CURRVAL FROM DUAL";
+        this.descriptionSQL = "SELECT DESCRIPTION FROM " + tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
+        this.textSQL = "SELECT TEXT FROM " + tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
     }
 
     public int getCount() {
@@ -51,15 +56,19 @@ public class DefaultEresourceHandler implements EresourceHandler {
     }
 
     public void handleEresource(final DatabaseEresource eresource) {
-        this.queue.add(eresource);
+        try {
+            this.queue.put(eresource);
+        } catch (InterruptedException e) {
+            throw new EresourceDatabaseException(e);
+        }
         this.count++;
     }
 
     public void run() {
         try (Connection conn = this.dataSource.getConnection();
                 Statement stmt = conn.createStatement();
-                PreparedStatement textStmt = conn.prepareStatement(TEXT_SQL);
-                PreparedStatement descStmt = conn.prepareStatement(DESCRIPTION_SQL)) {
+                PreparedStatement textStmt = conn.prepareStatement(this.textSQL);
+                PreparedStatement descStmt = conn.prepareStatement(this.descriptionSQL)) {
             this.stmt = stmt;
             this.textStmt = textStmt;
             this.descStmt = descStmt;
@@ -87,7 +96,7 @@ public class DefaultEresourceHandler implements EresourceHandler {
 
     private void insertClob(final String sql) throws SQLException, IOException {
         String id = null;
-        try (ResultSet idRs = this.stmt.executeQuery("SELECT ERESOURCE_ID_SEQ.CURRVAL FROM DUAL")) {
+        try (ResultSet idRs = this.stmt.executeQuery(this.currentIdSQL)) {
             idRs.next();
             id = idRs.getString(1);
         }

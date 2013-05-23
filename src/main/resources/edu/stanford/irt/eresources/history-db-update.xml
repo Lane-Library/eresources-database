@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <import resource="history-db-load.xml"/>
+    <bean id="dbLoader" class="edu.stanford.irt.eresources.HistoryDBLoader" parent="abstractHistoryDbLoader">
+        <property name="updatesOnly" value="true"/>
+        <property name="killPrevious" value="false"/>
+        <property name="callStatements">
+            <list>
+                <value>{ call ctx_ddl.sync_index('H_TEXT_IDX') }</value>
+                <value>{ call ctx_ddl.optimize_index('H_TEXT_IDX','FAST') }</value>
+                <value>{ call ctx_ddl.sync_index('H_TITLE_IDX') }</value>
+                <value>{ call ctx_ddl.optimize_index('H_TITLE_IDX','FAST') }</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
+        <property name="logEresource" value="true"/>
+    </bean>
+</beans>

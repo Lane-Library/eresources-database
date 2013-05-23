@@ -66,16 +66,24 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
 
     @Override
     public void addType(final String type) {
-        String typeToAdd = type;
-        if (COMPOSITE_TYPES.containsKey(type)) {
-            typeToAdd = COMPOSITE_TYPES.get(type);
-        }
-        if (ALLOWED_TYPES.contains(typeToAdd)) {
+        String typeToAdd = getCompositeType(type);
+        if (isAllowable(typeToAdd)) {
             if (this.types == null) {
                 this.types = new HashSet<String>();
             }
             this.types.add(typeToAdd);
         }
+    }
+    
+    protected boolean isAllowable(String type) {
+        return ALLOWED_TYPES.contains(type);
+    }
+    
+    protected String getCompositeType(String type) {
+        if (COMPOSITE_TYPES.containsKey(type)) {
+            return COMPOSITE_TYPES.get(type);
+        }
+        return type;
     }
 
     @Override

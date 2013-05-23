@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <bean id="historyAuthProcessor"
+        class="edu.stanford.irt.eresources.MARCEresourceProcessor">
+        <property name="inputStream">
+            
+            <bean id="eresourcesInputStream" class="edu.stanford.irt.eresources.HistoryInputStream">
+                <property name="dataSource" ref="voyagerDataSource"/>
+                <property name="executor" ref="executor"/>
+                <property name="bibQuery">
+                    <value>SELECT BIB_INDEX.BIB_ID FROM CIFDB.BIB_MASTER, CIFDB.BIB_INDEX
+                        WHERE BIB_MASTER.SUPPRESS_IN_OPAC != 'Y'
+                        AND BIB_MASTER.BIB_ID = BIB_INDEX.BIB_ID and INDEX_CODE = '655H' AND NORMAL_HEADING LIKE 'PERSON %'
+                        UNION
+                        SELECT BIB_INDEX.BIB_ID FROM CIFDB.BIB_MASTER, CIFDB.BIB_INDEX
+                        WHERE BIB_MASTER.SUPPRESS_IN_OPAC != 'Y'
+                        AND BIB_MASTER.BIB_ID = BIB_INDEX.BIB_ID and INDEX_CODE = '655H' AND NORMAL_HEADING LIKE 'ORGANIZATION'
+                        UNION
+                        SELECT BIB_INDEX.BIB_ID FROM CIFDB.BIB_MASTER, CIFDB.BIB_INDEX
+                        WHERE BIB_MASTER.SUPPRESS_IN_OPAC != 'Y'
+                        AND BIB_MASTER.BIB_ID = BIB_INDEX.BIB_ID and INDEX_CODE = '655H' AND NORMAL_HEADING LIKE 'EVENT'
+                        UNION
+                        SELECT BIB_INDEX.BIB_ID FROM CIFDB.BIB_MASTER, CIFDB.BIB_INDEX
+                        WHERE BIB_MASTER.SUPPRESS_IN_OPAC != 'Y'
+                        AND BIB_MASTER.BIB_ID = BIB_INDEX.BIB_ID and INDEX_CODE = '655H' AND NORMAL_HEADING LIKE 'PEOPLES'</value>
+                </property>
+            </bean>
+        </property>
+        <property name="xmlReader">
+            <bean class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
+                <property name="contentHandler" ref="authEresourceBuilder"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="authEresourceBuilder" class="edu.stanford.irt.eresources.AuthHistoryEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+</beans>
