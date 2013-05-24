@@ -152,7 +152,7 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
 
     private void handleBibControlfield() {
         if ("001".equals(this.tag)) {
-            this.currentEresource.setId(Integer.parseInt(this.currentText.toString()));
+            this.currentEresource.setRecordId(Integer.parseInt(this.currentText.toString()));
         } else if ("005".equals(this.tag)) {
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(this.currentText.toString()));

@@ -21,8 +21,8 @@ public class AuthAugmentationInputStream extends AuthInputStream {
             final Executor executor) {
         this.term = term;
         this.tag = tag;
-        this.dataSource = dataSource;
-        this.executor = executor;
+        this.setDataSource(dataSource);
+        this.setExecutor(executor);
     }
 
     @Override

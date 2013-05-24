@@ -6,7 +6,7 @@
         class="edu.stanford.irt.eresources.MARCEresourceProcessor">
         <property name="inputStream">
             
-            <bean id="eresourcesInputStream" class="edu.stanford.irt.eresources.HistoryInputStream">
+            <bean id="eresourcesInputStream" class="edu.stanford.irt.eresources.AuthHistoryInputStream">
                 <property name="dataSource" ref="voyagerDataSource"/>
                 <property name="executor" ref="executor"/>
                 <property name="bibQuery">

@@ -20,13 +20,13 @@ import javax.sql.DataSource;
 
 public abstract class EresourceInputStream extends PipedInputStream implements Runnable {
 
-    protected DataSource dataSource;
+    private DataSource dataSource;
 
-    protected Executor executor;
+    private Executor executor;
 
-    protected PipedOutputStream output;
+    private PipedOutputStream output;
 
-    protected Timestamp startDate;
+    private Timestamp startDate;
 
     @Override
     public int read() throws IOException {
