@@ -56,8 +56,6 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
 
     private String z;
 
-    private boolean isNoProxy;
-
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
         this.currentText.append(chars, start, length);
@@ -75,7 +73,6 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
             link.setUrl("http://cifdb.stanford.edu/cgi-bin/Pwebrecon.cgi?DB=local&Search_Arg=0359+" + this.subfield0359
                     + "&Search_Code=CMD*&CNT=10");
             version.addLink(link);
-            version.setProxy(false);
             this.currentEresource.addVersion(version);
             this.currentEresource.setKeywords(this.content.toString());
             if (!this.recordHasError) {
@@ -89,7 +86,6 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
             } else {
                 this.recordHasError = false;
             }
-            this.isNoProxy = false;
             this.content.setLength(0);
         } else {
             try {
@@ -251,7 +247,7 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
         if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
             String subset = this.currentText.toString().substring(8).toLowerCase();
             if ("noproxy".equals(subset)) {
-                this.isNoProxy = true;
+                this.currentVersion.setProxy(false);
             }
         }
         // else if ("844".equals(this.tag) && "a".equals(this.code)) {
