@@ -10,7 +10,7 @@ import java.util.Date;
 public class DBUpdate extends DBLoader {
 
     public static void main(final String[] args) throws SQLException, IOException {
-        DBLoader.main(new String[]{"update"});
+        DBLoader.main(new String[]{"db-update"});
     }
 
     private String selectQuery;
