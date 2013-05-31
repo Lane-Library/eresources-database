@@ -58,7 +58,7 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
 
     private String z;
 
-    private boolean isNoProxy;
+//    private boolean isNoProxy;
 
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
@@ -111,7 +111,7 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
             this.currentEresource.setRecordType("bib");
             this.subfield0359 = null;
             this.titleDates = null;
-            this.isNoProxy = false;
+//            this.isNoProxy = false;
             this.content.setLength(0);
             this.recordHasError = false;
         }
@@ -297,12 +297,12 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
     }
 
     private void handleMfhdSubfield() {
-        if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
-            String subset = this.currentText.toString().substring(8).toLowerCase();
-            if ("noproxy".equals(subset)) {
-                this.isNoProxy = true;
-            }
-        }
+//        if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
+//            String subset = this.currentText.toString().substring(8).toLowerCase();
+//            if ("noproxy".equals(subset)) {
+//                this.isNoProxy = true;
+//            }
+//        }
         // else if ("844".equals(this.tag) && "a".equals(this.code)) {
         // this.currentVersion.setPublisher(this.currentText.toString());
         // } else if ("866".equals(this.tag)) {
@@ -316,7 +316,7 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
         // this.currentVersion.setDescription(this.currentText.toString());
         // }
         // }
-        else if ("856".equals(this.tag)) {
+        if ("856".equals(this.tag)) {
             if ("q".equals(this.code) && (null == this.q)) {
                 this.q = this.currentText.toString();
             } else if ("z".equals(this.code) && (null == this.z)) {
