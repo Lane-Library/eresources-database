@@ -5,7 +5,7 @@
     <bean id="authProcessor" class="edu.stanford.irt.eresources.MARCEresourceProcessor">
         <property name="inputStream">
             <bean class="edu.stanford.irt.eresources.AuthInputStream">
-                <property name="dataSource" ref="voyagerDatasource"/>
+                <property name="dataSource" ref="voyagerDataSource"/>
                 <property name="executor" ref="executor"/>
             </bean>
         </property>

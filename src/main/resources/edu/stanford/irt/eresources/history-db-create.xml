@@ -60,9 +60,9 @@
         <property name="callStatements">
             <list>
                 <value>{ call ctx_ddl.sync_index('H_TEXT_IDX') }</value>
-                <!--<value>{ call ctx_ddl.optimize_index('H_TEXT_IDX','FULL') }</value>-->
+                <value>{ call ctx_ddl.optimize_index('H_TEXT_IDX','FULL') }</value>
                 <value>{ call ctx_ddl.sync_index('H_TITLE_IDX') }</value>
-                <!--<value>{ call ctx_ddl.optimize_index('H_TITLE_IDX','FULL') }</value>-->
+                <value>{ call ctx_ddl.optimize_index('H_TITLE_IDX','FULL') }</value>
                 <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'', cascade=>TRUE,estimate_percent => dbms_stats.auto_sample_size)'}'</value>
             </list>
         </property>

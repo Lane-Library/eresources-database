@@ -20,6 +20,11 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
     private String deleteMesh;
 
     public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
+            final EresourceSQLTranslator translator) {
+        this(dataSource, queue, translator, "");
+    }
+
+    public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
             final EresourceSQLTranslator translator, String tablePrefix) {
         super(dataSource, queue, translator, tablePrefix);
         this.translator = translator;

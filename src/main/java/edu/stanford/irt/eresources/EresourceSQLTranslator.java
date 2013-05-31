@@ -33,6 +33,10 @@ public class EresourceSQLTranslator {
 
     private String tablePrefix;
     
+    public EresourceSQLTranslator() {
+        this("");
+    }
+    
     public EresourceSQLTranslator(String tablePrefix) {
         this.tablePrefix = tablePrefix;
         this.insertInto = INSERT_INTO + tablePrefix;

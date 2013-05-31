@@ -42,6 +42,11 @@ public class DefaultEresourceHandler implements EresourceHandler {
     private String currentIdSQL;
 
     public DefaultEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
+            final EresourceSQLTranslator translator) {
+        this(dataSource, queue, translator, "");
+    }
+
+    public DefaultEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
             final EresourceSQLTranslator translator, String tablePrefix) {
         this.dataSource = dataSource;
         this.queue = queue;
@@ -77,9 +82,9 @@ public class DefaultEresourceHandler implements EresourceHandler {
                     try {
                         DatabaseEresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
                         if (eresource != null) {
-                            insertEresource(eresource);
+//                            insertEresource(eresource);
                         }
-                    } catch (InterruptedException | IOException e) {
+                    } catch (InterruptedException e) {// | IOException e) {
                         throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                     }
                 }
