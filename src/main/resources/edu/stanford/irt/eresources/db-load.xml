@@ -23,7 +23,9 @@
         <property name="executor" ref="executor"/>
         <property name="queue" ref="queue"/>
     </bean>
-    <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue"/>
+    <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue">
+        <constructor-arg value="10000"/>
+    </bean>
     <bean id="erdbDataSource" class="oracle.jdbc.pool.OracleConnectionPoolDataSource">
         <property name="URL" value="${eresources.eresourcesdb.url}"/>
         <property name="user" value="${eresources.eresourcesdb.username}"/>
