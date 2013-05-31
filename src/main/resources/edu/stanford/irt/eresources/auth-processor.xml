@@ -5,15 +5,7 @@
     <bean id="authProcessor" class="edu.stanford.irt.eresources.MARCEresourceProcessor">
         <property name="inputStream">
             <bean class="edu.stanford.irt.eresources.AuthInputStream">
-                <property name="dataSource">
-                    <bean class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
-                        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
-                        <property name="url" value="${eresources.voyagerdb.url}"/>
-                        <property name="username" value="${eresources.voyagerdb.username}"/>
-                        <property name="password" value="${eresources.voyagerdb.password}"/>
-                        <property name="suppressClose" value="true"/>
-                    </bean>
-                </property>
+                <property name="dataSource" ref="voyagerDataSource"/>
                 <property name="executor" ref="executor"/>
             </bean>
         </property>

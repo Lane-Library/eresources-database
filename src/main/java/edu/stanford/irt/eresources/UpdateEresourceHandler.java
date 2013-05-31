@@ -11,11 +11,30 @@ import javax.sql.DataSource;
 public class UpdateEresourceHandler extends DefaultEresourceHandler {
 
     private EresourceSQLTranslator translator;
+    private String tablePrefix;
+    private String deleteEresource;
+    private String deleteVersion;
+    private String deleteLink;
+    private String deleteType;
+    private String deleteSubset;
+    private String deleteMesh;
 
     public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
             final EresourceSQLTranslator translator) {
-        super(dataSource, queue, translator);
+        this(dataSource, queue, translator, "");
+    }
+
+    public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
+            final EresourceSQLTranslator translator, String tablePrefix) {
+        super(dataSource, queue, translator, tablePrefix);
         this.translator = translator;
+        this.tablePrefix = tablePrefix;
+        this.deleteEresource = "DELETE FROM " + this.tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ";
+        this.deleteVersion = "DELETE FROM " + this.tablePrefix + "VERSION WHERE ERESOURCE_ID = ";
+        this.deleteLink = "DELETE FROM " + this.tablePrefix + "LINK WHERE ERESOURCE_ID = ";
+        this.deleteType = "DELETE FROM " + this.tablePrefix + "TYPE WHERE ERESOURCE_ID = ";
+        this.deleteSubset = "DELETE FROM " + this.tablePrefix + "SUBSET WHERE ERESOURCE_ID = ";
+        this.deleteMesh = "DELETE FROM " + this.tablePrefix + "MESH WHERE ERESOURCE_ID = ";
     }
 
     @Override
@@ -24,12 +43,12 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
         try (ResultSet rs = stmt.executeQuery(this.translator.getEresourceIdSQL(eresource))) {
             if (rs.next()) {
                 int id = rs.getInt(1);
-                stmt.addBatch("DELETE FROM ERESOURCE WHERE ERESOURCE_ID = " + id);
-                stmt.addBatch("DELETE FROM VERSION WHERE ERESOURCE_ID = " + id);
-                stmt.addBatch("DELETE FROM LINK WHERE ERESOURCE_ID = " + id);
-                stmt.addBatch("DELETE FROM TYPE WHERE ERESOURCE_ID = " + id);
-                stmt.addBatch("DELETE FROM SUBSET WHERE ERESOURCE_ID = " + id);
-                stmt.addBatch("DELETE FROM MESH WHERE ERESOURCE_ID = " + id);
+                stmt.addBatch(this.deleteEresource + id);
+                stmt.addBatch(this.deleteVersion + id);
+                stmt.addBatch(this.deleteLink + id);
+                stmt.addBatch(this.deleteType + id);
+                stmt.addBatch(this.deleteSubset + id);
+                stmt.addBatch(this.deleteMesh + id);
                 stmt.executeBatch();
             }
         }

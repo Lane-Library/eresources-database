@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <bean id="historyBibProcessor"
+        class="edu.stanford.irt.eresources.MARCEresourceProcessor">
+        <property name="inputStream">
+            <bean id="eresourcesInputStream" class="edu.stanford.irt.eresources.HistoryInputStream">
+                <property name="dataSource" ref="voyagerDataSource"/>
+                <property name="executor" ref="executor"/>
+                <property name="bibQuery">
+                    <value>
+WITH BIBS AS
+  (SELECT BIB_ID
+  FROM LMLDB.BIB_MASTER
+  WHERE BIB_MASTER.SUPPRESS_IN_OPAC != 'Y'
+  AND ((update_date                 IS NULL
+  AND create_date                    > ?)
+  OR update_date                     > ?)
+  ),
+  OLDBIBS AS
+  (SELECT BIBS.BIB_ID
+  FROM BIBS,
+    LMLDB.BIB_TEXT
+  WHERE BIBS.BIB_ID                            = BIB_TEXT.BIB_ID
+  AND (END_PUB_DATE                           IS NULL
+  OR TRANSLATE(END_PUB_DATE,'u#y| ','99999')   &lt; '1946')
+  AND BEGIN_PUB_DATE                          IS NOT NULL
+  AND TRANSLATE(BEGIN_PUB_DATE,'u#y| ','9999') &lt; '1946'
+  )
+SELECT BIBS.BIB_ID
+FROM BIBS,
+  LMLDB.BIB_INDEX
+WHERE BIBS.BIB_ID    = BIB_INDEX.BIB_ID
+AND INDEX_CODE       = '655H'
+AND ( NORMAL_HEADING = 'HISTORICAL WORK'
+OR NORMAL_HEADING    = 'CLASSICAL WORK'
+OR NORMAL_HEADING LIKE 'RARE MATERIAL%'
+OR NORMAL_HEADING = 'OBJECT'
+OR NORMAL_HEADING LIKE '%BIOGRAP%'
+OR NORMAL_HEADING LIKE '%PORTRAIT%'
+OR NORMAL_HEADING = 'STANFORD RELATED'
+OR NORMAL_HEADING = 'ARCHIVAL MATERIAL'
+OR NORMAL_HEADING = 'INCUNABLULUM'
+OR NORMAL_HEADING = 'MANUSCRIPT HANDWRITTEN' )
+UNION
+SELECT OLDBIBS.BIB_ID
+FROM OLDBIBS,
+  LMLDB.BIB_INDEX
+WHERE OLDBIBS.BIB_ID = BIB_INDEX.BIB_ID
+AND INDEX_CODE       = '655H'
+AND ( NORMAL_HEADING = 'OBITUARY'
+OR NORMAL_HEADING    = 'FESTSCHRIFT'
+OR NORMAL_HEADING LIKE 'MANUSCRIPT%'
+OR NORMAL_HEADING = 'THESIS'
+OR NORMAL_HEADING = 'VISUAL MATERIAL'
+OR NORMAL_HEADING = 'SERIAL'
+OR NORMAL_HEADING = 'BOOK'
+OR NORMAL_HEADING = 'PAMPHLET'
+OR NORMAL_HEADING = 'LEAFLET'
+OR NORMAL_HEADING = 'ARTICLE'
+OR NORMAL_HEADING = 'CHAPTER' )
+                    </value>
+                </property>
+            </bean>
+        </property>
+        <property name="xmlReader">
+            <bean class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
+                <property name="contentHandler" ref="bibEresourceBuilder"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="bibEresourceBuilder" class="edu.stanford.irt.eresources.BibHistoryEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+</beans>
