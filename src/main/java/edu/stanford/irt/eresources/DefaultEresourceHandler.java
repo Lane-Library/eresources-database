@@ -82,9 +82,9 @@ public class DefaultEresourceHandler implements EresourceHandler {
                     try {
                         DatabaseEresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
                         if (eresource != null) {
-//                            insertEresource(eresource);
+                            insertEresource(eresource);
                         }
-                    } catch (InterruptedException e) {// | IOException e) {
+                    } catch (InterruptedException | IOException e) {
                         throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                     }
                 }
