@@ -11,8 +11,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.stanford.irt.eresources.impl.LinkImpl;
-
 /**
  * @author ceyates
  */
@@ -30,7 +28,7 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
     
     private DatabaseVersion currentVersion;
 
-    private LinkImpl currentLink;
+    private DatabaseLink currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
@@ -71,7 +69,7 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if ("record".equals(name)) {
-            LinkImpl link = new LinkImpl();
+            DatabaseLink link = new DatabaseLink();
             link.setLabel("catalog record");
             link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?DB=local&Search_Arg=0359+" + this.subfield0359
                     + "&Search_Code=CMD*&CNT=10");
@@ -122,7 +120,7 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if ("856".equals(this.tag)) {
-                this.currentLink = new LinkImpl();
+                this.currentLink = new DatabaseLink();
                 this.q = null;
                 this.z = null;
             }

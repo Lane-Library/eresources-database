@@ -11,8 +11,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.stanford.irt.eresources.impl.LinkImpl;
-
 /**
  * @author ceyates
  */
@@ -28,7 +26,7 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
 
     private HistoryDatabaseEresource currentEresource;
 
-    private LinkImpl currentLink;
+    private DatabaseLink currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
@@ -68,7 +66,7 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if ("record".equals(name)) {
             DatabaseVersion version = new DatabaseVersion();
-            LinkImpl link = new LinkImpl();
+            DatabaseLink link = new DatabaseLink();
             link.setLabel(this.catalogLinkLabel + " record");
             link.setUrl("http://cifdb.stanford.edu/cgi-bin/Pwebrecon.cgi?DB=local&Search_Arg=0359+" + this.subfield0359
                     + "&Search_Code=CMD*&CNT=10");
@@ -119,7 +117,7 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if ("856".equals(this.tag)) {
-                this.currentLink = new LinkImpl();
+                this.currentLink = new DatabaseLink();
                 this.q = null;
                 this.z = null;
             }
