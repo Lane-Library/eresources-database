@@ -30,7 +30,8 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
             "redwood software, installed", "duck software, installed", "stone software, installed",
             "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett" };
+            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+            "statistics software, installed", "biotools software, installed" };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
