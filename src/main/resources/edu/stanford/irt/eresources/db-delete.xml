@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <import resource="db-load.xml"/>
+    <bean id="dbLoader" class="edu.stanford.irt.eresources.DBLoader" parent="abstractDbLoader">
+        <property name="killPrevious" value="true"/>
+        <property name="handler" ref="eresourceHandler"/>
+        <property name="createStatements">
+            <list/>
+        </property>
+        <property name="callStatements">
+            <list>
+                <value>{ call ctx_ddl.sync_index('TEXT_IDX') }</value>
+                <value>{ call ctx_ddl.optimize_index('TEXT_IDX','FULL') }</value>
+                <value>{ call ctx_ddl.sync_index('TITLE_IDX') }</value>
+                <value>{ call ctx_ddl.optimize_index('TITLE_IDX','FULL') }</value>
+                <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'', cascade=>TRUE)'}'</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="eresourceHandler" class="edu.stanford.irt.eresources.DeleteEresourceHandler">
+        <constructor-arg ref="erdbDataSource"/>
+        <constructor-arg ref="queue"/>
+    </bean>
+</beans>
