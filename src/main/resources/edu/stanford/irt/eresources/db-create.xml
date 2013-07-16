@@ -17,7 +17,7 @@
                 <value>DROP INDEX LINK_IDX</value>
                 <value>DROP INDEX TEXT_IDX</value>
                 <value>DROP INDEX TITLE_IDX</value>
-                <value>DROP INDEX TITLE_LOWER_IDX</value>
+                <value>DROP INDEX TITLE_CONVERT_IDX</value>
                 <value>DROP INDEX SUBSET_IDX</value>
                 <value>DROP INDEX SUBSET_VERSION_IDX</value>
                 <value>DROP INDEX SUBSET_SUBSET_IDX</value>
@@ -69,7 +69,7 @@
                 <value>create index MESH_ERESOURCE_ID_IDX on MESH("TERM","ERESOURCE_ID")</value>
                 <value>create index TYPE_TYPE_RESOURCE_ID_IDX on TYPE("TYPE","ERESOURCE_ID")</value>
                 <value>create index SUBSET_SUBSET_VERSION_ID_IDX on SUBSET("SUBSET","VERSION_ID")</value>
-                <value>create index ERESOURCE_LOWER_TITLE_IDX on ERESOURCE(CONVERT(LOWER("TITLE"),'US7ASCII'))</value>
+                <value>create index TITLE_CONVERT_IDX on ERESOURCE(CONVERT(LOWER("TITLE"),'US7ASCII'))</value>
                 <value>CREATE INDEX TEXT_IDX ON ERESOURCE(TEXT) INDEXTYPE IS CTXSYS.CONTEXT</value>
                 <value>CREATE INDEX TITLE_IDX ON ERESOURCE(TITLE) INDEXTYPE IS CTXSYS.CONTEXT</value>
                  <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'', 
