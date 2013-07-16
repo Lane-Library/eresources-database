@@ -41,7 +41,7 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
     protected void insertEresource(final DatabaseEresource eresource) throws SQLException, IOException {
         Statement stmt = getStatement();
         try (ResultSet rs = stmt.executeQuery(this.translator.getEresourceIdSQL(eresource))) {
-            if (rs.next()) {
+            while (rs.next()) {
                 int id = rs.getInt(1);
                 stmt.addBatch(this.deleteEresource + id);
                 stmt.addBatch(this.deleteVersion + id);
