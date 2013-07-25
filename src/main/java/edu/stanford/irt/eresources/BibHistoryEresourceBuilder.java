@@ -238,11 +238,20 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
     private void handleBibSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code)) {
             String type = this.currentText.toString().toLowerCase();
+            // remove trailing periods, some probably should have them but
+            // voyager puts them on everything :-(
+            int lastPeriod = type.lastIndexOf('.');
+            if (lastPeriod >= 0) {
+                int lastPosition = type.length() - 1;
+                if (lastPeriod == lastPosition) {
+                    type = type.substring(0, lastPosition);
+                }
+            }
             if ((type.indexOf("subset") != 0) && !"internet resource".equals(type)) {
                 this.currentEresource.addType(type);
-                if ("motion picure".equals(type) || (type.indexOf("video") > -1)) {
+                if (type.indexOf("motion picture") == 0 || (type.indexOf("video") > -1)) {
                     this.currentEresource.addType("movie");
-                } else if ("book set".equals(type) || "pamphlet".equals(type) || "leaflet".equals(type)) {
+                } else if (type.indexOf("book set") ==0 || type.indexOf("pamphlet") == 0 || type.indexOf("leaflet") == 0) {
                     this.currentEresource.addType("book");
                 }
             }

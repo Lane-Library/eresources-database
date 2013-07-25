@@ -17,11 +17,22 @@
                 <value>DROP INDEX H_LINK_IDX</value>
                 <value>DROP INDEX H_TEXT_IDX</value>
                 <value>DROP INDEX H_TITLE_IDX</value>
+                <value>DROP INDEX H_TITLE_CONVERT_IDX</value>
                 <value>DROP INDEX H_SUBSET_IDX</value>
                 <value>DROP INDEX H_SUBSET_VERSION_IDX</value>
                 <value>DROP INDEX H_SUBSET_SUBSET_IDX</value>
                 <value>DROP INDEX H_MESH_IDX</value>
                 <value>DROP INDEX H_MESH_TERM_IDX</value>
+                <value>DROP INDEX H_ERESOURCE_TYPE_IDX</value>
+                
+                <value>DROP INDEX H_VERSION_ERESOURCE_ID_IDX</value>
+                <value>DROP INDEX H_ERESOURCE_CORE_IDX</value>
+                <value>DROP INDEX H_LINK_VERSION_ID_IDX</value>
+                <value>DROP INDEX H_MESH_ERESOURCE_ID_IDX</value>
+                <value>DROP INDEX H_TYPE_TYPE_RESOURCE_ID_IDX</value>
+                <value>DROP INDEX H_SUBSET_SUBSET_VERSION_ID_IDX</value>
+                <value>DROP INDEX H_ERESOURCE_LOWER_TITLE_IDX</value>
+                
                 <value>DROP TABLE H_ERESOURCE</value>
                 <value>DROP TABLE H_VERSION</value>
                 <value>DROP TABLE H_LINK</value>
@@ -33,7 +44,9 @@
                 <value>CREATE SEQUENCE H_LINK_ID_SEQ MAXVALUE 99999999 CYCLE</value>
                 <value>CREATE TABLE H_ERESOURCE (ERESOURCE_ID NUMBER(8,0) PRIMARY KEY, RECORD_ID
                     NUMBER(12,0), RECORD_TYPE VARCHAR2(8), UPDATED DATE, TITLE VARCHAR2(512),
-                    CORE CHAR(1), YEAR NUMBER(4,0), DESCRIPTION CLOB, TEXT CLOB)</value>
+                    CORE CHAR(1), YEAR NUMBER(4,0), DESCRIPTION CLOB, TEXT CLOB)
+                    LOB (TEXT) store as securefile
+                    LOB (DESCRIPTION) store as securefile</value>
                 <value>CREATE TABLE H_VERSION (VERSION_ID NUMBER(8,0) PRIMARY KEY, ERESOURCE_ID
                     NUMBER(8,0), PUBLISHER VARCHAR2(256), HOLDINGS VARCHAR2(256), DATES
                     VARCHAR2(256), DESCRIPTION VARCHAR2(256), PROXY CHAR(1), GETPASSWORD CHAR(1), SEQNUM NUMBER(2,0))</value>
@@ -44,26 +57,20 @@
                 <value>CREATE TABLE H_SUBSET (VERSION_ID NUMBER(8,0), ERESOURCE_ID NUMBER(8,0), SUBSET
                     VARCHAR(256))</value>
                 <value>CREATE TABLE H_MESH (ERESOURCE_ID NUMBER(8,0), TERM VARCHAR2(256))</value>
-                <value>CREATE INDEX H_MESH_IDX ON H_MESH(ERESOURCE_ID)</value>
-                <value>CREATE INDEX H_MESH_TERM_IDX ON H_MESH(TERM)</value>
-                <value>CREATE INDEX H_SUBSET_IDX ON H_SUBSET(ERESOURCE_ID)</value>
-                <value>CREATE INDEX H_SUBSET_VERSION_IDX ON H_SUBSET(VERSION_ID)</value>
-                <value>CREATE INDEX H_SUBSET_SUBSET ON H_SUBSET(SUBSET)</value>
-                <value>CREATE INDEX H_TYPE_IDX ON H_TYPE(ERESOURCE_ID)</value>
-                <value>CREATE INDEX H_TYPE_TYPE_IDX ON H_TYPE(TYPE)</value>
-                <value>CREATE INDEX H_VERSION_IDX ON H_VERSION(ERESOURCE_ID)</value>
-                <value>CREATE INDEX H_LINK_IDX ON H_LINK(VERSION_ID)</value>
-                <value>CREATE INDEX H_TEXT_IDX ON H_ERESOURCE(TEXT) INDEXTYPE IS CTXSYS.CONTEXT</value>
-                <value>CREATE INDEX H_TITLE_IDX ON H_ERESOURCE(TITLE) INDEXTYPE IS CTXSYS.CONTEXT</value>
             </list>
         </property>
         <property name="callStatements">
             <list>
-                <value>{ call ctx_ddl.sync_index('H_TEXT_IDX') }</value>
-                <value>{ call ctx_ddl.optimize_index('H_TEXT_IDX','FULL') }</value>
-                <value>{ call ctx_ddl.sync_index('H_TITLE_IDX') }</value>
-                <value>{ call ctx_ddl.optimize_index('H_TITLE_IDX','FULL') }</value>
-                <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'', cascade=>TRUE,estimate_percent => dbms_stats.auto_sample_size)'}'</value>
+                <value>CREATE INDEX H_VERSION_ERESOURCE_ID_IDX ON H_VERSION("ERESOURCE_ID")</value>
+                <value>CREATE INDEX H_ERESOURCE_CORE_IDX ON H_ERESOURCE("CORE")</value>
+                <value>CREATE INDEX H_LINK_VERSION_ID_IDX ON H_LINK("VERSION_ID")</value>
+                <value>CREATE INDEX H_MESH_ERESOURCE_ID_IDX ON H_MESH("TERM","ERESOURCE_ID")</value>
+                <value>CREATE INDEX H_TYPE_TYPE_RESOURCE_ID_IDX ON H_TYPE("TYPE","ERESOURCE_ID")</value>
+                <value>CREATE INDEX H_SUBSET_SUBSET_VERSION_ID_IDX ON H_SUBSET("SUBSET","VERSION_ID")</value>
+                <value>CREATE INDEX H_TITLE_CONVERT_IDX ON H_ERESOURCE(CONVERT(LOWER("TITLE"),'US7ASCII'))</value>
+                <value>CREATE INDEX H_TEXT_IDX ON H_ERESOURCE(TEXT) INDEXTYPE IS CTXSYS.CONTEXT</value>
+                <value>CREATE INDEX H_TITLE_IDX ON H_ERESOURCE(TITLE) INDEXTYPE IS CTXSYS.CONTEXT</value>
+                 <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'',cascade=>TRUE,estimate_percent => dbms_stats.auto_sample_size)'}'</value>
             </list>
         </property>
     </bean>

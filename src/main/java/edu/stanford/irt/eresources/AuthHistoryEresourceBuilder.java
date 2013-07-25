@@ -65,13 +65,12 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if ("record".equals(name)) {
-            DatabaseVersion version = new DatabaseVersion();
             DatabaseLink link = new DatabaseLink();
             link.setLabel(this.catalogLinkLabel + " record");
             link.setUrl("http://cifdb.stanford.edu/cgi-bin/Pwebrecon.cgi?DB=local&Search_Arg=0359+" + this.subfield0359
                     + "&Search_Code=CMD*&CNT=10");
-            version.addLink(link);
-            this.currentEresource.addVersion(version);
+            this.currentVersion.addLink(link);
+            this.currentEresource.addVersion(this.currentVersion);
             this.currentEresource.setKeywords(this.content.toString());
             if (!this.recordHasError) {
                 this.eresourceHandler.handleEresource(this.currentEresource);
@@ -182,6 +181,15 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
     private void handleBibSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code)) {
             String type = this.currentText.toString().toLowerCase();
+            // remove trailing periods, some probably should have them but
+            // voyager puts them on everything :-(
+            int lastPeriod = type.lastIndexOf('.');
+            if (lastPeriod >= 0) {
+                int lastPosition = type.length() - 1;
+                if (lastPeriod == lastPosition) {
+                    type = type.substring(0, lastPosition);
+                }
+            }
             if ((type.indexOf("subset") != 0) && !"internet resource".equals(type)) {
                 this.currentEresource.addType(type);
                 if ((type.indexOf("person") == 0) || "peoples".equals(type)) {
