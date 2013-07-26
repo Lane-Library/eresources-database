@@ -11,7 +11,7 @@ public class DatabaseVersion extends VersionImpl {
 
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
-    private static final String[] ALLOWED_SUBSETS_INITIALIZER = {"mobile applications","pda tools","mobile resources"};
+    private static final String[] ALLOWED_SUBSETS_INITIALIZER = {"mobile applications","pda tools","mobile resources", "biotools"};
     
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {

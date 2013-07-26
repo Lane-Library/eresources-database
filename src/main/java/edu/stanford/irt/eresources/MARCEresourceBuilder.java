@@ -232,8 +232,14 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     private void createCustomTypes(final DatabaseEresource eresource) {
         Collection<String> types = eresource.getTypes();
         if (types.contains("software, installed")) {
+            if (types.contains("statistics")) {
+                eresource.addType("statistics software, installed");
+            }
             for (Version verzion : eresource.getVersions()) {
                 DatabaseVersion version = (DatabaseVersion) verzion;
+                if (version.getSubsets().contains("biotools")) {
+                    eresource.addType("biotools software, installed");
+                }
                 // software installed in various locations have the location in
                 // the label
                 for (Link link : version.getLinks()) {
