@@ -23,6 +23,7 @@
                 <value>DROP INDEX SUBSET_SUBSET_IDX</value>
                 <value>DROP INDEX MESH_IDX</value>
                 <value>DROP INDEX MESH_TERM_IDX</value>
+                <value>DROP INDEX ERESOURCE_CORE_IDX</value>
                 <value>DROP INDEX ERESOURCE_TYPE_IDX</value>
                 
                 <value>DROP INDEX VERSION_ERESOURCE_ID_IDX</value>
