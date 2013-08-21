@@ -7,6 +7,16 @@
         <constructor-arg value="H_"/>
         <property name="killPrevious" value="true"/>
         <property name="handler" ref="eresourceHandler"/>
+        <property name="createStatements">
+            <list>
+                <value>DELETE FROM H_ERESOURCE</value>
+                <value>DELETE FROM H_VERSION</value>
+                <value>DELETE FROM H_LINK</value>
+                <value>DELETE FROM H_TYPE</value>
+                <value>DELETE FROM H_SUBSET</value>
+                <value>DELETE FROM H_MESH</value>
+            </list>
+        </property>
         <property name="callStatements">
             <list>
                 <value>{ call ctx_ddl.sync_index('H_TEXT_IDX') }</value>

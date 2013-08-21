@@ -46,7 +46,6 @@
                 <value>CREATE TABLE ERESOURCE (ERESOURCE_ID NUMBER(8,0) PRIMARY KEY, RECORD_ID
                     NUMBER(12,0), RECORD_TYPE VARCHAR2(8), UPDATED DATE, TITLE VARCHAR2(512),
                     CORE CHAR(1), YEAR NUMBER(4,0), DESCRIPTION CLOB, TEXT CLOB)
-                    TABLESPACE ERESOURCES_DATA
                     LOB (TEXT) store as securefile
                     LOB (DESCRIPTION) store as securefile</value>
                 <value>CREATE TABLE VERSION (VERSION_ID NUMBER(8,0) PRIMARY KEY, ERESOURCE_ID
@@ -63,25 +62,24 @@
         </property>
         <property name="callStatements">
             <list>
-                <value>create index VERSION_ERESOURCE_ID_IDX on VERSION("ERESOURCE_ID")</value>
-                <value>create index ERESOURCE_CORE_IDX on ERESOURCE("CORE")</value>
-                <value>create index LINK_VERSION_ID_IDX on LINK("VERSION_ID")</value>
-                <value>create index MESH_ERESOURCE_ID_IDX on MESH("TERM","ERESOURCE_ID")</value>
-                <value>create index TYPE_TYPE_RESOURCE_ID_IDX on TYPE("TYPE","ERESOURCE_ID")</value>
-                <value>create index SUBSET_SUBSET_VERSION_ID_IDX on SUBSET("SUBSET","VERSION_ID")</value>
-                <value>create index TITLE_CONVERT_IDX on ERESOURCE(CONVERT(LOWER("TITLE"),'US7ASCII'))</value>
+                <value>CREATE INDEX VERSION_ERESOURCE_ID_IDX ON VERSION("ERESOURCE_ID")</value>
+                <value>CREATE INDEX ERESOURCE_CORE_IDX ON ERESOURCE("CORE")</value>
+                <value>CREATE INDEX LINK_VERSION_ID_IDX ON LINK("VERSION_ID")</value>
+                <value>CREATE INDEX MESH_ERESOURCE_ID_IDX ON MESH("TERM","ERESOURCE_ID")</value>
+                <value>CREATE INDEX TYPE_TYPE_RESOURCE_ID_IDX ON TYPE("TYPE","ERESOURCE_ID")</value>
+                <value>CREATE INDEX SUBSET_SUBSET_VERSION_ID_IDX ON SUBSET("SUBSET","VERSION_ID")</value>
+                <value>CREATE INDEX TITLE_CONVERT_IDX ON ERESOURCE(CONVERT(LOWER("TITLE"),'US7ASCII'))</value>
                 <value>CREATE INDEX TEXT_IDX ON ERESOURCE(TEXT) INDEXTYPE IS CTXSYS.CONTEXT</value>
                 <value>CREATE INDEX TITLE_IDX ON ERESOURCE(TITLE) INDEXTYPE IS CTXSYS.CONTEXT</value>
-                 <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'', 
-                    cascade=>TRUE,estimate_percent => dbms_stats.auto_sample_size)'}'</value>
+                 <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'',cascade=>TRUE,estimate_percent => dbms_stats.auto_sample_size)'}'</value>
             </list>
         </property>
     </bean>
     <bean id="eresourceHandler" class="edu.stanford.irt.eresources.DefaultEresourceHandler">
-            <constructor-arg ref="erdbDataSource"/>
-            <constructor-arg ref="queue"/>
-            <constructor-arg>
-                <bean class="edu.stanford.irt.eresources.EresourceSQLTranslator"/>
-            </constructor-arg>
+        <constructor-arg ref="erdbDataSource"/>
+        <constructor-arg ref="queue"/>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.EresourceSQLTranslator"/>
+        </constructor-arg>
     </bean>
 </beans>
