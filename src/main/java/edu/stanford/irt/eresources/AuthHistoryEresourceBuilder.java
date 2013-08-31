@@ -190,12 +190,12 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
                     type = type.substring(0, lastPosition);
                 }
             }
-            if ((type.indexOf("subset") != 0) && !"internet resource".equals(type)) {
+//            if ((type.indexOf("subset") != 0) && !"internet resource".equals(type)) {
                 this.currentEresource.addType(type);
                 if ((type.indexOf("person") == 0) || "peoples".equals(type)) {
                     this.currentEresource.addType("people");
                 }
-            }
+//            }
             if (type.indexOf("person") == 0) {
                 this.catalogLinkLabel = "person";
             } else if ("organization".equals(type)) {

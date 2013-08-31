@@ -185,12 +185,12 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     private void handleBibSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code)) {
             String type = this.currentText.toString().toLowerCase();
-            if ((type.indexOf("subset") != 0) && !"internet resource".equals(type)) {
+//            if ((type.indexOf("subset") != 0) && !"internet resource".equals(type)) {
                 this.currentEresource.addType(type);
                 if ((type.indexOf("person") == 0) || "peoples".equals(type)) {
                     this.currentEresource.addType("people");
                 }
-            }
+//            }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
                 && ("27".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString().toLowerCase();
