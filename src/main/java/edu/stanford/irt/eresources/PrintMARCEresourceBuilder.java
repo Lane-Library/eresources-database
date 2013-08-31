@@ -320,12 +320,10 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                     type = type.substring(0, lastPosition);
                 }
             }
-//            if (!"laneconnex".equals(type) && !"internet resource".equals(type) && type.indexOf("subset") != 0) {
-                this.currentEresource.addType(type);
-                if ("core material".equals(type)) {
-                    this.currentEresource.setIsCore(true);
-                }
-//            }
+            this.currentEresource.addType(type);
+            if ("core material".equals(type)) {
+                this.currentEresource.setIsCore(true);
+            }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
                 && ("237".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString().toLowerCase();

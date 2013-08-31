@@ -247,14 +247,12 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
                     type = type.substring(0, lastPosition);
                 }
             }
-//            if ((type.indexOf("subset") != 0) && !"internet resource".equals(type)) {
-                this.currentEresource.addType(type);
-                if (type.indexOf("motion picture") == 0 || (type.indexOf("video") > -1)) {
-                    this.currentEresource.addType("movie");
-                } else if (type.indexOf("book set") ==0 || type.indexOf("pamphlet") == 0 || type.indexOf("leaflet") == 0) {
-                    this.currentEresource.addType("book");
-                }
-//            }
+            this.currentEresource.addType(type);
+            if (type.indexOf("motion picture") == 0 || (type.indexOf("video") > -1)) {
+                this.currentEresource.addType("movie");
+            } else if (type.indexOf("book set") ==0 || type.indexOf("pamphlet") == 0 || type.indexOf("leaflet") == 0) {
+                this.currentEresource.addType("book");
+            }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1) && ("27".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString().toLowerCase();
             this.currentEresource.addMeshTerm(mesh);
