@@ -20,7 +20,7 @@ public class Link {
 
     public String getLinkText() {
         StringBuilder sb = new StringBuilder();
-        if ("impact factor".equalsIgnoreCase(getLabel())) {
+        if ("impact factor".equalsIgnoreCase(this.label)) {
             sb.append("Impact Factor");
         } else {
             String summaryHoldings = this.version.getSummaryHoldings();
@@ -31,12 +31,12 @@ public class Link {
                     sb.append(", ").append(dates);
                 }
             } else {
-                if (getLabel() != null) {
-                    sb.append(getLabel());
+                if (this.label != null) {
+                    sb.append(this.label);
                 }
             }
             if (sb.length() == 0) {
-                sb.append(getLabel());
+                sb.append(this.label);
             }
             String description = this.version.getDescription();
             if (description != null && description.length() > 0) {
