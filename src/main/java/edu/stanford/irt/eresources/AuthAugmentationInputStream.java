@@ -8,8 +8,7 @@ import javax.sql.DataSource;
 
 public class AuthAugmentationInputStream extends AuthInputStream {
 
-    private static final String MESH_LIST_QUERY =
-    "select bib_id from cifdb.bib_index where index_code = '2451' and  display_heading = ?";
+    private static final String MESH_LIST_QUERY = "select bib_id from cifdb.bib_index where index_code = '2451' and  display_heading = ?";
 
     private static final String PERSON_LIST_QUERY = "select bib_id from cifdb.bib_index where index_code = '2451' and display_heading like ? || '%'";
 

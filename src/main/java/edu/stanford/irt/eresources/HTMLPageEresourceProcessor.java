@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
-    
+
     private static final String ERESOURCES = "eresources";
 
     private String basePath;

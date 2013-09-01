@@ -27,13 +27,13 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private StringBuilder content = new StringBuilder();
 
-    private DatabaseEresource currentEresource;
+    private Eresource currentEresource;
 
-    private DatabaseLink currentLink;
+    private Link currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
-    private DatabaseVersion currentVersion;
+    private Version currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -75,7 +75,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.eresourceHandler.handleEresource(this.currentEresource);
                 if (this.hasPreferredTitle) {
                     try {
-                        DatabaseEresource clone = (DatabaseEresource) this.currentEresource.clone();
+                        Eresource clone = (Eresource) this.currentEresource.clone();
                         clone.setTitle(this.preferredTitle.toString());
                         this.hasPreferredTitle = false;
                         this.preferredTitle.setLength(0);
@@ -107,8 +107,8 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             throws SAXException {
         this.currentText.setLength(0);
         if ("record".equals(name)) {
-            this.currentEresource = new DatabaseEresource();
-            this.currentVersion = new DatabaseVersion();
+            this.currentEresource = new Eresource();
+            this.currentVersion = new Version();
             this.currentEresource.addVersion(this.currentVersion);
             this.currentEresource.setRecordType("auth");
         }
@@ -119,7 +119,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if ("856".equals(this.tag)) {
-                this.currentLink = new DatabaseLink();
+                this.currentLink = new Link();
                 this.q = null;
                 this.z = null;
             }
@@ -258,8 +258,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentVersion.addSubset(subset);
             }
             this.currentVersion.addSubset(subset);
-        }
-        else if ("856".equals(this.tag)) {
+        } else if ("856".equals(this.tag)) {
             if ("q".equals(this.code) && (null == this.q)) {
                 this.q = this.currentText.toString();
             } else if ("z".equals(this.code) && (null == this.z)) {

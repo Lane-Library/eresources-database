@@ -8,9 +8,9 @@ package edu.stanford.irt.eresources;
  */
 public interface EresourceHandler extends Runnable {
 
-    void handleEresource(DatabaseEresource eresource);
+    int getCount();
+
+    void handleEresource(Eresource eresource);
 
     void stop();
-    
-    int getCount();
 }

@@ -1,11 +1,22 @@
 package edu.stanford.irt.eresources;
 
-import edu.stanford.irt.eresources.impl.LinkImpl;
+public class Link {
 
+    private String instruction;
 
-public class DatabaseLink extends LinkImpl {
-    
+    private String label;
+
+    private String url;
+
     private Version version;
+
+    public String getInstruction() {
+        return this.instruction;
+    }
+
+    public String getLabel() {
+        return this.label;
+    }
 
     public String getLinkText() {
         StringBuilder sb = new StringBuilder();
@@ -34,8 +45,24 @@ public class DatabaseLink extends LinkImpl {
         }
         return sb.toString();
     }
-    
-    void setVersion(Version version) {
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setInstruction(final String instruction) {
+        this.instruction = instruction;
+    }
+
+    public void setLabel(final String label) {
+        this.label = label;
+    }
+
+    public void setUrl(final String url) {
+        this.url = url;
+    }
+
+    void setVersion(final Version version) {
         this.version = version;
     }
 }

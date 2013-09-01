@@ -26,6 +26,18 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class DBLoader {
 
+    public static void main(final String[] args) throws SQLException, IOException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/"
+                + args[0] + ".xml");
+        DBLoader loader = (DBLoader) context.getBean("dbLoader");
+        ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
+        try {
+            loader.load();
+        } finally {
+            executor.shutdown();
+        }
+    }
+
     private Collection<String> callStatements = Collections.<String> emptyList();
 
     private Collection<String> createStatements = Collections.<String> emptyList();
@@ -42,29 +54,16 @@ public class DBLoader {
 
     private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
 
-    private Queue<DatabaseEresource> queue;
+    private Queue<Eresource> queue;
 
     private String userName;
 
     private String version;
-    
-    public static void main(final String[] args) throws SQLException, IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-                "edu/stanford/irt/eresources/" + args[0] + ".xml");
-        DBLoader loader = (DBLoader) context.getBean("dbLoader");
-        ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
-        try {
-            loader.load();
-        } finally {
-            executor.shutdown();
-        }
-    }
 
     public void load() throws SQLException, IOException {
         this.log.info(this.version + " starting up");
         managePIDFile();
-        try (Connection conn = this.dataSource.getConnection();
-             Statement stmt = conn.createStatement();) {
+        try (Connection conn = this.dataSource.getConnection(); Statement stmt = conn.createStatement();) {
             conn.setAutoCommit(false);
             for (String create : this.createStatements) {
                 try {
@@ -147,7 +146,7 @@ public class DBLoader {
         this.processors = processors;
     }
 
-    public void setQueue(final Queue<DatabaseEresource> queue) {
+    public void setQueue(final Queue<Eresource> queue) {
         this.queue = queue;
     }
 
@@ -157,6 +156,10 @@ public class DBLoader {
 
     public void setVersion(final String version) {
         this.version = version;
+    }
+
+    protected Date getUpdatedDate(final Statement stmt) throws SQLException {
+        return new Date(0);
     }
 
     private void managePIDFile() throws IOException {
@@ -190,9 +193,5 @@ public class DBLoader {
                 }
             }
         });
-    }
-
-    protected Date getUpdatedDate(final Statement stmt) throws SQLException {
-        return new Date(0);
     }
 }

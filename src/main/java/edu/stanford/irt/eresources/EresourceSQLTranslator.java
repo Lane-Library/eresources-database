@@ -8,36 +8,36 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class EresourceSQLTranslator {
-    
-    private static final String INSERT_INTO = "INSERT INTO ";
+
+    private static final char APOS = '\'';
+
+    private static final Pattern APOS_PATTERN = Pattern.compile("'");
+
+    private static final char COMMA = ',';
+
+    private static final char END_PAREN = ')';
 
     private static final String INSERT_ERESOURCE = "ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, CORE, YEAR, DESCRIPTION, TEXT) VALUES (";
+
+    private static final String INSERT_INTO = "INSERT INTO ";
 
     private static final String INSERT_LINK = "LINK (LINK_ID, VERSION_ID, ERESOURCE_ID, LABEL, URL, INSTRUCTION, LINK_TEXT) VALUES (";
 
     private static final String INSERT_VERSION = "VERSION (VERSION_ID, ERESOURCE_ID, PUBLISHER, HOLDINGS, DATES, DESCRIPTION, PROXY, GETPASSWORD, SEQNUM) VALUES (";
 
     private static final String NULL = "NULL";
-    
-    private static final char COMMA = ',';
-
-    private static final char END_PAREN = ')';
-
-    private static final char APOS = '\'';
-    
-    private static final Pattern APOS_PATTERN = Pattern.compile("'");
 
     private DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-    
+
     private String insertInto;
 
     private String tablePrefix;
-    
+
     public EresourceSQLTranslator() {
         this("");
     }
-    
-    public EresourceSQLTranslator(String tablePrefix) {
+
+    public EresourceSQLTranslator(final String tablePrefix) {
         this.tablePrefix = tablePrefix;
         this.insertInto = INSERT_INTO + tablePrefix;
     }
@@ -49,7 +49,7 @@ public class EresourceSQLTranslator {
         return sb.toString();
     }
 
-    public List<String> getInsertSQL(final DatabaseEresource er) {
+    public List<String> getInsertSQL(final Eresource er) {
         List<String> sql = new LinkedList<String>();
         String keywords = er.getKeywords();
         StringBuilder sb = new StringBuilder(this.insertInto).append(INSERT_ERESOURCE)
@@ -71,7 +71,7 @@ public class EresourceSQLTranslator {
         sql.addAll(getInsertMeshSQL(er));
         int order = 0;
         for (Version version : er.getVersions()) {
-            sql.addAll(getInsertVersionSQL((DatabaseVersion) version, order++));
+            sql.addAll(getInsertVersionSQL(version, order++));
         }
         return sql;
     }
@@ -80,11 +80,12 @@ public class EresourceSQLTranslator {
         if (string == null) {
             return NULL;
         }
-        StringBuilder sb = new StringBuilder().append(APOS).append(APOS_PATTERN.matcher(string).replaceAll("''")).append(APOS);
+        StringBuilder sb = new StringBuilder().append(APOS).append(APOS_PATTERN.matcher(string).replaceAll("''"))
+                .append(APOS);
         return sb.toString();
     }
 
-    private String getInsertLinkSQL(final DatabaseLink link) {
+    private String getInsertLinkSQL(final Link link) {
         StringBuilder sb = new StringBuilder(this.insertInto).append(INSERT_LINK)
                 .append(this.tablePrefix).append("LINK_ID_SEQ.NEXTVAL, ")
                 .append(this.tablePrefix).append("VERSION_ID_SEQ.CURRVAL, ")
@@ -97,7 +98,7 @@ public class EresourceSQLTranslator {
         return sb.toString();
     }
 
-    private Collection<String> getInsertMeshSQL(final DatabaseEresource er) {
+    private Collection<String> getInsertMeshSQL(final Eresource er) {
         Collection<String> sql = new LinkedList<String>();
         StringBuilder sb = new StringBuilder();
         for (String meshTerm : er.getMeshTerms()) {
@@ -109,7 +110,7 @@ public class EresourceSQLTranslator {
         return sql;
     }
 
-    private Collection<String> getInsertSubsetSQL(final DatabaseVersion vr) {
+    private Collection<String> getInsertSubsetSQL(final Version vr) {
         Collection<String> sql = new LinkedList<String>();
         StringBuilder sb = new StringBuilder();
         for (String subset : vr.getSubsets()) {
@@ -123,7 +124,7 @@ public class EresourceSQLTranslator {
         return sql;
     }
 
-    private Collection<String> getInsertTypeSQL(final DatabaseEresource er) {
+    private Collection<String> getInsertTypeSQL(final Eresource er) {
         Collection<String> sql = new LinkedList<String>();
         StringBuilder sb = new StringBuilder();
         for (String type : er.getTypes()) {
@@ -136,7 +137,7 @@ public class EresourceSQLTranslator {
         return sql;
     }
 
-    private Collection<String> getInsertVersionSQL(final DatabaseVersion vr, final int order) {
+    private Collection<String> getInsertVersionSQL(final Version vr, final int order) {
         Collection<String> sql = new LinkedList<String>();
         StringBuilder sb = new StringBuilder(this.insertInto).append(INSERT_VERSION)
                 .append(this.tablePrefix).append("VERSION_ID_SEQ.NEXTVAL, ")
@@ -152,7 +153,7 @@ public class EresourceSQLTranslator {
         sql.add(sb.toString());
         sql.addAll(getInsertSubsetSQL(vr));
         for (Link link : vr.getLinks()) {
-            sql.add(getInsertLinkSQL((DatabaseLink)link));
+            sql.add(getInsertLinkSQL(link));
         }
         return sql;
     }

@@ -181,16 +181,6 @@
             <version>3.6.1</version>
         </dependency>
         <dependency>
-            <artifactId>eresources-api</artifactId>
-            <groupId>edu.stanford.irt</groupId>
-            <version>1.6.0</version>
-        </dependency>
-        <dependency>
-            <artifactId>eresources-impl</artifactId>
-            <groupId>edu.stanford.irt</groupId>
-            <version>1.6.0</version>
-        </dependency>
-        <dependency>
             <artifactId>nekohtml</artifactId>
             <groupId>net.sourceforge.nekohtml</groupId>
             <version>1.9.11</version>

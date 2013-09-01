@@ -16,8 +16,6 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class AuthHistoryEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private String subfield0359;
-
     private String catalogLinkLabel;
 
     private String code;
@@ -26,11 +24,11 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
 
     private HistoryDatabaseEresource currentEresource;
 
-    private DatabaseLink currentLink;
+    private Link currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
-    private DatabaseVersion currentVersion;
+    private Version currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -47,6 +45,8 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
     private String q;
 
     private boolean recordHasError;
+
+    private String subfield0359;
 
     private String tag;
 
@@ -65,7 +65,7 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if ("record".equals(name)) {
-            DatabaseLink link = new DatabaseLink();
+            Link link = new Link();
             link.setLabel(this.catalogLinkLabel + " record");
             link.setUrl("http://cifdb.stanford.edu/cgi-bin/Pwebrecon.cgi?DB=local&Search_Arg=0359+" + this.subfield0359
                     + "&Search_Code=CMD*&CNT=10");
@@ -105,7 +105,7 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
         if ("record".equals(name)) {
             this.currentEresource = new HistoryDatabaseEresource();
             this.currentEresource.setRecordType("auth");
-            this.currentVersion = new DatabaseVersion();
+            this.currentVersion = new Version();
             this.subfield0359 = null;
             this.catalogLinkLabel = "catalog";
         }
@@ -116,7 +116,7 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if ("856".equals(this.tag)) {
-                this.currentLink = new DatabaseLink();
+                this.currentLink = new Link();
                 this.q = null;
                 this.z = null;
             }
@@ -135,9 +135,10 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
     private boolean checkSaveContent() {
         try {
             int tagNumber = Integer.parseInt(this.tag);
-            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22) || (tagNumber == 30)
-                    || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
-                    || ((tagNumber >= 941) && (tagNumber <= 943)) || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
+            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
+                    || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
+                    || ((tagNumber >= 941) && (tagNumber <= 943))
+                    || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
         } catch (NumberFormatException e) {
             return false;
         }
@@ -201,7 +202,8 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
             } else if ("event".equals(type)) {
                 this.catalogLinkLabel = "event";
             }
-        } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1) && ("27".indexOf(this.ind2) > -1)) {
+        } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
+                && ("27".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString().toLowerCase();
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && ("anpq".indexOf(this.code) > -1)) {
@@ -254,19 +256,6 @@ public class AuthHistoryEresourceBuilder extends DefaultHandler implements Ereso
                 this.currentVersion.setProxy(false);
             }
         }
-        // else if ("844".equals(this.tag) && "a".equals(this.code)) {
-        // this.currentVersion.setPublisher(this.currentText.toString());
-        // } else if ("866".equals(this.tag)) {
-        // if ("v".equals(this.code)) {
-        // String holdings = this.currentText.toString();
-        // holdings = holdings.replaceAll(" =", "");
-        // this.currentVersion.setSummaryHoldings(holdings);
-        // } else if ("y".equals(this.code)) {
-        // this.currentVersion.setDates(this.currentText.toString());
-        // } else if ("z".equals(this.code)) {
-        // this.currentVersion.setDescription(this.currentText.toString());
-        // }
-        // }
         else if ("856".equals(this.tag)) {
             if ("q".equals(this.code) && (null == this.q)) {
                 this.q = this.currentText.toString();

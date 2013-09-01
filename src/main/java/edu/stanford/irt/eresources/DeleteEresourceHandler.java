@@ -39,17 +39,17 @@ public class DeleteEresourceHandler implements EresourceHandler {
 
     private boolean keepGoing = true;
 
-    private BlockingQueue<DatabaseEresource> queue;
+    private BlockingQueue<Eresource> queue;
 
     private String selectSQL;
 
     private String tablePrefix;
 
-    public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue) {
+    public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue) {
         this(dataSource, queue, "");
     }
 
-    public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
+    public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final String tablePrefix) {
         this.dataSource = dataSource;
         this.queue = queue;
@@ -72,7 +72,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
     }
 
     @Override
-    public void handleEresource(final DatabaseEresource eresource) {
+    public void handleEresource(final Eresource eresource) {
         try {
             this.queue.put(eresource);
         } catch (InterruptedException e) {
@@ -99,7 +99,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
         synchronized (this.queue) {
             while (!this.queue.isEmpty() || this.keepGoing) {
                 try {
-                    DatabaseEresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
+                    Eresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
                     if (eresource != null) {
                         Set<Integer> set = this.ids.get(eresource.getRecordType());
                         set.remove(Integer.valueOf(eresource.getRecordId()));

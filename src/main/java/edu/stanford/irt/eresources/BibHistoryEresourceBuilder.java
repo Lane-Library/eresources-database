@@ -16,21 +16,18 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class BibHistoryEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private String subfield0359;
-
-//    private int field866Count;
-
     private String code;
 
+    // private int field866Count;
     private StringBuilder content = new StringBuilder();
 
     private HistoryDatabaseEresource currentEresource;
-    
-    private DatabaseVersion currentVersion;
 
-    private DatabaseLink currentLink;
+    private Link currentLink;
 
     private StringBuilder currentText = new StringBuilder();
+
+    private Version currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -48,6 +45,8 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
 
     private boolean recordHasError = false;
 
+    private String subfield0359;
+
     private String tag;
 
     private StringBuilder title = new StringBuilder();
@@ -56,8 +55,7 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
 
     private String z;
 
-//    private boolean isNoProxy;
-
+    // private boolean isNoProxy;
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
         this.currentText.append(chars, start, length);
@@ -69,7 +67,7 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if ("record".equals(name)) {
-            DatabaseLink link = new DatabaseLink();
+            Link link = new Link();
             link.setLabel("catalog record");
             link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?DB=local&Search_Arg=0359+" + this.subfield0359
                     + "&Search_Code=CMD*&CNT=10");
@@ -104,12 +102,12 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
         this.currentText.setLength(0);
         if ("record".equals(name)) {
             this.currentEresource = new HistoryDatabaseEresource();
-            this.currentVersion = new DatabaseVersion();
+            this.currentVersion = new Version();
             this.currentEresource.addVersion(this.currentVersion);
             this.currentEresource.setRecordType("bib");
             this.subfield0359 = null;
             this.titleDates = null;
-//            this.isNoProxy = false;
+            // this.isNoProxy = false;
             this.content.setLength(0);
             this.recordHasError = false;
         }
@@ -120,14 +118,14 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if ("856".equals(this.tag)) {
-                this.currentLink = new DatabaseLink();
+                this.currentLink = new Link();
                 this.q = null;
                 this.z = null;
             }
         } else if ("controlfield".equals(name)) {
             this.tag = atts.getValue("tag");
         } else if ("record".equals(name)) {
-//            this.field866Count = 0;
+            // this.field866Count = 0;
         }
     }
 
@@ -141,9 +139,10 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
     private boolean checkSaveContent() {
         try {
             int tagNumber = Integer.parseInt(this.tag);
-            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22) || (tagNumber == 30)
-                    || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
-                    || ((tagNumber >= 941) && (tagNumber <= 943)) || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
+            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
+                    || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
+                    || ((tagNumber >= 941) && (tagNumber <= 943))
+                    || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
         } catch (NumberFormatException e) {
             return false;
         }
@@ -250,10 +249,11 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
             this.currentEresource.addType(type);
             if (type.indexOf("motion picture") == 0 || (type.indexOf("video") > -1)) {
                 this.currentEresource.addType("movie");
-            } else if (type.indexOf("book set") ==0 || type.indexOf("pamphlet") == 0 || type.indexOf("leaflet") == 0) {
+            } else if (type.indexOf("book set") == 0 || type.indexOf("pamphlet") == 0 || type.indexOf("leaflet") == 0) {
                 this.currentEresource.addType("book");
             }
-        } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1) && ("27".indexOf(this.ind2) > -1)) {
+        } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
+                && ("27".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString().toLowerCase();
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && ("anpq".indexOf(this.code) > -1)) {
@@ -296,31 +296,12 @@ public class BibHistoryEresourceBuilder extends DefaultHandler implements Eresou
                 this.currentLink.setLabel(label);
             }
             this.currentVersion.addLink(this.currentLink);
-//        } else if ("866".equals(this.tag) && (++this.field866Count > 1)) {
-//            this.currentVersion.setDescription("");
+            // } else if ("866".equals(this.tag) && (++this.field866Count > 1)) {
+            // this.currentVersion.setDescription("");
         }
     }
 
     private void handleMfhdSubfield() {
-//        if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
-//            String subset = this.currentText.toString().substring(8).toLowerCase();
-//            if ("noproxy".equals(subset)) {
-//                this.isNoProxy = true;
-//            }
-//        }
-        // else if ("844".equals(this.tag) && "a".equals(this.code)) {
-        // this.currentVersion.setPublisher(this.currentText.toString());
-        // } else if ("866".equals(this.tag)) {
-        // if ("v".equals(this.code)) {
-        // String holdings = this.currentText.toString();
-        // holdings = holdings.replaceAll(" =", "");
-        // this.currentVersion.setSummaryHoldings(holdings);
-        // } else if ("y".equals(this.code)) {
-        // this.currentVersion.setDates(this.currentText.toString());
-        // } else if ("z".equals(this.code)) {
-        // this.currentVersion.setDescription(this.currentText.toString());
-        // }
-        // }
         if ("856".equals(this.tag)) {
             if ("q".equals(this.code) && (null == this.q)) {
                 this.q = this.currentText.toString();

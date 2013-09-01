@@ -1,19 +1,18 @@
 package edu.stanford.irt.eresources;
 
-
 public class EresourceDatabaseException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public EresourceDatabaseException(String message) {
+    public EresourceDatabaseException(final String message) {
         super(message);
     }
 
-    public EresourceDatabaseException(Throwable cause) {
-        super(cause);
+    public EresourceDatabaseException(final String message, final Throwable cause) {
+        super(message, cause);
     }
 
-    public EresourceDatabaseException(String message, Throwable cause) {
-        super(message, cause);
+    public EresourceDatabaseException(final Throwable cause) {
+        super(cause);
     }
 }

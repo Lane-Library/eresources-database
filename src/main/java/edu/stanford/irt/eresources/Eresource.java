@@ -10,9 +10,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import edu.stanford.irt.eresources.impl.EresourceImpl;
+public class Eresource implements Cloneable {
 
-public class DatabaseEresource extends EresourceImpl implements Cloneable {
+    private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
+
+    private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
+            "redwood software, installed", "duck software, installed", "stone software, installed",
+            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
+            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+            "statistics software, installed", "biotools software, installed" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -23,15 +29,7 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
             { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
             { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
                     "digital videos, local", "digital videos, local, public" },
-            { "book", "book set", "book sets", "books" }, { "database", "databases" }, {"graphic", "graphics"} };
-
-    private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
-
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
-            "redwood software, installed", "duck software, installed", "stone software, installed",
-            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed" };
+            { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -43,9 +41,21 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
         }
     }
 
+    private String description;
+
+    private int id;
+
+    private boolean isCore = false;
+
     private String keywords;
 
     private Collection<String> meshTerms;
+
+    private int recordId;
+
+    private String recordType;
+
+    private String title;
 
     private Collection<String> types;
 
@@ -55,9 +65,6 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
 
     private int year;
 
-    private boolean isCore = false;
-
-    @Override
     public void addMeshTerm(final String meshTerm) {
         if (null == this.meshTerms) {
             this.meshTerms = new HashSet<String>();
@@ -65,7 +72,6 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
         this.meshTerms.add(meshTerm);
     }
 
-    @Override
     public void addType(final String type) {
         String typeToAdd = getCompositeType(type);
         if (isAllowable(typeToAdd)) {
@@ -75,19 +81,7 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
             this.types.add(typeToAdd);
         }
     }
-    
-    protected boolean isAllowable(String type) {
-        return ALLOWED_TYPES.contains(type);
-    }
-    
-    protected String getCompositeType(String type) {
-        if (COMPOSITE_TYPES.containsKey(type)) {
-            return COMPOSITE_TYPES.get(type);
-        }
-        return type;
-    }
 
-    @Override
     public void addVersion(final Version version) {
         if (this.versions == null) {
             this.versions = new TreeSet<Version>(COMPARATOR);
@@ -100,12 +94,18 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
         return super.clone();
     }
 
-    @Override
+    public String getDescription() {
+        return this.description;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
     public String getKeywords() {
         return this.keywords;
     }
 
-    @Override
     public Collection<String> getMeshTerms() {
         if (null == this.meshTerms) {
             return Collections.emptySet();
@@ -113,7 +113,18 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
         return this.meshTerms;
     }
 
-    @Override
+    public int getRecordId() {
+        return this.recordId;
+    }
+
+    public String getRecordType() {
+        return this.recordType;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
     public Collection<String> getTypes() {
         if (null == this.types) {
             return Collections.emptySet();
@@ -121,12 +132,10 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
         return Collections.unmodifiableCollection(this.types);
     }
 
-    @Override
     public Date getUpdated() {
         return this.updated;
     }
 
-    @Override
     public Collection<Version> getVersions() {
         if (this.versions == null) {
             return Collections.emptySet();
@@ -138,26 +147,54 @@ public class DatabaseEresource extends EresourceImpl implements Cloneable {
         return this.year;
     }
 
-    @Override
     public boolean isCore() {
-        return this.isCore ;
+        return this.isCore;
     }
-    
-    public void setIsCore(boolean isCore) {
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    public void setId(final int id) {
+        this.id = id;
+    }
+
+    public void setIsCore(final boolean isCore) {
         this.isCore = isCore;
     }
 
-    @Override
     public void setKeywords(final String keywords) {
         this.keywords = keywords;
     }
 
-    @Override
+    public void setRecordId(final int recordId) {
+        this.recordId = recordId;
+    }
+
+    public void setRecordType(final String recordType) {
+        this.recordType = recordType;
+    }
+
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
     public void setUpdated(final Date updated) {
         this.updated = updated;
     }
 
     public void setYear(final int year) {
         this.year = year;
+    }
+
+    protected String getCompositeType(final String type) {
+        if (COMPOSITE_TYPES.containsKey(type)) {
+            return COMPOSITE_TYPES.get(type);
+        }
+        return type;
+    }
+
+    protected boolean isAllowable(final String type) {
+        return ALLOWED_TYPES.contains(type);
     }
 }

@@ -10,22 +10,29 @@ import javax.sql.DataSource;
 
 public class UpdateEresourceHandler extends DefaultEresourceHandler {
 
-    private EresourceSQLTranslator translator;
-    private String tablePrefix;
     private String deleteEresource;
-    private String deleteVersion;
+
     private String deleteLink;
-    private String deleteType;
-    private String deleteSubset;
+
     private String deleteMesh;
 
-    public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
+    private String deleteSubset;
+
+    private String deleteType;
+
+    private String deleteVersion;
+
+    private String tablePrefix;
+
+    private EresourceSQLTranslator translator;
+
+    public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final EresourceSQLTranslator translator) {
         this(dataSource, queue, translator, "");
     }
 
-    public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
-            final EresourceSQLTranslator translator, String tablePrefix) {
+    public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
+            final EresourceSQLTranslator translator, final String tablePrefix) {
         super(dataSource, queue, translator, tablePrefix);
         this.translator = translator;
         this.tablePrefix = tablePrefix;
@@ -38,7 +45,7 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
     }
 
     @Override
-    protected void insertEresource(final DatabaseEresource eresource) throws SQLException, IOException {
+    protected void insertEresource(final Eresource eresource) throws SQLException, IOException {
         Statement stmt = getStatement();
         try (ResultSet rs = stmt.executeQuery(this.translator.getEresourceIdSQL(eresource))) {
             while (rs.next()) {

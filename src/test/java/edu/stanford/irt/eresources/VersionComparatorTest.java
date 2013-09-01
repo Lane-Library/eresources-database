@@ -6,9 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.stanford.irt.eresources.impl.LinkImpl;
-import edu.stanford.irt.eresources.impl.VersionImpl;
-
 /**
  * @author ryanmax
  */
@@ -16,20 +13,20 @@ public class VersionComparatorTest {
 
     private VersionComparator comparator;
 
-    private LinkImpl link;
+    private Link link;
 
-    private VersionImpl v1;
+    private Version v1;
 
-    private VersionImpl v2;
+    private Version v2;
 
     /**
      * @throws java.lang.Exception
      */
     @Before
     public void setUp() throws Exception {
-        this.v1 = new VersionImpl();
-        this.v2 = new VersionImpl();
-        this.link = new LinkImpl();
+        this.v1 = new Version();
+        this.v2 = new Version();
+        this.link = new Link();
         this.comparator = new VersionComparator();
     }
 
@@ -83,7 +80,7 @@ public class VersionComparatorTest {
         this.v2.setSummaryHoldings("v. 1.");
         this.v1.setDates("1999-2000.");
         this.v2.setDates("1999-2000.");
-        this.v1.addLink(new LinkImpl());
+        this.v1.addLink(new Link());
         this.link.setLabel("Impact Factor");
         this.v2.addLink(this.link);
         assertTrue(this.comparator.compare(this.v1, this.v2) < 0);

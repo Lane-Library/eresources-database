@@ -34,13 +34,13 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
 
     private StringBuilder content = new StringBuilder();
 
-    private DatabaseEresource currentEresource;
+    private Eresource currentEresource;
 
-    private DatabaseLink currentLink;
+    private Link currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
-    private DatabaseVersion currentVersion;
+    private Version currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -93,7 +93,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                 this.eresourceHandler.handleEresource(this.currentEresource);
                 if (this.hasPreferredTitle) {
                     try {
-                        DatabaseEresource clone = (DatabaseEresource) this.currentEresource.clone();
+                        Eresource clone = (Eresource) this.currentEresource.clone();
                         clone.setTitle(this.preferredTitle.toString());
                         this.hasPreferredTitle = false;
                         this.preferredTitle.setLength(0);
@@ -119,7 +119,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
             if ("uvxy".indexOf(this.currentText.charAt(6)) > -1) {
                 this.isMfhd = true;
                 this.isBib = false;
-                this.currentVersion = new DatabaseVersion();
+                this.currentVersion = new Version();
             } else {
                 this.isBib = true;
                 this.isMfhd = false;
@@ -131,7 +131,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                         this.eresourceHandler.handleEresource(this.currentEresource);
                         if (this.hasPreferredTitle) {
                             try {
-                                DatabaseEresource clone = (DatabaseEresource) this.currentEresource.clone();
+                                Eresource clone = (Eresource) this.currentEresource.clone();
                                 clone.setTitle(this.preferredTitle.toString());
                                 this.hasPreferredTitle = false;
                                 this.preferredTitle.setLength(0);
@@ -144,12 +144,12 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
                         this.recordHasError = false;
                     }
                 }
-                this.currentEresource = new DatabaseEresource();
+                this.currentEresource = new Eresource();
                 this.currentEresource.setRecordType("print");
             }
         } else if ("record".equals(name)) {
             if (this.isMfhd) {
-                DatabaseLink link = new DatabaseLink();
+                Link link = new Link();
                 link.setLabel("Lane Catalog record");
                 link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
                         + this.currentEresource.getRecordId());
@@ -199,7 +199,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if (this.isMfhd && "856".equals(this.tag)) {
-                this.currentLink = new DatabaseLink();
+                this.currentLink = new Link();
                 this.q = null;
                 this.z = null;
             }
@@ -234,7 +234,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
         }
     }
 
-    private void createCustomTypes(final DatabaseEresource eresource) {
+    private void createCustomTypes(final Eresource eresource) {
         this.currentEresource.addType("print");
         Collection<String> types = eresource.getTypes();
         if (types.contains("periodical") || types.contains("newspaper") || types.contains("periodicals")

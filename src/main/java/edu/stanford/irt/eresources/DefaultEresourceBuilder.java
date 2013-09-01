@@ -17,13 +17,13 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class DefaultEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private DatabaseEresource currentEresource;
+    private Eresource currentEresource;
 
-    private DatabaseLink currentLink;
+    private Link currentLink;
 
     private StringBuilder currentText;
 
-    private DatabaseVersion currentVersion;
+    private Version currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -98,7 +98,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             throws SAXException {
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
-            this.currentEresource = new DatabaseEresource();
+            this.currentEresource = new Eresource();
             this.currentEresource.setRecordId(Integer.parseInt(atts.getValue("id")));
             this.currentEresource.setRecordType(atts.getValue("type"));
             try {
@@ -107,9 +107,9 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
                 throw new EresourceDatabaseException(e);
             }
         } else if ("version".equals(name)) {
-            this.currentVersion = new DatabaseVersion();
+            this.currentVersion = new Version();
         } else if ("link".equals(name)) {
-            this.currentLink = new DatabaseLink();
+            this.currentLink = new Link();
         }
     }
 }

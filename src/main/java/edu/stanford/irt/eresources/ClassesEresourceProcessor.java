@@ -22,7 +22,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
-    
+
     private static final String ERESOURCES = "eresources";
 
     private String allClassesURL;

@@ -21,38 +21,39 @@ public class DefaultEresourceHandler implements EresourceHandler {
 
     private int count = 0;
 
+    private String currentIdSQL;
+
     private DataSource dataSource;
+
+    private String descriptionSQL;
 
     private PreparedStatement descStmt;
 
     private volatile boolean keepGoing = true;
 
-    private BlockingQueue<DatabaseEresource> queue;
+    private BlockingQueue<Eresource> queue;
 
     private Statement stmt;
+
+    private String textSQL;
 
     private PreparedStatement textStmt;
 
     private EresourceSQLTranslator translator;
-    
-    private String textSQL;
-    
-    private String descriptionSQL;
-    
-    private String currentIdSQL;
 
-    public DefaultEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
+    public DefaultEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final EresourceSQLTranslator translator) {
         this(dataSource, queue, translator, "");
     }
 
-    public DefaultEresourceHandler(final DataSource dataSource, final BlockingQueue<DatabaseEresource> queue,
-            final EresourceSQLTranslator translator, String tablePrefix) {
+    public DefaultEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
+            final EresourceSQLTranslator translator, final String tablePrefix) {
         this.dataSource = dataSource;
         this.queue = queue;
         this.translator = translator;
         this.currentIdSQL = "SELECT " + tablePrefix + "ERESOURCE_ID_SEQ.CURRVAL FROM DUAL";
-        this.descriptionSQL = "SELECT DESCRIPTION FROM " + tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
+        this.descriptionSQL = "SELECT DESCRIPTION FROM " + tablePrefix
+                + "ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
         this.textSQL = "SELECT TEXT FROM " + tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
     }
 
@@ -60,10 +61,10 @@ public class DefaultEresourceHandler implements EresourceHandler {
         return this.count;
     }
 
-    public void handleEresource(final DatabaseEresource eresource) {
+    public void handleEresource(final Eresource eresource) {
         for (Version version : eresource.getVersions()) {
             for (Link link : version.getLinks()) {
-                ((DatabaseLink) link).setVersion(version);
+                link.setVersion(version);
             }
         }
         try {
@@ -85,12 +86,13 @@ public class DefaultEresourceHandler implements EresourceHandler {
             synchronized (this.queue) {
                 while (!this.queue.isEmpty() || this.keepGoing) {
                     try {
-                        DatabaseEresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
+                        Eresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
                         if (eresource != null) {
                             insertEresource(eresource);
                         }
                     } catch (InterruptedException | IOException e) {
-                        throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
+                        throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty="
+                                + this.queue.isEmpty(), e);
                     }
                 }
                 this.queue.notifyAll();
@@ -102,6 +104,25 @@ public class DefaultEresourceHandler implements EresourceHandler {
 
     public void stop() {
         this.keepGoing = false;
+    }
+
+    protected Statement getStatement() {
+        return this.stmt;
+    }
+
+    protected void insertEresource(final Eresource eresource) throws SQLException, IOException {
+        List<String> insertSQLStatements = this.translator.getInsertSQL(eresource);
+        for (Iterator<String> it = insertSQLStatements.iterator(); it.hasNext();) {
+            String sql = it.next();
+            if (sql.indexOf("TEXT:") != 0 && sql.indexOf("DESCRIPTION:") != 0) {
+                this.stmt.addBatch(sql);
+                it.remove();
+            }
+        }
+        this.stmt.executeBatch();
+        for (String clob : insertSQLStatements) {
+            insertClob(clob);
+        }
     }
 
     private void insertClob(final String sql) throws SQLException, IOException {
@@ -126,25 +147,6 @@ public class DefaultEresourceHandler implements EresourceHandler {
                 writer.close();
                 reader.close();
             }
-        }
-    }
-
-    protected Statement getStatement() {
-        return this.stmt;
-    }
-
-    protected void insertEresource(final DatabaseEresource eresource) throws SQLException, IOException {
-        List<String> insertSQLStatements = this.translator.getInsertSQL(eresource);
-        for (Iterator<String> it = insertSQLStatements.iterator(); it.hasNext();) {
-            String sql = it.next();
-            if (sql.indexOf("TEXT:") != 0 && sql.indexOf("DESCRIPTION:") != 0) {
-                this.stmt.addBatch(sql);
-                it.remove();
-            }
-        }
-        this.stmt.executeBatch();
-        for (String clob : insertSQLStatements) {
-            insertClob(clob);
         }
     }
 }
