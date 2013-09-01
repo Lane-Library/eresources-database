@@ -43,8 +43,6 @@ public class Eresource implements Cloneable {
 
     private String description;
 
-    private int id;
-
     private boolean isCore = false;
 
     private String keywords;
@@ -98,10 +96,6 @@ public class Eresource implements Cloneable {
         return this.description;
     }
 
-    public int getId() {
-        return this.id;
-    }
-
     public String getKeywords() {
         return this.keywords;
     }
@@ -153,10 +147,6 @@ public class Eresource implements Cloneable {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    public void setId(final int id) {
-        this.id = id;
     }
 
     public void setIsCore(final boolean isCore) {
