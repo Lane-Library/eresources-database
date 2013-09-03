@@ -10,6 +10,17 @@ public class Link {
 
     private Version version;
 
+    public String getAdditionalText() {
+        StringBuilder sb = new StringBuilder();
+        if (this.instruction != null) {
+            sb.append(" ").append(this.instruction);
+        }
+        if (this.version.getPublisher() != null) {
+            sb.append(" ").append(this.version.getPublisher());
+        }
+        return sb.toString();
+    }
+
     public String getInstruction() {
         return this.instruction;
     }

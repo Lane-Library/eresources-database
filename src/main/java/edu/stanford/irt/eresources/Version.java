@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class Version {
@@ -26,11 +27,11 @@ public class Version {
 
     private boolean isProxy = true;
 
-    private Collection<Link> links;
+    private List<Link> links;
 
     private String publisher;
 
-    private Collection<String> subsets;
+    private Set<String> subsets;
 
     private String summaryHoldings;
 
@@ -48,6 +49,34 @@ public class Version {
             }
             this.subsets.add(subset);
         }
+    }
+
+    public String getAdditionalText() {
+        StringBuilder sb = new StringBuilder(" ");
+        if (this.summaryHoldings != null) {
+            sb.append(this.summaryHoldings);
+        }
+        maybeAppend(sb, this.dates);
+        maybeAppend(sb, this.publisher);
+        maybeAppend(sb, this.description);
+        if (this.links != null && this.links.size() > 0) {
+            Link firstLink = this.links.get(0);
+            String label = firstLink.getLabel();
+            if (sb.length() == 1 && label != null) {
+                sb.append(label);
+            }
+            String instruction = firstLink.getInstruction();
+            if (instruction != null) {
+                if (sb.length() > 1) {
+                    sb.append(", ");
+                }
+                sb.append(instruction);
+            }
+        }
+        if (sb.length() > 1) {
+            sb.append(" ");
+        }
+        return sb.toString();
     }
 
     public String getDates() {
@@ -110,5 +139,14 @@ public class Version {
 
     public void setSummaryHoldings(final String summaryHoldings) {
         this.summaryHoldings = summaryHoldings;
+    }
+
+    private void maybeAppend(final StringBuilder sb, final String string) {
+        if (string != null && string.length() > 0) {
+            if (sb.length() > 1) {
+                sb.append(", ");
+            }
+            sb.append(string);
+        }
     }
 }
