@@ -5,13 +5,14 @@
     <xsl:param name="lane-host"/>
     
     <xsl:template match="h:html">
-        <eresource id="{@id}" type="web" update="{@update}">
+        <eresource id="{h:head/h:meta[@name='id']/@content}" type="web" update="{h:head/h:meta[@name='update']/@content}">
             <xsl:variable name="url">
                 <xsl:value-of select="$lane-host"/>
-                <xsl:value-of select="@file"/>
+                <xsl:value-of select="h:head/h:meta[@name='file']/@content"/>
             </xsl:variable>
             <xsl:variable name="keywords">
                 <xsl:apply-templates/>
+                <xsl:value-of select="h:head/h:meta[@name='Content-Type']/@content"/>
             </xsl:variable>
             <xsl:variable name="title" select="normalize-space(h:head/h:title)"/>
             <xsl:variable name="excerpt">
