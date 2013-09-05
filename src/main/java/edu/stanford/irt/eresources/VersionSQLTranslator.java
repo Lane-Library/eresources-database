@@ -28,7 +28,7 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
                 .append(vr.isProxy() ? "'T'" : "'F'").append(COMMA)
                 .append(vr.hasGetPasswordLink() ? "'T'" : "'F'").append(COMMA)
                 .append(order).append(COMMA)
-                 .append(apostrophize(vr.getAdditionalText()))
+                .append(apostrophize(vr.getAdditionalText()))
                 .append(END_PAREN);
         sql.add(sb.toString());
         sql.addAll(getInsertSubsetSQL(vr));
