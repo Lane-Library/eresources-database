@@ -2,7 +2,7 @@ package edu.stanford.irt.eresources;
 
 public class LinkSQLTranslator extends AbstractSQLTranslator {
 
-    private static final String INSERT_LINK = "LINK (LINK_ID, VERSION_ID, ERESOURCE_ID, LABEL, URL, INSTRUCTION, LINK_TEXT, ADDITIONAL_TEXT) VALUES (";
+    private static final String INSERT_LINK = "LINK (LINK_ID, VERSION_ID, ERESOURCE_ID, LABEL, URL, LINK_TEXT, ADDITIONAL_TEXT) VALUES (";
 
     public LinkSQLTranslator(final String tablePrefix) {
         super(tablePrefix);
@@ -16,7 +16,6 @@ public class LinkSQLTranslator extends AbstractSQLTranslator {
                 .append(tablePrefix).append("ERESOURCE_ID_SEQ.CURRVAL, ")
                 .append(apostrophize(link.getLabel())).append(COMMA)
                 .append(apostrophize(link.getUrl())).append(COMMA)
-                .append(apostrophize(link.getInstruction())).append(COMMA)
                 .append(apostrophize(link.getLinkText())).append(COMMA)
                 .append(apostrophize(link.getAdditionalText()))
                 .append(END_PAREN);
