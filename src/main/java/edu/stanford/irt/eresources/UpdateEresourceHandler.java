@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 import javax.sql.DataSource;
@@ -46,10 +48,15 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
 
     @Override
     protected void insertEresource(final Eresource eresource) throws SQLException, IOException {
-        Statement stmt = getStatement();
-        try (ResultSet rs = stmt.executeQuery(this.translator.getEresourceIdSQL(eresource))) {
-            while (rs.next()) {
-                int id = rs.getInt(1);
+        if (!eresource.isClone()) {
+            Statement stmt = getStatement();
+            List<String> ids = new LinkedList<String>();
+            try (ResultSet rs = stmt.executeQuery(this.translator.getEresourceIdSQL(eresource))) {
+                while (rs.next()) {
+                    ids.add(rs.getString(1));
+                }
+            }
+            for (String id : ids) {
                 stmt.addBatch(this.deleteEresource + id);
                 stmt.addBatch(this.deleteVersion + id);
                 stmt.addBatch(this.deleteLink + id);

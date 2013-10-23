@@ -25,8 +25,8 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
 
     public String getEresourceIdSQL(final Eresource er) {
         StringBuilder sb = new StringBuilder("SELECT ERESOURCE_ID FROM ").append(this.getTablePrefix())
-                .append("ERESOURCE WHERE RECORD_ID = '").append(er.getRecordId())
-                .append("' AND RECORD_TYPE = '").append(er.getRecordType()).append(APOS);
+                .append("ERESOURCE WHERE RECORD_ID = ").append(er.getRecordId())
+                .append(" AND RECORD_TYPE = '").append(er.getRecordType()).append(APOS);
         return sb.toString();
     }
 

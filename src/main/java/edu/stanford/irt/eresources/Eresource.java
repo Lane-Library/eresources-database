@@ -43,6 +43,8 @@ public class Eresource implements Cloneable {
 
     private String description;
 
+    private boolean isClone = false;
+
     private boolean isCore = false;
 
     private String keywords;
@@ -89,7 +91,9 @@ public class Eresource implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        Eresource clone = (Eresource) super.clone();
+        clone.isClone = true;
+        return clone;
     }
 
     public String getDescription() {
@@ -139,6 +143,10 @@ public class Eresource implements Cloneable {
 
     public int getYear() {
         return this.year;
+    }
+
+    public boolean isClone() {
+        return this.isClone;
     }
 
     public boolean isCore() {
