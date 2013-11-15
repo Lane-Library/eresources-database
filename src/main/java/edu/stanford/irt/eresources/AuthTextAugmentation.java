@@ -68,6 +68,10 @@ public class AuthTextAugmentation extends DefaultHandler {
     public String getAuthAugmentations(final String term, final String lookupTag) {
         String result = this.augmentations.get(term);
         if (null == result) {
+            this.augmentationText.setLength(0);
+            this.code = null;
+            this.currentText.setLength(0);
+            this.tag = null;
             XMLReader xmlReader = new UTF8ComposingMarcReader();
             xmlReader.setContentHandler(this);
             try {
