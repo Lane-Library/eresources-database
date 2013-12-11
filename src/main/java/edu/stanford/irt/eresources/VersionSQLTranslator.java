@@ -22,7 +22,7 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
                 .append(tablePrefix).append("VERSION_ID_SEQ.NEXTVAL, ")
                 .append(tablePrefix).append("ERESOURCE_ID_SEQ.CURRVAL,")
                 .append(vr.isProxy() ? "'T'" : "'F'").append(COMMA)
-                .append(vr.hasGetPasswordLink() ? "'T'" : "'F'").append(COMMA)
+                .append(vr.getHasGetPasswordLink() ? "'T'" : "'F'").append(COMMA)
                 .append(order).append(COMMA)
                 .append(apostrophize(vr.getAdditionalText()))
                 .append(END_PAREN);

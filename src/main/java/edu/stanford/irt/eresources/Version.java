@@ -109,7 +109,7 @@ public class Version {
         return this.summaryHoldings;
     }
 
-    public boolean hasGetPasswordLink() {
+    public boolean getHasGetPasswordLink() {
         return this.hasGetPasswordLink;
     }
 
