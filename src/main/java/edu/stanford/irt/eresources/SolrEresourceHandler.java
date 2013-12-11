@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.codehaus.jackson.map.ObjectMapper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SolrEresourceHandler implements EresourceHandler {
 
