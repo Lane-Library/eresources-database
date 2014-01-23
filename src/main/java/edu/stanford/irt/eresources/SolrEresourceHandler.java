@@ -93,6 +93,40 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String type : eresource.getTypes()) {
             doc.addField("type", type);
         }
+//        String publicationDate = eresource.getPublicationDate();
+//        if (null != publicationDate) {
+//            doc.addField("publicationDate", publicationDate);
+//        }
+//        String publicationIssue = eresource.getPublicationIssue();
+//        if (null != publicationIssue) {
+//            doc.addField("publicationIssue", publicationIssue);
+//        }
+//        String publicationPages = eresource.getPublicationPages();
+//        if (null != publicationPages) {
+//            doc.addField("publicationPages", publicationPages);
+//        }
+        String publicationAuthorsText = eresource.getPublicationAuthorsText();
+        if (null != publicationAuthorsText) {
+            doc.addField("publicationAuthorsText", publicationAuthorsText);
+        }
+        String publicationText = eresource.getPublicationText();
+        if (null != publicationText) {
+            doc.addField("publicationText", publicationText);
+        }
+        String publicationTitle = eresource.getPublicationTitle();
+        if (null != publicationTitle) {
+            doc.addField("publicationTitle", publicationTitle);
+        }
+//        String publicationVolume = eresource.getPublicationVolume();
+//        if (null != publicationVolume) {
+//            doc.addField("publicationVolume", publicationVolume);
+//        }
+        for (String author : eresource.getPublicationAuthors()) {
+            doc.addField("publicationAuthor", author);
+        }
+        for (String pubType : eresource.getPublicationTypes()) {
+            doc.addField("publicationType", pubType);
+        }
         for (Version version : eresource.getVersions()) {
             versions.add(version);
             for (String subset : version.getSubsets()) {

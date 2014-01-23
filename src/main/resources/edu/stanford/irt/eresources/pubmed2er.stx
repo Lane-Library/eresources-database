@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stx:transform xmlns:stx="http://stx.sourceforge.net/2002/ns"
+    version="1.0"
+    pass-through="none">
+    
+    <stx:variable name="pmid"/>
+    <stx:variable name="title"/>
+    <stx:variable name="keywords"/>
+    <stx:variable name="mesh"/>
+    <stx:variable name="description"/>
+    <stx:variable name="publicationDate"/>
+    <stx:variable name="publicationIssue"/>
+    <stx:variable name="publicationPages"/>
+    <stx:variable name="publicationTitle"/>
+    <stx:variable name="publicationType"/>
+    <stx:variable name="publicationVolume"/>
+    <stx:variable name="authorIndex"/>
+    <stx:variable name="authors"/>
+    <stx:variable name="authorsText"/>
+    
+    <stx:template match="MedlineCitation">
+        <stx:assign name="pmid" select="''"/>
+        <stx:assign name="title" select="''"/>
+        <stx:assign name="keywords" select="''"/>
+        <stx:assign name="mesh" select="''"/>
+        <stx:assign name="description" select="''"/>
+        <stx:assign name="publicationDate" select="''"/>
+        <stx:assign name="publicationIssue" select="''"/>
+        <stx:assign name="publicationPages" select="''"/>
+        <stx:assign name="publicationTitle" select="''"/>
+        <stx:assign name="publicationType" select="''"/>
+        <stx:assign name="publicationVolume" select="''"/>
+        <stx:assign name="authorIndex" select="0"/>
+        <stx:assign name="authors" select="''"/>
+        <stx:assign name="authorsText" select="''"/>
+        <stx:process-children/>
+        <eresource id="{$pmid}" type="pubmed" update="19690101000000">
+            <type>article</type>
+            <title><stx:value-of select="$title"/></title>
+            <stx:if test="$description != ''">
+                <er-description><stx:value-of select="$description"/></er-description>
+            </stx:if>
+            <version>
+                <link>
+                    <url><stx:value-of select="concat('http://sfx.stanford.edu/local?sid=stanford:laneweb-search-pubmed&amp;id=pmid:', $pmid)"/></url>
+                </link>
+            </version>
+            <stx:for-each-item name="heading" select="tokenize($mesh, ':::')">
+                <stx:assign name="keywords" select="concat($keywords, ' ', $heading)"/>
+                <mesh><stx:value-of select="$heading"/></mesh>
+            </stx:for-each-item>
+            <stx:if test="$publicationDate != ''">
+                <publicationDate><stx:value-of select="normalize-space($publicationDate)"/></publicationDate>
+                <stx:if test="matches($publicationDate,'^\d{4} ?')">
+                    <year><stx:value-of select="substring($publicationDate,1,4)"/></year>
+                </stx:if>
+            </stx:if>
+            <stx:if test="$publicationIssue != ''">
+                <publicationIssue><stx:value-of select="$publicationIssue"/></publicationIssue>
+            </stx:if>
+            <stx:if test="$publicationPages != ''">
+                <publicationPages><stx:value-of select="$publicationPages"/></publicationPages>
+            </stx:if>
+            <stx:if test="$publicationTitle != ''">
+                <publicationTitle><stx:value-of select="$publicationTitle"/></publicationTitle>
+            </stx:if>
+            <stx:if test="$publicationVolume != ''">
+                <publicationVolume><stx:value-of select="$publicationVolume"/></publicationVolume>
+            </stx:if>
+            <stx:for-each-item name="ptype" select="tokenize($publicationType, ':::')">
+                <stx:assign name="keywords" select="concat($keywords, ' ', $ptype)"/>
+                <publicationType><stx:value-of select="$ptype"/></publicationType>
+            </stx:for-each-item>
+            <stx:for-each-item name="author" select="tokenize($authors, ':::')">
+                <publicationAuthor><stx:value-of select="$author"/></publicationAuthor>
+            </stx:for-each-item>
+            <stx:assign name="authorIndex" select="count(tokenize($authors, ':::'))"/>
+            <stx:for-each-item name="author" select="tokenize($authors, ':::')">
+                <stx:assign name="authorIndex" select="$authorIndex - 1"/>
+                <stx:choose>
+                    <stx:when test="$authorIndex = 0">
+                        <stx:assign name="authorsText" select="concat($authorsText, $author, '.')"/>
+                    </stx:when>
+                    <stx:otherwise>
+                        <stx:assign name="authorsText" select="concat($authorsText, $author, ', ')"/>
+                    </stx:otherwise>
+                </stx:choose>
+            </stx:for-each-item>
+            <publicationAuthorsText><stx:value-of select="$authorsText"/></publicationAuthorsText>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $pmid)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $title)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $description)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $authorsText)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitle)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
+            <keywords><stx:value-of select="normalize-space($keywords)"/></keywords>
+        </eresource>
+    </stx:template>
+    
+    <stx:template match="*">
+        <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
+        <stx:process-children/>
+    </stx:template>
+        
+    <stx:template match="MedlineCitation/PMID">
+        <stx:assign name="pmid" select="."/>
+        <stx:process-children/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/ArticleTitle">
+        <stx:assign name="title" select="."/>
+        <stx:process-children/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/Journal/JournalIssue/Issue">
+        <stx:assign name="publicationIssue" select="."/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/Pagination/MedlinePgn">
+        <stx:assign name="publicationPages" select="."/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/Journal/ISOAbbreviation">
+        <stx:assign name="publicationTitle" select="."/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/Journal/JournalIssue/Volume">
+        <stx:assign name="publicationVolume" select="."/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/Journal/JournalIssue/PubDate/*">
+        <stx:choose>
+            <stx:when test="name(.) = 'MedlineDate'">
+                <stx:assign name="publicationDate" select="."/>
+            </stx:when>
+            <stx:otherwise>
+                <stx:assign name="publicationDate" select="concat($publicationDate, ., ' ')"/>
+            </stx:otherwise>
+        </stx:choose>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/Abstract/AbstractText">
+        <stx:variable name="thisDescription"/>
+        <stx:choose>
+            <stx:when test="@Label">
+                <stx:assign name="thisDescription" select="concat('::',@Label,'##',.)"/>
+            </stx:when>
+            <stx:otherwise>
+                <stx:assign name="thisDescription" select="."/>
+            </stx:otherwise>
+        </stx:choose>
+        <stx:choose>
+            <stx:when test="$description = ''">
+                <stx:assign name="description" select="$thisDescription"/>
+            </stx:when>
+            <stx:otherwise>
+                <stx:assign name="description" select="concat($description, ' ', $thisDescription)"/>
+            </stx:otherwise>
+        </stx:choose>
+        <stx:process-children/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/AuthorList/Author/LastName|MedlineCitation/Article/AuthorList/Author/CollectiveName">
+        <stx:choose>
+            <stx:when test="$authors = ''">
+                <stx:assign name="authors" select="."/>
+            </stx:when>
+            <stx:otherwise>
+                <stx:assign name="authors" select="concat($authors, ':::', .)"/>
+            </stx:otherwise>
+        </stx:choose>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/AuthorList/Author/Initials">
+        <stx:assign name="authors" select="concat($authors, ' ', .)"/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/PublicationTypeList/PublicationType">
+        <stx:choose>
+            <stx:when test="$publicationType = ''">
+                <stx:assign name="publicationType" select="."/>
+            </stx:when>
+            <stx:otherwise>
+                <stx:assign name="publicationType" select="concat($publicationType, ':::', .)"/>
+            </stx:otherwise>
+        </stx:choose>
+        <stx:process-children/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/MeshHeadingList/MeshHeading/DescriptorName">
+        <stx:choose>
+            <stx:when test="$mesh = ''">
+                <stx:assign name="mesh" select="."/>
+            </stx:when>
+            <stx:otherwise>
+                <stx:assign name="mesh" select="concat($mesh, ':::', .)"/>
+            </stx:otherwise>
+        </stx:choose>
+        <stx:process-children/>
+    </stx:template>
+    
+</stx:transform>
