@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -16,6 +18,8 @@ import org.xml.sax.XMLReader;
 public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
 
     private String basePath;
+
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     private XMLReader xmlReader;
 
@@ -60,6 +64,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
                         source.setByteStream(new FileInputStream(file));
                     }
                     this.xmlReader.parse(source);
+                    this.log.info("processed: " + file);
                 } catch (IOException e) {
                     throw new EresourceDatabaseException(e);
                 } catch (SAXException e) {
