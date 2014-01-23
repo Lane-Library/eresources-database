@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -25,7 +26,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             @Override
             public boolean accept(final File file) {
                 String name = file.getName();
-                return name.endsWith(".xml") || name.endsWith(".xml.gz");
+                return file.isDirectory() || name.endsWith(".xml") || name.endsWith(".xml.gz");
             }
         });
         for (File file : files) {
@@ -47,6 +48,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             throw new IllegalStateException("null xmlReader");
         }
         List<File> filesToParse = getXMLFiles(new File(this.basePath));
+        Collections.sort(filesToParse, new PubmedFilenameComparator());
         while (filesToParse.size() > 0) {
             InputSource source = new InputSource();
             File file = filesToParse.remove(0);
