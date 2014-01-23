@@ -22,7 +22,7 @@ public class SolrReload extends SolrLoader {
 
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
+        query.setQuery("NOT recordType:pubmed");
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {
@@ -50,7 +50,7 @@ public class SolrReload extends SolrLoader {
         super.load();
         try {
             // delete everything older than lastUpdate
-            this.solrServer.deleteByQuery("updated:[* TO " + lastUpdate + "]");
+            this.solrServer.deleteByQuery("NOT recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
             this.solrServer.commit();
         } catch (SolrServerException e) {
             throw new EresourceDatabaseException(e);

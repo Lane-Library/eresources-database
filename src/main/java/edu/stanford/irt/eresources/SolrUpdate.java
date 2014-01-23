@@ -21,7 +21,7 @@ public class SolrUpdate extends SolrLoader {
     @Override
     protected Date getUpdatedDate() {
         SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
+        query.setQuery("NOT recordType:pubmed");
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {
