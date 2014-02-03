@@ -86,6 +86,8 @@ public class SolrEresourceHandler implements EresourceHandler {
         if (!Character.isLetter((int) firstCharOfTitle)) {
             firstCharOfTitle = '1';
         }
+        // ertlsw = random, uncommon string so single letter isn't stopword'd out of results
+        doc.addField("title_starts", "ertlsw" + Character.toString(firstCharOfTitle));
         doc.addField("isCore", Boolean.toString(eresource.isCore()));
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);
@@ -157,7 +159,7 @@ public class SolrEresourceHandler implements EresourceHandler {
                     throw new EresourceDatabaseException(
                             "\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                 }
-                if (this.solrDocs.size() > this.solrMaxDocs) {
+                if (this.solrDocs.size() >= this.solrMaxDocs) {
                     commitSolrDocs();
                     this.solrDocs.clear();
                 }
