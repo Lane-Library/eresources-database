@@ -3,7 +3,7 @@
 
     <bean id="pubmedProcessor" class="edu.stanford.irt.eresources.PubmedEresourceProcessor">
         <property name="xmlReader">
-            <bean class="edu.stanford.lane.catalog.impl.xml.JaxpXMLReader">
+            <bean class="edu.stanford.irt.eresources.JaxpXMLReader">
                 <property name="contentHandler" ref="pubmedTransformer"/>
             </bean>
         </property>
