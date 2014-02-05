@@ -26,7 +26,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
-    private int _866Count;
+    private int $866Count;
 
     private AuthTextAugmentation authTextAugmentation;
 
@@ -208,7 +208,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
         } else if ("record".equals(name)) {
             this.isBib = false;
             this.isMfhd = false;
-            this._866Count = 0;
+            this.$866Count = 0;
         }
     }
 
@@ -406,7 +406,7 @@ public class PrintMARCEresourceBuilder extends DefaultHandler implements Eresour
             } else {
                 this.currentVersion.addLink(this.currentLink);
             }
-        } else if ("866".equals(this.tag) && (++this._866Count > 1)) {
+        } else if ("866".equals(this.tag) && (++this.$866Count > 1)) {
             this.currentVersion.setDescription("");
         }
     }

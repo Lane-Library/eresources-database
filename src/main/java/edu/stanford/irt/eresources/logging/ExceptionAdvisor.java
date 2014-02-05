@@ -30,7 +30,7 @@ public class ExceptionAdvisor extends DefaultPointcutAdvisor {
          * @throws Throwable
          *             if something bad happened
          */
-        public void afterThrowing(final Exception e) throws Throwable {
+        public void afterThrowing(final Exception e) {
             Logger log = LoggerFactory.getLogger(e.getClass());
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));

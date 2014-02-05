@@ -11,6 +11,8 @@ import java.util.concurrent.BlockingQueue;
 import javax.sql.DataSource;
 
 public class UpdateEresourceHandler extends DefaultEresourceHandler {
+    
+    private static final String DELETE_FROM = "DELETE FROM ";
 
     private String deleteEresource;
 
@@ -38,12 +40,12 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
         super(dataSource, queue, translator, tablePrefix);
         this.translator = translator;
         this.tablePrefix = tablePrefix;
-        this.deleteEresource = "DELETE FROM " + this.tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ";
-        this.deleteVersion = "DELETE FROM " + this.tablePrefix + "VERSION WHERE ERESOURCE_ID = ";
-        this.deleteLink = "DELETE FROM " + this.tablePrefix + "LINK WHERE ERESOURCE_ID = ";
-        this.deleteType = "DELETE FROM " + this.tablePrefix + "TYPE WHERE ERESOURCE_ID = ";
-        this.deleteSubset = "DELETE FROM " + this.tablePrefix + "SUBSET WHERE ERESOURCE_ID = ";
-        this.deleteMesh = "DELETE FROM " + this.tablePrefix + "MESH WHERE ERESOURCE_ID = ";
+        this.deleteEresource = DELETE_FROM + this.tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ";
+        this.deleteVersion = DELETE_FROM + this.tablePrefix + "VERSION WHERE ERESOURCE_ID = ";
+        this.deleteLink = DELETE_FROM + this.tablePrefix + "LINK WHERE ERESOURCE_ID = ";
+        this.deleteType = DELETE_FROM + this.tablePrefix + "TYPE WHERE ERESOURCE_ID = ";
+        this.deleteSubset = DELETE_FROM + this.tablePrefix + "SUBSET WHERE ERESOURCE_ID = ";
+        this.deleteMesh = DELETE_FROM + this.tablePrefix + "MESH WHERE ERESOURCE_ID = ";
     }
 
     @Override

@@ -33,7 +33,7 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
          * @throws Throwable
          *             if any thing bad happens
          */
-        public void before(final Method method, final Object[] params, final Object advisee) throws Throwable {
+        public void before(final Method method, final Object[] params, final Object advisee) {
             if (!this.logEresource && "handleEresource".equals(method.getName())) {
                 return;
             }

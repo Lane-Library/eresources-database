@@ -34,7 +34,7 @@ public class ReturnMethodAdvisor extends DefaultPointcutAdvisor {
          *             if any thing bad happens
          */
         public void afterReturning(final Object returnValue, final Method method, final Object[] params,
-                final Object advisee) throws Throwable {
+                final Object advisee) {
             if ("handleEresource".equals(method.getName())) {
                 return;
             }
