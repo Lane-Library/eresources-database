@@ -28,53 +28,53 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private int $866Count;
 
-    private AuthTextAugmentation authTextAugmentation;
+    protected AuthTextAugmentation authTextAugmentation;
 
-    private String code;
+    protected String code;
 
-    private StringBuilder content = new StringBuilder();
+    protected StringBuilder content = new StringBuilder();
 
-    private Eresource currentEresource;
+    protected Eresource currentEresource;
 
-    private Link currentLink;
+    protected Link currentLink;
 
-    private StringBuilder currentText = new StringBuilder();
+    protected StringBuilder currentText = new StringBuilder();
 
-    private Version currentVersion;
+    protected Version currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
-    private StringBuilder description505 = new StringBuilder();
+    protected StringBuilder description505 = new StringBuilder();
 
-    private StringBuilder description520 = new StringBuilder();
+    protected StringBuilder description520 = new StringBuilder();
 
-    private StringBuilder editionOrVersion = new StringBuilder();
+    protected StringBuilder editionOrVersion = new StringBuilder();
 
-    private EresourceHandler eresourceHandler;
+    protected EresourceHandler eresourceHandler;
 
-    private boolean hasPreferredTitle = false;
+    protected boolean hasPreferredTitle = false;
 
-    private String ind1;
+    protected String ind1;
 
-    private String ind2;
+    protected String ind2;
 
-    private boolean isBib;
+    protected boolean isBib;
 
-    private boolean isMfhd;
+    protected boolean isMfhd;
 
-    private StringBuilder preferredTitle = new StringBuilder();
+    protected StringBuilder preferredTitle = new StringBuilder();
 
-    private String q;
+    protected String q;
 
-    private boolean recordHasError = false;
+    protected boolean recordHasError = false;
 
-    private String tag;
+    protected String tag;
 
-    private StringBuilder title = new StringBuilder();
+    protected StringBuilder title = new StringBuilder();
 
-    private Date updated;
+    protected Date updated;
 
-    private String z;
+    protected String z;
 
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
@@ -229,7 +229,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void createCustomTypes(final Eresource eresource) {
+    protected void createCustomTypes(final Eresource eresource) {
         Collection<String> types = eresource.getTypes();
         if (types.contains("software, installed")) {
             if (types.contains("statistics")) {
@@ -282,7 +282,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleBibData(final String name) {
+    protected void handleBibData(final String name) {
         if ("subfield".equals(name)) {
             handleBibSubfield();
         } else if ("controlfield".equals(name)) {
@@ -312,7 +312,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleBibSubfield() {
+    protected void handleBibSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code)) {
             String type = this.currentText.toString().toLowerCase();
             // remove trailing periods, some probably should have them but
@@ -383,7 +383,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleMfhdData(final String name) {
+    protected void handleMfhdData(final String name) {
         if ("subfield".equals(name)) {
             handleMfhdSubfield();
         } else if ("controlfield".equals(name)) {
@@ -417,7 +417,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleMfhdSubfield() {
+    protected void handleMfhdSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
             String subset = this.currentText.toString().substring(8).toLowerCase();
             if ("proxy".equals(subset)) {
