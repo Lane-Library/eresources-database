@@ -98,63 +98,6 @@ public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
     }
 
     @Override
-    protected void handleBibSubfield() {
-        if ("655".equals(this.tag) && "a".equals(this.code)) {
-            String type = this.currentText.toString().toLowerCase();
-            // remove trailing periods, some probably should have them but
-            // voyager puts them on everything :-(
-            int lastPeriod = type.lastIndexOf('.');
-            if (lastPeriod >= 0) {
-                int lastPosition = type.length() - 1;
-                if (lastPeriod == lastPosition) {
-                    type = type.substring(0, lastPosition);
-                }
-            }
-            this.currentEresource.addType(type);
-            if ("core material".equals(type)) {
-                this.currentEresource.setIsCore(true);
-            }
-        } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
-                && ("237".indexOf(this.ind2) > -1)) {
-            String mesh = this.currentText.toString().toLowerCase();
-            this.currentEresource.addMeshTerm(mesh);
-        } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
-            if ("anpq".indexOf(this.code) > -1) {
-                if (this.title.length() > 0) {
-                    this.title.append(' ');
-                }
-                this.title.append(this.currentText);
-            }
-        } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
-            if ("anpq".indexOf(this.code) > -1) {
-                if (this.preferredTitle.length() > 0) {
-                    this.preferredTitle.append(' ');
-                }
-                this.preferredTitle.append(this.currentText);
-            }
-        } else if ("250".equals(this.tag) && "a".equals(this.code)) {
-            this.editionOrVersion.append(". ");
-            this.editionOrVersion.append(this.currentText);
-        } else if ("520".equals(this.tag)) {
-            this.description520.append(this.currentText.toString());
-        } else if ("505".equals(this.tag)) {
-            this.description505.append(this.currentText.toString());
-        }
-        if ("650".equals(this.tag) && "a".equals(this.code)) {
-            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString(), this.tag);
-            if (authText != null && authText.length() > 0) {
-                this.content.append(' ').append(authText).append(' ');
-            }
-        }
-        if (("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) && "a".equals(this.code)) {
-            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString(), this.tag);
-            if (authText != null && authText.length() > 0) {
-                this.content.append(' ').append(authText).append(' ');
-            }
-        }
-    }
-
-    @Override
     protected void handleMfhdSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
             String subset = this.currentText.toString().substring(8).toLowerCase();
