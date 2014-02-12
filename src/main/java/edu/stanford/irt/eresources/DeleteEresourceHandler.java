@@ -17,6 +17,8 @@ import javax.sql.DataSource;
 
 public class DeleteEresourceHandler implements EresourceHandler {
 
+    private static final String DELETE_FROM = "DELETE FROM ";
+
     private int count = 0;
 
     private DataSource dataSource;
@@ -55,12 +57,12 @@ public class DeleteEresourceHandler implements EresourceHandler {
         this.queue = queue;
         this.tablePrefix = tablePrefix;
         this.ids = new HashMap<String, Set<Integer>>();
-        this.deleteEresource = "DELETE FROM " + this.tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ";
-        this.deleteVersion = "DELETE FROM " + this.tablePrefix + "VERSION WHERE ERESOURCE_ID = ";
-        this.deleteLink = "DELETE FROM " + this.tablePrefix + "LINK WHERE ERESOURCE_ID = ";
-        this.deleteType = "DELETE FROM " + this.tablePrefix + "TYPE WHERE ERESOURCE_ID = ";
-        this.deleteSubset = "DELETE FROM " + this.tablePrefix + "SUBSET WHERE ERESOURCE_ID = ";
-        this.deleteMesh = "DELETE FROM " + this.tablePrefix + "MESH WHERE ERESOURCE_ID = ";
+        this.deleteEresource = DELETE_FROM + this.tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ";
+        this.deleteVersion = DELETE_FROM + this.tablePrefix + "VERSION WHERE ERESOURCE_ID = ";
+        this.deleteLink = DELETE_FROM + this.tablePrefix + "LINK WHERE ERESOURCE_ID = ";
+        this.deleteType = DELETE_FROM + this.tablePrefix + "TYPE WHERE ERESOURCE_ID = ";
+        this.deleteSubset = DELETE_FROM + this.tablePrefix + "SUBSET WHERE ERESOURCE_ID = ";
+        this.deleteMesh = DELETE_FROM + this.tablePrefix + "MESH WHERE ERESOURCE_ID = ";
         this.getID = "SELECT ERESOURCE_ID FROM " + this.tablePrefix
                 + "ERESOURCE WHERE RECORD_TYPE = ? and RECORD_ID = ?";
         this.selectSQL = "SELECT RECORD_TYPE, RECORD_ID FROM " + this.tablePrefix + "ERESOURCE";
@@ -117,19 +119,19 @@ public class DeleteEresourceHandler implements EresourceHandler {
                     for (Integer recordId : entry.getValue()) {
                         pstmt.setString(1, recordType);
                         pstmt.setInt(2, recordId.intValue());
-                        ResultSet rs = pstmt.executeQuery();
-                        while (rs.next()) {
-                            int id = rs.getInt(1);
-                            stmt.addBatch(this.deleteEresource + id);
-                            stmt.addBatch(this.deleteVersion + id);
-                            stmt.addBatch(this.deleteLink + id);
-                            stmt.addBatch(this.deleteType + id);
-                            stmt.addBatch(this.deleteSubset + id);
-                            stmt.addBatch(this.deleteMesh + id);
-                            stmt.executeBatch();
-                            this.count++;
+                        try (ResultSet rs = pstmt.executeQuery()) {
+                            while (rs.next()) {
+                                int id = rs.getInt(1);
+                                stmt.addBatch(this.deleteEresource + id);
+                                stmt.addBatch(this.deleteVersion + id);
+                                stmt.addBatch(this.deleteLink + id);
+                                stmt.addBatch(this.deleteType + id);
+                                stmt.addBatch(this.deleteSubset + id);
+                                stmt.addBatch(this.deleteMesh + id);
+                                stmt.executeBatch();
+                                this.count++;
+                            }
                         }
-                        rs.close();
                     }
                 }
             } catch (SQLException e) {

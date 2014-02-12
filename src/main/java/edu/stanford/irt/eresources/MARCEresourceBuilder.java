@@ -26,55 +26,55 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
-    private int _866Count;
+    protected AuthTextAugmentation authTextAugmentation;
 
-    private AuthTextAugmentation authTextAugmentation;
+    protected String code;
 
-    private String code;
+    protected StringBuilder content = new StringBuilder();
 
-    private StringBuilder content = new StringBuilder();
+    protected Eresource currentEresource;
 
-    private Eresource currentEresource;
+    protected Link currentLink;
 
-    private Link currentLink;
+    protected StringBuilder currentText = new StringBuilder();
 
-    private StringBuilder currentText = new StringBuilder();
+    protected Version currentVersion;
 
-    private Version currentVersion;
+    protected StringBuilder description505 = new StringBuilder();
+
+    protected StringBuilder description520 = new StringBuilder();
+
+    protected StringBuilder editionOrVersion = new StringBuilder();
+
+    protected EresourceHandler eresourceHandler;
+
+    protected boolean hasPreferredTitle = false;
+
+    protected String ind1;
+
+    protected String ind2;
+
+    protected boolean isBib;
+
+    protected boolean isMfhd;
+
+    protected StringBuilder preferredTitle = new StringBuilder();
+
+    protected String q;
+
+    protected boolean recordHasError = false;
+
+    protected String tag;
+
+    protected StringBuilder title = new StringBuilder();
+
+    protected Date updated;
+
+    protected String z;
+
+    private int $866Count;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-
-    private StringBuilder description505 = new StringBuilder();
-
-    private StringBuilder description520 = new StringBuilder();
-
-    private StringBuilder editionOrVersion = new StringBuilder();
-
-    private EresourceHandler eresourceHandler;
-
-    private boolean hasPreferredTitle = false;
-
-    private String ind1;
-
-    private String ind2;
-
-    private boolean isBib;
-
-    private boolean isMfhd;
-
-    private StringBuilder preferredTitle = new StringBuilder();
-
-    private String q;
-
-    private boolean recordHasError = false;
-
-    private String tag;
-
-    private StringBuilder title = new StringBuilder();
-
-    private Date updated;
-
-    private String z;
 
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
@@ -145,10 +145,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     }
                 }
                 this.currentEresource = new Eresource();
-                this.currentEresource.setRecordType("bib");
+                setRecordType();
             }
         } else if ("record".equals(name)) {
             if (this.isMfhd) {
+                maybeAddCatalogLink();
                 this.currentEresource.addVersion(this.currentVersion);
             } else if (this.isBib) {
                 if (this.description520.length() > 0) {
@@ -203,33 +204,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if ("record".equals(name)) {
             this.isBib = false;
             this.isMfhd = false;
-            this._866Count = 0;
+            this.$866Count = 0;
         }
     }
 
-    // Bibliographic
-    // 010-099
-    // Retain only, 020, 022, 030, 035
-    // 100-899 [note that non-Roman script occurs in 880]
-    // 900-999
-    // Retain only: 901, 902, 903, 907^x, 907^y, 941, 942, 943 [907^x&y will
-    // eventually be changed into 655 values]
-    private boolean checkSaveContent() {
-        if (!this.isBib) {
-            return false;
-        }
-        try {
-            int tagNumber = Integer.parseInt(this.tag);
-            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
-                    || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
-                    || ((tagNumber >= 941) && (tagNumber <= 943))
-                    || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private void createCustomTypes(final Eresource eresource) {
+    protected void createCustomTypes(final Eresource eresource) {
         Collection<String> types = eresource.getTypes();
         if (types.contains("software, installed")) {
             if (types.contains("statistics")) {
@@ -262,27 +241,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleBibControlfield() {
-        if ("001".equals(this.tag)) {
-            this.currentEresource.setRecordId(Integer.parseInt(this.currentText.toString()));
-        } else if ("005".equals(this.tag)) {
-            try {
-                this.updated = this.dateFormat.parse(this.currentText.toString());
-            } catch (ParseException e) {
-                throw new EresourceDatabaseException(e);
-            }
-        } else if ("008".equals(this.tag)) {
-            String endDate = parseYear(this.currentText.substring(11, 15));
-            String beginDate = parseYear(this.currentText.substring(7, 11));
-            if (null != endDate) {
-                this.currentEresource.setYear(Integer.parseInt(endDate));
-            } else if (null != beginDate) {
-                this.currentEresource.setYear(Integer.parseInt(beginDate));
-            }
-        }
-    }
-
-    private void handleBibData(final String name) {
+    protected void handleBibData(final String name) {
         if ("subfield".equals(name)) {
             handleBibSubfield();
         } else if ("controlfield".equals(name)) {
@@ -292,27 +251,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleBibDatafield() {
-        if ("245".equals(this.tag)) {
-            if ("0".equals(this.ind2)) {
-                this.currentEresource.setTitle(this.title.toString());
-            } else {
-                try {
-                    this.currentEresource.setTitle(this.title.substring(Integer.parseInt(this.ind2)));
-                } catch (StringIndexOutOfBoundsException e) {
-                    this.currentEresource.setTitle(this.title.toString());
-                }
-            }
-            this.title.setLength(0);
-        } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
-            this.hasPreferredTitle = true;
-        } else if ("250".equals(this.tag)) {
-            this.currentEresource.setTitle(this.currentEresource.getTitle() + this.editionOrVersion);
-            this.editionOrVersion.setLength(0);
-        }
-    }
-
-    private void handleBibSubfield() {
+    protected void handleBibSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code)) {
             String type = this.currentText.toString().toLowerCase();
             // remove trailing periods, some probably should have them but
@@ -370,20 +309,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleMfhdControlfield() {
-        if ("005".equals(this.tag)) {
-            try {
-                Date mfhdDate = this.dateFormat.parse(this.currentText.toString());
-                if (mfhdDate.compareTo(this.updated) > 0) {
-                    this.updated = mfhdDate;
-                }
-            } catch (ParseException e) {
-                throw new EresourceDatabaseException(e);
-            }
-        }
-    }
-
-    private void handleMfhdData(final String name) {
+    protected void handleMfhdData(final String name) {
         if ("subfield".equals(name)) {
             handleMfhdSubfield();
         } else if ("controlfield".equals(name)) {
@@ -393,31 +319,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleMfhdDatafield() {
-        if ("856".equals(this.tag)) {
-            String label = null;
-            if (null != this.q) {
-                label = this.q;
-            } else if (null != this.z) {
-                label = this.z;
-            }
-            if (null != label) {
-                if ((label.indexOf('(') == 0) && (label.indexOf(')') == label.length() - 1) && (label.length() > 2)) {
-                    label = label.substring(1, label.length() - 1);
-                }
-                this.currentLink.setLabel(label);
-            }
-            if ("get password".equalsIgnoreCase(label)) {
-                this.currentVersion.setHasGetPasswordLink(true);
-            } else {
-                this.currentVersion.addLink(this.currentLink);
-            }
-        } else if ("866".equals(this.tag) && (++this._866Count > 1)) {
-            this.currentVersion.setDescription("");
-        }
-    }
-
-    private void handleMfhdSubfield() {
+    protected void handleMfhdSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
             String subset = this.currentText.toString().substring(8).toLowerCase();
             if ("proxy".equals(subset)) {
@@ -425,11 +327,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("noproxy".equals(subset)) {
                 this.currentVersion.setProxy(false);
             } else {
-                this.currentVersion.addSubset(subset);
-                if ("biotools".equals(subset)) {
-                    // subset, biotools will count as type: software
-                    this.currentEresource.addType("software");
-                }
+                maybeAddSubset(subset);
             }
         } else if ("844".equals(this.tag) && "a".equals(this.code)) {
             this.currentVersion.setPublisher(this.currentText.toString());
@@ -453,6 +351,120 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("i".equals(this.code)) {
                 this.currentLink.setInstruction(this.currentText.toString());
             }
+        }
+    }
+
+    protected void maybeAddCatalogLink() {
+    }
+
+    protected void maybeAddSubset(final String subset) {
+        this.currentVersion.addSubset(subset);
+        if ("biotools".equals(subset)) {
+            // subset, biotools will count as type: software
+            this.currentEresource.addType("software");
+        }
+    }
+
+    protected void setRecordType() {
+        this.currentEresource.setRecordType("bib");
+    }
+
+    // Bibliographic
+    // 010-099
+    // Retain only, 020, 022, 030, 035
+    // 100-899 [note that non-Roman script occurs in 880]
+    // 900-999
+    // Retain only: 901, 902, 903, 907^x, 907^y, 941, 942, 943 [907^x&y will
+    // eventually be changed into 655 values]
+    private boolean checkSaveContent() {
+        if (!this.isBib) {
+            return false;
+        }
+        try {
+            int tagNumber = Integer.parseInt(this.tag);
+            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
+                    || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
+                    || ((tagNumber >= 941) && (tagNumber <= 943))
+                    || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private void handleBibControlfield() {
+        if ("001".equals(this.tag)) {
+            this.currentEresource.setRecordId(Integer.parseInt(this.currentText.toString()));
+        } else if ("005".equals(this.tag)) {
+            try {
+                this.updated = this.dateFormat.parse(this.currentText.toString());
+            } catch (ParseException e) {
+                throw new EresourceDatabaseException(e);
+            }
+        } else if ("008".equals(this.tag)) {
+            String endDate = parseYear(this.currentText.substring(11, 15));
+            String beginDate = parseYear(this.currentText.substring(7, 11));
+            if (null != endDate) {
+                this.currentEresource.setYear(Integer.parseInt(endDate));
+            } else if (null != beginDate) {
+                this.currentEresource.setYear(Integer.parseInt(beginDate));
+            }
+        }
+    }
+
+    private void handleBibDatafield() {
+        if ("245".equals(this.tag)) {
+            if ("0".equals(this.ind2)) {
+                this.currentEresource.setTitle(this.title.toString());
+            } else {
+                try {
+                    this.currentEresource.setTitle(this.title.substring(Integer.parseInt(this.ind2)));
+                } catch (StringIndexOutOfBoundsException e) {
+                    this.currentEresource.setTitle(this.title.toString());
+                }
+            }
+            this.title.setLength(0);
+        } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
+            this.hasPreferredTitle = true;
+        } else if ("250".equals(this.tag)) {
+            this.currentEresource.setTitle(this.currentEresource.getTitle() + this.editionOrVersion);
+            this.editionOrVersion.setLength(0);
+        }
+    }
+
+    private void handleMfhdControlfield() {
+        if ("005".equals(this.tag)) {
+            try {
+                Date mfhdDate = this.dateFormat.parse(this.currentText.toString());
+                if (mfhdDate.compareTo(this.updated) > 0) {
+                    this.updated = mfhdDate;
+                }
+            } catch (ParseException e) {
+                throw new EresourceDatabaseException(e);
+            }
+        }
+    }
+
+    private void handleMfhdDatafield() {
+        if ("856".equals(this.tag)) {
+            String label = null;
+            if (null != this.q) {
+                label = this.q;
+            } else if (null != this.z) {
+                label = this.z;
+            }
+            if (null != label) {
+                if ((label.indexOf('(') == 0) && (label.indexOf(')') == label.length() - 1) && (label.length() > 2)) {
+                    label = label.substring(1, label.length() - 1);
+                }
+                this.currentLink.setLabel(label);
+            }
+            if ("get password".equalsIgnoreCase(label)) {
+                this.currentVersion.setHasGetPasswordLink(true);
+            } else {
+                this.currentVersion.addLink(this.currentLink);
+            }
+        } else if ("866".equals(this.tag) && (++this.$866Count > 1)) {
+            this.currentVersion.setDescription("");
         }
     }
 

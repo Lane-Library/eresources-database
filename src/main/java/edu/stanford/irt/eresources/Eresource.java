@@ -231,7 +231,7 @@ public class Eresource implements Cloneable {
     }
 
     public Date getUpdated() {
-        return this.updated;
+        return new Date(this.updated.getTime());
     }
 
     public Collection<Version> getVersions() {
@@ -310,7 +310,7 @@ public class Eresource implements Cloneable {
     }
 
     public void setUpdated(final Date updated) {
-        this.updated = updated;
+        this.updated = new Date(updated.getTime());
     }
 
     public void setYear(final int year) {
