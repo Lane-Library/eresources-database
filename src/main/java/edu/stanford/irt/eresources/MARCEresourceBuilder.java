@@ -26,8 +26,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
-    private int $866Count;
-
     protected AuthTextAugmentation authTextAugmentation;
 
     protected String code;
@@ -41,8 +39,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     protected StringBuilder currentText = new StringBuilder();
 
     protected Version currentVersion;
-
-    private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     protected StringBuilder description505 = new StringBuilder();
 
@@ -75,6 +71,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     protected Date updated;
 
     protected String z;
+
+    private int $866Count;
+
+    private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
@@ -145,10 +145,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     }
                 }
                 this.currentEresource = new Eresource();
-                this.currentEresource.setRecordType("bib");
+                setRecordType();
             }
         } else if ("record".equals(name)) {
             if (this.isMfhd) {
+                maybeAddCatalogLink();
                 this.currentEresource.addVersion(this.currentVersion);
             } else if (this.isBib) {
                 if (this.description520.length() > 0) {
@@ -207,28 +208,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    // Bibliographic
-    // 010-099
-    // Retain only, 020, 022, 030, 035
-    // 100-899 [note that non-Roman script occurs in 880]
-    // 900-999
-    // Retain only: 901, 902, 903, 907^x, 907^y, 941, 942, 943 [907^x&y will
-    // eventually be changed into 655 values]
-    private boolean checkSaveContent() {
-        if (!this.isBib) {
-            return false;
-        }
-        try {
-            int tagNumber = Integer.parseInt(this.tag);
-            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
-                    || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
-                    || ((tagNumber >= 941) && (tagNumber <= 943))
-                    || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
     protected void createCustomTypes(final Eresource eresource) {
         Collection<String> types = eresource.getTypes();
         if (types.contains("software, installed")) {
@@ -262,26 +241,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    private void handleBibControlfield() {
-        if ("001".equals(this.tag)) {
-            this.currentEresource.setRecordId(Integer.parseInt(this.currentText.toString()));
-        } else if ("005".equals(this.tag)) {
-            try {
-                this.updated = this.dateFormat.parse(this.currentText.toString());
-            } catch (ParseException e) {
-                throw new EresourceDatabaseException(e);
-            }
-        } else if ("008".equals(this.tag)) {
-            String endDate = parseYear(this.currentText.substring(11, 15));
-            String beginDate = parseYear(this.currentText.substring(7, 11));
-            if (null != endDate) {
-                this.currentEresource.setYear(Integer.parseInt(endDate));
-            } else if (null != beginDate) {
-                this.currentEresource.setYear(Integer.parseInt(beginDate));
-            }
-        }
-    }
-
     protected void handleBibData(final String name) {
         if ("subfield".equals(name)) {
             handleBibSubfield();
@@ -289,26 +248,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             handleBibControlfield();
         } else if ("datafield".equals(name)) {
             handleBibDatafield();
-        }
-    }
-
-    private void handleBibDatafield() {
-        if ("245".equals(this.tag)) {
-            if ("0".equals(this.ind2)) {
-                this.currentEresource.setTitle(this.title.toString());
-            } else {
-                try {
-                    this.currentEresource.setTitle(this.title.substring(Integer.parseInt(this.ind2)));
-                } catch (StringIndexOutOfBoundsException e) {
-                    this.currentEresource.setTitle(this.title.toString());
-                }
-            }
-            this.title.setLength(0);
-        } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
-            this.hasPreferredTitle = true;
-        } else if ("250".equals(this.tag)) {
-            this.currentEresource.setTitle(this.currentEresource.getTitle() + this.editionOrVersion);
-            this.editionOrVersion.setLength(0);
         }
     }
 
@@ -370,6 +309,128 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
+    protected void handleMfhdData(final String name) {
+        if ("subfield".equals(name)) {
+            handleMfhdSubfield();
+        } else if ("controlfield".equals(name)) {
+            handleMfhdControlfield();
+        } else if ("datafield".equals(name)) {
+            handleMfhdDatafield();
+        }
+    }
+
+    protected void handleMfhdSubfield() {
+        if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
+            String subset = this.currentText.toString().substring(8).toLowerCase();
+            if ("proxy".equals(subset)) {
+                this.currentVersion.setProxy(true);
+            } else if ("noproxy".equals(subset)) {
+                this.currentVersion.setProxy(false);
+            } else {
+                maybeAddSubset(subset);
+            }
+        } else if ("844".equals(this.tag) && "a".equals(this.code)) {
+            this.currentVersion.setPublisher(this.currentText.toString());
+        } else if ("866".equals(this.tag)) {
+            if ("v".equals(this.code)) {
+                String holdings = this.currentText.toString();
+                holdings = holdings.replaceAll(" =", "");
+                this.currentVersion.setSummaryHoldings(holdings);
+            } else if ("y".equals(this.code)) {
+                this.currentVersion.setDates(this.currentText.toString());
+            } else if ("z".equals(this.code)) {
+                this.currentVersion.setDescription(this.currentText.toString());
+            }
+        } else if ("856".equals(this.tag)) {
+            if ("q".equals(this.code) && (null == this.q)) {
+                this.q = this.currentText.toString();
+            } else if ("z".equals(this.code) && (null == this.z)) {
+                this.z = this.currentText.toString();
+            } else if ("u".equals(this.code)) {
+                this.currentLink.setUrl(this.currentText.toString());
+            } else if ("i".equals(this.code)) {
+                this.currentLink.setInstruction(this.currentText.toString());
+            }
+        }
+    }
+
+    protected void maybeAddCatalogLink() {
+    }
+
+    protected void maybeAddSubset(final String subset) {
+        this.currentVersion.addSubset(subset);
+        if ("biotools".equals(subset)) {
+            // subset, biotools will count as type: software
+            this.currentEresource.addType("software");
+        }
+    }
+
+    protected void setRecordType() {
+        this.currentEresource.setRecordType("bib");
+    }
+
+    // Bibliographic
+    // 010-099
+    // Retain only, 020, 022, 030, 035
+    // 100-899 [note that non-Roman script occurs in 880]
+    // 900-999
+    // Retain only: 901, 902, 903, 907^x, 907^y, 941, 942, 943 [907^x&y will
+    // eventually be changed into 655 values]
+    private boolean checkSaveContent() {
+        if (!this.isBib) {
+            return false;
+        }
+        try {
+            int tagNumber = Integer.parseInt(this.tag);
+            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
+                    || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
+                    || ((tagNumber >= 941) && (tagNumber <= 943))
+                    || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private void handleBibControlfield() {
+        if ("001".equals(this.tag)) {
+            this.currentEresource.setRecordId(Integer.parseInt(this.currentText.toString()));
+        } else if ("005".equals(this.tag)) {
+            try {
+                this.updated = this.dateFormat.parse(this.currentText.toString());
+            } catch (ParseException e) {
+                throw new EresourceDatabaseException(e);
+            }
+        } else if ("008".equals(this.tag)) {
+            String endDate = parseYear(this.currentText.substring(11, 15));
+            String beginDate = parseYear(this.currentText.substring(7, 11));
+            if (null != endDate) {
+                this.currentEresource.setYear(Integer.parseInt(endDate));
+            } else if (null != beginDate) {
+                this.currentEresource.setYear(Integer.parseInt(beginDate));
+            }
+        }
+    }
+
+    private void handleBibDatafield() {
+        if ("245".equals(this.tag)) {
+            if ("0".equals(this.ind2)) {
+                this.currentEresource.setTitle(this.title.toString());
+            } else {
+                try {
+                    this.currentEresource.setTitle(this.title.substring(Integer.parseInt(this.ind2)));
+                } catch (StringIndexOutOfBoundsException e) {
+                    this.currentEresource.setTitle(this.title.toString());
+                }
+            }
+            this.title.setLength(0);
+        } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
+            this.hasPreferredTitle = true;
+        } else if ("250".equals(this.tag)) {
+            this.currentEresource.setTitle(this.currentEresource.getTitle() + this.editionOrVersion);
+            this.editionOrVersion.setLength(0);
+        }
+    }
+
     private void handleMfhdControlfield() {
         if ("005".equals(this.tag)) {
             try {
@@ -380,16 +441,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } catch (ParseException e) {
                 throw new EresourceDatabaseException(e);
             }
-        }
-    }
-
-    protected void handleMfhdData(final String name) {
-        if ("subfield".equals(name)) {
-            handleMfhdSubfield();
-        } else if ("controlfield".equals(name)) {
-            handleMfhdControlfield();
-        } else if ("datafield".equals(name)) {
-            handleMfhdDatafield();
         }
     }
 
@@ -414,45 +465,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if ("866".equals(this.tag) && (++this.$866Count > 1)) {
             this.currentVersion.setDescription("");
-        }
-    }
-
-    protected void handleMfhdSubfield() {
-        if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
-            String subset = this.currentText.toString().substring(8).toLowerCase();
-            if ("proxy".equals(subset)) {
-                this.currentVersion.setProxy(true);
-            } else if ("noproxy".equals(subset)) {
-                this.currentVersion.setProxy(false);
-            } else {
-                this.currentVersion.addSubset(subset);
-                if ("biotools".equals(subset)) {
-                    // subset, biotools will count as type: software
-                    this.currentEresource.addType("software");
-                }
-            }
-        } else if ("844".equals(this.tag) && "a".equals(this.code)) {
-            this.currentVersion.setPublisher(this.currentText.toString());
-        } else if ("866".equals(this.tag)) {
-            if ("v".equals(this.code)) {
-                String holdings = this.currentText.toString();
-                holdings = holdings.replaceAll(" =", "");
-                this.currentVersion.setSummaryHoldings(holdings);
-            } else if ("y".equals(this.code)) {
-                this.currentVersion.setDates(this.currentText.toString());
-            } else if ("z".equals(this.code)) {
-                this.currentVersion.setDescription(this.currentText.toString());
-            }
-        } else if ("856".equals(this.tag)) {
-            if ("q".equals(this.code) && (null == this.q)) {
-                this.q = this.currentText.toString();
-            } else if ("z".equals(this.code) && (null == this.z)) {
-                this.z = this.currentText.toString();
-            } else if ("u".equals(this.code)) {
-                this.currentLink.setUrl(this.currentText.toString());
-            } else if ("i".equals(this.code)) {
-                this.currentLink.setInstruction(this.currentText.toString());
-            }
         }
     }
 
