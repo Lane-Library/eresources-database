@@ -64,6 +64,8 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
                         source.setByteStream(new FileInputStream(file));
                     }
                     this.xmlReader.parse(source);
+                    // touch file so we don't load it next time
+                    file.setLastModified(System.currentTimeMillis());
                     this.log.info("processed: " + file);
                 } catch (IOException e) {
                     throw new EresourceDatabaseException(e);
