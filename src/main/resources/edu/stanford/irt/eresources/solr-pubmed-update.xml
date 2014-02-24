@@ -13,6 +13,7 @@
         <property name="ftpUser" value="${eresources.pubmedprocessor.ftp.username}"/>
         <property name="ftpPass" value="${eresources.pubmedprocessor.ftp.password}"/>
     </bean>
+    <!--  override pubmedProcessor from pubmed-processor.xml so we can set basePath -->
     <bean id="pubmedProcessor" class="edu.stanford.irt.eresources.PubmedEresourceProcessor">
         <property name="xmlReader">
             <bean class="edu.stanford.irt.eresources.JaxpXMLReader">
