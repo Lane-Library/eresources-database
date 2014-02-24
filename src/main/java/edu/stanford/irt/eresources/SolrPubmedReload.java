@@ -14,10 +14,6 @@ import org.apache.solr.common.SolrDocumentList;
 
 public class SolrPubmedReload extends SolrLoader {
 
-    public static void main(final String[] args) throws IOException {
-        SolrLoader.main(new String[] { "solr-pubmed-reload" });
-    }
-
     private SolrServer solrServer;
 
     private String getLastUpdate() {
