@@ -128,9 +128,6 @@ public class SolrLoader {
         this.queue = queue;
     }
 
-    public void setUserName(final String userName) {
-    }
-
     public void setVersion(final String version) {
         this.version = version;
     }
