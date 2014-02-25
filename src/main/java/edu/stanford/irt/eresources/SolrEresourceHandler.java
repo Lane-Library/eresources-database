@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SolrEresourceHandler implements EresourceHandler {
 
+    private static final int SORT_TITLE_MAX = 150;
+
     private int count = 0;
 
     private volatile boolean keepGoing = true;
@@ -50,6 +52,19 @@ public class SolrEresourceHandler implements EresourceHandler {
         return this.count;
     }
 
+    private static String getSortTitle(final String title) {
+        if (null == title || title.isEmpty()) {
+            return title;
+        }
+        String sortTitle = title.toLowerCase().replaceAll("[^0-9a-z ]", "").trim();
+        try {
+            sortTitle = sortTitle.substring(0, SORT_TITLE_MAX);
+        } catch (IndexOutOfBoundsException e) {
+            // OK
+        }
+        return sortTitle;
+    }
+
     @Override
     public void handleEresource(final Eresource eresource) {
         for (Version version : eresource.getVersions()) {
@@ -78,6 +93,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("description", eresource.getDescription());
         doc.addField("text", eresource.getKeywords());
         doc.addField("title", title);
+        doc.addField("title_sort", getSortTitle(title));
         doc.addField("year", Integer.toString(eresource.getYear()));
         char firstCharOfTitle = '0';
         if (null != title && !title.isEmpty()) {
@@ -95,18 +111,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String type : eresource.getTypes()) {
             doc.addField("type", type);
         }
-//        String publicationDate = eresource.getPublicationDate();
-//        if (null != publicationDate) {
-//            doc.addField("publicationDate", publicationDate);
-//        }
-//        String publicationIssue = eresource.getPublicationIssue();
-//        if (null != publicationIssue) {
-//            doc.addField("publicationIssue", publicationIssue);
-//        }
-//        String publicationPages = eresource.getPublicationPages();
-//        if (null != publicationPages) {
-//            doc.addField("publicationPages", publicationPages);
-//        }
         String publicationAuthorsText = eresource.getPublicationAuthorsText();
         if (null != publicationAuthorsText) {
             doc.addField("publicationAuthorsText", publicationAuthorsText);
@@ -119,10 +123,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         if (null != publicationTitle) {
             doc.addField("publicationTitle", publicationTitle);
         }
-//        String publicationVolume = eresource.getPublicationVolume();
-//        if (null != publicationVolume) {
-//            doc.addField("publicationVolume", publicationVolume);
-//        }
         for (String author : eresource.getPublicationAuthors()) {
             doc.addField("publicationAuthor", author);
         }
