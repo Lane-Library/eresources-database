@@ -41,6 +41,7 @@ public class SolrPubmedUpdate extends SolrLoader {
             client.connect(this.ftpHost);
             client.login(this.ftpUser, this.ftpPass);
             client.setFileType(FTP.BINARY_FILE_TYPE);
+            client.enterLocalPassiveMode();
             client.changeWorkingDirectory(this.ftpPath);
             for (FTPFile file : client.listFiles(".", filter)) {
                 fos = new FileOutputStream(this.basePath + "/" + file.getName());
