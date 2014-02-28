@@ -134,9 +134,6 @@ public class SolrEresourceHandler implements EresourceHandler {
             for (String subset : version.getSubsets()) {
                 doc.addField("subset", subset);
             }
-            for (Link link : version.getLinks()) {
-                doc.addField("links", link.getUrl());
-            }
         }
         try {
             doc.addField("versionsJson", this.mapper.writeValueAsString(versions));
