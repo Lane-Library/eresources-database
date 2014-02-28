@@ -14,9 +14,13 @@
     <stx:variable name="publicationTitle"/>
     <stx:variable name="publicationType"/>
     <stx:variable name="publicationVolume"/>
+    <stx:variable name="publicationYear"/>
     <stx:variable name="authorIndex"/>
     <stx:variable name="authors"/>
     <stx:variable name="authorsText"/>
+    <stx:variable name="thisYear">
+        <stx:value-of select="replace(date:new(),'.* (\d{4})','$1')" xmlns:date="java:java.util.Date" />
+    </stx:variable>
     
     <stx:template match="MedlineCitation">
         <stx:assign name="pmid" select="''"/>
@@ -30,73 +34,81 @@
         <stx:assign name="publicationTitle" select="''"/>
         <stx:assign name="publicationType" select="''"/>
         <stx:assign name="publicationVolume" select="''"/>
+        <stx:assign name="publicationYear" select="''"/>
         <stx:assign name="authorIndex" select="0"/>
         <stx:assign name="authors" select="''"/>
         <stx:assign name="authorsText" select="''"/>
         <stx:process-children/>
-        <eresource id="{$pmid}" type="pubmed" update="19690101000000">
-            <type>article</type>
-            <title><stx:value-of select="$title"/></title>
-            <stx:if test="$description != ''">
-                <er-description><stx:value-of select="$description"/></er-description>
-            </stx:if>
-            <version>
-                <link>
-                    <url><stx:value-of select="concat('http://sfx.stanford.edu/local?sid=stanford:laneweb-search-pubmed&amp;id=pmid:', $pmid)"/></url>
-                </link>
-            </version>
-            <stx:for-each-item name="heading" select="tokenize($mesh, ':::')">
-                <stx:assign name="keywords" select="concat($keywords, ' ', $heading)"/>
-                <mesh><stx:value-of select="$heading"/></mesh>
-            </stx:for-each-item>
-            <stx:if test="$publicationDate != ''">
-                <publicationDate><stx:value-of select="normalize-space($publicationDate)"/></publicationDate>
-                <stx:if test="matches($publicationDate,'^\d{4} ?')">
-                    <year><stx:value-of select="substring($publicationDate,1,4)"/></year>
+        <stx:if test="matches($publicationDate,'^\d{4} ?')">
+            <stx:assign name="publicationYear" select="substring($publicationDate,1,4)"/>
+        </stx:if>
+        
+        <!-- limit to last 11 years -->
+        <stx:if test="(number($thisYear) - number($publicationYear)) &lt;= 11">
+            <eresource id="{$pmid}" type="TTTpubmed" update="19690101000000">
+                <type>article</type>
+                <title><stx:value-of select="$title"/></title>
+                <stx:if test="$description != ''">
+                    <er-description><stx:value-of select="$description"/></er-description>
                 </stx:if>
-            </stx:if>
-            <stx:if test="$publicationIssue != ''">
-                <publicationIssue><stx:value-of select="$publicationIssue"/></publicationIssue>
-            </stx:if>
-            <stx:if test="$publicationPages != ''">
-                <publicationPages><stx:value-of select="$publicationPages"/></publicationPages>
-            </stx:if>
-            <stx:if test="$publicationTitle != ''">
-                <publicationTitle><stx:value-of select="$publicationTitle"/></publicationTitle>
-            </stx:if>
-            <stx:if test="$publicationVolume != ''">
-                <publicationVolume><stx:value-of select="$publicationVolume"/></publicationVolume>
-            </stx:if>
-            <stx:for-each-item name="ptype" select="tokenize($publicationType, ':::')">
-                <stx:assign name="keywords" select="concat($keywords, ' ', $ptype)"/>
-                <publicationType><stx:value-of select="$ptype"/></publicationType>
-            </stx:for-each-item>
-            <stx:for-each-item name="author" select="tokenize($authors, ':::')">
-                <publicationAuthor><stx:value-of select="$author"/></publicationAuthor>
-            </stx:for-each-item>
-            <stx:assign name="authorIndex" select="count(tokenize($authors, ':::'))"/>
-            <stx:for-each-item name="author" select="tokenize($authors, ':::')">
-                <stx:assign name="authorIndex" select="$authorIndex - 1"/>
-                <stx:choose>
-                    <stx:when test="$authorIndex = 0">
-                        <stx:assign name="authorsText" select="concat($authorsText, $author, '.')"/>
-                    </stx:when>
-                    <stx:otherwise>
-                        <stx:assign name="authorsText" select="concat($authorsText, $author, ', ')"/>
-                    </stx:otherwise>
-                </stx:choose>
-            </stx:for-each-item>
-            <publicationAuthorsText><stx:value-of select="$authorsText"/></publicationAuthorsText>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $pmid)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $title)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $description)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $authorsText)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitle)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
-            <keywords><stx:value-of select="normalize-space($keywords)"/></keywords>
-        </eresource>
+                <version>
+                    <link>
+                        <url><stx:value-of select="concat('http://sfx.stanford.edu/local?sid=stanford:laneweb-search-pubmed&amp;id=pmid:', $pmid)"/></url>
+                    </link>
+                </version>
+                <stx:for-each-item name="heading" select="tokenize($mesh, ':::')">
+                    <stx:assign name="keywords" select="concat($keywords, ' ', $heading)"/>
+                    <mesh><stx:value-of select="$heading"/></mesh>
+                </stx:for-each-item>
+                <stx:if test="$publicationDate != ''">
+                    <publicationDate><stx:value-of select="normalize-space($publicationDate)"/></publicationDate>
+                </stx:if>
+                <stx:if test="$publicationYear != ''">
+                    <year><stx:value-of select="$publicationYear"/></year>
+                </stx:if>
+                <stx:if test="$publicationIssue != ''">
+                    <publicationIssue><stx:value-of select="$publicationIssue"/></publicationIssue>
+                </stx:if>
+                <stx:if test="$publicationPages != ''">
+                    <publicationPages><stx:value-of select="$publicationPages"/></publicationPages>
+                </stx:if>
+                <stx:if test="$publicationTitle != ''">
+                    <publicationTitle><stx:value-of select="$publicationTitle"/></publicationTitle>
+                </stx:if>
+                <stx:if test="$publicationVolume != ''">
+                    <publicationVolume><stx:value-of select="$publicationVolume"/></publicationVolume>
+                </stx:if>
+                <stx:for-each-item name="ptype" select="tokenize($publicationType, ':::')">
+                    <stx:assign name="keywords" select="concat($keywords, ' ', $ptype)"/>
+                    <publicationType><stx:value-of select="$ptype"/></publicationType>
+                </stx:for-each-item>
+                <stx:for-each-item name="author" select="tokenize($authors, ':::')">
+                    <publicationAuthor><stx:value-of select="$author"/></publicationAuthor>
+                </stx:for-each-item>
+                <stx:assign name="authorIndex" select="count(tokenize($authors, ':::'))"/>
+                <stx:for-each-item name="author" select="tokenize($authors, ':::')">
+                    <stx:assign name="authorIndex" select="$authorIndex - 1"/>
+                    <stx:choose>
+                        <stx:when test="$authorIndex = 0">
+                            <stx:assign name="authorsText" select="concat($authorsText, $author, '.')"/>
+                        </stx:when>
+                        <stx:otherwise>
+                            <stx:assign name="authorsText" select="concat($authorsText, $author, ', ')"/>
+                        </stx:otherwise>
+                    </stx:choose>
+                </stx:for-each-item>
+                <publicationAuthorsText><stx:value-of select="$authorsText"/></publicationAuthorsText>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $pmid)"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $title)"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $description)"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $authorsText)"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitle)"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
+                <keywords><stx:value-of select="normalize-space($keywords)"/></keywords>
+            </eresource>
+        </stx:if>
     </stx:template>
     
     <stx:template match="*">
