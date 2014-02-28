@@ -45,7 +45,7 @@
         
         <!-- limit to last 11 years -->
         <stx:if test="(number($thisYear) - number($publicationYear)) &lt;= 11">
-            <eresource id="{$pmid}" type="TTTpubmed" update="19690101000000">
+            <eresource id="{$pmid}" type="pubmed" update="19690101000000">
                 <type>article</type>
                 <title><stx:value-of select="$title"/></title>
                 <stx:if test="$description != ''">
@@ -111,11 +111,13 @@
         </stx:if>
     </stx:template>
     
+    <!-- reduce keywords to fields we extract
     <stx:template match="*">
         <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
         <stx:process-children/>
     </stx:template>
-        
+    -->
+            
     <stx:template match="MedlineCitation/PMID">
         <stx:assign name="pmid" select="."/>
         <stx:process-children/>
