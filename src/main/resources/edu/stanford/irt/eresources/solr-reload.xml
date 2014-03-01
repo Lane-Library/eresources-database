@@ -8,12 +8,4 @@
         <property name="handler" ref="eresourceHandler"/>
         <property name="solrServer" ref="solrServer"/>
     </bean>
-    <bean id="pubmedProcessor" class="edu.stanford.irt.eresources.PubmedEresourceProcessor">
-        <property name="xmlReader">
-            <bean class="edu.stanford.irt.eresources.JaxpXMLReader">
-                <property name="contentHandler" ref="pubmedTransformer"/>
-            </bean>
-        </property>
-        <property name="basePath" value="${eresources.pubmedprocessor.basepath}"/>
-    </bean>
 </beans>
