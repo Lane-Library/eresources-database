@@ -88,23 +88,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     public void endDocument() {
         if (null != this.currentEresource) {
             this.currentEresource.setUpdated(this.updated);
-            createCustomTypes(this.currentEresource);
-            if (!this.recordHasError) {
-                this.eresourceHandler.handleEresource(this.currentEresource);
-                if (this.hasPreferredTitle) {
-                    try {
-                        Eresource clone = (Eresource) this.currentEresource.clone();
-                        clone.setTitle(this.preferredTitle.toString());
-                        this.hasPreferredTitle = false;
-                        this.preferredTitle.setLength(0);
-                        this.eresourceHandler.handleEresource(clone);
-                    } catch (CloneNotSupportedException e) {
-                        throw new EresourceDatabaseException(e);
-                    }
-                }
-            } else {
-                this.recordHasError = false;
-            }
+            handlePreviousRecord();
         }
         try {
             this.authTextAugmentation.save();
@@ -126,23 +110,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 if (null != this.currentEresource) {
                     this.currentEresource.setUpdated(this.updated);
                     this.updated = null;
-                    createCustomTypes(this.currentEresource);
-                    if (!this.recordHasError) {
-                        this.eresourceHandler.handleEresource(this.currentEresource);
-                        if (this.hasPreferredTitle) {
-                            try {
-                                Eresource clone = (Eresource) this.currentEresource.clone();
-                                clone.setTitle(this.preferredTitle.toString());
-                                this.hasPreferredTitle = false;
-                                this.preferredTitle.setLength(0);
-                                this.eresourceHandler.handleEresource(clone);
-                            } catch (CloneNotSupportedException e) {
-                                throw new EresourceDatabaseException(e);
-                            }
-                        }
-                    } else {
-                        this.recordHasError = false;
-                    }
+                    handlePreviousRecord();
                 }
                 this.currentEresource = new Eresource();
                 setRecordType();
@@ -465,6 +433,26 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if ("866".equals(this.tag) && (++this.$866Count > 1)) {
             this.currentVersion.setDescription("");
+        }
+    }
+
+    private void handlePreviousRecord() {
+        createCustomTypes(this.currentEresource);
+        if (!this.recordHasError) {
+            this.eresourceHandler.handleEresource(this.currentEresource);
+            if (this.hasPreferredTitle) {
+                try {
+                    Eresource clone = (Eresource) this.currentEresource.clone();
+                    clone.setTitle(this.preferredTitle.toString());
+                    this.hasPreferredTitle = false;
+                    this.preferredTitle.setLength(0);
+                    this.eresourceHandler.handleEresource(clone);
+                } catch (CloneNotSupportedException e) {
+                    throw new EresourceDatabaseException(e);
+                }
+            }
+        } else {
+            this.recordHasError = false;
         }
     }
 
