@@ -22,6 +22,8 @@
         <property name="version" value="${project.version}"/>
         <property name="executor" ref="executor"/>
         <property name="queue" ref="queue"/>
+        <property name="solrServer" ref="solrServer"/>
+        <property name="optimize" value="true"/>
     </bean>
     <bean id="eresourceHandler" class="edu.stanford.irt.eresources.SolrEresourceHandler">
         <constructor-arg ref="queue"/>

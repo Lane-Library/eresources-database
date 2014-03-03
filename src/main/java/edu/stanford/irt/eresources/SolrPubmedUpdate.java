@@ -8,7 +8,6 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -29,8 +28,6 @@ public class SolrPubmedUpdate extends SolrLoader {
     private String ftpUser;
 
     private Logger log = LoggerFactory.getLogger(getClass());
-
-    private SolrServer solrServer;
 
     private void getFtpUpdateFiles() {
         PubmedFtpFileFilter filter = new PubmedFtpFileFilter(this.basePath);
@@ -123,9 +120,5 @@ public class SolrPubmedUpdate extends SolrLoader {
             throw new IllegalArgumentException("null ftpUser");
         }
         this.ftpUser = ftpUser;
-    }
-
-    public void setSolrServer(final SolrServer solrServer) {
-        this.solrServer = solrServer;
     }
 }

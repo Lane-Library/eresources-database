@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -15,8 +14,6 @@ public class SolrUpdate extends SolrLoader {
     public static void main(final String[] args) throws IOException {
         SolrLoader.main(new String[] { "solr-update" });
     }
-
-    private SolrServer solrServer;
 
     @Override
     protected Date getUpdatedDate() {
@@ -38,9 +35,5 @@ public class SolrUpdate extends SolrLoader {
             updated = (Date) firstResult.getFieldValue("updated");
         }
         return updated;
-    }
-
-    public void setSolrServer(final SolrServer solrServer) {
-        this.solrServer = solrServer;
     }
 }

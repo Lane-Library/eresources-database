@@ -5,8 +5,6 @@
     <import resource="solr-pubmed-load.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrPubmedUpdate" parent="abstractSolrLoader" init-method="init">
         <property name="killPrevious" value="false"/>
-        <property name="handler" ref="eresourceHandler"/>
-        <property name="solrServer" ref="solrServer"/>
         <property name="basePath" value="${eresources.pubmedprocessor.updatepath}"/>
         <property name="ftpPath" value="${eresources.pubmedprocessor.ftp.pathname}"/>
         <property name="ftpHost" value="${eresources.pubmedprocessor.ftp.hostname}"/>

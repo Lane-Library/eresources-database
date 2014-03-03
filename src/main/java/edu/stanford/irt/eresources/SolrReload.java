@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -17,8 +16,6 @@ public class SolrReload extends SolrLoader {
     public static void main(final String[] args) throws IOException {
         SolrLoader.main(new String[] { "solr-reload" });
     }
-
-    private SolrServer solrServer;
 
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
@@ -55,9 +52,5 @@ public class SolrReload extends SolrLoader {
         } catch (SolrServerException e) {
             throw new EresourceDatabaseException(e);
         }
-    }
-
-    public void setSolrServer(final SolrServer solrServer) {
-        this.solrServer = solrServer;
     }
 }

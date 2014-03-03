@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.Executor;
 
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -26,10 +28,15 @@ public class SolrLoader {
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
         try {
             loader.load();
+            if (loader.optimize) {
+                loader.optimize();
+            }
         } finally {
             executor.shutdown();
         }
     }
+
+    private int count;
 
     private Executor executor;
 
@@ -39,9 +46,13 @@ public class SolrLoader {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
+    private boolean optimize;
+
     private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
 
     private Queue<Eresource> queue;
+
+    protected SolrServer solrServer;
 
     private String version;
 
@@ -68,8 +79,8 @@ public class SolrLoader {
                 }
             }
         }
-        int count = this.handler.getCount();
-        this.log.info("handled " + count + " eresources.");
+        this.count = this.handler.getCount();
+        this.log.info("handled " + this.count + " eresources.");
     }
 
     private void managePIDFile() throws IOException {
@@ -105,6 +116,19 @@ public class SolrLoader {
         });
     }
 
+    public void optimize() {
+        if (this.count <= 0) {
+            this.log.info("nothing loaded ... skipping optimization");
+        } else {
+            this.log.info("optimizing solr core");
+            try {
+                this.solrServer.optimize();
+            } catch (SolrServerException | IOException e) {
+                throw new EresourceDatabaseException("solr optimize failed", e);
+            }
+        }
+    }
+
     public void setExecutor(final Executor executor) {
         this.executor = executor;
     }
@@ -117,6 +141,10 @@ public class SolrLoader {
         this.killPrevious = killPrevious;
     }
 
+    public void setOptimize(final boolean optimize) {
+        this.optimize = optimize;
+    }
+
     public void setProcessors(final Collection<AbstractEresourceProcessor> processors) {
         if (null == processors) {
             throw new IllegalArgumentException("null processors");
@@ -126,6 +154,10 @@ public class SolrLoader {
 
     public void setQueue(final Queue<Eresource> queue) {
         this.queue = queue;
+    }
+
+    public void setSolrServer(final SolrServer solrServer) {
+        this.solrServer = solrServer;
     }
 
     public void setVersion(final String version) {

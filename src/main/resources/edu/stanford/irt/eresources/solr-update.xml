@@ -5,8 +5,7 @@
     <import resource="solr-load.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrUpdate" parent="abstractSolrLoader">
         <property name="killPrevious" value="false"/>
-        <property name="handler" ref="eresourceHandler"/>
-        <property name="solrServer" ref="solrServer"/>
+        <property name="optimize" value="false"/>
     </bean>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
         <property name="logEresource" value="true"/>
