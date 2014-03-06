@@ -10,7 +10,7 @@
         <property name="basePath" value="${eresources.pubmedprocessor.basepath}"/>
     </bean>
 
-    <bean id= "pubmedTransformer" class="edu.stanford.lane.catalog.impl.xml.TraxTransformer" init-method="init">
+    <bean id="pubmedTransformer" class="edu.stanford.lane.catalog.impl.xml.TraxTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/pubmed2er.stx"/>
         <property name="transformerFactory" value="net.sf.joost.trax.TransformerFactoryImpl"/>
         <property name="contentHandler" ref="pubmedBuilder"/>
@@ -18,5 +18,17 @@
     
     <bean id="pubmedBuilder" class="edu.stanford.irt.eresources.PubmedEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
+        <property name="specialTypesManager" ref="specialTypesManager"/>
+    </bean>
+    
+    <bean id="specialTypesManager" class="edu.stanford.irt.eresources.PubmedSpecialTypesManager">
+        <constructor-arg name="searchers">
+            <list>
+			    <bean class="edu.stanford.irt.eresources.PubmedSearcher">
+			        <constructor-arg name="type" value="Systematic Review"/>
+			        <constructor-arg name="query" value="systematic[sb]"/>
+			    </bean>
+            </list>
+        </constructor-arg>
     </bean>
 </beans>

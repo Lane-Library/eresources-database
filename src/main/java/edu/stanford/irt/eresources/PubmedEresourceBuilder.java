@@ -25,6 +25,8 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
 
     private EresourceHandler eresourceHandler;
 
+    private PubmedSpecialTypesManager specialTypesManager;
+
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
         this.currentText.append(ch, start, length);
@@ -102,6 +104,10 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
         this.eresourceHandler = eresourceHandler;
     }
 
+    public void setSpecialTypesManager(final PubmedSpecialTypesManager specialTypesManager) {
+        this.specialTypesManager = specialTypesManager;
+    }
+
     @Override
     public void startDocument() throws SAXException {
         if (null == this.eresourceHandler) {
@@ -115,9 +121,13 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             throws SAXException {
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
+            String id = atts.getValue("id");
             this.currentEresource = new Eresource();
-            this.currentEresource.setRecordId(Integer.parseInt(atts.getValue("id")));
+            this.currentEresource.setRecordId(Integer.parseInt(id));
             this.currentEresource.setRecordType(atts.getValue("type"));
+            for (String type : this.specialTypesManager.getTypes(id)) {
+                this.currentEresource.addPublicationType(type);
+            }
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(atts.getValue("update")));
             } catch (ParseException e) {
