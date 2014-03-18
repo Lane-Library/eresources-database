@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +18,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SolrEresourceHandler implements EresourceHandler {
 
     private static final int SORT_TITLE_MAX = 150;
+
+    public static final int TEN = 10;
+
+    public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private static String getSortTitle(final String title) {
         if (null == title || title.isEmpty()) {
@@ -106,6 +111,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("title_starts", "ertlsw" + Character.toString(firstCharOfTitle));
         doc.addField("isCore", Boolean.toString(eresource.isCore()));
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
+        doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);
         }
