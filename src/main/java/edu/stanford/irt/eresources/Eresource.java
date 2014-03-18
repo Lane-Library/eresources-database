@@ -30,6 +30,8 @@ public class Eresource implements Cloneable {
             { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
                     "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
+
+    private static final String ENG = "eng";
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -58,6 +60,8 @@ public class Eresource implements Cloneable {
     private String publicationDate;
 
     private String publicationIssue;
+
+    private Collection<String> publicationLanguages;
 
     private String publicationPages;
 
@@ -95,6 +99,13 @@ public class Eresource implements Cloneable {
             this.publicationAuthors = new HashSet<String>();
         }
         this.publicationAuthors.add(author);
+    }
+
+    public void addPublicationLanguage(final String publicationLanguage) {
+        if (this.publicationLanguages == null) {
+            this.publicationLanguages = new HashSet<String>();
+        }
+        this.publicationLanguages.add(publicationLanguage.toLowerCase());
     }
 
     public void addPublicationType(final String publicationType) {
@@ -167,6 +178,13 @@ public class Eresource implements Cloneable {
 
     public String getPublicationIssue() {
         return this.publicationIssue;
+    }
+
+    public Collection<String> getPublicationLanguages() {
+        if (null == this.publicationLanguages) {
+            return Collections.emptySet();
+        }
+        return Collections.unmodifiableCollection(this.publicationLanguages);
     }
 
     public String getPublicationPages() {
@@ -255,6 +273,13 @@ public class Eresource implements Cloneable {
 
     public boolean isCore() {
         return this.isCore;
+    }
+
+    public boolean isEnglish() {
+        if (null != this.publicationLanguages) {
+            return this.publicationLanguages.contains(ENG);
+        }
+        return false;
     }
 
     public void setDescription(final String description) {

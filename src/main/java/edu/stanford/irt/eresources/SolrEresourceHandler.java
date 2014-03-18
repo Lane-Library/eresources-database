@@ -18,6 +18,19 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private static final int SORT_TITLE_MAX = 150;
 
+    private static String getSortTitle(final String title) {
+        if (null == title || title.isEmpty()) {
+            return title;
+        }
+        String sortTitle = title.toLowerCase().replaceAll("[^0-9a-z ]", "").trim();
+        try {
+            sortTitle = sortTitle.substring(0, SORT_TITLE_MAX);
+        } catch (IndexOutOfBoundsException e) {
+            // OK
+        }
+        return sortTitle;
+    }
+
     private int count = 0;
 
     private volatile boolean keepGoing = true;
@@ -50,19 +63,6 @@ public class SolrEresourceHandler implements EresourceHandler {
     @Override
     public int getCount() {
         return this.count;
-    }
-
-    private static String getSortTitle(final String title) {
-        if (null == title || title.isEmpty()) {
-            return title;
-        }
-        String sortTitle = title.toLowerCase().replaceAll("[^0-9a-z ]", "").trim();
-        try {
-            sortTitle = sortTitle.substring(0, SORT_TITLE_MAX);
-        } catch (IndexOutOfBoundsException e) {
-            // OK
-        }
-        return sortTitle;
     }
 
     @Override
@@ -105,6 +105,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         // ertlsw = random, uncommon string so single letter isn't stopword'd out of results
         doc.addField("title_starts", "ertlsw" + Character.toString(firstCharOfTitle));
         doc.addField("isCore", Boolean.toString(eresource.isCore()));
+        doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);
         }
@@ -125,6 +126,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         for (String author : eresource.getPublicationAuthors()) {
             doc.addField("publicationAuthor", author);
+        }
+        for (String pubLanguage : eresource.getPublicationLanguages()) {
+            doc.addField("publicationLanguage", pubLanguage);
         }
         for (String pubType : eresource.getPublicationTypes()) {
             doc.addField("publicationType", pubType);

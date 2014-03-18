@@ -275,6 +275,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.content.append(' ').append(authText).append(' ');
             }
         }
+        if ("041".equals(this.tag)) {
+            this.currentEresource.addPublicationLanguage(this.currentText.toString());
+        }
     }
 
     protected void handleMfhdData(final String name) {
@@ -371,10 +374,14 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if ("008".equals(this.tag)) {
             String endDate = parseYear(this.currentText.substring(11, 15));
             String beginDate = parseYear(this.currentText.substring(7, 11));
+            String lang = this.currentText.substring(35, 38);
             if (null != endDate) {
                 this.currentEresource.setYear(Integer.parseInt(endDate));
             } else if (null != beginDate) {
                 this.currentEresource.setYear(Integer.parseInt(beginDate));
+            }
+            if (null != lang) {
+                this.currentEresource.addPublicationLanguage(lang);
             }
         }
     }

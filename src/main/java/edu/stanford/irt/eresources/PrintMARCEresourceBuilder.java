@@ -41,6 +41,7 @@ public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
         link.setLabel("Lane Catalog record");
         link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
         this.currentVersion.addLink(link);
+        this.currentVersion.addLink(link);
     }
 
     @Override
