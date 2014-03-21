@@ -49,7 +49,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
             Date sometimeEarlier = new Date(1);
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            if (sometimeEarlier.getTime() > this.startDate.getTime()) {
+            if (sometimeEarlier.getTime() > getStartTime()) {
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);

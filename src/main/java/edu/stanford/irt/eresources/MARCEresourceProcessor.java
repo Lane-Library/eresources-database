@@ -24,7 +24,7 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
         if (null == this.xmlReader) {
             throw new IllegalStateException("null xmlReader");
         }
-        this.inputStream.setStartDate(new Timestamp(this.startDate.getTime()));
+        this.inputStream.setStartDate(new Timestamp(getStartTime()));
         InputSource source = new InputSource();
         try {
             source.setByteStream(this.inputStream);

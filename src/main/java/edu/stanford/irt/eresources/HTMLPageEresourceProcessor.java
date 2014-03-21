@@ -63,7 +63,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                 DOMParser parser = new DOMParser(config);
                 parser.parse(source);
                 Document doc = parser.getDocument();
-                if (file.lastModified() > this.startDate.getTime() && isSearchable(doc)) {
+                if (file.lastModified() > getStartTime() && isSearchable(doc)) {
                     Element root = doc.getDocumentElement();
                     root.setAttribute("id", Integer.toString(fileName.hashCode()));
                     root.setAttribute("update", this.dateFormat.format(file.lastModified()));

@@ -6,12 +6,16 @@ import edu.stanford.lane.catalog.RecordProcessor;
 
 public abstract class AbstractEresourceProcessor implements RecordProcessor {
 
-    protected Date startDate = new Date(0);
+    private long startTime;
 
     public void setStartDate(final Date startDate) {
         if (null == startDate) {
             throw new IllegalArgumentException("null startDate");
         }
-        this.startDate.setTime(startDate.getTime());
+        this.startTime = startDate.getTime();
+    }
+    
+    protected long getStartTime() {
+        return this.startTime;
     }
 }
