@@ -32,8 +32,6 @@ public class ExceptionAdvisor extends DefaultPointcutAdvisor {
          */
         public void afterThrowing(final Exception e) {
             Logger log = LoggerFactory.getLogger(e.getClass());
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
             if ((e instanceof ClosedByInterruptException) || (e instanceof InterruptedException)
                     || (e instanceof InterruptedIOException)) {
                 log.warn(e.getMessage());
