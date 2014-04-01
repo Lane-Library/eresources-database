@@ -51,7 +51,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            while (filesToParse.size() > 0) {
+            while (!filesToParse.isEmpty()) {
                 File file = filesToParse.remove(0);
                 String fileName = file.getAbsolutePath();
                 InputSource source = new InputSource();

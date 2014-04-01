@@ -59,7 +59,7 @@ public class Version {
         maybeAppend(sb, this.dates);
         maybeAppend(sb, this.publisher);
         maybeAppend(sb, this.description);
-        if (this.links != null && this.links.size() > 0) {
+        if (this.links != null && !this.links.isEmpty()) {
             Link firstLink = this.links.get(0);
             String label = firstLink.getLabel();
             if (sb.length() == 1 && label != null) {
@@ -87,11 +87,11 @@ public class Version {
         return this.description;
     }
 
-    public Collection<Link> getLinks() {
+    public List<Link> getLinks() {
         if (null == this.links) {
-            return Collections.emptySet();
+            return Collections.emptyList();
         }
-        return Collections.unmodifiableCollection(this.links);
+        return Collections.unmodifiableList(this.links);
     }
 
     public String getPublisher() {

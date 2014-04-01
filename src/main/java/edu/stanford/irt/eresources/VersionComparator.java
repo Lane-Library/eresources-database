@@ -61,12 +61,12 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      * @return score
      */
     private int calculateHoldingsScore(final Version v) {
-        if (v.getLinks().size() == 0) {
+        List<Link> links = v.getLinks();
+        if (links.isEmpty()) {
             return Integer.MIN_VALUE;
         }
         int score = 0;
-        Collection<Link> links = v.getLinks();
-        if (links.size() > 0 && "Impact Factor".equals(links.iterator().next().getLabel())) {
+        if ("Impact Factor".equals(links.get(0).getLabel())) {
             return -99;
         }
         String summaryHoldings = v.getSummaryHoldings();
@@ -91,7 +91,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         }
         // make sure installed software product description is first:
         if (score == 0) {
-            if ("Product Description".equals(links.iterator().next().getLabel())) {
+            if ("Product Description".equals(links.get(0).getLabel())) {
                 score = 1;
             }
         }
