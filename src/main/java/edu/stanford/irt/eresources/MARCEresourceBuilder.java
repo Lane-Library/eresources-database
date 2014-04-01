@@ -324,6 +324,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void maybeAddCatalogLink() {
+        // by default do nothing
     }
 
     protected void maybeAddSubset(final String subset) {
