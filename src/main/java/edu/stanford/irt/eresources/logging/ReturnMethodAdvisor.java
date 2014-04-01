@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources.logging;
 
 import java.lang.reflect.Method;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -38,10 +37,9 @@ public class ReturnMethodAdvisor extends DefaultPointcutAdvisor {
             if ("handleEresource".equals(method.getName())) {
                 return;
             }
-            Logger log = LoggerFactory.getLogger(advisee.getClass());
             StringBuilder sb = new StringBuilder("return ").append(method.getName()).append("()")
                     .append(returnValue == null ? ";" : " = " + returnValue.toString());
-            log.info(sb.toString());
+            LoggerFactory.getLogger(advisee.getClass()).info(sb.toString());
         }
     }
 

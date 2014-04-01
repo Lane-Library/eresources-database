@@ -3,7 +3,6 @@ package edu.stanford.irt.eresources.logging;
 import java.io.InterruptedIOException;
 import java.nio.channels.ClosedByInterruptException;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.ThrowsAdvice;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -29,12 +28,11 @@ public class ExceptionAdvisor extends DefaultPointcutAdvisor {
          *             if something bad happened
          */
         public void afterThrowing(final Exception e) {
-            Logger log = LoggerFactory.getLogger(e.getClass());
             if ((e instanceof ClosedByInterruptException) || (e instanceof InterruptedException)
                     || (e instanceof InterruptedIOException)) {
-                log.warn(e.getMessage());
+                LoggerFactory.getLogger(e.getClass()).warn(e.getMessage());
             } else {
-                log.error(e.getMessage(), e);
+                LoggerFactory.getLogger(e.getClass()).error(e.getMessage(), e);
             }
         }
     }

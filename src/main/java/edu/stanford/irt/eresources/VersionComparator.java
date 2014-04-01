@@ -3,7 +3,6 @@ package edu.stanford.irt.eresources;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
