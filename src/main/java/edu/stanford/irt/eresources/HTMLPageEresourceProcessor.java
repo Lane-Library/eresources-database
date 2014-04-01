@@ -18,6 +18,7 @@ import javax.xml.transform.sax.SAXResult;
 
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -57,6 +58,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                 try {
                     source.setByteStream(new FileInputStream(file));
                 } catch (FileNotFoundException e) {
+                    LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                     continue;
                 }
                 source.setEncoding("UTF-8");

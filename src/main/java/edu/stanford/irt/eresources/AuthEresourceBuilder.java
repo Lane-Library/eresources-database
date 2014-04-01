@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -93,6 +94,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 handleBibData(name);
                 handleMfhdData(name);
             } catch (RuntimeException e) {
+                LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                 this.recordHasError = true;
             }
         }

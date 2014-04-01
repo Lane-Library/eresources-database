@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -387,6 +388,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 try {
                     this.currentEresource.setTitle(this.title.substring(Integer.parseInt(this.ind2)));
                 } catch (StringIndexOutOfBoundsException e) {
+                    LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                     this.currentEresource.setTitle(this.title.toString());
                 }
             }
