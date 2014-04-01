@@ -1,8 +1,6 @@
 package edu.stanford.irt.eresources.logging;
 
 import java.io.InterruptedIOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.channels.ClosedByInterruptException;
 
 import org.slf4j.Logger;
