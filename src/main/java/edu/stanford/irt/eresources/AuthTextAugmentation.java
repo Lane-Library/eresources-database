@@ -120,6 +120,6 @@ public class AuthTextAugmentation extends DefaultHandler {
     private boolean checkSaveContent() {
         // verified by DM: people records won't have 450's and MeSH records
         // won't have 400's
-        return (("400".equals(this.tag) || "450".equals(this.tag)) && "a".equals(this.code));
+        return ("400".equals(this.tag) || "450".equals(this.tag)) && "a".equals(this.code);
     }
 }

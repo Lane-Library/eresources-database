@@ -89,10 +89,8 @@ public class VersionComparator implements Comparator<Version>, Serializable {
             score--;
         }
         // make sure installed software product description is first:
-        if (score == 0) {
-            if ("Product Description".equals(links.get(0).getLabel())) {
-                score = 1;
-            }
+        if (score == 0 && "Product Description".equals(links.get(0).getLabel())) {
+            score = 1;
         }
         return score;
     }

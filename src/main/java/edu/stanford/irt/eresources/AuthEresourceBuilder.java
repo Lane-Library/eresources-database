@@ -214,7 +214,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.currentEresource.setYear(Integer.parseInt(endDate));
                     this.hasEndDate = true;
                 }
-            } else if ("a".indexOf(this.code) > -1 && this.hasEndDate == false) {
+            } else if ("a".indexOf(this.code) > -1 && !this.hasEndDate) {
                 String beginDate = parseYear(this.currentText.toString());
                 if (null != beginDate) {
                     this.currentEresource.setYear(Integer.parseInt(beginDate));

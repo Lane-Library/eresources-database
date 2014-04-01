@@ -181,7 +181,7 @@ public class DBLoader {
         int index = pid.indexOf('@');
         pid = pid.substring(0, index);
         try (FileOutputStream out = new FileOutputStream(pidFile)) {
-            out.write(pid.getBytes());
+            out.write(pid.getBytes("UTF-8"));
         }
         Runtime.getRuntime().addShutdownHook(new Thread() {
 

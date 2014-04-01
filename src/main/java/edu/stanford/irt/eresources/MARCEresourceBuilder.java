@@ -73,7 +73,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected String z;
 
-    private int $866Count;
+    private int countOf866;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -173,7 +173,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if ("record".equals(name)) {
             this.isBib = false;
             this.isMfhd = false;
-            this.$866Count = 0;
+            this.countOf866 = 0;
         }
     }
 
@@ -434,7 +434,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else {
                 this.currentVersion.addLink(this.currentLink);
             }
-        } else if ("866".equals(this.tag) && (++this.$866Count > 1)) {
+        } else if ("866".equals(this.tag) && (++this.countOf866 > 1)) {
             this.currentVersion.setDescription("");
         }
     }
