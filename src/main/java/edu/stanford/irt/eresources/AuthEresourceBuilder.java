@@ -20,7 +20,15 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class AuthEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    
+    private static final String RECORD = "record";
+    
+    private static final String SUBFIELD = "subfield";
+    
+    private static final String DATAFIELD = "datafield";
+    
+    private static final String CONTROLFIELD = "controlfield";
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^(\\d[\\d|u]{3}|Continuing)$");
 
@@ -70,7 +78,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
 
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
-        if ("record".equals(name)) {
+        if (RECORD.equals(name)) {
             this.currentEresource.setKeywords(this.content.toString());
             if (!this.recordHasError) {
                 this.eresourceHandler.handleEresource(this.currentEresource);
@@ -108,15 +116,15 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     public void startElement(final String uri, final String localName, final String name, final Attributes atts)
             throws SAXException {
         this.currentText.setLength(0);
-        if ("record".equals(name)) {
+        if (RECORD.equals(name)) {
             this.currentEresource = new Eresource();
             this.currentVersion = new Version();
             this.currentEresource.addVersion(this.currentVersion);
             this.currentEresource.setRecordType("auth");
         }
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             this.code = atts.getValue("code");
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
@@ -125,7 +133,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.q = null;
                 this.z = null;
             }
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
         }
     }
@@ -162,11 +170,11 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     private void handleBibData(final String name) {
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             handleBibSubfield();
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             handleBibControlfield();
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             handleBibDatafield();
         }
     }
@@ -224,9 +232,9 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     private void handleMfhdData(final String name) {
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             handleMfhdSubfield();
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             handleMfhdDatafield();
         }
     }

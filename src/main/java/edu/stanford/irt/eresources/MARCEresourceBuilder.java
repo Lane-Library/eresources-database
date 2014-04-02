@@ -23,7 +23,17 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    protected static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    
+    private static final String RECORD = "record";
+    
+    private static final String SUBFIELD = "subfield";
+    
+    private static final String DATAFIELD = "datafield";
+    
+    private static final String CONTROLFIELD = "controlfield";
+    
+    private static final String BIOTOOLS = "biotools";
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
@@ -116,7 +126,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentEresource = new Eresource();
                 setRecordType();
             }
-        } else if ("record".equals(name)) {
+        } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
                 maybeAddCatalogLink();
                 this.currentEresource.addVersion(this.currentVersion);
@@ -157,9 +167,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     public void startElement(final String uri, final String localName, final String name, final Attributes atts)
             throws SAXException {
         this.currentText.setLength(0);
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             this.code = atts.getValue("code");
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
@@ -168,9 +178,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.q = null;
                 this.z = null;
             }
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
-        } else if ("record".equals(name)) {
+        } else if (RECORD.equals(name)) {
             this.isBib = false;
             this.isMfhd = false;
             this.countOf866 = 0;
@@ -185,7 +195,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
             for (Version verzion : eresource.getVersions()) {
                 Version version = verzion;
-                if (version.getSubsets().contains("biotools")) {
+                if (version.getSubsets().contains(BIOTOOLS)) {
                     eresource.addType("biotools software, installed");
                 }
                 // software installed in various locations have the location in
@@ -211,11 +221,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void handleBibData(final String name) {
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             handleBibSubfield();
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             handleBibControlfield();
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             handleBibDatafield();
         }
     }
@@ -279,11 +289,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void handleMfhdData(final String name) {
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             handleMfhdSubfield();
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             handleMfhdControlfield();
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             handleMfhdDatafield();
         }
     }
@@ -329,7 +339,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected void maybeAddSubset(final String subset) {
         this.currentVersion.addSubset(subset);
-        if ("biotools".equals(subset)) {
+        if (BIOTOOLS.equals(subset)) {
             // subset, biotools will count as type: software
             this.currentEresource.addType("software");
         }
