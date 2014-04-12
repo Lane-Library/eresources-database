@@ -3,20 +3,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     <import resource="bib-processor.xml"/>
-    <import resource="web-processor.xml"/>
+    <!--<import resource="web-processor.xml"/>
     <import resource="auth-processor.xml"/>
     <import resource="classes-processor.xml"/>
-    <import resource="print-processor.xml"/>
+    <import resource="print-processor.xml"/>-->
     <bean id="abstractDbLoader" class="edu.stanford.irt.eresources.DBLoader" abstract="true">
         <property name="userName" value="${eresources.eresourcesdb.username}"/>
         <property name="dataSource" ref="erdbDataSource"/>
         <property name="processors">
             <list>
                 <ref bean="bibProcessor"/>
-                <ref bean="webProcessor"/>
+                <!--<ref bean="webProcessor"/>
                 <ref bean="authProcessor"/>
                 <ref bean="classesProcessor"/>
-                <ref bean="printProcessor"/>
+                <ref bean="printProcessor"/>-->
             </list>
         </property>
         <property name="version" value="${project.version}"/>

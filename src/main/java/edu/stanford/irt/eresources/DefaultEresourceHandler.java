@@ -70,19 +70,20 @@ public class DefaultEresourceHandler implements EresourceHandler {
         try {
             this.queue.put(eresource);
         } catch (InterruptedException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         }
         this.count++;
     }
 
     public void run() {
-        try (Connection conn = this.dataSource.getConnection();
-                Statement stmt = conn.createStatement();
-                PreparedStatement textStmt = conn.prepareStatement(this.textSQL);
-                PreparedStatement descStmt = conn.prepareStatement(this.descriptionSQL)) {
-            this.stmt = stmt;
-            this.textStmt = textStmt;
-            this.descStmt = descStmt;
+//        try (Connection conn = this.dataSource.getConnection();
+//                Statement stmt = conn.createStatement();
+//                PreparedStatement textStmt = conn.prepareStatement(this.textSQL);
+//                PreparedStatement descStmt = conn.prepareStatement(this.descriptionSQL)) {
+//            this.stmt = stmt;
+//            this.textStmt = textStmt;
+//            this.descStmt = descStmt;
+        try {
             synchronized (this.queue) {
                 while (!this.queue.isEmpty() || this.keepGoing) {
                     try {
@@ -91,14 +92,14 @@ public class DefaultEresourceHandler implements EresourceHandler {
                             insertEresource(eresource);
                         }
                     } catch (InterruptedException | IOException e) {
-                        throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty="
+                        throw new EresourceException("\nstop=" + this.keepGoing + "\nempty="
                                 + this.queue.isEmpty(), e);
                     }
                 }
                 this.queue.notifyAll();
             }
         } catch (SQLException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         }
     }
 
@@ -115,13 +116,15 @@ public class DefaultEresourceHandler implements EresourceHandler {
         for (Iterator<String> it = insertSQLStatements.iterator(); it.hasNext();) {
             String sql = it.next();
             if (sql.indexOf("TEXT:") != 0 && sql.indexOf("DESCRIPTION:") != 0) {
-                this.stmt.addBatch(sql);
+//                this.stmt.addBatch(sql);
+                System.out.println(sql);
                 it.remove();
             }
         }
-        this.stmt.executeBatch();
+//        this.stmt.executeBatch();
         for (String clob : insertSQLStatements) {
-            insertClob(clob);
+//            insertClob(clob);
+            System.out.println(clob);
         }
     }
 

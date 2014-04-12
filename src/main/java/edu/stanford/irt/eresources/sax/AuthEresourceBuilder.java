@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import edu.stanford.irt.eresources.EresourceException;
+import edu.stanford.irt.eresources.EresourceHandler;
 
 /**
  * @author ceyates
@@ -36,13 +39,13 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private StringBuilder content = new StringBuilder();
 
-    private Eresource currentEresource;
+    private SAXEresource currentEresource;
 
-    private Link currentLink;
+    private SAXLink currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
-    private Version currentVersion;
+    private SAXVersion currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -84,13 +87,13 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.eresourceHandler.handleEresource(this.currentEresource);
                 if (this.hasPreferredTitle) {
                     try {
-                        Eresource clone = (Eresource) this.currentEresource.clone();
+                        SAXEresource clone = (SAXEresource) this.currentEresource.clone();
                         clone.setTitle(this.preferredTitle.toString());
                         this.hasPreferredTitle = false;
                         this.preferredTitle.setLength(0);
                         this.eresourceHandler.handleEresource(clone);
                     } catch (CloneNotSupportedException e) {
-                        throw new EresourceDatabaseException(e);
+                        throw new EresourceException(e);
                     }
                 }
             } else {
@@ -117,8 +120,8 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             throws SAXException {
         this.currentText.setLength(0);
         if (RECORD.equals(name)) {
-            this.currentEresource = new Eresource();
-            this.currentVersion = new Version();
+            this.currentEresource = new SAXEresource();
+            this.currentVersion = new SAXVersion();
             this.currentEresource.addVersion(this.currentVersion);
             this.currentEresource.setRecordType("auth");
         }
@@ -129,7 +132,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if ("856".equals(this.tag)) {
-                this.currentLink = new Link();
+                this.currentLink = new SAXLink();
                 this.q = null;
                 this.z = null;
             }
@@ -164,7 +167,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(this.currentText.toString()));
             } catch (ParseException e) {
-                throw new EresourceDatabaseException(e);
+                throw new EresourceException(e);
             }
         }
     }

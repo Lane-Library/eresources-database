@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -6,6 +6,10 @@ import java.sql.Timestamp;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
+import edu.stanford.irt.eresources.AbstractEresourceProcessor;
+import edu.stanford.irt.eresources.EresourceException;
+import edu.stanford.irt.eresources.EresourceInputStream;
 
 /**
  * @author ceyates To change the template for this generated type comment go to Window - Preferences - Java - Code
@@ -30,9 +34,9 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
             source.setByteStream(this.inputStream);
             this.xmlReader.parse(source);
         } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         } catch (SAXException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         }
     }
 

@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.stanford.irt.eresources.sax.SAXLink;
+import edu.stanford.irt.eresources.sax.SAXVersion;
+
 /**
  * @author ryanmax
  */
@@ -13,26 +16,26 @@ public class VersionComparatorTest {
 
     private VersionComparator comparator;
 
-    private Link link;
+    private SAXLink link;
 
-    private Version v1;
+    private SAXVersion v1;
 
-    private Version v2;
+    private SAXVersion v2;
 
     /**
      * @throws java.lang.Exception
      */
     @Before
     public void setUp() throws Exception {
-        this.v1 = new Version();
-        this.v2 = new Version();
-        this.link = new Link();
+        this.v1 = new SAXVersion();
+        this.v2 = new SAXVersion();
+        this.link = new SAXLink();
         this.comparator = new VersionComparator();
     }
 
     /**
      * Test method for
-     * {@link edu.stanford.irt.laneweb.eresources.EresourceVersionComparator#compare(edu.stanford.irt.eresources.Version, edu.stanford.irt.eresources.Version)}
+     * {@link edu.stanford.irt.laneweb.eresources.EresourceVersionComparator#compare(edu.stanford.irt.eresources.sax.SAXVersion, edu.stanford.irt.eresources.sax.SAXVersion)}
      * .
      */
     @Test
@@ -80,7 +83,7 @@ public class VersionComparatorTest {
         this.v2.setSummaryHoldings("v. 1.");
         this.v1.setDates("1999-2000.");
         this.v2.setDates("1999-2000.");
-        this.v1.addLink(new Link());
+        this.v1.addLink(new SAXLink());
         this.link.setLabel("Impact Factor");
         this.v2.addLink(this.link);
         assertTrue(this.comparator.compare(this.v1, this.v2) < 0);

@@ -28,7 +28,7 @@ public class DBUpdate extends DBLoader {
         Timestamp timeLastUpdated = null;
         try (ResultSet rs = stmt.executeQuery(this.selectQuery)) {
             if (!rs.next()) {
-                throw new EresourceDatabaseException("unable to get MAX(UPDATED)");
+                throw new EresourceException("unable to get MAX(UPDATED)");
             }
             timeLastUpdated = rs.getTimestamp(1);
         }

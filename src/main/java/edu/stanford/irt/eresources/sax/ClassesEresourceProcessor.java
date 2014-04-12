@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +20,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
+
+import edu.stanford.irt.eresources.AbstractEresourceProcessor;
+import edu.stanford.irt.eresources.EresourceException;
 
 public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
@@ -55,15 +58,15 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (SAXException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         } catch (ParserConfigurationException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         } catch (TransformerConfigurationException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         } catch (TransformerException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         }
     }
 

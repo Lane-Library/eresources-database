@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +19,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.AuthAugmentationInputStream;
+import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader;
 
 public class AuthTextAugmentation extends DefaultHandler {
@@ -50,7 +52,7 @@ public class AuthTextAugmentation extends DefaultHandler {
                 LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                 this.augmentations = new HashMap<String, String>();
             } catch (ClassNotFoundException e) {
-                throw new EresourceDatabaseException(e);
+                throw new EresourceException(e);
             }
         }
     }
@@ -80,9 +82,9 @@ public class AuthTextAugmentation extends DefaultHandler {
                 xmlReader.parse(new InputSource(new AuthAugmentationInputStream(term, lookupTag, this.dataSource,
                         this.executor)));
             } catch (IOException e) {
-                throw new EresourceDatabaseException(e);
+                throw new EresourceException(e);
             } catch (SAXException e) {
-                throw new EresourceDatabaseException(e);
+                throw new EresourceException(e);
             }
             result = this.augmentationText.toString().trim();
             this.augmentations.put(term, result);

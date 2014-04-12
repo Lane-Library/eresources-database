@@ -78,7 +78,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
         try {
             this.queue.put(eresource);
         } catch (InterruptedException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         }
     }
 
@@ -96,7 +96,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
                 this.ids.get(recordType).add(recordId);
             }
         } catch (SQLException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         }
         synchronized (this.queue) {
             while (!this.queue.isEmpty() || this.keepGoing) {
@@ -107,7 +107,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
                         set.remove(Integer.valueOf(eresource.getRecordId()));
                     }
                 } catch (InterruptedException e) {
-                    throw new EresourceDatabaseException(
+                    throw new EresourceException(
                             "\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                 }
             }
@@ -135,7 +135,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
                     }
                 }
             } catch (SQLException e) {
-                throw new EresourceDatabaseException(e);
+                throw new EresourceException(e);
             }
             this.queue.notifyAll();
         }

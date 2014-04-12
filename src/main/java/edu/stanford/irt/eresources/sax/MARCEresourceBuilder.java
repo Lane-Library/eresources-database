@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -17,6 +17,11 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import edu.stanford.irt.eresources.EresourceException;
+import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.Version;
 
 /**
  * @author ceyates
@@ -43,13 +48,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected StringBuilder content = new StringBuilder();
 
-    protected Eresource currentEresource;
+    protected SAXEresource currentEresource;
 
-    protected Link currentLink;
+    protected SAXLink currentLink;
 
     protected StringBuilder currentText = new StringBuilder();
 
-    protected Version currentVersion;
+    protected SAXVersion currentVersion;
 
     protected StringBuilder description505 = new StringBuilder();
 
@@ -104,7 +109,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         try {
             this.authTextAugmentation.save();
         } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         }
     }
 
@@ -114,7 +119,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if ("uvxy".indexOf(this.currentText.charAt(6)) > -1) {
                 this.isMfhd = true;
                 this.isBib = false;
-                this.currentVersion = new Version();
+                this.currentVersion = new SAXVersion();
             } else {
                 this.isBib = true;
                 this.isMfhd = false;
@@ -123,7 +128,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.updated = null;
                     handlePreviousRecord();
                 }
-                this.currentEresource = new Eresource();
+                this.currentEresource = new SAXEresource();
                 setRecordType();
             }
         } else if (RECORD.equals(name)) {
@@ -174,7 +179,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if (this.isMfhd && "856".equals(this.tag)) {
-                this.currentLink = new Link();
+                this.currentLink = new SAXLink();
                 this.q = null;
                 this.z = null;
             }
@@ -187,33 +192,33 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    protected void createCustomTypes(final Eresource eresource) {
-        Collection<String> types = eresource.getTypes();
+    protected void createCustomTypes(final SAXEresource sAXEresource) {
+        Collection<String> types = sAXEresource.getTypes();
         if (types.contains("software, installed")) {
             if (types.contains("statistics")) {
-                eresource.addType("statistics software, installed");
+                sAXEresource.addType("statistics software, installed");
             }
-            for (Version verzion : eresource.getVersions()) {
+            for (Version verzion : sAXEresource.getVersions()) {
                 Version version = verzion;
                 if (version.getSubsets().contains(BIOTOOLS)) {
-                    eresource.addType("biotools software, installed");
+                    sAXEresource.addType("biotools software, installed");
                 }
                 // software installed in various locations have the location in
                 // the label
                 for (Link link : version.getLinks()) {
                     String label = link.getLabel();
                     if (label.indexOf("Redwood") == 0) {
-                        eresource.addType("redwood software, installed");
+                        sAXEresource.addType("redwood software, installed");
                     } else if (label.indexOf("Stone") == 0) {
-                        eresource.addType("stone software, installed");
+                        sAXEresource.addType("stone software, installed");
                     } else if (label.indexOf("Duck") == 0) {
-                        eresource.addType("duck software, installed");
+                        sAXEresource.addType("duck software, installed");
                     } else if (label.indexOf("M051") == 0) {
-                        eresource.addType("m051 software, installed");
+                        sAXEresource.addType("m051 software, installed");
                     } else if (label.indexOf("Public") == 0) {
-                        eresource.addType("lksc-public software, installed");
+                        sAXEresource.addType("lksc-public software, installed");
                     } else if (label.indexOf("Student") == 0) {
-                        eresource.addType("lksc-student software, installed");
+                        sAXEresource.addType("lksc-student software, installed");
                     }
                 }
             }
@@ -378,7 +383,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             try {
                 this.updated = this.dateFormat.parse(this.currentText.toString());
             } catch (ParseException e) {
-                throw new EresourceDatabaseException(e);
+                throw new EresourceException(e);
             }
         } else if ("008".equals(this.tag)) {
             String endDate = parseYear(this.currentText.substring(11, 15));
@@ -420,7 +425,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.updated = mfhdDate;
                 }
             } catch (ParseException e) {
-                throw new EresourceDatabaseException(e);
+                throw new EresourceException(e);
             }
         }
     }
@@ -455,13 +460,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.eresourceHandler.handleEresource(this.currentEresource);
             if (this.hasPreferredTitle) {
                 try {
-                    Eresource clone = (Eresource) this.currentEresource.clone();
+                    SAXEresource clone = (SAXEresource) this.currentEresource.clone();
                     clone.setTitle(this.preferredTitle.toString());
                     this.hasPreferredTitle = false;
                     this.preferredTitle.setLength(0);
                     this.eresourceHandler.handleEresource(clone);
                 } catch (CloneNotSupportedException e) {
-                    throw new EresourceDatabaseException(e);
+                    throw new EresourceException(e);
                 }
             }
         } else {

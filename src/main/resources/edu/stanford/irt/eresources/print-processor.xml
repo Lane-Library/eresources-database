@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
-    <bean id="printProcessor" class="edu.stanford.irt.eresources.MARCEresourceProcessor">
+    <bean id="printProcessor" class="edu.stanford.irt.eresources.sax.MARCEresourceProcessor">
         <property name="inputStream">
             <bean id="eresourcesInputStream" class="edu.stanford.irt.eresources.PrintBibInputStream">
                 <property name="dataSource" ref="voyagerDataSource"/>
@@ -12,7 +12,7 @@
         <property name="xmlReader" >
             <bean class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
                 <property name="contentHandler">
-                    <bean  class="edu.stanford.irt.eresources.PrintMARCEresourceBuilder">
+                    <bean  class="edu.stanford.irt.eresources.sax.PrintMARCEresourceBuilder">
                         <property name="eresourceHandler" ref="eresourceHandler"/>
                         <property name="authTextAugmentation" ref="authTextAugmentation"/>
                     </bean>

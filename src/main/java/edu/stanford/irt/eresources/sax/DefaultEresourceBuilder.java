@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -7,6 +7,9 @@ import java.text.SimpleDateFormat;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import edu.stanford.irt.eresources.EresourceException;
+import edu.stanford.irt.eresources.EresourceHandler;
 
 /**
  * 
@@ -17,13 +20,13 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class DefaultEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private Eresource currentEresource;
+    private SAXEresource currentEresource;
 
-    private Link currentLink;
+    private SAXLink currentLink;
 
     private StringBuilder currentText;
 
-    private Version currentVersion;
+    private SAXVersion currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -77,7 +80,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         } else if ("description".equals(name)) {
             this.currentVersion.setDescription(this.currentText.toString());
         } else if (!"eresources".equals(name)) {
-            throw new EresourceDatabaseException("cant handle " + name);
+            throw new EresourceException("cant handle " + name);
         }
     }
 
@@ -98,18 +101,18 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             throws SAXException {
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
-            this.currentEresource = new Eresource();
+            this.currentEresource = new SAXEresource();
             this.currentEresource.setRecordId(Integer.parseInt(atts.getValue("id")));
             this.currentEresource.setRecordType(atts.getValue("type"));
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(atts.getValue("update")));
             } catch (ParseException e) {
-                throw new EresourceDatabaseException(e);
+                throw new EresourceException(e);
             }
         } else if ("version".equals(name)) {
-            this.currentVersion = new Version();
+            this.currentVersion = new SAXVersion();
         } else if ("link".equals(name)) {
-            this.currentLink = new Link();
+            this.currentLink = new SAXLink();
         }
     }
 }

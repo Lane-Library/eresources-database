@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -26,6 +26,9 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
+import edu.stanford.irt.eresources.AbstractEresourceProcessor;
+import edu.stanford.irt.eresources.EresourceException;
 
 public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
@@ -76,13 +79,13 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (SAXException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         } catch (TransformerConfigurationException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         } catch (TransformerException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
+            throw new EresourceException(e);
         }
     }
 

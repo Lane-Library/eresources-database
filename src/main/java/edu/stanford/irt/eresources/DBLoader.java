@@ -62,23 +62,24 @@ public class DBLoader {
         Logger log = LoggerFactory.getLogger(getClass());
         log.info(this.version + " starting up");
         managePIDFile();
-        try (Connection conn = this.dataSource.getConnection(); Statement stmt = conn.createStatement();) {
-            conn.setAutoCommit(false);
+//        try (Connection conn = this.dataSource.getConnection(); Statement stmt = conn.createStatement();) {
+//            conn.setAutoCommit(false);
             for (String create : this.createStatements) {
-                try {
+//                try {
                     log.info(create);
-                    stmt.execute(create);
-                } catch (SQLException e) {
-                    int errorCode = e.getErrorCode();
-                    if ((942 != errorCode) && (1418 != errorCode) && (2289 != errorCode)) {
-                        throw e;
-                    }
-                }
+//                    stmt.execute(create);
+                    System.out.println(create);
+//                } catch (SQLException e) {
+//                    int errorCode = e.getErrorCode();
+//                    if ((942 != errorCode) && (1418 != errorCode) && (2289 != errorCode)) {
+//                        throw e;
+//                    }
+//                }
             }
-            Date updated = getUpdatedDate(stmt);
+//            Date updated = getUpdatedDate(stmt);
             this.executor.execute(this.handler);
             for (AbstractEresourceProcessor processor : this.processors) {
-                processor.setStartDate(updated);
+                processor.setStartDate(new Date(0));
                 processor.process();
             }
             this.handler.stop();
@@ -87,25 +88,26 @@ public class DBLoader {
                     try {
                         this.queue.wait();
                     } catch (InterruptedException e) {
-                        throw new EresourceDatabaseException(e);
+                        throw new EresourceException(e);
                     }
                 }
             }
-            conn.commit();
+//            conn.commit();
             int count = this.handler.getCount();
             if (count > 0) {
                 for (String call : this.callStatements) {
                     if ((call.indexOf("{0}") > 0) && (null != this.userName)) {
                         call = MessageFormat.format(call, new Object[] { this.userName });
                     }
-                    CallableStatement callable = conn.prepareCall(call);
-                    log.info(call);
-                    callable.execute();
-                    callable.close();
+//                    CallableStatement callable = conn.prepareCall(call);
+//                    log.info(call);
+//                    callable.execute();
+//                    callable.close();
+                    System.out.println(call);
                 }
             }
             log.info("handled " + count + " eresources.");
-        }
+//        }
     }
 
     public void setCallStatements(final Collection<String> callStatements) {
