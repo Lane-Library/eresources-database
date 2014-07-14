@@ -151,7 +151,7 @@
     <stx:template match="MedlineCitation/Article/Pagination/MedlinePgn">
         <stx:assign name="publicationPages" select="."/>
     </stx:template>
-    
+
     <stx:template match="MedlineCitation/Article/Journal/ISOAbbreviation">
         <stx:assign name="publicationTitle" select="."/>
     </stx:template>
@@ -241,6 +241,12 @@
             </stx:otherwise>
         </stx:choose>
         <stx:process-children/>
+    </stx:template>
+    
+    <stx:template match="DeleteCitation/PMID">
+        <eresource id="{.}" type="pubmed" update="19690101000000">
+            <type>article</type>
+        </eresource>
     </stx:template>
     
 </stx:transform>
