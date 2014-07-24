@@ -13,6 +13,7 @@
     <stx:variable name="publicationIssue"/>
     <stx:variable name="publicationPages"/>
     <stx:variable name="publicationTitle"/>
+    <stx:variable name="publicationTitleFull"/>
     <stx:variable name="publicationType"/>
     <stx:variable name="publicationVolume"/>
     <stx:variable name="publicationYear"/>
@@ -32,6 +33,7 @@
         <stx:assign name="publicationIssue" select="''"/>
         <stx:assign name="publicationPages" select="''"/>
         <stx:assign name="publicationTitle" select="''"/>
+        <stx:assign name="publicationTitleFull" select="''"/>
         <stx:assign name="publicationType" select="''"/>
         <stx:assign name="publicationVolume" select="''"/>
         <stx:assign name="publicationYear" select="''"/>
@@ -115,6 +117,7 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $description)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $authorsText)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitle)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitleFull)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
@@ -152,11 +155,12 @@
         <stx:assign name="publicationPages" select="."/>
     </stx:template>
 
-    <!-- // should include <Title> as well so "dermatology" pulls up this 13560353
-                <Title>Australian journal of dermatology</Title>
-                <ISOAbbreviation>Aust J Dermatol</ISOAbbreviation>    -->
     <stx:template match="MedlineCitation/Article/Journal/ISOAbbreviation">
         <stx:assign name="publicationTitle" select="."/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/Journal/Title">
+        <stx:assign name="publicationTitleFull" select="."/>
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/Journal/JournalIssue/Volume">
