@@ -152,6 +152,9 @@
         <stx:assign name="publicationPages" select="."/>
     </stx:template>
 
+    <!-- // should include <Title> as well so "dermatology" pulls up this 13560353
+                <Title>Australian journal of dermatology</Title>
+                <ISOAbbreviation>Aust J Dermatol</ISOAbbreviation>    -->
     <stx:template match="MedlineCitation/Article/Journal/ISOAbbreviation">
         <stx:assign name="publicationTitle" select="."/>
     </stx:template>
@@ -219,7 +222,7 @@
         <stx:process-children/>
     </stx:template>
     
-    <stx:template match="MedlineCitation/MeshHeadingList/MeshHeading/DescriptorName">
+    <stx:template match="MedlineCitation/MeshHeadingList/MeshHeading/DescriptorName[. != 'Infant' and . != 'Dogs' and . != 'Cattle' and . != 'Cats' and . != 'Rabbits' and . != 'Guinea Pigs' and . != 'Cricetinae' and . != 'Male' and . != 'Pregnancy' and . != 'Female' and . != 'Humans' and . != 'Animals' and . != 'Middle Aged' and . != 'Chick Embryo' and . != 'Child, Preschool' and . != 'Infant, Newborn' and . != 'Young Adult' and . != 'Rats' and . != 'Mice' and . != 'Child' and . != 'Adult' and . != 'Adolescent' and . != 'Aged, 80 and over' and . != 'Aged']">
         <stx:choose>
             <stx:when test="$mesh = ''">
                 <stx:assign name="mesh" select="."/>
