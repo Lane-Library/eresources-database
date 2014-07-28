@@ -191,7 +191,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
                 && ("27".indexOf(this.ind2) > -1)) {
-            String mesh = this.currentText.toString().toLowerCase();
+            String mesh = this.currentText.toString();
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && ("anpq".indexOf(this.code) > -1)) {
             if (this.title.length() > 0) {
