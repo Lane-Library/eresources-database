@@ -32,6 +32,8 @@ public class Eresource implements Cloneable {
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final String ENG = "eng";
+
+    private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -105,7 +107,7 @@ public class Eresource implements Cloneable {
         if (this.publicationLanguages == null) {
             this.publicationLanguages = new HashSet<String>();
         }
-        this.publicationLanguages.add(publicationLanguage.toLowerCase());
+        this.publicationLanguages.add(LANGUAGE_MAP.getLanguage(publicationLanguage.toLowerCase()));
     }
 
     public void addPublicationType(final String publicationType) {
