@@ -226,7 +226,7 @@
         <stx:process-children/>
     </stx:template>
     
-    <stx:template match="MedlineCitation/MeshHeadingList/MeshHeading/DescriptorName[. != 'Infant' and . != 'Dogs' and . != 'Cattle' and . != 'Cats' and . != 'Rabbits' and . != 'Guinea Pigs' and . != 'Cricetinae' and . != 'Male' and . != 'Pregnancy' and . != 'Female' and . != 'Humans' and . != 'Animals' and . != 'Middle Aged' and . != 'Chick Embryo' and . != 'Child, Preschool' and . != 'Infant, Newborn' and . != 'Young Adult' and . != 'Rats' and . != 'Mice' and . != 'Child' and . != 'Adult' and . != 'Adolescent' and . != 'Aged, 80 and over' and . != 'Aged']">
+    <stx:template match="MedlineCitation/MeshHeadingList/MeshHeading/DescriptorName">
         <stx:choose>
             <stx:when test="$mesh = ''">
                 <stx:assign name="mesh" select="."/>
