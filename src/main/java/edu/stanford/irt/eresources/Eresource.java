@@ -31,7 +31,7 @@ public class Eresource implements Cloneable {
                     "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
-    private static final String ENG = "eng";
+    private static final String ENG = "English";
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
     static {
