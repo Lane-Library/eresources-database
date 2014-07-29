@@ -56,12 +56,12 @@ public class SolrEresourceHandler implements EresourceHandler {
         this.solrMaxDocs = solrMaxDocs;
     }
 
-    private void commitSolrDocs() {
+    private void addSolrDocs() {
         try {
             this.solrServer.add(this.solrDocs);
-            this.solrServer.commit();
+            this.solrDocs.clear();
         } catch (SolrServerException | IOException e) {
-            throw new EresourceDatabaseException("solr commit failed", e);
+            throw new EresourceDatabaseException("solr add failed", e);
         }
     }
 
@@ -168,13 +168,12 @@ public class SolrEresourceHandler implements EresourceHandler {
                             "\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                 }
                 if (this.solrDocs.size() >= this.solrMaxDocs) {
-                    commitSolrDocs();
-                    this.solrDocs.clear();
+                    addSolrDocs();
                 }
             }
             this.queue.notifyAll();
             if (!this.solrDocs.isEmpty()) {
-                commitSolrDocs();
+                addSolrDocs();
             }
         }
     }
