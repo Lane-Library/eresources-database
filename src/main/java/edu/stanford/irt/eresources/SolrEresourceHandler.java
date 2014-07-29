@@ -90,6 +90,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         String recordType = eresource.getRecordType();
         StringBuffer key = new StringBuffer();
         String title = eresource.getTitle();
+        String sortTitle = getSortTitle(title);
         List<Version> versions = new LinkedList<Version>();
         key.append(recordType).append("-").append(Integer.toString(eresource.getRecordId()));
         doc.addField("id", key.toString());
@@ -98,11 +99,11 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("description", eresource.getDescription());
         doc.addField("text", eresource.getKeywords());
         doc.addField("title", title);
-        doc.addField("title_sort", getSortTitle(title));
+        doc.addField("title_sort", sortTitle);
         doc.addField("year", Integer.toString(eresource.getYear()));
         char firstCharOfTitle = '0';
-        if (null != title && !title.isEmpty()) {
-            firstCharOfTitle = title.trim().substring(0, 1).charAt(0);
+        if (null != sortTitle && !sortTitle.isEmpty()) {
+            firstCharOfTitle = sortTitle.trim().substring(0, 1).charAt(0);
         }
         if (!Character.isLetter((int) firstCharOfTitle)) {
             firstCharOfTitle = '1';
