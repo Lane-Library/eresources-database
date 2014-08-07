@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -19,7 +20,17 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
+/**
+ * fetch "as supplied by publisher" records from PubMed because they are not included in the licensed PubMed/Medline FTP
+ * feed; initial query is "publisher [sb]"; subsequent queries just grab everything added in the last day so duplication
+ * can occur between this and the FTP data fetcher
+ * 
+ * @author ryanmax
+ */
 public class PubmedInProcessDataFetcher implements DataFetcher {
 
     private static final String _TODAY = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -33,15 +44,19 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
 
     private static final HttpClient httpClient = HttpClients.createDefault();
 
+    private static final String INITIAL_QUERY = "publisher [sb]";
+
     private static final int PMIDS_PER_REQUEST = 500;
 
     private static final String PROP_FILE = "inprocess.properties";
 
-    private static final String QUERY = "(publisher [sb] OR inprocess [sb]) AND (\"?\"[EDAT] : \"3000\"[EDAT]) ";
-
     private static final int SLEEP_TIME = 500;
 
+    private static final String UPDATES_QUERY = "(\"?\"[EDAT] : \"3000\"[EDAT]) ";
+
     private String basePath;
+
+    private Logger log = LoggerFactory.getLogger(getClass());
 
     private Properties properties;
 
@@ -71,7 +86,7 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
     }
 
     private String getLastUpdateDate() {
-        String updateDate = "0";
+        String updateDate = null;
         FileInputStream in = null;
         this.propertiesFile = new File(this.basePath + "/" + PROP_FILE);
         try {
@@ -92,8 +107,13 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
     public void getUpdateFiles() {
         String date = getLastUpdateDate();
         String query;
+        if (null == date) {
+            query = INITIAL_QUERY;
+        } else {
+            query = UPDATES_QUERY.replace("?", date);
+        }
         try {
-            query = URLEncoder.encode(QUERY.replace("?", date), "UTF-8");
+            query = URLEncoder.encode(query, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }
@@ -103,44 +123,48 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
     }
 
     private void pmidListToFiles(final List<String> pmids) {
-        StringBuilder sb = new StringBuilder();
-        int removed = 0;
-        int filesWritten = 0;
+        List<String> myPmids = (ArrayList<String>) ((ArrayList<String>) pmids).clone();
+        File directory = new File(this.basePath + "/" + _TODAY);
+        int i = 0;
+        int start;
+        int end;
         String url;
-        int size = pmids.size();
-        File parentDirectory = null;
-        if (size > 0) {
-            parentDirectory = new File(this.basePath + "/" + _TODAY);
-            parentDirectory.mkdir();
-        }
-        for (int i = 0; i < size; i++) {
-            sb.append(',').append(pmids.remove(0));
-            if (++removed >= PMIDS_PER_REQUEST || pmids.size() == 0) {
-                try {
-                    url = BASE_URL + URLEncoder.encode(sb.toString().substring(1), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    throw new EresourceDatabaseException(e);
-                }
-                removed = 0;
-                sb = new StringBuilder();
-                String content = getContent(url);
-                if (null == content) {
-                    // second request if content is null
-                    content = getContent(url);
-                }
-                if (null == content) {
-                    throw new EresourceDatabaseException("ncbi not responding; request: " + url);
-                }
-                File f = new File(parentDirectory.getAbsolutePath() + "/" + BASE_FILENAME + ++filesWritten + ".xml");
-                FileOutputStream fos = null;
-                try {
-                    f.createNewFile();
-                    fos = new FileOutputStream(f);
-                    fos.write(content.getBytes());
-                    fos.close();
-                } catch (IOException e) {
-                    throw new EresourceDatabaseException(e);
-                }
+        while (myPmids.size() > 0) {
+            start = i * PMIDS_PER_REQUEST;
+            end = ++i * PMIDS_PER_REQUEST;
+            if (end > pmids.size()) {
+                end = pmids.size();
+            }
+            List<String> sublist = pmids.subList(start, end);
+            myPmids.removeAll(sublist);
+            try {
+                url = BASE_URL + URLEncoder.encode(StringUtils.collectionToCommaDelimitedString(sublist), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new EresourceDatabaseException(e);
+            }
+            String content = getContent(url);
+            if (null == content) {
+                // second request if content is null
+                content = getContent(url);
+            }
+            if (null == content) {
+                this.log.error("ncbi not responding; request: " + url);
+                // return without throwing an exception so other data fetching (ftp) can complete
+                this.log.error("exiting in-process fetch without updating lastUpdate date");
+                return;
+            }
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            File f = new File(directory.getAbsolutePath() + "/" + BASE_FILENAME + i + ".xml");
+            FileOutputStream fos = null;
+            try {
+                f.createNewFile();
+                fos = new FileOutputStream(f);
+                fos.write(content.getBytes());
+                fos.close();
+            } catch (IOException e) {
+                throw new EresourceDatabaseException(e);
             }
         }
     }
