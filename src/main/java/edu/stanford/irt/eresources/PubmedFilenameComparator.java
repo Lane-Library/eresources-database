@@ -15,9 +15,9 @@ public class PubmedFilenameComparator implements Comparator<File> {
         String f1Alpha = getAlphasFromFile(f1);
         String f2Alpha = getAlphasFromFile(f2);
         if (f1Alpha.equals(f2Alpha)) {
-            int f1Num = getDigitsFromFile(f1);
-            int f2Num = getDigitsFromFile(f2);
-            return f1Num - f2Num;
+            long f1Num = getDigitsFromFile(f1);
+            long f2Num = getDigitsFromFile(f2);
+            return (int) (f1Num - f2Num);
         }
         return f1.compareTo(f2);
     }
@@ -26,7 +26,7 @@ public class PubmedFilenameComparator implements Comparator<File> {
         return file.getAbsolutePath().replaceAll("(\\W|\\d)", "");
     }
 
-    private int getDigitsFromFile(final File file) {
-        return Integer.parseInt(file.getAbsolutePath().replaceAll("[^\\d]", ""));
+    private long getDigitsFromFile(final File file) {
+        return Long.parseLong(file.getAbsolutePath().replaceAll("[^\\d]", ""));
     }
 }
