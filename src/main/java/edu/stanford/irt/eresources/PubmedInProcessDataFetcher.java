@@ -35,7 +35,7 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
 
     private static final String _TODAY = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-    private static final String BASE_FILENAME = "inprocess-" + _TODAY + "_";
+    private static final String BASE_FILENAME = "inprocess-";
 
     private static final String BASE_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?email=ryanmax@stanford.edu&db=pubmed&mode=xml&id=";
 
