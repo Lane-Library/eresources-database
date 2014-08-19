@@ -184,9 +184,9 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private void handleBibSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code)) {
-            String type = this.currentText.toString().toLowerCase();
+            String type = this.currentText.toString();
             this.currentEresource.addType(type);
-            if ((type.indexOf("person") == 0) || "peoples".equals(type)) {
+            if ((type.indexOf("Persons") == 0) || "Peoples".equals(type)) {
                 this.currentEresource.addType("Person");
             }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
