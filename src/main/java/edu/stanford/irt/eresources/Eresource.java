@@ -14,26 +14,26 @@ public class Eresource implements Cloneable {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { "article", "cc", "database", "book", "ej",
-            "atlases, pictorial", "redwood software, installed", "duck software, installed",
-            "stone software, installed", "m051 software, installed", "lksc-student software, installed",
-            "lksc-public software, installed", "software, installed", "software", "statistics", "video", "graphic",
-            "lanesite", "print", "bassett", "statistics software, installed", "biotools software, installed" };
+    private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Clinical Decision Tools", "Database",
+            "Book", "Journal", "Atlases, Pictorial", "Software, Installed - Redwood Room",
+            "Software, Installed - Duck Room", "Software, Installed - Stone Room", "Software, Installed - M051",
+            "Software, Installed - LKSC Student", "Software, Installed - LKSC Public", "Software, Installed",
+            "Software", "Statistics", "Video", "Graphic", "Lane Web Page", "Print", "Bassett",
+            "Statistics Software, Installed", "Biotools Software, Installed" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
-    private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
-            { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
-            { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-            { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
-                    "digital videos, local", "digital videos, local, public" },
-            { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
+    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Journal", "Periodicals", "Newspapers" },
+            { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
+            { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
+            { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Graphic", "Graphics" } };
 
     private static final String ENG = "English";
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
+
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);

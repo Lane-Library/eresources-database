@@ -14,24 +14,23 @@ public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
     protected void createCustomTypes(final Eresource eresource) {
         this.currentEresource.addType("print");
         Collection<String> types = eresource.getTypes();
-        if (types.contains("periodical") || types.contains("newspaper") || types.contains("periodicals")
-                || types.contains("newspapers")) {
-            eresource.addType("ej");
+        if (types.contains("Periodicals")
+                || types.contains("Newspapers")) {
+            eresource.addType("Journal");
         }
-        if (types.contains("decision support techniques") || types.contains("calculators, clinical")
-                || types.contains("algorithms")) {
-            eresource.addType("cc");
+        if (types.contains("Decision Support Techniques") || types.contains("Calculators, Clinical")
+                || types.contains("Algorithms")) {
+            eresource.addType("Clinical Decision Tools");
         }
-        if (types.contains("digital video") || types.contains("digital video, local")
-                || types.contains("digital video, local, public") || types.contains("digital videos")
-                || types.contains("digital videos, local") || types.contains("digital videos, local, public")) {
-            eresource.addType("video");
+        if (types.contains("Digital Video") || types.contains("Digital Video, Local")
+                || types.contains("Digital Video, Local, Public")) {
+            eresource.addType("Video");
         }
-        if (types.contains("book set") || types.contains("book sets") || types.contains("books")) {
-            eresource.addType("book");
+        if (types.contains("Book Sets") || types.contains("Books")) {
+            eresource.addType("Book");
         }
-        if (types.contains("databases")) {
-            eresource.addType("database");
+        if (types.contains("Databases")) {
+            eresource.addType("Database");
         }
     }
 

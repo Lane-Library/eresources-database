@@ -178,31 +178,31 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected void createCustomTypes(final Eresource eresource) {
         Collection<String> types = eresource.getTypes();
-        if (types.contains("software, installed")) {
-            if (types.contains("statistics")) {
-                eresource.addType("statistics software, installed");
+        if (types.contains("Software, Installed")) {
+            if (types.contains("Statistics")) {
+                eresource.addType("Statistics Software, Installed");
             }
             for (Version verzion : eresource.getVersions()) {
                 Version version = verzion;
                 if (version.getSubsets().contains("biotools")) {
-                    eresource.addType("biotools software, installed");
+                    eresource.addType("Biotools Software, Installed");
                 }
                 // software installed in various locations have the location in
                 // the label
                 for (Link link : version.getLinks()) {
                     String label = link.getLabel();
                     if (label.indexOf("Redwood") == 0) {
-                        eresource.addType("redwood software, installed");
+                        eresource.addType("Software, Installed - Redwood Room");
                     } else if (label.indexOf("Stone") == 0) {
-                        eresource.addType("stone software, installed");
+                        eresource.addType("Software, Installed - Stone Room");
                     } else if (label.indexOf("Duck") == 0) {
-                        eresource.addType("duck software, installed");
+                        eresource.addType("Software, Installed - Duck Room");
                     } else if (label.indexOf("M051") == 0) {
-                        eresource.addType("m051 software, installed");
+                        eresource.addType("Software, Installed - M051");
                     } else if (label.indexOf("Public") == 0) {
-                        eresource.addType("lksc-public software, installed");
+                        eresource.addType("Software, Installed - LKSC Public");
                     } else if (label.indexOf("Student") == 0) {
-                        eresource.addType("lksc-student software, installed");
+                        eresource.addType("Software, Installed - LKSC Student");
                     }
                 }
             }
@@ -221,7 +221,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected void handleBibSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code)) {
-            String type = this.currentText.toString().toLowerCase();
+            String type = this.currentText.toString();
             // remove trailing periods, some probably should have them but
             // voyager puts them on everything :-(
             int lastPeriod = type.lastIndexOf('.');
@@ -232,7 +232,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
             }
             this.currentEresource.addType(type);
-            if ("core material".equals(type)) {
+            if ("Core Material".equals(type)) {
                 this.currentEresource.setIsCore(true);
             }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
@@ -257,7 +257,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.editionOrVersion.append(". ");
             this.editionOrVersion.append(this.currentText);
         } else if ("035".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("(Bassett)") == 0)) {
-            this.currentEresource.addType("bassett");
+            this.currentEresource.addType("Bassett");
         } else if ("520".equals(this.tag)) {
             this.description520.append(this.currentText.toString());
         } else if ("505".equals(this.tag)) {
@@ -332,7 +332,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         this.currentVersion.addSubset(subset);
         if ("biotools".equals(subset)) {
             // subset, biotools will count as type: software
-            this.currentEresource.addType("software");
+            this.currentEresource.addType("Software");
         }
     }
 

@@ -47,7 +47,7 @@
         </stx:if>
         
         <eresource id="{$pmid}" type="pubmed" update="19690101000000">
-            <type>article</type>
+            <type>Article</type>
             <stx:assign name="title">
                 <stx:choose>
                     <stx:when test="$vernacularTitle != ''">
