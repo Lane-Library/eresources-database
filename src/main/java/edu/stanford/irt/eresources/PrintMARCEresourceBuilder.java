@@ -12,7 +12,7 @@ public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
 
     @Override
     protected void createCustomTypes(final Eresource eresource) {
-        this.currentEresource.addType("print");
+        this.currentEresource.addType("Print");
         Collection<String> types = eresource.getTypes();
         if (types.contains("Periodicals")
                 || types.contains("Newspapers")) {
