@@ -18,7 +18,7 @@ public class Eresource implements Cloneable {
             "Book", "Journal", "Atlases, Pictorial", "Software, Installed - Redwood Room",
             "Software, Installed - Duck Room", "Software, Installed - Stone Room", "Software, Installed - M051",
             "Software, Installed - LKSC Student", "Software, Installed - LKSC Public", "Software, Installed",
-            "Software", "Statistics", "Video", "Graphic", "Lane Web Page", "Print", "Bassett",
+            "Software", "Statistics", "Video", "Graphic", "Lane Class", "Lane Web Page", "Print", "Bassett",
             "Statistics Software, Installed", "Biotools Software, Installed" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
