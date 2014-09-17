@@ -65,6 +65,8 @@ public class Eresource implements Cloneable {
 
     private int year;
 
+    private String primaryType;
+
     public void addMeshTerm(final String meshTerm) {
         if (null == this.meshTerms) {
             this.meshTerms = new HashSet<String>();
@@ -80,6 +82,21 @@ public class Eresource implements Cloneable {
             }
             this.types.add(typeToAdd);
         }
+    }
+
+    public void setPrimaryType(final String type) {
+        this.primaryType = type;
+    }
+    
+    public String getPrimaryType() {
+        if (this.primaryType == null) {
+            if ("bib".equals(this.recordType) || "print".equals(this.recordType) || "auth".equals(this.recordType)) {
+                return "UNKNOWN";
+            } else {
+                return this.recordType;
+            }
+        }
+        return this.primaryType;
     }
 
     public void addVersion(final Version version) {

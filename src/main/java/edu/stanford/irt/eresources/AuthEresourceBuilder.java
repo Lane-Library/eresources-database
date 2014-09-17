@@ -199,6 +199,9 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             if ((type.indexOf("person") == 0) || "peoples".equals(type)) {
                 this.currentEresource.addType("people");
             }
+            if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
+                this.currentEresource.setPrimaryType(type);
+            }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
                 && ("27".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString().toLowerCase();

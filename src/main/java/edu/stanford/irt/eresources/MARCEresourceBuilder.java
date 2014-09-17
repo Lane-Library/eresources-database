@@ -246,6 +246,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if ("core material".equals(type)) {
                 this.currentEresource.setIsCore(true);
             }
+            if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
+                this.currentEresource.setPrimaryType(type);
+            }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
                 && ("237".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString().toLowerCase();

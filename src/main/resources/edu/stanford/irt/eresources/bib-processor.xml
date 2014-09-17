@@ -14,7 +14,6 @@
                 <property name="contentHandler" ref="bibBuilder"/>
             </bean>
         </property>
-        <property name="eresourceBuilder" ref="bibBuilder"/>
     </bean>
     <bean id="marcReader" class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
         <property name="contentHandler" ref="bibBuilder"/>
