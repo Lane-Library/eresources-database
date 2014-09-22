@@ -33,7 +33,6 @@ public class Eresource implements Cloneable {
     private static final String ENG = "English";
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
-
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -47,6 +46,8 @@ public class Eresource implements Cloneable {
 
     private String description;
 
+    private String doi;
+
     private boolean isClone = false;
 
     private boolean isCore = false;
@@ -54,6 +55,8 @@ public class Eresource implements Cloneable {
     private String keywords;
 
     private Collection<String> meshTerms;
+
+    private String pmid;
 
     private Collection<String> publicationAuthors;
 
@@ -152,6 +155,10 @@ public class Eresource implements Cloneable {
         return this.description;
     }
 
+    public String getDoi() {
+        return this.doi;
+    }
+
     public String getKeywords() {
         return this.keywords;
     }
@@ -161,6 +168,10 @@ public class Eresource implements Cloneable {
             return Collections.emptySet();
         }
         return this.meshTerms;
+    }
+
+    public String getPmid() {
+        return this.pmid;
     }
 
     public Collection<String> getPublicationAuthors() {
@@ -288,12 +299,20 @@ public class Eresource implements Cloneable {
         this.description = description;
     }
 
+    public void setDoi(final String doi) {
+        this.doi = doi;
+    }
+
     public void setIsCore(final boolean isCore) {
         this.isCore = isCore;
     }
 
     public void setKeywords(final String keywords) {
         this.keywords = keywords;
+    }
+
+    public void setPmid(final String pmid) {
+        this.pmid = pmid;
     }
 
     public void setPublicationAuthorsText(final String authorsText) {
