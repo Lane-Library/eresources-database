@@ -144,7 +144,7 @@
         <stx:process-children/>
     </stx:template>
     
-    <stx:template match="MedlineCitation/Article/ELocationID[@EIdType='doi' and @ValidYN='Y']">
+    <stx:template match="MedlineCitation/Article/ELocationID[@EIdType='doi' and not(@ValidYN='N')]">
         <stx:assign name="doi" select="."/>
         <stx:process-children/>
     </stx:template>
