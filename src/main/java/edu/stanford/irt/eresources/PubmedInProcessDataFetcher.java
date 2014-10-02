@@ -28,7 +28,7 @@ import org.springframework.util.StringUtils;
  * fetch "as supplied by publisher" records from PubMed because they are not included in the licensed PubMed/Medline FTP
  * feed; initial query is "publisher [sb]"; subsequent queries just grab everything added in the last day so duplication
  * can occur between this and the FTP data fetcher
- * 
+ *
  * @author ryanmax
  */
 public class PubmedInProcessDataFetcher implements DataFetcher {
@@ -51,7 +51,7 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
     private static final String PROP_FILE = "inprocess.properties";
 
     private static final String PROP_NAME = "pubmed.inprocess.lastUpdate";
-    
+
     private static final int SLEEP_TIME = 500;
 
     private static final String UPDATES_QUERY = "(\"?\"[EDAT] : \"3000\"[EDAT]) ";
@@ -109,7 +109,7 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
     public void getUpdateFiles() {
         String date = getLastUpdateDate();
         String query;
-        if (null == date) {
+        if (null == date || date.isEmpty()) {
             query = INITIAL_QUERY;
         } else {
             query = UPDATES_QUERY.replace("?", date);
