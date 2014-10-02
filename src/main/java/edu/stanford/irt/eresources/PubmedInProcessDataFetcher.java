@@ -50,6 +50,8 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
 
     private static final String PROP_FILE = "inprocess.properties";
 
+    private static final String PROP_NAME = "pubmed.inprocess.lastUpdate";
+    
     private static final int SLEEP_TIME = 500;
 
     private static final String UPDATES_QUERY = "(\"?\"[EDAT] : \"3000\"[EDAT]) ";
@@ -88,14 +90,14 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
     private String getLastUpdateDate() {
         String updateDate = null;
         FileInputStream in = null;
-        this.propertiesFile = new File(this.basePath + "/" + PROP_FILE);
+        this.propertiesFile = new File(PROP_FILE);
         try {
             this.propertiesFile.createNewFile();
             in = new FileInputStream(this.propertiesFile);
             this.properties = new Properties();
             this.properties.load(in);
-            if (this.properties.containsKey("lastUpdate")) {
-                updateDate = this.properties.getProperty("lastUpdate");
+            if (this.properties.containsKey(PROP_NAME)) {
+                updateDate = this.properties.getProperty(PROP_NAME);
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
@@ -117,8 +119,8 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }
-        this.searcher = new PubmedSearcher("In-Process and As Supplied by Publisher", query);
-        pmidListToFiles(this.searcher.getPmids());
+//        this.searcher = new PubmedSearcher("In-Process and As Supplied by Publisher", query);
+//        pmidListToFiles(this.searcher.getPmids());
         writeLastRunDate();
     }
 
@@ -177,7 +179,7 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
     }
 
     private void writeLastRunDate() {
-        this.properties.setProperty("lastUpdate", new SimpleDateFormat("yyyy/MM/dd").format(new Date()));
+        this.properties.setProperty(PROP_NAME, new SimpleDateFormat("yyyy/MM/dd").format(new Date()));
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(this.propertiesFile);

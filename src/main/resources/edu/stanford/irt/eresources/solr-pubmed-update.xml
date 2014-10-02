@@ -7,7 +7,7 @@
         <constructor-arg name="dataFetchers">
 			<list>
 				<bean class="edu.stanford.irt.eresources.PubmedInProcessDataFetcher" >
-    				<property name="basePath" value="${eresources.pubmedprocessor.updatepath}/inprocess"/>
+    				<property name="basePath" value="${eresources.pubmedprocessor.inprocessPath}"/>
 				</bean>
 				<bean class="edu.stanford.irt.eresources.PubmedFtpDataFetcher" >
 					<property name="basePath" value="${eresources.pubmedprocessor.updatepath}"/>
