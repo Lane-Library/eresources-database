@@ -8,7 +8,7 @@ import java.util.List;
 
 public class EresourceSQLTranslator extends AbstractSQLTranslator {
 
-    private static final String INSERT_ERESOURCE = "ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, PRIMARY_TYPE, CORE, YEAR, DESCRIPTION, TEXT) VALUES (";
+    private static final String INSERT_ERESOURCE = "ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, PRIMARY_TYPE, CORE, YEAR, HAS_ITEMS, DESCRIPTION, TEXT) VALUES (";
 
     private DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -42,6 +42,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
                 .append(apostrophize(er.getPrimaryType())).append(COMMA)
                 .append(er.isCore() ? "'Y'" : NULL).append(COMMA)
                 .append(er.getYear() > 0 ? Integer.toString(er.getYear()) : NULL).append(COMMA)
+                .append(er.hasItems() ? "'Y'" : NULL).append(COMMA)
                 .append(er.getDescription() != null ? "empty_clob()" : NULL)
                 .append(", empty_clob())");
         sql.add(sb.toString());

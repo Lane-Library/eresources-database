@@ -91,6 +91,16 @@ public class Eresource implements Cloneable {
     private int year;
 
     private String primaryType;
+    
+    private boolean hasItems;
+    
+    public boolean hasItems() {
+        return this.hasItems;
+    }
+    
+    public void setHasItems(boolean hasItems) {
+        this.hasItems = hasItems;
+    }
 
     public void addMeshTerm(final String meshTerm) {
         if (null == this.meshTerms) {

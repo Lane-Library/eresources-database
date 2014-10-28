@@ -15,6 +15,7 @@
                     <bean  class="edu.stanford.irt.eresources.PrintMARCEresourceBuilder">
                         <property name="eresourceHandler" ref="eresourceHandler"/>
                         <property name="authTextAugmentation" ref="authTextAugmentation"/>
+                        <property name="itemsAvaliable" ref="itemsAvailable"/>
                     </bean>
                 </property>
             </bean>
