@@ -23,6 +23,8 @@ public class Eresource implements Cloneable {
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
+    
+    private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
             { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
@@ -30,6 +32,26 @@ public class Eresource implements Cloneable {
             { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
                     "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
+    
+    private static final String[][] PRIMARY_TYPES_INITIALIZER = {
+        {"cartographic materials", "Map"},
+        {"search engine", "Search Engine"},
+        {"sound recordings", "Sound Recording"},
+        {"leaflets", "Leaflet"},
+        {"documents", "Document"},
+        {"pamphlets", "Pamphlet"},
+        {"components", "Component"},
+        {"websites", "Website"},
+        {"book sets", "Book Set"},
+        {"computer files", "Computer File"},
+        {"databases", "Database"},
+        {"visual materials", "Visual Material"},
+        {"serials", "Serial"},
+        {"books", "Book"},
+        {"laneclasses", "Class"},
+        {"lanesite", "Lane Webpage"}
+    };
+    
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -38,6 +60,9 @@ public class Eresource implements Cloneable {
             for (int j = 1; j < element.length; j++) {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
+        }
+        for (String [] element : PRIMARY_TYPES_INITIALIZER) {
+            PRIMARY_TYPES.put(element[0], element[1]);
         }
     }
 
@@ -85,16 +110,12 @@ public class Eresource implements Cloneable {
     }
 
     public void setPrimaryType(final String type) {
-        this.primaryType = type;
+        this.primaryType = PRIMARY_TYPES.get(type);
     }
     
     public String getPrimaryType() {
         if (this.primaryType == null) {
-            if ("bib".equals(this.recordType) || "print".equals(this.recordType) || "auth".equals(this.recordType)) {
-                return "UNKNOWN";
-            } else {
-                return this.recordType;
-            }
+            return "";
         }
         return this.primaryType;
     }

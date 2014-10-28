@@ -18,7 +18,7 @@
                 <xsl:value-of select="substring($keywords, string-length($title) + 2, 65)"/>
             </xsl:variable>
             <title><xsl:value-of select="$title"/></title>
-            <type>lanesite</type>
+            <primaryType>lanesite</primaryType>
             <keywords> <xsl:value-of select="$keywords"/> </keywords>
             <version>
                 <subset>noproxy</subset>
