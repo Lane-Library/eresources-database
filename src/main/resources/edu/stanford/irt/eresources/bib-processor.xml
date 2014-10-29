@@ -21,7 +21,7 @@
     <bean id="bibBuilder" class="edu.stanford.irt.eresources.MARCEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
         <property name="authTextAugmentation" ref="authTextAugmentation"/>
-        <property name="itemsAvaliabel" ref="itemsAvailable"/>
+        <property name="itemsAvailable" ref="itemsAvailable"/>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.AuthTextAugmentation">
         <property name="dataSource" ref="voyagerDataSource"/>
