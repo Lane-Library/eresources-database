@@ -87,7 +87,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
-    private ItemsAvailable itemsAvailable;
+    private ItemCount itemCount;
 
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
@@ -101,7 +101,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     public void endDocument() {
         if (null != this.currentEresource) {
             this.currentEresource.setUpdated(this.updated);
-            this.currentEresource.setHasItems(this.itemsAvailable.itemsAvailable(this.currentEresource.getRecordId()));
+            this.currentEresource.setItemCount(this.itemCount.itemCount(this.currentEresource.getRecordId()));
             handlePreviousRecord();
         }
         try {
@@ -124,7 +124,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 if (null != this.currentEresource) {
                     this.currentEresource.setUpdated(this.updated);
                     this.updated = null;
-                    this.currentEresource.setHasItems(this.itemsAvailable.itemsAvailable(this.currentEresource.getRecordId()));
+                    this.currentEresource.setItemCount(this.itemCount.itemCount(this.currentEresource.getRecordId()));
                     handlePreviousRecord();
                 }
                 this.currentEresource = new Eresource();
@@ -160,8 +160,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         this.eresourceHandler = eresourceHandler;
     }
     
-    public void setItemsAvailable(final ItemsAvailable itemsAvailable) {
-        this.itemsAvailable = itemsAvailable;
+    public void setItemCount(final ItemCount itemCount) {
+        this.itemCount = itemCount;
     }
 
     @Override

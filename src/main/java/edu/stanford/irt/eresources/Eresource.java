@@ -92,14 +92,14 @@ public class Eresource implements Cloneable {
 
     private String primaryType;
     
-    private boolean hasItems;
+    private int[] count = new int[] {0, 0};
     
-    public boolean hasItems() {
-        return this.hasItems;
+    public int[] getItemCount() {
+        return this.count;
     }
     
-    public void setHasItems(boolean hasItems) {
-        this.hasItems = hasItems;
+    public void setItemCount(int[] count) {
+        this.count = count;
     }
 
     public void addMeshTerm(final String meshTerm) {

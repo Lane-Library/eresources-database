@@ -8,7 +8,7 @@ import java.util.List;
 
 public class EresourceSQLTranslator extends AbstractSQLTranslator {
 
-    private static final String INSERT_ERESOURCE = "ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, PRIMARY_TYPE, CORE, YEAR, HAS_ITEMS, DESCRIPTION, TEXT) VALUES (";
+    private static final String INSERT_ERESOURCE = "ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (";
 
     private DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -33,6 +33,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
     public List<String> getInsertSQL(final Eresource er) {
         List<String> sql = new LinkedList<String>();
         String keywords = er.getKeywords();
+        int[] itemCount = er.getItemCount();
         StringBuilder sb = new StringBuilder(this.getInsertInto()).append(INSERT_ERESOURCE)
                 .append(this.getTablePrefix()).append("ERESOURCE_ID_SEQ.NEXTVAL,")
                 .append(APOS).append(er.getRecordId()).append(APOS).append(COMMA)
@@ -42,7 +43,8 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
                 .append(apostrophize(er.getPrimaryType())).append(COMMA)
                 .append(er.isCore() ? "'Y'" : NULL).append(COMMA)
                 .append(er.getYear() > 0 ? Integer.toString(er.getYear()) : NULL).append(COMMA)
-                .append(er.hasItems() ? "'Y'" : NULL).append(COMMA)
+                .append(itemCount[0]).append(COMMA)
+                .append(itemCount[1]).append(COMMA)
                 .append(er.getDescription() != null ? "empty_clob()" : NULL)
                 .append(", empty_clob())");
         sql.add(sb.toString());
