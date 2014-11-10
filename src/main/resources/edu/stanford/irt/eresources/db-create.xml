@@ -82,4 +82,8 @@
             <bean class="edu.stanford.irt.eresources.EresourceSQLTranslator"/>
         </constructor-arg>
     </bean>
+    <bean id="bibInputStream" class="edu.stanford.irt.eresources.BibInputStream">
+        <property name="dataSource" ref="voyagerDataSource"/>
+        <property name="executor" ref="executor"/>
+    </bean>
 </beans>
