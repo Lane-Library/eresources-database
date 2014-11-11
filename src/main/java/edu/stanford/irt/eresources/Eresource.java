@@ -222,7 +222,7 @@ public class Eresource implements Cloneable {
 
     @Override
     public String toString() {
-        return new StringBuilder(this.recordId).append(' ').append(this.title).toString();
+        return new StringBuilder(this.recordType).append(':').append(this.recordId).append(' ').append(this.title).toString();
     }
 
     protected String getCompositeType(final String type) {
