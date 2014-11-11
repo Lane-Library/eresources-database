@@ -50,6 +50,9 @@ public class DeleteEresourceHandler implements EresourceHandler {
     public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue) {
         this(dataSource, queue, "");
     }
+    
+    protected DeleteEresourceHandler() {
+    }
 
     public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final String tablePrefix) {
