@@ -8,13 +8,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * 
- */
-/**
- * @author ceyates
- * @param <EresourceImpl>
- */
 public class DefaultEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
     private Eresource currentEresource;

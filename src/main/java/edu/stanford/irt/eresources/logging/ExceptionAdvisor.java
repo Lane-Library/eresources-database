@@ -24,8 +24,6 @@ public class ExceptionAdvisor extends DefaultPointcutAdvisor {
          * 
          * @param e
          *            the Exception
-         * @throws Throwable
-         *             if something bad happened
          */
         public void afterThrowing(final Exception e) {
             if ((e instanceof ClosedByInterruptException) || (e instanceof InterruptedException)

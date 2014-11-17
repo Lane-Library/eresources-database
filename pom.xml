@@ -30,23 +30,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.16</version>
-                <configuration>
-                    <argLine>-XX:-UseSplitVerifier</argLine>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <configuration> 
-                    <encoding>UTF-8</encoding> 
-                </configuration>
+                <version>2.18</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.2</version>
                 <configuration>
                     <target>1.7</target>
                     <source>1.7</source>
@@ -69,12 +58,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.4</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.wagon</groupId>
                         <artifactId>wagon-ssh</artifactId>
-                        <version>2.5</version>
+                        <version>2.7</version>
                     </dependency>
                 </dependencies>
                 <configuration>
@@ -87,12 +76,12 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-surefire-report-plugin</artifactId>
-                            <version>2.16</version>
+                            <version>2.18</version>
                         </plugin>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-checkstyle-plugin</artifactId>
-                            <version>2.10</version>
+                            <version>2.13</version>
                             <reportSets>
                                 <reportSet>
                                     <reports>
@@ -104,7 +93,7 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-pmd-plugin</artifactId>
-                            <version>3.0.1</version>
+                            <version>3.2</version>
                             <configuration>
                                 <targetJdk>1.7</targetJdk>
                             </configuration>
@@ -117,7 +106,7 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-jxr-plugin</artifactId>
-                            <version>2.3</version>
+                            <version>2.5</version>
                         </plugin>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
@@ -126,7 +115,7 @@
                             <configuration>
                                 <links>
                                     <link>http://download.oracle.com/javase/7/docs/api</link>
-                                    <link>http://www.junit.org/junit/javadoc/</link>
+                                    <link>http://junit.sourceforge.net/javadoc/</link>
                                 </links>
                             </configuration>
                         </plugin>
@@ -138,17 +127,17 @@
                         <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>findbugs-maven-plugin</artifactId>
-                            <version>2.5.2</version>
+                            <version>3.0.0</version>
                         </plugin>
                         <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>jdepend-maven-plugin</artifactId>
-                            <version>2.0-beta-2</version>
+                            <version>2.0</version>
                         </plugin>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-changes-plugin</artifactId>
-                            <version>2.9</version>
+                            <version>2.11</version>
                             <configuration>
                                 <issueLinkTemplatePerSystem>
                                     <FogBugz>%URL%/default.php?%ISSUE%</FogBugz>
@@ -167,7 +156,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.5.1</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -195,12 +184,12 @@
         <dependency>
             <artifactId>slf4j-api</artifactId>
             <groupId>org.slf4j</groupId>
-            <version>1.7.5</version>
+            <version>1.7.7</version>
         </dependency>
         <dependency>
             <artifactId>spring-aop</artifactId>
             <groupId>org.springframework</groupId>
-            <version>3.2.4.RELEASE</version>
+            <version>3.2.11.RELEASE</version>
             <exclusions>
             	<exclusion>
             		<artifactId>commons-logging</artifactId>
@@ -211,18 +200,12 @@
         <dependency>
             <artifactId>spring-context</artifactId>
             <groupId>org.springframework</groupId>
-            <version>3.2.4.RELEASE</version>
+            <version>3.2.11.RELEASE</version>
         </dependency>
         <dependency>
             <artifactId>xercesImpl</artifactId>
             <groupId>xerces</groupId>
-            <version>2.9.1</version>
-            <exclusions>
-            	<exclusion>
-            		<artifactId>xml-apis</artifactId>
-            		<groupId>xml-apis</groupId>
-            	</exclusion>
-            </exclusions>
+            <version>2.11.0</version>
         </dependency>
         <dependency>
             <artifactId>cglib</artifactId>
@@ -263,13 +246,13 @@
         <dependency>
             <artifactId>slf4j-log4j12</artifactId>
             <groupId>org.slf4j</groupId>
-            <version>1.7.5</version>
+            <version>1.7.7</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <artifactId>spring-jdbc</artifactId>
             <groupId>org.springframework</groupId>
-            <version>3.2.4.RELEASE</version>
+            <version>3.2.11.RELEASE</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -281,7 +264,7 @@
         <dependency>
         	<groupId>org.slf4j</groupId>
         	<artifactId>jcl-over-slf4j</artifactId>
-        	<version>1.7.5</version>
+        	<version>1.7.7</version>
         	<scope>runtime</scope>
         </dependency>
     </dependencies>
