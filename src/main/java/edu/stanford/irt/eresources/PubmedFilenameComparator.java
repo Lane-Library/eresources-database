@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 /**
  * Alpha and numeric sort of files so PubMed updates are applied in order
- * 
+ *
  * @author ryanmax
  */
 public class PubmedFilenameComparator implements Comparator<File> {
@@ -17,7 +17,7 @@ public class PubmedFilenameComparator implements Comparator<File> {
         if (f1Alpha.equals(f2Alpha)) {
             long f1Num = getDigitsFromFile(f1);
             long f2Num = getDigitsFromFile(f2);
-            return (int) (f1Num - f2Num);
+            return Long.compare(f1Num, f2Num);
         }
         return f1.compareTo(f2);
     }
