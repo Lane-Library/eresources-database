@@ -262,14 +262,14 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             String mesh = this.currentText.toString().toLowerCase();
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
-            if ("anpq".indexOf(this.code) > -1) {
+            if ("abcnpq".indexOf(this.code) > -1) {
                 if (this.title.length() > 0) {
                     this.title.append(' ');
                 }
                 this.title.append(this.currentText);
             }
         } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
-            if ("anpq".indexOf(this.code) > -1) {
+            if ("abcnpq".indexOf(this.code) > -1) {
                 if (this.preferredTitle.length() > 0) {
                     this.preferredTitle.append(' ');
                 }
