@@ -262,9 +262,16 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             String mesh = this.currentText.toString().toLowerCase();
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
-            if ("abcnpq".indexOf(this.code) > -1) {
+            if ("abnpq".indexOf(this.code) > -1) {
                 if (this.title.length() > 0) {
                     this.title.append(' ');
+                }
+                if ("b".equals(this.code)) {
+                    //remove trailing slash from subtitle (subfield b)
+                    int lengthLessTwo = this.currentText.length() - 2;
+                    if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
+                        this.currentText.setLength(lengthLessTwo);
+                    }
                 }
                 this.title.append(this.currentText);
             }
