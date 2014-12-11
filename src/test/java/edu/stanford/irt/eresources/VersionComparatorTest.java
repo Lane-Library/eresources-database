@@ -19,22 +19,14 @@ public class VersionComparatorTest {
 
     private Version v2;
 
-    /**
-     * @throws java.lang.Exception
-     */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.v1 = new Version();
         this.v2 = new Version();
         this.link = new Link();
         this.comparator = new VersionComparator();
     }
 
-    /**
-     * Test method for
-     * {@link edu.stanford.irt.laneweb.eresources.EresourceVersionComparator#compare(edu.stanford.irt.eresources.Version, edu.stanford.irt.eresources.Version)}
-     * .
-     */
     @Test
     public void testCompare() {
         this.v1.setDates("1999.");

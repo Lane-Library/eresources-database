@@ -7,10 +7,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-/**
- * @author ceyates To change the template for this generated type comment go to Window - Preferences - Java - Code
- *         Generation - Code and Comments
- */
 public class MARCEresourceProcessor extends AbstractEresourceProcessor {
 
     private EresourceInputStream inputStream;
@@ -24,7 +20,7 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
         if (null == this.xmlReader) {
             throw new IllegalStateException("null xmlReader");
         }
-        this.inputStream.setStartDate(new Timestamp(this.startDate.getTime()));
+        this.inputStream.setStartDate(new Timestamp(getStartTime()));
         InputSource source = new InputSource();
         try {
             source.setByteStream(this.inputStream);
@@ -44,7 +40,7 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     /**
-     * @param reader
+     * @param xmlReader
      *            The reader to set.
      */
     public void setXmlReader(final XMLReader xmlReader) {

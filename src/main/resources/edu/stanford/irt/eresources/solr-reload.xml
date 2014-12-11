@@ -6,4 +6,12 @@
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrReload" parent="abstractSolrLoader">
         <property name="optimize" value="false"/>
     </bean>
+    <bean id="bibInputStream" class="edu.stanford.irt.eresources.BibInputStream">
+        <property name="dataSource" ref="voyagerDataSource"/>
+        <property name="executor" ref="executor"/>
+    </bean>
+    <bean id="printBibInputStream" class="edu.stanford.irt.eresources.PrintBibInputStream">
+        <property name="dataSource" ref="voyagerDataSource"/>
+        <property name="executor" ref="executor"/>
+    </bean>
 </beans>

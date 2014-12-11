@@ -7,6 +7,14 @@
         <property name="killPrevious" value="false"/>
         <property name="optimize" value="false"/>
     </bean>
+    <bean id="bibInputStream" class="edu.stanford.irt.eresources.UpdateBibInputStream">
+        <property name="dataSource" ref="voyagerDataSource"/>
+        <property name="executor" ref="executor"/>
+    </bean>
+    <bean id="printBibInputStream" class="edu.stanford.irt.eresources.UpdatePrintBibInputStream">
+        <property name="dataSource" ref="voyagerDataSource"/>
+        <property name="executor" ref="executor"/>
+    </bean>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
         <property name="logEresource" value="true"/>
     </bean>

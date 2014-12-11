@@ -45,6 +45,8 @@ public class DefaultEresourceHandler implements EresourceHandler {
             final EresourceSQLTranslator translator) {
         this(dataSource, queue, translator, "");
     }
+    
+    protected DefaultEresourceHandler() {}
 
     public DefaultEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final EresourceSQLTranslator translator, final String tablePrefix) {

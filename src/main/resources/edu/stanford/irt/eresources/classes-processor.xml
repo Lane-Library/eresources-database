@@ -4,7 +4,6 @@
         class="edu.stanford.irt.eresources.ClassesEresourceProcessor">
         <property name="contentHandler" ref="classesTransformer"/>
         <property name="allClassesURL" value="${eresources.lane-host}/classes/all-data.xml"/>
-        <property name="eresourceBuilder" ref="classesBuilder"/>
     </bean>
     <bean id= "classesTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/classes2er.xsl"/>

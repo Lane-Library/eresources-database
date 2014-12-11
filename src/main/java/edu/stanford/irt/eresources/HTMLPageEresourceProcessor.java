@@ -18,6 +18,7 @@ import javax.xml.transform.sax.SAXResult;
 
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -50,20 +51,21 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            while (filesToParse.size() > 0) {
+            while (!filesToParse.isEmpty()) {
                 File file = filesToParse.remove(0);
                 String fileName = file.getAbsolutePath();
                 InputSource source = new InputSource();
                 try {
                     source.setByteStream(new FileInputStream(file));
                 } catch (FileNotFoundException e) {
+                    LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                     continue;
                 }
                 source.setEncoding("UTF-8");
                 DOMParser parser = new DOMParser(config);
                 parser.parse(source);
                 Document doc = parser.getDocument();
-                if (file.lastModified() > this.startDate.getTime() && isSearchable(doc)) {
+                if (file.lastModified() > getStartTime() && isSearchable(doc)) {
                     Element root = doc.getDocumentElement();
                     root.setAttribute("id", Integer.toString(fileName.hashCode()));
                     root.setAttribute("update", this.dateFormat.format(file.lastModified()));

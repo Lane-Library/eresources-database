@@ -33,6 +33,15 @@ public class Eresource implements Cloneable {
     private static final String ENG = "English";
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
+
+    private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
+
+    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
+            { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
+            { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
+            { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
+            { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
+            { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -42,7 +51,12 @@ public class Eresource implements Cloneable {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
+        for (String[] element : PRIMARY_TYPES_INITIALIZER) {
+            PRIMARY_TYPES.put(element[0], element[1]);
+        }
     }
+
+    private int[] count = new int[] { 0, 0 };
 
     private String description;
 
@@ -77,6 +91,8 @@ public class Eresource implements Cloneable {
     private Collection<String> publicationTypes;
 
     private String publicationVolume;
+    
+    private String primaryType;
 
     private int recordId;
 
@@ -157,6 +173,10 @@ public class Eresource implements Cloneable {
 
     public String getDoi() {
         return this.doi;
+    }
+
+    public int[] getItemCount() {
+        return this.count;
     }
 
     public String getKeywords() {
@@ -241,6 +261,13 @@ public class Eresource implements Cloneable {
     public String getPublicationVolume() {
         return this.publicationVolume;
     }
+    
+    public String getPrimaryType() {
+        if (this.primaryType == null) {
+            return "";
+        }
+        return this.primaryType;
+    }
 
     public int getRecordId() {
         return this.recordId;
@@ -307,6 +334,10 @@ public class Eresource implements Cloneable {
         this.isCore = isCore;
     }
 
+    public void setItemCount(final int[] count) {
+        this.count = count;
+    }
+
     public void setKeywords(final String keywords) {
         this.keywords = keywords;
     }
@@ -342,6 +373,10 @@ public class Eresource implements Cloneable {
     public void setPublicationVolume(final String publicationVolume) {
         this.publicationVolume = publicationVolume;
     }
+    
+    public void setPrimaryType(final String type) {
+        this.primaryType = PRIMARY_TYPES.get(type);
+    }
 
     public void setRecordId(final int recordId) {
         this.recordId = recordId;
@@ -362,4 +397,10 @@ public class Eresource implements Cloneable {
     public void setYear(final int year) {
         this.year = year;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.recordType).append(':').append(this.recordId).append(' ').append(this.title).toString();
+    }
+
 }

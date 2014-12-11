@@ -12,6 +12,7 @@ import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,6 +47,7 @@ public class AuthTextAugmentation extends DefaultHandler {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("augmentations.obj"))) {
                 this.augmentations = (Map<String, String>) ois.readObject();
             } catch (IOException e) {
+                LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                 this.augmentations = new HashMap<String, String>();
             } catch (ClassNotFoundException e) {
                 throw new EresourceDatabaseException(e);
@@ -118,6 +120,6 @@ public class AuthTextAugmentation extends DefaultHandler {
     private boolean checkSaveContent() {
         // verified by DM: people records won't have 450's and MeSH records
         // won't have 400's
-        return (("400".equals(this.tag) || "450".equals(this.tag)) && "a".equals(this.code));
+        return ("400".equals(this.tag) || "450".equals(this.tag)) && "a".equals(this.code);
     }
 }

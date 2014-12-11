@@ -50,8 +50,6 @@ public class DBLoader {
 
     private boolean killPrevious;
 
-    private Logger log = LoggerFactory.getLogger(getClass());
-
     private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
 
     private Queue<Eresource> queue;
@@ -61,13 +59,14 @@ public class DBLoader {
     private String version;
 
     public void load() throws SQLException, IOException {
-        this.log.info(this.version + " starting up");
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info(this.version + " starting up");
         managePIDFile();
         try (Connection conn = this.dataSource.getConnection(); Statement stmt = conn.createStatement();) {
             conn.setAutoCommit(false);
             for (String create : this.createStatements) {
                 try {
-                    this.log.info(create);
+                    log.info(create);
                     stmt.execute(create);
                 } catch (SQLException e) {
                     int errorCode = e.getErrorCode();
@@ -100,12 +99,12 @@ public class DBLoader {
                         call = MessageFormat.format(call, new Object[] { this.userName });
                     }
                     CallableStatement callable = conn.prepareCall(call);
-                    this.log.info(call);
+                    log.info(call);
                     callable.execute();
                     callable.close();
                 }
             }
-            this.log.info("handled " + count + " eresources.");
+            log.info("handled " + count + " eresources.");
         }
     }
 
@@ -182,7 +181,7 @@ public class DBLoader {
         int index = pid.indexOf('@');
         pid = pid.substring(0, index);
         try (FileOutputStream out = new FileOutputStream(pidFile)) {
-            out.write(pid.getBytes());
+            out.write(pid.getBytes("UTF-8"));
         }
         Runtime.getRuntime().addShutdownHook(new Thread() {
 

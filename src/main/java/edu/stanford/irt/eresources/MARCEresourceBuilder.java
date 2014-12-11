@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -22,7 +23,17 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    protected static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    
+    private static final String RECORD = "record";
+    
+    private static final String SUBFIELD = "subfield";
+    
+    private static final String DATAFIELD = "datafield";
+    
+    private static final String CONTROLFIELD = "controlfield";
+    
+    private static final String BIOTOOLS = "biotools";
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
@@ -72,9 +83,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected String z;
 
-    private int $866Count;
+    private int countOf866;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    private ItemCount itemCount;
 
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
@@ -88,6 +101,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     public void endDocument() {
         if (null != this.currentEresource) {
             this.currentEresource.setUpdated(this.updated);
+            this.currentEresource.setItemCount(this.itemCount.itemCount(this.currentEresource.getRecordId()));
             handlePreviousRecord();
         }
         try {
@@ -110,12 +124,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 if (null != this.currentEresource) {
                     this.currentEresource.setUpdated(this.updated);
                     this.updated = null;
+                    this.currentEresource.setItemCount(this.itemCount.itemCount(this.currentEresource.getRecordId()));
                     handlePreviousRecord();
                 }
                 this.currentEresource = new Eresource();
                 setRecordType();
             }
-        } else if ("record".equals(name)) {
+        } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
                 maybeAddCatalogLink();
                 this.currentEresource.addVersion(this.currentVersion);
@@ -144,6 +159,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
     }
+    
+    public void setItemCount(final ItemCount itemCount) {
+        this.itemCount = itemCount;
+    }
 
     @Override
     public void startDocument() {
@@ -156,9 +175,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     public void startElement(final String uri, final String localName, final String name, final Attributes atts)
             throws SAXException {
         this.currentText.setLength(0);
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             this.code = atts.getValue("code");
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
@@ -167,12 +186,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.q = null;
                 this.z = null;
             }
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
-        } else if ("record".equals(name)) {
+        } else if (RECORD.equals(name)) {
             this.isBib = false;
             this.isMfhd = false;
-            this.$866Count = 0;
+            this.countOf866 = 0;
         }
     }
 
@@ -184,7 +203,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
             for (Version verzion : eresource.getVersions()) {
                 Version version = verzion;
-                if (version.getSubsets().contains("biotools")) {
+                if (version.getSubsets().contains(BIOTOOLS)) {
                     eresource.addType("Biotools Software, Installed");
                 }
                 // software installed in various locations have the location in
@@ -210,11 +229,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void handleBibData(final String name) {
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             handleBibSubfield();
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             handleBibControlfield();
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             handleBibDatafield();
         }
     }
@@ -235,21 +254,38 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if ("Core Material".equals(type)) {
                 this.currentEresource.setIsCore(true);
             }
+            if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
+                this.currentEresource.setPrimaryType(type);
+            }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
                 && ("237".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString();
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
-            if ("anpq".indexOf(this.code) > -1) {
+            if ("abnpq".indexOf(this.code) > -1) {
                 if (this.title.length() > 0) {
                     this.title.append(' ');
+                }
+                if ("b".equals(this.code)) {
+                    //remove trailing slash from subtitle (subfield b)
+                    int lengthLessTwo = this.currentText.length() - 2;
+                    if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
+                        this.currentText.setLength(lengthLessTwo);
+                    }
                 }
                 this.title.append(this.currentText);
             }
         } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
-            if ("anpq".indexOf(this.code) > -1) {
+            if ("abnpq".indexOf(this.code) > -1) {
                 if (this.preferredTitle.length() > 0) {
                     this.preferredTitle.append(' ');
+                }
+                if ("b".equals(this.code)) {
+                    //remove trailing slash from subtitle (subfield b)
+                    int lengthLessTwo = this.currentText.length() - 2;
+                    if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
+                        this.currentText.setLength(lengthLessTwo);
+                    }
                 }
                 this.preferredTitle.append(this.currentText);
             }
@@ -281,11 +317,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void handleMfhdData(final String name) {
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             handleMfhdSubfield();
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             handleMfhdControlfield();
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             handleMfhdDatafield();
         }
     }
@@ -326,11 +362,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void maybeAddCatalogLink() {
+        // by default do nothing
     }
 
     protected void maybeAddSubset(final String subset) {
         this.currentVersion.addSubset(subset);
-        if ("biotools".equals(subset)) {
+        if (BIOTOOLS.equals(subset)) {
             // subset, biotools will count as type: software
             this.currentEresource.addType("Software");
         }
@@ -394,6 +431,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 try {
                     this.currentEresource.setTitle(this.title.substring(Integer.parseInt(this.ind2)));
                 } catch (StringIndexOutOfBoundsException e) {
+                    LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                     this.currentEresource.setTitle(this.title.toString());
                 }
             }
@@ -438,7 +476,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else {
                 this.currentVersion.addLink(this.currentLink);
             }
-        } else if ("866".equals(this.tag) && (++this.$866Count > 1)) {
+        } else if ("866".equals(this.tag) && (++this.countOf866 > 1)) {
             this.currentVersion.setDescription("");
         }
     }

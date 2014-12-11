@@ -34,6 +34,8 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
             final EresourceSQLTranslator translator) {
         this(dataSource, queue, translator, "");
     }
+    
+    protected UpdateEresourceHandler() {}
 
     public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final EresourceSQLTranslator translator, final String tablePrefix) {

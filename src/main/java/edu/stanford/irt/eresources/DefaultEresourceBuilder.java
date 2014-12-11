@@ -8,13 +8,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-/**
- * 
- */
-/**
- * @author ceyates
- * @param <EresourceImpl>
- */
 public class DefaultEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
     private Eresource currentEresource;
@@ -66,6 +59,10 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentVersion.setPublisher(this.currentText.toString());
         } else if ("type".equals(name)) {
             this.currentEresource.addType(this.currentText.toString());
+        } else if ("primaryType".equals(name)) {
+            String type = this.currentText.toString();
+            this.currentEresource.setPrimaryType(type);
+            this.currentEresource.addType(type);
         } else if ("keywords".equals(name)) {
             this.currentEresource.setKeywords(this.currentText.toString());
         } else if ("mesh".equals(name)) {

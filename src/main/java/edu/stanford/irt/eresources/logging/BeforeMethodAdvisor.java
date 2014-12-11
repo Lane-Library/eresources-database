@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources.logging;
 
 import java.lang.reflect.Method;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.MethodBeforeAdvice;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -37,7 +36,6 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
             if (!this.logEresource && "handleEresource".equals(method.getName())) {
                 return;
             }
-            Logger log = LoggerFactory.getLogger(advisee.getClass());
             StringBuilder sb = new StringBuilder("enter ").append(method.getName()).append("(");
             if (params != null) {
                 for (int i = 0; i < params.length; i++) {
@@ -52,7 +50,7 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
                 }
             }
             sb.append(");");
-            log.info(sb.toString());
+            LoggerFactory.getLogger(advisee.getClass()).info(sb.toString());
         }
     }
 

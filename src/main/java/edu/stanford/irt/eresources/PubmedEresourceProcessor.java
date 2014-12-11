@@ -56,7 +56,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
         while (filesToParse.size() > 0) {
             InputSource source = new InputSource();
             File file = filesToParse.remove(0);
-            if (this.startDate.getTime() <= file.lastModified()) {
+            if (getStartTime() <= file.lastModified()) {
                 try {
                     if (file.getName().matches(".*\\.gz")) {
                         source.setByteStream(new GZIPInputStream(new FileInputStream(file)));

@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -19,7 +20,15 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class AuthEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    
+    private static final String RECORD = "record";
+    
+    private static final String SUBFIELD = "subfield";
+    
+    private static final String DATAFIELD = "datafield";
+    
+    private static final String CONTROLFIELD = "controlfield";
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^(\\d[\\d|u]{3}|Continuing)$");
 
@@ -69,7 +78,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
 
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
-        if ("record".equals(name)) {
+        if (RECORD.equals(name)) {
             this.currentEresource.setKeywords(this.content.toString());
             if (!this.recordHasError) {
                 this.eresourceHandler.handleEresource(this.currentEresource);
@@ -93,6 +102,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 handleBibData(name);
                 handleMfhdData(name);
             } catch (RuntimeException e) {
+                LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                 this.recordHasError = true;
             }
         }
@@ -106,15 +116,15 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     public void startElement(final String uri, final String localName, final String name, final Attributes atts)
             throws SAXException {
         this.currentText.setLength(0);
-        if ("record".equals(name)) {
+        if (RECORD.equals(name)) {
             this.currentEresource = new Eresource();
             this.currentVersion = new Version();
             this.currentEresource.addVersion(this.currentVersion);
             this.currentEresource.setRecordType("auth");
         }
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             this.code = atts.getValue("code");
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
@@ -123,7 +133,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.q = null;
                 this.z = null;
             }
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
         }
     }
@@ -160,11 +170,11 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     private void handleBibData(final String name) {
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             handleBibSubfield();
-        } else if ("controlfield".equals(name)) {
+        } else if (CONTROLFIELD.equals(name)) {
             handleBibControlfield();
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             handleBibDatafield();
         }
     }
@@ -189,6 +199,9 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             if ((type.indexOf("Persons") == 0) || "Peoples".equals(type)) {
                 this.currentEresource.addType("Person");
             }
+            if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
+                this.currentEresource.setPrimaryType(type);
+            }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
                 && ("27".indexOf(this.ind2) > -1)) {
             String mesh = this.currentText.toString();
@@ -212,7 +225,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.currentEresource.setYear(Integer.parseInt(endDate));
                     this.hasEndDate = true;
                 }
-            } else if ("a".indexOf(this.code) > -1 && this.hasEndDate == false) {
+            } else if ("a".indexOf(this.code) > -1 && !this.hasEndDate) {
                 String beginDate = parseYear(this.currentText.toString());
                 if (null != beginDate) {
                     this.currentEresource.setYear(Integer.parseInt(beginDate));
@@ -222,9 +235,9 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     private void handleMfhdData(final String name) {
-        if ("subfield".equals(name)) {
+        if (SUBFIELD.equals(name)) {
             handleMfhdSubfield();
-        } else if ("datafield".equals(name)) {
+        } else if (DATAFIELD.equals(name)) {
             handleMfhdDatafield();
         }
     }
