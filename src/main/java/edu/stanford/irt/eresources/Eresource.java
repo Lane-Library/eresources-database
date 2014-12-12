@@ -36,12 +36,12 @@ public class Eresource implements Cloneable {
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
-    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-            { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
-            { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
-            { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
-            { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
-            { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
+    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "Articles", "Article" }, { "Cartographic Materials", "Map" },
+            { "Search Engine", "Search Engine" }, { "Sound Recordings", "Sound Recording" }, { "Leaflets", "Leaflet" },
+            { "Documents", "Document" }, { "Pamphlets", "Pamphlet" }, { "Components", "Component" },
+            { "Websites", "Website" }, { "Book Sets", "Book Set" }, { "Computer Files", "Computer File" },
+            { "Databases", "Database" }, { "Visual Materials", "Visual Material" }, { "Serials", "Serial" },
+            { "Books", "Book" }, { "Lane Class", "Class" }, { "Lane Web Page", "Lane Webpage" } };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);

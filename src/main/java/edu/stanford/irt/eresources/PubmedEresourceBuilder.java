@@ -101,6 +101,8 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             this.currentEresource.setPmid(this.currentText.toString());
         } else if ("doi".equals(name)) {
             this.currentEresource.setDoi(this.currentText.toString());
+        } else if ("primaryType".equals(name)) {
+            this.currentEresource.setPrimaryType(this.currentText.toString());
         } else if (!"eresources".equals(name)) {
             throw new EresourceDatabaseException("cant handle " + name);
         }
