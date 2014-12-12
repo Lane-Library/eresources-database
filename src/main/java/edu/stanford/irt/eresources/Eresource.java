@@ -15,20 +15,20 @@ public class Eresource implements Cloneable {
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Clinical Decision Tools", "Database",
-            "Book", "Journal", "Atlases, Pictorial", "Software, Installed - Redwood Room",
-            "Software, Installed - Duck Room", "Software, Installed - Stone Room", "Software, Installed - M051",
-            "Software, Installed - LKSC Student", "Software, Installed - LKSC Public", "Software, Installed",
-            "Software", "Statistics", "Video", "Graphic", "Lane Class", "Lane Web Page", "Print", "Bassett",
-            "Statistics Software, Installed", "Biotools Software, Installed" };
+        "Book", "Journal", "Atlases, Pictorial", "Software, Installed - Redwood Room",
+        "Software, Installed - Duck Room", "Software, Installed - Stone Room", "Software, Installed - M051",
+        "Software, Installed - LKSC Student", "Software, Installed - LKSC Public", "Software, Installed",
+        "Software", "Statistics", "Video", "Graphic", "Lane Class", "Lane Web Page", "Print", "Bassett",
+        "Statistics Software, Installed", "Biotools Software, Installed" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Journal", "Periodicals", "Newspapers" },
-            { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
-            { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-            { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Graphic", "Graphics" } };
+        { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
+        { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
+        { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Graphic", "Graphics" } };
 
     private static final String ENG = "English";
 
@@ -36,12 +36,13 @@ public class Eresource implements Cloneable {
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
-    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "Articles", "Article" }, { "Cartographic Materials", "Map" },
-            { "Search Engine", "Search Engine" }, { "Sound Recordings", "Sound Recording" }, { "Leaflets", "Leaflet" },
-            { "Documents", "Document" }, { "Pamphlets", "Pamphlet" }, { "Components", "Component" },
-            { "Websites", "Website" }, { "Book Sets", "Book Set" }, { "Computer Files", "Computer File" },
-            { "Databases", "Database" }, { "Visual Materials", "Visual Material" }, { "Serials", "Serial" },
-            { "Books", "Book" }, { "Lane Class", "Class" }, { "Lane Web Page", "Lane Webpage" } };
+    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "Articles", "Article" },
+            { "Cartographic Materials", "Map" }, { "Search Engine", "Search Engine" },
+            { "Sound Recordings", "Sound Recording" }, { "Leaflets", "Leaflet" }, { "Documents", "Document" },
+            { "Pamphlets", "Pamphlet" }, { "Components", "Component" }, { "Websites", "Website" },
+            { "Book Sets", "Book Set" }, { "Computer Files", "Computer File" }, { "Databases", "Database" },
+            { "Visual Materials", "Visual Material" }, { "Serials", "Serial" }, { "Books", "Book" },
+            { "Lane Class", "Class" }, { "Lane Web Page", "Lane Webpage" } };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -72,6 +73,8 @@ public class Eresource implements Cloneable {
 
     private String pmid;
 
+    private String primaryType;
+
     private Collection<String> publicationAuthors;
 
     private String publicationAuthorsText;
@@ -91,8 +94,6 @@ public class Eresource implements Cloneable {
     private Collection<String> publicationTypes;
 
     private String publicationVolume;
-    
-    private String primaryType;
 
     private int recordId;
 
@@ -194,6 +195,13 @@ public class Eresource implements Cloneable {
         return this.pmid;
     }
 
+    public String getPrimaryType() {
+        if (this.primaryType == null) {
+            return "";
+        }
+        return this.primaryType;
+    }
+
     public Collection<String> getPublicationAuthors() {
         if (null == this.publicationAuthors) {
             return Collections.emptySet();
@@ -260,13 +268,6 @@ public class Eresource implements Cloneable {
 
     public String getPublicationVolume() {
         return this.publicationVolume;
-    }
-    
-    public String getPrimaryType() {
-        if (this.primaryType == null) {
-            return "";
-        }
-        return this.primaryType;
     }
 
     public int getRecordId() {
@@ -346,6 +347,10 @@ public class Eresource implements Cloneable {
         this.pmid = pmid;
     }
 
+    public void setPrimaryType(final String type) {
+        this.primaryType = PRIMARY_TYPES.get(type);
+    }
+
     public void setPublicationAuthorsText(final String authorsText) {
         this.publicationAuthorsText = authorsText;
     }
@@ -373,10 +378,6 @@ public class Eresource implements Cloneable {
     public void setPublicationVolume(final String publicationVolume) {
         this.publicationVolume = publicationVolume;
     }
-    
-    public void setPrimaryType(final String type) {
-        this.primaryType = PRIMARY_TYPES.get(type);
-    }
 
     public void setRecordId(final int recordId) {
         this.recordId = recordId;
@@ -400,7 +401,7 @@ public class Eresource implements Cloneable {
 
     @Override
     public String toString() {
-        return new StringBuilder(this.recordType).append(':').append(this.recordId).append(' ').append(this.title).toString();
+        return new StringBuilder(this.recordType).append(':').append(this.recordId).append(' ').append(this.title)
+                .toString();
     }
-
 }
