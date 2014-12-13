@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -18,24 +18,30 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.Version;
+
 /**
  * @author ceyates
  */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
     protected static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
-    
-    private static final String RECORD = "record";
-    
-    private static final String SUBFIELD = "subfield";
-    
-    private static final String DATAFIELD = "datafield";
-    
-    private static final String CONTROLFIELD = "controlfield";
-    
-    private static final String BIOTOOLS = "biotools";
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
+
+    private static final String BIOTOOLS = "biotools";
+
+    private static final String CONTROLFIELD = "controlfield";
+
+    private static final String DATAFIELD = "datafield";
+
+    private static final String RECORD = "record";
+
+    private static final String SUBFIELD = "subfield";
 
     protected AuthTextAugmentation authTextAugmentation;
 
@@ -43,13 +49,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected StringBuilder content = new StringBuilder();
 
-    protected Eresource currentEresource;
+    protected SAXEresource currentEresource;
 
-    protected Link currentLink;
+    protected SAXLink currentLink;
 
     protected StringBuilder currentText = new StringBuilder();
 
-    protected Version currentVersion;
+    protected SAXVersion currentVersion;
 
     protected StringBuilder description505 = new StringBuilder();
 
@@ -117,7 +123,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if ("uvxy".indexOf(this.currentText.charAt(6)) > -1) {
                 this.isMfhd = true;
                 this.isBib = false;
-                this.currentVersion = new Version();
+                this.currentVersion = new SAXVersion();
             } else {
                 this.isBib = true;
                 this.isMfhd = false;
@@ -127,7 +133,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.currentEresource.setItemCount(this.itemCount.itemCount(this.currentEresource.getRecordId()));
                     handlePreviousRecord();
                 }
-                this.currentEresource = new Eresource();
+                this.currentEresource = new SAXEresource();
                 setRecordType();
             }
         } else if (RECORD.equals(name)) {
@@ -156,10 +162,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         this.authTextAugmentation = authTextAugmentation;
     }
 
+    @Override
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
     }
-    
+
     public void setItemCount(final ItemCount itemCount) {
         this.itemCount = itemCount;
     }
@@ -182,7 +189,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if (this.isMfhd && "856".equals(this.tag)) {
-                this.currentLink = new Link();
+                this.currentLink = new SAXLink();
                 this.q = null;
                 this.z = null;
             }
@@ -195,7 +202,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    protected void createCustomTypes(final Eresource eresource) {
+    protected void createCustomTypes(final SAXEresource eresource) {
         Collection<String> types = eresource.getTypes();
         if (types.contains("software, installed")) {
             if (types.contains("statistics")) {
@@ -267,7 +274,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.title.append(' ');
                 }
                 if ("b".equals(this.code)) {
-                    //remove trailing slash from subtitle (subfield b)
+                    // remove trailing slash from subtitle (subfield b)
                     int lengthLessTwo = this.currentText.length() - 2;
                     if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
                         this.currentText.setLength(lengthLessTwo);
@@ -281,7 +288,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.preferredTitle.append(' ');
                 }
                 if ("b".equals(this.code)) {
-                    //remove trailing slash from subtitle (subfield b)
+                    // remove trailing slash from subtitle (subfield b)
                     int lengthLessTwo = this.currentText.length() - 2;
                     if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
                         this.currentText.setLength(lengthLessTwo);
@@ -480,7 +487,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.eresourceHandler.handleEresource(this.currentEresource);
             if (this.hasPreferredTitle) {
                 try {
-                    Eresource clone = (Eresource) this.currentEresource.clone();
+                    SAXEresource clone = (SAXEresource) this.currentEresource.clone();
                     clone.setTitle(this.preferredTitle.toString());
                     this.hasPreferredTitle = false;
                     this.preferredTitle.setLength(0);

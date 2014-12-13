@@ -24,6 +24,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
+    @Override
     public int compare(final Version v1, final Version v2) {
         int score1 = calculateHoldingsScore(v1);
         int score2 = calculateHoldingsScore(v2);
@@ -48,19 +49,19 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     /**
      * Calculate sorting score for version based on:
-     * 
+     *
      * <pre>
      * ++ dates or summaryHoldings end in "-"
      * -- description has "delayed" in it
      * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
      * </pre>
-     * 
-     * @param v
+     *
+     * @param version
      * @return score
      */
-    private int calculateHoldingsScore(final Version v) {
-        List<Link> links = v.getLinks();
+    private int calculateHoldingsScore(final Version version) {
+        List<Link> links = version.getLinks();
         if (links.isEmpty()) {
             return Integer.MIN_VALUE;
         }
@@ -68,7 +69,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         if ("Impact Factor".equals(links.get(0).getLabel())) {
             return -99;
         }
-        String summaryHoldings = v.getSummaryHoldings();
+        String summaryHoldings = version.getSummaryHoldings();
         if (summaryHoldings != null) {
             if (summaryHoldings.endsWith("-") || summaryHoldings.startsWith("v. 1-")) {
                 score++;
@@ -76,7 +77,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
                 score--;
             }
         }
-        String dates = v.getDates();
+        String dates = version.getDates();
         if (dates != null) {
             if (dates.endsWith("-")) {
                 score++;
@@ -84,7 +85,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
                 score--;
             }
         }
-        String description = v.getDescription();
+        String description = version.getDescription();
         if (description != null && description.contains("delayed")) {
             score--;
         }
@@ -97,13 +98,13 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     /**
      * Calculate score for select list of publishers
-     * 
-     * @param v
+     *
+     * @param version
      * @return score
      */
-    private int calculatePublisherScore(final Version v) {
+    private int calculatePublisherScore(final Version version) {
         int score = 1;
-        String publisher = v.getPublisher();
+        String publisher = version.getPublisher();
         if (publisher != null) {
             publisher = publisher.toLowerCase();
             if (FAVORED_PUBLISHERS.contains(publisher)) {
@@ -113,8 +114,8 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         return score;
     }
 
-    private int getYearsCovered(final Version v) {
-        String dates = v.getDates();
+    private int getYearsCovered(final Version version) {
+        String dates = version.getDates();
         if (dates != null) {
             Matcher closedMatcher = CLOSED_DATE_PATTERN.matcher(dates);
             Matcher openMatcher = OPEN_DATE_PATTERN.matcher(dates);

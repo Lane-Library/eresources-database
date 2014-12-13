@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +19,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.AuthAugmentationInputStream;
+import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader;
 
 public class AuthTextAugmentation extends DefaultHandler {

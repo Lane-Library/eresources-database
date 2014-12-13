@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -27,6 +27,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
+import edu.stanford.irt.eresources.AbstractEresourceProcessor;
+import edu.stanford.irt.eresources.EresourceDatabaseException;
+
 public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String ERESOURCES = "eresources";
@@ -37,6 +40,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
+    @Override
     public void process() {
         if (null == this.basePath) {
             throw new IllegalArgumentException("null basePath");
@@ -98,12 +102,13 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         List<File> result = new LinkedList<File>();
         File[] files = directory.listFiles(new FileFilter() {
 
+            @Override
             public boolean accept(final File file) {
                 String name = file.getName();
                 return name.endsWith(".html")
                         || (file.isDirectory() && !".svn".equals(name) && !"includes".equals(name)
                                 && !"search".equals(name) && !"tobacco".equals(name) && !"samples".equals(name) && !"m"
-                                    .equals(name));
+                                .equals(name));
             }
         });
         for (File file : files) {

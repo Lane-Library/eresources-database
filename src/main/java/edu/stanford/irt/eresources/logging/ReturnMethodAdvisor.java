@@ -8,7 +8,7 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 
 /**
  * A logging advisor that logs at method return with method name and return values.
- * 
+ *
  * @author ceyates
  */
 public class ReturnMethodAdvisor extends DefaultPointcutAdvisor {
@@ -20,7 +20,7 @@ public class ReturnMethodAdvisor extends DefaultPointcutAdvisor {
 
         /**
          * logs at INFO level with the thread, object, method and return value.
-         * 
+         *
          * @param method
          *            the advised Method
          * @param params
@@ -32,6 +32,7 @@ public class ReturnMethodAdvisor extends DefaultPointcutAdvisor {
          * @throws Throwable
          *             if any thing bad happens
          */
+        @Override
         public void afterReturning(final Object returnValue, final Method method, final Object[] params,
                 final Object advisee) {
             if ("handleEresource".equals(method.getName())) {

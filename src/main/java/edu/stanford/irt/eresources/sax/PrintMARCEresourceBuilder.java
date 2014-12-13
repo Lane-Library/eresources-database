@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.util.Collection;
 
@@ -11,7 +11,7 @@ import java.util.Collection;
 public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
 
     @Override
-    protected void createCustomTypes(final Eresource eresource) {
+    protected void createCustomTypes(final SAXEresource eresource) {
         this.currentEresource.addType("print");
         Collection<String> types = eresource.getTypes();
         if (types.contains("periodical") || types.contains("newspaper") || types.contains("periodicals")
@@ -37,7 +37,7 @@ public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
 
     @Override
     protected void maybeAddCatalogLink() {
-        Link link = new Link();
+        SAXLink link = new SAXLink();
         link.setLabel("Lane Catalog record");
         link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
         this.currentVersion.addLink(link);

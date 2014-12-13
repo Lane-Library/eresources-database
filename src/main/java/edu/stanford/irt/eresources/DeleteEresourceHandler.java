@@ -50,9 +50,6 @@ public class DeleteEresourceHandler implements EresourceHandler {
     public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue) {
         this(dataSource, queue, "");
     }
-    
-    protected DeleteEresourceHandler() {
-    }
 
     public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final String tablePrefix) {
@@ -69,6 +66,9 @@ public class DeleteEresourceHandler implements EresourceHandler {
         this.getID = "SELECT ERESOURCE_ID FROM " + this.tablePrefix
                 + "ERESOURCE WHERE RECORD_TYPE = ? and RECORD_ID = ?";
         this.selectSQL = "SELECT RECORD_TYPE, RECORD_ID FROM " + this.tablePrefix + "ERESOURCE";
+    }
+
+    protected DeleteEresourceHandler() {
     }
 
     @Override

@@ -14,7 +14,7 @@ public abstract class AbstractEresourceProcessor implements RecordProcessor {
         }
         this.startTime = startDate.getTime();
     }
-    
+
     protected long getStartTime() {
         return this.startTime;
     }

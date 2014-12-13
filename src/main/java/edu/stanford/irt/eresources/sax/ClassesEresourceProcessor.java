@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,6 +21,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.AbstractEresourceProcessor;
+import edu.stanford.irt.eresources.EresourceDatabaseException;
+
 public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String ERESOURCES = "eresources";
@@ -36,6 +39,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
+    @Override
     public void process() {
         try {
             URL url;
