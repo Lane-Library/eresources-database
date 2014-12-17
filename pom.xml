@@ -188,7 +188,6 @@
             <artifactId>icu4j</artifactId>
             <groupId>com.ibm.icu</groupId>
             <version>4.8.1.1</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <artifactId>log4j</artifactId>
