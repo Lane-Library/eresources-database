@@ -68,6 +68,9 @@ public class DeleteEresourceHandler implements EresourceHandler {
         this.selectSQL = "SELECT RECORD_TYPE, RECORD_ID FROM " + this.tablePrefix + "ERESOURCE";
     }
 
+    protected DeleteEresourceHandler() {
+    }
+
     @Override
     public int getCount() {
         return this.count;

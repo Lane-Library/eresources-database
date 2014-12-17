@@ -29,6 +29,8 @@ public class AuthMarcEresource extends AbstractMarcEresource {
 
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+    private int[] itemCount;
+    private String primaryType;
     
     public AuthMarcEresource(Record record, String keywords) {
         super(keywords);
@@ -121,5 +123,15 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     @Override
     public String getRecordType() {
         return AUTH_TYPE;
+    }
+
+    @Override
+    public int[] getItemCount() {
+        return this.itemCount;
+    }
+
+    @Override
+    public String getPrimaryType() {
+        return this.primaryType;
     }
 }

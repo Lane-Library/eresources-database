@@ -141,6 +141,10 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
 
     private Record record;
 
+    private int[] itemCount;
+
+    private String primaryType;
+
     public BibMarcMarcEresource(final Record record, final List<Record> holdings, final String keywords) {
         super(keywords);
         if (record == null) {
@@ -352,5 +356,15 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
     @Override
     public String getRecordType() {
         return BIB_TYPE;
+    }
+
+    @Override
+    public int[] getItemCount() {
+        return this.itemCount;
+    }
+
+    @Override
+    public String getPrimaryType() {
+        return this.primaryType;
     }
 }

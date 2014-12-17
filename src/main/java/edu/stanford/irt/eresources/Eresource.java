@@ -7,9 +7,13 @@ public interface Eresource {
 
     String getDescription();
 
+    int[] getItemCount();
+
     String getKeywords();
 
     Collection<String> getMeshTerms();
+
+    String getPrimaryType();
 
     int getRecordId();
 
@@ -25,7 +29,7 @@ public interface Eresource {
 
     int getYear();
 
-    boolean isCore();
-
     boolean isClone();
+
+    boolean isCore();
 }

@@ -34,6 +34,15 @@ public class SAXEresource implements Cloneable, Eresource {
             { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
                     "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
+
+    private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
+
+    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
+        { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
+        { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
+        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
+        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
+        { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -43,7 +52,12 @@ public class SAXEresource implements Cloneable, Eresource {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
+        for (String[] element : PRIMARY_TYPES_INITIALIZER) {
+            PRIMARY_TYPES.put(element[0], element[1]);
+        }
     }
+
+    private int[] count = new int[] { 0, 0 };
 
     private String description;
 
@@ -54,6 +68,8 @@ public class SAXEresource implements Cloneable, Eresource {
     private String keywords;
 
     private Collection<String> meshTerms;
+
+    private String primaryType;
 
     private int recordId;
 
@@ -86,7 +102,7 @@ public class SAXEresource implements Cloneable, Eresource {
         }
     }
 
-    public void addVersion(final SAXVersion version) {
+    public void addVersion(final Version version) {
         if (this.versions == null) {
             this.versions = new TreeSet<Version>(COMPARATOR);
         }
@@ -100,7 +116,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return clone;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getDescription()
      */
     @Override
@@ -108,7 +125,17 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.description;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * @see edu.stanford.irt.eresources.Eresource#getItemCount()
+     */
+    @Override
+    public int[] getItemCount() {
+        return this.count;
+    }
+
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getKeywords()
      */
     @Override
@@ -116,7 +143,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.keywords;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getMeshTerms()
      */
     @Override
@@ -127,7 +155,20 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.meshTerms;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * @see edu.stanford.irt.eresources.Eresource#getPrimaryType()
+     */
+    @Override
+    public String getPrimaryType() {
+        if (this.primaryType == null) {
+            return "";
+        }
+        return this.primaryType;
+    }
+
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getRecordId()
      */
     @Override
@@ -135,7 +176,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.recordId;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getRecordType()
      */
     @Override
@@ -143,7 +185,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.recordType;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getTitle()
      */
     @Override
@@ -151,7 +194,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.title;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getTypes()
      */
     @Override
@@ -162,7 +206,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return Collections.unmodifiableCollection(this.types);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getUpdated()
      */
     @Override
@@ -170,7 +215,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return new Date(this.updated.getTime());
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getVersions()
      */
     @Override
@@ -181,7 +227,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return Collections.unmodifiableCollection(this.versions);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getYear()
      */
     @Override
@@ -189,10 +236,16 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.year;
     }
 
+    @Override
     public boolean isClone() {
         return this.isClone;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see edu.stanford.irt.eresources.Eresource#isCore()
+     */
+    @Override
     public boolean isCore() {
         return this.isCore;
     }
@@ -205,8 +258,16 @@ public class SAXEresource implements Cloneable, Eresource {
         this.isCore = isCore;
     }
 
+    public void setItemCount(final int[] count) {
+        this.count = count;
+    }
+
     public void setKeywords(final String keywords) {
         this.keywords = keywords;
+    }
+
+    public void setPrimaryType(final String type) {
+        this.primaryType = PRIMARY_TYPES.get(type);
     }
 
     public void setRecordId(final int recordId) {
@@ -227,6 +288,12 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void setYear(final int year) {
         this.year = year;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.recordType).append(':').append(this.recordId).append(' ').append(this.title)
+                .toString();
     }
 
     protected String getCompositeType(final String type) {

@@ -57,10 +57,15 @@ public class DefaultEresourceHandler implements EresourceHandler {
         this.textSQL = "SELECT TEXT FROM " + tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
     }
 
+    protected DefaultEresourceHandler() {
+    }
+
+    @Override
     public int getCount() {
         return this.count;
     }
 
+    @Override
     public void handleEresource(final Eresource eresource) {
         for (Version version : eresource.getVersions()) {
             for (Link link : version.getLinks()) {
@@ -75,6 +80,7 @@ public class DefaultEresourceHandler implements EresourceHandler {
         this.count++;
     }
 
+    @Override
     public void run() {
 //        try (Connection conn = this.dataSource.getConnection();
 //                Statement stmt = conn.createStatement();
@@ -103,6 +109,7 @@ public class DefaultEresourceHandler implements EresourceHandler {
         }
     }
 
+    @Override
     public void stop() {
         this.keepGoing = false;
     }

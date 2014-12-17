@@ -39,6 +39,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
+    @Override
     public void process() {
         try {
             URL url;

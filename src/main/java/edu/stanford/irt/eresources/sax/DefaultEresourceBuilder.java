@@ -11,13 +11,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.EresourceHandler;
 
-/**
- * 
- */
-/**
- * @author ceyates
- * @param <EresourceImpl>
- */
 public class DefaultEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
     private SAXEresource currentEresource;
@@ -69,6 +62,10 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentVersion.setPublisher(this.currentText.toString());
         } else if ("type".equals(name)) {
             this.currentEresource.addType(this.currentText.toString());
+        } else if ("primaryType".equals(name)) {
+            String type = this.currentText.toString();
+            this.currentEresource.setPrimaryType(type);
+            this.currentEresource.addType(type);
         } else if ("keywords".equals(name)) {
             this.currentEresource.setKeywords(this.currentText.toString());
         } else if ("mesh".equals(name)) {
@@ -84,6 +81,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         }
     }
 
+    @Override
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
     }

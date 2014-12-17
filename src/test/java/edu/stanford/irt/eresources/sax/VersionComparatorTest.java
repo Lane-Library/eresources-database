@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -6,8 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.stanford.irt.eresources.sax.SAXLink;
-import edu.stanford.irt.eresources.sax.SAXVersion;
+import edu.stanford.irt.eresources.VersionComparator;
 
 /**
  * @author ryanmax
@@ -22,22 +21,14 @@ public class VersionComparatorTest {
 
     private SAXVersion v2;
 
-    /**
-     * @throws java.lang.Exception
-     */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.v1 = new SAXVersion();
         this.v2 = new SAXVersion();
         this.link = new SAXLink();
         this.comparator = new VersionComparator();
     }
 
-    /**
-     * Test method for
-     * {@link edu.stanford.irt.laneweb.eresources.EresourceVersionComparator#compare(edu.stanford.irt.eresources.sax.SAXVersion, edu.stanford.irt.eresources.sax.SAXVersion)}
-     * .
-     */
     @Test
     public void testCompare() {
         this.v1.setDates("1999.");

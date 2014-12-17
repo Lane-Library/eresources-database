@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package edu.stanford.irt.eresources.sax;
 
@@ -11,27 +11,27 @@ import java.util.Collection;
 public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
 
     @Override
-    protected void createCustomTypes(final SAXEresource sAXEresource) {
+    protected void createCustomTypes(final SAXEresource eresource) {
         this.currentEresource.addType("print");
-        Collection<String> types = sAXEresource.getTypes();
+        Collection<String> types = eresource.getTypes();
         if (types.contains("periodical") || types.contains("newspaper") || types.contains("periodicals")
                 || types.contains("newspapers")) {
-            sAXEresource.addType("ej");
+            eresource.addType("ej");
         }
         if (types.contains("decision support techniques") || types.contains("calculators, clinical")
                 || types.contains("algorithms")) {
-            sAXEresource.addType("cc");
+            eresource.addType("cc");
         }
         if (types.contains("digital video") || types.contains("digital video, local")
                 || types.contains("digital video, local, public") || types.contains("digital videos")
                 || types.contains("digital videos, local") || types.contains("digital videos, local, public")) {
-            sAXEresource.addType("video");
+            eresource.addType("video");
         }
         if (types.contains("book set") || types.contains("book sets") || types.contains("books")) {
-            sAXEresource.addType("book");
+            eresource.addType("book");
         }
         if (types.contains("databases")) {
-            sAXEresource.addType("database");
+            eresource.addType("database");
         }
     }
 

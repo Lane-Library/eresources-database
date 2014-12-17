@@ -40,6 +40,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
+    @Override
     public void process() {
         if (null == this.basePath) {
             throw new IllegalArgumentException("null basePath");
@@ -101,12 +102,13 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         List<File> result = new LinkedList<File>();
         File[] files = directory.listFiles(new FileFilter() {
 
+            @Override
             public boolean accept(final File file) {
                 String name = file.getName();
                 return name.endsWith(".html")
                         || (file.isDirectory() && !".svn".equals(name) && !"includes".equals(name)
                                 && !"search".equals(name) && !"tobacco".equals(name) && !"samples".equals(name) && !"m"
-                                    .equals(name));
+                                .equals(name));
             }
         });
         for (File file : files) {

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package edu.stanford.irt.eresources.sax;
 

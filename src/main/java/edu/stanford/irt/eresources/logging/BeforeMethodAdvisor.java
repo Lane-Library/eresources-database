@@ -8,7 +8,7 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 
 /**
  * A logging advisor that logs at method entry with method name and parameter values.
- * 
+ *
  * @author ceyates
  */
 public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
@@ -22,7 +22,7 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
 
         /**
          * logs at INFO level with the thread, object, method and parameters.
-         * 
+         *
          * @param method
          *            the advised Method
          * @param params
@@ -32,6 +32,7 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
          * @throws Throwable
          *             if any thing bad happens
          */
+        @Override
         public void before(final Method method, final Object[] params, final Object advisee) {
             if (!this.logEresource && "handleEresource".equals(method.getName())) {
                 return;

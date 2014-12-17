@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package edu.stanford.irt.eresources.sax;
 
@@ -23,17 +23,17 @@ import edu.stanford.irt.eresources.EresourceHandler;
  */
 public class AuthEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
-    
-    private static final String RECORD = "record";
-    
-    private static final String SUBFIELD = "subfield";
-    
-    private static final String DATAFIELD = "datafield";
-    
+    private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^(\\d[\\d|u]{3}|Continuing)$");
+
     private static final String CONTROLFIELD = "controlfield";
 
-    private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^(\\d[\\d|u]{3}|Continuing)$");
+    private static final String DATAFIELD = "datafield";
+
+    private static final String RECORD = "record";
+
+    private static final String SUBFIELD = "subfield";
+
+    private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private String code;
 
@@ -111,6 +111,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
+    @Override
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
     }
@@ -201,6 +202,9 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             this.currentEresource.addType(type);
             if ((type.indexOf("person") == 0) || "peoples".equals(type)) {
                 this.currentEresource.addType("people");
+            }
+            if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
+                this.currentEresource.setPrimaryType(type);
             }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
                 && ("27".indexOf(this.ind2) > -1)) {

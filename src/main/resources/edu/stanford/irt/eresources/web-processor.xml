@@ -4,7 +4,6 @@
         class="edu.stanford.irt.eresources.sax.HTMLPageEresourceProcessor">
         <property name="contentHandler" ref="webTransformer"/>
         <property name="basePath" value="${eresources.webprocessor.basepath}"/>
-        <property name="eresourceBuilder" ref="webBuilder"/>
     </bean>
     <bean id= "webTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/web2er.xsl"/>

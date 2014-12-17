@@ -50,7 +50,7 @@
         class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="proxyTargetClass" value="true"/>
         <property name="beanNames"
-            value="dbLoader,bibProcessor,webProcessor,authProcessor,classesProcessor,printProcessor"/>
+            value="dbLoader,bibProcessor,webProcessor,authProcessor,classesProcessor,printProcessor,eresourceHandler"/>
         <property name="interceptorNames"
             value="exceptionAdvisor,beforeMethodAdvisor,afterMethodAdvisor"/>
     </bean>

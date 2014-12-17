@@ -24,6 +24,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
+    @Override
     public int compare(final Version v1, final Version v2) {
         int score1 = calculateHoldingsScore(v1);
         int score2 = calculateHoldingsScore(v2);
@@ -48,14 +49,13 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     /**
      * Calculate sorting score for version based on:
-     * 
+     *
      * <pre>
      * ++ dates or summaryHoldings end in "-"
      * -- description has "delayed" in it
      * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
      * </pre>
-     * 
      * @param version
      * @return score
      */
@@ -97,7 +97,6 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     /**
      * Calculate score for select list of publishers
-     * 
      * @param version
      * @return score
      */

@@ -22,6 +22,14 @@
             <bean class="edu.stanford.irt.eresources.EresourceSQLTranslator"/>
         </constructor-arg>
     </bean>
+    <bean id="bibInputStream" class="edu.stanford.irt.eresources.UpdateBibInputStream">
+        <property name="dataSource" ref="voyagerDataSource"/>
+        <property name="executor" ref="executor"/>
+    </bean>
+    <bean id="printBibInputStream" class="edu.stanford.irt.eresources.UpdatePrintBibInputStream">
+        <property name="dataSource" ref="voyagerDataSource"/>
+        <property name="executor" ref="executor"/>
+    </bean>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
         <property name="logEresource" value="true"/>
     </bean>

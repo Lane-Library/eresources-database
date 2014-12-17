@@ -13,7 +13,8 @@ public class SAXLink implements Link {
 
     private Version version;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Link#getAdditionalText()
      */
     @Override
@@ -28,7 +29,8 @@ public class SAXLink implements Link {
         return sb.toString();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Link#getInstruction()
      */
     @Override
@@ -36,7 +38,8 @@ public class SAXLink implements Link {
         return this.instruction;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Link#getLabel()
      */
     @Override
@@ -44,7 +47,8 @@ public class SAXLink implements Link {
         return this.label;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Link#getLinkText()
      */
     @Override
@@ -76,7 +80,8 @@ public class SAXLink implements Link {
         return sb.toString();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Link#getUrl()
      */
     @Override
@@ -96,6 +101,7 @@ public class SAXLink implements Link {
         this.url = url;
     }
 
+    @Override
     public void setVersion(final Version version) {
         this.version = version;
     }

@@ -15,7 +15,7 @@ public class SAXVersion implements Version {
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
-            "mobile resources", "biotools" };
+        "mobile resources", "biotools" };
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
             ALLOWED_SUBSETS.add(subset);
@@ -54,9 +54,6 @@ public class SAXVersion implements Version {
         }
     }
 
-    /* (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#getAdditionalText()
-     */
     @Override
     public String getAdditionalText() {
         StringBuilder sb = new StringBuilder(" ");
@@ -86,7 +83,8 @@ public class SAXVersion implements Version {
         return sb.toString();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#getDates()
      */
     @Override
@@ -94,7 +92,8 @@ public class SAXVersion implements Version {
         return this.dates;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#getDescription()
      */
     @Override
@@ -102,7 +101,8 @@ public class SAXVersion implements Version {
         return this.description;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#getLinks()
      */
     @Override
@@ -113,7 +113,8 @@ public class SAXVersion implements Version {
         return Collections.unmodifiableList(this.links);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#getPublisher()
      */
     @Override
@@ -121,7 +122,8 @@ public class SAXVersion implements Version {
         return this.publisher;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#getSubsets()
      */
     @Override
@@ -132,7 +134,8 @@ public class SAXVersion implements Version {
         return Collections.unmodifiableCollection(this.subsets);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#getSummaryHoldings()
      */
     @Override
@@ -140,7 +143,8 @@ public class SAXVersion implements Version {
         return this.summaryHoldings;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#hasGetPasswordLink()
      */
     @Override
@@ -148,7 +152,8 @@ public class SAXVersion implements Version {
         return this.hasGetPasswordLink;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#isProxy()
      */
     @Override

@@ -14,7 +14,6 @@
                 <property name="contentHandler" ref="authBuilder"/>
             </bean>
         </property>
-        <property name="eresourceBuilder" ref="authBuilder"/>
     </bean>
     <bean id="authBuilder" class="edu.stanford.irt.eresources.sax.AuthEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
