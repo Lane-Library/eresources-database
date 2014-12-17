@@ -108,7 +108,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                 return name.endsWith(".html")
                         || (file.isDirectory() && !".svn".equals(name) && !"includes".equals(name)
                                 && !"search".equals(name) && !"tobacco".equals(name) && !"samples".equals(name) && !"m"
-                                .equals(name));
+                                    .equals(name));
             }
         });
         for (File file : files) {

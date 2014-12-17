@@ -11,19 +11,6 @@
         </property>
         <property name="authTextAugmentation" ref="authTextAugmentation"/>
         <property name="eresourceHandler" ref="eresourceHandler"/>
-        <!--<property name="xmlReader">
-            <bean id="marcReader" class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
-                <property name="contentHandler" ref="bibBuilder"/>
-            </bean>
-        </property>-->
-        <!--<property name="eresourceBuilder" ref="bibBuilder"/>-->
-    </bean>
-    <bean id="marcReader" class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
-        <property name="contentHandler" ref="bibBuilder"/>
-    </bean>
-    <bean id="bibBuilder" class="edu.stanford.irt.eresources.sax.MARCEresourceBuilder">
-        <property name="eresourceHandler" ref="eresourceHandler"/>
-        <property name="authTextAugmentation" ref="authTextAugmentation"/>
         <property name="itemCount" ref="itemCount"/>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.sax.AuthTextAugmentation">

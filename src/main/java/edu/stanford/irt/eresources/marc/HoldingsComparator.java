@@ -13,13 +13,14 @@ public class HoldingsComparator implements Comparator<MarcVersion> {
 
     private static final Pattern CLOSED_DATE_PATTERN = Pattern.compile("(\\d{4})\\-(\\d{4})\\.");
 
-    private static final List<String> favoredPublishers = Arrays.asList("sciencedirect", "wiley", "springer", "highwire", "ovid",
-            "nature", "liebert", "informaworld", "karger", "pubmed central");
+    private static final List<String> favoredPublishers = Arrays.asList("sciencedirect", "wiley", "springer",
+            "highwire", "ovid", "nature", "liebert", "informaworld", "karger", "pubmed central");
 
     private static final Pattern OPEN_DATE_PATTERN = Pattern.compile(".*(\\d{4})\\-");
 
     private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
+    @Override
     public int compare(final MarcVersion data1, final MarcVersion data2) {
         String dates1 = data1.getDates();
         String dates2 = data2.getDates();
@@ -42,24 +43,22 @@ public class HoldingsComparator implements Comparator<MarcVersion> {
             return score2 - score1;
         }
         return 1;
-        // return (v1.getId() < v2.getId() ? -1 : (v1.getId() == v2.getId() ? 0
-        // : 1));
     }
 
     /**
      * Calculate sorting score for holdings data based on:
-     * 
+     *
      * <pre>
      * ++ dates or summaryHoldings end in "-"
      * -- description has "delayed" in it
      * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
      * </pre>
-     * 
+     *
      * @param data
      * @return score
      */
-    private int calculateHoldingsScore(final MarcVersion data, String dates) {
+    private int calculateHoldingsScore(final MarcVersion data, final String dates) {
         int score = 0;
         String summaryHoldings = data.getSummaryHoldings();
         if (summaryHoldings != null) {
@@ -89,7 +88,7 @@ public class HoldingsComparator implements Comparator<MarcVersion> {
 
     /**
      * Calculate score for select list of publishers
-     * 
+     *
      * @param v
      * @return score
      */

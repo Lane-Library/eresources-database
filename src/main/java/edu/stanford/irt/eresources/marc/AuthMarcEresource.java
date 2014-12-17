@@ -18,23 +18,31 @@ import org.marc4j.marc.VariableField;
 import com.ibm.icu.text.Normalizer;
 
 import edu.stanford.irt.eresources.EresourceException;
-import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 
-
 public class AuthMarcEresource extends AbstractMarcEresource {
-    
-    private static final String AUTH_TYPE = "auth";
-    private Record record;
 
+    private static final String AUTH_TYPE = "auth";
+
+    private static final int[] ITEMS = new int[] { 0, 0 };
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-    private int[] itemCount;
-    private String primaryType;
-    
-    public AuthMarcEresource(Record record, String keywords) {
+
+    private Record record;
+
+    public AuthMarcEresource(final Record record, final String keywords) {
         super(keywords);
         this.record = record;
+    }
+
+    @Override
+    public int[] getItemCount() {
+        return ITEMS;
+    }
+
+    @Override
+    public String getRecordType() {
+        return AUTH_TYPE;
     }
 
     public String getType() {
@@ -57,11 +65,6 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected List<Version> doVersions() {
-        return Collections.<Version>singletonList(new MarcVersion(this.record));
-    }
-
-    @Override
     protected Collection<String> doMeshTerms() {
         Collection<String> m = new LinkedList<String>();
         for (VariableField field : this.record.getVariableFields("650")) {
@@ -70,6 +73,19 @@ public class AuthMarcEresource extends AbstractMarcEresource {
             }
         }
         return m;
+    }
+
+    @Override
+    protected String doPrimaryType() {
+        String primaryType = "";
+        for (VariableField field : this.record.getVariableFields("655")) {
+            DataField datafield = (DataField) field;
+            if (datafield.getIndicator1() == '4' && datafield.getIndicator2() == '7') {
+                primaryType = datafield.getSubfield('a').getData();
+                break;
+            }
+        }
+        return primaryType;
     }
 
     @Override
@@ -116,22 +132,12 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
+    protected List<Version> doVersions() {
+        return Collections.<Version> singletonList(new MarcVersion(this.record));
+    }
+
+    @Override
     protected int doYear() {
         return 0;
-    }
-
-    @Override
-    public String getRecordType() {
-        return AUTH_TYPE;
-    }
-
-    @Override
-    public int[] getItemCount() {
-        return this.itemCount;
-    }
-
-    @Override
-    public String getPrimaryType() {
-        return this.primaryType;
     }
 }

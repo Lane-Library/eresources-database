@@ -25,26 +25,26 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
-            "mobile resources", "biotools" };
+        "mobile resources", "biotools" };
+
+    private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
+        { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
+        { "student computing", "lksc-student" } };
+
+    private static final Pattern PATTERN = Pattern.compile(" =");
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
             ALLOWED_SUBSETS.add(subset);
         }
     }
 
-    private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
-            { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
-            { "student computing", "lksc-student" } };
+    private String additionalText;
 
-    private static final Pattern PATTERN = Pattern.compile(" =");
-
-    private Record record;
-    
     private boolean hasGetPassword = false;
 
     private LinkedList<Link> links;
 
-    private String additionalText;
+    private Record record;
 
     public MarcVersion(final Record record) {
         if (record == null) {
@@ -53,82 +53,38 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
         this.record = record;
     }
 
+    @Override
+    public String getAdditionalText() {
+        if (this.additionalText == null) {
+            this.additionalText = doAdditionalText();
+        }
+        return this.additionalText;
+    }
+
+    @Override
     public String getDates() {
         return getSubfieldData((DataField) this.record.getVariableField("866"), 'y');
     }
 
+    @Override
     public String getDescription() {
         return getSubfieldData((DataField) this.record.getVariableField("866"), 'z');
     }
-    
+
+    @Override
     public List<Link> getLinks() {
         if (this.links == null) {
             setupLinks();
         }
         return this.links;
     }
-    
-    public boolean hasGetPassword() {
-        if (this.links == null) {
-            setupLinks();
-        }
-        return this.hasGetPassword;
-    }
 
-    private void setupLinks() {
-        this.links = new LinkedList<Link>();
-        for (VariableField field : this.record.getVariableFields("856")) {
-            if ("http://lane.stanford.edu/secure/ejpw.html".equals(getSubfieldData((DataField)field, 'u'))) {
-                this.hasGetPassword = true;
-            } else {
-                MarcLink link = new MarcLink((DataField) field, this);
-                this.links.add(link);
-            }
-        }
-//        String summaryHoldings = getSummaryHoldings();
-//        String dates = getDates();
-//        String publisher = getPublisher();
-//        StringBuilder sb = new StringBuilder();
-//        for (int i = 0; i < this.links.size(); i++) {
-//            Link oldLink = (Link) links.get(i);
-//            sb.setLength(0);
-//            if (this.links.size() == 1 && summaryHoldings != null) {
-//                sb.append(summaryHoldings);
-//                if (dates != null) {
-//                    sb.append(", ").append(dates);
-//                }
-//            } else {
-//                sb.append(oldLink.getLabel());
-//            }
-//            if (sb.length() == 0) {
-//                sb.append(oldLink.getUrl());
-//            }
-//            String description = getDescription();
-//            if (description != null) {
-//                sb.append(" ").append(description);
-//            }
-//            String newLabel = sb.toString();
-//            sb.setLength(0);
-//            if (publisher != null) {
-//                String oldInstruction = oldLink.getInstruction();
-//                if (oldInstruction != null) {
-//                    sb.append(oldInstruction).append(" ");
-//                }
-//                sb.append(publisher);
-//            }
-//            if (hasGetPassword()) {
-//                sb.append("GETPASSWORD");
-//            }
-//            String newInstruction = sb.length() == 0 ? null : sb.toString();
-//            AugmentedMarcLink newLink = new AugmentedMarcLink(oldLink, newLabel, newInstruction);
-//            this.links.set(i, newLink);
-//        }
-    }
-
+    @Override
     public String getPublisher() {
         return getSubfieldData((DataField) this.record.getVariableField("844"), 'a');
     }
 
+    @Override
     public Collection<String> getSubsets() {
         Collection<String> subsets = new TreeSet<String>();
         Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
@@ -145,6 +101,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
         return subsets;
     }
 
+    @Override
     public String getSummaryHoldings() {
         String value = getSubfieldData((DataField) this.record.getVariableField("866"), 'v');
         if (value != null) {
@@ -153,6 +110,20 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
         return value;
     }
 
+    public boolean hasGetPassword() {
+        if (this.links == null) {
+            setupLinks();
+        }
+        return this.hasGetPassword;
+    }
+
+    @Override
+    public boolean hasGetPasswordLink() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public boolean isProxy() {
         boolean isProxy = true;
         Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
@@ -179,14 +150,6 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
                 }
             }
         }
-    }
-
-    @Override
-    public String getAdditionalText() {
-        if (this.additionalText == null) {
-            this.additionalText = doAdditionalText();
-        }
-        return this.additionalText;
     }
 
     private String doAdditionalText() {
@@ -219,18 +182,24 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
         return sb.toString();
     }
 
-    @Override
-    public boolean hasGetPasswordLink() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
     private void maybeAppend(final StringBuilder sb, final String string) {
         if (string != null && string.length() > 0) {
             if (sb.length() > 1) {
                 sb.append(", ");
             }
             sb.append(string);
+        }
+    }
+
+    private void setupLinks() {
+        this.links = new LinkedList<Link>();
+        for (VariableField field : this.record.getVariableFields("856")) {
+            if ("http://lane.stanford.edu/secure/ejpw.html".equals(getSubfieldData((DataField) field, 'u'))) {
+                this.hasGetPassword = true;
+            } else {
+                MarcLink link = new MarcLink((DataField) field, this);
+                this.links.add(link);
+            }
         }
     }
 }

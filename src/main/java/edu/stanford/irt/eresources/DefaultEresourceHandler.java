@@ -82,14 +82,13 @@ public class DefaultEresourceHandler implements EresourceHandler {
 
     @Override
     public void run() {
-//        try (Connection conn = this.dataSource.getConnection();
-//                Statement stmt = conn.createStatement();
-//                PreparedStatement textStmt = conn.prepareStatement(this.textSQL);
-//                PreparedStatement descStmt = conn.prepareStatement(this.descriptionSQL)) {
-//            this.stmt = stmt;
-//            this.textStmt = textStmt;
-//            this.descStmt = descStmt;
-        try {
+        try (Connection conn = this.dataSource.getConnection();
+                Statement stmt = conn.createStatement();
+                PreparedStatement textStmt = conn.prepareStatement(this.textSQL);
+                PreparedStatement descStmt = conn.prepareStatement(this.descriptionSQL)) {
+            this.stmt = stmt;
+            this.textStmt = textStmt;
+            this.descStmt = descStmt;
             synchronized (this.queue) {
                 while (!this.queue.isEmpty() || this.keepGoing) {
                     try {
@@ -98,8 +97,7 @@ public class DefaultEresourceHandler implements EresourceHandler {
                             insertEresource(eresource);
                         }
                     } catch (InterruptedException | IOException e) {
-                        throw new EresourceException("\nstop=" + this.keepGoing + "\nempty="
-                                + this.queue.isEmpty(), e);
+                        throw new EresourceException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                     }
                 }
                 this.queue.notifyAll();
@@ -123,15 +121,13 @@ public class DefaultEresourceHandler implements EresourceHandler {
         for (Iterator<String> it = insertSQLStatements.iterator(); it.hasNext();) {
             String sql = it.next();
             if (sql.indexOf("TEXT:") != 0 && sql.indexOf("DESCRIPTION:") != 0) {
-//                this.stmt.addBatch(sql);
-                System.out.println(sql);
+                this.stmt.addBatch(sql);
                 it.remove();
             }
         }
-//        this.stmt.executeBatch();
+        this.stmt.executeBatch();
         for (String clob : insertSQLStatements) {
-//            insertClob(clob);
-            System.out.println(clob);
+            insertClob(clob);
         }
     }
 

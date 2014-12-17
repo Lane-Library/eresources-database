@@ -9,7 +9,6 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 
 /**
  * A logging advisor that logs exceptions.
- *
  */
 public class ExceptionAdvisor extends DefaultPointcutAdvisor {
 

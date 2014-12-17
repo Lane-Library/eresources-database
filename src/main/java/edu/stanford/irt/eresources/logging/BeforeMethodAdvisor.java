@@ -8,7 +8,6 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 
 /**
  * A logging advisor that logs at method entry with method name and parameter values.
- *
  */
 public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
 

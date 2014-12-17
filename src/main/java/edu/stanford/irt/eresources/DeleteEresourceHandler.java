@@ -110,8 +110,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
                         set.remove(Integer.valueOf(eresource.getRecordId()));
                     }
                 } catch (InterruptedException e) {
-                    throw new EresourceException(
-                            "\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
+                    throw new EresourceException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                 }
             }
             try (Connection conn = this.dataSource.getConnection();

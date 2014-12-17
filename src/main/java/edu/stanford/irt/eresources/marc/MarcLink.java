@@ -14,8 +14,6 @@ public class MarcLink extends AbstractMarcComponent implements Link {
 
     private DataField dataField;
 
-    private MarcVersion version;
-
     private String instruction;
 
     private boolean instructionDone;
@@ -28,60 +26,11 @@ public class MarcLink extends AbstractMarcComponent implements Link {
 
     private boolean urlDone;
 
+    private MarcVersion version;
+
     public MarcLink(final DataField dataField, final MarcVersion marcVersion) {
         this.dataField = dataField;
         this.version = marcVersion;
-    }
-
-    public String getInstruction() {
-        if (!this.instructionDone) {
-            doInstruction();
-        }
-        return this.instruction;
-    }
-
-    public String getLabel() {
-        if (!this.labelDone) {
-            doLabel();
-        }
-        return this.label;
-    }
-
-    public String getUrl() {
-        if (!this.urlDone) {
-            doUrl();
-        }
-        return this.url;
-    }
-
-    private void doInstruction() {
-        this.instruction = getSubfieldData(this.dataField, 'i');
-        this.instructionDone = true;
-    }
-
-    private void doLabel() {
-        String l = getSubfieldData(this.dataField, 'q');
-        if (l == null) {
-            l = getSubfieldData(this.dataField, 'z');
-        }
-        if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > 2)) {
-            l = l.substring(1, l.length() - 1);
-        }
-        this.label = l;
-        this.labelDone = true;
-    }
-
-    private void doUrl() {
-        this.url = getSubfieldData(this.dataField, 'u');
-        this.urlDone = true;
-    }
-
-    public Collection<String> getSubsets() {
-        return this.version.getSubsets();
-    }
-
-    public boolean isNoProxy() {
-        return this.version.isProxy();
     }
 
     @Override
@@ -94,6 +43,22 @@ public class MarcLink extends AbstractMarcComponent implements Link {
             sb.append(" ").append(this.version.getPublisher());
         }
         return sb.toString();
+    }
+
+    @Override
+    public String getInstruction() {
+        if (!this.instructionDone) {
+            doInstruction();
+        }
+        return this.instruction;
+    }
+
+    @Override
+    public String getLabel() {
+        if (!this.labelDone) {
+            doLabel();
+        }
+        return this.label;
     }
 
     @Override
@@ -125,9 +90,46 @@ public class MarcLink extends AbstractMarcComponent implements Link {
         return sb.toString();
     }
 
+    public Collection<String> getSubsets() {
+        return this.version.getSubsets();
+    }
+
     @Override
-    public void setVersion(Version version) {
+    public String getUrl() {
+        if (!this.urlDone) {
+            doUrl();
+        }
+        return this.url;
+    }
+
+    public boolean isNoProxy() {
+        return this.version.isProxy();
+    }
+
+    @Override
+    public void setVersion(final Version version) {
         // TODO Auto-generated method stub
-        
+    }
+
+    private void doInstruction() {
+        this.instruction = getSubfieldData(this.dataField, 'i');
+        this.instructionDone = true;
+    }
+
+    private void doLabel() {
+        String l = getSubfieldData(this.dataField, 'q');
+        if (l == null) {
+            l = getSubfieldData(this.dataField, 'z');
+        }
+        if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > 2)) {
+            l = l.substring(1, l.length() - 1);
+        }
+        this.label = l;
+        this.labelDone = true;
+    }
+
+    private void doUrl() {
+        this.url = getSubfieldData(this.dataField, 'u');
+        this.urlDone = true;
     }
 }

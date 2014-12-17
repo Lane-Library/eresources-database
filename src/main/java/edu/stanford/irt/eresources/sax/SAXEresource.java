@@ -19,30 +19,30 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
-            "redwood software, installed", "duck software, installed", "stone software, installed",
-            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed" };
+        "redwood software, installed", "duck software, installed", "stone software, installed",
+        "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
+        "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+        "statistics software, installed", "biotools software, installed" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
-            { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
-            { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-            { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
-                    "digital videos, local", "digital videos, local, public" },
+        { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
+        { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
+        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
+            "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
     private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-        { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
-        { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
-        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
-        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
-        { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
+            { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
+            { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
+            { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
+            { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
+            { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);

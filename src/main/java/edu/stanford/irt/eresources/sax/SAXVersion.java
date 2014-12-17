@@ -15,7 +15,7 @@ public class SAXVersion implements Version {
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
-        "mobile resources", "biotools" };
+            "mobile resources", "biotools" };
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
             ALLOWED_SUBSETS.add(subset);

@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,28 +9,28 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.stanford.irt.eresources.Eresource;
-import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
-import edu.stanford.irt.eresources.VersionComparator;
 
 public abstract class AbstractMarcEresource extends AbstractMarcComponent implements Eresource {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
-            "redwood software, installed", "duck software, installed", "stone software, installed",
-            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed" };
+        "redwood software, installed", "duck software, installed", "stone software, installed",
+        "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
+        "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+        "statistics software, installed", "biotools software, installed" };
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
-            { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
-            { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-            { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
-                    "digital videos, local", "digital videos, local, public" },
+        { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
+        { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
+        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
+            "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
+
+    private static final int[] NOITEMS = new int[] { 0, 0 };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -41,14 +40,6 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
-    }
-    
-    protected boolean isAllowedType(String type) {
-        return ALLOWED_TYPES.contains(type);
-    }
-    
-    protected String getCompositeType(String type) {
-        return COMPOSITE_TYPES.get(type);
     }
 
     private String description;
@@ -63,13 +54,13 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
 
     private boolean isCoreDone;
 
-    private List<Version> versions;
-
-    private boolean versionsDone;
+    private String keywords;
 
     private Collection<String> meshTerms;
 
     private boolean meshTermsDone;
+
+    private String primaryType;
 
     private String title;
 
@@ -83,16 +74,19 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
 
     private boolean updatedDone;
 
+    private List<Version> versions;
+
+    private boolean versionsDone;
+
     private int year;
 
     private boolean yearDone;
 
-    private String keywords;
-    
-    public AbstractMarcEresource(String keywords) {
+    public AbstractMarcEresource(final String keywords) {
         this.keywords = keywords;
     }
 
+    @Override
     public String getDescription() {
         if (!this.descriptionDone) {
             this.description = doDescription();
@@ -109,18 +103,17 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
         return this.id;
     }
 
+    @Override
+    public int[] getItemCount() {
+        return NOITEMS;
+    }
+
+    @Override
     public String getKeywords() {
         return this.keywords;
     }
 
-    public Collection<Version> getVersions() {
-        if (!this.versionsDone) {
-            this.versions = doVersions();
-            this.versionsDone = true;
-        }
-        return this.versions;
-    }
-
+    @Override
     public Collection<String> getMeshTerms() {
         if (!this.meshTermsDone) {
             this.meshTerms = doMeshTerms();
@@ -129,6 +122,23 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
         return this.meshTerms;
     }
 
+    @Override
+    public String getPrimaryType() {
+        if (this.primaryType == null) {
+            this.primaryType = doPrimaryType();
+        }
+        return this.primaryType;
+    }
+
+    @Override
+    public int getRecordId() {
+        if (this.id == 0) {
+            this.id = doId();
+        }
+        return this.id;
+    }
+
+    @Override
     public String getTitle() {
         if (!this.titleDone) {
             this.title = doTitle();
@@ -137,6 +147,7 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
         return this.title;
     }
 
+    @Override
     public Collection<String> getTypes() {
         if (!this.typesDone) {
             this.types = doTypes();
@@ -145,6 +156,7 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
         return this.types;
     }
 
+    @Override
     public Date getUpdated() {
         if (!this.updatedDone) {
             this.updated = doUpdated();
@@ -153,6 +165,16 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
         return this.updated;
     }
 
+    @Override
+    public Collection<Version> getVersions() {
+        if (!this.versionsDone) {
+            this.versions = doVersions();
+            this.versionsDone = true;
+        }
+        return this.versions;
+    }
+
+    @Override
     public int getYear() {
         if (!this.yearDone) {
             this.year = doYear();
@@ -161,6 +183,13 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
         return this.year;
     }
 
+    @Override
+    public boolean isClone() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public boolean isCore() {
         if (!this.isCoreDone) {
             this.isCore = doIsCore();
@@ -173,14 +202,6 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
     public String toString() {
         return getTitle();
     }
-    
-    @Override
-    public int getRecordId() {
-        if (this.id == 0) {
-            this.id = doId();
-        }
-        return this.id;
-    }
 
     protected abstract String doDescription();
 
@@ -188,9 +209,9 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
 
     protected abstract boolean doIsCore();
 
-    protected abstract List<Version> doVersions();
-
     protected abstract Collection<String> doMeshTerms();
+
+    protected abstract String doPrimaryType();
 
     protected abstract String doTitle();
 
@@ -198,11 +219,15 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
 
     protected abstract Date doUpdated();
 
+    protected abstract List<Version> doVersions();
+
     protected abstract int doYear();
 
-    @Override
-    public boolean isClone() {
-        // TODO Auto-generated method stub
-        return false;
+    protected String getCompositeType(final String type) {
+        return COMPOSITE_TYPES.get(type);
+    }
+
+    protected boolean isAllowedType(final String type) {
+        return ALLOWED_TYPES.contains(type);
     }
 }

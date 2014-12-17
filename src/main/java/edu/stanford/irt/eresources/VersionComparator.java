@@ -53,6 +53,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
      * </pre>
+     * 
      * @param version
      * @return score
      */
@@ -94,6 +95,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     /**
      * Calculate score for select list of publishers
+     * 
      * @param version
      * @return score
      */

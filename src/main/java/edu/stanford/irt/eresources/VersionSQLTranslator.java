@@ -38,8 +38,8 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
         for (String subset : vr.getSubsets()) {
             sb.setLength(0);
             sb.append(this.getInsertInto()).append("SUBSET VALUES (").append(tablePrefix)
-                    .append("VERSION_ID_SEQ.CURRVAL,").append(tablePrefix).append("ERESOURCE_ID_SEQ.CURRVAL,")
-                    .append(apostrophize(subset)).append(END_PAREN);
+            .append("VERSION_ID_SEQ.CURRVAL,").append(tablePrefix).append("ERESOURCE_ID_SEQ.CURRVAL,")
+            .append(apostrophize(subset)).append(END_PAREN);
             sql.add(sb.toString());
         }
         return sql;

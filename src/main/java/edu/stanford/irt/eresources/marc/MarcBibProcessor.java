@@ -16,13 +16,14 @@ import com.ibm.icu.text.Normalizer;
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.EresourceInputStream;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.sax.AuthTextAugmentation;
 
 public class MarcBibProcessor extends AbstractEresourceProcessor {
-    
-    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
     private static final String HOLDINGS_CHARS = "uvxy";
+
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
     private AuthTextAugmentation authTextAugmentation;
 
@@ -30,6 +31,9 @@ public class MarcBibProcessor extends AbstractEresourceProcessor {
 
     private EresourceInputStream inputStream;
 
+    private ItemCount itemCount;
+
+    @Override
     public void process() {
         this.inputStream.setStartDate(new Timestamp(getStartTime()));
         MarcReader reader = new MarcStreamReader(this.inputStream);
@@ -40,9 +44,10 @@ public class MarcBibProcessor extends AbstractEresourceProcessor {
             Record record = reader.next();
             if (isBib(record)) {
                 if (bib != null) {
-                    this.handler.handleEresource(new BibMarcMarcEresource(bib, holdings, keywords));
+                    int[] items = this.itemCount.itemCount(bib.getControlNumber());
+                    this.handler.handleEresource(new BibMarcMarcEresource(bib, holdings, keywords, items));
                     if (bib.getVariableField("249") != null) {
-                        this.handler.handleEresource(new AltTitleMarcEresource(bib, holdings, keywords));
+                        this.handler.handleEresource(new AltTitleMarcEresource(bib, holdings, keywords, items));
                     }
                 }
                 bib = record;
@@ -53,9 +58,10 @@ public class MarcBibProcessor extends AbstractEresourceProcessor {
             }
         }
         if (bib != null) {
-            this.handler.handleEresource(new BibMarcMarcEresource(bib, holdings, keywords));
+            int[] items = this.itemCount.itemCount(bib.getControlNumber());
+            this.handler.handleEresource(new BibMarcMarcEresource(bib, holdings, keywords, items));
             if (bib.getVariableField("249") != null) {
-                this.handler.handleEresource(new AltTitleMarcEresource(bib, holdings, keywords));
+                this.handler.handleEresource(new AltTitleMarcEresource(bib, holdings, keywords, items));
             }
         }
     }
@@ -81,12 +87,16 @@ public class MarcBibProcessor extends AbstractEresourceProcessor {
         this.inputStream = inputStream;
     }
 
+    public void setItemCount(final ItemCount itemCount) {
+        this.itemCount = itemCount;
+    }
+
     private String getKeywords(final Record record) {
         StringBuilder sb = new StringBuilder();
         for (DataField field : record.getDataFields()) {
             int tagNumber = Integer.parseInt(field.getTag());
-            if (((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22) || (tagNumber == 30)
-                    || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
+            if (((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
+                    || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
                     || ((tagNumber >= 941) && (tagNumber <= 943)) || tagNumber == 907) {
                 for (Subfield subfield : field.getSubfields()) {
                     if (tagNumber != 907 || "xy".indexOf(subfield.getCode()) > -1) {

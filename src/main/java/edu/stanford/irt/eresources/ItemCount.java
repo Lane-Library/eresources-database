@@ -38,6 +38,10 @@ public class ItemCount {
         return count;
     }
 
+    public int[] itemCount(final String bibId) {
+        return itemCount(Integer.parseInt(bibId));
+    }
+
     private int getCount(final int bibId, final String query) {
         int total = 0;
         try (Connection conn = this.dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
