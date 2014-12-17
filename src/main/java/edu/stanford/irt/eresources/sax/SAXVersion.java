@@ -83,28 +83,16 @@ public class SAXVersion implements Version {
         return sb.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#getDates()
-     */
     @Override
     public String getDates() {
         return this.dates;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#getDescription()
-     */
     @Override
     public String getDescription() {
         return this.description;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#getLinks()
-     */
     @Override
     public List<Link> getLinks() {
         if (null == this.links) {
@@ -113,19 +101,11 @@ public class SAXVersion implements Version {
         return Collections.unmodifiableList(this.links);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#getPublisher()
-     */
     @Override
     public String getPublisher() {
         return this.publisher;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#getSubsets()
-     */
     @Override
     public Collection<String> getSubsets() {
         if (null == this.subsets) {
@@ -134,28 +114,16 @@ public class SAXVersion implements Version {
         return Collections.unmodifiableCollection(this.subsets);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#getSummaryHoldings()
-     */
     @Override
     public String getSummaryHoldings() {
         return this.summaryHoldings;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#hasGetPasswordLink()
-     */
     @Override
     public boolean hasGetPasswordLink() {
         return this.hasGetPasswordLink;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#isProxy()
-     */
     @Override
     public boolean isProxy() {
         return this.isProxy;

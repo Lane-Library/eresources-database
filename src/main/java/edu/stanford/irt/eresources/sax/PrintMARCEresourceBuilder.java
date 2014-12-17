@@ -1,13 +1,7 @@
-/**
- *
- */
 package edu.stanford.irt.eresources.sax;
 
 import java.util.Collection;
 
-/**
- * @author ceyates
- */
 public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
 
     @Override

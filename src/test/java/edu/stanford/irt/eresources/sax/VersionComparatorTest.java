@@ -8,9 +8,6 @@ import org.junit.Test;
 
 import edu.stanford.irt.eresources.VersionComparator;
 
-/**
- * @author ryanmax
- */
 public class VersionComparatorTest {
 
     private VersionComparator comparator;

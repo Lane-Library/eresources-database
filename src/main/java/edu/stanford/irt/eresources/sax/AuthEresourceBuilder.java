@@ -1,6 +1,3 @@
-/**
- *
- */
 package edu.stanford.irt.eresources.sax;
 
 import java.text.DateFormat;
@@ -18,9 +15,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.EresourceHandler;
 
-/**
- * @author ceyates
- */
 public class AuthEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^(\\d[\\d|u]{3}|Continuing)$");

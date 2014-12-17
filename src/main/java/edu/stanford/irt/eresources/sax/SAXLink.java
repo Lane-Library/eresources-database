@@ -13,10 +13,6 @@ public class SAXLink implements Link {
 
     private Version version;
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getAdditionalText()
-     */
     @Override
     public String getAdditionalText() {
         StringBuilder sb = new StringBuilder();
@@ -29,28 +25,16 @@ public class SAXLink implements Link {
         return sb.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getInstruction()
-     */
     @Override
     public String getInstruction() {
         return this.instruction;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getLabel()
-     */
     @Override
     public String getLabel() {
         return this.label;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getLinkText()
-     */
     @Override
     public String getLinkText() {
         StringBuilder sb = new StringBuilder();
@@ -80,10 +64,6 @@ public class SAXLink implements Link {
         return sb.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getUrl()
-     */
     @Override
     public String getUrl() {
         return this.url;

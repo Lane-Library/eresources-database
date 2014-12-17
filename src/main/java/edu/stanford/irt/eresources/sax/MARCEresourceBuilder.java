@@ -1,6 +1,3 @@
-/**
- *
- */
 package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
@@ -24,9 +21,6 @@ import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 
-/**
- * @author ceyates
- */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
     protected static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);

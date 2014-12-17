@@ -9,7 +9,6 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 /**
  * A logging advisor that logs at method return with method name and return values.
  *
- * @author ceyates
  */
 public class ReturnMethodAdvisor extends DefaultPointcutAdvisor {
 

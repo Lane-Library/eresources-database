@@ -9,9 +9,6 @@ import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Link;
 
-/**
- * @author ryanmax
- */
 public class HoldingsComparator implements Comparator<MarcVersion> {
 
     private static final Pattern CLOSED_DATE_PATTERN = Pattern.compile("(\\d{4})\\-(\\d{4})\\.");

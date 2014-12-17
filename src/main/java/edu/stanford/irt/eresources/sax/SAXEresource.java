@@ -116,37 +116,21 @@ public class SAXEresource implements Cloneable, Eresource {
         return clone;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getDescription()
-     */
     @Override
     public String getDescription() {
         return this.description;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getItemCount()
-     */
     @Override
     public int[] getItemCount() {
         return this.count;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getKeywords()
-     */
     @Override
     public String getKeywords() {
         return this.keywords;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getMeshTerms()
-     */
     @Override
     public Collection<String> getMeshTerms() {
         if (null == this.meshTerms) {
@@ -155,10 +139,6 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.meshTerms;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getPrimaryType()
-     */
     @Override
     public String getPrimaryType() {
         if (this.primaryType == null) {
@@ -167,37 +147,21 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.primaryType;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getRecordId()
-     */
     @Override
     public int getRecordId() {
         return this.recordId;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getRecordType()
-     */
     @Override
     public String getRecordType() {
         return this.recordType;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getTitle()
-     */
     @Override
     public String getTitle() {
         return this.title;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getTypes()
-     */
     @Override
     public Collection<String> getTypes() {
         if (null == this.types) {
@@ -206,19 +170,11 @@ public class SAXEresource implements Cloneable, Eresource {
         return Collections.unmodifiableCollection(this.types);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getUpdated()
-     */
     @Override
     public Date getUpdated() {
         return new Date(this.updated.getTime());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getVersions()
-     */
     @Override
     public Collection<Version> getVersions() {
         if (this.versions == null) {
@@ -227,10 +183,6 @@ public class SAXEresource implements Cloneable, Eresource {
         return Collections.unmodifiableCollection(this.versions);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getYear()
-     */
     @Override
     public int getYear() {
         return this.year;
@@ -241,10 +193,6 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.isClone;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#isCore()
-     */
     @Override
     public boolean isCore() {
         return this.isCore;
