@@ -119,8 +119,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
 
     @Override
     public boolean hasGetPasswordLink() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.hasGetPassword;
     }
 
     @Override
