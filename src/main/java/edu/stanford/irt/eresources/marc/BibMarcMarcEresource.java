@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -117,7 +118,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected Collection<String> doMeshTerms() {
-        Collection<String> m = new LinkedList<String>();
+        Collection<String> m = new TreeSet<String>();
         for (VariableField field : this.record.getVariableFields("650")) {
             if (((DataField) field).getIndicator1() == '4' && "27".indexOf(((DataField) field).getIndicator2()) > -1) {
                 m.add(getSubfieldData((DataField) field, 'a').toLowerCase());
