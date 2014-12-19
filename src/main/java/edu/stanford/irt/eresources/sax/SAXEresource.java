@@ -106,7 +106,9 @@ public class SAXEresource implements Cloneable, Eresource {
         if (this.versions == null) {
             this.versions = new TreeSet<Version>(COMPARATOR);
         }
-        this.versions.add(version);
+        if (version.getLinks().size() > 0) {
+            this.versions.add(version);
+        }
     }
 
     @Override

@@ -37,10 +37,12 @@ public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
 
     @Override
     protected void maybeAddCatalogLink() {
+        SAXVersion version = new SAXVersion();
         SAXLink link = new SAXLink();
         link.setLabel("Lane Catalog record");
         link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
-        this.currentVersion.addLink(link);
+        version.addLink(link);
+        this.currentEresource.addVersion(version);
     }
 
     @Override

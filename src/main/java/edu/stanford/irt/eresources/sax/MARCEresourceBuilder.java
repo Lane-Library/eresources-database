@@ -138,7 +138,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
-                maybeAddCatalogLink();
                 this.currentEresource.addVersion(this.currentVersion);
             } else if (this.isBib) {
                 if (this.description520.length() > 0) {
@@ -148,7 +147,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
                 this.description520.setLength(0);
                 this.description505.setLength(0);
-                this.currentEresource.setKeywords(this.content.toString());
+                this.currentEresource.setKeywords(this.content.toString().replaceAll("\\s\\s+", " "));
                 this.content.setLength(0);
             }
         } else if (this.isBib) {
@@ -348,7 +347,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if ("844".equals(this.tag) && "a".equals(this.code)) {
             this.currentVersion.setPublisher(this.currentText.toString());
-        } else if ("866".equals(this.tag)) {
+        } else if ("866".equals(this.tag) && this.countOf866 == 0) {
             if ("v".equals(this.code)) {
                 String holdings = this.currentText.toString();
                 holdings = holdings.replaceAll(" =", "");
@@ -489,6 +488,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private void handlePreviousRecord() {
         createCustomTypes(this.currentEresource);
+        maybeAddCatalogLink();
         if (!this.recordHasError) {
             this.eresourceHandler.handleEresource(this.currentEresource);
             if (this.hasPreferredTitle) {

@@ -17,5 +17,6 @@
     </bean>
     <bean id="authBuilder" class="edu.stanford.irt.eresources.sax.AuthEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
+        <property name="authTextAugmentation" ref="authTextAugmentation"/>
     </bean>
 </beans>

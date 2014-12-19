@@ -71,6 +71,8 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private String z;
 
+    private AuthTextAugmentation authTextAugmentation;
+
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
         this.currentText.append(chars, start, length);
@@ -82,8 +84,9 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if (RECORD.equals(name)) {
-            this.currentEresource.setKeywords(this.content.toString());
+            this.currentEresource.setKeywords(this.content.toString().replaceAll("\\s\\s+", " ").trim());
             if (!this.recordHasError) {
+                this.currentEresource.addVersion(this.currentVersion);
                 this.eresourceHandler.handleEresource(this.currentEresource);
                 if (this.hasPreferredTitle) {
                     try {
@@ -116,6 +119,10 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
         this.eresourceHandler = eresourceHandler;
     }
 
+    public void setAuthTextAugmentation(final AuthTextAugmentation authTextAugmentation) {
+        this.authTextAugmentation = authTextAugmentation;
+    }
+
     @Override
     public void startElement(final String uri, final String localName, final String name, final Attributes atts)
             throws SAXException {
@@ -123,7 +130,6 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
         if (RECORD.equals(name)) {
             this.currentEresource = new SAXEresource();
             this.currentVersion = new SAXVersion();
-            this.currentEresource.addVersion(this.currentVersion);
             this.currentEresource.setRecordType("auth");
         }
         if (SUBFIELD.equals(name)) {
@@ -234,6 +240,18 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 if (null != beginDate) {
                     this.currentEresource.setYear(Integer.parseInt(beginDate));
                 }
+            }
+        }
+        if ("650".equals(this.tag) && "a".equals(this.code)) {
+            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString(), this.tag);
+            if (authText != null && authText.length() > 0) {
+                this.content.append(' ').append(authText).append(' ');
+            }
+        }
+        if (("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) && "a".equals(this.code)) {
+            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString(), this.tag);
+            if (authText != null && authText.length() > 0) {
+                this.content.append(' ').append(authText).append(' ');
             }
         }
     }
