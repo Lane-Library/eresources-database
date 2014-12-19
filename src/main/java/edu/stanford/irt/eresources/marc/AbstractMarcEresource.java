@@ -40,6 +40,26 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
+    }    private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
+
+    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
+        { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
+        { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
+        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
+        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
+        { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
+    static {
+        for (String type : ALLOWED_TYPES_INITIALIZER) {
+            ALLOWED_TYPES.add(type);
+        }
+        for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
+            for (int j = 1; j < element.length; j++) {
+                COMPOSITE_TYPES.put(element[j], element[0]);
+            }
+        }
+        for (String[] element : PRIMARY_TYPES_INITIALIZER) {
+            PRIMARY_TYPES.put(element[0], element[1]);
+        }
     }
 
     private String description;
@@ -125,7 +145,10 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
     @Override
     public String getPrimaryType() {
         if (this.primaryType == null) {
-            this.primaryType = doPrimaryType();
+            this.primaryType = PRIMARY_TYPES.get(doPrimaryType());
+            if (this.primaryType == null) {
+                this.primaryType = "";
+            }
         }
         return this.primaryType;
     }

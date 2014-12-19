@@ -8,8 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.Version;
 
-public class HoldingsComparator implements Comparator<MarcVersion> {
+public class HoldingsComparator implements Comparator<Version> {
 
     private static final Pattern CLOSED_DATE_PATTERN = Pattern.compile("(\\d{4})\\-(\\d{4})\\.");
 
@@ -21,7 +22,7 @@ public class HoldingsComparator implements Comparator<MarcVersion> {
     private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     @Override
-    public int compare(final MarcVersion data1, final MarcVersion data2) {
+    public int compare(final Version data1, final Version data2) {
         String dates1 = data1.getDates();
         String dates2 = data2.getDates();
         int score1 = calculateHoldingsScore(data1, dates1);
@@ -58,7 +59,7 @@ public class HoldingsComparator implements Comparator<MarcVersion> {
      * @param data
      * @return score
      */
-    private int calculateHoldingsScore(final MarcVersion data, final String dates) {
+    private int calculateHoldingsScore(final Version data, final String dates) {
         int score = 0;
         String summaryHoldings = data.getSummaryHoldings();
         if (summaryHoldings != null) {

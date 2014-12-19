@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.marc;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import org.marc4j.marc.VariableField;
 import com.ibm.icu.text.Normalizer;
 
 import edu.stanford.irt.eresources.EresourceException;
+import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
@@ -40,11 +42,6 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
     private static final String[][][] CUSTOM_TYPES = { { { "periodical", "newspaper" }, { "ej" } },
         { { "decision support techniques", "calculators, clinical", "algorithms" }, { "cc" } },
         { { "digital video", "digital video, local" }, { "video" } }, { { "book set" }, { "book" } } };
-
-    private static final String[][] TYPES_FOR_SUBSETS = { { "redwood", "redwood software, installed" },
-        { "stone", "stone software, installed" }, { "duck", "duck software, installed" },
-        { "m230", "m230 software, installed" }, { "lksc-public", "lksc-public software, installed" },
-        { "lksc-student", "lksc-student software, installed" }, { "biotools", "software" } };
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -120,7 +117,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
     protected Collection<String> doMeshTerms() {
         Collection<String> m = new TreeSet<String>();
         for (VariableField field : this.record.getVariableFields("650")) {
-            if (((DataField) field).getIndicator1() == '4' && "27".indexOf(((DataField) field).getIndicator2()) > -1) {
+            if (((DataField) field).getIndicator1() == '4' && "237".indexOf(((DataField) field).getIndicator2()) > -1) {
                 m.add(getSubfieldData((DataField) field, 'a').toLowerCase());
             }
         }
@@ -134,10 +131,18 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
             DataField datafield = (DataField) field;
             if (datafield.getIndicator1() == '4' && datafield.getIndicator2() == '7') {
                 primaryType = datafield.getSubfield('a').getData();
-                break;
             }
         }
-        return primaryType;
+        // remove trailing periods, some probably should have them but
+        // voyager puts them on everything :-(
+        int lastPeriod = primaryType.lastIndexOf('.');
+        if (lastPeriod >= 0) {
+            int lastPosition = primaryType.length() - 1;
+            if (lastPeriod == lastPosition) {
+                primaryType = primaryType.substring(0, lastPosition);
+            }
+        }
+        return primaryType.toLowerCase();
     }
 
     @Override
@@ -147,6 +152,13 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
         for (Subfield subfield : field245.getSubfields()) {
             if ("anpq".indexOf(subfield.getCode()) > -1) {
                 append(sb, Normalizer.compose(subfield.getData(), false));
+            } else if (subfield.getCode() == 'b') {
+                String data = subfield.getData();
+                int lengthLessTwo = data.length() - 2;
+                if (data.lastIndexOf(" /") == lengthLessTwo) {
+                    data = data.substring(0, lengthLessTwo);
+                }
+                append(sb, Normalizer.compose(data, false));
             }
         }
         DataField field250 = (DataField) this.record.getVariableField("250");
@@ -160,7 +172,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected Collection<String> doTypes() {
-        Collection<String> t = new LinkedList<String>();
+        Collection<String> t = new TreeSet<String>();
         for (VariableField field : this.record.getVariableFields("655")) {
             String type = getSubfieldData((DataField) field, 'a').toLowerCase();
             // remove trailing periods, some probably should have them but
@@ -207,12 +219,14 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected List<Version> doVersions() {
-        List<Version> versions = new LinkedList<Version>();
+        Collection<Version> versions= new TreeSet<Version>(new VersionComparator());
         for (Record holding : this.holdings) {
-            versions.add(new MarcVersion(holding));
+            Version version = new MarcVersion(holding);
+            if (version.getLinks().size() > 0) {
+                versions.add(new MarcVersion(holding));
+            }
         }
-        Collections.sort(versions, new VersionComparator());
-        return versions;
+        return new ArrayList<Version>(versions);
     }
 
     @Override
@@ -239,11 +253,6 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
             }
         }
         Collection<String> subsets = getAllSubsets();
-        for (String[] element : TYPES_FOR_SUBSETS) {
-            if (subsets.contains(element[0])) {
-                types.add(element[1]);
-            }
-        }
         if (types.contains("software, installed")) {
             if (types.contains("statistics")) {
                 types.add("statistics software, installed");
@@ -251,10 +260,36 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
             if (subsets.contains("biotools")) {
                 types.add("biotools software, installed");
             }
+            for (Version version : getVersions()) {
+                // software installed in various locations have the location in
+                // the label
+                for (Link link : version.getLinks()) {
+                    String label = link.getLabel();
+                    if (label != null) {
+                    if (label.indexOf("Redwood") == 0) {
+                        types.add("redwood software, installed");
+                    } else if (label.indexOf("Stone") == 0) {
+                        types.add("stone software, installed");
+                    } else if (label.indexOf("Duck") == 0) {
+                        types.add("duck software, installed");
+                    } else if (label.indexOf("M051") == 0) {
+                        types.add("m051 software, installed");
+                    } else if (label.indexOf("Public") == 0) {
+                        types.add("lksc-public software, installed");
+                    } else if (label.indexOf("Student") == 0) {
+                        types.add("lksc-student software, installed");
+                    }
+                    }
+                }
+            }
+        }
+        if (subsets.contains("biotools")) {
+            types.add("software");
         }
         if (isBassettRecord()) {
             types.add("bassett");
         }
+    
     }
 
     private Collection<String> getAllSubsets() {

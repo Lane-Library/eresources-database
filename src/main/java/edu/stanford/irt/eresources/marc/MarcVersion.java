@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 
 import edu.stanford.irt.eresources.EresourceException;
@@ -27,9 +28,9 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
         "mobile resources", "biotools" };
 
-    private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
-        { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
-        { "student computing", "lksc-student" } };
+//    private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
+//        { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
+//        { "student computing", "lksc-student" } };
 
     private static final Pattern PATTERN = Pattern.compile(" =");
     static {
@@ -68,7 +69,18 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
 
     @Override
     public String getDescription() {
-        return getSubfieldData((DataField) this.record.getVariableField("866"), 'z');
+        String description = null;
+        List<VariableField> fields = this.record.getVariableFields("866");
+        if (fields.size() > 1) {
+            description = "";
+        } else if (fields.size() == 1) {
+            DataField field = (DataField) fields.get(0);
+            //TODO: review getting the last one if multiple, this is was SAX processing did
+            for (Subfield subfield : field.getSubfields('z')) {
+                description = subfield.getData();
+            }
+        }
+        return description;
     }
 
     @Override
@@ -142,11 +154,6 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
             String label = link.getLabel();
             if (label != null) {
                 label = label.toLowerCase();
-                for (String[] element : CUSTOM_SUBSETS) {
-                    if (label.indexOf(element[0]) == 0) {
-                        subsets.add(element[1]);
-                    }
-                }
             }
         }
     }

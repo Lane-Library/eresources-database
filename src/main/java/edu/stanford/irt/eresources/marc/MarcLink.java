@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.marc;
 import java.util.Collection;
 
 import org.marc4j.marc.DataField;
+import org.marc4j.marc.Subfield;
 
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
@@ -36,8 +37,9 @@ public class MarcLink extends AbstractMarcComponent implements Link {
     @Override
     public String getAdditionalText() {
         StringBuilder sb = new StringBuilder();
-        if (this.instruction != null) {
-            sb.append(" ").append(this.instruction);
+        String inst = getInstruction();
+        if (inst != null) {
+            sb.append(" ").append(inst);
         }
         if (this.version.getPublisher() != null) {
             sb.append(" ").append(this.version.getPublisher());
@@ -112,7 +114,10 @@ public class MarcLink extends AbstractMarcComponent implements Link {
     }
 
     private void doInstruction() {
-        this.instruction = getSubfieldData(this.dataField, 'i');
+        //TODO: review getting last ^i, that's what happens with SAX;
+        for (Subfield subfield : this.dataField.getSubfields('i')) {
+            this.instruction = subfield.getData();
+        }
         this.instructionDone = true;
     }
 

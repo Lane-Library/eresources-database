@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//FIXME: not sure this strictly correct Collections.sort gets a different order than SortedSet.add
 public class VersionComparator implements Comparator<Version>, Serializable {
 
     private static final Pattern CLOSED_DATE_PATTERN = Pattern.compile("(\\d{4})\\-(\\d{4})\\.");
@@ -23,6 +24,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     @Override
     public int compare(final Version v1, final Version v2) {
+        int score = 1;
         int score1 = calculateHoldingsScore(v1);
         int score2 = calculateHoldingsScore(v2);
         int yearsCovered1 = getYearsCovered(v1);
@@ -33,15 +35,16 @@ public class VersionComparator implements Comparator<Version>, Serializable {
             score2 = score2 + yearsCovered2;
         }
         if (score1 != score2) {
-            return score2 - score1;
+            score = score2 - score1;
+        } else {
+            // only factor in publisher score if holding scores are equal
+            score1 = calculatePublisherScore(v1);
+            score2 = calculatePublisherScore(v2);
+            if (score1 != score2) {
+                score = score2 - score1;
+            }
         }
-        // only factor in publisher score if holding scores are equal
-        score1 = calculatePublisherScore(v1);
-        score2 = calculatePublisherScore(v2);
-        if (score1 != score2) {
-            return score2 - score1;
-        }
-        return 1;
+        return score;
     }
 
     /**
@@ -60,7 +63,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
     private int calculateHoldingsScore(final Version version) {
         List<Link> links = version.getLinks();
         if (links.isEmpty()) {
-            return Integer.MIN_VALUE;
+            return -999;
         }
         int score = 0;
         if ("Impact Factor".equals(links.get(0).getLabel())) {

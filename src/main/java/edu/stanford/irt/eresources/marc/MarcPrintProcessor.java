@@ -1,6 +1,9 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.sql.Timestamp;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import org.marc4j.MarcReader;
 import org.marc4j.MarcStreamReader;
@@ -11,12 +14,16 @@ import org.marc4j.marc.Subfield;
 import com.ibm.icu.text.Normalizer;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
-import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.EresourceInputStream;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.sax.AuthTextAugmentation;
 
-public class MarcAuthProcessor extends AbstractEresourceProcessor {
+public class MarcPrintProcessor extends AbstractEresourceProcessor {
+
+    private static final String HOLDINGS_CHARS = "uvxy";
+
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
     private AuthTextAugmentation authTextAugmentation;
 
@@ -24,14 +31,38 @@ public class MarcAuthProcessor extends AbstractEresourceProcessor {
 
     private EresourceInputStream inputStream;
 
+    private ItemCount itemCount;
+
     @Override
     public void process() {
         this.inputStream.setStartDate(new Timestamp(getStartTime()));
         MarcReader reader = new MarcStreamReader(this.inputStream);
+        Record bib = null;
+        List<Record> holdings = null;
+        String keywords = null;
         while (reader.hasNext()) {
             Record record = reader.next();
-            Eresource eresource = new AuthMarcEresource(record, getKeywords(record).replaceAll("\\s\\s+", " ").trim());
-            this.handler.handleEresource(eresource);
+            if (isBib(record)) {
+                if (bib != null) {
+                    int[] items = this.itemCount.itemCount(bib.getControlNumber());
+                    this.handler.handleEresource(new PrintMarcEresource(bib, holdings, keywords, items));
+                    if (bib.getVariableField("249") != null) {
+                        this.handler.handleEresource(new AltTitlePrintMarcEresource(bib, holdings, keywords, items));
+                    }
+                }
+                bib = record;
+                keywords = WHITESPACE.matcher(getKeywords(record)).replaceAll(" ");
+                holdings = new LinkedList<Record>();
+            } else {
+                holdings.add(record);
+            }
+        }
+        if (bib != null) {
+            int[] items = this.itemCount.itemCount(bib.getControlNumber());
+            this.handler.handleEresource(new PrintMarcEresource(bib, holdings, keywords, items));
+            if (bib.getVariableField("249") != null) {
+                this.handler.handleEresource(new AltTitlePrintMarcEresource(bib, holdings, keywords, items));
+            }
         }
     }
 
@@ -54,6 +85,10 @@ public class MarcAuthProcessor extends AbstractEresourceProcessor {
             throw new IllegalArgumentException("null inputStream");
         }
         this.inputStream = inputStream;
+    }
+
+    public void setItemCount(final ItemCount itemCount) {
+        this.itemCount = itemCount;
     }
 
     private String getKeywords(final Record record) {
@@ -81,6 +116,11 @@ public class MarcAuthProcessor extends AbstractEresourceProcessor {
                 }
             }
         }
+        sb.append(' ');
         return sb.toString();
+    }
+
+    private boolean isBib(final Record record) {
+        return HOLDINGS_CHARS.indexOf(record.getLeader().getTypeOfRecord()) == -1;
     }
 }
