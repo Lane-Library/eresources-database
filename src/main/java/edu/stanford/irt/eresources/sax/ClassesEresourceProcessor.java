@@ -7,7 +7,6 @@ import java.util.Date;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -42,12 +41,10 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
     @Override
     public void process() {
         try {
-            URL url;
-            url = new URL(this.allClassesURL);
+            URL url = new URL(this.allClassesURL);
             InputSource source;
             source = new InputSource(url.openConnection().getInputStream());
-            DocumentBuilder parser;
-            parser = this.factory.newDocumentBuilder();
+            DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);
             Date sometimeEarlier = new Date(1);
@@ -58,15 +55,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (SAXException e) {
-            throw new EresourceException(e);
-        } catch (IOException e) {
-            throw new EresourceException(e);
-        } catch (ParserConfigurationException e) {
-            throw new EresourceException(e);
-        } catch (TransformerConfigurationException e) {
-            throw new EresourceException(e);
-        } catch (TransformerException e) {
+        } catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
             throw new EresourceException(e);
         }
     }

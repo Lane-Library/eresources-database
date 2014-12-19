@@ -7,13 +7,12 @@ import java.util.List;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 
-
 public class CatalogVersion implements Version {
 
     private List<Link> links;
 
-    public CatalogVersion(int recordId) {
-        this.links = Collections.<Link>singletonList(new CatalogLink(recordId));
+    public CatalogVersion(final int recordId) {
+        this.links = Collections.<Link> singletonList(new CatalogLink(recordId));
     }
 
     @Override

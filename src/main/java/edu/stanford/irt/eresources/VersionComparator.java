@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//FIXME: not sure this strictly correct Collections.sort gets a different order than SortedSet.add
+// FIXME: not sure this strictly correct Collections.sort gets a different order than SortedSet.add
 public class VersionComparator implements Comparator<Version>, Serializable {
 
     private static final Pattern CLOSED_DATE_PATTERN = Pattern.compile("(\\d{4})\\-(\\d{4})\\.");
@@ -56,7 +56,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
      * </pre>
-     * 
+     *
      * @param version
      * @return score
      */
@@ -98,7 +98,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     /**
      * Calculate score for select list of publishers
-     * 
+     *
      * @param version
      * @return score
      */

@@ -11,16 +11,22 @@ import org.marc4j.marc.Record;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
-
 public class PrintMarcEresource extends BibMarcMarcEresource {
+
+    public PrintMarcEresource(final Record record, final List<Record> holdings, final String keywords, final int[] items) {
+        super(record, holdings, keywords, items);
+    }
 
     @Override
     public String getRecordType() {
         return "print";
     }
 
-    public PrintMarcEresource(Record record, List<Record> holdings, String keywords, int[] items) {
-        super(record, holdings, keywords, items);
+    @Override
+    protected Collection<String> doTypes() {
+        Collection<String> types = super.doTypes();
+        types.add("print");
+        return types;
     }
 
     @Override
@@ -29,13 +35,6 @@ public class PrintMarcEresource extends BibMarcMarcEresource {
         versions.addAll(super.doVersions());
         versions.add(getCatalogVersion());
         return new ArrayList<Version>(versions);
-    }
-
-    @Override
-    protected Collection<String> doTypes() {
-        Collection<String> types = super.doTypes();
-        types.add("print");
-        return types;
     }
 
     private Version getCatalogVersion() {

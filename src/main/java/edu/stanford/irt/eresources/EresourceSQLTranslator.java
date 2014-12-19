@@ -63,7 +63,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
         for (String meshTerm : er.getMeshTerms()) {
             sb.setLength(0);
             sb.append(this.getInsertInto()).append("MESH VALUES (").append(this.getTablePrefix())
-            .append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(meshTerm)).append(END_PAREN);
+                    .append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(meshTerm)).append(END_PAREN);
             sql.add(sb.toString());
         }
         return sql;
@@ -75,7 +75,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
         for (String type : er.getTypes()) {
             sb.setLength(0);
             sb.append(this.getInsertInto()).append("TYPE VALUES (").append(this.getTablePrefix())
-            .append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(type)).append(END_PAREN);
+                    .append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(type)).append(END_PAREN);
             sql.add(sb.toString());
         }
         return sql;

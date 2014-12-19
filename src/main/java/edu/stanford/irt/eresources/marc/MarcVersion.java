@@ -25,12 +25,11 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
-        "mobile resources", "biotools" };
+            "mobile resources", "biotools" };
 
-//    private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
-//        { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
-//        { "student computing", "lksc-student" } };
-
+    // private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
+    // { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
+    // { "student computing", "lksc-student" } };
     private static final Pattern PATTERN = Pattern.compile(" =");
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
@@ -74,7 +73,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
             description = "";
         } else if (fields.size() == 1) {
             DataField field = (DataField) fields.get(0);
-            //TODO: review getting the last one if multiple, this is was SAX processing did
+            // TODO: review getting the last one if multiple, this is was SAX processing did
             for (Subfield subfield : field.getSubfields('z')) {
                 description = subfield.getData();
             }

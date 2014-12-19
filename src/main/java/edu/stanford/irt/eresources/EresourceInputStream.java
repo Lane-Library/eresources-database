@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.sql.Connection;
@@ -40,55 +41,25 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
     @Override
     public void run() {
         try (Connection conn = this.dataSource.getConnection();
-                PreparedStatement getListStmt = conn.prepareStatement(getSelectIDListSQL());
                 PreparedStatement getBibStmt = conn.prepareStatement(getBibQuery());
-                PreparedStatement getMfhdStmt = conn.prepareStatement(getMfhdQuery())) {
-            prepareListStatement(getListStmt);
-            Map<String, Collection<String>> ids = new HashMap<String, Collection<String>>();
-            String lastBib = null;
-            Collection<String> mfhds = null;
-            try (ResultSet rs = getListStmt.executeQuery()) {
-                int columnCount = rs.getMetaData().getColumnCount();
-                while (rs.next()) {
-                    String currentBib = rs.getString(1);
-                    if (columnCount > 1) {
-                        String currentMfhd = rs.getString(2);
-                        if (!currentBib.equals(lastBib)) {
-                            lastBib = currentBib;
-                            mfhds = new ArrayList<String>();
-                            ids.put(currentBib, mfhds);
-                        }
-                        mfhds.add(currentMfhd);
-                    } else {
-                        ids.put(currentBib, Collections.<String> emptySet());
-                    }
-                }
-            }
+                PreparedStatement getMfhdStmt = conn.prepareStatement(getMfhdQuery());
+                OutputStream out = this.output) {
+            Map<String, Collection<String>> ids = getIds(conn);
             for (Entry<String, Collection<String>> entry : ids.entrySet()) {
                 String bibId = entry.getKey();
                 getBibStmt.setString(1, bibId);
                 try (ResultSet rs = getBibStmt.executeQuery();) {
-                    while (rs.next()) {
-                        this.output.write(rs.getBytes(2));
-                    }
+                    sendBytes(rs);
                 }
                 for (String mfhdId : entry.getValue()) {
                     getMfhdStmt.setString(1, mfhdId);
                     try (ResultSet rs = getMfhdStmt.executeQuery();) {
-                        while (rs.next()) {
-                            this.output.write(rs.getBytes(2));
-                        }
+                        sendBytes(rs);
                     }
                 }
             }
         } catch (SQLException | IOException e) {
             throw new EresourceException(e);
-        } finally {
-            try {
-                this.output.close();
-            } catch (IOException e) {
-                throw new EresourceException(e);
-            }
         }
     }
 
@@ -126,6 +97,39 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
         }
         for (int i = 1; i <= qmarkCount; i++) {
             stmt.setTimestamp(i, this.startDate);
+        }
+    }
+
+    private Map<String, Collection<String>> getIds(final Connection conn) throws SQLException {
+        try (PreparedStatement getListStmt = conn.prepareStatement(getSelectIDListSQL())) {
+            prepareListStatement(getListStmt);
+            Map<String, Collection<String>> ids = new HashMap<String, Collection<String>>();
+            String lastBib = null;
+            Collection<String> mfhds = null;
+            try (ResultSet rs = getListStmt.executeQuery()) {
+                int columnCount = rs.getMetaData().getColumnCount();
+                while (rs.next()) {
+                    String currentBib = rs.getString(1);
+                    if (columnCount > 1) {
+                        String currentMfhd = rs.getString(2);
+                        if (!currentBib.equals(lastBib)) {
+                            lastBib = currentBib;
+                            mfhds = new ArrayList<String>();
+                            ids.put(currentBib, mfhds);
+                        }
+                        mfhds.add(currentMfhd);
+                    } else {
+                        ids.put(currentBib, Collections.<String> emptySet());
+                    }
+                }
+            }
+            return ids;
+        }
+    }
+
+    private void sendBytes(final ResultSet rs) throws SQLException, IOException {
+        while (rs.next()) {
+            this.output.write(rs.getBytes(2));
         }
     }
 }

@@ -26,7 +26,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class DBLoader {
 
-    public static void main(final String[] args) throws SQLException, IOException {
+    public static void main(final String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/"
                 + args[0] + ".xml");
         DBLoader loader = (DBLoader) context.getBean("dbLoader");
@@ -58,53 +58,28 @@ public class DBLoader {
 
     private String version;
 
-    public void load() throws SQLException, IOException {
+    public void load() {
         Logger log = LoggerFactory.getLogger(getClass());
         log.info(this.version + " starting up");
         managePIDFile();
         try (Connection conn = this.dataSource.getConnection(); Statement stmt = conn.createStatement();) {
-            conn.setAutoCommit(false);
-            for (String create : this.createStatements) {
-                try {
-                    log.info(create);
-                    stmt.execute(create);
-                } catch (SQLException e) {
-                    int errorCode = e.getErrorCode();
-                    if ((942 != errorCode) && (1418 != errorCode) && (2289 != errorCode)) {
-                        throw e;
-                    }
-                }
-            }
-            Date updated = getUpdatedDate(stmt);
+            prepareDatabase(conn, stmt, log);
+            getUpdatedDate(stmt);
             this.executor.execute(this.handler);
             for (AbstractEresourceProcessor processor : this.processors) {
                 processor.setStartDate(new Date(0));
                 processor.process();
             }
             this.handler.stop();
-            synchronized (this.queue) {
-                while (!this.queue.isEmpty()) {
-                    try {
-                        this.queue.wait();
-                    } catch (InterruptedException e) {
-                        throw new EresourceException(e);
-                    }
-                }
-            }
+            waitUntilDone();
             conn.commit();
             int count = this.handler.getCount();
             if (count > 0) {
-                for (String call : this.callStatements) {
-                    if ((call.indexOf("{0}") > 0) && (null != this.userName)) {
-                        call = MessageFormat.format(call, new Object[] { this.userName });
-                    }
-                    CallableStatement callable = conn.prepareCall(call);
-                    log.info(call);
-                    callable.execute();
-                    callable.close();
-                }
+                cleanupDatabase(conn, log);
             }
             log.info("handled " + count + " eresources.");
+        } catch (SQLException e) {
+            throw new EresourceException(e);
         }
     }
 
@@ -161,36 +136,79 @@ public class DBLoader {
         return new Date(0);
     }
 
-    private void managePIDFile() throws IOException {
+    private void cleanupDatabase(final Connection conn, final Logger log) throws SQLException {
+        for (String call : this.callStatements) {
+            if ((call.indexOf("{0}") > 0) && (null != this.userName)) {
+                call = MessageFormat.format(call, new Object[] { this.userName });
+            }
+            CallableStatement callable = conn.prepareCall(call);
+            log.info(call);
+            callable.execute();
+            callable.close();
+        }
+    }
+
+    private void managePIDFile() {
         final File pidFile = new File("eresources.pid");
         String pid = null;
-        if (!pidFile.createNewFile()) {
-            BufferedReader reader = new BufferedReader(new FileReader(pidFile));
-            pid = reader.readLine();
-            reader.close();
-            if (this.killPrevious) {
-                LoggerFactory.getLogger(DBReload.class).warn("pid " + pid + " exists, killing . . .");
-                Runtime.getRuntime().exec(new String[] { "kill", pid });
-            } else {
-                IllegalStateException e = new IllegalStateException("pid " + pid + " already running");
-                LoggerFactory.getLogger(DBUpdate.class).error(e.getMessage());
-                throw e;
-            }
-        }
-        pid = ManagementFactory.getRuntimeMXBean().getName();
-        int index = pid.indexOf('@');
-        pid = pid.substring(0, index);
-        try (FileOutputStream out = new FileOutputStream(pidFile)) {
-            out.write(pid.getBytes("UTF-8"));
-        }
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            @Override
-            public void run() {
-                if (!pidFile.delete()) {
-                    throw new IllegalStateException("failed to delete pid file");
+        try {
+            if (!pidFile.createNewFile()) {
+                BufferedReader reader = new BufferedReader(new FileReader(pidFile));
+                pid = reader.readLine();
+                reader.close();
+                if (this.killPrevious) {
+                    LoggerFactory.getLogger(DBReload.class).warn("pid " + pid + " exists, killing . . .");
+                    Runtime.getRuntime().exec(new String[] { "kill", pid });
+                } else {
+                    IllegalStateException e = new IllegalStateException("pid " + pid + " already running");
+                    LoggerFactory.getLogger(DBUpdate.class).error(e.getMessage());
+                    throw e;
                 }
             }
-        });
+            pid = ManagementFactory.getRuntimeMXBean().getName();
+            int index = pid.indexOf('@');
+            pid = pid.substring(0, index);
+            try (FileOutputStream out = new FileOutputStream(pidFile)) {
+                out.write(pid.getBytes("UTF-8"));
+            }
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+
+                @Override
+                public void run() {
+                    if (!pidFile.delete()) {
+                        throw new IllegalStateException("failed to delete pid file");
+                    }
+                }
+            });
+        } catch (IOException e) {
+            throw new EresourceException(e);
+        }
+    }
+
+    private void prepareDatabase(final Connection conn, final Statement stmt, final Logger log) throws SQLException {
+        conn.setAutoCommit(false);
+        for (String create : this.createStatements) {
+            try {
+                log.info(create);
+                stmt.execute(create);
+            } catch (SQLException e) {
+                int errorCode = e.getErrorCode();
+                if ((942 != errorCode) && (1418 != errorCode) && (2289 != errorCode)) {
+                    throw e;
+                }
+            }
+        }
+    }
+
+    private void waitUntilDone() {
+        synchronized (this.queue) {
+            while (!this.queue.isEmpty()) {
+                try {
+                    this.queue.wait();
+                } catch (InterruptedException e) {
+                    throw new EresourceException(e);
+                }
+            }
+        }
     }
 }

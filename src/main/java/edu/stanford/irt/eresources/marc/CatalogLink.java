@@ -3,13 +3,11 @@ package edu.stanford.irt.eresources.marc;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 
-
 public class CatalogLink implements Link {
-    
+
     private String url;
 
-    public CatalogLink(int recordId) {
-        
+    public CatalogLink(final int recordId) {
         this.url = "http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + recordId;
     }
 
@@ -40,7 +38,7 @@ public class CatalogLink implements Link {
     }
 
     @Override
-    public void setVersion(Version version) {
+    public void setVersion(final Version version) {
         // TODO Auto-generated method stub
     }
 }

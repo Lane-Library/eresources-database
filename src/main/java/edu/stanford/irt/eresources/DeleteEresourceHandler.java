@@ -87,6 +87,24 @@ public class DeleteEresourceHandler implements EresourceHandler {
 
     @Override
     public void run() {
+        // get record ids from eresources
+        getRecordIds();
+        synchronized (this.queue) {
+            // get all existing ids
+            subtractExistingIds();
+            // deleted the remainder from eresources
+            removeRemaining();
+            // TODO: I don't thing removeRemaining needs to be synchronized
+            this.queue.notifyAll();
+        }
+    }
+
+    @Override
+    public void stop() {
+        this.keepGoing = false;
+    }
+
+    private void getRecordIds() {
         try (Connection conn = this.dataSource.getConnection();
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(this.selectSQL)) {
@@ -101,50 +119,48 @@ public class DeleteEresourceHandler implements EresourceHandler {
         } catch (SQLException e) {
             throw new EresourceException(e);
         }
-        synchronized (this.queue) {
-            while (!this.queue.isEmpty() || this.keepGoing) {
-                try {
-                    Eresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
-                    if (eresource != null) {
-                        Set<Integer> set = this.ids.get(eresource.getRecordType());
-                        set.remove(Integer.valueOf(eresource.getRecordId()));
-                    }
-                } catch (InterruptedException e) {
-                    throw new EresourceException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
-                }
-            }
-            try (Connection conn = this.dataSource.getConnection();
-                    Statement stmt = conn.createStatement();
-                    PreparedStatement pstmt = conn.prepareStatement(this.getID)) {
-                for (Entry<String, Set<Integer>> entry : this.ids.entrySet()) {
-                    String recordType = entry.getKey();
-                    for (Integer recordId : entry.getValue()) {
-                        pstmt.setString(1, recordType);
-                        pstmt.setInt(2, recordId.intValue());
-                        try (ResultSet rs = pstmt.executeQuery()) {
-                            while (rs.next()) {
-                                int id = rs.getInt(1);
-                                stmt.addBatch(this.deleteEresource + id);
-                                stmt.addBatch(this.deleteVersion + id);
-                                stmt.addBatch(this.deleteLink + id);
-                                stmt.addBatch(this.deleteType + id);
-                                stmt.addBatch(this.deleteSubset + id);
-                                stmt.addBatch(this.deleteMesh + id);
-                                stmt.executeBatch();
-                                this.count++;
-                            }
+    }
+
+    private void removeRemaining() {
+        try (Connection conn = this.dataSource.getConnection();
+                Statement stmt = conn.createStatement();
+                PreparedStatement pstmt = conn.prepareStatement(this.getID)) {
+            for (Entry<String, Set<Integer>> entry : this.ids.entrySet()) {
+                String recordType = entry.getKey();
+                for (Integer recordId : entry.getValue()) {
+                    pstmt.setString(1, recordType);
+                    pstmt.setInt(2, recordId.intValue());
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        while (rs.next()) {
+                            int id = rs.getInt(1);
+                            stmt.addBatch(this.deleteEresource + id);
+                            stmt.addBatch(this.deleteVersion + id);
+                            stmt.addBatch(this.deleteLink + id);
+                            stmt.addBatch(this.deleteType + id);
+                            stmt.addBatch(this.deleteSubset + id);
+                            stmt.addBatch(this.deleteMesh + id);
+                            stmt.executeBatch();
+                            this.count++;
                         }
                     }
                 }
-            } catch (SQLException e) {
-                throw new EresourceException(e);
             }
-            this.queue.notifyAll();
+        } catch (SQLException e) {
+            throw new EresourceException(e);
         }
     }
 
-    @Override
-    public void stop() {
-        this.keepGoing = false;
+    private void subtractExistingIds() {
+        while (!this.queue.isEmpty() || this.keepGoing) {
+            try {
+                Eresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
+                if (eresource != null) {
+                    Set<Integer> set = this.ids.get(eresource.getRecordType());
+                    set.remove(Integer.valueOf(eresource.getRecordId()));
+                }
+            } catch (InterruptedException e) {
+                throw new EresourceException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
+            }
+        }
     }
 }

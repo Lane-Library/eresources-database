@@ -218,7 +218,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected List<Version> doVersions() {
-        Collection<Version> versions= new TreeSet<Version>(new VersionComparator());
+        Collection<Version> versions = new TreeSet<Version>(new VersionComparator());
         for (Record holding : this.holdings) {
             Version version = new MarcVersion(holding);
             if (version.getLinks().size() > 0) {
@@ -253,34 +253,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
         }
         Collection<String> subsets = getAllSubsets();
         if (types.contains("software, installed")) {
-            if (types.contains("statistics")) {
-                types.add("statistics software, installed");
-            }
-            if (subsets.contains("biotools")) {
-                types.add("biotools software, installed");
-            }
-            for (Version version : getVersions()) {
-                // software installed in various locations have the location in
-                // the label
-                for (Link link : version.getLinks()) {
-                    String label = link.getLabel();
-                    if (label != null) {
-                    if (label.indexOf("Redwood") == 0) {
-                        types.add("redwood software, installed");
-                    } else if (label.indexOf("Stone") == 0) {
-                        types.add("stone software, installed");
-                    } else if (label.indexOf("Duck") == 0) {
-                        types.add("duck software, installed");
-                    } else if (label.indexOf("M051") == 0) {
-                        types.add("m051 software, installed");
-                    } else if (label.indexOf("Public") == 0) {
-                        types.add("lksc-public software, installed");
-                    } else if (label.indexOf("Student") == 0) {
-                        types.add("lksc-student software, installed");
-                    }
-                    }
-                }
-            }
+            handleInstalledSoftware(types, subsets);
         }
         if (subsets.contains("biotools")) {
             types.add("software");
@@ -288,7 +261,6 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
         if (isBassettRecord()) {
             types.add("bassett");
         }
-    
     }
 
     private Collection<String> getAllSubsets() {
@@ -297,6 +269,40 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
             subsets.addAll(version.getSubsets());
         }
         return subsets;
+    }
+
+    private void handleInstalledSoftware(final Collection<String> types, final Collection<String> subsets) {
+        if (types.contains("statistics")) {
+            types.add("statistics software, installed");
+        }
+        if (subsets.contains("biotools")) {
+            types.add("biotools software, installed");
+        }
+        for (Version version : getVersions()) {
+            // software installed in various locations have the location in
+            // the label
+            for (Link link : version.getLinks()) {
+                handleLinkLabel(types, link.getLabel());
+            }
+        }
+    }
+
+    private void handleLinkLabel(final Collection<String> types, final String label) {
+        if (label != null) {
+            if (label.indexOf("Redwood") == 0) {
+                types.add("redwood software, installed");
+            } else if (label.indexOf("Stone") == 0) {
+                types.add("stone software, installed");
+            } else if (label.indexOf("Duck") == 0) {
+                types.add("duck software, installed");
+            } else if (label.indexOf("M051") == 0) {
+                types.add("m051 software, installed");
+            } else if (label.indexOf("Public") == 0) {
+                types.add("lksc-public software, installed");
+            } else if (label.indexOf("Student") == 0) {
+                types.add("lksc-student software, installed");
+            }
+        }
     }
 
     private boolean isBassettRecord() {
