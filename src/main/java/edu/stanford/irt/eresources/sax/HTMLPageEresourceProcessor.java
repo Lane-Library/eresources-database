@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.transform.TransformerConfigurationException;
@@ -99,7 +99,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<File> getHTMLPages(final File directory) {
-        List<File> result = new LinkedList<File>();
+        List<File> result = new ArrayList<File>();
         File[] files = directory.listFiles(new FileFilter() {
 
             @Override

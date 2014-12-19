@@ -1,9 +1,9 @@
 package edu.stanford.irt.eresources.sax;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +40,7 @@ public class SAXVersion implements Version {
 
     public void addLink(final Link link) {
         if (null == this.links) {
-            this.links = new LinkedList<Link>();
+            this.links = new ArrayList<Link>();
         }
         this.links.add(link);
     }

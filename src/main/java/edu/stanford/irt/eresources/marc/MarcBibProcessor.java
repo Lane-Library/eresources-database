@@ -1,7 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.sql.Timestamp;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -52,7 +52,7 @@ public class MarcBibProcessor extends AbstractEresourceProcessor {
                 }
                 bib = record;
                 keywords = WHITESPACE.matcher(getKeywords(record)).replaceAll(" ");
-                holdings = new LinkedList<Record>();
+                holdings = new ArrayList<Record>();
             } else {
                 holdings.add(record);
             }

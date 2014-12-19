@@ -3,11 +3,11 @@ package edu.stanford.irt.eresources.marc;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,7 +73,7 @@ public class AuthMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected Collection<String> doMeshTerms() {
-        Collection<String> m = new LinkedList<String>();
+        Collection<String> m = new ArrayList<String>();
         for (VariableField field : this.record.getVariableFields("650")) {
             if (((DataField) field).getIndicator1() == '4' && "27".indexOf(((DataField) field).getIndicator2()) > -1) {
                 m.add(getSubfieldData((DataField) field, 'a').toLowerCase());
@@ -110,7 +110,7 @@ public class AuthMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected Collection<String> doTypes() {
-        Collection<String> t = new LinkedList<String>();
+        Collection<String> t = new ArrayList<String>();
         for (VariableField field : this.record.getVariableFields("655")) {
             String type = getSubfieldData((DataField) field, 'a').toLowerCase();
             if (!"laneconnex".equals(type) && !"internet resource".equals(type) && type.indexOf("subset") != 0) {

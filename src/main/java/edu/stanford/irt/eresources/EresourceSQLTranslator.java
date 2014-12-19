@@ -2,8 +2,8 @@ package edu.stanford.irt.eresources;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 public class EresourceSQLTranslator extends AbstractSQLTranslator {
@@ -31,7 +31,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
     }
 
     public List<String> getInsertSQL(final Eresource er) {
-        List<String> sql = new LinkedList<String>();
+        List<String> sql = new ArrayList<String>();
         String keywords = er.getKeywords();
         int[] itemCount = er.getItemCount();
         StringBuilder sb = new StringBuilder(this.getInsertInto()).append(INSERT_ERESOURCE)
@@ -58,7 +58,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
     }
 
     private Collection<String> getInsertMeshSQL(final Eresource er) {
-        Collection<String> sql = new LinkedList<String>();
+        Collection<String> sql = new ArrayList<String>();
         StringBuilder sb = new StringBuilder();
         for (String meshTerm : er.getMeshTerms()) {
             sb.setLength(0);
@@ -70,7 +70,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
     }
 
     private Collection<String> getInsertTypeSQL(final Eresource er) {
-        Collection<String> sql = new LinkedList<String>();
+        Collection<String> sql = new ArrayList<String>();
         StringBuilder sb = new StringBuilder();
         for (String type : er.getTypes()) {
             sb.setLength(0);

@@ -1,12 +1,11 @@
 package edu.stanford.irt.eresources.marc;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import org.marc4j.marc.DataField;
@@ -43,7 +42,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
 
     private boolean hasGetPassword = false;
 
-    private LinkedList<Link> links;
+    private ArrayList<Link> links;
 
     private Record record;
 
@@ -98,7 +97,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
 
     @Override
     public Collection<String> getSubsets() {
-        Collection<String> subsets = new TreeSet<String>();
+        Collection<String> subsets = new HashSet<String>();
         Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
         while (it.hasNext()) {
             String subset = getSubfieldData((DataField) it.next(), 'a').toLowerCase();
@@ -198,7 +197,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     }
 
     private void setupLinks() {
-        this.links = new LinkedList<Link>();
+        this.links = new ArrayList<Link>();
         for (VariableField field : this.record.getVariableFields("856")) {
             if ("http://lane.stanford.edu/secure/ejpw.html".equals(getSubfieldData((DataField) field, 'u'))) {
                 this.hasGetPassword = true;

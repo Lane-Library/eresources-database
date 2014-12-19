@@ -6,10 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -115,7 +114,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected Collection<String> doMeshTerms() {
-        Collection<String> m = new TreeSet<String>();
+        Collection<String> m = new HashSet<String>();
         for (VariableField field : this.record.getVariableFields("650")) {
             if (((DataField) field).getIndicator1() == '4' && "237".indexOf(((DataField) field).getIndicator2()) > -1) {
                 m.add(getSubfieldData((DataField) field, 'a').toLowerCase());
@@ -172,7 +171,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected Collection<String> doTypes() {
-        Collection<String> t = new TreeSet<String>();
+        Collection<String> t = new HashSet<String>();
         for (VariableField field : this.record.getVariableFields("655")) {
             String type = getSubfieldData((DataField) field, 'a').toLowerCase();
             // remove trailing periods, some probably should have them but
@@ -293,7 +292,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
     }
 
     private Collection<String> getAllSubsets() {
-        Collection<String> subsets = new LinkedList<String>();
+        Collection<String> subsets = new ArrayList<String>();
         for (Version version : getVersions()) {
             subsets.addAll(version.getSubsets());
         }

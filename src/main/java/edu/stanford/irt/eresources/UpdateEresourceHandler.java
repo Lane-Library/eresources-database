@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
@@ -55,7 +55,7 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
     protected void insertEresource(final Eresource eresource) throws SQLException, IOException {
         if (!eresource.isClone()) {
             Statement stmt = getStatement();
-            List<String> ids = new LinkedList<String>();
+            List<String> ids = new ArrayList<String>();
             try (ResultSet rs = stmt.executeQuery(this.translator.getEresourceIdSQL(eresource))) {
                 while (rs.next()) {
                     ids.add(rs.getString(1));

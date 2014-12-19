@@ -8,10 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Executor;
@@ -55,7 +55,7 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                         String currentMfhd = rs.getString(2);
                         if (!currentBib.equals(lastBib)) {
                             lastBib = currentBib;
-                            mfhds = new LinkedList<String>();
+                            mfhds = new ArrayList<String>();
                             ids.put(currentBib, mfhds);
                         }
                         mfhds.add(currentMfhd);

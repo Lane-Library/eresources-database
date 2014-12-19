@@ -1,7 +1,7 @@
 package edu.stanford.irt.eresources;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 public class VersionSQLTranslator extends AbstractSQLTranslator {
@@ -16,7 +16,7 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
     }
 
     public List<String> getInsertSQL(final Version vr, final int order) {
-        List<String> sql = new LinkedList<String>();
+        List<String> sql = new ArrayList<String>();
         String tablePrefix = getTablePrefix();
         StringBuilder sb = new StringBuilder(this.getInsertInto()).append(INSERT_VERSION).append(tablePrefix)
                 .append("VERSION_ID_SEQ.NEXTVAL, ").append(tablePrefix).append("ERESOURCE_ID_SEQ.CURRVAL,")
@@ -32,7 +32,7 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
     }
 
     private Collection<String> getInsertSubsetSQL(final Version vr) {
-        Collection<String> sql = new LinkedList<String>();
+        Collection<String> sql = new ArrayList<String>();
         String tablePrefix = getTablePrefix();
         StringBuilder sb = new StringBuilder();
         for (String subset : vr.getSubsets()) {
