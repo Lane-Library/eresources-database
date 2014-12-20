@@ -30,7 +30,7 @@ import edu.stanford.irt.eresources.VersionComparator;
 /**
  * An Eresource that encapsulates the marc Records from which it is derived.
  */
-public class BibMarcMarcEresource extends AbstractMarcEresource {
+public class BibMarcEresource extends AbstractMarcEresource {
 
     public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -50,7 +50,7 @@ public class BibMarcMarcEresource extends AbstractMarcEresource {
 
     private Record record;
 
-    public BibMarcMarcEresource(final Record record, final List<Record> holdings, final String keywords,
+    public BibMarcEresource(final Record record, final List<Record> holdings, final String keywords,
             final int[] items) {
         super(keywords);
         if (record == null) {

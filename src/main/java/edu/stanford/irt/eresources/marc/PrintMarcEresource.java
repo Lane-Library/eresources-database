@@ -11,7 +11,7 @@ import org.marc4j.marc.Record;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
-public class PrintMarcEresource extends BibMarcMarcEresource {
+public class PrintMarcEresource extends BibMarcEresource {
 
     public PrintMarcEresource(final Record record, final List<Record> holdings, final String keywords, final int[] items) {
         super(record, holdings, keywords, items);

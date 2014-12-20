@@ -8,7 +8,7 @@ import org.marc4j.marc.Subfield;
 
 import com.ibm.icu.text.Normalizer;
 
-public class AltTitleMarcEresource extends BibMarcMarcEresource {
+public class AltTitleMarcEresource extends BibMarcEresource {
 
     private Record record;
 

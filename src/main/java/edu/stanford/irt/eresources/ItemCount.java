@@ -45,7 +45,6 @@ public class ItemCount {
     private int getCount(final int bibId, final String query) {
         int total = 0;
         try (Connection conn = this.dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            ;
             pstmt.setInt(1, bibId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {

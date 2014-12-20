@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
 
 public class DefaultEresourceHandler implements EresourceHandler {
+    
+    private static final String TEXT_PREFIX = "TEXT:";
 
     private int count = 0;
 
@@ -83,12 +85,12 @@ public class DefaultEresourceHandler implements EresourceHandler {
     @Override
     public void run() {
         try (Connection conn = this.dataSource.getConnection();
-                Statement stmt = conn.createStatement();
-                PreparedStatement textStmt = conn.prepareStatement(this.textSQL);
-                PreparedStatement descStmt = conn.prepareStatement(this.descriptionSQL)) {
-            this.stmt = stmt;
-            this.textStmt = textStmt;
-            this.descStmt = descStmt;
+                Statement s = conn.createStatement();
+                PreparedStatement t = conn.prepareStatement(this.textSQL);
+                PreparedStatement d = conn.prepareStatement(this.descriptionSQL)) {
+            this.stmt = s;
+            this.textStmt = t;
+            this.descStmt = d;
             synchronized (this.queue) {
                 while (!this.queue.isEmpty() || this.keepGoing) {
                     try {
@@ -120,7 +122,7 @@ public class DefaultEresourceHandler implements EresourceHandler {
         List<String> insertSQLStatements = this.translator.getInsertSQL(eresource);
         for (Iterator<String> it = insertSQLStatements.iterator(); it.hasNext();) {
             String sql = it.next();
-            if (sql.indexOf("TEXT:") != 0 && sql.indexOf("DESCRIPTION:") != 0) {
+            if (sql.indexOf(TEXT_PREFIX) != 0 && sql.indexOf("DESCRIPTION:") != 0) {
                 this.stmt.addBatch(sql);
                 it.remove();
             }
@@ -138,12 +140,12 @@ public class DefaultEresourceHandler implements EresourceHandler {
             id = idRs.getString(1);
         }
         @SuppressWarnings("resource")
-        PreparedStatement ps = sql.indexOf("TEXT:") == 0 ? this.textStmt : this.descStmt;
+        PreparedStatement ps = sql.indexOf(TEXT_PREFIX) == 0 ? this.textStmt : this.descStmt;
         ps.setString(1, id);
         try (ResultSet clobRs = ps.executeQuery()) {
             if (clobRs.next()) {
                 Clob clob = clobRs.getClob(1);
-                Reader reader = new StringReader(sql.indexOf("TEXT:") == 0 ? sql.substring(5) : sql.substring(12));
+                Reader reader = new StringReader(sql.indexOf(TEXT_PREFIX) == 0 ? sql.substring(5) : sql.substring(12));
                 Writer writer = clob.setCharacterStream(1);
                 char[] buffer = new char[1024];
                 int size = 0;
