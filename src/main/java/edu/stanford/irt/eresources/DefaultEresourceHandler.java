@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
 
 public class DefaultEresourceHandler implements EresourceHandler {
-    
+
     private static final String TEXT_PREFIX = "TEXT:";
 
     private int count = 0;

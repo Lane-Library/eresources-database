@@ -15,6 +15,7 @@ import org.marc4j.marc.VariableField;
 
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextStrategy;
 import edu.stanford.irt.eresources.Version;
 
 /**
@@ -25,12 +26,14 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
-            "mobile resources", "biotools" };
+        "mobile resources", "biotools" };
 
     // private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
     // { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
     // { "student computing", "lksc-student" } };
     private static final Pattern PATTERN = Pattern.compile(" =");
+
+    private static final TextStrategy TEXT_STRATEGY = new TextStrategy();
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
             ALLOWED_SUBSETS.add(subset);
@@ -55,7 +58,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = doAdditionalText();
+            this.additionalText = TEXT_STRATEGY.getAdditionalText(this);
         }
         return this.additionalText;
     }
@@ -153,45 +156,6 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
             if (label != null) {
                 label = label.toLowerCase();
             }
-        }
-    }
-
-    private String doAdditionalText() {
-        StringBuilder sb = new StringBuilder(" ");
-        String summaryHoldings = getSummaryHoldings();
-        if (summaryHoldings != null) {
-            sb.append(summaryHoldings);
-        }
-        maybeAppend(sb, getDates());
-        maybeAppend(sb, getPublisher());
-        maybeAppend(sb, getDescription());
-        List<Link> l = getLinks();
-        if (l != null && !l.isEmpty()) {
-            Link firstLink = l.get(0);
-            String label = firstLink.getLabel();
-            if (sb.length() == 1 && label != null) {
-                sb.append(label);
-            }
-            String instruction = firstLink.getInstruction();
-            if (instruction != null) {
-                if (sb.length() > 1) {
-                    sb.append(", ");
-                }
-                sb.append(instruction);
-            }
-        }
-        if (sb.length() > 1) {
-            sb.append(" ");
-        }
-        return sb.toString();
-    }
-
-    private void maybeAppend(final StringBuilder sb, final String string) {
-        if (string != null && string.length() > 0) {
-            if (sb.length() > 1) {
-                sb.append(", ");
-            }
-            sb.append(string);
         }
     }
 

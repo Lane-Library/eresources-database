@@ -1,13 +1,20 @@
 package edu.stanford.irt.eresources.sax;
 
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextStrategy;
 import edu.stanford.irt.eresources.Version;
 
 public class SAXLink implements Link {
 
+    private static final TextStrategy TEXT_STRATEGY = new TextStrategy();
+
+    private String additionalText;
+
     private String instruction;
 
     private String label;
+
+    private String linkText;
 
     private String url;
 
@@ -15,14 +22,10 @@ public class SAXLink implements Link {
 
     @Override
     public String getAdditionalText() {
-        StringBuilder sb = new StringBuilder();
-        if (this.instruction != null) {
-            sb.append(" ").append(this.instruction);
+        if (this.additionalText == null) {
+            this.additionalText = TEXT_STRATEGY.getAdditionalText(this.instruction, this.version.getPublisher());
         }
-        if (this.version.getPublisher() != null) {
-            sb.append(" ").append(this.version.getPublisher());
-        }
-        return sb.toString();
+        return this.additionalText;
     }
 
     @Override
@@ -37,31 +40,10 @@ public class SAXLink implements Link {
 
     @Override
     public String getLinkText() {
-        StringBuilder sb = new StringBuilder();
-        if ("impact factor".equalsIgnoreCase(this.label)) {
-            sb.append("Impact Factor");
-        } else {
-            String summaryHoldings = this.version.getSummaryHoldings();
-            if (summaryHoldings != null && this.version.getLinks().size() == 1) {
-                sb.append(summaryHoldings);
-                String dates = this.version.getDates();
-                if (dates != null && dates.length() > 0) {
-                    sb.append(", ").append(dates);
-                }
-            } else {
-                if (this.label != null) {
-                    sb.append(this.label);
-                }
-            }
-            if (sb.length() == 0) {
-                sb.append(this.label);
-            }
-            String description = this.version.getDescription();
-            if (description != null && description.length() > 0) {
-                sb.append(" ").append(description);
-            }
+        if (this.linkText == null) {
+            this.linkText = TEXT_STRATEGY.getLinkText(this.label, this.version);
         }
-        return sb.toString();
+        return this.linkText;
     }
 
     @Override

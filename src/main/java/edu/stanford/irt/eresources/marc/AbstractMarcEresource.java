@@ -8,6 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Record;
+import org.marc4j.marc.Subfield;
+import org.marc4j.marc.VariableField;
+
+import com.ibm.icu.text.Normalizer;
+
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Version;
 
@@ -16,18 +23,18 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
-            "redwood software, installed", "duck software, installed", "stone software, installed",
-            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed" };
+        "redwood software, installed", "duck software, installed", "stone software, installed",
+        "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
+        "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+        "statistics software, installed", "biotools software, installed" };
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
-            { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
-            { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-            { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
-                    "digital videos, local", "digital videos, local, public" },
+        { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
+        { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
+        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
+            "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final int[] NOITEMS = new int[] { 0, 0 };
@@ -35,11 +42,11 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
     private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-            { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
-            { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
-            { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
-            { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
-            { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
+        { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
+        { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
+        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
+        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
+        { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -84,6 +91,8 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
 
     private String primaryType;
 
+    private Record record;
+
     private String title;
 
     private boolean titleDone;
@@ -104,7 +113,8 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
 
     private boolean yearDone;
 
-    public AbstractMarcEresource(final String keywords) {
+    public AbstractMarcEresource(final Record record, final String keywords) {
+        this.record = record;
         this.keywords = keywords;
     }
 
@@ -147,7 +157,7 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
     @Override
     public String getPrimaryType() {
         if (this.primaryType == null) {
-            this.primaryType = PRIMARY_TYPES.get(doPrimaryType());
+            this.primaryType = PRIMARY_TYPES.get(doPrimaryType(this.record));
             if (this.primaryType == null) {
                 this.primaryType = "";
             }
@@ -228,6 +238,10 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
         return getTitle();
     }
 
+    protected void addCustomTypes(final Collection<String> types) {
+        // do nothing by default
+    }
+
     protected abstract String doDescription();
 
     protected abstract int doId();
@@ -236,11 +250,73 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
 
     protected abstract Collection<String> doMeshTerms();
 
-    protected abstract String doPrimaryType();
+    protected String doPrimaryType(final Record record) {
+        String type = "";
+        for (VariableField field : record.getVariableFields("655")) {
+            DataField datafield = (DataField) field;
+            if (datafield.getIndicator1() == '4' && datafield.getIndicator2() == '7') {
+                type = datafield.getSubfield('a').getData();
+            }
+        }
+        // remove trailing periods, some probably should have them but
+        // voyager puts them on everything :-(
+        int lastPeriod = type.lastIndexOf('.');
+        if (lastPeriod >= 0) {
+            int lastPosition = type.length() - 1;
+            if (lastPeriod == lastPosition) {
+                type = type.substring(0, lastPosition);
+            }
+        }
+        return type.toLowerCase();
+    }
 
-    protected abstract String doTitle();
+    protected String doTitle() {
+        StringBuilder sb = new StringBuilder();
+        DataField field245 = (DataField) this.record.getVariableField("245");
+        for (Subfield subfield : field245.getSubfields()) {
+            if ("anpq".indexOf(subfield.getCode()) > -1) {
+                append(sb, Normalizer.compose(subfield.getData(), false));
+            } else if (subfield.getCode() == 'b') {
+                String data = subfield.getData();
+                int lengthLessTwo = data.length() - 2;
+                if (data.lastIndexOf(" /") == lengthLessTwo) {
+                    data = data.substring(0, lengthLessTwo);
+                }
+                append(sb, Normalizer.compose(data, false));
+            }
+        }
+        DataField field250 = (DataField) this.record.getVariableField("250");
+        String edition = getSubfieldData(field250, 'a');
+        if (edition != null) {
+            sb.append(". ").append(edition);
+        }
+        int offset = field245.getIndicator2() - 48;
+        return sb.toString().substring(offset);
+    }
 
-    protected abstract Collection<String> doTypes();
+    protected Collection<String> doTypes() {
+        Collection<String> t = new HashSet<String>();
+        for (VariableField field : this.record.getVariableFields("655")) {
+            String type = getSubfieldData((DataField) field, 'a').toLowerCase();
+            // remove trailing periods, some probably should have them but
+            // voyager puts them on everything :-(
+            int lastPeriod = type.lastIndexOf('.');
+            if (lastPeriod >= 0) {
+                int lastPosition = type.length() - 1;
+                if (lastPeriod == lastPosition) {
+                    type = type.substring(0, lastPosition);
+                }
+            }
+            String composite = getCompositeType(type);
+            if (composite != null) {
+                t.add(composite);
+            } else if (isAllowedType(type)) {
+                t.add(type);
+            }
+        }
+        addCustomTypes(t);
+        return t;
+    }
 
     protected abstract Date doUpdated();
 

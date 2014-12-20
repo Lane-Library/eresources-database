@@ -39,8 +39,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
     private static final String BIB_TYPE = "bib";
 
     private static final String[][][] CUSTOM_TYPES = { { { "periodical", "newspaper" }, { "ej" } },
-        { { "decision support techniques", "calculators, clinical", "algorithms" }, { "cc" } },
-        { { "digital video", "digital video, local" }, { "video" } }, { { "book set" }, { "book" } } };
+            { { "decision support techniques", "calculators, clinical", "algorithms" }, { "cc" } },
+            { { "digital video", "digital video, local" }, { "video" } }, { { "book set" }, { "book" } } };
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -50,9 +50,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
 
     private Record record;
 
-    public BibMarcEresource(final Record record, final List<Record> holdings, final String keywords,
-            final int[] items) {
-        super(keywords);
+    public BibMarcEresource(final Record record, final List<Record> holdings, final String keywords, final int[] items) {
+        super(record, keywords);
         if (record == null) {
             throw new EresourceException("null record");
         }
@@ -76,6 +75,28 @@ public class BibMarcEresource extends AbstractMarcEresource {
 
     public String getType() {
         return BIB_TYPE;
+    }
+
+    @Override
+    protected void addCustomTypes(final Collection<String> types) {
+        for (String[][] element : CUSTOM_TYPES) {
+            for (int j = 0; j < element[0].length; j++) {
+                if (types.contains(element[0][j])) {
+                    types.add(element[1][0]);
+                    break;
+                }
+            }
+        }
+        Collection<String> subsets = getAllSubsets();
+        if (types.contains("software, installed")) {
+            handleInstalledSoftware(types, subsets);
+        }
+        if (subsets.contains("biotools")) {
+            types.add("software");
+        }
+        if (isBassettRecord()) {
+            types.add("bassett");
+        }
     }
 
     @Override
@@ -124,77 +145,6 @@ public class BibMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected String doPrimaryType() {
-        String primaryType = "";
-        for (VariableField field : this.record.getVariableFields("655")) {
-            DataField datafield = (DataField) field;
-            if (datafield.getIndicator1() == '4' && datafield.getIndicator2() == '7') {
-                primaryType = datafield.getSubfield('a').getData();
-            }
-        }
-        // remove trailing periods, some probably should have them but
-        // voyager puts them on everything :-(
-        int lastPeriod = primaryType.lastIndexOf('.');
-        if (lastPeriod >= 0) {
-            int lastPosition = primaryType.length() - 1;
-            if (lastPeriod == lastPosition) {
-                primaryType = primaryType.substring(0, lastPosition);
-            }
-        }
-        return primaryType.toLowerCase();
-    }
-
-    @Override
-    protected String doTitle() {
-        StringBuilder sb = new StringBuilder();
-        DataField field245 = (DataField) this.record.getVariableField("245");
-        for (Subfield subfield : field245.getSubfields()) {
-            if ("anpq".indexOf(subfield.getCode()) > -1) {
-                append(sb, Normalizer.compose(subfield.getData(), false));
-            } else if (subfield.getCode() == 'b') {
-                String data = subfield.getData();
-                int lengthLessTwo = data.length() - 2;
-                if (data.lastIndexOf(" /") == lengthLessTwo) {
-                    data = data.substring(0, lengthLessTwo);
-                }
-                append(sb, Normalizer.compose(data, false));
-            }
-        }
-        DataField field250 = (DataField) this.record.getVariableField("250");
-        String edition = getSubfieldData(field250, 'a');
-        if (edition != null) {
-            sb.append(". ").append(edition);
-        }
-        int offset = field245.getIndicator2() - 48;
-        return sb.toString().substring(offset);
-    }
-
-    @Override
-    protected Collection<String> doTypes() {
-        Collection<String> t = new HashSet<String>();
-        for (VariableField field : this.record.getVariableFields("655")) {
-            String type = getSubfieldData((DataField) field, 'a').toLowerCase();
-            // remove trailing periods, some probably should have them but
-            // voyager puts them on everything :-(
-            int lastPeriod = type.lastIndexOf('.');
-            if (lastPeriod >= 0) {
-                int lastPosition = type.length() - 1;
-                if (lastPeriod == lastPosition) {
-                    type = type.substring(0, lastPosition);
-                }
-            }
-            String composite = getCompositeType(type);
-            if (composite != null) {
-                t.add(composite);
-            } else if (isAllowedType(type)) {
-                t.add(type);
-            }
-        }
-        addCustomTypes(t);
-        return t;
-    }
-
-    @Override
     protected Date doUpdated() {
         Date d;
         try {
@@ -240,27 +190,6 @@ public class BibMarcEresource extends AbstractMarcEresource {
             y = Integer.parseInt(beginDate);
         }
         return y;
-    }
-
-    private void addCustomTypes(final Collection<String> types) {
-        for (String[][] element : CUSTOM_TYPES) {
-            for (int j = 0; j < element[0].length; j++) {
-                if (types.contains(element[0][j])) {
-                    types.add(element[1][0]);
-                    break;
-                }
-            }
-        }
-        Collection<String> subsets = getAllSubsets();
-        if (types.contains("software, installed")) {
-            handleInstalledSoftware(types, subsets);
-        }
-        if (subsets.contains("biotools")) {
-            types.add("software");
-        }
-        if (isBassettRecord()) {
-            types.add("bassett");
-        }
     }
 
     private Collection<String> getAllSubsets() {

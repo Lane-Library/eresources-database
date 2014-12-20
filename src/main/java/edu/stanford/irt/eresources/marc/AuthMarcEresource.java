@@ -18,8 +18,6 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 
-import com.ibm.icu.text.Normalizer;
-
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Version;
 
@@ -38,7 +36,7 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     private Record record;
 
     public AuthMarcEresource(final Record record, final String keywords) {
-        super(keywords);
+        super(record, keywords);
         this.record = record;
     }
 
@@ -80,58 +78,6 @@ public class AuthMarcEresource extends AbstractMarcEresource {
             }
         }
         return m;
-    }
-
-    @Override
-    protected String doPrimaryType() {
-        String primaryType = "";
-        for (VariableField field : this.record.getVariableFields("655")) {
-            DataField datafield = (DataField) field;
-            if (datafield.getIndicator1() == '4' && datafield.getIndicator2() == '7') {
-                primaryType = datafield.getSubfield('a').getData();
-                break;
-            }
-        }
-        return primaryType;
-    }
-
-    @Override
-    protected String doTitle() {
-        StringBuilder sb = new StringBuilder();
-        DataField field245 = (DataField) this.record.getVariableField("245");
-        for (Subfield subfield : field245.getSubfields()) {
-            if ("anpq".indexOf(subfield.getCode()) > -1) {
-                append(sb, Normalizer.compose(subfield.getData(), false));
-            }
-        }
-        int offset = field245.getIndicator2() - '0';
-        return sb.toString().substring(offset);
-    }
-
-    @Override
-    protected Collection<String> doTypes() {
-        Collection<String> t = new ArrayList<String>();
-        for (VariableField field : this.record.getVariableFields("655")) {
-            String type = getSubfieldData((DataField) field, 'a').toLowerCase();
-            if (!"laneconnex".equals(type) && !"internet resource".equals(type) && type.indexOf("subset") != 0) {
-                // remove trailing periods, some probably should have them but
-                // voyager puts them on everything :-(
-                int lastPeriod = type.lastIndexOf('.');
-                if (lastPeriod >= 0) {
-                    int lastPosition = type.length() - 1;
-                    if (lastPeriod == lastPosition) {
-                        type = type.substring(0, lastPosition);
-                    }
-                }
-                String composite = getCompositeType(type);
-                if (composite != null) {
-                    t.add(composite);
-                } else if (isAllowedType(type)) {
-                    t.add(type);
-                }
-            }
-        }
-        return t;
     }
 
     @Override

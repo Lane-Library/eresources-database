@@ -1,17 +1,20 @@
 package edu.stanford.irt.eresources.marc;
 
-import java.util.Collection;
-
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextStrategy;
 import edu.stanford.irt.eresources.Version;
 
 /**
  * A Link that encapsulates the DataField from which it is derived.
  */
 public class MarcLink extends AbstractMarcComponent implements Link {
+
+    private static final TextStrategy TEXT_STRATEGY = new TextStrategy();
+
+    private String additionalText;
 
     private DataField dataField;
 
@@ -23,28 +26,25 @@ public class MarcLink extends AbstractMarcComponent implements Link {
 
     private boolean labelDone;
 
+    private String linkText;
+
     private String url;
 
     private boolean urlDone;
 
-    private MarcVersion version;
+    private Version version;
 
-    public MarcLink(final DataField dataField, final MarcVersion marcVersion) {
+    public MarcLink(final DataField dataField, final Version version) {
         this.dataField = dataField;
-        this.version = marcVersion;
+        this.version = version;
     }
 
     @Override
     public String getAdditionalText() {
-        StringBuilder sb = new StringBuilder();
-        String inst = getInstruction();
-        if (inst != null) {
-            sb.append(" ").append(inst);
+        if (this.additionalText == null) {
+            this.additionalText = TEXT_STRATEGY.getAdditionalText(getInstruction(), this.version.getPublisher());
         }
-        if (this.version.getPublisher() != null) {
-            sb.append(" ").append(this.version.getPublisher());
-        }
-        return sb.toString();
+        return this.additionalText;
     }
 
     @Override
@@ -65,35 +65,10 @@ public class MarcLink extends AbstractMarcComponent implements Link {
 
     @Override
     public String getLinkText() {
-        StringBuilder sb = new StringBuilder();
-        if ("impact factor".equalsIgnoreCase(this.label)) {
-            sb.append("Impact Factor");
-        } else {
-            String summaryHoldings = this.version.getSummaryHoldings();
-            if (summaryHoldings != null && this.version.getLinks().size() == 1) {
-                sb.append(summaryHoldings);
-                String dates = this.version.getDates();
-                if (dates != null && dates.length() > 0) {
-                    sb.append(", ").append(dates);
-                }
-            } else {
-                if (this.label != null) {
-                    sb.append(this.label);
-                }
-            }
-            if (sb.length() == 0) {
-                sb.append(this.label);
-            }
-            String description = this.version.getDescription();
-            if (description != null && description.length() > 0) {
-                sb.append(" ").append(description);
-            }
+        if (this.linkText == null) {
+            this.linkText = TEXT_STRATEGY.getLinkText(getLabel(), this.version);
         }
-        return sb.toString();
-    }
-
-    public Collection<String> getSubsets() {
-        return this.version.getSubsets();
+        return this.linkText;
     }
 
     @Override
@@ -102,10 +77,6 @@ public class MarcLink extends AbstractMarcComponent implements Link {
             doUrl();
         }
         return this.url;
-    }
-
-    public boolean isNoProxy() {
-        return this.version.isProxy();
     }
 
     @Override

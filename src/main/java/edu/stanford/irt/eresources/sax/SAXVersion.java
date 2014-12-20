@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextStrategy;
 import edu.stanford.irt.eresources.Version;
 
 public class SAXVersion implements Version {
@@ -15,12 +16,16 @@ public class SAXVersion implements Version {
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
-        "mobile resources", "biotools" };
+            "mobile resources", "biotools" };
+
+    private static final TextStrategy TEXT_STRATEGY = new TextStrategy();
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
             ALLOWED_SUBSETS.add(subset);
         }
     }
+
+    private String additionalText;
 
     private String dates;
 
@@ -56,31 +61,10 @@ public class SAXVersion implements Version {
 
     @Override
     public String getAdditionalText() {
-        StringBuilder sb = new StringBuilder(" ");
-        if (this.summaryHoldings != null) {
-            sb.append(this.summaryHoldings);
+        if (this.additionalText == null) {
+            this.additionalText = TEXT_STRATEGY.getAdditionalText(this);
         }
-        maybeAppend(sb, this.dates);
-        maybeAppend(sb, this.publisher);
-        maybeAppend(sb, this.description);
-        if (this.links != null && !this.links.isEmpty()) {
-            Link firstLink = this.links.get(0);
-            String label = firstLink.getLabel();
-            if (sb.length() == 1 && label != null) {
-                sb.append(label);
-            }
-            String instruction = firstLink.getInstruction();
-            if (instruction != null) {
-                if (sb.length() > 1) {
-                    sb.append(", ");
-                }
-                sb.append(instruction);
-            }
-        }
-        if (sb.length() > 1) {
-            sb.append(" ");
-        }
-        return sb.toString();
+        return this.additionalText;
     }
 
     @Override
@@ -151,14 +135,5 @@ public class SAXVersion implements Version {
 
     public void setSummaryHoldings(final String summaryHoldings) {
         this.summaryHoldings = summaryHoldings;
-    }
-
-    private void maybeAppend(final StringBuilder sb, final String string) {
-        if (string != null && string.length() > 0) {
-            if (sb.length() > 1) {
-                sb.append(", ");
-            }
-            sb.append(string);
-        }
     }
 }
