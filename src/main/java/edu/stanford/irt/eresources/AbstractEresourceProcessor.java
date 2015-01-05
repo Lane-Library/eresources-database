@@ -9,9 +9,6 @@ public abstract class AbstractEresourceProcessor implements RecordProcessor {
     private long startTime;
 
     public void setStartDate(final Date startDate) {
-        if (null == startDate) {
-            throw new IllegalArgumentException("null startDate");
-        }
         this.startTime = startDate.getTime();
     }
 
