@@ -62,7 +62,8 @@ public class DBLoader {
         Logger log = LoggerFactory.getLogger(getClass());
         log.info(this.version + " starting up");
         managePIDFile();
-        try (Connection conn = this.dataSource.getConnection(); Statement stmt = conn.createStatement();) {
+        try (Connection conn = this.dataSource.getConnection();
+                Statement stmt = conn.createStatement();) {
             prepareDatabase(conn, stmt, log);
             getUpdatedDate(stmt);
             this.executor.execute(this.handler);

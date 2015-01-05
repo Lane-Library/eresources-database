@@ -11,21 +11,13 @@ public class DBUpdate extends DBLoader {
     public static void main(final String[] args) {
         DBLoader.main(new String[] { "db-update" });
     }
-
-    private String selectQuery;
-
-    public DBUpdate() {
-        this("");
-    }
-
-    public DBUpdate(final String tablePrefix) {
-        this.selectQuery = "SELECT MAX(UPDATED) FROM " + tablePrefix + "ERESOURCE";
-    }
+    
+    private static final String MAX_UPDATED_QUERY = "SELECT MAX(UPDATED) FROM ERESOURCE";
 
     @Override
     protected Date getUpdatedDate(final Statement stmt) throws SQLException {
         Timestamp timeLastUpdated = null;
-        try (ResultSet rs = stmt.executeQuery(this.selectQuery)) {
+        try (ResultSet rs = stmt.executeQuery(MAX_UPDATED_QUERY)) {
             if (!rs.next()) {
                 throw new EresourceException("unable to get MAX(UPDATED)");
             }
