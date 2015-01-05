@@ -37,7 +37,7 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
 
     public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final EresourceSQLTranslator translator, final String tablePrefix) {
-        super(dataSource, queue, translator, tablePrefix);
+        super(dataSource, queue, translator);
         this.translator = translator;
         this.tablePrefix = tablePrefix;
         this.deleteEresource = DELETE_FROM + this.tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ";
