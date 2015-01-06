@@ -163,10 +163,19 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public String getPrimaryType() {
+        String type = null;
         if (this.primaryType == null) {
-            return "";
+            type = "";
+        } else if ("Book".equals(this.primaryType)) {
+            if ("print".equals(this.recordType)) {
+                type = "Print Book";
+            } else {
+                type = "Digital Book";
+            }
+        } else {
+            type = this.primaryType;
         }
-        return this.primaryType;
+        return type;
     }
 
     /*
