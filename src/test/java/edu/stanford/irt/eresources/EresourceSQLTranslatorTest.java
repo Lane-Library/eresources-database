@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources;
 import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +54,8 @@ public class EresourceSQLTranslatorTest {
         expect(this.versionTranslator.getInsertSQL(this.version, 0)).andReturn(Collections.<String>emptyList());
         replay(this.eresource, this.version, this.versionTranslator);
         List<String> sql = this.translator.getInsertSQL(this.eresource);
-        assertEquals("INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (ERESOURCE_ID_SEQ.NEXTVAL,'1','type',TO_DATE('19700101020000','YYYYMMDDHH24MISS'),'title','primaryType',NULL,2010,1,1,empty_clob(), empty_clob())", sql.get(0));
+        String dateString = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(0));
+        assertEquals("INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (ERESOURCE_ID_SEQ.NEXTVAL,'1','type',TO_DATE('" + dateString + "','YYYYMMDDHH24MISS'),'title','primaryType',NULL,2010,1,1,empty_clob(), empty_clob())", sql.get(0));
         assertEquals("TEXT:keywords", sql.get(1));
         assertEquals("DESCRIPTION:description", sql.get(2));
         assertEquals("INSERT INTO TYPE VALUES (ERESOURCE_ID_SEQ.CURRVAL,'type')", sql.get(3));
