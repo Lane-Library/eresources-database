@@ -42,7 +42,7 @@ public class SAXEresource implements Cloneable, Eresource {
         { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Component" },
         { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
         { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Digital Journal" },
-        { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" }, {"booklets", "Book"},
+        { "books", "Book" }, { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, {"booklets", "Book"},
         { "collections", "Database"} };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
