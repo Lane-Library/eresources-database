@@ -14,8 +14,8 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
 
     private VersionSQLTranslator versionTranslator;
 
-    public EresourceSQLTranslator() {
-        this.versionTranslator = new VersionSQLTranslator();
+    public EresourceSQLTranslator(VersionSQLTranslator versionTranslator) {
+        this.versionTranslator = versionTranslator;
     }
 
     public String getEresourceIdSQL(final Eresource er) {
@@ -30,6 +30,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
         List<String> sql = new ArrayList<String>();
         String keywords = er.getKeywords();
         int[] itemCount = er.getItemCount();
+        String description = er.getDescription();
         StringBuilder sb = new StringBuilder(INSERT_ERESOURCE)
                 .append("ERESOURCE_ID_SEQ.NEXTVAL,")
                 .append(APOS).append(er.getRecordId()).append(APOS).append(COMMA)
@@ -38,13 +39,14 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
                 .append(apostrophize(er.getPrimaryType())).append(COMMA)
                 .append(er.isCore() ? "'Y'" : NULL).append(COMMA)
                 .append(er.getYear() > 0 ? Integer.toString(er.getYear()) : NULL).append(COMMA)
-                .append(itemCount[0]).append(COMMA).append(itemCount[1]).append(COMMA)
-                .append(er.getDescription() != null ? "empty_clob()" : NULL)
+                .append(itemCount[0]).append(COMMA)
+                .append(itemCount[1]).append(COMMA)
+                .append(description != null ? "empty_clob()" : NULL)
                 .append(", empty_clob())");
         sql.add(sb.toString());
         sql.add("TEXT:" + keywords);
-        if (er.getDescription() != null) {
-            sql.add("DESCRIPTION:" + er.getDescription());
+        if (description != null) {
+            sql.add("DESCRIPTION:" + description);
         }
         sql.addAll(getInsertTypeSQL(er));
         sql.addAll(getInsertMeshSQL(er));
