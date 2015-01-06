@@ -40,22 +40,15 @@ public class DeleteEresourceHandlerTest {
 
     private Statement stmt;
 
-    private EresourceSQLTranslator translator;
-
-    private Version version;
-
     @Before
     public void setUp() {
         this.queue = createMock(BlockingQueue.class);
         this.dataSource = createMock(DataSource.class);
         this.handler = new DeleteEresourceHandler(this.dataSource, this.queue);
         this.eresource = createMock(Eresource.class);
-        this.version = createMock(Version.class);
-        // this.link = createMock(Link.class);
         this.connection = createMock(Connection.class);
         this.stmt = createMock(Statement.class);
         this.pStmnt = createMock(PreparedStatement.class);
-        this.translator = createMock(EresourceSQLTranslator.class);
         this.resultSet = createMock(ResultSet.class);
     }
 
@@ -115,14 +108,12 @@ public class DeleteEresourceHandlerTest {
         expectLastCall().times(2);
         this.connection.close();
         expectLastCall().times(2);
-        replay(this.eresource, this.version, this.queue, this.dataSource, this.translator, this.connection, this.stmt,
-                this.resultSet, this.pStmnt);
+        replay(this.eresource, this.queue, this.dataSource, this.connection, this.stmt, this.resultSet, this.pStmnt);
         Thread thread = new Thread(this.handler);
         thread.start();
         Thread.sleep(1000);
         this.handler.stop();
         thread.join();
-        verify(this.eresource, this.version, this.queue, this.dataSource, this.translator, this.connection, this.stmt,
-                this.resultSet, this.pStmnt);
+        verify(this.eresource, this.queue, this.dataSource, this.connection, this.stmt, this.resultSet, this.pStmnt);
     }
 }
