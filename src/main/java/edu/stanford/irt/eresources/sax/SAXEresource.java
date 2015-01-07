@@ -22,7 +22,7 @@ public class SAXEresource implements Cloneable, Eresource {
             "redwood software, installed", "duck software, installed", "stone software, installed",
             "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
             "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed" };
+            "statistics software, installed", "biotools software, installed", "laneclass", "lanepage" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 

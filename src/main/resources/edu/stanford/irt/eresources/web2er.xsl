@@ -19,6 +19,7 @@
             </xsl:variable>
             <title><xsl:value-of select="$title"/></title>
             <primaryType>lanesite</primaryType>
+            <type>lanepage</type>
             <keywords> <xsl:value-of select="$keywords"/> </keywords>
             <version>
                 <subset>noproxy</subset>
