@@ -5,16 +5,16 @@ import java.util.List;
 
 public abstract class AbstractVersion implements Version {
 
-    protected String getAdditionalText(final Version version) {
+    protected String createAdditionalText() {
         StringBuilder sb = new StringBuilder(" ");
-        String summaryHoldings = version.getSummaryHoldings();
+        String summaryHoldings = getSummaryHoldings();
         if (summaryHoldings != null) {
             sb.append(summaryHoldings);
         }
-        maybeAppend(sb, version.getDates());
-        maybeAppend(sb, version.getPublisher());
-        maybeAppend(sb, version.getDescription());
-        List<Link> l = version.getLinks();
+        maybeAppend(sb, getDates());
+        maybeAppend(sb, getPublisher());
+        maybeAppend(sb, getDescription());
+        List<Link> l = getLinks();
         if (l != null && !l.isEmpty()) {
             Link firstLink = l.get(0);
             String label = firstLink.getLabel();

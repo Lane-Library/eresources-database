@@ -59,7 +59,7 @@ public class SAXVersion extends AbstractVersion {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = getAdditionalText(this);
+            this.additionalText = createAdditionalText();
         }
         return this.additionalText;
     }
