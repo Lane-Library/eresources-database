@@ -5,18 +5,9 @@ import org.marc4j.marc.Subfield;
 
 import com.ibm.icu.text.Normalizer;
 
-public abstract class AbstractMarcComponent {
+public abstract class MarcTextUtil {
 
-    protected void append(final StringBuilder sb, final String value) {
-        if (value != null) {
-            if (sb.length() > 0) {
-                sb.append(' ');
-            }
-            sb.append(value);
-        }
-    }
-
-    protected String getSubfieldData(final DataField field, final char code) {
+    protected static String getSubfieldData(final DataField field, final char code) {
         String result = null;
         if (field != null) {
             Subfield subfield = field.getSubfield(code);
@@ -25,5 +16,9 @@ public abstract class AbstractMarcComponent {
             }
         }
         return result;
+    }
+    
+    private MarcTextUtil() {
+        // utility class
     }
 }

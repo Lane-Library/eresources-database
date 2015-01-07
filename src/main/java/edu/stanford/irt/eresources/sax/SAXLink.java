@@ -1,12 +1,9 @@
 package edu.stanford.irt.eresources.sax;
 
-import edu.stanford.irt.eresources.Link;
-import edu.stanford.irt.eresources.TextStrategy;
+import edu.stanford.irt.eresources.AbstractLink;
 import edu.stanford.irt.eresources.Version;
 
-public class SAXLink implements Link {
-
-    private static final TextStrategy TEXT_STRATEGY = new TextStrategy();
+public class SAXLink extends AbstractLink {
 
     private String additionalText;
 
@@ -23,7 +20,7 @@ public class SAXLink implements Link {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = TEXT_STRATEGY.getAdditionalText(this.instruction, this.version.getPublisher());
+            this.additionalText = getAdditionalText(this.instruction, this.version.getPublisher());
         }
         return this.additionalText;
     }
@@ -41,7 +38,7 @@ public class SAXLink implements Link {
     @Override
     public String getLinkText() {
         if (this.linkText == null) {
-            this.linkText = TEXT_STRATEGY.getLinkText(this.label, this.version);
+            this.linkText = getLinkText(this.label, this.version);
         }
         return this.linkText;
     }

@@ -13,15 +13,14 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 
+import edu.stanford.irt.eresources.AbstractVersion;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Link;
-import edu.stanford.irt.eresources.TextStrategy;
-import edu.stanford.irt.eresources.Version;
 
 /**
  * MarcVersion encapsulates a holding record.
  */
-public class MarcVersion extends AbstractMarcComponent implements Version {
+public class MarcVersion extends AbstractVersion {
 
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
@@ -32,8 +31,6 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     // { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
     // { "student computing", "lksc-student" } };
     private static final Pattern PATTERN = Pattern.compile(" =");
-
-    private static final TextStrategy TEXT_STRATEGY = new TextStrategy();
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
             ALLOWED_SUBSETS.add(subset);
@@ -58,14 +55,14 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = TEXT_STRATEGY.getAdditionalText(this);
+            this.additionalText = getAdditionalText(this);
         }
         return this.additionalText;
     }
 
     @Override
     public String getDates() {
-        return getSubfieldData((DataField) this.record.getVariableField("866"), 'y');
+        return MarcTextUtil.getSubfieldData((DataField) this.record.getVariableField("866"), 'y');
     }
 
     @Override
@@ -94,7 +91,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
 
     @Override
     public String getPublisher() {
-        return getSubfieldData((DataField) this.record.getVariableField("844"), 'a');
+        return MarcTextUtil.getSubfieldData((DataField) this.record.getVariableField("844"), 'a');
     }
 
     @Override
@@ -102,7 +99,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
         Collection<String> subsets = new HashSet<String>();
         Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
         while (it.hasNext()) {
-            String subset = getSubfieldData((DataField) it.next(), 'a').toLowerCase();
+            String subset = MarcTextUtil.getSubfieldData((DataField) it.next(), 'a').toLowerCase();
             if (subset.indexOf("subset, ") == 0 && !"subset, noproxy".equals(subset)) {
                 subset = subset.substring(8);
                 if (ALLOWED_SUBSETS.contains(subset)) {
@@ -116,7 +113,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
 
     @Override
     public String getSummaryHoldings() {
-        String value = getSubfieldData((DataField) this.record.getVariableField("866"), 'v');
+        String value = MarcTextUtil.getSubfieldData((DataField) this.record.getVariableField("866"), 'v');
         if (value != null) {
             value = PATTERN.matcher(value).replaceAll("");
         }
@@ -140,7 +137,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
         boolean isProxy = true;
         Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
         while (isProxy && it.hasNext()) {
-            isProxy = !"subset, noproxy".equalsIgnoreCase(getSubfieldData((DataField) it.next(), 'a'));
+            isProxy = !"subset, noproxy".equalsIgnoreCase(MarcTextUtil.getSubfieldData((DataField) it.next(), 'a'));
         }
         return isProxy;
     }
@@ -162,7 +159,7 @@ public class MarcVersion extends AbstractMarcComponent implements Version {
     private void setupLinks() {
         this.links = new ArrayList<Link>();
         for (VariableField field : this.record.getVariableFields("856")) {
-            if ("http://lane.stanford.edu/secure/ejpw.html".equals(getSubfieldData((DataField) field, 'u'))) {
+            if ("http://lane.stanford.edu/secure/ejpw.html".equals(MarcTextUtil.getSubfieldData((DataField) field, 'u'))) {
                 this.hasGetPassword = true;
             } else {
                 MarcLink link = new MarcLink((DataField) field, this);

@@ -12,15 +12,21 @@ public class ItemCount {
     /*
      * this query from: http://stackoverflow.com/questions/7745609/sql-select-only-rows-with-max-value-on-a-column
      */
-    private static final String AVAILABLE_QUERY = "select count(item_status_1.item_id) "
+    private static final String AVAILABLE_QUERY =
+            "select count(item_status_1.item_id) "
             + "from lmldb.bib_item bi, lmldb.item_status item_status_1 "
-            + "left outer join lmldb.item_status item_status_2 " + "on (item_status_1.item_id = item_status_2.item_id "
+            + "left outer join lmldb.item_status item_status_2 "
+            + "on (item_status_1.item_id = item_status_2.item_id "
             + "and item_status_1.item_status_date < item_status_2.item_status_date) "
-            + "where item_status_2.item_id is null " + "and bi.item_id = item_status_1.item_id "
-            + "and item_status_1.item_status = 1 " + "and bi.bib_id = ?";
+            + "where item_status_2.item_id is null "
+            + "and bi.item_id = item_status_1.item_id "
+            + "and item_status_1.item_status = 1 "
+            + "and bi.bib_id = ?";
 
-    private static final String TOTAL_QUERY = "select count(distinct item_status.item_id) "
-            + "from lmldb.bib_item, lmldb.item_status " + "where bib_item.item_id = item_status.item_id "
+    private static final String TOTAL_QUERY =
+            "select count(distinct item_status.item_id) "
+            + "from lmldb.bib_item, lmldb.item_status "
+            + "where bib_item.item_id = item_status.item_id "
             + "and bib_item.bib_id = ?";
 
     private DataSource dataSource;
@@ -44,7 +50,8 @@ public class ItemCount {
 
     private int getCount(final int bibId, final String query) {
         int total = 0;
-        try (Connection conn = this.dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+        try (Connection conn = this.dataSource.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, bibId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {

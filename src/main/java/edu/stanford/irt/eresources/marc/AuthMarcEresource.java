@@ -74,7 +74,7 @@ public class AuthMarcEresource extends AbstractMarcEresource {
         Collection<String> m = new ArrayList<String>();
         for (VariableField field : this.record.getVariableFields("650")) {
             if (((DataField) field).getIndicator1() == '4' && "27".indexOf(((DataField) field).getIndicator2()) > -1) {
-                m.add(getSubfieldData((DataField) field, 'a').toLowerCase());
+                m.add(MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase());
             }
         }
         return m;

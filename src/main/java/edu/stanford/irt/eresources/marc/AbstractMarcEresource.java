@@ -18,7 +18,7 @@ import com.ibm.icu.text.Normalizer;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Version;
 
-public abstract class AbstractMarcEresource extends AbstractMarcComponent implements Eresource {
+public abstract class AbstractMarcEresource implements Eresource {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
@@ -286,7 +286,7 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
             }
         }
         DataField field250 = (DataField) this.record.getVariableField("250");
-        String edition = getSubfieldData(field250, 'a');
+        String edition = MarcTextUtil.getSubfieldData(field250, 'a');
         if (edition != null) {
             sb.append(". ").append(edition);
         }
@@ -297,7 +297,7 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
     protected Collection<String> doTypes() {
         Collection<String> t = new HashSet<String>();
         for (VariableField field : this.record.getVariableFields("655")) {
-            String type = getSubfieldData((DataField) field, 'a').toLowerCase();
+            String type = MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase();
             // remove trailing periods, some probably should have them but
             // voyager puts them on everything :-(
             int lastPeriod = type.lastIndexOf('.');
@@ -316,6 +316,15 @@ public abstract class AbstractMarcEresource extends AbstractMarcComponent implem
         }
         addCustomTypes(t);
         return t;
+    }
+
+    protected void append(final StringBuilder sb, final String value) {
+        if (value != null) {
+            if (sb.length() > 0) {
+                sb.append(' ');
+            }
+            sb.append(value);
+        }
     }
 
     protected abstract Date doUpdated();

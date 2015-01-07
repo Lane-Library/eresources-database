@@ -3,16 +3,13 @@ package edu.stanford.irt.eresources.marc;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Subfield;
 
-import edu.stanford.irt.eresources.Link;
-import edu.stanford.irt.eresources.TextStrategy;
+import edu.stanford.irt.eresources.AbstractLink;
 import edu.stanford.irt.eresources.Version;
 
 /**
  * A Link that encapsulates the DataField from which it is derived.
  */
-public class MarcLink extends AbstractMarcComponent implements Link {
-
-    private static final TextStrategy TEXT_STRATEGY = new TextStrategy();
+public class MarcLink extends AbstractLink {
 
     private String additionalText;
 
@@ -42,7 +39,7 @@ public class MarcLink extends AbstractMarcComponent implements Link {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = TEXT_STRATEGY.getAdditionalText(getInstruction(), this.version.getPublisher());
+            this.additionalText = getAdditionalText(getInstruction(), this.version.getPublisher());
         }
         return this.additionalText;
     }
@@ -66,7 +63,7 @@ public class MarcLink extends AbstractMarcComponent implements Link {
     @Override
     public String getLinkText() {
         if (this.linkText == null) {
-            this.linkText = TEXT_STRATEGY.getLinkText(getLabel(), this.version);
+            this.linkText = getLinkText(getLabel(), this.version);
         }
         return this.linkText;
     }
@@ -93,9 +90,9 @@ public class MarcLink extends AbstractMarcComponent implements Link {
     }
 
     private void doLabel() {
-        String l = getSubfieldData(this.dataField, 'q');
+        String l = MarcTextUtil.getSubfieldData(this.dataField, 'q');
         if (l == null) {
-            l = getSubfieldData(this.dataField, 'z');
+            l = MarcTextUtil.getSubfieldData(this.dataField, 'z');
         }
         if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > 2)) {
             l = l.substring(1, l.length() - 1);
@@ -105,7 +102,7 @@ public class MarcLink extends AbstractMarcComponent implements Link {
     }
 
     private void doUrl() {
-        this.url = getSubfieldData(this.dataField, 'u');
+        this.url = MarcTextUtil.getSubfieldData(this.dataField, 'u');
         this.urlDone = true;
     }
 }

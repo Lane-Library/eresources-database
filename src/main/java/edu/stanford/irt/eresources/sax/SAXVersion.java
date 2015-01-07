@@ -7,18 +7,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import edu.stanford.irt.eresources.AbstractVersion;
 import edu.stanford.irt.eresources.Link;
-import edu.stanford.irt.eresources.TextStrategy;
-import edu.stanford.irt.eresources.Version;
 
-public class SAXVersion implements Version {
+public class SAXVersion extends AbstractVersion {
 
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
             "mobile resources", "biotools" };
-
-    private static final TextStrategy TEXT_STRATEGY = new TextStrategy();
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
             ALLOWED_SUBSETS.add(subset);
@@ -62,7 +59,7 @@ public class SAXVersion implements Version {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = TEXT_STRATEGY.getAdditionalText(this);
+            this.additionalText = getAdditionalText(this);
         }
         return this.additionalText;
     }

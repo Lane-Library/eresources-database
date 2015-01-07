@@ -128,7 +128,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
         boolean i = false;
         Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
         while (it.hasNext() && !i) {
-            i = "core material".equalsIgnoreCase(getSubfieldData((DataField) it.next(), 'a'));
+            i = "core material".equalsIgnoreCase(MarcTextUtil.getSubfieldData((DataField) it.next(), 'a'));
         }
         return i;
     }
@@ -138,7 +138,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
         Collection<String> m = new HashSet<String>();
         for (VariableField field : this.record.getVariableFields("650")) {
             if (((DataField) field).getIndicator1() == '4' && "237".indexOf(((DataField) field).getIndicator2()) > -1) {
-                m.add(getSubfieldData((DataField) field, 'a').toLowerCase());
+                m.add(MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase());
             }
         }
         return m;
@@ -238,7 +238,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
         boolean isBassett = false;
         Iterator<VariableField> it = this.record.getVariableFields("035").iterator();
         while (!isBassett && it.hasNext()) {
-            String value = getSubfieldData((DataField) it.next(), 'a');
+            String value = MarcTextUtil.getSubfieldData((DataField) it.next(), 'a');
             isBassett = value != null && value.indexOf("Bassett") > -1;
         }
         return isBassett;
