@@ -8,6 +8,10 @@ import edu.stanford.irt.eresources.Eresource;
 
 public class MarcPrintProcessor extends AbstractMarcBibProcessor {
 
+    public MarcPrintProcessor(KeywordsStrategy keywordsStrategy) {
+        super(keywordsStrategy);
+    }
+
     @Override
     protected Eresource createAltTitleEresource(final Record bib, final List<Record> holdings, final String keywords,
             final int[] items) {

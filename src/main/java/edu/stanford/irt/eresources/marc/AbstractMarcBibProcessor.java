@@ -16,6 +16,10 @@ import edu.stanford.irt.eresources.ItemCount;
 
 public abstract class AbstractMarcBibProcessor extends AbstractMarcProcessor {
 
+    public AbstractMarcBibProcessor(KeywordsStrategy keywordsStrategy) {
+        super(keywordsStrategy);
+    }
+
     private static final String HOLDINGS_CHARS = "uvxy";
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");

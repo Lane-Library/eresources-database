@@ -52,12 +52,6 @@ public class BibMarcEresource extends AbstractMarcEresource {
 
     public BibMarcEresource(final Record record, final List<Record> holdings, final String keywords, final int[] items) {
         super(record, keywords);
-        if (record == null) {
-            throw new EresourceException("null record");
-        }
-        if (holdings == null) {
-            throw new EresourceException("null holdings");
-        }
         this.record = record;
         this.holdings = holdings;
         this.items = items;
