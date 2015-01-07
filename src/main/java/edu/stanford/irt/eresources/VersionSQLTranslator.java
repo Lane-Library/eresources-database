@@ -10,8 +10,8 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
 
     private LinkSQLTranslator linkTranslator;
 
-    public VersionSQLTranslator() {
-        this.linkTranslator = new LinkSQLTranslator();
+    public VersionSQLTranslator(LinkSQLTranslator linkTranslator) {
+        this.linkTranslator = linkTranslator;
     }
 
     public List<String> getInsertSQL(final Version vr, final int order) {
@@ -20,8 +20,8 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
                 .append("VERSION_ID_SEQ.NEXTVAL, ")
                 .append("ERESOURCE_ID_SEQ.CURRVAL,")
                 .append(vr.isProxy() ? "'T'" : "'F'").append(COMMA)
-                .append(vr.hasGetPasswordLink() ? "'T'" : "'F'")
-                .append(COMMA).append(order).append(COMMA)
+                .append(vr.hasGetPasswordLink() ? "'T'" : "'F'").append(COMMA)
+                .append(order).append(COMMA)
                 .append(apostrophize(vr.getAdditionalText())).append(COMMA)
                 .append(apostrophize(vr.getPublisher()))
                 .append(END_PAREN);
