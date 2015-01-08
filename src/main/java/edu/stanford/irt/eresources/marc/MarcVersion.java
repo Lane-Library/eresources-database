@@ -120,15 +120,11 @@ public class MarcVersion extends AbstractVersion {
         return value;
     }
 
-    public boolean hasGetPassword() {
+    @Override
+    public boolean hasGetPasswordLink() {
         if (this.links == null) {
             setupLinks();
         }
-        return this.hasGetPassword;
-    }
-
-    @Override
-    public boolean hasGetPasswordLink() {
         return this.hasGetPassword;
     }
 

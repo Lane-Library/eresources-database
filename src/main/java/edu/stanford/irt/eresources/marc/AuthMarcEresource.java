@@ -50,10 +50,6 @@ public class AuthMarcEresource extends AbstractMarcEresource {
         return AUTH_TYPE;
     }
 
-    public String getType() {
-        return AUTH_TYPE;
-    }
-
     @Override
     protected String doDescription() {
         return null;

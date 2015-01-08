@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
@@ -19,6 +21,7 @@ import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Version;
 
 public abstract class AbstractMarcEresource implements Eresource {
+    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
@@ -77,8 +80,6 @@ public abstract class AbstractMarcEresource implements Eresource {
 
     private int id;
 
-    private boolean idDone;
-
     private boolean isCore;
 
     private boolean isCoreDone;
@@ -127,14 +128,6 @@ public abstract class AbstractMarcEresource implements Eresource {
         return this.description;
     }
 
-    public int getId() {
-        if (!this.idDone) {
-            this.id = doId();
-            this.idDone = true;
-        }
-        return this.id;
-    }
-
     @Override
     public int[] getItemCount() {
         return NOITEMS;
@@ -157,7 +150,7 @@ public abstract class AbstractMarcEresource implements Eresource {
     @Override
     public String getPrimaryType() {
         if (this.primaryType == null) {
-            this.primaryType = PRIMARY_TYPES.get(doPrimaryType(this.record));
+            this.primaryType = PRIMARY_TYPES.get(doPrimaryType());
             if (this.primaryType == null) {
                 this.primaryType = "";
             }
@@ -220,7 +213,6 @@ public abstract class AbstractMarcEresource implements Eresource {
 
     @Override
     public boolean isClone() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -250,9 +242,9 @@ public abstract class AbstractMarcEresource implements Eresource {
 
     protected abstract Collection<String> doMeshTerms();
 
-    protected String doPrimaryType(final Record record) {
+    protected String doPrimaryType() {
         String type = "";
-        for (VariableField field : record.getVariableFields("655")) {
+        for (VariableField field : this.record.getVariableFields("655")) {
             DataField datafield = (DataField) field;
             if (datafield.getIndicator1() == '4' && datafield.getIndicator2() == '7') {
                 type = datafield.getSubfield('a').getData();
@@ -270,18 +262,17 @@ public abstract class AbstractMarcEresource implements Eresource {
         return type.toLowerCase();
     }
 
+    
     protected String doTitle() {
         StringBuilder sb = new StringBuilder();
         DataField field245 = (DataField) this.record.getVariableField("245");
         for (Subfield subfield : field245.getSubfields()) {
-            if ("anpq".indexOf(subfield.getCode()) > -1) {
+            char code = subfield.getCode();
+            if ("anpq".indexOf(code) > -1) {
                 append(sb, Normalizer.compose(subfield.getData(), false));
-            } else if (subfield.getCode() == 'b') {
+            } else if (code == 'b') {
                 String data = subfield.getData();
-                int lengthLessTwo = data.length() - 2;
-                if (data.lastIndexOf(" /") == lengthLessTwo) {
-                    data = data.substring(0, lengthLessTwo);
-                }
+                data = SPACE_SLASH.matcher(data).replaceFirst("");
                 append(sb, Normalizer.compose(data, false));
             }
         }

@@ -8,6 +8,7 @@ import org.marc4j.marc.Subfield;
 
 import com.ibm.icu.text.Normalizer;
 
+// TODO: create a TitleStrategy class
 public class AltTitleMarcEresource extends BibMarcEresource {
 
     private Record record;
