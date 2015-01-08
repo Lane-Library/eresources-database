@@ -18,19 +18,17 @@
     <bean id="eresourceHandler" class="edu.stanford.irt.eresources.UpdateEresourceHandler">
         <constructor-arg ref="erdbDataSource"/>
         <constructor-arg ref="queue"/>
-        <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.EresourceSQLTranslator"/>
-        </constructor-arg>
+        <constructor-arg ref="eresourceTranslator"/>
     </bean>
     <bean id="bibInputStream" class="edu.stanford.irt.eresources.UpdateBibInputStream">
-        <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
     <bean id="printBibInputStream" class="edu.stanford.irt.eresources.UpdatePrintBibInputStream">
-        <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
-    <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
+    <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor">
         <property name="logEresource" value="true"/>
     </bean>
 </beans>

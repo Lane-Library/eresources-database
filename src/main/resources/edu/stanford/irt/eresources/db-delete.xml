@@ -21,13 +21,14 @@
     <bean id="eresourceHandler" class="edu.stanford.irt.eresources.DeleteEresourceHandler">
         <constructor-arg ref="erdbDataSource"/>
         <constructor-arg ref="queue"/>
+        <constructor-arg ref="eresourceTranslator"/>
     </bean>
     <bean id="bibInputStream" class="edu.stanford.irt.eresources.BibInputStream">
-        <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
+        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
+        <constructor-arg name="executor" ref="executor"/>
     </bean>
     <bean id="printBibInputStream" class="edu.stanford.irt.eresources.PrintBibInputStream">
-        <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
+        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
+        <constructor-arg name="executor" ref="executor"/>
     </bean>
 </beans>

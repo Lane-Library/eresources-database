@@ -10,7 +10,6 @@ import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
@@ -21,7 +20,7 @@ public class AuthTextAugmentationTest {
 
     private DataField field;
 
-    private MarcReader marcReader;
+    private AugmentationMarcReader marcReader;
 
     private Record record;
 
@@ -29,7 +28,7 @@ public class AuthTextAugmentationTest {
 
     @Before
     public void setUp() {
-        this.marcReader = createMock(MarcReader.class);
+        this.marcReader = createMock(AugmentationMarcReader.class);
         this.augmentation = new AuthTextAugmentation(this.marcReader);
         this.record = createMock(Record.class);
         this.field = createMock(DataField.class);
@@ -38,6 +37,7 @@ public class AuthTextAugmentationTest {
 
     @Test
     public void testGetAuthAugmentations() {
+        this.marcReader.reset("term", "tag");
         expect(this.marcReader.hasNext()).andReturn(true);
         expect(this.marcReader.next()).andReturn(this.record);
         expect(this.record.getDataFields()).andReturn(Collections.singletonList(this.field));

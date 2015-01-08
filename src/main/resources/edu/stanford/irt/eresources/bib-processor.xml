@@ -3,21 +3,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     <bean id="bibProcessor" class="edu.stanford.irt.eresources.marc.MarcBibProcessor">
-        <property name="inputStream">
-            <bean id="eresourcesInputStream" class="edu.stanford.irt.eresources.BibInputStream">
-                <property name="dataSource" ref="voyagerDataSource"/>
-                <property name="executor" ref="executor"/>
+        <constructor-arg ref="eresourceHandler"/>
+        <constructor-arg>
+            <bean class="org.marc4j.MarcStreamReader">
+                <constructor-arg ref="bibInputStream"/>
             </bean>
-        </property>
-        <property name="authTextAugmentation" ref="authTextAugmentation"/>
-        <property name="eresourceHandler" ref="eresourceHandler"/>
-        <property name="itemCount" ref="itemCount"/>
-    </bean>
-    <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
-        <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
-    </bean>
-    <bean id="itemCount" class="edu.stanford.irt.eresources.ItemCount">
-        <constructor-arg ref="voyagerDataSource"/>
+        </constructor-arg>
+        <constructor-arg ref="itemCount"/>
+        <constructor-arg ref="keywordsStrategy"/>
     </bean>
 </beans>

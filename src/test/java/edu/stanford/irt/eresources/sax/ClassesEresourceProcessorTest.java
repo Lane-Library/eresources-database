@@ -1,7 +1,5 @@
 package edu.stanford.irt.eresources.sax;
 
-import static org.junit.Assert.*;
-
 import java.net.URL;
 
 import org.junit.Before;

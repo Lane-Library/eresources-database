@@ -8,17 +8,6 @@
         <property name="handler" ref="eresourceHandler"/>
         <property name="createStatements">
             <list>
-                <!-- TODO: discover the impact of removing indexes while reloading data -->
-                <!--<value>DROP INDEX VERSION_ERESOURCE_ID_IDX</value>
-                <value>DROP INDEX ERESOURCE_CORE_IDX</value>
-                <value>DROP INDEX LINK_VERSION_ID_IDX</value>
-                <value>DROP INDEX MESH_ERESOURCE_ID_IDX</value>
-                <value>DROP INDEX TYPE_TYPE_RESOURCE_ID_IDX</value>
-                <value>DROP INDEX SUBSET_SUBSET_VERSION_ID_IDX</value>
-                <value>DROP INDEX ERESOURCE_LOWER_TITLE_IDX</value>
-                <value>DROP INDEX TEXT_IDX</value>
-                <value>DROP INDEX TITLE_IDX</value>-->
-                
                 <value>DELETE FROM ERESOURCE</value>
                 <value>DELETE FROM VERSION</value>
                 <value>DELETE FROM LINK</value>
@@ -29,16 +18,6 @@
         </property>
         <property name="callStatements">
             <list>
-                <!-- TODO: discover the impact of removing indexes while reloading data -->
-                <!--<value>create index VERSION_ERESOURCE_ID_IDX on VERSION("ERESOURCE_ID")</value>
-                <value>create index ERESOURCE_CORE_IDX on ERESOURCE("CORE")</value>
-                <value>create index LINK_VERSION_ID_IDX on LINK("VERSION_ID")</value>
-                <value>create index MESH_ERESOURCE_ID_IDX on MESH("TERM","ERESOURCE_ID")</value>
-                <value>create index TYPE_TYPE_RESOURCE_ID_IDX on TYPE("TYPE","ERESOURCE_ID")</value>
-                <value>create index SUBSET_SUBSET_VERSION_ID_IDX on SUBSET("SUBSET","VERSION_ID")</value>
-                <value>create index ERESOURCE_LOWER_TITLE_IDX on ERESOURCE(CONVERT(LOWER("TITLE"),'US7ASCII'))</value>
-                <value>CREATE INDEX TEXT_IDX ON ERESOURCE(TEXT) INDEXTYPE IS CTXSYS.CONTEXT</value>
-                <value>CREATE INDEX TITLE_IDX ON ERESOURCE(TITLE) INDEXTYPE IS CTXSYS.CONTEXT</value>-->
                 <value>{ call ctx_ddl.sync_index('TEXT_IDX') }</value>
                 <value>{ call ctx_ddl.optimize_index('TEXT_IDX','FULL') }</value>
                 <value>{ call ctx_ddl.sync_index('TITLE_IDX') }</value>
@@ -50,16 +29,14 @@
     <bean id="eresourceHandler" class="edu.stanford.irt.eresources.DefaultEresourceHandler">
         <constructor-arg ref="erdbDataSource"/>
         <constructor-arg ref="queue"/>
-        <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.EresourceSQLTranslator"/>
-        </constructor-arg>
+        <constructor-arg ref="eresourceTranslator"/>
     </bean>
     <bean id="bibInputStream" class="edu.stanford.irt.eresources.BibInputStream">
-        <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
     <bean id="printBibInputStream" class="edu.stanford.irt.eresources.PrintBibInputStream">
-        <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
 </beans>

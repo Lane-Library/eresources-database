@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
-    <bean id="webProcessor"
-        class="edu.stanford.irt.eresources.sax.HTMLPageEresourceProcessor">
-        <property name="contentHandler" ref="webTransformer"/>
-        <property name="basePath" value="${eresources.webprocessor.basepath}"/>
-    </bean>
-    <bean id= "webTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
-        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/web2er.xsl"/>
-        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
-        <property name="namespace" value=""/>
-        <property name="element" value="eresources"/>
-        <property name="contentHandler" ref="webBuilder"/>
-        <property name="parameters">
-            <map>
-                <entry key="lane-host" value="${eresources.lane-host}"/>
-            </map>
-        </property>
-    </bean>
-    <bean id="webBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
-        <property name="eresourceHandler" ref="eresourceHandler"/>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <bean id="webProcessor" class="edu.stanford.irt.eresources.sax.HTMLPageEresourceProcessor">
+        <constructor-arg name="basePath" value="${eresources.webprocessor.basepath}"/>
+        <constructor-arg name="contentHandler">
+            <bean id="webTransformer"
+                class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer"
+                init-method="init">
+                <property name="stylesheet"
+                    value="classpath://edu/stanford/irt/eresources/web2er.xsl"/>
+                <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+                <property name="namespace" value=""/>
+                <property name="element" value="eresources"/>
+                <property name="contentHandler">
+                    <bean id="webBuilder"
+                        class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
+                        <property name="eresourceHandler" ref="eresourceHandler"/>
+                    </bean>
+                </property>
+                <property name="parameters">
+                    <map>
+                        <entry key="lane-host" value="${eresources.lane-host}"/>
+                    </map>
+                </property>
+            </bean>
+        </constructor-arg>
     </bean>
 </beans>

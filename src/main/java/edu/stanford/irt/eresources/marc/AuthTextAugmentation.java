@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
@@ -25,10 +24,10 @@ public class AuthTextAugmentation {
 
     private StringBuilder augmentationText = new StringBuilder();
 
-    private MarcReader marcReader;
+    private AugmentationMarcReader marcReader;
 
     @SuppressWarnings("unchecked")
-    public AuthTextAugmentation(final MarcReader marcReader) {
+    public AuthTextAugmentation(final AugmentationMarcReader marcReader) {
         this.marcReader = marcReader;
         // create a new augmentation map each Sunday:
         if (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -49,6 +48,7 @@ public class AuthTextAugmentation {
     public String getAuthAugmentations(final String term, final String lookupTag) {
         String result = this.augmentations.get(term);
         if (null == result) {
+            this.marcReader.reset(term, lookupTag);
             this.augmentationText.setLength(0);
             while (this.marcReader.hasNext()) {
                 getAugmentations(this.marcReader.next());

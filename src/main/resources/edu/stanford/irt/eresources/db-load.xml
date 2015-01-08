@@ -26,6 +26,30 @@
     <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue">
         <constructor-arg value="10000"/>
     </bean>
+    <bean id="itemCount" class="edu.stanford.irt.eresources.ItemCount">
+        <constructor-arg ref="voyagerDataSource"/>
+    </bean>
+    <bean id="keywordsStrategy" class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
+                <constructor-arg>
+                    <bean class="edu.stanford.irt.eresources.marc.AugmentationMarcReader">
+                        <constructor-arg ref="voyagerDataSource"/>
+                        <constructor-arg ref="executor"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+    <bean id="eresourceTranslator" class="edu.stanford.irt.eresources.EresourceSQLTranslator">
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.VersionSQLTranslator">
+                <constructor-arg>
+                    <bean class="edu.stanford.irt.eresources.LinkSQLTranslator"/>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
     <bean id="erdbDataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
         <property name="url" value="${eresources.eresourcesdb.url}"/>
@@ -38,7 +62,8 @@
         <property name="user" value="${eresources.voyagerdb.username}"/>
         <property name="password" value="${eresources.voyagerdb.password}"/>
     </bean>
-    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" destroy-method="destroy">
+    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
+        destroy-method="destroy">
         <property name="corePoolSize" value="4"/>
         <property name="maxPoolSize" value="4"/>
         <property name="queueCapacity" value="0"/>
