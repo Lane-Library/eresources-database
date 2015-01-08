@@ -45,7 +45,9 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
     private Set<String> noSearchDirectories;
 
-    public HTMLPageEresourceProcessor() {
+    public HTMLPageEresourceProcessor(final String basePath, final ContentHandler contentHandler) {
+        this.basePath = basePath;
+        this.contentHandler = contentHandler;
         this.noSearchDirectories = new HashSet<String>();
         for (String element : NO_SEARCH_DIRECTORIES) {
             this.noSearchDirectories.add(element);
@@ -75,14 +77,6 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         } catch (SAXException e) {
             throw new EresourceException(e);
         }
-    }
-
-    public void setBasePath(final String basePath) {
-        this.basePath = basePath;
-    }
-
-    public void setContentHandler(final ContentHandler contentHandler) {
-        this.contentHandler = contentHandler;
     }
 
     private List<File> getHTMLPages(final File directory) {

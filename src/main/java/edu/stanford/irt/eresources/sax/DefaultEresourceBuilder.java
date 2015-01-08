@@ -17,7 +17,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
 
     private SAXLink currentLink;
 
-    private StringBuilder currentText;
+    private StringBuilder currentText = new StringBuilder();
 
     private SAXVersion currentVersion;
 
@@ -84,14 +84,6 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
     @Override
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
-    }
-
-    @Override
-    public void startDocument() throws SAXException {
-        if (null == this.eresourceHandler) {
-            throw new IllegalStateException("null eresourceHandler");
-        }
-        this.currentText = new StringBuilder();
     }
 
     @Override

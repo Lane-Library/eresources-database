@@ -27,7 +27,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String ERESOURCES = "eresources";
 
-    private String allClassesURL;
+    private URL allClassesURL;
 
     private ContentHandler contentHandler;
 
@@ -38,12 +38,16 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
+    public ClassesEresourceProcessor(final URL allClassesURL, final ContentHandler contentHandler) {
+        this.allClassesURL = allClassesURL;
+        this.contentHandler = contentHandler;
+    }
+
     @Override
     public void process() {
         try {
-            URL url = new URL(this.allClassesURL);
             InputSource source;
-            source = new InputSource(url.openConnection().getInputStream());
+            source = new InputSource(this.allClassesURL.openConnection().getInputStream());
             DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);
@@ -58,13 +62,5 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
         } catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
             throw new EresourceException(e);
         }
-    }
-
-    public void setAllClassesURL(final String allClassesURL) {
-        this.allClassesURL = allClassesURL;
-    }
-
-    public void setContentHandler(final ContentHandler contentHandler) {
-        this.contentHandler = contentHandler;
     }
 }
