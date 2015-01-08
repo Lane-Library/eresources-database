@@ -12,8 +12,6 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
-import edu.stanford.irt.eresources.sax.AuthTextAugmentation;
-
 
 public class KeywordsStrategyTest {
     

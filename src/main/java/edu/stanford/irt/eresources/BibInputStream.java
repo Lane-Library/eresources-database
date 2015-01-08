@@ -1,6 +1,14 @@
 package edu.stanford.irt.eresources;
 
+import java.util.concurrent.Executor;
+
+import javax.sql.DataSource;
+
 public class BibInputStream extends EresourceInputStream {
+
+    public BibInputStream(DataSource dataSource, Executor executor) {
+        super(dataSource, executor);
+    }
 
     private static final String BIB_QUERY = "SELECT SEQNUM, RECORD_SEGMENT FROM LMLDB.BIB_DATA WHERE BIB_ID = ?";
 

@@ -1,6 +1,14 @@
 package edu.stanford.irt.eresources;
 
+import java.util.concurrent.Executor;
+
+import javax.sql.DataSource;
+
 public class PrintBibInputStream extends BibInputStream {
+
+    public PrintBibInputStream(DataSource dataSource, Executor executor) {
+        super(dataSource, executor);
+    }
 
     private static final String QUERY =
             "WITH PRINT_BIBS AS "

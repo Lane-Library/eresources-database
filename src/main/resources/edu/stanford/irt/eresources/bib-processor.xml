@@ -13,7 +13,7 @@
         <property name="eresourceHandler" ref="eresourceHandler"/>
         <property name="itemCount" ref="itemCount"/>
     </bean>
-    <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.sax.AuthTextAugmentation">
+    <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
         <property name="dataSource" ref="voyagerDataSource"/>
         <property name="executor" ref="executor"/>
     </bean>

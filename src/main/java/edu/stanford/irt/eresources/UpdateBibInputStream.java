@@ -1,6 +1,14 @@
 package edu.stanford.irt.eresources;
 
+import java.util.concurrent.Executor;
+
+import javax.sql.DataSource;
+
 public class UpdateBibInputStream extends BibInputStream {
+
+    public UpdateBibInputStream(DataSource dataSource, Executor executor) {
+        super(dataSource, executor);
+    }
 
     private static final String QUERY = "WITH updated_bibs AS " + "  (SELECT bib_id " + "  FROM lmldb.bib_master "
             + "  WHERE update_date > ? " + "  OR create_date    > ? " + "  UNION " + "  SELECT bib_mfhd.bib_id "

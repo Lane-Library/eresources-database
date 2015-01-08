@@ -24,6 +24,10 @@ public class EresourceInputStreamTest {
 
     private static class TestEresourceInputStream extends EresourceInputStream {
 
+        public TestEresourceInputStream(DataSource dataSource, Executor executor) {
+            super(dataSource, executor);
+        }
+
         @Override
         protected String getBibQuery() {
             return "bibQuery";
@@ -58,13 +62,11 @@ public class EresourceInputStreamTest {
 
     @Before
     public void setUp() {
-        this.stream = new TestEresourceInputStream();
+        this.dataSource = createMock(DataSource.class);
+        this.executor = java.util.concurrent.Executors.newSingleThreadExecutor();
+        this.stream = new TestEresourceInputStream(this.dataSource, this.executor);
         this.timestamp = createMock(Timestamp.class);
         this.stream.setStartDate(this.timestamp);
-        this.dataSource = createMock(DataSource.class);
-        this.stream.setDataSource(this.dataSource);
-        this.executor = java.util.concurrent.Executors.newSingleThreadExecutor();
-        this.stream.setExecutor(this.executor);
         this.connection = createMock(Connection.class);
         this.pstmt = createMock(PreparedStatement.class);
         this.resultSet = createMock(ResultSet.class);

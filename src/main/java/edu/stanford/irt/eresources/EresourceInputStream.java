@@ -29,6 +29,11 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
 
     private Timestamp startDate;
 
+    public EresourceInputStream(final DataSource dataSource, final Executor executor) {
+        this.dataSource = dataSource;
+        this.executor = executor;
+    }
+
     @Override
     public int read() throws IOException {
         if (null == this.output) {
@@ -61,17 +66,6 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
         } catch (SQLException | IOException e) {
             throw new EresourceException(e);
         }
-    }
-
-    public void setDataSource(final DataSource dataSource) {
-        if (null == dataSource) {
-            throw new IllegalArgumentException("null dataSource");
-        }
-        this.dataSource = dataSource;
-    }
-
-    public void setExecutor(final Executor executor) {
-        this.executor = executor;
     }
 
     public void setStartDate(final Timestamp startDate) {

@@ -8,8 +8,6 @@ import org.marc4j.marc.Subfield;
 
 import com.ibm.icu.text.Normalizer;
 
-import edu.stanford.irt.eresources.sax.AuthTextAugmentation;
-
 
 public class KeywordsStrategy {
 
