@@ -29,6 +29,8 @@ import edu.stanford.irt.eresources.Version;
  */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
+    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
+
     protected static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
@@ -274,12 +276,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
                 if ("b".equals(this.code)) {
                     // remove trailing slash from subtitle (subfield b)
-                    int lengthLessTwo = this.currentText.length() - 2;
-                    if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
-                        this.currentText.setLength(lengthLessTwo);
-                    }
+                    String data = this.currentText.toString();
+                    data = SPACE_SLASH.matcher(data).replaceFirst("");
+                    this.title.append(data);
+                } else {
+                    this.title.append(this.currentText);
                 }
-                this.title.append(this.currentText);
             }
         } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
             if ("abnpq".indexOf(this.code) > -1) {
@@ -288,12 +290,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
                 if ("b".equals(this.code)) {
                     // remove trailing slash from subtitle (subfield b)
-                    int lengthLessTwo = this.currentText.length() - 2;
-                    if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
-                        this.currentText.setLength(lengthLessTwo);
-                    }
+                    String data = this.currentText.toString();
+                    data = SPACE_SLASH.matcher(data).replaceFirst("");
+                    this.preferredTitle.append(data);
+                } else {
+                    this.preferredTitle.append(this.currentText);
                 }
-                this.preferredTitle.append(this.currentText);
             }
         } else if ("250".equals(this.tag) && "a".equals(this.code)) {
             this.editionOrVersion.append(". ");
