@@ -44,11 +44,12 @@ public abstract class AbstractMarcEresource implements Eresource {
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
     private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-        { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
-        { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
+        { "search engine", "Database" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Book" },
+        { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Component" },
         { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
-        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
-        { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
+        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Digital Journal" },
+        { "books", "Book" }, { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, {"booklets", "Book"},
+        { "collections", "Database"} };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -152,6 +153,12 @@ public abstract class AbstractMarcEresource implements Eresource {
             this.primaryType = PRIMARY_TYPES.get(doPrimaryType());
             if (this.primaryType == null) {
                 this.primaryType = "";
+            } else if ("Book".equals(this.primaryType)) {
+                if ("print".equals(getRecordType())) {
+                    this.primaryType = "Print Book";
+                } else {
+                    this.primaryType = "Digital Book";
+                }
             }
         }
         return this.primaryType;

@@ -22,7 +22,7 @@ public class SAXEresource implements Cloneable, Eresource {
         "redwood software, installed", "duck software, installed", "stone software, installed",
         "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
         "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-        "statistics software, installed", "biotools software, installed" };
+        "statistics software, installed", "biotools software, installed", "laneclass", "lanepage" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -38,11 +38,12 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
     private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-            { "search engine", "Search Engine" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Leaflet" },
-            { "documents", "Document" }, { "pamphlets", "Pamphlet" }, { "components", "Component" },
-            { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
-            { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Serial" },
-            { "books", "Book" }, { "laneclasses", "Class" }, { "lanesite", "Lane Webpage" } };
+        { "search engine", "Database" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Book" },
+        { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Component" },
+        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
+        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Digital Journal" },
+        { "books", "Book" }, { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, {"booklets", "Book"},
+        { "collections", "Database"} };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);

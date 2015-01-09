@@ -189,7 +189,7 @@ public class AbstractMarcEresourceTest {
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Books.");
         replay(this.record, this.field, this.subfield);
-        assertEquals("Book", this.eresource.getPrimaryType());
+        assertEquals("Digital Book", this.eresource.getPrimaryType());
         verify(this.record, this.field, this.subfield);
     }
 
