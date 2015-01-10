@@ -64,7 +64,7 @@ public class AuthTextAugmentation extends DefaultHandler {
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        if (checkSaveContent()) {
+        if ("subfield".equals(localName) && checkSaveContent()) {
             this.augmentationText.append(' ').append(this.currentText);
         }
     }
@@ -114,8 +114,6 @@ public class AuthTextAugmentation extends DefaultHandler {
             this.code = atts.getValue("code");
         } else if ("datafield".equals(localName)) {
             this.tag = atts.getValue("tag");
-        } else if ("record".equals(localName)) {
-            this.augmentationText.setLength(0);
         }
     }
 
