@@ -4,7 +4,7 @@ import java.util.Date;
 
 import edu.stanford.lane.catalog.RecordProcessor;
 
-public abstract class AbstractEresourceProcessor implements RecordProcessor {
+public abstract class AbstractEresourceProcessor implements RecordProcessor, StartDateAware {
 
     private long startTime;
 
