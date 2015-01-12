@@ -35,9 +35,6 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
         this.translator = translator;
     }
 
-    protected UpdateEresourceHandler() {
-    }
-
     @Override
     protected void insertEresource(final Eresource eresource) throws SQLException, IOException {
         if (!eresource.isClone()) {

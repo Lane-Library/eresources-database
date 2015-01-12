@@ -52,9 +52,6 @@ public class DeleteEresourceHandler implements EresourceHandler {
         this.ids = new HashMap<String, Set<Integer>>();
     }
 
-    protected DeleteEresourceHandler() {
-    }
-
     @Override
     public int getCount() {
         Logger log = LoggerFactory.getLogger(getClass());

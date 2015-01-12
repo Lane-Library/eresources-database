@@ -53,9 +53,6 @@ public class DefaultEresourceHandler implements EresourceHandler {
         this.translator = translator;
     }
 
-    protected DefaultEresourceHandler() {
-    }
-
     @Override
     public int getCount() {
         Logger log = LoggerFactory.getLogger(getClass());
