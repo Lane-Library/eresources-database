@@ -45,6 +45,7 @@ public class DefaultEresourceHandlerTest {
 
     private Version version;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
         this.dataSource = createMock(DataSource.class);

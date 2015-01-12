@@ -40,6 +40,7 @@ public class DeleteEresourceHandlerTest {
 
     private Statement stmt;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
         this.queue = createMock(BlockingQueue.class);

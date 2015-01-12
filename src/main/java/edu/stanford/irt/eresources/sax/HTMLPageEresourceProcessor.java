@@ -19,6 +19,7 @@ import javax.xml.transform.sax.SAXResult;
 
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -56,6 +57,8 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
     @Override
     public void process() {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter process();");
         if (null == this.basePath) {
             throw new IllegalArgumentException("null basePath");
         }
@@ -77,6 +80,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         } catch (SAXException e) {
             throw new EresourceException(e);
         }
+        log.info("return process();");
     }
 
     private List<File> getHTMLPages(final File directory) {

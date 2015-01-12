@@ -10,6 +10,9 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class UpdateEresourceHandler extends DefaultEresourceHandler {
 
     private static final String DELETE_ERESOURCE= "DELETE FROM ERESOURCE WHERE ERESOURCE_ID = ";
@@ -56,5 +59,12 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
             }
         }
         super.insertEresource(eresource);
+    }
+
+    @Override
+    public void handleEresource(Eresource eresource) {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter handleEresource(" + eresource + ");");
+        super.handleEresource(eresource);
     }
 }

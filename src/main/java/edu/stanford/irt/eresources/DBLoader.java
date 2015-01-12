@@ -60,6 +60,7 @@ public class DBLoader {
 
     public void load() {
         Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter load();");
         log.info(this.version + " starting up");
         managePIDFile();
         try (Connection conn = this.dataSource.getConnection();
@@ -82,6 +83,7 @@ public class DBLoader {
         } catch (SQLException e) {
             throw new EresourceException(e);
         }
+        log.info("return load();");
     }
 
     public void setCallStatements(final Collection<String> callStatements) {

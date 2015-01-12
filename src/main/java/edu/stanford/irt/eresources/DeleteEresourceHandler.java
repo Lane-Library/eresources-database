@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DeleteEresourceHandler implements EresourceHandler {
 
     private static final String DELETE_ERESOURCE = "DELETE FROM ERESOURCE WHERE ERESOURCE_ID = ";
@@ -54,6 +57,9 @@ public class DeleteEresourceHandler implements EresourceHandler {
 
     @Override
     public int getCount() {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter getCount();");
+        log.info("return getCount() = " + this.count);
         return this.count;
     }
 
@@ -68,6 +74,8 @@ public class DeleteEresourceHandler implements EresourceHandler {
 
     @Override
     public void run() {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter run();");
         // get record ids from eresources
         getRecordIds();
         synchronized (this.queue) {
@@ -78,11 +86,15 @@ public class DeleteEresourceHandler implements EresourceHandler {
             // TODO: I don't think removeRemaining needs to be synchronized
             this.queue.notifyAll();
         }
+        log.info("return run();");
     }
 
     @Override
     public void stop() {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter stop();");
         this.keepGoing = false;
+        log.info("return stop();");
     }
 
     private void getRecordIds() {

@@ -32,6 +32,7 @@ public class DBLoaderTest {
 
     private Statement statement;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
         this.loader = new DBLoader();

@@ -12,6 +12,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
@@ -45,6 +47,8 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     @Override
     public void process() {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter process();");
         try {
             InputSource source;
             source = new InputSource(this.allClassesURL.openConnection().getInputStream());
@@ -62,5 +66,6 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
         } catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
             throw new EresourceException(e);
         }
+        log.info("return process();");
     }
 }

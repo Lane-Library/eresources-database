@@ -17,6 +17,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DefaultEresourceHandler implements EresourceHandler {
 
     private static final String CURRENT_ID_SQL = "SELECT ERESOURCE_ID_SEQ.CURRVAL FROM DUAL";
@@ -55,6 +58,9 @@ public class DefaultEresourceHandler implements EresourceHandler {
 
     @Override
     public int getCount() {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter getCount();");
+        log.info("return getCount() = " + this.count);
         return this.count;
     }
 
@@ -75,6 +81,8 @@ public class DefaultEresourceHandler implements EresourceHandler {
 
     @Override
     public void run() {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter run();");
         try (Connection conn = this.dataSource.getConnection();
                 Statement s = conn.createStatement();
                 PreparedStatement t = conn.prepareStatement(TEXT_SQL);
@@ -98,11 +106,15 @@ public class DefaultEresourceHandler implements EresourceHandler {
         } catch (SQLException e) {
             throw new EresourceException(e);
         }
+        log.info("return run();");
     }
 
     @Override
     public void stop() {
+        Logger log = LoggerFactory.getLogger(getClass());
+        log.info("enter stop();");
         this.keepGoing = false;
+        log.info("return stop();");
     }
 
     protected Statement getStatement() {
