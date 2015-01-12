@@ -37,33 +37,33 @@ public abstract class AbstractMarcBibProcessor extends AbstractMarcProcessor {
     public void process() {
         Logger log = LoggerFactory.getLogger(getClass());
         log.info("enter process();");
-//        Record bib = null;
-//        List<Record> holdings = null;
-//        String keywords = null;
-//        while (this.marcReader.hasNext()) {
-//            Record record = this.marcReader.next();
-//            if (isBib(record)) {
-//                if (bib != null) {
-//                    int[] items = this.itemCount.itemCount(bib.getControlNumber());
-//                    this.handler.handleEresource(createEresource(bib, holdings, keywords, items));
-//                    if (bib.getVariableField("249") != null) {
-//                        this.handler.handleEresource(createAltTitleEresource(bib, holdings, keywords, items));
-//                    }
-//                }
-//                bib = record;
-//                keywords = WHITESPACE.matcher(getKeywords(record)).replaceAll(" ");
-//                holdings = new ArrayList<Record>();
-//            } else {
-//                holdings.add(record);
-//            }
-//        }
-//        if (bib != null) {
-//            int[] items = this.itemCount.itemCount(bib.getControlNumber());
-//            this.handler.handleEresource(createEresource(bib, holdings, keywords, items));
-//            if (bib.getVariableField("249") != null) {
-//                this.handler.handleEresource(createAltTitleEresource(bib, holdings, keywords, items));
-//            }
-//        }
+        Record bib = null;
+        List<Record> holdings = null;
+        String keywords = null;
+        while (this.marcReader.hasNext()) {
+            Record record = this.marcReader.next();
+            if (isBib(record)) {
+                if (bib != null) {
+                    int[] items = this.itemCount.itemCount(bib.getControlNumber());
+                    this.handler.handleEresource(createEresource(bib, holdings, keywords, items));
+                    if (bib.getVariableField("249") != null) {
+                        this.handler.handleEresource(createAltTitleEresource(bib, holdings, keywords, items));
+                    }
+                }
+                bib = record;
+                keywords = WHITESPACE.matcher(getKeywords(record)).replaceAll(" ");
+                holdings = new ArrayList<Record>();
+            } else {
+                holdings.add(record);
+            }
+        }
+        if (bib != null) {
+            int[] items = this.itemCount.itemCount(bib.getControlNumber());
+            this.handler.handleEresource(createEresource(bib, holdings, keywords, items));
+            if (bib.getVariableField("249") != null) {
+                this.handler.handleEresource(createAltTitleEresource(bib, holdings, keywords, items));
+            }
+        }
         log.info("return process();");
     }
 
