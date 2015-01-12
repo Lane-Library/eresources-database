@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
-import org.marc4j.MarcReader;
+import java.util.Date;
+
 import org.marc4j.marc.Record;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +13,9 @@ public class MarcAuthProcessor extends AbstractMarcProcessor {
 
     private EresourceHandler handler;
 
-    private MarcReader marcReader;
+    private EresourceMarcReader marcReader;
     
-    public MarcAuthProcessor(EresourceHandler handler, MarcReader marcReader, KeywordsStrategy keywordsStrategy) {
+    public MarcAuthProcessor(EresourceHandler handler, EresourceMarcReader marcReader, KeywordsStrategy keywordsStrategy) {
         super(keywordsStrategy);
         this.handler = handler;
         this.marcReader = marcReader;
@@ -24,6 +25,7 @@ public class MarcAuthProcessor extends AbstractMarcProcessor {
     public void process() {
         Logger log = LoggerFactory.getLogger(getClass());
         log.info("enter process();");
+        this.marcReader.setStartDate(new Date(getStartTime()));
         while (this.marcReader.hasNext()) {
             Record record = this.marcReader.next();
             Eresource eresource = new AuthMarcEresource(record, getKeywords(record).replaceAll("\\s\\s+", " ").trim());

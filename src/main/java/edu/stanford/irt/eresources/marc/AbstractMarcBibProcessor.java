@@ -1,10 +1,10 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +23,9 @@ public abstract class AbstractMarcBibProcessor extends AbstractMarcProcessor {
 
     private ItemCount itemCount;
 
-    private MarcReader marcReader;
+    private EresourceMarcReader marcReader;
 
-    public AbstractMarcBibProcessor(final EresourceHandler handler, final MarcReader marcReader,
+    public AbstractMarcBibProcessor(final EresourceHandler handler, final EresourceMarcReader marcReader,
             final ItemCount itemCount, final KeywordsStrategy keywordsStrategy) {
         super(keywordsStrategy);
         this.handler = handler;
@@ -37,6 +37,7 @@ public abstract class AbstractMarcBibProcessor extends AbstractMarcProcessor {
     public void process() {
         Logger log = LoggerFactory.getLogger(getClass());
         log.info("enter process();");
+        this.marcReader.setStartDate(new Date(getStartTime()));
         Record bib = null;
         List<Record> holdings = null;
         String keywords = null;

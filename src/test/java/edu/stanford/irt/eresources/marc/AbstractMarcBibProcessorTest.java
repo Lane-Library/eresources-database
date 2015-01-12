@@ -5,11 +5,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.marc4j.MarcReader;
 import org.marc4j.marc.Leader;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.VariableField;
@@ -22,7 +22,7 @@ public class AbstractMarcBibProcessorTest {
 
     private class TestAbstractMarcBibProcessor extends AbstractMarcBibProcessor {
 
-        public TestAbstractMarcBibProcessor(EresourceHandler handler, MarcReader marcReader, ItemCount itemCount, final KeywordsStrategy keywordsStrategy) {
+        public TestAbstractMarcBibProcessor(EresourceHandler handler, EresourceMarcReader marcReader, ItemCount itemCount, final KeywordsStrategy keywordsStrategy) {
             super(handler, marcReader, itemCount, keywordsStrategy);
         }
 
@@ -45,7 +45,7 @@ public class AbstractMarcBibProcessorTest {
 
     private ItemCount itemCount;
 
-    private MarcReader marcReader;
+    private EresourceMarcReader marcReader;
 
     private EresourceHandler eresourceHandler;
 
@@ -58,7 +58,7 @@ public class AbstractMarcBibProcessorTest {
     @Before
     public void setUp() {
         this.eresourceHandler = createMock(EresourceHandler.class);
-        this.marcReader = createMock(MarcReader.class);
+        this.marcReader = createMock(EresourceMarcReader.class);
         this.itemCount = createMock(ItemCount.class);
         this.keywordStrategy = createMock(KeywordsStrategy.class);
         this.processor = new TestAbstractMarcBibProcessor(this.eresourceHandler, this.marcReader, this.itemCount, this.keywordStrategy);
@@ -69,6 +69,7 @@ public class AbstractMarcBibProcessorTest {
 
     @Test
     public void testProcess() {
+        this.marcReader.setStartDate(new Date(0));
         expect(this.marcReader.hasNext()).andReturn(true).times(2);
         expect(this.marcReader.next()).andReturn(this.record).times(2);
         expect(this.record.getLeader()).andReturn(this.leader).times(2);

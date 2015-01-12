@@ -5,7 +5,7 @@
     <bean id="authProcessor" class="edu.stanford.irt.eresources.marc.MarcAuthProcessor">
         <constructor-arg ref="eresourceHandler"/>
         <constructor-arg>
-            <bean class="org.marc4j.MarcStreamReader">
+            <bean class="edu.stanford.irt.eresources.marc.EresourceMarcReader">
                 <constructor-arg>
                     <bean class="edu.stanford.irt.eresources.AuthInputStream">
                         <constructor-arg ref="voyagerDataSource"/>

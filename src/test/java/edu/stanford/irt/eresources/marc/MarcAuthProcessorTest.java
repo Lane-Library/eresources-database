@@ -6,9 +6,10 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
 
 import edu.stanford.irt.eresources.Eresource;
@@ -20,7 +21,7 @@ public class MarcAuthProcessorTest {
 
     private KeywordsStrategy keywordsStrategy;
 
-    private MarcReader marcReader;
+    private EresourceMarcReader marcReader;
 
     private MarcAuthProcessor processor;
 
@@ -29,7 +30,7 @@ public class MarcAuthProcessorTest {
     @Before
     public void setUp() {
         this.eresourceHandler = createMock(EresourceHandler.class);
-        this.marcReader = createMock(MarcReader.class);
+        this.marcReader = createMock(EresourceMarcReader.class);
         this.keywordsStrategy = createMock(KeywordsStrategy.class);
         this.processor = new MarcAuthProcessor(this.eresourceHandler, this.marcReader, this.keywordsStrategy);
         this.record = createMock(Record.class);
@@ -37,6 +38,7 @@ public class MarcAuthProcessorTest {
 
     @Test
     public void testProcess() {
+        this.marcReader.setStartDate(new Date(0));
         expect(this.marcReader.hasNext()).andReturn(true);
         expect(this.marcReader.next()).andReturn(this.record);
         expect(this.keywordsStrategy.getKeywords(this.record)).andReturn("keywords");

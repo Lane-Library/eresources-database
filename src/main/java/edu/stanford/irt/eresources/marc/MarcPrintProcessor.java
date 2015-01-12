@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources.marc;
 
 import java.util.List;
 
-import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
 
 import edu.stanford.irt.eresources.Eresource;
@@ -11,7 +10,7 @@ import edu.stanford.irt.eresources.ItemCount;
 
 public class MarcPrintProcessor extends AbstractMarcBibProcessor {
 
-    public MarcPrintProcessor(EresourceHandler handler, MarcReader marcReader, ItemCount itemCount, KeywordsStrategy keywordsStrategy) {
+    public MarcPrintProcessor(EresourceHandler handler, EresourceMarcReader marcReader, ItemCount itemCount, KeywordsStrategy keywordsStrategy) {
         super(handler, marcReader, itemCount, keywordsStrategy);
     }
 
