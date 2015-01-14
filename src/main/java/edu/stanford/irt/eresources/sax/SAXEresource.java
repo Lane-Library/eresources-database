@@ -37,11 +37,11 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
-    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-        { "search engine", "Database" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Book" },
-        { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Component" },
-        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
-        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Digital Journal" },
+    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Other" },
+        { "search engine", "Database" }, { "sound recordings", "Audio" }, { "leaflets", "Book" },
+        { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Other" },
+        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Software" },
+        { "databases", "Database" }, { "visual materials", "Image" }, { "serials", "Digital Journal" },
         { "books", "Book" }, { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, {"booklets", "Book"},
         { "collections", "Database"} };
     static {
