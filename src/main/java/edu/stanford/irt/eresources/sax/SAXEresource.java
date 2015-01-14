@@ -101,7 +101,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String title;
 
-    private Collection<String> types;
+    private Collection<String> types = new HashSet<String>();
 
     private Date updated;
 
@@ -119,9 +119,6 @@ public class SAXEresource implements Cloneable, Eresource {
     public void addType(final String type) {
         String typeToAdd = getCompositeType(type);
         if (isAllowable(typeToAdd)) {
-            if (this.types == null) {
-                this.types = new HashSet<String>();
-            }
             this.types.add(typeToAdd);
         }
     }
