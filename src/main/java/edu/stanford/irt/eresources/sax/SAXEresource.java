@@ -36,14 +36,6 @@ public class SAXEresource implements Cloneable, Eresource {
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
-
-    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Other" },
-        { "search engine", "Database" }, { "sound recordings", "Audio" }, { "leaflets", "Book" },
-        { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Other" },
-        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Software" },
-        { "databases", "Database" }, { "visual materials", "Image" }, { "serials", "Digital Journal" },
-        { "books", "Book" }, { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, {"booklets", "Book"},
-        { "collections", "Database"} };
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -53,9 +45,40 @@ public class SAXEresource implements Cloneable, Eresource {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
-        for (String[] element : PRIMARY_TYPES_INITIALIZER) {
-            PRIMARY_TYPES.put(element[0], element[1]);
-        }
+            PRIMARY_TYPES.put("book", "book");
+            PRIMARY_TYPES.put("books", "book");
+            PRIMARY_TYPES.put("book set", "book");
+            PRIMARY_TYPES.put("book sets", "book");
+            PRIMARY_TYPES.put("cartographic material", "Other");
+            PRIMARY_TYPES.put("cartographic materials", "Other");
+            PRIMARY_TYPES.put("collection", "Database");
+            PRIMARY_TYPES.put("collections", "Database");
+            PRIMARY_TYPES.put("component", "Other");
+            PRIMARY_TYPES.put("components", "Other");
+            PRIMARY_TYPES.put("computer file", "Software");
+            PRIMARY_TYPES.put("computer files", "Software");
+            PRIMARY_TYPES.put("database", "Database");
+            PRIMARY_TYPES.put("databases", "Database");
+            PRIMARY_TYPES.put("document", "book");
+            PRIMARY_TYPES.put("documents", "book");
+            PRIMARY_TYPES.put("laneclass", "Lane Class");
+            PRIMARY_TYPES.put("lanepage", "Lane Webpage");
+            PRIMARY_TYPES.put("leaflet", "book");
+            PRIMARY_TYPES.put("leaflets", "book");
+            PRIMARY_TYPES.put("pamphlet", "book");
+            PRIMARY_TYPES.put("pamphlets", "book");
+            PRIMARY_TYPES.put("periodical", "Digital Journal");
+            PRIMARY_TYPES.put("periodicals", "Digital Journal");
+            PRIMARY_TYPES.put("search engine", "Database");
+            PRIMARY_TYPES.put("search engines", "Database");
+            PRIMARY_TYPES.put("serial", "Digital Journal");
+            PRIMARY_TYPES.put("serials", "Digital Journal");
+            PRIMARY_TYPES.put("sound recording", "Audio");
+            PRIMARY_TYPES.put("sound recordings", "Audio");
+            PRIMARY_TYPES.put("visual material", "Image");
+            PRIMARY_TYPES.put("visual materials", "Image");
+            PRIMARY_TYPES.put("website", "Website");
+            PRIMARY_TYPES.put("websites", "Website");
     }
 
     private int[] count = new int[] { 0, 0 };
@@ -166,8 +189,8 @@ public class SAXEresource implements Cloneable, Eresource {
     public String getPrimaryType() {
         String type = null;
         if (this.primaryType == null) {
-            type = "";
-        } else if ("Book".equals(this.primaryType)) {
+            type = "Other";
+        } else if ("book".equals(this.primaryType)) {
             if ("print".equals(this.recordType)) {
                 type = "Print Book";
             } else {
@@ -203,6 +226,9 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public String getTitle() {
+        if (this.title != null && this.title.length() > 512) {
+            return this.title.substring(0, 511);
+        }
         return this.title;
     }
 
