@@ -137,6 +137,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
                 this.currentEresource = new SAXEresource();
                 setRecordType();
+                this.currentEresource.addType("catalog");
             }
         } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
