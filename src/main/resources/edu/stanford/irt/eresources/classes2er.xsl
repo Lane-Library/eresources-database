@@ -22,7 +22,6 @@
             <title><xsl:value-of select="$title"/></title>
             <primaryType>laneclass</primaryType>
             <type>lanesite</type>
-            <type>laneclass</type>
             <keywords><xsl:value-of select="concat($description, ' ', $title)"/></keywords>
             <version>
                 <link>

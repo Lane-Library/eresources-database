@@ -9,12 +9,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
 public class SAXEresource implements Cloneable, Eresource {
+    
+    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
@@ -241,9 +244,7 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public Collection<String> getTypes() {
-        if (null == this.types) {
-            return Collections.emptySet();
-        }
+        this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll("").toUpperCase());
         return Collections.unmodifiableCollection(this.types);
     }
 
