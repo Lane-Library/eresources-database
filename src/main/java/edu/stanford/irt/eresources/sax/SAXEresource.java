@@ -70,12 +70,12 @@ public class SAXEresource implements Cloneable, Eresource {
             PRIMARY_TYPES.put("leaflets", "book");
             PRIMARY_TYPES.put("pamphlet", "book");
             PRIMARY_TYPES.put("pamphlets", "book");
-            PRIMARY_TYPES.put("periodical", "Digital Journal");
-            PRIMARY_TYPES.put("periodicals", "Digital Journal");
+            PRIMARY_TYPES.put("periodical", "journal");
+            PRIMARY_TYPES.put("periodicals", "journal");
             PRIMARY_TYPES.put("search engine", "Database");
             PRIMARY_TYPES.put("search engines", "Database");
-            PRIMARY_TYPES.put("serial", "Digital Journal");
-            PRIMARY_TYPES.put("serials", "Digital Journal");
+            PRIMARY_TYPES.put("serial", "journal");
+            PRIMARY_TYPES.put("serials", "journal");
             PRIMARY_TYPES.put("sound recording", "Audio");
             PRIMARY_TYPES.put("sound recordings", "Audio");
             PRIMARY_TYPES.put("visual material", "visual material");
@@ -195,6 +195,12 @@ public class SAXEresource implements Cloneable, Eresource {
                 type = "Print Book";
             } else {
                 type = "Digital Book";
+            }
+        } else if ("journal".equals(this.primaryType)) {
+            if ("print".equals(this.recordType)) {
+                type = "Print Journal";
+            } else {
+                type = "Digital Journal";
             }
         } else if ("visual material".equals(this.primaryType)) {
             if (this.types.contains("video")) {
