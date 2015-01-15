@@ -250,7 +250,7 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public Collection<String> getTypes() {
-        this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll("").toUpperCase());
+        this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll("").toLowerCase());
         return Collections.unmodifiableCollection(this.types);
     }
 
