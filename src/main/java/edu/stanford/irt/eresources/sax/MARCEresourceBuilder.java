@@ -369,7 +369,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentLink.setUrl(this.currentText.toString());
             } else if ("i".equals(this.code)) {
                 maybeSetInstruction(this.currentLink, this.currentText.toString());
-                this.currentLink.setInstruction(this.currentText.toString());
             }
         }
     }
