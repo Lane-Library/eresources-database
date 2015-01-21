@@ -29,8 +29,6 @@ import edu.stanford.irt.eresources.Version;
  */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
-
     protected static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
@@ -42,6 +40,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     private static final String DATAFIELD = "datafield";
 
     private static final String RECORD = "record";
+
+    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
 
     private static final String SUBFIELD = "subfield";
 
@@ -368,6 +368,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("u".equals(this.code)) {
                 this.currentLink.setUrl(this.currentText.toString());
             } else if ("i".equals(this.code)) {
+                maybeSetInstruction(this.currentLink, this.currentText.toString());
                 this.currentLink.setInstruction(this.currentText.toString());
             }
         }
@@ -383,6 +384,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             // subset, biotools will count as type: software
             this.currentEresource.addType("software");
         }
+    }
+
+    protected void maybeSetInstruction(final SAXLink link, final String instruction) {
+        link.setInstruction(instruction);
     }
 
     protected void setRecordType() {

@@ -1,14 +1,13 @@
-/**
- *
- */
 package edu.stanford.irt.eresources.sax;
 
 import java.util.Collection;
 
-/**
- * @author ceyates
- */
 public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
+
+    @Override
+    protected void maybeSetInstruction(SAXLink link, String instruction) {
+        // do nothing
+    }
 
     @Override
     protected void createCustomTypes(final SAXEresource eresource) {
