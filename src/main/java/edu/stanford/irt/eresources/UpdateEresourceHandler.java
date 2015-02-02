@@ -11,7 +11,7 @@ import java.util.concurrent.BlockingQueue;
 import javax.sql.DataSource;
 
 public class UpdateEresourceHandler extends DefaultEresourceHandler {
-    
+
     private static final String DELETE_FROM = "DELETE FROM ";
 
     private String deleteEresource;
@@ -34,8 +34,6 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
             final EresourceSQLTranslator translator) {
         this(dataSource, queue, translator, "");
     }
-    
-    protected UpdateEresourceHandler() {}
 
     public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final EresourceSQLTranslator translator, final String tablePrefix) {
@@ -48,6 +46,9 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
         this.deleteType = DELETE_FROM + this.tablePrefix + "TYPE WHERE ERESOURCE_ID = ";
         this.deleteSubset = DELETE_FROM + this.tablePrefix + "SUBSET WHERE ERESOURCE_ID = ";
         this.deleteMesh = DELETE_FROM + this.tablePrefix + "MESH WHERE ERESOURCE_ID = ";
+    }
+
+    protected UpdateEresourceHandler() {
     }
 
     @Override

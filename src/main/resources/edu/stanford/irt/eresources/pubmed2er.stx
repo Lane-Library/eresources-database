@@ -54,7 +54,7 @@
                 <doi><stx:value-of select="$doi"/></doi>
             </stx:if>
             <type>Article</type>
-            <primaryType>Articles</primaryType>
+            <primaryType>Article</primaryType>
             <stx:assign name="title">
                 <stx:choose>
                     <stx:when test="$vernacularTitle != ''">

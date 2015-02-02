@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8,15 +8,18 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.EresourceHandler;
+
 public class DefaultEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private Eresource currentEresource;
+    private SAXEresource currentEresource;
 
-    private Link currentLink;
+    private SAXLink currentLink;
 
     private StringBuilder currentText;
 
-    private Version currentVersion;
+    private SAXVersion currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -78,6 +81,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         }
     }
 
+    @Override
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
     }
@@ -95,7 +99,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             throws SAXException {
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
-            this.currentEresource = new Eresource();
+            this.currentEresource = new SAXEresource();
             this.currentEresource.setRecordId(Integer.parseInt(atts.getValue("id")));
             this.currentEresource.setRecordType(atts.getValue("type"));
             try {
@@ -104,9 +108,9 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
                 throw new EresourceDatabaseException(e);
             }
         } else if ("version".equals(name)) {
-            this.currentVersion = new Version();
+            this.currentVersion = new SAXVersion();
         } else if ("link".equals(name)) {
-            this.currentLink = new Link();
+            this.currentLink = new SAXLink();
         }
     }
 }

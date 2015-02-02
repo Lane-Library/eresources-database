@@ -4,17 +4,17 @@ import java.util.regex.Pattern;
 
 public class AbstractSQLTranslator {
 
+    protected static final char APOS = '\'';
+
     protected static final char COMMA = ',';
 
     protected static final char END_PAREN = ')';
 
-    private static final String INSERT_INTO = "INSERT INTO ";
-
     protected static final String NULL = "NULL";
 
-    protected static final char APOS = '\'';
-
     private static final Pattern APOS_PATTERN = Pattern.compile("'");
+
+    private static final String INSERT_INTO = "INSERT INTO ";
 
     private String insertInto;
 

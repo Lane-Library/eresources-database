@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -18,24 +18,32 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.Version;
+
 /**
  * @author ceyates
  */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
     protected static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
-    
-    private static final String RECORD = "record";
-    
-    private static final String SUBFIELD = "subfield";
-    
-    private static final String DATAFIELD = "datafield";
-    
-    private static final String CONTROLFIELD = "controlfield";
-    
-    private static final String BIOTOOLS = "biotools";
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
+
+    private static final String BIOTOOLS = "biotools";
+
+    private static final String CONTROLFIELD = "controlfield";
+
+    private static final String DATAFIELD = "datafield";
+
+    private static final String RECORD = "record";
+
+    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
+
+    private static final String SUBFIELD = "subfield";
 
     protected AuthTextAugmentation authTextAugmentation;
 
@@ -43,13 +51,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected StringBuilder content = new StringBuilder();
 
-    protected Eresource currentEresource;
+    protected SAXEresource currentEresource;
 
-    protected Link currentLink;
+    protected SAXLink currentLink;
 
     protected StringBuilder currentText = new StringBuilder();
 
-    protected Version currentVersion;
+    protected SAXVersion currentVersion;
 
     protected StringBuilder description505 = new StringBuilder();
 
@@ -117,7 +125,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if ("uvxy".indexOf(this.currentText.charAt(6)) > -1) {
                 this.isMfhd = true;
                 this.isBib = false;
-                this.currentVersion = new Version();
+                this.currentVersion = new SAXVersion();
             } else {
                 this.isBib = true;
                 this.isMfhd = false;
@@ -127,12 +135,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.currentEresource.setItemCount(this.itemCount.itemCount(this.currentEresource.getRecordId()));
                     handlePreviousRecord();
                 }
-                this.currentEresource = new Eresource();
+                this.currentEresource = new SAXEresource();
                 setRecordType();
+                this.currentEresource.addType("Catalog");
             }
         } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
-                maybeAddCatalogLink();
                 this.currentEresource.addVersion(this.currentVersion);
             } else if (this.isBib) {
                 if (this.description520.length() > 0) {
@@ -142,7 +150,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
                 this.description520.setLength(0);
                 this.description505.setLength(0);
-                this.currentEresource.setKeywords(this.content.toString());
+                this.currentEresource.setKeywords(this.content.toString().replaceAll("\\s\\s+", " "));
                 this.content.setLength(0);
             }
         } else if (this.isBib) {
@@ -156,10 +164,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         this.authTextAugmentation = authTextAugmentation;
     }
 
+    @Override
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
     }
-    
+
     public void setItemCount(final ItemCount itemCount) {
         this.itemCount = itemCount;
     }
@@ -182,7 +191,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if (this.isMfhd && "856".equals(this.tag)) {
-                this.currentLink = new Link();
+                this.currentLink = new SAXLink();
                 this.q = null;
                 this.z = null;
             }
@@ -195,7 +204,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    protected void createCustomTypes(final Eresource eresource) {
+    protected void createCustomTypes(final SAXEresource eresource) {
         Collection<String> types = eresource.getTypes();
         if (types.contains("Software, Installed")) {
             if (types.contains("Statistics")) {
@@ -267,13 +276,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.title.append(' ');
                 }
                 if ("b".equals(this.code)) {
-                    //remove trailing slash from subtitle (subfield b)
-                    int lengthLessTwo = this.currentText.length() - 2;
-                    if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
-                        this.currentText.setLength(lengthLessTwo);
-                    }
+                    // remove trailing slash from subtitle (subfield b)
+                    String data = this.currentText.toString();
+                    data = SPACE_SLASH.matcher(data).replaceFirst("");
+                    this.title.append(data);
+                } else {
+                    this.title.append(this.currentText);
                 }
-                this.title.append(this.currentText);
             }
         } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
             if ("abnpq".indexOf(this.code) > -1) {
@@ -281,13 +290,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.preferredTitle.append(' ');
                 }
                 if ("b".equals(this.code)) {
-                    //remove trailing slash from subtitle (subfield b)
-                    int lengthLessTwo = this.currentText.length() - 2;
-                    if (this.currentText.lastIndexOf(" /") == lengthLessTwo) {
-                        this.currentText.setLength(lengthLessTwo);
-                    }
+                    // remove trailing slash from subtitle (subfield b)
+                    String data = this.currentText.toString();
+                    data = SPACE_SLASH.matcher(data).replaceFirst("");
+                    this.preferredTitle.append(data);
+                } else {
+                    this.preferredTitle.append(this.currentText);
                 }
-                this.preferredTitle.append(this.currentText);
             }
         } else if ("250".equals(this.tag) && "a".equals(this.code)) {
             this.editionOrVersion.append(". ");
@@ -295,8 +304,14 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if ("035".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("(Bassett)") == 0)) {
             this.currentEresource.addType("Bassett");
         } else if ("520".equals(this.tag)) {
+            if (this.description520.length() > 0) {
+                this.description520.append(' ');
+            }
             this.description520.append(this.currentText.toString());
         } else if ("505".equals(this.tag)) {
+            if (this.description505.length() > 0) {
+                this.description505.append(' ');
+            }
             this.description505.append(this.currentText.toString());
         }
         if ("650".equals(this.tag) && "a".equals(this.code)) {
@@ -338,7 +353,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if ("844".equals(this.tag) && "a".equals(this.code)) {
             this.currentVersion.setPublisher(this.currentText.toString());
-        } else if ("866".equals(this.tag)) {
+        } else if ("866".equals(this.tag) && this.countOf866 == 0) {
             if ("v".equals(this.code)) {
                 String holdings = this.currentText.toString();
                 holdings = holdings.replaceAll(" =", "");
@@ -356,7 +371,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("u".equals(this.code)) {
                 this.currentLink.setUrl(this.currentText.toString());
             } else if ("i".equals(this.code)) {
-                this.currentLink.setInstruction(this.currentText.toString());
+                maybeSetInstruction(this.currentLink, this.currentText.toString());
             }
         }
     }
@@ -371,6 +386,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             // subset, biotools will count as type: software
             this.currentEresource.addType("Software");
         }
+    }
+
+    protected void maybeSetInstruction(final SAXLink link, final String instruction) {
+        link.setInstruction(instruction);
     }
 
     protected void setRecordType() {
@@ -483,11 +502,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private void handlePreviousRecord() {
         createCustomTypes(this.currentEresource);
+        maybeAddCatalogLink();
         if (!this.recordHasError) {
             this.eresourceHandler.handleEresource(this.currentEresource);
             if (this.hasPreferredTitle) {
                 try {
-                    Eresource clone = (Eresource) this.currentEresource.clone();
+                    SAXEresource clone = (SAXEresource) this.currentEresource.clone();
                     clone.setTitle(this.preferredTitle.toString());
                     // clone needs different id so solr doesn't just overwrite parent record
                     clone.setRecordId(Math.abs(clone.getTitle().hashCode()));

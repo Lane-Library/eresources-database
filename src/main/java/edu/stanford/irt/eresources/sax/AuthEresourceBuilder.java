@@ -1,7 +1,7 @@
 /**
- * 
+ *
  */
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -15,34 +15,37 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.EresourceHandler;
+
 /**
  * @author ceyates
  */
 public class AuthEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
-    
-    private static final String RECORD = "record";
-    
-    private static final String SUBFIELD = "subfield";
-    
-    private static final String DATAFIELD = "datafield";
-    
+    private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^(\\d[\\d|u]{3}|Continuing)$");
+
     private static final String CONTROLFIELD = "controlfield";
 
-    private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^(\\d[\\d|u]{3}|Continuing)$");
+    private static final String DATAFIELD = "datafield";
+
+    private static final String RECORD = "record";
+
+    private static final String SUBFIELD = "subfield";
+
+    private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private String code;
 
     private StringBuilder content = new StringBuilder();
 
-    private Eresource currentEresource;
+    private SAXEresource currentEresource;
 
-    private Link currentLink;
+    private SAXLink currentLink;
 
     private StringBuilder currentText = new StringBuilder();
 
-    private Version currentVersion;
+    private SAXVersion currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -68,6 +71,8 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private String z;
 
+    private AuthTextAugmentation authTextAugmentation;
+
     @Override
     public void characters(final char[] chars, final int start, final int length) throws SAXException {
         this.currentText.append(chars, start, length);
@@ -79,12 +84,13 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if (RECORD.equals(name)) {
-            this.currentEresource.setKeywords(this.content.toString());
+            this.currentEresource.setKeywords(this.content.toString().replaceAll("\\s\\s+", " ").trim());
             if (!this.recordHasError) {
+                this.currentEresource.addVersion(this.currentVersion);
                 this.eresourceHandler.handleEresource(this.currentEresource);
                 if (this.hasPreferredTitle) {
                     try {
-                        Eresource clone = (Eresource) this.currentEresource.clone();
+                        SAXEresource clone = (SAXEresource) this.currentEresource.clone();
                         clone.setTitle(this.preferredTitle.toString());
                         this.hasPreferredTitle = false;
                         this.preferredTitle.setLength(0);
@@ -108,8 +114,13 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
+    @Override
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
+    }
+
+    public void setAuthTextAugmentation(final AuthTextAugmentation authTextAugmentation) {
+        this.authTextAugmentation = authTextAugmentation;
     }
 
     @Override
@@ -117,10 +128,10 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             throws SAXException {
         this.currentText.setLength(0);
         if (RECORD.equals(name)) {
-            this.currentEresource = new Eresource();
-            this.currentVersion = new Version();
-            this.currentEresource.addVersion(this.currentVersion);
+            this.currentEresource = new SAXEresource();
+            this.currentVersion = new SAXVersion();
             this.currentEresource.setRecordType("auth");
+            this.currentEresource.addType("catalog");
         }
         if (SUBFIELD.equals(name)) {
             this.code = atts.getValue("code");
@@ -129,7 +140,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
             if ("856".equals(this.tag)) {
-                this.currentLink = new Link();
+                this.currentLink = new SAXLink();
                 this.q = null;
                 this.z = null;
             }
@@ -230,6 +241,18 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 if (null != beginDate) {
                     this.currentEresource.setYear(Integer.parseInt(beginDate));
                 }
+            }
+        }
+        if ("650".equals(this.tag) && "a".equals(this.code)) {
+            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString(), this.tag);
+            if (authText != null && authText.length() > 0) {
+                this.content.append(' ').append(authText).append(' ');
+            }
+        }
+        if (("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) && "a".equals(this.code)) {
+            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString(), this.tag);
+            if (authText != null && authText.length() > 0) {
+                this.content.append(' ').append(authText).append(' ');
             }
         }
     }

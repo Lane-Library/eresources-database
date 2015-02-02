@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +19,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.AuthAugmentationInputStream;
+import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader;
 
 public class AuthTextAugmentation extends DefaultHandler {
@@ -62,7 +64,7 @@ public class AuthTextAugmentation extends DefaultHandler {
 
     @Override
     public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        if (checkSaveContent()) {
+        if ("subfield".equals(localName) && checkSaveContent()) {
             this.augmentationText.append(' ').append(this.currentText);
         }
     }
@@ -112,8 +114,6 @@ public class AuthTextAugmentation extends DefaultHandler {
             this.code = atts.getValue("code");
         } else if ("datafield".equals(localName)) {
             this.tag = atts.getValue("tag");
-        } else if ("record".equals(localName)) {
-            this.augmentationText.setLength(0);
         }
     }
 

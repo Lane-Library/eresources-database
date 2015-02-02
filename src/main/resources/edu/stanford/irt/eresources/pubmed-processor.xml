@@ -16,7 +16,7 @@
         <property name="contentHandler" ref="pubmedBuilder"/>
     </bean>
     
-    <bean id="pubmedBuilder" class="edu.stanford.irt.eresources.PubmedEresourceBuilder">
+    <bean id="pubmedBuilder" class="edu.stanford.irt.eresources.sax.PubmedEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
         <property name="specialTypesManager" ref="specialTypesManager"/>
     </bean>

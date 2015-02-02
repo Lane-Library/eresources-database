@@ -1,9 +1,11 @@
 /**
- * 
+ *
  */
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import org.xml.sax.ContentHandler;
+
+import edu.stanford.irt.eresources.EresourceHandler;
 
 /**
  * @author ceyates

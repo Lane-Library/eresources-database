@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.sax;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8,18 +8,22 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.PubmedSpecialTypesManager;
+
 /**
  *
  */
 public class PubmedEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    private Eresource currentEresource;
+    private SAXEresource currentEresource;
 
-    private Link currentLink;
+    private SAXLink currentLink;
 
     private StringBuilder currentText;
 
-    private Version currentVersion;
+    private SAXVersion currentVersion;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -130,7 +134,7 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
             String id = atts.getValue("id");
-            this.currentEresource = new Eresource();
+            this.currentEresource = new SAXEresource();
             this.currentEresource.setRecordId(Integer.parseInt(id));
             this.currentEresource.setRecordType(atts.getValue("type"));
             for (String type : this.specialTypesManager.getTypes(id)) {
@@ -142,9 +146,9 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
                 throw new EresourceDatabaseException(e);
             }
         } else if ("version".equals(name)) {
-            this.currentVersion = new Version();
+            this.currentVersion = new SAXVersion();
         } else if ("link".equals(name)) {
-            this.currentLink = new Link();
+            this.currentLink = new SAXLink();
         }
     }
 }

@@ -20,6 +20,7 @@
         <xsl:variable name="description" select="normalize-space(event_description)"/>
         <eresource id="{$id}" type="class" update="19690101000000">
             <title><xsl:value-of select="$title"/></title>
+            <primaryType>laneclass</primaryType>
             <type>Lane Class</type>
             <type>Lane Web Page</type>
             <keywords><xsl:value-of select="concat($description, ' ', $title)"/></keywords>

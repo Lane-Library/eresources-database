@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
-    <bean id="bibProcessor" class="edu.stanford.irt.eresources.MARCEresourceProcessor">
+    <bean id="bibProcessor" class="edu.stanford.irt.eresources.sax.MARCEresourceProcessor">
         <property name="inputStream" ref="bibInputStream"/>
         <property name="xmlReader">
             <bean id="marcReader" class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
@@ -13,12 +13,12 @@
     <bean id="marcReader" class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
         <property name="contentHandler" ref="bibBuilder"/>
     </bean>
-    <bean id="bibBuilder" class="edu.stanford.irt.eresources.MARCEresourceBuilder">
+    <bean id="bibBuilder" class="edu.stanford.irt.eresources.sax.MARCEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
         <property name="authTextAugmentation" ref="authTextAugmentation"/>
         <property name="itemCount" ref="itemCount"/>
     </bean>
-    <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.AuthTextAugmentation">
+    <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.sax.AuthTextAugmentation">
         <property name="dataSource" ref="voyagerDataSource"/>
         <property name="executor" ref="executor"/>
     </bean>

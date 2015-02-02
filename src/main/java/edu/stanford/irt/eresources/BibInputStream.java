@@ -6,8 +6,7 @@ public class BibInputStream extends EresourceInputStream {
 
     private static final String MFHD_QUERY = "SELECT SEQNUM, RECORD_SEGMENT FROM LMLDB.MFHD_DATA WHERE MFHD_ID = ?";
 
-    private static final String QUERY = 
-              "select bib_mfhd.bib_id, bib_mfhd.mfhd_id "
+    private static final String QUERY = "select bib_mfhd.bib_id, bib_mfhd.mfhd_id "
             + "from lmldb.bib_mfhd, lmldb.bib_master, lmldb.bib_index, lmldb.mfhd_master "
             + "where bib_master.bib_id = bib_mfhd.bib_id "
             + "and bib_master.suppress_in_opac != 'Y' "

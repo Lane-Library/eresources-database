@@ -37,6 +37,7 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
         return super.read();
     }
 
+    @Override
     public void run() {
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(getSelectIDListSQL());
