@@ -6,10 +6,14 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
@@ -33,6 +37,37 @@ public class DefaultEresourceBuilderTest {
     @Test
     public void testCharacters() throws SAXException {
         this.builder.characters("characters".toCharArray(), 0, "characters".length());
+    }
+    
+    @Test
+    public void test() throws SAXException, IOException {
+        XMLReader reader = XMLReaderFactory.createXMLReader();
+        reader.setContentHandler(this.builder);
+        this.builder.setEresourceHandler(new EresourceHandler() {
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public int getCount() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public void handleEresource(Eresource eresource) {
+                System.out.println(eresource);
+            }
+
+            @Override
+            public void stop() {
+                // TODO Auto-generated method stub
+                
+            }});
+        reader.parse(getClass().getResource("eresources.xml").toExternalForm());
     }
 
     @Test
