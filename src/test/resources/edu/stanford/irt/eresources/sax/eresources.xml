@@ -1,0 +1,23 @@
+<eresources>
+    <eresource id="1" update="20100731023000" type="type">
+        <version>
+            <link>
+                <url>url</url>
+                <label>label</label>
+                <instruction>instruction</instruction>
+            </link>
+            <date>date</date>
+            <summary-holdings>summary-holdings</summary-holdings>
+            <subset>subset</subset>
+            <subset>proxy</subset>
+            <subset>noproxy</subset>
+            <publisher>publisher</publisher>
+            <description>description</description>
+        </version>
+        <type>type</type>
+        <primaryType>primaryType</primaryType>
+        <keywords>keywords</keywords>
+        <mesh>mesh</mesh>
+        <title>title</title>
+    </eresource>
+</eresources>
