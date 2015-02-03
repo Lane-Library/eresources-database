@@ -6,12 +6,15 @@ import org.marc4j.marc.Record;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.EresourceInputStream;
 import edu.stanford.irt.eresources.ItemCount;
 
 public class MarcPrintProcessor extends AbstractMarcBibProcessor {
 
-    public MarcPrintProcessor(EresourceHandler handler, EresourceMarcReader marcReader, ItemCount itemCount, KeywordsStrategy keywordsStrategy) {
-        super(handler, marcReader, itemCount, keywordsStrategy);
+    public MarcPrintProcessor(final EresourceInputStream input, final EresourceHandler handler,
+            final MarcReaderFactory marcReaderFactory, final ItemCount itemCount,
+            final KeywordsStrategy keywordsStrategy) {
+        super(input, handler, marcReaderFactory, itemCount, keywordsStrategy);
     }
 
     @Override

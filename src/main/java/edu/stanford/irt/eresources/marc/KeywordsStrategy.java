@@ -8,7 +8,6 @@ import org.marc4j.marc.Subfield;
 
 import com.ibm.icu.text.Normalizer;
 
-
 public class KeywordsStrategy {
 
     private static final String AGUMENTABLE_TAGS = "100|600|650|700";
@@ -16,8 +15,8 @@ public class KeywordsStrategy {
     private static final String KEYWORD_TAGS = "020|022|030|035|901|902|903|907|941|942|943";
 
     private AuthTextAugmentation authTextAugmentation;
-    
-    public KeywordsStrategy(AuthTextAugmentation authTextAugmentation) {
+
+    public KeywordsStrategy(final AuthTextAugmentation authTextAugmentation) {
         this.authTextAugmentation = authTextAugmentation;
     }
 
@@ -33,11 +32,6 @@ public class KeywordsStrategy {
         return sb.toString();
     }
 
-    private boolean isKeywordTag(final String tag) {
-        int tagNumber = Integer.parseInt(tag);
-        return (tagNumber >= 100 && tagNumber < 900) || KEYWORD_TAGS.indexOf(tag) != -1;
-    }
-
     private void getKeywordsFromField(final String tag, final List<Subfield> subfields, final StringBuilder sb) {
         for (Subfield subfield : subfields) {
             char code = subfield.getCode();
@@ -45,10 +39,6 @@ public class KeywordsStrategy {
                 getKeywordsFromSubfield(tag, code, subfield.getData(), sb);
             }
         }
-    }
-
-    private boolean isKeywordSubfield(final String tag, final char code) {
-        return !"907".equals(tag) || "xy".indexOf(code) > -1;
     }
 
     private void getKeywordsFromSubfield(final String tag, final char code, final String data, final StringBuilder sb) {
@@ -67,5 +57,14 @@ public class KeywordsStrategy {
 
     private boolean isAugmentable(final String tag, final char code) {
         return code == 'a' && AGUMENTABLE_TAGS.indexOf(tag) != -1;
+    }
+
+    private boolean isKeywordSubfield(final String tag, final char code) {
+        return !"907".equals(tag) || "xy".indexOf(code) > -1;
+    }
+
+    private boolean isKeywordTag(final String tag) {
+        int tagNumber = Integer.parseInt(tag);
+        return (tagNumber >= 100 && tagNumber < 900) || KEYWORD_TAGS.indexOf(tag) != -1;
     }
 }

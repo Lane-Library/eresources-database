@@ -25,7 +25,7 @@ public class MarcVersion extends AbstractVersion {
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
-        "mobile resources", "biotools" };
+            "mobile resources", "biotools" };
 
     // private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
     // { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
@@ -155,7 +155,8 @@ public class MarcVersion extends AbstractVersion {
     private void setupLinks() {
         this.links = new ArrayList<Link>();
         for (VariableField field : this.record.getVariableFields("856")) {
-            if ("http://lane.stanford.edu/secure/ejpw.html".equals(MarcTextUtil.getSubfieldData((DataField) field, 'u'))) {
+            if ("http://lane.stanford.edu/secure/ejpw.html"
+                    .equals(MarcTextUtil.getSubfieldData((DataField) field, 'u'))) {
                 this.hasGetPassword = true;
             } else {
                 MarcLink link = new MarcLink((DataField) field, this);

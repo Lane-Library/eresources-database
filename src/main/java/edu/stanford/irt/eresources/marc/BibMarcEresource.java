@@ -39,8 +39,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
     private static final String BIB_TYPE = "bib";
 
     private static final String[][][] CUSTOM_TYPES = { { { "periodical", "newspaper" }, { "ej" } },
-            { { "decision support techniques", "calculators, clinical", "algorithms" }, { "cc" } },
-            { { "digital video", "digital video, local" }, { "video" } }, { { "book set" }, { "book" } } };
+        { { "decision support techniques", "calculators, clinical", "algorithms" }, { "cc" } },
+        { { "digital video", "digital video, local" }, { "video" } }, { { "book set" }, { "book" } } };
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 

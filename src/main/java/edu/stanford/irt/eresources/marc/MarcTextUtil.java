@@ -7,6 +7,10 @@ import com.ibm.icu.text.Normalizer;
 
 public abstract class MarcTextUtil {
 
+    private MarcTextUtil() {
+        // utility class
+    }
+
     protected static String getSubfieldData(final DataField field, final char code) {
         String result = null;
         if (field != null) {
@@ -16,9 +20,5 @@ public abstract class MarcTextUtil {
             }
         }
         return result;
-    }
-    
-    private MarcTextUtil() {
-        // utility class
     }
 }

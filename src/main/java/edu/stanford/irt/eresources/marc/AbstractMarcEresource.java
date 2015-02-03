@@ -20,23 +20,22 @@ import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Version;
 
 public abstract class AbstractMarcEresource implements Eresource {
-    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
-        "redwood software, installed", "duck software, installed", "stone software, installed",
-        "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-        "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-        "statistics software, installed", "biotools software, installed" };
+            "redwood software, installed", "duck software, installed", "stone software, installed",
+            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
+            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+            "statistics software, installed", "biotools software, installed" };
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
-        { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
-        { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
-            "digital videos, local", "digital videos, local, public" },
+            { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
+            { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
+            { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
+                    "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final int[] NOITEMS = new int[] { 0, 0 };
@@ -44,12 +43,14 @@ public abstract class AbstractMarcEresource implements Eresource {
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
     private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-        { "search engine", "Database" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Book" },
-        { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Component" },
-        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
-        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Digital Journal" },
-        { "books", "Book" }, { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, {"booklets", "Book"},
-        { "collections", "Database"} };
+            { "search engine", "Database" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Book" },
+            { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Component" }, { "websites", "Website" },
+            { "book sets", "Book Set" }, { "computer files", "Computer File" }, { "databases", "Database" },
+            { "visual materials", "Visual Material" }, { "serials", "Digital Journal" }, { "books", "Book" },
+            { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, { "booklets", "Book" },
+            { "collections", "Database" } };
+
+    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -240,6 +241,15 @@ public abstract class AbstractMarcEresource implements Eresource {
         // do nothing by default
     }
 
+    protected void append(final StringBuilder sb, final String value) {
+        if (value != null) {
+            if (sb.length() > 0) {
+                sb.append(' ');
+            }
+            sb.append(value);
+        }
+    }
+
     protected abstract String doDescription();
 
     protected abstract int doId();
@@ -268,7 +278,6 @@ public abstract class AbstractMarcEresource implements Eresource {
         return type.toLowerCase();
     }
 
-    
     protected String doTitle() {
         StringBuilder sb = new StringBuilder();
         DataField field245 = (DataField) this.record.getVariableField("245");
@@ -313,15 +322,6 @@ public abstract class AbstractMarcEresource implements Eresource {
         }
         addCustomTypes(t);
         return t;
-    }
-
-    protected void append(final StringBuilder sb, final String value) {
-        if (value != null) {
-            if (sb.length() > 0) {
-                sb.append(' ');
-            }
-            sb.append(value);
-        }
     }
 
     protected abstract Date doUpdated();

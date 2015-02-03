@@ -8,7 +8,11 @@ import java.io.ObjectOutputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
+import javax.sql.DataSource;
+
+import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
@@ -16,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ibm.icu.text.Normalizer;
 
+import edu.stanford.irt.eresources.AuthAugmentationInputStream;
 import edu.stanford.irt.eresources.EresourceException;
 
 public class AuthTextAugmentation {
@@ -24,11 +29,18 @@ public class AuthTextAugmentation {
 
     private StringBuilder augmentationText = new StringBuilder();
 
-    private AugmentationMarcReader marcReader;
+    private DataSource dataSource;
+
+    private Executor executor;
+
+    private MarcReaderFactory marcReaderFactory;
 
     @SuppressWarnings("unchecked")
-    public AuthTextAugmentation(final AugmentationMarcReader marcReader) {
-        this.marcReader = marcReader;
+    public AuthTextAugmentation(final MarcReaderFactory marcReaderFactory, final DataSource dataSource,
+            final Executor executor) {
+        this.marcReaderFactory = marcReaderFactory;
+        this.dataSource = dataSource;
+        this.executor = executor;
         // create a new augmentation map each Sunday:
         if (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
             this.augmentations = new HashMap<String, String>();
@@ -48,10 +60,11 @@ public class AuthTextAugmentation {
     public String getAuthAugmentations(final String term, final String lookupTag) {
         String result = this.augmentations.get(term);
         if (null == result) {
-            this.marcReader.reset(term, lookupTag);
+            MarcReader marcReader = this.marcReaderFactory.newMarcReader(new AuthAugmentationInputStream(term,
+                    lookupTag, this.dataSource, this.executor));
             this.augmentationText.setLength(0);
-            while (this.marcReader.hasNext()) {
-                getAugmentations(this.marcReader.next());
+            while (marcReader.hasNext()) {
+                getAugmentations(marcReader.next());
             }
             result = this.augmentationText.toString().trim();
             this.augmentations.put(term, result);

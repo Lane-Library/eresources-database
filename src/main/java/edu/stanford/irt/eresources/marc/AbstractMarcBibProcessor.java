@@ -1,16 +1,15 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.EresourceInputStream;
 import edu.stanford.irt.eresources.ItemCount;
 
 public abstract class AbstractMarcBibProcessor extends AbstractMarcProcessor {
@@ -23,26 +22,25 @@ public abstract class AbstractMarcBibProcessor extends AbstractMarcProcessor {
 
     private ItemCount itemCount;
 
-    private EresourceMarcReader marcReader;
-
-    public AbstractMarcBibProcessor(final EresourceHandler handler, final EresourceMarcReader marcReader,
-            final ItemCount itemCount, final KeywordsStrategy keywordsStrategy) {
-        super(keywordsStrategy);
+    public AbstractMarcBibProcessor(final EresourceInputStream input, final EresourceHandler handler,
+            final MarcReaderFactory marcReaderFactory, final ItemCount itemCount,
+            final KeywordsStrategy keywordsStrategy) {
+        super(input, marcReaderFactory, keywordsStrategy);
         this.handler = handler;
-        this.marcReader = marcReader;
         this.itemCount = itemCount;
     }
 
+    protected abstract Eresource createAltTitleEresource(Record bib, List<Record> holdings, String keywords, int[] items);
+
+    protected abstract Eresource createEresource(Record bib, List<Record> holdings, String keywords, int[] items);
+
     @Override
-    public void process() {
-        Logger log = LoggerFactory.getLogger(getClass());
-        log.info("enter process();");
-        this.marcReader.setStartDate(new Date(getStartTime()));
+    protected void doProcess(final MarcReader marcReader) {
         Record bib = null;
         List<Record> holdings = null;
         String keywords = null;
-        while (this.marcReader.hasNext()) {
-            Record record = this.marcReader.next();
+        while (marcReader.hasNext()) {
+            Record record = marcReader.next();
             if (isBib(record)) {
                 if (bib != null) {
                     int[] items = this.itemCount.itemCount(bib.getControlNumber());
@@ -65,12 +63,7 @@ public abstract class AbstractMarcBibProcessor extends AbstractMarcProcessor {
                 this.handler.handleEresource(createAltTitleEresource(bib, holdings, keywords, items));
             }
         }
-        log.info("return process();");
     }
-
-    protected abstract Eresource createAltTitleEresource(Record bib, List<Record> holdings, String keywords, int[] items);
-
-    protected abstract Eresource createEresource(Record bib, List<Record> holdings, String keywords, int[] items);
 
     private boolean isBib(final Record record) {
         return HOLDINGS_CHARS.indexOf(record.getLeader().getTypeOfRecord()) == -1;

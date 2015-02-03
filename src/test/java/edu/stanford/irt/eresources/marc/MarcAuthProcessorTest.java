@@ -6,11 +6,9 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-import java.util.Date;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.marc4j.marc.Record;
+import org.marc4j.MarcReader;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
@@ -21,31 +19,27 @@ public class MarcAuthProcessorTest {
 
     private KeywordsStrategy keywordsStrategy;
 
-    private EresourceMarcReader marcReader;
+    private MarcReader marcReader;
 
     private MarcAuthProcessor processor;
-
-    private Record record;
 
     @Before
     public void setUp() {
         this.eresourceHandler = createMock(EresourceHandler.class);
-        this.marcReader = createMock(EresourceMarcReader.class);
         this.keywordsStrategy = createMock(KeywordsStrategy.class);
-        this.processor = new MarcAuthProcessor(this.eresourceHandler, this.marcReader, this.keywordsStrategy);
-        this.record = createMock(Record.class);
+        this.processor = new MarcAuthProcessor(null, this.eresourceHandler, null, this.keywordsStrategy);
+        this.marcReader = createMock(MarcReader.class);
     }
 
     @Test
-    public void testProcess() {
-        this.marcReader.setStartDate(new Date(0));
+    public void testDoProcess() {
         expect(this.marcReader.hasNext()).andReturn(true);
-        expect(this.marcReader.next()).andReturn(this.record);
-        expect(this.keywordsStrategy.getKeywords(this.record)).andReturn("keywords");
+        expect(this.marcReader.next()).andReturn(null);
+        expect(this.keywordsStrategy.getKeywords(null)).andReturn("keywords");
         this.eresourceHandler.handleEresource(isA(Eresource.class));
         expect(this.marcReader.hasNext()).andReturn(false);
-        replay(this.eresourceHandler, this.marcReader, this.keywordsStrategy, this.record);
-        this.processor.process();
-        verify(this.eresourceHandler, this.marcReader, this.keywordsStrategy, this.record);
+        replay(this.eresourceHandler, this.marcReader, this.keywordsStrategy);
+        this.processor.doProcess(this.marcReader);
+        verify(this.eresourceHandler, this.marcReader, this.keywordsStrategy);
     }
 }

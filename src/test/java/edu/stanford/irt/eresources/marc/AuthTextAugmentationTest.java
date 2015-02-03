@@ -1,15 +1,17 @@
 package edu.stanford.irt.eresources.marc;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
+import java.io.InputStream;
 import java.util.Collections;
+import java.util.concurrent.Executor;
+
+import javax.sql.DataSource;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.marc4j.MarcReader;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
@@ -20,16 +22,25 @@ public class AuthTextAugmentationTest {
 
     private DataField field;
 
-    private AugmentationMarcReader marcReader;
+    private MarcReaderFactory marcReaderFactory;
 
     private Record record;
 
     private Subfield subfield;
 
+    private Executor executor;
+
+    private DataSource dataSource;
+    
+    private MarcReader marcReader;
+
     @Before
     public void setUp() {
-        this.marcReader = createMock(AugmentationMarcReader.class);
-        this.augmentation = new AuthTextAugmentation(this.marcReader);
+        this.marcReaderFactory = createMock(MarcReaderFactory.class);
+        this.dataSource = createMock(DataSource.class);
+        this.executor = createMock(Executor.class);
+        this.augmentation = new AuthTextAugmentation(this.marcReaderFactory, this.dataSource, this.executor);
+        this.marcReader = createMock(MarcReader.class);
         this.record = createMock(Record.class);
         this.field = createMock(DataField.class);
         this.subfield = createMock(Subfield.class);
@@ -37,7 +48,7 @@ public class AuthTextAugmentationTest {
 
     @Test
     public void testGetAuthAugmentations() {
-        this.marcReader.reset("term", "tag");
+        expect(this.marcReaderFactory.newMarcReader(isA(InputStream.class))).andReturn(this.marcReader);
         expect(this.marcReader.hasNext()).andReturn(true);
         expect(this.marcReader.next()).andReturn(this.record);
         expect(this.record.getDataFields()).andReturn(Collections.singletonList(this.field));
@@ -45,8 +56,8 @@ public class AuthTextAugmentationTest {
         expect(this.field.getSubfields('a')).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("augmentation");
         expect(this.marcReader.hasNext()).andReturn(false);
-        replay(this.marcReader, this.record, this.field, this.subfield);
+        replay(this.marcReaderFactory, this.marcReader, this.record, this.field, this.subfield);
         assertEquals("augmentation", this.augmentation.getAuthAugmentations("term", "tag"));
-        verify(this.marcReader, this.record, this.field, this.subfield);
+        verify(this.marcReaderFactory, this.marcReader, this.record, this.field, this.subfield);
     }
 }
