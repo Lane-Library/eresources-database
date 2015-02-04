@@ -36,7 +36,7 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Journal", "Periodicals", "Newspapers" },
         { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
         { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-        { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Graphic", "Graphics" } };
+        { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Graphic", "Graphics" }, { "Article", "Articles" } };
 
     private static final String ENG = "English";
 
@@ -53,6 +53,7 @@ public class SAXEresource implements Cloneable, Eresource {
             }
         }
             PRIMARY_TYPES.put("article", "Article");
+            PRIMARY_TYPES.put("articles", "Article");
             PRIMARY_TYPES.put("book", "Book");
             PRIMARY_TYPES.put("books", "Book");
             PRIMARY_TYPES.put("book set", "Book");
