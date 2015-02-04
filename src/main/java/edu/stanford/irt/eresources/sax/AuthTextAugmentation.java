@@ -69,8 +69,8 @@ public class AuthTextAugmentation extends DefaultHandler {
         }
     }
 
-    public String getAuthAugmentations(final String term, final String lookupTag) {
-        String result = this.augmentations.get(term);
+    public String getAuthAugmentations(final String controlNumber) {
+        String result = this.augmentations.get(controlNumber);
         if (null == result) {
             this.augmentationText.setLength(0);
             this.code = null;
@@ -79,7 +79,7 @@ public class AuthTextAugmentation extends DefaultHandler {
             XMLReader xmlReader = new UTF8ComposingMarcReader();
             xmlReader.setContentHandler(this);
             try {
-                xmlReader.parse(new InputSource(new AuthAugmentationInputStream(term, lookupTag, this.dataSource,
+                xmlReader.parse(new InputSource(new AuthAugmentationInputStream(controlNumber, this.dataSource,
                         this.executor)));
             } catch (IOException e) {
                 throw new EresourceDatabaseException(e);
@@ -87,7 +87,7 @@ public class AuthTextAugmentation extends DefaultHandler {
                 throw new EresourceDatabaseException(e);
             }
             result = this.augmentationText.toString().trim();
-            this.augmentations.put(term, result);
+            this.augmentations.put(controlNumber, result);
         }
         return result;
     }

@@ -243,14 +243,14 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
             }
         }
-        if ("650".equals(this.tag) && "a".equals(this.code)) {
-            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString(), this.tag);
+        if ("650".equals(this.tag) && "0".equals(this.code)) {
+            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString());
             if (authText != null && authText.length() > 0) {
                 this.content.append(' ').append(authText).append(' ');
             }
         }
-        if (("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) && "a".equals(this.code)) {
-            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString(), this.tag);
+        if (("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) && "0".equals(this.code)) {
+            String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString());
             if (authText != null && authText.length() > 0) {
                 this.content.append(' ').append(authText).append(' ');
             }

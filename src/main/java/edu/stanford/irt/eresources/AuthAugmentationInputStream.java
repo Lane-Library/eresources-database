@@ -8,33 +8,23 @@ import javax.sql.DataSource;
 
 public class AuthAugmentationInputStream extends AuthInputStream {
 
-    private static final String MESH_LIST_QUERY = "select bib_id from cifdb.bib_index where index_code = '2451' and  display_heading = ?";
+    private static final String LIST_QUERY = "select bib_id from cifdb.bib_index where index_code = '0359' and  normal_heading = ?";
 
-    private static final String PERSON_LIST_QUERY = "select bib_id from cifdb.bib_index where index_code = '2451' and display_heading like ? || '%'";
+    private String controlNumber;
 
-    private String tag;
-
-    private String term;
-
-    public AuthAugmentationInputStream(final String term, final String tag, final DataSource dataSource,
-            final Executor executor) {
-        this.term = term;
-        this.tag = tag;
+    public AuthAugmentationInputStream(final String controlNumber, final DataSource dataSource, final Executor executor) {
+        this.controlNumber = controlNumber;
         this.setDataSource(dataSource);
         this.setExecutor(executor);
     }
 
     @Override
     protected String getSelectIDListSQL() {
-        if ("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) {
-            return PERSON_LIST_QUERY;
-        } else {
-            return MESH_LIST_QUERY;
-        }
+        return LIST_QUERY;
     }
 
     @Override
     protected void prepareListStatement(final PreparedStatement stmt) throws SQLException {
-        stmt.setString(1, this.term);
+        stmt.setString(1, this.controlNumber);
     }
 }
