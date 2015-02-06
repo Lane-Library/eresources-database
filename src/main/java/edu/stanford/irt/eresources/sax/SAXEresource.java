@@ -192,15 +192,15 @@ public class SAXEresource implements Cloneable, Eresource {
             type = "Other";
         } else if ("book".equals(this.primaryType)) {
             if ("print".equals(this.recordType)) {
-                type = "Print Book";
+                type = "Book Print";
             } else {
-                type = "Digital Book";
+                type = "Book Digital";
             }
         } else if ("journal".equals(this.primaryType)) {
             if ("print".equals(this.recordType)) {
-                type = "Print Journal";
+                type = "Journal Print";
             } else {
-                type = "Digital Journal";
+                type = "Journal Digital";
             }
         } else if ("visual material".equals(this.primaryType)) {
             if (this.types.contains("video")) {
