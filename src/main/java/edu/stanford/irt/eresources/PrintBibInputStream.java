@@ -37,14 +37,13 @@ public class PrintBibInputStream extends BibInputStream {
                     "    SELECT BIB_ID " +
                     "    FROM LMLDB.BIB_INDEX " +
                     "    WHERE INDEX_CODE = '2450' " +
-                    "    AND DISPLAY_HEADING LIKE '%[digital%' " +
-                    "    INTERSECT " +
-                    "    SELECT BIB_ID " +
-                    "    FROM LMLDB.BIB_INDEX " +
-                    "    WHERE INDEX_CODE = '008D' " +
-                    "    AND REGEXP_LIKE(NORMAL_HEADING,'^\\d{4}$') " +
-                    "    AND TO_NUMBER(TRIM(NORMAL_HEADING)) >= TO_CHAR(SYSDATE - (10 * 365),'YYYY') " +
-                    "    ) " +
+                    "    AND DISPLAY_HEADING LIKE '%[digital%')" +
+                    "  INTERSECT " +
+                    "  SELECT BIB_ID " +
+                    "  FROM LMLDB.BIB_INDEX " +
+                    "  WHERE INDEX_CODE = '008D' " +
+                    "  AND REGEXP_LIKE(NORMAL_HEADING,'^\\d{4}$') " +
+                    "  AND TO_NUMBER(TRIM(NORMAL_HEADING)) >= TO_CHAR(SYSDATE - (10 * 365),'YYYY') " +
                     // exclude Subset, Circbib fogbugz case 96195
                     "  MINUS " +
                     "  SELECT BIB_ID " +
@@ -55,5 +54,8 @@ public class PrintBibInputStream extends BibInputStream {
     @Override
     protected String getSelectIDListSQL() {
         return QUERY;
+    }
+    public static void main(String[] args) {
+        System.out.println(QUERY);
     }
 }
