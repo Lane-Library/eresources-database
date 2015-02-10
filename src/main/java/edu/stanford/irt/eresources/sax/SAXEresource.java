@@ -252,6 +252,9 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public Collection<String> getTypes() {
         this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll("").toLowerCase());
+        if (this.types.contains("journaldigital") || this.types.contains("journalprint")) {
+            this.types.add("journal");
+        }
         return Collections.unmodifiableCollection(this.types);
     }
 
