@@ -197,6 +197,8 @@ public class SAXEresource implements Cloneable, Eresource {
         } else if ("serial".equals(this.primaryType)) {
             if (this.types.contains("book")) {
                 type = "Book " + getPrintOrDigital();
+            } else if (this.types.contains("database")) {
+                type = "Database";
             } else {
                 type = "Journal " + getPrintOrDigital();
             }
