@@ -16,8 +16,6 @@ import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
 public class SAXEresource implements Cloneable, Eresource {
-    
-    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
@@ -25,7 +23,7 @@ public class SAXEresource implements Cloneable, Eresource {
             "redwood software, installed", "duck software, installed", "stone software, installed",
             "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
             "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog"};
+            "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -39,6 +37,8 @@ public class SAXEresource implements Cloneable, Eresource {
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
+
+    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -48,40 +48,40 @@ public class SAXEresource implements Cloneable, Eresource {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
-            PRIMARY_TYPES.put("book", "book");
-            PRIMARY_TYPES.put("books", "book");
-            PRIMARY_TYPES.put("book set", "book");
-            PRIMARY_TYPES.put("book sets", "book");
-            PRIMARY_TYPES.put("cartographic material", "Other");
-            PRIMARY_TYPES.put("cartographic materials", "Other");
-            PRIMARY_TYPES.put("collection", "Database");
-            PRIMARY_TYPES.put("collections", "Database");
-            PRIMARY_TYPES.put("component", "Other");
-            PRIMARY_TYPES.put("components", "Other");
-            PRIMARY_TYPES.put("computer file", "Software");
-            PRIMARY_TYPES.put("computer files", "Software");
-            PRIMARY_TYPES.put("database", "Database");
-            PRIMARY_TYPES.put("databases", "Database");
-            PRIMARY_TYPES.put("document", "book");
-            PRIMARY_TYPES.put("documents", "book");
-            PRIMARY_TYPES.put("laneclass", "Lane Class");
-            PRIMARY_TYPES.put("lanepage", "Lane Webpage");
-            PRIMARY_TYPES.put("leaflet", "book");
-            PRIMARY_TYPES.put("leaflets", "book");
-            PRIMARY_TYPES.put("pamphlet", "book");
-            PRIMARY_TYPES.put("pamphlets", "book");
-            PRIMARY_TYPES.put("periodical", "journal");
-            PRIMARY_TYPES.put("periodicals", "journal");
-            PRIMARY_TYPES.put("search engine", "Database");
-            PRIMARY_TYPES.put("search engines", "Database");
-            PRIMARY_TYPES.put("serial", "journal");
-            PRIMARY_TYPES.put("serials", "journal");
-            PRIMARY_TYPES.put("sound recording", "Audio");
-            PRIMARY_TYPES.put("sound recordings", "Audio");
-            PRIMARY_TYPES.put("visual material", "visual material");
-            PRIMARY_TYPES.put("visual materials", "visual material");
-            PRIMARY_TYPES.put("website", "Website");
-            PRIMARY_TYPES.put("websites", "Website");
+        PRIMARY_TYPES.put("book", "book");
+        PRIMARY_TYPES.put("books", "book");
+        PRIMARY_TYPES.put("book set", "book");
+        PRIMARY_TYPES.put("book sets", "book");
+        PRIMARY_TYPES.put("cartographic material", "Other");
+        PRIMARY_TYPES.put("cartographic materials", "Other");
+        PRIMARY_TYPES.put("collection", "Database");
+        PRIMARY_TYPES.put("collections", "Database");
+        PRIMARY_TYPES.put("component", "Other");
+        PRIMARY_TYPES.put("components", "Other");
+        PRIMARY_TYPES.put("computer file", "Software");
+        PRIMARY_TYPES.put("computer files", "Software");
+        PRIMARY_TYPES.put("database", "Database");
+        PRIMARY_TYPES.put("databases", "Database");
+        PRIMARY_TYPES.put("document", "book");
+        PRIMARY_TYPES.put("documents", "book");
+        PRIMARY_TYPES.put("laneclass", "Lane Class");
+        PRIMARY_TYPES.put("lanepage", "Lane Webpage");
+        PRIMARY_TYPES.put("leaflet", "book");
+        PRIMARY_TYPES.put("leaflets", "book");
+        PRIMARY_TYPES.put("pamphlet", "book");
+        PRIMARY_TYPES.put("pamphlets", "book");
+        PRIMARY_TYPES.put("periodical", "journal");
+        PRIMARY_TYPES.put("periodicals", "journal");
+        PRIMARY_TYPES.put("search engine", "Database");
+        PRIMARY_TYPES.put("search engines", "Database");
+        PRIMARY_TYPES.put("serial", "serial");
+        PRIMARY_TYPES.put("serials", "serial");
+        PRIMARY_TYPES.put("sound recording", "Audio");
+        PRIMARY_TYPES.put("sound recordings", "Audio");
+        PRIMARY_TYPES.put("visual material", "visual material");
+        PRIMARY_TYPES.put("visual materials", "visual material");
+        PRIMARY_TYPES.put("website", "Website");
+        PRIMARY_TYPES.put("websites", "Website");
     }
 
     private int[] count = new int[] { 0, 0 };
@@ -191,16 +191,14 @@ public class SAXEresource implements Cloneable, Eresource {
         if (this.primaryType == null) {
             type = "Other";
         } else if ("book".equals(this.primaryType)) {
-            if ("print".equals(this.recordType)) {
-                type = "Book Print";
-            } else {
-                type = "Book Digital";
-            }
+            type = "Book " + getPrintOrDigital();
         } else if ("journal".equals(this.primaryType)) {
-            if ("print".equals(this.recordType)) {
-                type = "Journal Print";
+            type = "Journal " + getPrintOrDigital();
+        } else if ("serial".equals(this.primaryType)) {
+            if (this.types.contains("book")) {
+                type = "Book " + getPrintOrDigital();
             } else {
-                type = "Journal Digital";
+                type = "Journal " + getPrintOrDigital();
             }
         } else if ("visual material".equals(this.primaryType)) {
             if (this.types.contains("video")) {
@@ -208,6 +206,7 @@ public class SAXEresource implements Cloneable, Eresource {
             } else {
                 type = "Image";
             }
+        } else if ("serial".equals(this.primaryType)) {
         } else {
             type = this.primaryType;
         }
@@ -353,5 +352,15 @@ public class SAXEresource implements Cloneable, Eresource {
 
     protected boolean isAllowable(final String type) {
         return ALLOWED_TYPES.contains(type);
+    }
+
+    private String getPrintOrDigital() {
+        String printOrDigital = null;
+        if ("print".equals(this.recordType)) {
+            printOrDigital = "Print";
+        } else {
+            printOrDigital = "Digital";
+        }
+        return printOrDigital;
     }
 }
