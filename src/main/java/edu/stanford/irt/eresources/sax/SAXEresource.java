@@ -80,8 +80,8 @@ public class SAXEresource implements Cloneable, Eresource {
             PRIMARY_TYPES.put("periodicals", "Journal");
             PRIMARY_TYPES.put("search engine", "Database");
             PRIMARY_TYPES.put("search engines", "Database");
-            PRIMARY_TYPES.put("serial", "Journal");
-            PRIMARY_TYPES.put("serials", "Journal");
+            PRIMARY_TYPES.put("serial", "Serial");
+            PRIMARY_TYPES.put("serials", "Serial");
             PRIMARY_TYPES.put("sound recording", "Audio");
             PRIMARY_TYPES.put("sound recordings", "Audio");
             PRIMARY_TYPES.put("visual material", "Visual Material");
@@ -252,16 +252,16 @@ public class SAXEresource implements Cloneable, Eresource {
         if (this.primaryType == null) {
             type = "Other";
         } else if ("Book".equals(this.primaryType)) {
-            if ("print".equals(this.recordType)) {
-                type = "Print Book";
-            } else {
-                type = "Digital Book";
-            }
+            type = "Book " + getPrintOrDigital();
         } else if ("Journal".equals(this.primaryType)) {
-            if ("print".equals(this.recordType)) {
-                type = "Print Journal";
+            type = "Journal " + getPrintOrDigital();
+        } else if ("Serial".equals(this.primaryType)) {
+            if (this.types.contains("Book")) {
+                type = "Book " + getPrintOrDigital();
+            } else if (this.types.contains("Database")) {
+                type = "Database";
             } else {
-                type = "Digital Journal";
+                type = "Journal " + getPrintOrDigital();
             }
         } else if ("Visual Material".equals(this.primaryType)) {
             if (this.types.contains("Video")) {
@@ -269,6 +269,7 @@ public class SAXEresource implements Cloneable, Eresource {
             } else {
                 type = "Image";
             }
+        } else if ("Serial".equals(this.primaryType)) {
         } else {
             type = this.primaryType;
         }
@@ -386,7 +387,10 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public Collection<String> getTypes() {
         this.types.add(getPrimaryType());
-//        this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll(""));
+        //this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll(""));
+        if (getPrimaryType().startsWith("Journal")) {
+            this.types.add("Journal");
+        }
         return Collections.unmodifiableCollection(this.types);
     }
 
@@ -533,5 +537,15 @@ public class SAXEresource implements Cloneable, Eresource {
 
     protected boolean isAllowable(final String type) {
         return ALLOWED_TYPES.contains(type);
+    }
+
+    private String getPrintOrDigital() {
+        String printOrDigital = null;
+        if ("print".equals(this.recordType)) {
+            printOrDigital = "Print";
+        } else {
+            printOrDigital = "Digital";
+        }
+        return printOrDigital;
     }
 }

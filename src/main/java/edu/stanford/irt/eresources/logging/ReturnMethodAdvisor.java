@@ -29,8 +29,6 @@ public class ReturnMethodAdvisor extends DefaultPointcutAdvisor {
          *            the Object getting the advice
          * @param returnValue
          *            the Method's return value
-         * @throws Throwable
-         *             if any thing bad happens
          */
         @Override
         public void afterReturning(final Object returnValue, final Method method, final Object[] params,

@@ -29,8 +29,6 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
          *            the Method's parameters
          * @param advisee
          *            the Object getting the advice
-         * @throws Throwable
-         *             if any thing bad happens
          */
         @Override
         public void before(final Method method, final Object[] params, final Object advisee) {
