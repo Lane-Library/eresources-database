@@ -228,14 +228,16 @@
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/PublicationTypeList/PublicationType">
-        <stx:choose>
-            <stx:when test="$publicationType = ''">
-                <stx:assign name="publicationType" select="."/>
-            </stx:when>
-            <stx:otherwise>
-                <stx:assign name="publicationType" select="concat($publicationType, ':::', .)"/>
-            </stx:otherwise>
-        </stx:choose>
+		<stx:if test="string:toLowerCase(.) != 'journal article'" xmlns:string="java:java.lang.String">
+	        <stx:choose>
+	            <stx:when test="$publicationType = ''">
+	                <stx:assign name="publicationType" select="."/>
+	            </stx:when>
+	            <stx:otherwise>
+	                <stx:assign name="publicationType" select="concat($publicationType, ':::', .)"/>
+	            </stx:otherwise>
+	        </stx:choose>
+		</stx:if>
         <stx:process-children/>
     </stx:template>
     
