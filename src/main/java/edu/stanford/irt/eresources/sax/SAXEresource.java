@@ -208,7 +208,6 @@ public class SAXEresource implements Cloneable, Eresource {
             } else {
                 type = "Image";
             }
-        } else if ("serial".equals(this.primaryType)) {
         } else {
             type = this.primaryType;
         }
