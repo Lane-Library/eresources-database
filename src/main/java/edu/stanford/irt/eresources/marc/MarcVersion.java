@@ -26,7 +26,7 @@ public class MarcVersion extends AbstractVersion {
     private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
 
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
-            "mobile resources", "biotools" };
+        "mobile resources", "biotools" };
 
     // private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
     // { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },

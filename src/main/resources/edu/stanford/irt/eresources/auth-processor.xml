@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <bean id="authProcessor" class="edu.stanford.irt.eresources.marc.MarcAuthProcessor">
         <constructor-arg ref="eresourceHandler"/>
         <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.EresourceMarcReader">
+            <bean class="org.marc4j.MarcStreamReader">
                 <constructor-arg>
                     <bean class="edu.stanford.irt.eresources.AuthInputStream">
                         <constructor-arg ref="voyagerDataSource"/>
