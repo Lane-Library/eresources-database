@@ -150,6 +150,17 @@
             </plugin>
         </plugins>
     </build>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>4.1.4.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <artifactId>aopalliance</artifactId>
@@ -174,7 +185,6 @@
         <dependency>
             <artifactId>spring-aop</artifactId>
             <groupId>org.springframework</groupId>
-            <version>4.1.4.RELEASE</version>
             <exclusions>
             	<exclusion>
             		<artifactId>commons-logging</artifactId>
@@ -185,7 +195,6 @@
         <dependency>
             <artifactId>spring-context</artifactId>
             <groupId>org.springframework</groupId>
-            <version>4.1.4.RELEASE</version>
         </dependency>
         <dependency>
             <artifactId>xercesImpl</artifactId>
@@ -224,7 +233,6 @@
         <dependency>
             <artifactId>spring-jdbc</artifactId>
             <groupId>org.springframework</groupId>
-            <version>4.1.4.RELEASE</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
