@@ -53,7 +53,7 @@ public class ItemCountTest {
         this.pstmt.close();
         this.connection.close();
         replay(this.dataSource, this.connection, this.pstmt, this.resultSet);
-        assertArrayEquals(new int[] {1,2}, this.itemCount.itemCount(1));
+        assertArrayEquals(new int[] {1,2}, this.itemCount.itemCount("1"));
         verify(this.dataSource, this.connection, this.pstmt, this.resultSet);
     }
 

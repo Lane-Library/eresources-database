@@ -16,6 +16,7 @@ import org.marc4j.marc.VariableField;
 import edu.stanford.irt.eresources.AbstractVersion;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.Version;
 
 /**
  * MarcVersion encapsulates a holding record.
@@ -155,13 +156,15 @@ public class MarcVersion extends AbstractVersion {
     private void setupLinks() {
         this.links = new ArrayList<Link>();
         for (VariableField field : this.record.getVariableFields("856")) {
-            if ("http://lane.stanford.edu/secure/ejpw.html"
-                    .equals(MarcTextUtil.getSubfieldData((DataField) field, 'u'))) {
+            if ("http://lane.stanford.edu/secure/ejpw.html".equals(MarcTextUtil.getSubfieldData((DataField) field, 'u'))) {
                 this.hasGetPassword = true;
             } else {
-                MarcLink link = new MarcLink((DataField) field, this);
-                this.links.add(link);
+                this.links.add(createLink((DataField) field, this));
             }
         }
+    }
+    
+    protected Link createLink(DataField field, Version version) {
+        return new MarcLink((DataField) field, this);
     }
 }

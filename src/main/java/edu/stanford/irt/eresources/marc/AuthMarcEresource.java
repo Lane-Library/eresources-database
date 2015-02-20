@@ -131,4 +131,19 @@ public class AuthMarcEresource extends AbstractMarcEresource {
         }
         return null;
     }
+
+    @Override
+    protected String getPrintOrDigital() {
+        return null;
+    }
+
+    @Override
+    protected String getRealPrimaryType(String type) {
+        return "Other";
+    }
+
+    @Override
+    protected void addPrimaryType(Collection<String> t) {
+        t.add("other");
+    }
 }

@@ -28,7 +28,7 @@ public class AuthAugmentationInputStreamTest {
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
         this.executor = createMock(Executor.class);
-        this.stream = new AuthAugmentationInputStream("term", "100", this.dataSource, this.executor);
+        this.stream = new AuthAugmentationInputStream("12", this.dataSource, this.executor);
         this.stmt = createMock(PreparedStatement.class);
     }
 
@@ -40,21 +40,21 @@ public class AuthAugmentationInputStreamTest {
 
     @Test
     public void testGetSelectIDListSQL600() {
-        this.stream = new AuthAugmentationInputStream("term", "600", this.dataSource, this.executor);
+        this.stream = new AuthAugmentationInputStream("12", this.dataSource, this.executor);
         assertEquals("select bib_id from cifdb.bib_index where index_code = '2451' and display_heading like ? || '%'",
                 this.stream.getSelectIDListSQL());
     }
 
     @Test
     public void testGetSelectIDListSQL700() {
-        this.stream = new AuthAugmentationInputStream("term", "700", this.dataSource, this.executor);
+        this.stream = new AuthAugmentationInputStream("12", this.dataSource, this.executor);
         assertEquals("select bib_id from cifdb.bib_index where index_code = '2451' and display_heading like ? || '%'",
                 this.stream.getSelectIDListSQL());
     }
 
     @Test
     public void testGetSelectIDListSQLMesh() {
-        this.stream = new AuthAugmentationInputStream("term", "200", this.dataSource, this.executor);
+        this.stream = new AuthAugmentationInputStream("12", this.dataSource, this.executor);
         assertEquals("select bib_id from cifdb.bib_index where index_code = '2451' and  display_heading = ?",
                 this.stream.getSelectIDListSQL());
     }

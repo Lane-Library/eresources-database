@@ -32,13 +32,28 @@ public class KeywordsStrategy {
         return sb.toString();
     }
 
+    private boolean isKeywordTag(final String tag) {
+        int tagNumber = Integer.parseInt(tag);
+        return (tagNumber >= 100 && tagNumber < 900) || KEYWORD_TAGS.indexOf(tag) != -1;
+    }
+
     private void getKeywordsFromField(final String tag, final List<Subfield> subfields, final StringBuilder sb) {
         for (Subfield subfield : subfields) {
             char code = subfield.getCode();
             if (isKeywordSubfield(tag, code)) {
                 getKeywordsFromSubfield(tag, code, subfield.getData(), sb);
             }
+            if (isAugmentable(tag, code)) {
+                String authText = this.authTextAugmentation.getAuthAugmentations(subfield.getData());
+                if (authText != null) {
+                    sb.append(' ').append(authText);
+                }
+            }
         }
+    }
+
+    private boolean isKeywordSubfield(final String tag, final char code) {
+        return !"907".equals(tag) || "xy".indexOf(code) > -1;
     }
 
     private void getKeywordsFromSubfield(final String tag, final char code, final String data, final StringBuilder sb) {
@@ -47,24 +62,9 @@ public class KeywordsStrategy {
             sb.append(' ');
         }
         sb.append(value);
-        if (isAugmentable(tag, code)) {
-            String authText = this.authTextAugmentation.getAuthAugmentations(value, tag);
-            if (authText != null) {
-                sb.append(' ').append(authText);
-            }
-        }
     }
 
     private boolean isAugmentable(final String tag, final char code) {
-        return code == 'a' && AGUMENTABLE_TAGS.indexOf(tag) != -1;
-    }
-
-    private boolean isKeywordSubfield(final String tag, final char code) {
-        return !"907".equals(tag) || "xy".indexOf(code) > -1;
-    }
-
-    private boolean isKeywordTag(final String tag) {
-        int tagNumber = Integer.parseInt(tag);
-        return (tagNumber >= 100 && tagNumber < 900) || KEYWORD_TAGS.indexOf(tag) != -1;
+        return code == '0' && AGUMENTABLE_TAGS.indexOf(tag) != -1;
     }
 }

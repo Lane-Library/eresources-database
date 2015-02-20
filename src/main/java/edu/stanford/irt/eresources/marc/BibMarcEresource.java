@@ -32,6 +32,8 @@ import edu.stanford.irt.eresources.VersionComparator;
  */
 public class BibMarcEresource extends AbstractMarcEresource {
 
+    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
+
     public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
@@ -90,6 +92,39 @@ public class BibMarcEresource extends AbstractMarcEresource {
         }
         if (isBassettRecord()) {
             types.add("bassett");
+        }
+    }
+
+    protected void addPrimaryType(Collection<String> t) {
+        String mappedPrimaryType = getMappedPrimaryType(getInitialPrimaryType());
+        if ("serial".equals(mappedPrimaryType)) {
+            Collection<String> initialTypes = getInitialTypes();
+            if (initialTypes.contains("book")) {
+                t.add("book" + getPrintOrDigital().toLowerCase());
+            } else if (initialTypes.contains("database")) {
+                //add nothing
+            } else {
+            t.add("journal");
+            t.add("journal" + getPrintOrDigital().toLowerCase());
+            }
+        } else if ("book".equals(mappedPrimaryType)) {
+            t.add("book" + getPrintOrDigital().toLowerCase());
+        } else if ("visual material".equals(mappedPrimaryType)) {
+            Collection<String> initialTypes = getInitialTypes();
+            boolean video = false;
+            for (String type : initialTypes) {
+                if (type.contains("video")) {
+                    video = true;
+                    break;
+                }
+            }
+            if (video) {
+                t.add("video");
+            } else {
+                t.add("image");
+            }
+        } else {
+            t.add(WHITESPACE.matcher(mappedPrimaryType).replaceAll("").toLowerCase());
         }
     }
 
@@ -164,12 +199,16 @@ public class BibMarcEresource extends AbstractMarcEresource {
     protected List<Version> doVersions() {
         Collection<Version> versions = new TreeSet<Version>(new VersionComparator());
         for (Record holding : this.holdings) {
-            Version version = new MarcVersion(holding);
+            Version version = createVersion(holding);
             if (version.getLinks().size() > 0) {
-                versions.add(new MarcVersion(holding));
+                versions.add(version);
             }
         }
         return new ArrayList<Version>(versions);
+    }
+    
+    protected Version createVersion(Record record) {
+        return new MarcVersion(record);
     }
 
     @Override
@@ -247,5 +286,35 @@ public class BibMarcEresource extends AbstractMarcEresource {
             return year.replace('u', '5');
         }
         return null;
+    }
+
+    @Override
+    protected String getPrintOrDigital() {
+        return "Digital";
+    }
+
+    @Override
+    protected String getRealPrimaryType(String type) {
+        String t = getMappedPrimaryType(type);
+        if ("serial".equals(t)) {
+            Collection<String> initialTypes = getInitialTypes();
+            if (initialTypes.contains("book")) {
+                return "Book " + getPrintOrDigital();
+            } else if (initialTypes.contains("database")) {
+                return "Database";
+            } else {
+            return "Journal " + getPrintOrDigital();
+            }
+        } else if ("book".equals(t)) {
+            return "Book " + getPrintOrDigital();
+        } else if ("visual material".equals(t)) {
+            if (getTypes().contains("video")) {
+                return "Video";
+            } else {
+                return "Image";
+            }
+        } else {
+            return t;
+        }
     }
 }

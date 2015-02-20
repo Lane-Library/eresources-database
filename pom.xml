@@ -152,6 +152,11 @@
     </build>
     <dependencies>
         <dependency>
+            <artifactId>aopalliance</artifactId>
+            <groupId>aopalliance</groupId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <artifactId>catalog</artifactId>
             <groupId>edu.stanford.irt</groupId>
             <version>3.6.1</version>
@@ -167,14 +172,31 @@
             <version>1.7.7</version>
         </dependency>
         <dependency>
+            <artifactId>spring-aop</artifactId>
+            <groupId>org.springframework</groupId>
+            <version>4.1.4.RELEASE</version>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>commons-logging</artifactId>
+            		<groupId>commons-logging</groupId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <artifactId>spring-context</artifactId>
             <groupId>org.springframework</groupId>
-            <version>4.0.3.RELEASE</version>
+            <version>4.1.4.RELEASE</version>
         </dependency>
         <dependency>
             <artifactId>xercesImpl</artifactId>
             <groupId>xerces</groupId>
             <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <artifactId>cglib</artifactId>
+            <groupId>cglib</groupId>
+            <version>2.2.2</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <artifactId>icu4j</artifactId>
@@ -202,7 +224,7 @@
         <dependency>
             <artifactId>spring-jdbc</artifactId>
             <groupId>org.springframework</groupId>
-            <version>4.0.3.RELEASE</version>
+            <version>4.1.4.RELEASE</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>

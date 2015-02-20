@@ -57,17 +57,17 @@ public class AuthTextAugmentation {
         }
     }
 
-    public String getAuthAugmentations(final String term, final String lookupTag) {
-        String result = this.augmentations.get(term);
+    public String getAuthAugmentations(final String controlNumber) {
+        String result = this.augmentations.get(controlNumber);
         if (null == result) {
-            MarcReader marcReader = this.marcReaderFactory.newMarcReader(new AuthAugmentationInputStream(term,
-                    lookupTag, this.dataSource, this.executor));
+            MarcReader marcReader = this.marcReaderFactory.newMarcReader(new AuthAugmentationInputStream(controlNumber,
+                    this.dataSource, this.executor));
             this.augmentationText.setLength(0);
             while (marcReader.hasNext()) {
                 getAugmentations(marcReader.next());
             }
             result = this.augmentationText.toString().trim();
-            this.augmentations.put(term, result);
+            this.augmentations.put(controlNumber, result);
         }
         return result;
     }

@@ -57,7 +57,7 @@ public class AuthTextAugmentationTest {
         expect(this.subfield.getData()).andReturn("augmentation");
         expect(this.marcReader.hasNext()).andReturn(false);
         replay(this.marcReaderFactory, this.marcReader, this.record, this.field, this.subfield);
-        assertEquals("augmentation", this.augmentation.getAuthAugmentations("term", "tag"));
+        assertEquals("augmentation", this.augmentation.getAuthAugmentations("12"));
         verify(this.marcReaderFactory, this.marcReader, this.record, this.field, this.subfield);
     }
 }

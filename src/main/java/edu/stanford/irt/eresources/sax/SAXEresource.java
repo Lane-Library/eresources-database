@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Version;
@@ -19,31 +20,25 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
-        "redwood software, installed", "duck software, installed", "stone software, installed",
-        "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-        "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-        "statistics software, installed", "biotools software, installed", "laneclass", "lanepage" };
+            "redwood software, installed", "duck software, installed", "stone software, installed",
+            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
+            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+            "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
-        { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
-        { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
-            "digital videos, local", "digital videos, local, public" },
+            { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
+            { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
+            { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
+                    "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
-    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-        { "search engine", "Database" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Book" },
-        { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Component" },
-        { "websites", "Website" }, { "book sets", "Book Set" }, { "computer files", "Computer File" },
-        { "databases", "Database" }, { "visual materials", "Visual Material" }, { "serials", "Digital Journal" },
-        { "books", "Book" }, { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, {"booklets", "Book"},
-        { "collections", "Database"} };
+    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -53,9 +48,40 @@ public class SAXEresource implements Cloneable, Eresource {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
-        for (String[] element : PRIMARY_TYPES_INITIALIZER) {
-            PRIMARY_TYPES.put(element[0], element[1]);
-        }
+        PRIMARY_TYPES.put("book", "book");
+        PRIMARY_TYPES.put("books", "book");
+        PRIMARY_TYPES.put("book set", "book");
+        PRIMARY_TYPES.put("book sets", "book");
+        PRIMARY_TYPES.put("cartographic material", "Other");
+        PRIMARY_TYPES.put("cartographic materials", "Other");
+        PRIMARY_TYPES.put("collection", "Database");
+        PRIMARY_TYPES.put("collections", "Database");
+        PRIMARY_TYPES.put("component", "Other");
+        PRIMARY_TYPES.put("components", "Other");
+        PRIMARY_TYPES.put("computer file", "Software");
+        PRIMARY_TYPES.put("computer files", "Software");
+        PRIMARY_TYPES.put("database", "Database");
+        PRIMARY_TYPES.put("databases", "Database");
+        PRIMARY_TYPES.put("document", "book");
+        PRIMARY_TYPES.put("documents", "book");
+        PRIMARY_TYPES.put("laneclass", "Lane Class");
+        PRIMARY_TYPES.put("lanepage", "Lane Webpage");
+        PRIMARY_TYPES.put("leaflet", "book");
+        PRIMARY_TYPES.put("leaflets", "book");
+        PRIMARY_TYPES.put("pamphlet", "book");
+        PRIMARY_TYPES.put("pamphlets", "book");
+        PRIMARY_TYPES.put("periodical", "journal");
+        PRIMARY_TYPES.put("periodicals", "journal");
+        PRIMARY_TYPES.put("search engine", "Database");
+        PRIMARY_TYPES.put("search engines", "Database");
+        PRIMARY_TYPES.put("serial", "serial");
+        PRIMARY_TYPES.put("serials", "serial");
+        PRIMARY_TYPES.put("sound recording", "Audio");
+        PRIMARY_TYPES.put("sound recordings", "Audio");
+        PRIMARY_TYPES.put("visual material", "visual material");
+        PRIMARY_TYPES.put("visual materials", "visual material");
+        PRIMARY_TYPES.put("website", "Website");
+        PRIMARY_TYPES.put("websites", "Website");
     }
 
     private int[] count = new int[] { 0, 0 };
@@ -107,7 +133,9 @@ public class SAXEresource implements Cloneable, Eresource {
         if (this.versions == null) {
             this.versions = new TreeSet<Version>(COMPARATOR);
         }
-        this.versions.add(version);
+        if (version.getLinks().size() > 0) {
+            this.versions.add(version);
+        }
     }
 
     @Override
@@ -254,5 +282,15 @@ public class SAXEresource implements Cloneable, Eresource {
 
     protected boolean isAllowable(final String type) {
         return ALLOWED_TYPES.contains(type);
+    }
+
+    private String getPrintOrDigital() {
+        String printOrDigital = null;
+        if ("print".equals(this.recordType)) {
+            printOrDigital = "Print";
+        } else {
+            printOrDigital = "Digital";
+        }
+        return printOrDigital;
     }
 }

@@ -20,6 +20,7 @@ import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Version;
 
 public abstract class AbstractMarcEresource implements Eresource {
+    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
@@ -27,7 +28,7 @@ public abstract class AbstractMarcEresource implements Eresource {
             "redwood software, installed", "duck software, installed", "stone software, installed",
             "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
             "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed" };
+            "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog" };
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
@@ -38,19 +39,9 @@ public abstract class AbstractMarcEresource implements Eresource {
                     "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
-    private static final int[] NOITEMS = new int[] { 0, 0 };
-
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
-    private static final String[][] PRIMARY_TYPES_INITIALIZER = { { "cartographic materials", "Map" },
-            { "search engine", "Database" }, { "sound recordings", "Sound Recording" }, { "leaflets", "Book" },
-            { "documents", "Book" }, { "pamphlets", "Book" }, { "components", "Component" }, { "websites", "Website" },
-            { "book sets", "Book Set" }, { "computer files", "Computer File" }, { "databases", "Database" },
-            { "visual materials", "Visual Material" }, { "serials", "Digital Journal" }, { "books", "Book" },
-            { "laneclasses", "Lane Class" }, { "lanesite", "Lane Webpage" }, { "booklets", "Book" },
-            { "collections", "Database" } };
-
-    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
+    private static final int[] NOITEMS = new int[] {0,0};
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -60,19 +51,41 @@ public abstract class AbstractMarcEresource implements Eresource {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
-    }
-    static {
-        for (String type : ALLOWED_TYPES_INITIALIZER) {
-            ALLOWED_TYPES.add(type);
-        }
-        for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
-            for (int j = 1; j < element.length; j++) {
-                COMPOSITE_TYPES.put(element[j], element[0]);
-            }
-        }
-        for (String[] element : PRIMARY_TYPES_INITIALIZER) {
-            PRIMARY_TYPES.put(element[0], element[1]);
-        }
+        PRIMARY_TYPES.put("", "Other");
+        PRIMARY_TYPES.put("book", "book");
+        PRIMARY_TYPES.put("books", "book");
+        PRIMARY_TYPES.put("book set", "book");
+        PRIMARY_TYPES.put("book sets", "book");
+        PRIMARY_TYPES.put("cartographic material", "Other");
+        PRIMARY_TYPES.put("cartographic materials", "Other");
+        PRIMARY_TYPES.put("collection", "Database");
+        PRIMARY_TYPES.put("collections", "Database");
+        PRIMARY_TYPES.put("component", "Other");
+        PRIMARY_TYPES.put("components", "Other");
+        PRIMARY_TYPES.put("computer file", "Software");
+        PRIMARY_TYPES.put("computer files", "Software");
+        PRIMARY_TYPES.put("database", "Database");
+        PRIMARY_TYPES.put("databases", "Database");
+        PRIMARY_TYPES.put("document", "book");
+        PRIMARY_TYPES.put("documents", "book");
+        PRIMARY_TYPES.put("laneclass", "Lane Class");
+        PRIMARY_TYPES.put("lanepage", "Lane Webpage");
+        PRIMARY_TYPES.put("leaflet", "book");
+        PRIMARY_TYPES.put("leaflets", "book");
+        PRIMARY_TYPES.put("pamphlet", "book");
+        PRIMARY_TYPES.put("pamphlets", "book");
+        PRIMARY_TYPES.put("periodical", "journal");
+        PRIMARY_TYPES.put("periodicals", "journal");
+        PRIMARY_TYPES.put("search engine", "Database");
+        PRIMARY_TYPES.put("search engines", "Database");
+        PRIMARY_TYPES.put("serial", "serial");
+        PRIMARY_TYPES.put("serials", "serial");
+        PRIMARY_TYPES.put("sound recording", "Audio");
+        PRIMARY_TYPES.put("sound recordings", "Audio");
+        PRIMARY_TYPES.put("visual material", "visual material");
+        PRIMARY_TYPES.put("visual materials", "visual material");
+        PRIMARY_TYPES.put("website", "Website");
+        PRIMARY_TYPES.put("websites", "Website");
     }
 
     private String description;
@@ -115,6 +128,12 @@ public abstract class AbstractMarcEresource implements Eresource {
 
     private boolean yearDone;
 
+    private boolean primaryTypeDone;
+
+    private String initialPrimaryType;
+
+    private Collection<String> initialTypes;
+
     public AbstractMarcEresource(final Record record, final String keywords) {
         this.record = record;
         this.keywords = keywords;
@@ -150,17 +169,8 @@ public abstract class AbstractMarcEresource implements Eresource {
 
     @Override
     public String getPrimaryType() {
-        if (this.primaryType == null) {
-            this.primaryType = PRIMARY_TYPES.get(doPrimaryType());
-            if (this.primaryType == null) {
-                this.primaryType = "";
-            } else if ("Book".equals(this.primaryType)) {
-                if ("print".equals(getRecordType())) {
-                    this.primaryType = "Print Book";
-                } else {
-                    this.primaryType = "Digital Book";
-                }
-            }
+        if (!this.primaryTypeDone) {
+            this.primaryType = doPrimaryType();
         }
         return this.primaryType;
     }
@@ -241,15 +251,6 @@ public abstract class AbstractMarcEresource implements Eresource {
         // do nothing by default
     }
 
-    protected void append(final StringBuilder sb, final String value) {
-        if (value != null) {
-            if (sb.length() > 0) {
-                sb.append(' ');
-            }
-            sb.append(value);
-        }
-    }
-
     protected abstract String doDescription();
 
     protected abstract int doId();
@@ -259,6 +260,11 @@ public abstract class AbstractMarcEresource implements Eresource {
     protected abstract Collection<String> doMeshTerms();
 
     protected String doPrimaryType() {
+        return getRealPrimaryType(getInitialPrimaryType());
+    }
+    
+    protected String getInitialPrimaryType() {
+        if (this.initialPrimaryType == null) {
         String type = "";
         for (VariableField field : this.record.getVariableFields("655")) {
             DataField datafield = (DataField) field;
@@ -275,7 +281,23 @@ public abstract class AbstractMarcEresource implements Eresource {
                 type = type.substring(0, lastPosition);
             }
         }
-        return type.toLowerCase();
+        this.initialPrimaryType = type.toLowerCase();
+        }
+        return this.initialPrimaryType;
+    }
+
+    
+    protected String getRealPrimaryType(String type) {
+        return type;
+    }
+    
+    protected String getMappedPrimaryType(String type) {
+        if (PRIMARY_TYPES.containsKey(type)) {
+            return PRIMARY_TYPES.get(type);
+        } else {
+            return type;
+        }
+        
     }
 
     protected String doTitle() {
@@ -301,7 +323,16 @@ public abstract class AbstractMarcEresource implements Eresource {
     }
 
     protected Collection<String> doTypes() {
+        Collection<String> t = getInitialTypes();
+        addCustomTypes(t);
+        addPrimaryType(t);
+        return t;
+    }
+    
+    protected Collection<String> getInitialTypes() {
+        if (this.initialTypes == null) {
         Collection<String> t = new HashSet<String>();
+        t.add("catalog");
         for (VariableField field : this.record.getVariableFields("655")) {
             String type = MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase();
             // remove trailing periods, some probably should have them but
@@ -320,8 +351,22 @@ public abstract class AbstractMarcEresource implements Eresource {
                 t.add(type);
             }
         }
-        addCustomTypes(t);
-        return t;
+        this.initialTypes = t;
+        }
+        return this.initialTypes;
+    }
+
+    protected void addPrimaryType(Collection<String> t) {
+        t.add(getInitialPrimaryType());
+    }
+
+    protected void append(final StringBuilder sb, final String value) {
+        if (value != null) {
+            if (sb.length() > 0) {
+                sb.append(' ');
+            }
+            sb.append(value);
+        }
     }
 
     protected abstract Date doUpdated();
@@ -337,4 +382,6 @@ public abstract class AbstractMarcEresource implements Eresource {
     protected boolean isAllowedType(final String type) {
         return ALLOWED_TYPES.contains(type);
     }
+
+    protected abstract String getPrintOrDigital();
 }

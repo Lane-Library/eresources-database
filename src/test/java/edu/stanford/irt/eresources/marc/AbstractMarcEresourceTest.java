@@ -70,6 +70,12 @@ public class AbstractMarcEresourceTest {
         protected int doYear() {
             return 1955;
         }
+
+        @Override
+        protected String getPrintOrDigital() {
+            // TODO Auto-generated method stub
+            return null;
+        }
     }
 
     private AbstractMarcEresource eresource;
