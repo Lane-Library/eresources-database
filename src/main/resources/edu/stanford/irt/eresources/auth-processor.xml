@@ -3,17 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <bean id="authProcessor" class="edu.stanford.irt.eresources.marc.MarcAuthProcessor">
+        <constructor-arg ref="authInputStream"/>
         <constructor-arg ref="eresourceHandler"/>
-        <constructor-arg>
-            <bean class="org.marc4j.MarcStreamReader">
-                <constructor-arg>
-                    <bean class="edu.stanford.irt.eresources.AuthInputStream">
-                        <constructor-arg ref="voyagerDataSource"/>
-                        <constructor-arg ref="executor"/>
-                    </bean>
-                </constructor-arg>
-            </bean>
-        </constructor-arg>
+        <constructor-arg ref="marcReaderFactory"/>
         <constructor-arg ref="keywordsStrategy"/>
     </bean>
 </beans>

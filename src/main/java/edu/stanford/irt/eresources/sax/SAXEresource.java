@@ -104,7 +104,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String title;
 
-    private Collection<String> types;
+    private Collection<String> types = new HashSet<String>();
 
     private Date updated;
 
@@ -122,9 +122,6 @@ public class SAXEresource implements Cloneable, Eresource {
     public void addType(final String type) {
         String typeToAdd = getCompositeType(type);
         if (isAllowable(typeToAdd)) {
-            if (this.types == null) {
-                this.types = new HashSet<String>();
-            }
             this.types.add(typeToAdd);
         }
     }
@@ -170,10 +167,31 @@ public class SAXEresource implements Cloneable, Eresource {
 
     @Override
     public String getPrimaryType() {
+        String type = null;
         if (this.primaryType == null) {
-            return "";
+            type = "Other";
+        } else if ("book".equals(this.primaryType)) {
+            type = "Book " + getPrintOrDigital();
+        } else if ("journal".equals(this.primaryType)) {
+            type = "Journal " + getPrintOrDigital();
+        } else if ("serial".equals(this.primaryType)) {
+            if (this.types.contains("book")) {
+                type = "Book " + getPrintOrDigital();
+            } else if (this.types.contains("database")) {
+                type = "Database";
+            } else {
+                type = "Journal " + getPrintOrDigital();
+            }
+        } else if ("visual material".equals(this.primaryType)) {
+            if (this.types.contains("video")) {
+                type = "Video";
+            } else {
+                type = "Image";
+            }
+        } else {
+            type = this.primaryType;
         }
-        return this.primaryType;
+        return type;
     }
 
     @Override
@@ -193,8 +211,9 @@ public class SAXEresource implements Cloneable, Eresource {
 
     @Override
     public Collection<String> getTypes() {
-        if (null == this.types) {
-            return Collections.emptySet();
+        this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll("").toLowerCase());
+        if (this.types.contains("journaldigital") || this.types.contains("journalprint")) {
+            this.types.add("journal");
         }
         return Collections.unmodifiableCollection(this.types);
     }

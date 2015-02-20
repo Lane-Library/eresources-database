@@ -3,12 +3,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <bean id="printProcessor" class="edu.stanford.irt.eresources.marc.MarcPrintProcessor">
+        <constructor-arg ref="printBibInputStream"/>
         <constructor-arg ref="eresourceHandler"/>
-        <constructor-arg>
-            <bean class="org.marc4j.MarcStreamReader">
-                <constructor-arg ref="printBibInputStream"/>
-            </bean>
-        </constructor-arg>
+        <constructor-arg ref="marcReaderFactory"/>
         <constructor-arg ref="itemCount"/>
         <constructor-arg ref="keywordsStrategy"/>
     </bean>

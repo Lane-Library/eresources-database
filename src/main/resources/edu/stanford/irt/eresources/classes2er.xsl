@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://lane.stanford.edu/eresources#"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:lc="http://lane.stanford.edu/laneclasses"
-    exclude-result-prefixes="lc" version="2.0">
+<xsl:stylesheet xmlns="http://lane.stanford.edu/eresources#" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:lc="http://lane.stanford.edu/laneclasses"
+                exclude-result-prefixes="lc"
+                version="2.0">
+
 
     <xsl:param name="lane-host"/>
 
@@ -17,9 +20,8 @@
         <xsl:variable name="description" select="normalize-space(event_description)"/>
         <eresource id="{$id}" type="class" update="19690101000000">
             <title><xsl:value-of select="$title"/></title>
-            <primaryType>laneclasses</primaryType>
+            <primaryType>laneclass</primaryType>
             <type>lanesite</type>
-            <type>laneclass</type>
             <keywords><xsl:value-of select="concat($description, ' ', $title)"/></keywords>
             <version>
                 <link>

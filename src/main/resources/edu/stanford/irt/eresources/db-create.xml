@@ -84,6 +84,10 @@
         <constructor-arg name="dataSource" ref="voyagerDataSource"/>
         <constructor-arg name="executor" ref="executor"/>
     </bean>
+    <bean id="authInputStream" class="edu.stanford.irt.eresources.AuthInputStream">
+        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
+        <constructor-arg name="executor" ref="executor"/>
+    </bean>
     <bean id="printBibInputStream" class="edu.stanford.irt.eresources.PrintBibInputStream">
         <constructor-arg name="dataSource" ref="voyagerDataSource"/>
         <constructor-arg name="executor" ref="executor"/>

@@ -24,11 +24,12 @@
         <constructor-arg ref="voyagerDataSource"/>
         <constructor-arg ref="executor"/>
     </bean>
+    <bean id="authInputStream" class="edu.stanford.irt.eresources.UpdateAuthInputStream">
+        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
+        <constructor-arg name="executor" ref="executor"/>
+    </bean>
     <bean id="printBibInputStream" class="edu.stanford.irt.eresources.UpdatePrintBibInputStream">
         <constructor-arg ref="voyagerDataSource"/>
         <constructor-arg ref="executor"/>
-    </bean>
-    <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor">
-        <property name="logEresource" value="true"/>
     </bean>
 </beans>

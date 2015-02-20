@@ -32,12 +32,9 @@
     <bean id="keywordsStrategy" class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
-                <constructor-arg>
-                    <bean class="edu.stanford.irt.eresources.marc.AugmentationMarcReader">
-                        <constructor-arg ref="voyagerDataSource"/>
-                        <constructor-arg ref="executor"/>
-                    </bean>
-                </constructor-arg>
+                <constructor-arg ref="marcReaderFactory"/>
+                <constructor-arg ref="voyagerDataSource"/>
+                <constructor-arg ref="executor"/>
             </bean>
         </constructor-arg>
     </bean>
@@ -50,6 +47,7 @@
             </bean>
         </constructor-arg>
     </bean>
+    <bean id="marcReaderFactory" class="edu.stanford.irt.eresources.marc.MarcReaderFactory"/>
     <bean id="erdbDataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
         <property name="url" value="${eresources.eresourcesdb.url}"/>
