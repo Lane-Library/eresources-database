@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
@@ -24,7 +25,7 @@ public class ItemCountTest {
     private ItemCount itemCount;
     private DataSource dataSource;
     private Connection connection;
-    private PreparedStatement pstmt;
+    private Statement pstmt;
     private ResultSet resultSet;
 
     @Before
@@ -32,44 +33,26 @@ public class ItemCountTest {
         this.dataSource = createMock(DataSource.class);
         this.itemCount = new ItemCount(this.dataSource);
         this.connection = createMock(Connection.class);
-        this.pstmt = createMock(PreparedStatement.class);
+        this.pstmt = createMock(Statement.class);
         this.resultSet = createMock(ResultSet.class);
     }
 
     @Test
     public void testItemCountInt() throws SQLException {
         expect(this.dataSource.getConnection()).andReturn(this.connection).times(2);
-        expect(this.connection.prepareStatement(isA(String.class))).andReturn(this.pstmt).times(2);
-        this.pstmt.setInt(1, 1);
-        expectLastCall().times(2);
-        expect(this.pstmt.executeQuery()).andReturn(this.resultSet).times(2);
-        expect(this.resultSet.next()).andReturn(true).times(2);
-        expect(this.resultSet.getInt(1)).andReturn(1);
+        expect(this.connection.createStatement()).andReturn(this.pstmt).times(2);
+        expect(this.pstmt.executeQuery(isA(String.class))).andReturn(this.resultSet).times(2);
+        expect(this.resultSet.next()).andReturn(true);
+        expect(this.resultSet.getString(1)).andReturn("1");
+        expect(this.resultSet.getInt(2)).andReturn(1);
+        expect(this.resultSet.next()).andReturn(false);
         this.resultSet.close();
         this.pstmt.close();
         this.connection.close();
-        expect(this.resultSet.getInt(1)).andReturn(2);
-        this.resultSet.close();
-        this.pstmt.close();
-        this.connection.close();
-        replay(this.dataSource, this.connection, this.pstmt, this.resultSet);
-        assertArrayEquals(new int[] {1,2}, this.itemCount.itemCount("1"));
-        verify(this.dataSource, this.connection, this.pstmt, this.resultSet);
-    }
-
-    @Test
-    public void testItemCountString() throws SQLException {
-        expect(this.dataSource.getConnection()).andReturn(this.connection).times(2);
-        expect(this.connection.prepareStatement(isA(String.class))).andReturn(this.pstmt).times(2);
-        this.pstmt.setInt(1, 1);
-        expectLastCall().times(2);
-        expect(this.pstmt.executeQuery()).andReturn(this.resultSet).times(2);
-        expect(this.resultSet.next()).andReturn(true).times(2);
-        expect(this.resultSet.getInt(1)).andReturn(1);
-        this.resultSet.close();
-        this.pstmt.close();
-        this.connection.close();
-        expect(this.resultSet.getInt(1)).andReturn(2);
+        expect(this.resultSet.next()).andReturn(true);
+        expect(this.resultSet.getString(1)).andReturn("1");
+        expect(this.resultSet.getInt(2)).andReturn(2);
+        expect(this.resultSet.next()).andReturn(false);
         this.resultSet.close();
         this.pstmt.close();
         this.connection.close();
