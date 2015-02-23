@@ -34,34 +34,34 @@ public class AuthAugmentationInputStreamTest {
 
     @Test
     public void testGetSelectIDListSQL100() {
-        assertEquals("select bib_id from cifdb.bib_index where index_code = '2451' and display_heading like ? || '%'",
+        assertEquals("select bib_id from cifdb.bib_index where index_code = '0359' and  normal_heading = ?",
                 this.stream.getSelectIDListSQL());
     }
 
     @Test
     public void testGetSelectIDListSQL600() {
         this.stream = new AuthAugmentationInputStream("12", this.dataSource, this.executor);
-        assertEquals("select bib_id from cifdb.bib_index where index_code = '2451' and display_heading like ? || '%'",
+        assertEquals("select bib_id from cifdb.bib_index where index_code = '0359' and  normal_heading = ?",
                 this.stream.getSelectIDListSQL());
     }
 
     @Test
     public void testGetSelectIDListSQL700() {
         this.stream = new AuthAugmentationInputStream("12", this.dataSource, this.executor);
-        assertEquals("select bib_id from cifdb.bib_index where index_code = '2451' and display_heading like ? || '%'",
+        assertEquals("select bib_id from cifdb.bib_index where index_code = '0359' and  normal_heading = ?",
                 this.stream.getSelectIDListSQL());
     }
 
     @Test
     public void testGetSelectIDListSQLMesh() {
         this.stream = new AuthAugmentationInputStream("12", this.dataSource, this.executor);
-        assertEquals("select bib_id from cifdb.bib_index where index_code = '2451' and  display_heading = ?",
+        assertEquals("select bib_id from cifdb.bib_index where index_code = '0359' and  normal_heading = ?",
                 this.stream.getSelectIDListSQL());
     }
 
     @Test
     public void testPrepareListStatement() throws SQLException {
-        this.stmt.setString(1, "term");
+        this.stmt.setString(1, "12");
         replay(this.stmt);
         this.stream.prepareListStatement(this.stmt);
         verify(this.stmt);

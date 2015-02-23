@@ -155,9 +155,10 @@ public class AbstractMarcEresourceTest {
         expect(this.subfield.getData()).andReturn("bassett.");
         expect(this.subfield.getData()).andReturn("Periodical");
         expect(this.subfield.getData()).andReturn("A big nothingburger");
-        expect(this.record.getVariableFields("655")).andReturn(fields);
+        expect(this.record.getVariableFields("655")).andReturn(fields).times(2);
+        expect(this.field.getIndicator1()).andReturn(' ').times(3);
         replay(this.record, this.field, this.subfield);
-        assertArrayEquals(new String[] { "bassett", "ej" }, this.eresource.doTypes().toArray());
+        assertArrayEquals(new String[] { "", "bassett", "ej", "catalog" }, this.eresource.getTypes().toArray());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -195,7 +196,7 @@ public class AbstractMarcEresourceTest {
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Books.");
         replay(this.record, this.field, this.subfield);
-        assertEquals("Digital Book", this.eresource.getPrimaryType());
+        assertEquals("books", this.eresource.getPrimaryType());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -220,9 +221,10 @@ public class AbstractMarcEresourceTest {
         expect(this.subfield.getData()).andReturn("bassett.");
         expect(this.subfield.getData()).andReturn("Periodical");
         expect(this.subfield.getData()).andReturn("A big nothingburger");
-        expect(this.record.getVariableFields("655")).andReturn(fields);
+        expect(this.record.getVariableFields("655")).andReturn(fields).times(2);
+        expect(this.field.getIndicator1()).andReturn(' ').times(3);
         replay(this.record, this.field, this.subfield);
-        assertArrayEquals(new String[] { "bassett", "ej" }, this.eresource.getTypes().toArray());
+        assertArrayEquals(new String[] { "", "bassett", "ej", "catalog" }, this.eresource.getTypes().toArray());
         verify(this.record, this.field, this.subfield);
     }
 
