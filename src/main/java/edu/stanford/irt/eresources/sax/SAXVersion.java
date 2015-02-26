@@ -53,6 +53,16 @@ public class SAXVersion implements Version {
             this.subsets.add(subset);
         }
     }
+    
+    @Override
+    public String getHoldingsAndDates() {
+        StringBuilder sb = new StringBuilder(" ");
+        if (this.summaryHoldings != null) {
+            sb.append(this.summaryHoldings);
+        }
+        maybeAppend(sb, this.dates);
+        return sb.toString();
+    }
 
     @Override
     public String getAdditionalText() {
