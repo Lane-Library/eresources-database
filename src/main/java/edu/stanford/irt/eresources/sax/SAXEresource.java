@@ -20,20 +20,20 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
-            "redwood software, installed", "duck software, installed", "stone software, installed",
-            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog" };
+        "redwood software, installed", "duck software, installed", "stone software, installed",
+        "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
+        "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+        "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
-            { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
-            { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-            { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
-                    "digital videos, local", "digital videos, local, public" },
+        { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
+        { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
+        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
+            "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
@@ -83,6 +83,8 @@ public class SAXEresource implements Cloneable, Eresource {
         PRIMARY_TYPES.put("website", "Website");
         PRIMARY_TYPES.put("websites", "Website");
     }
+
+    private String author;
 
     private int[] count = new int[] { 0, 0 };
 
@@ -140,6 +142,11 @@ public class SAXEresource implements Cloneable, Eresource {
         SAXEresource clone = (SAXEresource) super.clone();
         clone.isClone = true;
         return clone;
+    }
+
+    @Override
+    public String getAuthor() {
+        return this.author;
     }
 
     /*
@@ -299,6 +306,10 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public boolean isCore() {
         return this.isCore;
+    }
+
+    public void setAuthor(final String author) {
+        this.author = author;
     }
 
     public void setDescription(final String description) {
