@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>lane</artifactId>
         <groupId>edu.stanford.irt</groupId>
@@ -10,8 +12,8 @@
     <version>2.0.0-SNAPSHOT</version>
     <scm>
         <developerConnection>scm:git:ssh://corn.stanford.edu/afs/ir/group/lane/git/eresources-database.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <distributionManagement>
         <site>
             <id>lane-preprod</id>
@@ -19,13 +21,12 @@
         </site>
     </distributionManagement>
     <build>
-        <defaultGoal>assembly:assembly</defaultGoal>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -121,23 +122,57 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.handlers</resource>
+                                </transformer>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.schemas</resource>
+                                </transformer>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.tooling</resource>
+                                </transformer>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.factories</resource>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
-            	<groupId>org.apache.maven.plugins</groupId>
-            	<artifactId>maven-release-plugin</artifactId>
-            	<version>2.5.1</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.1</version>
             </plugin>
             <plugin>
-            	<groupId>org.jacoco</groupId>
-            	<artifactId>jacoco-maven-plugin</artifactId>
-            	<version>0.7.3.201502191951</version>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.3.201502191951</version>
                 <executions>
                     <execution>
                         <id>unit</id>
@@ -186,10 +221,10 @@
             <artifactId>spring-aop</artifactId>
             <groupId>org.springframework</groupId>
             <exclusions>
-            	<exclusion>
-            		<artifactId>commons-logging</artifactId>
-            		<groupId>commons-logging</groupId>
-            	</exclusion>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -230,33 +265,33 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-        	<groupId>junit</groupId>
-        	<artifactId>junit</artifactId>
-        	<version>4.12</version>
-        	<scope>test</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-        	<groupId>org.slf4j</groupId>
-        	<artifactId>jcl-over-slf4j</artifactId>
-        	<version>1.7.10</version>
-        	<scope>runtime</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.10</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-        	<groupId>edu.stanford.irt.marc4j</groupId>
-        	<artifactId>marc4j-jdk15</artifactId>
-        	<version>2.3.5</version>
+            <groupId>edu.stanford.irt.marc4j</groupId>
+            <artifactId>marc4j-jdk15</artifactId>
+            <version>2.3.5</version>
         </dependency>
         <dependency>
-        	<groupId>net.sf.saxon</groupId>
-        	<artifactId>Saxon-HE</artifactId>
-        	<version>9.6.0-4</version>
-        	<scope>runtime</scope>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.6.0-4</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-        	<groupId>org.easymock</groupId>
-        	<artifactId>easymock</artifactId>
-        	<version>3.3.1</version>
-        	<scope>test</scope>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.3.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
