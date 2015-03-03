@@ -1,17 +1,13 @@
 package edu.stanford.irt.eresources.classes;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Loader;
-import edu.stanford.irt.eresources.StartDate;
 
 public class ClassesTransformerTest {
 

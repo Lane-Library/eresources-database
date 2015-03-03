@@ -34,7 +34,6 @@ public class DeleteJDBCLoaderTest {
 
     private Statement stmt;
 
-    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
         this.dataSource = createMock(DataSource.class);

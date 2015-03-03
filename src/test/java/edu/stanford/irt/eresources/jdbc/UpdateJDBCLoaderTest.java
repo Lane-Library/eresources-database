@@ -39,7 +39,6 @@ public class UpdateJDBCLoaderTest {
 
     private EresourceSQLTranslator translator;
 
-    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
         this.dataSource = createMock(DataSource.class);

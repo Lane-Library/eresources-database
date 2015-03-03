@@ -41,7 +41,6 @@ public class JDBCLoaderTest {
 
     private Version version;
 
-    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
