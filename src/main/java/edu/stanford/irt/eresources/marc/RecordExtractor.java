@@ -9,8 +9,6 @@ import edu.stanford.irt.eresources.Extractor;
 
 public class RecordExtractor implements Extractor<Record> {
     
-    public static final Record END = new RecordImpl();
-    
     private MarcReader marcReader;
 
     public RecordExtractor(MarcReader marcReader) {

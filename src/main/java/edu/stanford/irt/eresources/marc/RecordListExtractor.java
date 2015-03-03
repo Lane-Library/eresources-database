@@ -14,7 +14,6 @@ public class RecordListExtractor implements Extractor<List<Record>> {
 
     private static final String HOLDINGS_CHARS = "uvxy";
     
-    public static final List<Record> END = Collections.emptyList();
     private MarcReader marcReader;
     private Record lastRecord;
     private List<Record> nextList;
