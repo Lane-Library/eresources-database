@@ -10,22 +10,6 @@
         </constructor-arg>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.classes.ClassesTransformer">
-                <!--<constructor-arg>
-                    <bean class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer"
-                        init-method="init">
-                        <property name="stylesheet"
-                            value="classpath://edu/stanford/irt/eresources/classes2er.xsl"/>
-                        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
-                        <property name="namespace" value="http://lane.stanford.edu/laneclasses"/>
-                        <property name="element" value="classes"/>
-                        <property name="parameters">
-                            <map>
-                                <entry key="lane-host" value="${eresources.lane-host}"/>
-                            </map>
-                        </property>
-                    </bean>
-                </constructor-arg>-->
-                <constructor-arg ref="startDate"/>
                 <constructor-arg value="classpath:/edu/stanford/irt/eresources/classes2er.xsl"/>
             </bean>
         </constructor-arg>
