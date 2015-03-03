@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import edu.stanford.irt.eresources.jdbc.DBUpdate;
-
 public abstract class EresourcesETLApp {
 
     private boolean killPrevious;
@@ -80,7 +78,7 @@ public abstract class EresourcesETLApp {
                     Runtime.getRuntime().exec(new String[] { "kill", pid });
                 } else {
                     IllegalStateException e = new IllegalStateException("pid " + pid + " already running");
-                    LoggerFactory.getLogger(DBUpdate.class).error(e.getMessage());
+                    LoggerFactory.getLogger(EresourcesETLApp.class).error(e.getMessage());
                     throw e;
                 }
             }
