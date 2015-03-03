@@ -2,27 +2,33 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
-    <bean id="classesProcessor" class="edu.stanford.irt.eresources.sax.ClassesEresourceProcessor">
-        <constructor-arg value="${eresources.lane-host}/classes/all-data.xml"/>
+    <bean id="classesProcessor" class="edu.stanford.irt.eresources.ETLProcessor">
         <constructor-arg>
-            <bean class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer"
-                init-method="init">
-                <property name="stylesheet"
-                    value="classpath://edu/stanford/irt/eresources/classes2er.xsl"/>
-                <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
-                <property name="namespace" value="http://lane.stanford.edu/laneclasses"/>
-                <property name="element" value="classes"/>
-                <property name="contentHandler">
-                    <bean class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
-                        <property name="eresourceHandler" ref="eresourceHandler"/>
-                    </bean>
-                </property>
-                <property name="parameters">
-                    <map>
-                        <entry key="lane-host" value="${eresources.lane-host}"/>
-                    </map>
-                </property>
+            <bean class="edu.stanford.irt.eresources.classes.ClassesExtractor">
+                <constructor-arg value="${eresources.lane-host}/classes/all-data.xml"/>
             </bean>
         </constructor-arg>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.classes.ClassesTransformer">
+                <!--<constructor-arg>
+                    <bean class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer"
+                        init-method="init">
+                        <property name="stylesheet"
+                            value="classpath://edu/stanford/irt/eresources/classes2er.xsl"/>
+                        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+                        <property name="namespace" value="http://lane.stanford.edu/laneclasses"/>
+                        <property name="element" value="classes"/>
+                        <property name="parameters">
+                            <map>
+                                <entry key="lane-host" value="${eresources.lane-host}"/>
+                            </map>
+                        </property>
+                    </bean>
+                </constructor-arg>-->
+                <constructor-arg ref="startDate"/>
+                <constructor-arg value="classpath:/edu/stanford/irt/eresources/classes2er.xsl"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg ref="loader"/>
     </bean>
 </beans>

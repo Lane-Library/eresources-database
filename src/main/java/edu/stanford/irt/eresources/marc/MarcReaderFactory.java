@@ -7,7 +7,7 @@ import org.marc4j.MarcStreamReader;
 
 public class MarcReaderFactory {
 
-    public MarcReader newMarcReader(final InputStream input) {
-        return new MarcStreamReader(input);
+    public MarcReader newMarcReader(final InputStream inputStream) {
+        return new MarcStreamReader(inputStream);
     }
 }

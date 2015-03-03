@@ -2,10 +2,21 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
-    <bean id="authProcessor" class="edu.stanford.irt.eresources.marc.MarcAuthProcessor">
-        <constructor-arg ref="authInputStream"/>
-        <constructor-arg ref="eresourceHandler"/>
-        <constructor-arg ref="marcReaderFactory"/>
-        <constructor-arg ref="keywordsStrategy"/>
+    <bean id="authProcessor" class="edu.stanford.irt.eresources.ETLProcessor">
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.RecordExtractor">
+                <constructor-arg>
+                    <bean class="org.marc4j.MarcStreamReader">
+                        <constructor-arg ref="authInputStream"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.AuthMarcTransformer">
+                <constructor-arg ref="keywordsStrategy"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg ref="loader"/>
     </bean>
 </beans>

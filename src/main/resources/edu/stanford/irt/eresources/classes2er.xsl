@@ -9,15 +9,15 @@
     <xsl:param name="lane-host"/>
 
     <xsl:template match="/lc:classes">
-        <xsl:for-each-group select="event_data" group-by="event_name">
+        <xsl:for-each-group select="lc:event_data" group-by="lc:event_name">
             <xsl:apply-templates select="current-group()[last()]"/>
         </xsl:for-each-group>
     </xsl:template>
 
-    <xsl:template match="event_data">
-        <xsl:variable name="id" select="module_id"/>
-        <xsl:variable name="title" select="normalize-space(event_name)"/>
-        <xsl:variable name="description" select="normalize-space(event_description)"/>
+    <xsl:template match="lc:event_data">
+        <xsl:variable name="id" select="lc:module_id"/>
+        <xsl:variable name="title" select="normalize-space(lc:event_name)"/>
+        <xsl:variable name="description" select="normalize-space(lc:event_description)"/>
         <eresource id="{$id}" type="class" update="19690101000000">
             <title><xsl:value-of select="$title"/></title>
             <primaryType>laneclass</primaryType>

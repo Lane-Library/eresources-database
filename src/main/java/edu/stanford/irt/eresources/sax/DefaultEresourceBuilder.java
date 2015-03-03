@@ -5,13 +5,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.irt.eresources.EresourceException;
-import edu.stanford.irt.eresources.EresourceHandler;
 
-public class DefaultEresourceBuilder extends DefaultHandler implements EresourceBuilder {
+public class DefaultEresourceBuilder extends DefaultHandler  {
 
     private SAXEresource currentEresource;
 
@@ -24,14 +22,18 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private EresourceHandler eresourceHandler;
+    
+    public DefaultEresourceBuilder(EresourceHandler eresourceHandler) {
+        this.eresourceHandler = eresourceHandler;
+    }
 
     @Override
-    public void characters(final char[] ch, final int start, final int length) throws SAXException {
+    public void characters(final char[] ch, final int start, final int length) {
         this.currentText.append(ch, start, length);
     }
 
     @Override
-    public void endElement(final String uri, final String localName, final String name) throws SAXException {
+    public void endElement(final String uri, final String localName, final String name) {
         if ("eresource".equals(name)) {
             this.eresourceHandler.handleEresource(this.currentEresource);
             this.currentEresource = null;
@@ -40,6 +42,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentVersion = null;
         } else if ("link".equals(name)) {
             this.currentVersion.addLink(this.currentLink);
+            this.currentLink.setVersion(this.currentVersion);
             this.currentLink = null;
         } else if ("url".equals(name)) {
             this.currentLink.setUrl(this.currentText.toString());
@@ -82,13 +85,8 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
     }
 
     @Override
-    public void setEresourceHandler(final EresourceHandler eresourceHandler) {
-        this.eresourceHandler = eresourceHandler;
-    }
-
-    @Override
     public void startElement(final String uri, final String localName, final String name, final Attributes atts)
-            throws SAXException {
+            {
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
             this.currentEresource = new SAXEresource();

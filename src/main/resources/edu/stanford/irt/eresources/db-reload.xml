@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <import resource="db-load.xml"/>
-    <bean id="dbLoader" class="edu.stanford.irt.eresources.DBLoader" parent="abstractDbLoader">
+    <bean id="dbLoader" class="edu.stanford.irt.eresources.jdbc.JDBCEresourcesETLApp" parent="abstractDbLoader">
         <property name="killPrevious" value="true"/>
         <property name="handler" ref="eresourceHandler"/>
         <property name="createStatements">
@@ -26,20 +26,20 @@
             </list>
         </property>
     </bean>
-    <bean id="eresourceHandler" class="edu.stanford.irt.eresources.DefaultEresourceHandler">
+    <bean id="eresourceHandler" class="edu.stanford.irt.eresources.jdbc.JDBCLoader">
         <constructor-arg ref="erdbDataSource"/>
         <constructor-arg ref="queue"/>
         <constructor-arg ref="eresourceTranslator"/>
     </bean>
-    <bean id="bibInputStream" class="edu.stanford.irt.eresources.BibInputStream">
+    <bean id="bibInputStream" class="edu.stanford.irt.eresources.marc.BibInputStream">
         <constructor-arg ref="voyagerDataSource"/>
         <constructor-arg ref="executor"/>
     </bean>
-    <bean id="authInputStream" class="edu.stanford.irt.eresources.AuthInputStream">
+    <bean id="authInputStream" class="edu.stanford.irt.eresources.marc.AuthInputStream">
         <constructor-arg name="dataSource" ref="voyagerDataSource"/>
         <constructor-arg name="executor" ref="executor"/>
     </bean>
-    <bean id="printBibInputStream" class="edu.stanford.irt.eresources.PrintBibInputStream">
+    <bean id="printBibInputStream" class="edu.stanford.irt.eresources.marc.PrintBibInputStream">
         <constructor-arg ref="voyagerDataSource"/>
         <constructor-arg ref="executor"/>
     </bean>

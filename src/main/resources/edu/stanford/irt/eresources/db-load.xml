@@ -7,10 +7,8 @@
     <import resource="auth-processor.xml"/>
     <import resource="classes-processor.xml"/>
     <import resource="print-processor.xml"/>
-    <bean id="abstractDbLoader" class="edu.stanford.irt.eresources.DBLoader" abstract="true">
-        <property name="userName" value="${eresources.eresourcesdb.username}"/>
-        <property name="dataSource" ref="erdbDataSource"/>
-        <property name="processors">
+    <bean id="abstractETL" class="edu.stanford.irt.eresources.jdbc.EresourcesETLApp" abstract="true">
+        <constructor-arg>
             <list>
                 <ref bean="bibProcessor"/>
                 <ref bean="webProcessor"/>
@@ -18,15 +16,19 @@
                 <ref bean="classesProcessor"/>
                 <ref bean="printProcessor"/>
             </list>
-        </property>
-        <property name="version" value="${project.version}"/>
-        <property name="executor" ref="executor"/>
-        <property name="queue" ref="queue"/>
+        </constructor-arg>
+        <constructor-arg ref="startDate"/>
+        <constructor-arg value="true"/>
+    </bean>
+    <bean id="startDate" class="edu.stanford.irt.eresources.StartDate"/>
+    <bean id="loader" class="edu.stanford.irt.eresources.jdbc.JDBCLoader">
+        <constructor-arg ref="erdbDataSource"/>
+        <constructor-arg ref="eresourceTranslator"/>
     </bean>
     <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue">
         <constructor-arg value="10000"/>
     </bean>
-    <bean id="itemCount" class="edu.stanford.irt.eresources.ItemCount">
+    <bean id="itemCount" class="edu.stanford.irt.eresources.marc.ItemCount">
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
     <bean id="keywordsStrategy" class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
@@ -38,11 +40,11 @@
             </bean>
         </constructor-arg>
     </bean>
-    <bean id="eresourceTranslator" class="edu.stanford.irt.eresources.EresourceSQLTranslator">
+    <bean id="eresourceTranslator" class="edu.stanford.irt.eresources.jdbc.EresourceSQLTranslator">
         <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.VersionSQLTranslator">
+            <bean class="edu.stanford.irt.eresources.jdbc.VersionSQLTranslator">
                 <constructor-arg>
-                    <bean class="edu.stanford.irt.eresources.LinkSQLTranslator"/>
+                    <bean class="edu.stanford.irt.eresources.jdbc.LinkSQLTranslator"/>
                 </constructor-arg>
             </bean>
         </constructor-arg>
@@ -62,8 +64,8 @@
     </bean>
     <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
         destroy-method="destroy">
-        <property name="corePoolSize" value="4"/>
-        <property name="maxPoolSize" value="4"/>
+        <property name="corePoolSize" value="8"/>
+        <property name="maxPoolSize" value="8"/>
         <property name="queueCapacity" value="0"/>
     </bean>
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

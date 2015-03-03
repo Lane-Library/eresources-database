@@ -8,6 +8,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -34,7 +35,7 @@ public class BibMarcEresourceTest {
     @Before
     public void setUp() {
         this.record = createMock(Record.class);
-        this.eresource = new BibMarcEresource(this.record, Collections.singletonList(this.record), "keywords",
+        this.eresource = new BibMarcEresource(Arrays.asList(new Record[] {this.record, this.record}), "keywords",
                 new int[] { 1, 1 });
         this.field = createMock(DataField.class);
         this.subfield = createMock(Subfield.class);

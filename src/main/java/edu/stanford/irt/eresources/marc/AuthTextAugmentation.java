@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import com.ibm.icu.text.Normalizer;
 
-import edu.stanford.irt.eresources.AuthAugmentationInputStream;
 import edu.stanford.irt.eresources.EresourceException;
 
 public class AuthTextAugmentation {

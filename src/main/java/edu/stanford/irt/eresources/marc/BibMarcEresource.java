@@ -52,10 +52,10 @@ public class BibMarcEresource extends AbstractMarcEresource {
 
     private Record record;
 
-    public BibMarcEresource(final Record record, final List<Record> holdings, final String keywords, final int[] items) {
-        super(record, keywords);
-        this.record = record;
-        this.holdings = holdings;
+    public BibMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
+        super(recordList.get(0), keywords);
+        this.record = recordList.get(0);
+        this.holdings = recordList.subList(1, recordList.size());
         this.items = items;
     }
 

@@ -13,10 +13,10 @@ public class AltTitleMarcEresource extends BibMarcEresource {
 
     private Record record;
 
-    public AltTitleMarcEresource(final Record record, final List<Record> holdings, final String keywords,
+    public AltTitleMarcEresource(final List<Record> recordList, final String keywords,
             final int[] items) {
-        super(record, holdings, keywords, items);
-        this.record = record;
+        super(recordList, keywords, items);
+        this.record = recordList.get(0);
     }
 
     @Override

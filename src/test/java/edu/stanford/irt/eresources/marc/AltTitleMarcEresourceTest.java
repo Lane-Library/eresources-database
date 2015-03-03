@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -29,7 +30,7 @@ public class AltTitleMarcEresourceTest {
     @Before
     public void setUp() {
         this.record = createMock(Record.class);
-        this.eresource = new AltTitleMarcEresource(this.record, null, null, null);
+        this.eresource = new AltTitleMarcEresource(Collections.singletonList(this.record), null, null);
         this.field = createMock(DataField.class);
         this.subfield = createMock(Subfield.class);
     }

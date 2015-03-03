@@ -13,8 +13,8 @@ import edu.stanford.irt.eresources.VersionComparator;
 
 public class PrintMarcEresource extends BibMarcEresource {
 
-    public PrintMarcEresource(final Record record, final List<Record> holdings, final String keywords, final int[] items) {
-        super(record, holdings, keywords, items);
+    public PrintMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
+        super(recordList, keywords, items);
     }
 
     @Override
