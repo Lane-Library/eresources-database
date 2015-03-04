@@ -90,6 +90,8 @@ public class SAXEresource implements Cloneable, Eresource {
             PRIMARY_TYPES.put("websites", "Website");
     }
 
+    private String author;
+
     private int[] count = new int[] { 0, 0 };
 
     private String description;
@@ -191,6 +193,11 @@ public class SAXEresource implements Cloneable, Eresource {
         SAXEresource clone = (SAXEresource) super.clone();
         clone.isClone = true;
         return clone;
+    }
+
+    @Override
+    public String getAuthor() {
+        return this.author;
     }
 
     /*
@@ -443,6 +450,10 @@ public class SAXEresource implements Cloneable, Eresource {
             return this.publicationLanguages.contains(ENG);
         }
         return false;
+    }
+    
+    public void setAuthor(final String author) {
+        this.author = author;
     }
 
     public void setDescription(final String description) {

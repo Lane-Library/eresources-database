@@ -11,6 +11,8 @@ public interface Version {
 
     String getDescription();
 
+    String getHoldingsAndDates();
+
     List<Link> getLinks();
 
     String getPublisher();

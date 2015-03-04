@@ -1,9 +1,9 @@
 package edu.stanford.irt.eresources;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,33 +23,36 @@ public class ItemCount {
             + "GROUP BY bi.bib_id";
 
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) "
-            + "FROM lmldb.bib_item, lmldb.item_status " + "WHERE bib_item.item_id = item_status.item_id "
+            + "FROM lmldb.bib_item, lmldb.item_status "
+            + "WHERE bib_item.item_id = item_status.item_id "
             + "GROUP BY bib_id";
 
-    private Map<Integer, Integer> available = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> availables;
 
     private DataSource dataSource;
 
-    private Map<Integer, Integer> total = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> totals;
 
     public ItemCount(final DataSource dataSource) {
         this.dataSource = dataSource;
-        init(this.total, TOTAL_QUERY);
-        init(this.available, AVAILABLE_QUERY);
     }
 
-    private int getCount(final int bibId, final Map<Integer, Integer> map) {
-        Integer count = new Integer(0);
-        if (map.containsKey(Integer.valueOf(bibId))) {
-            count = map.get(Integer.valueOf(bibId));
+    public int[] itemCount(final int bibId) {
+        if (this.totals == null) {
+            this.initialize();
         }
-        return count.intValue();
+        int[] itemCount = new int[2];
+        itemCount[0] = getCount(bibId, this.totals);
+        if (itemCount[0] > 0) {
+            itemCount[1] = getCount(bibId, this.availables);
+        }
+        return itemCount;
     }
 
-    private void init(final Map<Integer, Integer> map, final String query) {
-        try (Connection conn = this.dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            ;
-            ResultSet rs = pstmt.executeQuery();
+    private Map<Integer, Integer> createItemCountMap(final String query) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        try (Connection conn = this.dataSource.getConnection(); Statement statement = conn.createStatement()) {
+            ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
                 map.put(Integer.valueOf(rs.getInt(1)), Integer.valueOf(rs.getInt(2)));
             }
@@ -57,14 +60,16 @@ public class ItemCount {
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
+        return map;
     }
 
-    public int[] itemCount(final int bibId) {
-        int[] count = new int[2];
-        count[0] = getCount(bibId, this.total);
-        if (count[0] > 0) {
-            count[1] = getCount(bibId, this.available);
-        }
-        return count;
+    private int getCount(final int bibId, final Map<Integer, Integer> map) {
+        Integer count = map.get(Integer.valueOf(bibId));
+        return count != null ? count.intValue() : 0;
+    }
+
+    private void initialize() {
+        this.totals = createItemCountMap(TOTAL_QUERY);
+        this.availables = createItemCountMap(AVAILABLE_QUERY);
     }
 }

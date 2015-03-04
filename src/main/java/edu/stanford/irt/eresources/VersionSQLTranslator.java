@@ -6,7 +6,7 @@ import java.util.List;
 
 public class VersionSQLTranslator extends AbstractSQLTranslator {
 
-    private static final String INSERT_VERSION = "VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, ADDITIONAL_TEXT, PUBLISHER) VALUES (";
+    private static final String INSERT_VERSION = "VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, ADDITIONAL_TEXT, PUBLISHER, HOLDINGS_DATES) VALUES (";
 
     private LinkSQLTranslator linkTranslator;
 
@@ -22,7 +22,8 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
                 .append("VERSION_ID_SEQ.NEXTVAL, ").append(tablePrefix).append("ERESOURCE_ID_SEQ.CURRVAL,")
                 .append(vr.isProxy() ? "'T'" : "'F'").append(COMMA).append(vr.hasGetPasswordLink() ? "'T'" : "'F'")
                 .append(COMMA).append(order).append(COMMA).append(apostrophize(vr.getAdditionalText())).append(COMMA)
-                .append(apostrophize(vr.getPublisher())).append(END_PAREN);
+                .append(apostrophize(vr.getPublisher())).append(COMMA)
+                .append(apostrophize(vr.getHoldingsAndDates())).append(END_PAREN);
         sql.add(sb.toString());
         sql.addAll(getInsertSubsetSQL(vr));
         for (Link link : vr.getLinks()) {
