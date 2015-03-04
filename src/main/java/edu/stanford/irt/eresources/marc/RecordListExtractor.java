@@ -24,8 +24,8 @@ public class RecordListExtractor implements Extractor<List<Record>> {
     }
 
 
-    private boolean isBib(final Record record) {
-        return HOLDINGS_CHARS.indexOf(record.getLeader().getTypeOfRecord()) == -1;
+    private boolean isHolding(final Record record) {
+        return HOLDINGS_CHARS.indexOf(record.getLeader().getTypeOfRecord()) > -1;
     }
 
 
@@ -45,17 +45,19 @@ public class RecordListExtractor implements Extractor<List<Record>> {
         List<Record> recordList = null;
         if (this.marcReader.hasNext()) {
             Record record = this.marcReader.next();
+            recordList = new ArrayList<Record>();
             if (!this.started) {
-                this.lastRecord = record;
-            }
-            if (this.lastRecord != null) {
-                recordList = new ArrayList<Record>();
+                recordList.add(record);
+            } else {
                 recordList.add(this.lastRecord);
+                if (isHolding(record)) {
+                    recordList.add(record);
+                }
             }
-            while(this.marcReader.hasNext() && !isBib(record = this.marcReader.next())) {
+            while(this.marcReader.hasNext() && isHolding(record = this.marcReader.next())) {
                 recordList.add(record);
             }
-            this.lastRecord = isBib(record) ? record : null;
+            this.lastRecord = isHolding(record) ? null : record;
         } else if (this.lastRecord != null) {
             return Collections.singletonList(this.lastRecord);
         }

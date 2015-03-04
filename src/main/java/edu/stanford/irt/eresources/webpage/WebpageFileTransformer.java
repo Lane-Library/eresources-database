@@ -47,14 +47,18 @@ public class WebpageFileTransformer implements Transformer<File>, EresourceHandl
 
     private DOMParser parser;
 
-    public WebpageFileTransformer(final String basePath, final InputStream input) {
+    private String laneHost;
+
+    public WebpageFileTransformer(final String basePath, final InputStream input, final String laneHost) {
         this.basePath = basePath;
+        this.laneHost = laneHost;
         this.eresourceBuilder = new DefaultEresourceBuilder(this);
         try {
             this.transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(input));
         } catch (TransformerConfigurationException | TransformerFactoryConfigurationError e) {
             throw new EresourceException(e);
         }
+        this.transformer.setParameter("lane-host", this.laneHost);
         this.htmlConfig = new HTMLConfiguration();
         this.htmlConfig.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
         this.htmlConfig.setFeature("http://cyberneko.org/html/features/insert-namespaces", Boolean.TRUE);

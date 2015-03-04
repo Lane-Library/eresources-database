@@ -41,12 +41,16 @@ public class ClassesTransformer implements Transformer<InputStream>, EresourceHa
 
     private javax.xml.transform.Transformer transformer;
 
-    public ClassesTransformer(final InputStream input) {
+    private String laneHost;
+
+    public ClassesTransformer(final InputStream input, String laneHost) {
+        this.laneHost = laneHost;
         try {
             this.transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(input));
         } catch (TransformerConfigurationException | TransformerFactoryConfigurationError e) {
             throw new EresourceException(e);
         }
+        this.transformer.setParameter("lane-host", this.laneHost);
         this.eresourceBuilder = new DefaultEresourceBuilder(this);
     }
 

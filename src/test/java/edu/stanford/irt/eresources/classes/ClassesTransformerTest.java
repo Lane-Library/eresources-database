@@ -17,7 +17,7 @@ public class ClassesTransformerTest {
 
     @Before
     public void setUp() {
-        this.processor = new ClassesTransformer(getClass().getResourceAsStream("/edu/stanford/irt/eresources/classes2er.xsl"));
+        this.processor = new ClassesTransformer(getClass().getResourceAsStream("/edu/stanford/irt/eresources/classes2er.xsl"), "lane-host");
         this.loader = createMock(Loader.class);
     }
 

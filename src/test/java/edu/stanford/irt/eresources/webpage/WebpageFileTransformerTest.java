@@ -24,7 +24,7 @@ public class WebpageFileTransformerTest {
     public void setUp() {
         String basePath = System.getProperty("user.dir") + "/src/test/resources/edu/stanford/irt/eresources/webpage";
 
-        this.processor = new WebpageFileTransformer(basePath, getClass().getResourceAsStream("/edu/stanford/irt/eresources/web2er.xsl"));
+        this.processor = new WebpageFileTransformer(basePath, getClass().getResourceAsStream("/edu/stanford/irt/eresources/web2er.xsl"), "lane-host");
         this.file = new File(basePath + "/file.html");
         this.loader = createMock(Loader.class);
     }

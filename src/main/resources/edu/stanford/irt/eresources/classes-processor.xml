@@ -11,6 +11,7 @@
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.classes.ClassesTransformer">
                 <constructor-arg value="classpath:/edu/stanford/irt/eresources/classes2er.xsl"/>
+                <constructor-arg value="${eresources.lane-host}"/>
             </bean>
         </constructor-arg>
         <constructor-arg ref="loader"/>
