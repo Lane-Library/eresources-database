@@ -51,6 +51,7 @@ public class EresourceSQLTranslatorTest {
         expect(this.eresource.getRecordType()).andReturn("type");
         expect(this.eresource.getUpdated()).andReturn(new Date(0));
         expect(this.eresource.getTitle()).andReturn("title");
+        expect(this.eresource.getAuthor()).andReturn("author");
         expect(this.eresource.getPrimaryType()).andReturn("primaryType");
         expect(this.eresource.isCore()).andReturn(false);
         expect(this.eresource.getYear()).andReturn(2010).times(2);
@@ -61,7 +62,7 @@ public class EresourceSQLTranslatorTest {
         replay(this.eresource, this.version, this.versionTranslator);
         List<String> sql = this.translator.getInsertSQL(this.eresource);
         String dateString = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(0));
-        assertEquals("INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (ERESOURCE_ID_SEQ.NEXTVAL,'1','type',TO_DATE('" + dateString + "','YYYYMMDDHH24MISS'),'title','primaryType',NULL,2010,1,1,empty_clob(), empty_clob())", sql.get(0));
+        assertEquals("INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, AUTHOR, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (ERESOURCE_ID_SEQ.NEXTVAL,'1','type',TO_DATE('" + dateString + "','YYYYMMDDHH24MISS'),'title','author','primaryType',NULL,2010,1,1,empty_clob(), empty_clob())", sql.get(0));
         assertEquals("TEXT:keywords", sql.get(1));
         assertEquals("DESCRIPTION:description", sql.get(2));
         assertEquals("INSERT INTO TYPE VALUES (ERESOURCE_ID_SEQ.CURRVAL,'type')", sql.get(3));

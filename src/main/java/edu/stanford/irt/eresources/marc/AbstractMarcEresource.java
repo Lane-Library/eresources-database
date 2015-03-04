@@ -140,6 +140,19 @@ public abstract class AbstractMarcEresource implements Eresource {
     }
 
     @Override
+    public String getAuthor() {
+        String author = null;
+        DataField field245 = (DataField) this.record.getVariableField("245");
+        if (field245 != null) {
+            Subfield subfieldc = field245.getSubfield('c');
+            if (subfieldc != null) {
+                author =  Normalizer.compose(subfieldc.getData(), false);
+            }
+        }
+        return author;
+    }
+
+    @Override
     public String getDescription() {
         if (!this.descriptionDone) {
             this.description = doDescription();

@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import edu.stanford.irt.eresources.AbstractVersion;
 import edu.stanford.irt.eresources.Link;
-import edu.stanford.irt.eresources.Version;
 
-public class CatalogVersion implements Version {
+public class CatalogVersion extends AbstractVersion {
 
     private List<Link> links;
 

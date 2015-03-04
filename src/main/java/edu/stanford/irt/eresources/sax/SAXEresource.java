@@ -84,6 +84,8 @@ public class SAXEresource implements Cloneable, Eresource {
         PRIMARY_TYPES.put("websites", "Website");
     }
 
+    private String author;
+
     private int[] count = new int[] { 0, 0 };
 
     private String description;
@@ -140,6 +142,11 @@ public class SAXEresource implements Cloneable, Eresource {
         SAXEresource clone = (SAXEresource) super.clone();
         clone.isClone = true;
         return clone;
+    }
+
+    @Override
+    public String getAuthor() {
+        return this.author;
     }
 
     @Override
@@ -244,6 +251,10 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public boolean isCore() {
         return this.isCore;
+    }
+
+    public void setAuthor(final String author) {
+        this.author = author;
     }
 
     public void setDescription(final String description) {

@@ -5,6 +5,17 @@ import java.util.List;
 
 public abstract class AbstractVersion implements Version {
 
+    @Override
+    public String getHoldingsAndDates() {
+        StringBuilder sb = new StringBuilder(" ");
+        String summaryHoldings = getSummaryHoldings();
+        if (summaryHoldings != null) {
+            sb.append(summaryHoldings);
+        }
+        maybeAppend(sb, getDates());
+        return sb.toString();
+    }
+
     protected String createAdditionalText() {
         StringBuilder sb = new StringBuilder(" ");
         String summaryHoldings = getSummaryHoldings();

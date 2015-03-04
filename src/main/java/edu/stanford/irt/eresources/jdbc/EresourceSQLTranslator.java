@@ -11,7 +11,7 @@ import edu.stanford.irt.eresources.Version;
 
 public class EresourceSQLTranslator extends AbstractSQLTranslator {
 
-    private static final String INSERT_ERESOURCE = "INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (";
+    private static final String INSERT_ERESOURCE = "INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, AUTHOR, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (";
 
     private DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -39,6 +39,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
                 .append(APOS).append(er.getRecordId()).append(APOS).append(COMMA)
                 .append(APOS).append(er.getRecordType()).append(APOS).append(COMMA).append("TO_DATE('").append(this.formatter.format(er.getUpdated())).append("','YYYYMMDDHH24MISS')").append(COMMA)
                 .append(apostrophize(er.getTitle())).append(COMMA)
+                .append(apostrophize(er.getAuthor())).append(COMMA)
                 .append(apostrophize(er.getPrimaryType())).append(COMMA)
                 .append(er.isCore() ? "'Y'" : NULL).append(COMMA)
                 .append(er.getYear() > 0 ? Integer.toString(er.getYear()) : NULL).append(COMMA)
