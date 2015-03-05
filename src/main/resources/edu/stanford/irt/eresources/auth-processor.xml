@@ -4,6 +4,9 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <bean id="authProcessor" class="edu.stanford.irt.eresources.ETLProcessor">
         <constructor-arg>
+            <idref bean="authProcessor"/>
+        </constructor-arg>
+        <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.RecordExtractor">
                 <constructor-arg>
                     <bean class="org.marc4j.MarcStreamReader">

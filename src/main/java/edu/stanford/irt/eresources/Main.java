@@ -10,22 +10,28 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class Main {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private boolean killPrevious;
 
     private Collection<ETLProcessor<?>> processors = Collections.<ETLProcessor<?>> emptyList();
 
-    public Main(final List<ETLProcessor<?>> processors) {
-        this(processors, false);
+    private String version;
+
+    public Main(final List<ETLProcessor<?>> processors, String version) {
+        this(processors, version, false);
     }
 
-    public Main(final List<ETLProcessor<?>> processors, final boolean killPrevious) {
+    public Main(final List<ETLProcessor<?>> processors, String version, final boolean killPrevious) {
         this.processors = processors;
+        this.version = version;
         this.killPrevious = killPrevious;
     }
 
@@ -44,6 +50,7 @@ public class Main {
     }
 
     public void run() {
+        LOG.info(this.version + " starting up");
         managePIDFile();
         for (ETLProcessor<?> processor : this.processors) {
             processor.process();

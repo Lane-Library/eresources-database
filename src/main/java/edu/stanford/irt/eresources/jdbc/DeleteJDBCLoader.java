@@ -14,12 +14,17 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Loader;
 import edu.stanford.irt.eresources.StartDate;
 
 public class DeleteJDBCLoader extends JDBCLoader {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteJDBCLoader.class);
 
     private static final String DELETE_ERESOURCE = "DELETE FROM ERESOURCE WHERE ERESOURCE_ID = ";
 
@@ -93,6 +98,7 @@ public class DeleteJDBCLoader extends JDBCLoader {
                             this.count++;
                         }
                     }
+                    LOG.info(recordType + ":" + recordId);
                 }
             }
         } catch (SQLException e) {

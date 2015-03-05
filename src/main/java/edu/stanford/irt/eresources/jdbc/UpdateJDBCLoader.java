@@ -12,11 +12,16 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.StartDate;
 
 public class UpdateJDBCLoader extends JDBCLoader {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(UpdateJDBCLoader.class);
 
     private static final String DELETE_ERESOURCE = "DELETE FROM ERESOURCE WHERE ERESOURCE_ID = ";
 
@@ -73,5 +78,6 @@ public class UpdateJDBCLoader extends JDBCLoader {
             }
         }
         super.insertEresource(eresource);
+        LOG.info(eresource.toString());
     }
 }

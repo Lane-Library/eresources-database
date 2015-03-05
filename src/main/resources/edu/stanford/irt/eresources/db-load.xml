@@ -17,6 +17,7 @@
                 <ref bean="printProcessor"/>
             </list>
         </constructor-arg>
+        <constructor-arg value="${project.version}"/>
         <constructor-arg value="true"/>
     </bean>
     <bean id="startDate" class="edu.stanford.irt.eresources.StartDate"/>

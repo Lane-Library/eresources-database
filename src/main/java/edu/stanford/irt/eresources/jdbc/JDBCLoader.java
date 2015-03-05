@@ -19,12 +19,17 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Loader;
 import edu.stanford.irt.eresources.StartDate;
 
 public class JDBCLoader implements Loader {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCLoader.class);
 
     private static final String CURRENT_ID_SQL = "SELECT ERESOURCE_ID_SEQ.CURRVAL FROM DUAL";
 
@@ -106,6 +111,7 @@ public class JDBCLoader implements Loader {
     }
 
     protected void postProcess() throws SQLException {
+        LOG.info("handled " + count + " eresources");
         if (this.count > 0) {
         for (String call : this.callStatements) {
             if ((call.indexOf("{0}") > 0) && (null != this.userName)) {
@@ -130,6 +136,7 @@ public class JDBCLoader implements Loader {
         for (String create : this.createStatements) {
             try {
                 this.stmt.execute(create);
+                LOG.info(create);
             } catch (SQLException e) {
                 int errorCode = e.getErrorCode();
                 if ((942 != errorCode) && (1418 != errorCode) && (2289 != errorCode)) {
@@ -147,6 +154,7 @@ public class JDBCLoader implements Loader {
     private void executeCall(final String call) throws SQLException {
         try (CallableStatement callable = this.connection.prepareCall(call)) {
             callable.execute();
+            LOG.info(call);
         }
     }
 

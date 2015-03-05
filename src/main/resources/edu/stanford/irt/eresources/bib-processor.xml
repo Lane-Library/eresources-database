@@ -5,6 +5,9 @@
     
     <bean id="bibProcessor" class="edu.stanford.irt.eresources.ETLProcessor">
         <constructor-arg>
+            <idref bean="bibProcessor"/>
+        </constructor-arg>
+        <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.RecordListExtractor">
                 <constructor-arg>
                     <bean class="org.marc4j.MarcStreamReader">

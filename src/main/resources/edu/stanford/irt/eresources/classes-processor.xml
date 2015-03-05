@@ -4,6 +4,9 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <bean id="classesProcessor" class="edu.stanford.irt.eresources.ETLProcessor">
         <constructor-arg>
+            <idref bean="classesProcessor"/>
+        </constructor-arg>
+        <constructor-arg>
             <bean class="edu.stanford.irt.eresources.classes.ClassesExtractor">
                 <constructor-arg value="${eresources.lane-host}/classes/all-data.xml"/>
                 <constructor-arg ref="startDate"/>

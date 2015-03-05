@@ -36,7 +36,7 @@ public class EresourcesETLAppTest {
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
         this.processor = createMock(ETLProcessor.class);
-        this.app = new Main(Collections.singletonList(this.processor), true);
+        this.app = new Main(Collections.singletonList(this.processor), "version",  true);
         this.connection = createMock(Connection.class);
         this.statement = createMock(Statement.class);
     }
