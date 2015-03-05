@@ -37,44 +37,37 @@ public class AbstractMarcEresourceTest {
         }
 
         @Override
-        protected String doDescription() {
-            return "description";
-        }
-
-        @Override
-        protected int doId() {
-            return Integer.MAX_VALUE;
-        }
-
-        @Override
-        protected boolean doIsCore() {
-            return false;
-        }
-
-        @Override
-        protected Collection<String> doMeshTerms() {
-            return Collections.singleton("mesh");
-        }
-
-        @Override
-        protected Date doUpdated() {
-            return new Date(0);
-        }
-
-        @Override
-        protected List<Version> doVersions() {
-            return Collections.emptyList();
-        }
-
-        @Override
-        protected int doYear() {
-            return 1955;
-        }
-
-        @Override
         protected String getPrintOrDigital() {
             // TODO Auto-generated method stub
             return null;
+        }
+
+        @Override
+        public String getDescription() {
+            return null;
+        }
+
+        @Override
+        public Date getUpdated() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public Collection<Version> getVersions() {
+            return Collections.emptySet();
+        }
+
+        @Override
+        public int getYear() {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+        @Override
+        public boolean isCore() {
+            // TODO Auto-generated method stub
+            return false;
         }
     }
 
@@ -102,11 +95,6 @@ public class AbstractMarcEresourceTest {
     }
 
     @Test
-    public void testDoDescription() {
-        assertEquals("description", this.eresource.doDescription());
-    }
-
-    @Test
     public void testDoPrimaryType() {
         expect(this.record.getVariableFields("655")).andReturn(Collections.<VariableField> singletonList(this.field));
         expect(this.field.getIndicator1()).andReturn('4');
@@ -114,12 +102,12 @@ public class AbstractMarcEresourceTest {
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Books.");
         replay(this.record, this.field, this.subfield);
-        assertEquals("books", this.eresource.doPrimaryType());
+        assertEquals("books", this.eresource.getPrimaryType());
         verify(this.record, this.field, this.subfield);
     }
 
     @Test
-    public void testDoTitle() {
+    public void testGetTitle() {
         expect(this.record.getVariableField("245")).andReturn(this.field);
         List<Subfield> subfields = new ArrayList<Subfield>();
         for (int i = 0; i < 5; i++) {
@@ -168,12 +156,6 @@ public class AbstractMarcEresourceTest {
     }
 
     @Test
-    public void testGetDescription() {
-        this.testDoDescription();
-        assertEquals("description", this.eresource.getDescription());
-    }
-
-    @Test
     public void testGetItemCount() {
         assertArrayEquals(new int[] { 0, 0 }, this.eresource.getItemCount());
     }
@@ -185,7 +167,14 @@ public class AbstractMarcEresourceTest {
 
     @Test
     public void testGetMeshTerms() {
+        expect(this.record.getVariableFields("650")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.field.getIndicator1()).andReturn('4');
+        expect(this.field.getIndicator2()).andReturn('7');
+        expect(this.field.getSubfield('a')).andReturn(this.subfield);
+        expect(this.subfield.getData()).andReturn("mesh");
+        replay(this.record, this.field, this.subfield);
         assertEquals(Collections.singleton("mesh"), this.eresource.getMeshTerms());
+        verify(this.record, this.field, this.subfield);
     }
 
     @Test
@@ -202,13 +191,10 @@ public class AbstractMarcEresourceTest {
 
     @Test
     public void testGetRecordId() {
-        assertEquals(Integer.MAX_VALUE, this.eresource.getRecordId());
-    }
-
-    @Test
-    public void testGetTitle() {
-        this.testDoTitle();
-        assertEquals("a b n p q. 3rd ed.", this.eresource.getTitle());
+        expect(this.record.getControlNumber()).andReturn("12");
+        replay(this.record);
+        assertEquals(12, this.eresource.getRecordId());
+        verify(this.record);
     }
 
     @Test
@@ -226,16 +212,6 @@ public class AbstractMarcEresourceTest {
         replay(this.record, this.field, this.subfield);
         assertArrayEquals(new String[] { "", "bassett", "ej", "catalog" }, this.eresource.getTypes().toArray());
         verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public void testGetUpdated() {
-        assertEquals(new Date(0), this.eresource.getUpdated());
-    }
-
-    @Test
-    public void testGetVersions() {
-        assertEquals(0, this.eresource.getVersions().size());
     }
 
     @Test
@@ -260,7 +236,29 @@ public class AbstractMarcEresourceTest {
 
     @Test
     public void testToString() {
-        this.testDoTitle();
-        assertEquals("test:2147483647 a b n p q. 3rd ed.", this.eresource.toString());
+        expect(this.record.getControlNumber()).andReturn("12");
+        expect(this.record.getVariableField("245")).andReturn(this.field);
+        List<Subfield> subfields = new ArrayList<Subfield>();
+        for (int i = 0; i < 5; i++) {
+            subfields.add(this.subfield);
+        }
+        expect(this.field.getSubfields()).andReturn(subfields);
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("The a");
+        expect(this.subfield.getCode()).andReturn('b');
+        expect(this.subfield.getData()).andReturn("b /");
+        expect(this.subfield.getCode()).andReturn('n');
+        expect(this.subfield.getData()).andReturn("n");
+        expect(this.subfield.getCode()).andReturn('p');
+        expect(this.subfield.getData()).andReturn("p");
+        expect(this.subfield.getCode()).andReturn('q');
+        expect(this.subfield.getData()).andReturn("q");
+        expect(this.record.getVariableField("250")).andReturn(this.field);
+        expect(this.field.getSubfield('a')).andReturn(this.subfield);
+        expect(this.subfield.getData()).andReturn("3rd ed.");
+        expect(this.field.getIndicator2()).andReturn('4');
+        replay(this.record, this.field, this.subfield);
+        assertEquals("test:12 a b n p q. 3rd ed.", this.eresource.toString());
+        verify(this.record, this.field, this.subfield);
     }
 }

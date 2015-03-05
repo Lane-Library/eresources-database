@@ -57,7 +57,7 @@ public class BibMarcEresourceTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("data");
         replay(this.record, this.field, this.subfield);
-        assertEquals("data", this.eresource.doDescription());
+        assertEquals("data", this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -65,7 +65,7 @@ public class BibMarcEresourceTest {
     public void testDoId() {
         expect(this.record.getControlNumber()).andReturn("12");
         replay(this.record, this.field, this.subfield);
-        assertEquals(12, this.eresource.doId());
+        assertEquals(12, this.eresource.getRecordId());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -75,7 +75,7 @@ public class BibMarcEresourceTest {
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Core Material");
         replay(this.record, this.field, this.subfield);
-        assertTrue(this.eresource.doIsCore());
+        assertTrue(this.eresource.isCore());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -87,7 +87,7 @@ public class BibMarcEresourceTest {
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("data");
         replay(this.record, this.field, this.subfield);
-        Collection<String> mesh = this.eresource.doMeshTerms();
+        Collection<String> mesh = this.eresource.getMeshTerms();
         assertEquals("data", mesh.iterator().next());
         verify(this.record, this.field, this.subfield);
     }
@@ -97,7 +97,7 @@ public class BibMarcEresourceTest {
         expect(this.record.getVariableField("005")).andReturn(this.controlfield).times(2);
         expect(this.controlfield.getData()).andReturn("19550519120000").times(2);
         replay(this.record, this.field, this.subfield, this.controlfield);
-        this.eresource.doUpdated();
+        this.eresource.getUpdated();
         verify(this.record, this.field, this.subfield, this.controlfield);
     }
 
@@ -105,7 +105,7 @@ public class BibMarcEresourceTest {
     public void testDoVersions() {
         expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> emptyList());
         replay(this.record, this.field, this.subfield);
-        this.eresource.doVersions();
+        this.eresource.getVersions();
         verify(this.record, this.field, this.subfield);
     }
 
@@ -114,7 +114,7 @@ public class BibMarcEresourceTest {
         expect(this.record.getVariableField("008")).andReturn(this.controlfield);
         expect(this.controlfield.getData()).andReturn("012345678901955");
         replay(this.record, this.field, this.subfield, this.controlfield);
-        assertEquals(1955, this.eresource.doYear());
+        assertEquals(1955, this.eresource.getYear());
         verify(this.record, this.field, this.subfield, this.controlfield);
     }
 

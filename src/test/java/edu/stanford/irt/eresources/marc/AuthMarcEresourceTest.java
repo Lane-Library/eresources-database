@@ -51,13 +51,13 @@ public class AuthMarcEresourceTest {
     public void testDoId() {
         expect(this.record.getControlNumber()).andReturn("100");
         replay(this.record);
-        assertEquals(100, this.eresource.doId());
+        assertEquals(100, this.eresource.getRecordId());
         verify(this.record);
     }
 
     @Test
     public void testDoIsCore() {
-        assertFalse(this.eresource.doIsCore());
+        assertFalse(this.eresource.isCore());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class AuthMarcEresourceTest {
         expect(this.record.getVariableField("005")).andReturn(this.controlfield);
         expect(this.controlfield.getData()).andReturn("19550519120000");
         replay(this.record, this.field, this.subfield, this.controlfield);
-        this.eresource.doUpdated();
+        this.eresource.getUpdated();
         verify(this.record, this.field, this.subfield, this.controlfield);
     }
 
@@ -87,7 +87,7 @@ public class AuthMarcEresourceTest {
         expect(this.field.getSubfield('u')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("url");
         replay(this.record, this.field, this.subfield);
-        assertEquals(1, this.eresource.doVersions().size());
+        assertEquals(1, this.eresource.getVersions().size());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -97,7 +97,7 @@ public class AuthMarcEresourceTest {
         expect(this.field.getSubfield('b')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("19uu");
         replay(this.record, this.field, this.subfield);
-        assertEquals(1955, this.eresource.doYear());
+        assertEquals(1955, this.eresource.getYear());
         verify(this.record, this.field, this.subfield);
     }
 

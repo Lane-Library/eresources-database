@@ -23,16 +23,16 @@ public class PrintMarcEresource extends BibMarcEresource {
     }
 
     @Override
-    protected Collection<String> doTypes() {
-        Collection<String> types = super.doTypes();
+    public Collection<String> getTypes() {
+        Collection<String> types = super.getTypes();
         types.add("print");
         return types;
     }
 
     @Override
-    protected List<Version> doVersions() {
+    public List<Version> getVersions() {
         SortedSet<Version> versions = new TreeSet<Version>(new VersionComparator());
-        versions.addAll(super.doVersions());
+        versions.addAll(super.getVersions());
         versions.add(getCatalogVersion());
         return new ArrayList<Version>(versions);
     }

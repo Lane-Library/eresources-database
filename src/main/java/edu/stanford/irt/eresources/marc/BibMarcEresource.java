@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -129,8 +128,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected String doDescription() {
-        String d = null;
+    public String getDescription() {
+        String description = null;
         List<VariableField> fields = this.record.getVariableFields("520");
         if (fields.size() == 0) {
             fields = this.record.getVariableFields("505");
@@ -142,18 +141,13 @@ public class BibMarcEresource extends AbstractMarcEresource {
                     append(sb, Normalizer.compose(subfield.getData(), false));
                 }
             }
-            d = sb.toString();
+            description = sb.toString();
         }
-        return d;
+        return description;
     }
 
     @Override
-    protected int doId() {
-        return Integer.parseInt(this.record.getControlNumber());
-    }
-
-    @Override
-    protected boolean doIsCore() {
+    public boolean isCore() {
         boolean i = false;
         Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
         while (it.hasNext() && !i) {
@@ -163,18 +157,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected Collection<String> doMeshTerms() {
-        Collection<String> m = new HashSet<String>();
-        for (VariableField field : this.record.getVariableFields("650")) {
-            if (((DataField) field).getIndicator1() == '4' && "237".indexOf(((DataField) field).getIndicator2()) > -1) {
-                m.add(MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase());
-            }
-        }
-        return m;
-    }
-
-    @Override
-    protected Date doUpdated() {
+    public Date getUpdated() {
         Date d;
         try {
             d = this.dateFormat.parse(((ControlField) this.record.getVariableField("005")).getData());
@@ -196,7 +179,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected List<Version> doVersions() {
+    public List<Version> getVersions() {
         Collection<Version> versions = new TreeSet<Version>(new VersionComparator());
         for (Record holding : this.holdings) {
             Version version = createVersion(holding);
@@ -212,7 +195,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected int doYear() {
+    public int getYear() {
         int y = 0;
         String currentText = ((ControlField) this.record.getVariableField("008")).getData();
         String endDate = parseYear(currentText.substring(11, 15));

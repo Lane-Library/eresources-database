@@ -3,7 +3,6 @@ package edu.stanford.irt.eresources.marc;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -51,33 +50,17 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected String doDescription() {
+    public String getDescription() {
         return null;
     }
 
     @Override
-    protected int doId() {
-        return Integer.parseInt(this.record.getControlNumber());
-    }
-
-    @Override
-    protected boolean doIsCore() {
+    public boolean isCore() {
         return false;
     }
 
     @Override
-    protected Collection<String> doMeshTerms() {
-        Collection<String> m = new ArrayList<String>();
-        for (VariableField field : this.record.getVariableFields("650")) {
-            if (((DataField) field).getIndicator1() == '4' && "27".indexOf(((DataField) field).getIndicator2()) > -1) {
-                m.add(MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase());
-            }
-        }
-        return m;
-    }
-
-    @Override
-    protected Date doUpdated() {
+    public Date getUpdated() {
         try {
             return this.dateFormat.parse(((ControlField) this.record.getVariableField("005")).getData());
         } catch (ParseException e) {
@@ -86,7 +69,7 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected List<Version> doVersions() {
+    public List<Version> getVersions() {
         MarcVersion version = new MarcVersion(this.record);
         if (version.getLinks().size() > 0) {
             return Collections.<Version> singletonList(new MarcVersion(this.record));
@@ -96,7 +79,7 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected int doYear() {
+    public int getYear() {
         int year = 0;
         for (VariableField field : this.record.getVariableFields("943")) {
             boolean hasEndDate = false;

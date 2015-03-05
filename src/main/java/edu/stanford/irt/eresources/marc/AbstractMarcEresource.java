@@ -1,10 +1,8 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -17,7 +15,6 @@ import org.marc4j.marc.VariableField;
 import com.ibm.icu.text.Normalizer;
 
 import edu.stanford.irt.eresources.Eresource;
-import edu.stanford.irt.eresources.Version;
 
 public abstract class AbstractMarcEresource implements Eresource {
     private static final Pattern SPACE_SLASH = Pattern.compile(" /");
@@ -88,47 +85,9 @@ public abstract class AbstractMarcEresource implements Eresource {
         PRIMARY_TYPES.put("websites", "Website");
     }
 
-    private String description;
-
-    private boolean descriptionDone;
-
-    private int id;
-
-    private boolean isCore;
-
-    private boolean isCoreDone;
-
     private String keywords;
 
-    private Collection<String> meshTerms;
-
-    private boolean meshTermsDone;
-
-    private String primaryType;
-
     private Record record;
-
-    private String title;
-
-    private boolean titleDone;
-
-    private Collection<String> types;
-
-    private boolean typesDone;
-
-    private Date updated;
-
-    private boolean updatedDone;
-
-    private List<Version> versions;
-
-    private boolean versionsDone;
-
-    private int year;
-
-    private boolean yearDone;
-
-    private boolean primaryTypeDone;
 
     private String initialPrimaryType;
 
@@ -153,15 +112,6 @@ public abstract class AbstractMarcEresource implements Eresource {
     }
 
     @Override
-    public String getDescription() {
-        if (!this.descriptionDone) {
-            this.description = doDescription();
-            this.descriptionDone = true;
-        }
-        return this.description;
-    }
-
-    @Override
     public int[] getItemCount() {
         return NOITEMS;
     }
@@ -172,87 +122,60 @@ public abstract class AbstractMarcEresource implements Eresource {
     }
 
     @Override
-    public Collection<String> getMeshTerms() {
-        if (!this.meshTermsDone) {
-            this.meshTerms = doMeshTerms();
-            this.meshTermsDone = true;
-        }
-        return this.meshTerms;
+    public String getPrimaryType() {
+        return getRealPrimaryType(getInitialPrimaryType());
     }
 
     @Override
-    public String getPrimaryType() {
-        if (!this.primaryTypeDone) {
-            this.primaryType = doPrimaryType();
+    public Collection<String> getMeshTerms() {
+        Collection<String> m = new HashSet<String>();
+        for (VariableField field : this.record.getVariableFields("650")) {
+            if (((DataField) field).getIndicator1() == '4' && "237".indexOf(((DataField) field).getIndicator2()) > -1) {
+                m.add(MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase());
+            }
         }
-        return this.primaryType;
+        return m;
     }
 
     @Override
     public int getRecordId() {
-        if (this.id == 0) {
-            this.id = doId();
-        }
-        return this.id;
+        return Integer.parseInt(this.record.getControlNumber());
     }
 
     @Override
     public String getTitle() {
-        if (!this.titleDone) {
-            this.title = doTitle();
-            this.titleDone = true;
+        StringBuilder sb = new StringBuilder();
+        DataField field245 = (DataField) this.record.getVariableField("245");
+        for (Subfield subfield : field245.getSubfields()) {
+            char code = subfield.getCode();
+            if ("anpq".indexOf(code) > -1) {
+                append(sb, Normalizer.compose(subfield.getData(), false));
+            } else if (code == 'b') {
+                String data = subfield.getData();
+                data = SPACE_SLASH.matcher(data).replaceFirst("");
+                append(sb, Normalizer.compose(data, false));
+            }
         }
-        return this.title;
+        DataField field250 = (DataField) this.record.getVariableField("250");
+        String edition = MarcTextUtil.getSubfieldData(field250, 'a');
+        if (edition != null) {
+            sb.append(". ").append(edition);
+        }
+        int offset = field245.getIndicator2() - 48;
+        return sb.toString().substring(offset);
     }
 
     @Override
     public Collection<String> getTypes() {
-        if (!this.typesDone) {
-            this.types = doTypes();
-            this.typesDone = true;
-        }
-        return this.types;
-    }
-
-    @Override
-    public Date getUpdated() {
-        if (!this.updatedDone) {
-            this.updated = doUpdated();
-            this.updatedDone = true;
-        }
-        return this.updated;
-    }
-
-    @Override
-    public Collection<Version> getVersions() {
-        if (!this.versionsDone) {
-            this.versions = doVersions();
-            this.versionsDone = true;
-        }
-        return this.versions;
-    }
-
-    @Override
-    public int getYear() {
-        if (!this.yearDone) {
-            this.year = doYear();
-            this.yearDone = true;
-        }
-        return this.year;
+        Collection<String> t = getInitialTypes();
+        addCustomTypes(t);
+        addPrimaryType(t);
+        return t;
     }
 
     @Override
     public boolean isClone() {
         return false;
-    }
-
-    @Override
-    public boolean isCore() {
-        if (!this.isCoreDone) {
-            this.isCore = doIsCore();
-            this.isCoreDone = true;
-        }
-        return this.isCore;
     }
 
     @Override
@@ -262,18 +185,6 @@ public abstract class AbstractMarcEresource implements Eresource {
 
     protected void addCustomTypes(final Collection<String> types) {
         // do nothing by default
-    }
-
-    protected abstract String doDescription();
-
-    protected abstract int doId();
-
-    protected abstract boolean doIsCore();
-
-    protected abstract Collection<String> doMeshTerms();
-
-    protected String doPrimaryType() {
-        return getRealPrimaryType(getInitialPrimaryType());
     }
     
     protected String getInitialPrimaryType() {
@@ -311,35 +222,6 @@ public abstract class AbstractMarcEresource implements Eresource {
             return type;
         }
         
-    }
-
-    protected String doTitle() {
-        StringBuilder sb = new StringBuilder();
-        DataField field245 = (DataField) this.record.getVariableField("245");
-        for (Subfield subfield : field245.getSubfields()) {
-            char code = subfield.getCode();
-            if ("anpq".indexOf(code) > -1) {
-                append(sb, Normalizer.compose(subfield.getData(), false));
-            } else if (code == 'b') {
-                String data = subfield.getData();
-                data = SPACE_SLASH.matcher(data).replaceFirst("");
-                append(sb, Normalizer.compose(data, false));
-            }
-        }
-        DataField field250 = (DataField) this.record.getVariableField("250");
-        String edition = MarcTextUtil.getSubfieldData(field250, 'a');
-        if (edition != null) {
-            sb.append(". ").append(edition);
-        }
-        int offset = field245.getIndicator2() - 48;
-        return sb.toString().substring(offset);
-    }
-
-    protected Collection<String> doTypes() {
-        Collection<String> t = getInitialTypes();
-        addCustomTypes(t);
-        addPrimaryType(t);
-        return t;
     }
     
     protected Collection<String> getInitialTypes() {
@@ -381,12 +263,6 @@ public abstract class AbstractMarcEresource implements Eresource {
             sb.append(value);
         }
     }
-
-    protected abstract Date doUpdated();
-
-    protected abstract List<Version> doVersions();
-
-    protected abstract int doYear();
 
     protected String getCompositeType(final String type) {
         return COMPOSITE_TYPES.get(type);
