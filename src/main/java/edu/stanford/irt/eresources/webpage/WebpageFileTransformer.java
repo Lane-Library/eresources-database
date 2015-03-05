@@ -71,10 +71,10 @@ public class WebpageFileTransformer implements Transformer<File>, EresourceHandl
     }
 
     @Override
-    public Eresource[] transform(final File input) {
+    public List<Eresource> transform(final File input) {
         this.eresources = new ArrayList<Eresource>();
         parseFile(input);
-        return this.eresources.toArray(new Eresource[this.eresources.size()]);
+        return this.eresources;
     }
 
     /**

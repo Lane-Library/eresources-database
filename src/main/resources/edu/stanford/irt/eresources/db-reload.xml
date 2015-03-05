@@ -3,9 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <import resource="db-load.xml"/>
-    <bean id="dbLoader" class="edu.stanford.irt.eresources.jdbc.JDBCEresourcesETLApp" parent="abstractDbLoader">
-        <property name="killPrevious" value="true"/>
-        <property name="handler" ref="eresourceHandler"/>
+    <bean id="loader" class="edu.stanford.irt.eresources.jdbc.JDBCLoader" init-method="preProcess" destroy-method="postProcess">
+        <constructor-arg ref="erdbDataSource"/>
+        <constructor-arg ref="eresourceTranslator"/>
+        <constructor-arg ref="startDate"/>
         <property name="createStatements">
             <list>
                 <value>DELETE FROM ERESOURCE</value>
@@ -19,25 +20,26 @@
         <property name="callStatements">
             <list>
                 <value>{ call ctx_ddl.sync_index('TEXT_IDX') }</value>
-                <value>{ call ctx_ddl.optimize_index('TEXT_IDX','FULL') }</value>
+                <value>{ call ctx_ddl.optimize_index('TEXT_IDX','FAST') }</value>
                 <value>{ call ctx_ddl.sync_index('TITLE_IDX') }</value>
-                <value>{ call ctx_ddl.optimize_index('TITLE_IDX','FULL') }</value>
-                <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'', cascade=>TRUE)'}'</value>
+                <value>{ call ctx_ddl.optimize_index('TITLE_IDX','FAST') }</value>
             </list>
         </property>
+        <property name="userName" value="ceyates"/>
     </bean>
-    <bean id="eresourceHandler" class="edu.stanford.irt.eresources.jdbc.JDBCLoader">
-        <constructor-arg ref="erdbDataSource"/>
-        <constructor-arg ref="queue"/>
-        <constructor-arg ref="eresourceTranslator"/>
+    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
+        destroy-method="destroy">
+        <property name="corePoolSize" value="3"/>
+        <property name="maxPoolSize" value="3"/>
+        <property name="queueCapacity" value="0"/>
     </bean>
     <bean id="bibInputStream" class="edu.stanford.irt.eresources.marc.BibInputStream">
         <constructor-arg ref="voyagerDataSource"/>
         <constructor-arg ref="executor"/>
     </bean>
     <bean id="authInputStream" class="edu.stanford.irt.eresources.marc.AuthInputStream">
-        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
-        <constructor-arg name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
     <bean id="printBibInputStream" class="edu.stanford.irt.eresources.marc.PrintBibInputStream">
         <constructor-arg ref="voyagerDataSource"/>

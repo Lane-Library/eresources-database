@@ -11,6 +11,11 @@ import com.ibm.icu.text.Normalizer;
 // TODO: create a TitleStrategy class
 public class AltTitleMarcEresource extends BibMarcEresource {
 
+    @Override
+    public boolean isClone() {
+        return true;
+    }
+
     private Record record;
 
     public AltTitleMarcEresource(final List<Record> recordList, final String keywords,

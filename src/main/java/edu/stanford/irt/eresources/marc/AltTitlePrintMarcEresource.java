@@ -10,6 +10,11 @@ import com.ibm.icu.text.Normalizer;
 
 public class AltTitlePrintMarcEresource extends PrintMarcEresource {
 
+    @Override
+    public boolean isClone() {
+        return true;
+    }
+
     private Record record;
 
     public AltTitlePrintMarcEresource(final List<Record> recordList, final String keywords,

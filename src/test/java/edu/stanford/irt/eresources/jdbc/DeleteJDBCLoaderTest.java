@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 
 import javax.sql.DataSource;
 
@@ -87,7 +88,7 @@ public class DeleteJDBCLoaderTest {
         this.stmt.close();
         this.connection.close();
         replay(this.pStmnt, this.dataSource, this.connection, this.stmt, this.resultSet, this.eresource);
-        this.loader.load(this.eresource);
+        this.loader.load(Collections.singletonList(this.eresource));
         verify(this.pStmnt, this.dataSource, this.connection, this.stmt, this.resultSet, this.eresource);
     }
 

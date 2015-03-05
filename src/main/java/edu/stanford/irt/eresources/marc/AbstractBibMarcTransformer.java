@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.marc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -10,20 +11,16 @@ import edu.stanford.irt.eresources.Eresource;
 public abstract class AbstractBibMarcTransformer extends AbstractMarcTransformer<List<Record>> {
 
     @Override
-    public Eresource[] transform(List<Record> recordList) {
+    public List<Eresource> transform(List<Record> recordList) {
+        List<Eresource> eresources = new ArrayList<Eresource>();
         Record bib = recordList.get(0);
         String keywords = WHITESPACE.matcher(getKeywords(bib)).replaceAll(" ");
         int[] items = this.itemCount.itemCount(bib.getControlNumber());
+        eresources.add(createEresource(recordList, keywords, items));
         if (bib.getVariableField("249") != null) {
-            return new Eresource[] {
-                createEresource(recordList, keywords, items),
-                createAltTitleEresource(recordList, keywords, items)
-            };
-        } else {
-            return new Eresource[] {
-                createEresource(recordList, keywords, items)
-            };
+            eresources.add(createAltTitleEresource(recordList, keywords, items));
         }
+        return eresources;
     }
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");

@@ -257,7 +257,7 @@ public abstract class AbstractMarcEresource implements Eresource {
 
     @Override
     public String toString() {
-        return getTitle();
+        return getRecordType() + ":" + getRecordId() + " " + getTitle();
     }
 
     protected void addCustomTypes(final Collection<String> types) {

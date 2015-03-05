@@ -55,7 +55,7 @@ public class ClassesTransformer implements Transformer<InputStream>, EresourceHa
     }
 
     @Override
-    public Eresource[] transform(InputStream input) {
+    public List<Eresource> transform(InputStream input) {
         this.eresources = new ArrayList<Eresource>();
         try {
             InputSource source;
@@ -67,7 +67,7 @@ public class ClassesTransformer implements Transformer<InputStream>, EresourceHa
         } catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
             throw new EresourceException(e);
         }
-        return eresources.toArray(new Eresource[eresources.size()]);
+        return this.eresources;
     }
 
     @Override

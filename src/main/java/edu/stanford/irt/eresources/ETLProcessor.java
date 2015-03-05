@@ -1,5 +1,7 @@
 package edu.stanford.irt.eresources;
 
+import java.util.List;
+
 public class ETLProcessor<T> {
 
     private Extractor<T> extractor;
@@ -16,10 +18,10 @@ public class ETLProcessor<T> {
     
     public void process() {
         while(this.extractor.hasNext()) {
-            T t = this.extractor.next();
-            Eresource[] ers = this.transformer.transform(t);
-            this.loader.load(ers);
-//            this.loader.load(this.transformer.transform(this.extractor.next()));
+//            T t = this.extractor.next();
+//            List<Eresource> ers = this.transformer.transform(t);
+//            this.loader.load(ers);
+            this.loader.load(this.transformer.transform(this.extractor.next()));
         }
     }
 }

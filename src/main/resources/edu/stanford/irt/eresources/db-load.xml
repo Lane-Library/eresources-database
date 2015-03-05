@@ -7,7 +7,7 @@
     <import resource="auth-processor.xml"/>
     <import resource="classes-processor.xml"/>
     <import resource="print-processor.xml"/>
-    <bean id="abstractETL" class="edu.stanford.irt.eresources.jdbc.EresourcesETLApp" abstract="true">
+    <bean id="ETL" class="edu.stanford.irt.eresources.EresourcesETLApp">
         <constructor-arg>
             <list>
                 <ref bean="bibProcessor"/>
@@ -17,17 +17,9 @@
                 <ref bean="printProcessor"/>
             </list>
         </constructor-arg>
-        <constructor-arg ref="startDate"/>
         <constructor-arg value="true"/>
     </bean>
     <bean id="startDate" class="edu.stanford.irt.eresources.StartDate"/>
-    <bean id="loader" class="edu.stanford.irt.eresources.jdbc.JDBCLoader">
-        <constructor-arg ref="erdbDataSource"/>
-        <constructor-arg ref="eresourceTranslator"/>
-    </bean>
-    <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue">
-        <constructor-arg value="10000"/>
-    </bean>
     <bean id="itemCount" class="edu.stanford.irt.eresources.marc.ItemCount">
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
@@ -61,12 +53,6 @@
         <property name="URL" value="${eresources.voyagerdb.url}"/>
         <property name="user" value="${eresources.voyagerdb.username}"/>
         <property name="password" value="${eresources.voyagerdb.password}"/>
-    </bean>
-    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
-        destroy-method="destroy">
-        <property name="corePoolSize" value="8"/>
-        <property name="maxPoolSize" value="8"/>
-        <property name="queueCapacity" value="0"/>
     </bean>
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations" value="file:eresources.properties"/>

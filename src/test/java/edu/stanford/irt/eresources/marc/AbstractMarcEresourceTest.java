@@ -33,7 +33,7 @@ public class AbstractMarcEresourceTest {
 
         @Override
         public String getRecordType() {
-            return null;
+            return "test";
         }
 
         @Override
@@ -261,6 +261,6 @@ public class AbstractMarcEresourceTest {
     @Test
     public void testToString() {
         this.testDoTitle();
-        assertEquals("a b n p q. 3rd ed.", this.eresource.toString());
+        assertEquals("test:2147483647 a b n p q. 3rd ed.", this.eresource.toString());
     }
 }

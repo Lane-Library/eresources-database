@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,6 +22,7 @@ import javax.sql.DataSource;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Loader;
+import edu.stanford.irt.eresources.StartDate;
 
 public class JDBCLoader implements Loader {
 
@@ -29,6 +34,12 @@ public class JDBCLoader implements Loader {
 
     private static final String TEXT_SQL = "SELECT TEXT FROM ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
 
+    private List<String> callStatements = Collections.emptyList();
+
+    private Connection connection;
+
+    private List<String> createStatements = Collections.emptyList();
+
     private DataSource dataSource;
 
     private PreparedStatement descStmt;
@@ -39,9 +50,39 @@ public class JDBCLoader implements Loader {
 
     private EresourceSQLTranslator translator;
 
-    public JDBCLoader(final DataSource dataSource, final EresourceSQLTranslator translator) {
+    private String userName;
+
+    private StartDate startDate;
+
+    private int count;
+
+    public JDBCLoader(final DataSource dataSource, final EresourceSQLTranslator translator, final StartDate startDate) {
         this.dataSource = dataSource;
         this.translator = translator;
+        this.startDate = startDate;
+    }
+
+    @Override
+    public void load(final List<Eresource> eresources) {
+        for (Eresource eresource : eresources) {
+            try {
+                insertEresource(eresource);
+            } catch (IOException | SQLException e) {
+                throw new EresourceException(e);
+            }
+        }
+    }
+
+    public void setCallStatements(final List<String> callStatements) {
+        this.callStatements = callStatements;
+    }
+
+    public void setCreateStatements(final List<String> createStatements) {
+        this.createStatements = createStatements;
+    }
+
+    public void setUserName(final String userName) {
+        this.userName = userName;
     }
 
     protected Statement getStatement() {
@@ -60,6 +101,55 @@ public class JDBCLoader implements Loader {
         this.stmt.executeBatch();
         for (String clob : insertSQLStatements) {
             insertClob(clob);
+        }
+        this.count++;
+    }
+
+    protected void postProcess() throws SQLException {
+        System.out.println("count=" + this.count);
+        if (this.count > 0) {
+        for (String call : this.callStatements) {
+            if ((call.indexOf("{0}") > 0) && (null != this.userName)) {
+                call = MessageFormat.format(call, new Object[] { this.userName });
+            }
+            executeCall(call);
+            System.out.println(call);
+        }
+        }
+        this.descStmt.close();
+        this.textStmt.close();
+        this.stmt.close();
+        this.connection.commit();
+        this.connection.close();
+    }
+
+    protected void preProcess() throws SQLException {
+        this.connection = this.dataSource.getConnection();
+        this.connection.setAutoCommit(false);
+        this.stmt = this.connection.createStatement();
+        this.textStmt = this.connection.prepareStatement(TEXT_SQL);
+        this.descStmt = this.connection.prepareStatement(DESCRIPTION_SQL);
+        for (String create : this.createStatements) {
+            try {
+                this.stmt.execute(create);
+                System.out.println(create);
+            } catch (SQLException e) {
+                int errorCode = e.getErrorCode();
+                if ((942 != errorCode) && (1418 != errorCode) && (2289 != errorCode)) {
+                    throw e;
+                }
+            }
+        }
+        initializeStartDate(this.startDate, this.connection);
+    }
+
+    protected void initializeStartDate(StartDate startDate, Connection connection) throws SQLException {
+        startDate.initialize(new Date(0));
+    }
+
+    private void executeCall(final String call) throws SQLException {
+        try (CallableStatement callable = this.connection.prepareCall(call)) {
+            callable.execute();
         }
     }
 
@@ -85,27 +175,6 @@ public class JDBCLoader implements Loader {
                 writer.close();
                 reader.close();
             }
-        }
-    }
-
-    @Override
-    public void load(Eresource... eresources) {
-        try (Connection conn = this.dataSource.getConnection();
-                Statement s = conn.createStatement();
-                PreparedStatement t = conn.prepareStatement(TEXT_SQL);
-                PreparedStatement d = conn.prepareStatement(DESCRIPTION_SQL)) {
-            this.stmt = s;
-            this.textStmt = t;
-            this.descStmt = d;
-            for (Eresource eresource : eresources) {
-                    try {
-                            insertEresource(eresource);
-                    } catch (IOException e) {
-                        throw new EresourceException(e);
-                    }
-            }
-        } catch (SQLException e) {
-            throw new EresourceException(e);
         }
     }
 }

@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.jdbc;
+package edu.stanford.irt.eresources;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -17,19 +17,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.ETLProcessor;
+import edu.stanford.irt.eresources.EresourcesETLApp;
 import edu.stanford.irt.eresources.StartDate;
 
-public class JDBCEresourcesETLAppTest {
+public class EresourcesETLAppTest {
 
     private Connection connection;
 
     private DataSource dataSource;
 
-    private JDBCEresourcesETLApp app;
+    private EresourcesETLApp app;
 
     private Statement statement;
-
-    private StartDate startDate;
 
     private ETLProcessor<?> processor;
 
@@ -37,8 +36,7 @@ public class JDBCEresourcesETLAppTest {
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
         this.processor = createMock(ETLProcessor.class);
-        this.startDate = createMock(StartDate.class);
-        this.app = new JDBCEresourcesETLApp(this.dataSource, Collections.singletonList(this.processor), this.startDate, true);
+        this.app = new EresourcesETLApp(Collections.singletonList(this.processor), true);
         this.connection = createMock(Connection.class);
         this.statement = createMock(Statement.class);
     }
@@ -46,11 +44,11 @@ public class JDBCEresourcesETLAppTest {
     @Test
     public void testLoad() throws SQLException {
         this.processor.process();
-        expect(this.dataSource.getConnection()).andReturn(this.connection).times(2);
-        expect(this.connection.createStatement()).andReturn(this.statement);
-        this.statement.close();
-        this.connection.close();
-        expectLastCall().times(2);
+//        expect(this.dataSource.getConnection()).andReturn(this.connection).times(2);
+//        expect(this.connection.createStatement()).andReturn(this.statement);
+//        this.statement.close();
+//        this.connection.close();
+//        expectLastCall().times(2);
         replay(this.dataSource, this.processor, this.connection, this.statement);
         this.app.run();
         verify(this.dataSource, this.processor, this.connection, this.statement);

@@ -8,28 +8,24 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-public abstract class EresourcesETLApp {
+public class EresourcesETLApp {
 
     private boolean killPrevious;
 
     private Collection<ETLProcessor<?>> processors = Collections.<ETLProcessor<?>> emptyList();
 
-    private StartDate startDate;
-
-    public EresourcesETLApp(final List<ETLProcessor<?>> processors, final StartDate startDate) {
-        this(processors, startDate, false);
+    public EresourcesETLApp(final List<ETLProcessor<?>> processors) {
+        this(processors, false);
     }
 
-    public EresourcesETLApp(final List<ETLProcessor<?>> processors, final StartDate startDate, final boolean killPrevious) {
+    public EresourcesETLApp(final List<ETLProcessor<?>> processors, final boolean killPrevious) {
         this.processors = processors;
-        this.startDate = startDate;
         this.killPrevious = killPrevious;
     }
 
@@ -40,29 +36,18 @@ public abstract class EresourcesETLApp {
         ThreadPoolTaskExecutor executor = context.getBean("executor", ThreadPoolTaskExecutor.class);
         try {
             app.run();
-        } finally {
+            context.close();
+        } catch (Exception e) {
             executor.shutdown();
+            throw e;
         }
     }
 
     public void run() {
         managePIDFile();
-        initializeStartDate(this.startDate);
-        preProcess();
         for (ETLProcessor<?> processor : this.processors) {
             processor.process();
         }
-        postProcess();
-    }
-
-    protected void initializeStartDate(final StartDate startDate) {
-        startDate.initialize(new Date(0));
-    }
-
-    protected void postProcess() {
-    }
-
-    protected void preProcess() {
     }
 
     private void managePIDFile() {

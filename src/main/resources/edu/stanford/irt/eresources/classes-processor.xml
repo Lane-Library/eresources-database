@@ -6,6 +6,7 @@
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.classes.ClassesExtractor">
                 <constructor-arg value="${eresources.lane-host}/classes/all-data.xml"/>
+                <constructor-arg ref="startDate"/>
             </bean>
         </constructor-arg>
         <constructor-arg>

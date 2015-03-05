@@ -11,7 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -20,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.StartDate;
 
 public class UpdateJDBCLoaderTest {
 
@@ -29,7 +33,7 @@ public class UpdateJDBCLoaderTest {
 
     private Eresource eresource;
 
-    private UpdateJDBCLoader handler;
+    private UpdateJDBCLoader loader;
 
     private PreparedStatement pStmnt;
 
@@ -39,11 +43,14 @@ public class UpdateJDBCLoaderTest {
 
     private EresourceSQLTranslator translator;
 
+    private StartDate startDate;
+
     @Before
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
         this.translator = createMock(EresourceSQLTranslator.class);
-        this.handler = new UpdateJDBCLoader(this.dataSource, this.translator);
+        this.startDate = createMock(StartDate.class);
+        this.loader = new UpdateJDBCLoader(this.dataSource, this.translator, this.startDate);
         this.connection = createMock(Connection.class);
         this.stmt = createMock(Statement.class);
         this.pStmnt = createMock(PreparedStatement.class);
@@ -56,6 +63,14 @@ public class UpdateJDBCLoaderTest {
         expect(this.dataSource.getConnection()).andReturn(this.connection);
         expect(this.connection.createStatement()).andReturn(this.stmt);
         expect(this.connection.prepareStatement(isA(String.class))).andReturn(this.pStmnt).times(2);
+        this.connection.setAutoCommit(false);
+        expect(this.connection.createStatement()).andReturn(this.stmt);
+        expect(this.stmt.executeQuery("SELECT MAX(UPDATED) FROM ERESOURCE")).andReturn(this.resultSet);
+        expect(this.resultSet.next()).andReturn(true);
+        expect(this.resultSet.getTimestamp(1)).andReturn(new Timestamp(1));
+        this.startDate.initialize(new Date(1));
+        this.resultSet.close();
+        this.stmt.close();
 //        expect(this.queue.isEmpty()).andReturn(false);
 //        expect(this.queue.poll(1, TimeUnit.SECONDS)).andReturn(this.eresource);
         expect(this.eresource.isClone()).andReturn(false);
@@ -79,15 +94,17 @@ public class UpdateJDBCLoaderTest {
         expect(this.stmt.executeBatch()).andReturn(new int[0]);
 //        expect(this.queue.isEmpty()).andReturn(true);
 //        expect(this.queue.poll(1, TimeUnit.SECONDS)).andReturn(null).atLeastOnce();
-        this.stmt.close();
-        this.connection.close();
-        replay(this.eresource, this.dataSource, this.translator, this.connection, this.stmt, this.resultSet);
+//        this.connection.commit();
+//        this.stmt.close();
+//        this.connection.close();
+        replay(this.startDate, this.eresource, this.dataSource, this.translator, this.connection, this.stmt, this.resultSet);
 //        Thread thread = new Thread(this.handler);
 //        thread.start();
 //        Thread.sleep(1000);
 //        this.handler.stop();
 //        thread.join();
-        this.handler.load(this.eresource);
-        verify(this.eresource, this.dataSource, this.translator, this.connection, this.stmt, this.resultSet);
+        this.loader.preProcess();
+        this.loader.load(Collections.singletonList(this.eresource));
+        verify(this.startDate, this.eresource, this.dataSource, this.translator, this.connection, this.stmt, this.resultSet);
     }
 }

@@ -3,8 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <import resource="db-load.xml"/>
-    <bean id="ETL" class="edu.stanford.irt.eresources.jdbc.JDBCEresourcesETLApp" parent="abstractETL">
+    <bean id="loader" class="edu.stanford.irt.eresources.jdbc.JDBCLoader" init-method="preProcess" destroy-method="postProcess">
         <constructor-arg ref="erdbDataSource"/>
+        <constructor-arg ref="eresourceTranslator"/>
+        <constructor-arg ref="startDate"/>
         <property name="createStatements">
             <list>
                 <value>DROP SEQUENCE ERESOURCE_ID_SEQ</value>
@@ -43,7 +45,7 @@
                 <value>CREATE SEQUENCE VERSION_ID_SEQ MAXVALUE 99999999 CYCLE</value>
                 <value>CREATE SEQUENCE LINK_ID_SEQ MAXVALUE 99999999 CYCLE</value>
                 <value>CREATE TABLE ERESOURCE (ERESOURCE_ID NUMBER(8,0) PRIMARY KEY, RECORD_ID
-                    NUMBER(12,0), RECORD_TYPE VARCHAR2(8), UPDATED DATE, TITLE VARCHAR2(512), AUTHOR VARCHAR(1000),
+                    NUMBER(12,0), RECORD_TYPE VARCHAR2(8), UPDATED DATE, TITLE VARCHAR2(1512), AUTHOR VARCHAR(1000),
                     CORE CHAR(1), YEAR NUMBER(4,0), DESCRIPTION CLOB, TEXT CLOB, PRIMARY_TYPE VARCHAR(256), TOTAL NUMBER(4,0), AVAILABLE NUMBER(4,0))
                     LOB (TEXT) store as securefile
                     LOB (DESCRIPTION) store as securefile</value>
@@ -70,26 +72,27 @@
                 <value>CREATE INDEX TITLE_CONVERT_IDX ON ERESOURCE(CONVERT(LOWER("TITLE"),'US7ASCII'))</value>
                 <value>CREATE INDEX TEXT_IDX ON ERESOURCE(TEXT) INDEXTYPE IS CTXSYS.CONTEXT</value>
                 <value>CREATE INDEX TITLE_IDX ON ERESOURCE(TITLE) INDEXTYPE IS CTXSYS.CONTEXT</value>
-                 <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'',cascade=>TRUE,estimate_percent => dbms_stats.auto_sample_size)'}'</value>
+                <value>'{' call dbms_stats.gather_schema_stats(ownname=>''{0}'',cascade=>TRUE,estimate_percent => dbms_stats.auto_sample_size)'}'</value>
             </list>
         </property>
         <property name="userName" value="ceyates"/>
     </bean>
-<!--    <bean id="eresourceHandler" class="edu.stanford.irt.eresources.jdbc.JDBCLoader">
-        <constructor-arg ref="erdbDataSource"/>
-        <constructor-arg ref="eresourceTranslator"/>
-        <constructor-arg ref="executor"/>
-    </bean>-->
+    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
+        destroy-method="destroy">
+        <property name="corePoolSize" value="3"/>
+        <property name="maxPoolSize" value="3"/>
+        <property name="queueCapacity" value="0"/>
+    </bean>
     <bean id="bibInputStream" class="edu.stanford.irt.eresources.marc.BibInputStream">
-        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
-        <constructor-arg name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
     <bean id="authInputStream" class="edu.stanford.irt.eresources.marc.AuthInputStream">
-        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
-        <constructor-arg name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
     <bean id="printBibInputStream" class="edu.stanford.irt.eresources.marc.PrintBibInputStream">
-        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
-        <constructor-arg name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
 </beans>

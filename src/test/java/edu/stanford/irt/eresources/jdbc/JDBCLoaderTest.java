@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.StartDate;
 import edu.stanford.irt.eresources.Version;
 
 public class JDBCLoaderTest {
@@ -41,11 +42,14 @@ public class JDBCLoaderTest {
 
     private Version version;
 
+    private StartDate startDate;
+
     @Before
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
         this.translator = createMock(EresourceSQLTranslator.class);
-        this.loader = new JDBCLoader(this.dataSource, this.translator);
+        this.startDate = createMock(StartDate.class);
+        this.loader = new JDBCLoader(this.dataSource, this.translator, this.startDate);
         this.eresource = createMock(Eresource.class);
         this.version = createMock(Version.class);
         this.link = createMock(Link.class);
@@ -59,10 +63,12 @@ public class JDBCLoaderTest {
         expect(this.dataSource.getConnection()).andReturn(this.connection);
         expect(this.connection.createStatement()).andReturn(this.stmt);
         expect(this.connection.prepareStatement(isA(String.class))).andReturn(this.pStmnt).times(2);
+        this.connection.setAutoCommit(false);
 //        expect(this.queue.isEmpty()).andReturn(false);
         expect(this.translator.getInsertSQL(this.eresource)).andReturn(Collections.<String>emptyList());
         expect(this.stmt.executeBatch()).andReturn(null);
 //        expect(this.queue.isEmpty()).andReturn(true);
+        this.connection.commit();
         this.pStmnt.close();
         this.pStmnt.close();
         this.stmt.close();
@@ -71,7 +77,9 @@ public class JDBCLoaderTest {
 //        expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
 //        expect(this.queue.add(this.eresource)).andReturn(true);
         replay(this.pStmnt, this.stmt, this.connection, this.eresource, this.version, this.dataSource, this.translator);
-        this.loader.load(this.eresource);
+        this.loader.preProcess();
+        this.loader.load(Collections.singletonList(this.eresource));
+        this.loader.postProcess();
 //        assertEquals(1, this.loader.getCount());
         verify(this.pStmnt, this.stmt, this.connection, this.eresource, this.version, this.dataSource, this.translator);
     }
