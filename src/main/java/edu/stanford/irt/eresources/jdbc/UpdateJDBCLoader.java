@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,35 +43,35 @@ public class UpdateJDBCLoader extends JDBCLoader {
         try (Statement stmt = connection.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT MAX(UPDATED) FROM ERESOURCE")) {
             if (!rs.next()) {
-                    throw new EresourceException("unable to get MAX(UPDATED)");
-                }
+                throw new EresourceException("unable to get MAX(UPDATED)");
+            }
             Timestamp timestamp = rs.getTimestamp(1);
             Date updated = timestamp == null ? new Date(0) : new Date(timestamp.getTime());
-                startDate.initialize(updated);
+            startDate.initialize(updated);
         }
     }
 
     @Override
     protected void insertEresource(final Eresource eresource) throws SQLException, IOException {
         if (!eresource.isClone()) {
-            Statement stmt = getStatement();
             List<String> ids = new ArrayList<String>();
-            try (ResultSet rs = stmt.executeQuery(this.translator.getEresourceIdSQL(eresource))) {
+            try (Statement stmt = getConnection().createStatement()) {
+                ResultSet rs = stmt.executeQuery(this.translator.getEresourceIdSQL(eresource));
                 while (rs.next()) {
                     ids.add(rs.getString(1));
                 }
-            }
-            for (String id : ids) {
-                stmt.addBatch(DELETE_ERESOURCE + id);
-                stmt.addBatch(DELETE_VERSION + id);
-                stmt.addBatch(DELETE_LINK + id);
-                stmt.addBatch(DELETE_TYPE + id);
-                stmt.addBatch(DELETE_SUBSET + id);
-                stmt.addBatch(DELETE_MESH + id);
-                stmt.executeBatch();
+                rs.close();
+                for (String id : ids) {
+                    stmt.addBatch(DELETE_ERESOURCE + id);
+                    stmt.addBatch(DELETE_VERSION + id);
+                    stmt.addBatch(DELETE_LINK + id);
+                    stmt.addBatch(DELETE_TYPE + id);
+                    stmt.addBatch(DELETE_SUBSET + id);
+                    stmt.addBatch(DELETE_MESH + id);
+                    stmt.executeBatch();
+                }
             }
         }
-        System.out.println(eresource);
         super.insertEresource(eresource);
     }
 }

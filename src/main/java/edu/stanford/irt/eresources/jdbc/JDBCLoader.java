@@ -54,7 +54,7 @@ public class JDBCLoader implements Loader {
 
     private StartDate startDate;
 
-    private int count;
+    protected int count;
 
     public JDBCLoader(final DataSource dataSource, final EresourceSQLTranslator translator, final StartDate startDate) {
         this.dataSource = dataSource;
@@ -84,9 +84,9 @@ public class JDBCLoader implements Loader {
     public void setUserName(final String userName) {
         this.userName = userName;
     }
-
-    protected Statement getStatement() {
-        return this.stmt;
+    
+    protected Connection getConnection() {
+        return this.connection;
     }
 
     protected void insertEresource(final Eresource eresource) throws SQLException, IOException {
@@ -106,14 +106,12 @@ public class JDBCLoader implements Loader {
     }
 
     protected void postProcess() throws SQLException {
-        System.out.println("count=" + this.count);
         if (this.count > 0) {
         for (String call : this.callStatements) {
             if ((call.indexOf("{0}") > 0) && (null != this.userName)) {
                 call = MessageFormat.format(call, new Object[] { this.userName });
             }
             executeCall(call);
-            System.out.println(call);
         }
         }
         this.descStmt.close();
@@ -132,7 +130,6 @@ public class JDBCLoader implements Loader {
         for (String create : this.createStatements) {
             try {
                 this.stmt.execute(create);
-                System.out.println(create);
             } catch (SQLException e) {
                 int errorCode = e.getErrorCode();
                 if ((942 != errorCode) && (1418 != errorCode) && (2289 != errorCode)) {

@@ -3,12 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <import resource="db-load.xml"/>
-    <bean id="dbLoader" class="edu.stanford.irt.eresources.jdbc.JDBCEresourcesETLApp" parent="abstractDbLoader">
-        <property name="killPrevious" value="true"/>
-        <property name="handler" ref="eresourceHandler"/>
-        <property name="createStatements">
-            <list/>
-        </property>
+    <bean id="loader" class="edu.stanford.irt.eresources.jdbc.DeleteJDBCLoader" init-method="preProcess" destroy-method="postProcess">
+        <constructor-arg ref="erdbDataSource"/>
+        <constructor-arg ref="eresourceTranslator"/>
+        <constructor-arg ref="startDate"/>
         <property name="callStatements">
             <list>
                 <value>{ call ctx_ddl.sync_index('TEXT_IDX') }</value>
@@ -18,21 +16,22 @@
             </list>
         </property>
     </bean>
-    <bean id="eresourceHandler" class="edu.stanford.irt.eresources.jdbc.DeleteJDBCLoader">
-        <constructor-arg ref="erdbDataSource"/>
-        <constructor-arg ref="queue"/>
-        <constructor-arg ref="eresourceTranslator"/>
+    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"
+        destroy-method="destroy">
+        <property name="corePoolSize" value="3"/>
+        <property name="maxPoolSize" value="3"/>
+        <property name="queueCapacity" value="0"/>
     </bean>
     <bean id="bibInputStream" class="edu.stanford.irt.eresources.marc.BibInputStream">
-        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
-        <constructor-arg name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
     <bean id="authInputStream" class="edu.stanford.irt.eresources.marc.AuthInputStream">
-        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
-        <constructor-arg name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
     <bean id="printBibInputStream" class="edu.stanford.irt.eresources.marc.PrintBibInputStream">
-        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
-        <constructor-arg name="executor" ref="executor"/>
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
     </bean>
 </beans>

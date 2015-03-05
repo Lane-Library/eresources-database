@@ -1,9 +1,6 @@
 package edu.stanford.irt.eresources.jdbc;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collections;
+import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -18,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.StartDate;
 
 public class DeleteJDBCLoaderTest {
 
@@ -35,10 +34,13 @@ public class DeleteJDBCLoaderTest {
 
     private Statement stmt;
 
+    private StartDate startDate;
+
     @Before
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
-        this.loader = new DeleteJDBCLoader(this.dataSource);
+        this.startDate = createMock(StartDate.class);
+        this.loader = new DeleteJDBCLoader(this.dataSource, null, this.startDate);
         this.eresource = createMock(Eresource.class);
         this.connection = createMock(Connection.class);
         this.stmt = createMock(Statement.class);
@@ -46,10 +48,13 @@ public class DeleteJDBCLoaderTest {
         this.resultSet = createMock(ResultSet.class);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testLoad() throws SQLException {
-//        expect(this.queue.add(this.eresource)).andReturn(true);
         expect(this.dataSource.getConnection()).andReturn(this.connection);
+        this.connection.setAutoCommit(false);
+        expect(this.connection.createStatement()).andReturn(this.stmt);
+        expect(this.connection.prepareStatement(isA(String.class))).andReturn(this.pStmnt).times(2);
+        this.startDate.initialize(new Date(0));
         expect(this.connection.createStatement()).andReturn(this.stmt);
         expect(this.stmt.executeQuery("SELECT RECORD_TYPE, RECORD_ID FROM ERESOURCE")).andReturn(this.resultSet);
         expect(this.resultSet.next()).andReturn(true);
@@ -61,12 +66,8 @@ public class DeleteJDBCLoaderTest {
         expect(this.resultSet.next()).andReturn(false);
         this.resultSet.close();
         this.stmt.close();
-        this.connection.close();
-//        expect(this.queue.isEmpty()).andReturn(false);
         expect(this.eresource.getRecordType()).andReturn("recordType");
         expect(this.eresource.getRecordId()).andReturn(1);
-//        expect(this.queue.isEmpty()).andReturn(true);
-        expect(this.dataSource.getConnection()).andReturn(this.connection);
         expect(this.connection.createStatement()).andReturn(this.stmt);
         expect(this.connection.prepareStatement("SELECT ERESOURCE_ID FROM ERESOURCE WHERE RECORD_TYPE = ? and RECORD_ID = ?")).andReturn(this.pStmnt);
         this.pStmnt.setString(1, "recordType");
@@ -84,12 +85,17 @@ public class DeleteJDBCLoaderTest {
         expect(this.resultSet.next()).andReturn(false);
         this.resultSet.close();
         this.pStmnt.close();
-        
+        expectLastCall().times(2);
         this.stmt.close();
+        this.pStmnt.close();
+        this.stmt.close();
+        this.connection.commit();
         this.connection.close();
-        replay(this.pStmnt, this.dataSource, this.connection, this.stmt, this.resultSet, this.eresource);
+        replay(this.startDate, this.pStmnt, this.dataSource, this.connection, this.stmt, this.resultSet, this.eresource);
+        this.loader.preProcess();
         this.loader.load(Collections.singletonList(this.eresource));
-        verify(this.pStmnt, this.dataSource, this.connection, this.stmt, this.resultSet, this.eresource);
+        this.loader.postProcess();
+        verify(this.startDate, this.pStmnt, this.dataSource, this.connection, this.stmt, this.resultSet, this.eresource);
     }
 
     @Test

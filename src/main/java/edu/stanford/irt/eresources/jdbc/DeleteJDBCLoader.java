@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,9 @@ import javax.sql.DataSource;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Loader;
+import edu.stanford.irt.eresources.StartDate;
 
-public class DeleteJDBCLoader implements Loader {
+public class DeleteJDBCLoader extends JDBCLoader {
 
     private static final String DELETE_ERESOURCE = "DELETE FROM ERESOURCE WHERE ERESOURCE_ID = ";
 
@@ -35,29 +37,26 @@ public class DeleteJDBCLoader implements Loader {
 
     private static final String SELECT = "SELECT RECORD_TYPE, RECORD_ID FROM ERESOURCE";
 
-    private DataSource dataSource;
+    private Map<String, Set<Integer>> ids = new HashMap<String, Set<Integer>>();
 
-    private Map<String, Set<Integer>> ids;
-
-    public DeleteJDBCLoader(final DataSource dataSource) {
-        this.dataSource = dataSource;
+    public DeleteJDBCLoader(final DataSource dataSource, final EresourceSQLTranslator translator, final StartDate startDate) {
+        super(dataSource, translator, startDate);
     }
 
-//    protected void doLoad(BlockingQueue<Eresource> queue) throws InterruptedException {
-//        Logger log = LoggerFactory.getLogger(getClass());
-//        log.info("enter run();");
-//        // get record ids from eresources
-//        getRecordIds();
-//            // get all existing ids
-//            subtractExistingIds(queue);
-//            // deleted the remainder from eresources
-//            removeRemaining();
-//        log.info("return run();");
-//    }
+    @Override
+    protected void postProcess() throws SQLException {
+        removeRemaining();
+        super.postProcess();
+    }
+
+    @Override
+    protected void preProcess() throws SQLException {
+        super.preProcess();
+        getRecordIds();
+    }
 
     private void getRecordIds() {
-        try (Connection conn = this.dataSource.getConnection();
-                Statement stmt = conn.createStatement();
+        try (Statement stmt = getConnection().createStatement();
                 ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
                 String recordType = rs.getString("RECORD_TYPE");
@@ -73,8 +72,8 @@ public class DeleteJDBCLoader implements Loader {
     }
 
     private void removeRemaining() {
-        try (Connection conn = this.dataSource.getConnection();
-                Statement stmt = conn.createStatement();
+        Connection conn = getConnection();
+        try (Statement stmt = conn.createStatement();
                 PreparedStatement pstmt = conn.prepareStatement(GET_ID)) {
             for (Entry<String, Set<Integer>> entry : this.ids.entrySet()) {
                 String recordType = entry.getKey();
@@ -91,6 +90,7 @@ public class DeleteJDBCLoader implements Loader {
                             stmt.addBatch(DELETE_SUBSET + id);
                             stmt.addBatch(DELETE_MESH + id);
                             stmt.executeBatch();
+                            this.count++;
                         }
                     }
                 }
@@ -100,20 +100,11 @@ public class DeleteJDBCLoader implements Loader {
         }
     }
 
-//    private void subtractExistingIds(BlockingQueue<Eresource> queue) throws InterruptedException {
-//        while (true) {
-//                Eresource eresource = queue.take();
-//                if (eresource == Eresource.EMPTY) {
-//                    break;
-//                } else {
-//                    Set<Integer> set = this.ids.get(eresource.getRecordType());
-//                    set.remove(Integer.valueOf(eresource.getRecordId()));
-//                }
-//        }
-//    }
-
     @Override
     public void load(List<Eresource> eresources) {
-        throw new UnsupportedOperationException();
+        for (Eresource eresource: eresources) {
+      Set<Integer> set = this.ids.get(eresource.getRecordType());
+      set.remove(Integer.valueOf(eresource.getRecordId()));
+        }
     }
 }
