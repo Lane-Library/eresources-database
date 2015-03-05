@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceException;
-import edu.stanford.irt.eresources.Loader;
 import edu.stanford.irt.eresources.StartDate;
 
 public class DeleteJDBCLoader extends JDBCLoader {

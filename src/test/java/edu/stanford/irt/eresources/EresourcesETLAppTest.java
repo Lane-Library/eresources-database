@@ -1,8 +1,6 @@
 package edu.stanford.irt.eresources;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
@@ -15,10 +13,6 @@ import javax.sql.DataSource;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import edu.stanford.irt.eresources.ETLProcessor;
-import edu.stanford.irt.eresources.Main;
-import edu.stanford.irt.eresources.StartDate;
 
 public class EresourcesETLAppTest {
 

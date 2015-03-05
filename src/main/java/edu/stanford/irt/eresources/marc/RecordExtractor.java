@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources.marc;
 
 import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
-import org.marc4j.marc.impl.RecordImpl;
 
 import edu.stanford.irt.eresources.Extractor;
 
