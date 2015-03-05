@@ -14,17 +14,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-public class EresourcesETLApp {
+public class Main {
 
     private boolean killPrevious;
 
     private Collection<ETLProcessor<?>> processors = Collections.<ETLProcessor<?>> emptyList();
 
-    public EresourcesETLApp(final List<ETLProcessor<?>> processors) {
+    public Main(final List<ETLProcessor<?>> processors) {
         this(processors, false);
     }
 
-    public EresourcesETLApp(final List<ETLProcessor<?>> processors, final boolean killPrevious) {
+    public Main(final List<ETLProcessor<?>> processors, final boolean killPrevious) {
         this.processors = processors;
         this.killPrevious = killPrevious;
     }
@@ -32,7 +32,7 @@ public class EresourcesETLApp {
     public static void main(final String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/"
                 + args[0] + ".xml");
-        EresourcesETLApp app = context.getBean("ETL", EresourcesETLApp.class);
+        Main app = context.getBean("ETL", Main.class);
         ThreadPoolTaskExecutor executor = context.getBean("executor", ThreadPoolTaskExecutor.class);
         try {
             app.run();
@@ -59,11 +59,11 @@ public class EresourcesETLApp {
                 pid = reader.readLine();
                 reader.close();
                 if (this.killPrevious) {
-                    LoggerFactory.getLogger(EresourcesETLApp.class).warn("pid " + pid + " exists, killing . . .");
+                    LoggerFactory.getLogger(Main.class).warn("pid " + pid + " exists, killing . . .");
                     Runtime.getRuntime().exec(new String[] { "kill", pid });
                 } else {
                     IllegalStateException e = new IllegalStateException("pid " + pid + " already running");
-                    LoggerFactory.getLogger(EresourcesETLApp.class).error(e.getMessage());
+                    LoggerFactory.getLogger(Main.class).error(e.getMessage());
                     throw e;
                 }
             }

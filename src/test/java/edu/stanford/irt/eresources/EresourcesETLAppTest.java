@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.ETLProcessor;
-import edu.stanford.irt.eresources.EresourcesETLApp;
+import edu.stanford.irt.eresources.Main;
 import edu.stanford.irt.eresources.StartDate;
 
 public class EresourcesETLAppTest {
@@ -26,7 +26,7 @@ public class EresourcesETLAppTest {
 
     private DataSource dataSource;
 
-    private EresourcesETLApp app;
+    private Main app;
 
     private Statement statement;
 
@@ -36,7 +36,7 @@ public class EresourcesETLAppTest {
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
         this.processor = createMock(ETLProcessor.class);
-        this.app = new EresourcesETLApp(Collections.singletonList(this.processor), true);
+        this.app = new Main(Collections.singletonList(this.processor), true);
         this.connection = createMock(Connection.class);
         this.statement = createMock(Statement.class);
     }

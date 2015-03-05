@@ -7,7 +7,7 @@
     <import resource="auth-processor.xml"/>
     <import resource="classes-processor.xml"/>
     <import resource="print-processor.xml"/>
-    <bean id="ETL" class="edu.stanford.irt.eresources.EresourcesETLApp">
+    <bean id="ETL" class="edu.stanford.irt.eresources.Main">
         <constructor-arg>
             <list>
                 <ref bean="bibProcessor"/>
