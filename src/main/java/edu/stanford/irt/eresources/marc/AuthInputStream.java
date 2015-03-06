@@ -13,7 +13,7 @@ public class AuthInputStream extends EresourceInputStream {
 
     private static final String RECORD_QUERY = "SELECT SEQNUM, RECORD_SEGMENT FROM CIFDB.BIB_DATA WHERE BIB_ID = ? ORDER BY SEQNUM";
 
-    public AuthInputStream(DataSource dataSource, Executor executor) {
+    public AuthInputStream(final DataSource dataSource, final Executor executor) {
         super(dataSource, executor);
     }
 

@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 
 public interface Eresource {
-    
+
     String getAuthor();
 
     String getDescription();

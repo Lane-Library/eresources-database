@@ -6,15 +6,14 @@ import org.marc4j.marc.Record;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 
-
 public class PrintMarcVersion extends MarcVersion {
 
-    public PrintMarcVersion(Record record) {
+    public PrintMarcVersion(final Record record) {
         super(record);
     }
 
     @Override
-    protected Link createLink(DataField field, Version version) {
+    protected Link createLink(final DataField field, final Version version) {
         return new PrintMarcLink(field, version);
     }
 }

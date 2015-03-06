@@ -30,19 +30,19 @@ public class JDBCLoaderTest {
 
     private Eresource eresource;
 
-    private JDBCLoader loader;
-
     private Link link;
 
+    private JDBCLoader loader;
+
     private PreparedStatement pStmnt;
+
+    private StartDate startDate;
 
     private Statement stmt;
 
     private EresourceSQLTranslator translator;
 
     private Version version;
-
-    private StartDate startDate;
 
     @Before
     public void setUp() {
@@ -64,23 +64,23 @@ public class JDBCLoaderTest {
         expect(this.connection.createStatement()).andReturn(this.stmt);
         expect(this.connection.prepareStatement(isA(String.class))).andReturn(this.pStmnt).times(2);
         this.connection.setAutoCommit(false);
-//        expect(this.queue.isEmpty()).andReturn(false);
-        expect(this.translator.getInsertSQL(this.eresource)).andReturn(Collections.<String>emptyList());
+        // expect(this.queue.isEmpty()).andReturn(false);
+        expect(this.translator.getInsertSQL(this.eresource)).andReturn(Collections.<String> emptyList());
         expect(this.stmt.executeBatch()).andReturn(null);
-//        expect(this.queue.isEmpty()).andReturn(true);
+        // expect(this.queue.isEmpty()).andReturn(true);
         this.connection.commit();
         this.pStmnt.close();
         this.pStmnt.close();
         this.stmt.close();
         this.connection.close();
-//        expect(this.eresource.getVersions()).andReturn(Collections.singleton(this.version));
-//        expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
-//        expect(this.queue.add(this.eresource)).andReturn(true);
+        // expect(this.eresource.getVersions()).andReturn(Collections.singleton(this.version));
+        // expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
+        // expect(this.queue.add(this.eresource)).andReturn(true);
         replay(this.pStmnt, this.stmt, this.connection, this.eresource, this.version, this.dataSource, this.translator);
         this.loader.preProcess();
         this.loader.load(Collections.singletonList(this.eresource));
         this.loader.postProcess();
-//        assertEquals(1, this.loader.getCount());
+        // assertEquals(1, this.loader.getCount());
         verify(this.pStmnt, this.stmt, this.connection, this.eresource, this.version, this.dataSource, this.translator);
     }
 }

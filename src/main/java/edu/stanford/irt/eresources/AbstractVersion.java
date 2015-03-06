@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources;
 
 import java.util.List;
 
-
 public abstract class AbstractVersion implements Version {
 
     @Override

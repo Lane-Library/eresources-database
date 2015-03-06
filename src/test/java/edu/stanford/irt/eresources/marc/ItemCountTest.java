@@ -17,13 +17,16 @@ import javax.sql.DataSource;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class ItemCountTest {
-    
-    private ItemCount itemCount;
-    private DataSource dataSource;
+
     private Connection connection;
+
+    private DataSource dataSource;
+
+    private ItemCount itemCount;
+
     private Statement pstmt;
+
     private ResultSet resultSet;
 
     @Before
@@ -55,7 +58,7 @@ public class ItemCountTest {
         this.pstmt.close();
         this.connection.close();
         replay(this.dataSource, this.connection, this.pstmt, this.resultSet);
-        assertArrayEquals(new int[] {1,2}, this.itemCount.itemCount("1"));
+        assertArrayEquals(new int[] { 1, 2 }, this.itemCount.itemCount("1"));
         verify(this.dataSource, this.connection, this.pstmt, this.resultSet);
     }
 }

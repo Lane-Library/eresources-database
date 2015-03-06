@@ -11,6 +11,7 @@ import edu.stanford.irt.eresources.StartDate;
 public class ClassesExtractor implements Extractor<InputStream> {
 
     private URL allClassesURL;
+
     private boolean hasNext;
 
     public ClassesExtractor(final URL allClassesURL, final StartDate startDate) {

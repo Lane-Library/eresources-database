@@ -37,9 +37,9 @@ public class DeleteJDBCLoaderTest {
 
     private ResultSet resultSet;
 
-    private Statement stmt;
-
     private StartDate startDate;
+
+    private Statement stmt;
 
     @Before
     public void setUp() {
@@ -74,7 +74,10 @@ public class DeleteJDBCLoaderTest {
         expect(this.eresource.getRecordType()).andReturn("recordType");
         expect(this.eresource.getRecordId()).andReturn(1);
         expect(this.connection.createStatement()).andReturn(this.stmt);
-        expect(this.connection.prepareStatement("SELECT ERESOURCE_ID FROM ERESOURCE WHERE RECORD_TYPE = ? and RECORD_ID = ?")).andReturn(this.pStmnt);
+        expect(
+                this.connection
+                .prepareStatement("SELECT ERESOURCE_ID FROM ERESOURCE WHERE RECORD_TYPE = ? and RECORD_ID = ?"))
+                .andReturn(this.pStmnt);
         this.pStmnt.setString(1, "recordType");
         this.pStmnt.setInt(2, 2);
         expect(this.pStmnt.executeQuery()).andReturn(this.resultSet);

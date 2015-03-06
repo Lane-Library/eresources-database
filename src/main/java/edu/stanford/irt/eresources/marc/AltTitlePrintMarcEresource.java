@@ -10,15 +10,9 @@ import com.ibm.icu.text.Normalizer;
 
 public class AltTitlePrintMarcEresource extends PrintMarcEresource {
 
-    @Override
-    public boolean isClone() {
-        return true;
-    }
-
     private Record record;
 
-    public AltTitlePrintMarcEresource(final List<Record> recordList, final String keywords,
-            final int[] items) {
+    public AltTitlePrintMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
         super(recordList, keywords, items);
         this.record = recordList.get(0);
     }
@@ -33,5 +27,10 @@ public class AltTitlePrintMarcEresource extends PrintMarcEresource {
             }
         }
         return title.toString();
+    }
+
+    @Override
+    public boolean isClone() {
+        return true;
     }
 }

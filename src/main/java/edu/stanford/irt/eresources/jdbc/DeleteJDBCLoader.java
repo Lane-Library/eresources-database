@@ -22,8 +22,6 @@ import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.StartDate;
 
 public class DeleteJDBCLoader extends JDBCLoader {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(DeleteJDBCLoader.class);
 
     private static final String DELETE_ERESOURCE = "DELETE FROM ERESOURCE WHERE ERESOURCE_ID = ";
 
@@ -39,12 +37,23 @@ public class DeleteJDBCLoader extends JDBCLoader {
 
     private static final String GET_ID = "SELECT ERESOURCE_ID FROM ERESOURCE WHERE RECORD_TYPE = ? and RECORD_ID = ?";
 
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteJDBCLoader.class);
+
     private static final String SELECT = "SELECT RECORD_TYPE, RECORD_ID FROM ERESOURCE";
 
     private Map<String, Set<Integer>> ids = new HashMap<String, Set<Integer>>();
 
-    public DeleteJDBCLoader(final DataSource dataSource, final EresourceSQLTranslator translator, final StartDate startDate) {
+    public DeleteJDBCLoader(final DataSource dataSource, final EresourceSQLTranslator translator,
+            final StartDate startDate) {
         super(dataSource, translator, startDate);
+    }
+
+    @Override
+    public void load(final List<Eresource> eresources) {
+        for (Eresource eresource : eresources) {
+            Set<Integer> set = this.ids.get(eresource.getRecordType());
+            set.remove(Integer.valueOf(eresource.getRecordId()));
+        }
     }
 
     @Override
@@ -60,8 +69,7 @@ public class DeleteJDBCLoader extends JDBCLoader {
     }
 
     private void getRecordIds() {
-        try (Statement stmt = getConnection().createStatement();
-                ResultSet rs = stmt.executeQuery(SELECT)) {
+        try (Statement stmt = getConnection().createStatement(); ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
                 String recordType = rs.getString("RECORD_TYPE");
                 Integer recordId = Integer.valueOf(rs.getInt("RECORD_ID"));
@@ -77,8 +85,7 @@ public class DeleteJDBCLoader extends JDBCLoader {
 
     private void removeRemaining() {
         Connection conn = getConnection();
-        try (Statement stmt = conn.createStatement();
-                PreparedStatement pstmt = conn.prepareStatement(GET_ID)) {
+        try (Statement stmt = conn.createStatement(); PreparedStatement pstmt = conn.prepareStatement(GET_ID)) {
             for (Entry<String, Set<Integer>> entry : this.ids.entrySet()) {
                 String recordType = entry.getKey();
                 for (Integer recordId : entry.getValue()) {
@@ -102,14 +109,6 @@ public class DeleteJDBCLoader extends JDBCLoader {
             }
         } catch (SQLException e) {
             throw new EresourceException(e);
-        }
-    }
-
-    @Override
-    public void load(List<Eresource> eresources) {
-        for (Eresource eresource: eresources) {
-      Set<Integer> set = this.ids.get(eresource.getRecordType());
-      set.remove(Integer.valueOf(eresource.getRecordId()));
         }
     }
 }

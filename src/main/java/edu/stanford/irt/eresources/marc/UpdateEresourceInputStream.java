@@ -9,18 +9,16 @@ import javax.sql.DataSource;
 
 import edu.stanford.irt.eresources.StartDate;
 
-
 public abstract class UpdateEresourceInputStream extends EresourceInputStream {
-
-
 
     private StartDate startDate;
 
-    public UpdateEresourceInputStream(DataSource dataSource, Executor executor, StartDate startDate) {
+    public UpdateEresourceInputStream(final DataSource dataSource, final Executor executor, final StartDate startDate) {
         super(dataSource, executor);
         this.startDate = startDate;
     }
 
+    @Override
     protected void prepareListStatement(final PreparedStatement stmt) throws SQLException {
         char[] queryString = getSelectIDListSQL().toCharArray();
         int qmarkCount = 0;

@@ -14,7 +14,8 @@ public class AuthMarcTransformer extends AbstractMarcTransformer<Record> {
     }
 
     @Override
-    public List<Eresource> transform(Record record) {
-        return Collections.singletonList(new AuthMarcEresource(record, getKeywords(record).replaceAll("\\s\\s+", " ").trim()));
+    public List<Eresource> transform(final Record record) {
+        return Collections.singletonList(new AuthMarcEresource(record, getKeywords(record).replaceAll("\\s\\s+", " ")
+                .trim()));
     }
 }

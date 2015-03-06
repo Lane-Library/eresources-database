@@ -29,7 +29,7 @@ public class EresourceInputStreamTest {
 
     private static class TestEresourceInputStream extends UpdateEresourceInputStream {
 
-        public TestEresourceInputStream(DataSource dataSource, Executor executor, StartDate startDate) {
+        public TestEresourceInputStream(final DataSource dataSource, final Executor executor, final StartDate startDate) {
             super(dataSource, executor, startDate);
         }
 
@@ -61,10 +61,9 @@ public class EresourceInputStreamTest {
 
     private ResultSet resultSet;
 
-    private EresourceInputStream stream;
-
-
     private StartDate startDate;
+
+    private EresourceInputStream stream;
 
     @Before
     public void setUp() {

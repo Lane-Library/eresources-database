@@ -5,12 +5,11 @@ import org.marc4j.marc.Record;
 
 import edu.stanford.irt.eresources.Extractor;
 
-
 public class RecordExtractor implements Extractor<Record> {
-    
+
     private MarcReader marcReader;
 
-    public RecordExtractor(MarcReader marcReader) {
+    public RecordExtractor(final MarcReader marcReader) {
         this.marcReader = marcReader;
     }
 

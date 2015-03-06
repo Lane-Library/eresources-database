@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources;
 
-
 public abstract class AbstractLink implements Link {
 
     protected String getAdditionalText(final String instruction, final String publisher) {

@@ -17,7 +17,6 @@ import com.ibm.icu.text.Normalizer;
 import edu.stanford.irt.eresources.Eresource;
 
 public abstract class AbstractMarcEresource implements Eresource {
-    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
@@ -36,9 +35,11 @@ public abstract class AbstractMarcEresource implements Eresource {
                     "digital videos, local", "digital videos, local, public" },
             { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
+    private static final int[] NOITEMS = new int[] { 0, 0 };
+
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
-    private static final int[] NOITEMS = new int[] {0,0};
+    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -85,13 +86,13 @@ public abstract class AbstractMarcEresource implements Eresource {
         PRIMARY_TYPES.put("websites", "Website");
     }
 
-    private String keywords;
-
-    private Record record;
-
     private String initialPrimaryType;
 
     private Collection<String> initialTypes;
+
+    private String keywords;
+
+    private Record record;
 
     public AbstractMarcEresource(final Record record, final String keywords) {
         this.record = record;
@@ -105,7 +106,7 @@ public abstract class AbstractMarcEresource implements Eresource {
         if (field245 != null) {
             Subfield subfieldc = field245.getSubfield('c');
             if (subfieldc != null) {
-                author =  Normalizer.compose(subfieldc.getData(), false);
+                author = Normalizer.compose(subfieldc.getData(), false);
             }
         }
         return author;
@@ -122,11 +123,6 @@ public abstract class AbstractMarcEresource implements Eresource {
     }
 
     @Override
-    public String getPrimaryType() {
-        return getRealPrimaryType(getInitialPrimaryType());
-    }
-
-    @Override
     public Collection<String> getMeshTerms() {
         Collection<String> m = new HashSet<String>();
         for (VariableField field : this.record.getVariableFields("650")) {
@@ -135,6 +131,11 @@ public abstract class AbstractMarcEresource implements Eresource {
             }
         }
         return m;
+    }
+
+    @Override
+    public String getPrimaryType() {
+        return getRealPrimaryType(getInitialPrimaryType());
     }
 
     @Override
@@ -186,72 +187,8 @@ public abstract class AbstractMarcEresource implements Eresource {
     protected void addCustomTypes(final Collection<String> types) {
         // do nothing by default
     }
-    
-    protected String getInitialPrimaryType() {
-        if (this.initialPrimaryType == null) {
-        String type = "";
-        for (VariableField field : this.record.getVariableFields("655")) {
-            DataField datafield = (DataField) field;
-            if (datafield.getIndicator1() == '4' && datafield.getIndicator2() == '7') {
-                type = datafield.getSubfield('a').getData();
-            }
-        }
-        // remove trailing periods, some probably should have them but
-        // voyager puts them on everything :-(
-        int lastPeriod = type.lastIndexOf('.');
-        if (lastPeriod >= 0) {
-            int lastPosition = type.length() - 1;
-            if (lastPeriod == lastPosition) {
-                type = type.substring(0, lastPosition);
-            }
-        }
-        this.initialPrimaryType = type.toLowerCase();
-        }
-        return this.initialPrimaryType;
-    }
 
-    
-    protected String getRealPrimaryType(String type) {
-        return type;
-    }
-    
-    protected String getMappedPrimaryType(String type) {
-        if (PRIMARY_TYPES.containsKey(type)) {
-            return PRIMARY_TYPES.get(type);
-        } else {
-            return type;
-        }
-        
-    }
-    
-    protected Collection<String> getInitialTypes() {
-        if (this.initialTypes == null) {
-        Collection<String> t = new HashSet<String>();
-        t.add("catalog");
-        for (VariableField field : this.record.getVariableFields("655")) {
-            String type = MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase();
-            // remove trailing periods, some probably should have them but
-            // voyager puts them on everything :-(
-            int lastPeriod = type.lastIndexOf('.');
-            if (lastPeriod >= 0) {
-                int lastPosition = type.length() - 1;
-                if (lastPeriod == lastPosition) {
-                    type = type.substring(0, lastPosition);
-                }
-            }
-            String composite = getCompositeType(type);
-            if (composite != null) {
-                t.add(composite);
-            } else if (isAllowedType(type)) {
-                t.add(type);
-            }
-        }
-        this.initialTypes = t;
-        }
-        return this.initialTypes;
-    }
-
-    protected void addPrimaryType(Collection<String> t) {
+    protected void addPrimaryType(final Collection<String> t) {
         t.add(getInitialPrimaryType());
     }
 
@@ -268,9 +205,71 @@ public abstract class AbstractMarcEresource implements Eresource {
         return COMPOSITE_TYPES.get(type);
     }
 
-    protected boolean isAllowedType(final String type) {
-        return ALLOWED_TYPES.contains(type);
+    protected String getInitialPrimaryType() {
+        if (this.initialPrimaryType == null) {
+            String type = "";
+            for (VariableField field : this.record.getVariableFields("655")) {
+                DataField datafield = (DataField) field;
+                if (datafield.getIndicator1() == '4' && datafield.getIndicator2() == '7') {
+                    type = datafield.getSubfield('a').getData();
+                }
+            }
+            // remove trailing periods, some probably should have them but
+            // voyager puts them on everything :-(
+            int lastPeriod = type.lastIndexOf('.');
+            if (lastPeriod >= 0) {
+                int lastPosition = type.length() - 1;
+                if (lastPeriod == lastPosition) {
+                    type = type.substring(0, lastPosition);
+                }
+            }
+            this.initialPrimaryType = type.toLowerCase();
+        }
+        return this.initialPrimaryType;
+    }
+
+    protected Collection<String> getInitialTypes() {
+        if (this.initialTypes == null) {
+            Collection<String> t = new HashSet<String>();
+            t.add("catalog");
+            for (VariableField field : this.record.getVariableFields("655")) {
+                String type = MarcTextUtil.getSubfieldData((DataField) field, 'a').toLowerCase();
+                // remove trailing periods, some probably should have them but
+                // voyager puts them on everything :-(
+                int lastPeriod = type.lastIndexOf('.');
+                if (lastPeriod >= 0) {
+                    int lastPosition = type.length() - 1;
+                    if (lastPeriod == lastPosition) {
+                        type = type.substring(0, lastPosition);
+                    }
+                }
+                String composite = getCompositeType(type);
+                if (composite != null) {
+                    t.add(composite);
+                } else if (isAllowedType(type)) {
+                    t.add(type);
+                }
+            }
+            this.initialTypes = t;
+        }
+        return this.initialTypes;
+    }
+
+    protected String getMappedPrimaryType(final String type) {
+        if (PRIMARY_TYPES.containsKey(type)) {
+            return PRIMARY_TYPES.get(type);
+        } else {
+            return type;
+        }
     }
 
     protected abstract String getPrintOrDigital();
+
+    protected String getRealPrimaryType(final String type) {
+        return type;
+    }
+
+    protected boolean isAllowedType(final String type) {
+        return ALLOWED_TYPES.contains(type);
+    }
 }

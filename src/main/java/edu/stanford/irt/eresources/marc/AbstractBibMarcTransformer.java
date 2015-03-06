@@ -10,8 +10,17 @@ import edu.stanford.irt.eresources.Eresource;
 
 public abstract class AbstractBibMarcTransformer extends AbstractMarcTransformer<List<Record>> {
 
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
+    private ItemCount itemCount;
+
+    public AbstractBibMarcTransformer(final ItemCount itemCount, final KeywordsStrategy keywordsStrategy) {
+        super(keywordsStrategy);
+        this.itemCount = itemCount;
+    }
+
     @Override
-    public List<Eresource> transform(List<Record> recordList) {
+    public List<Eresource> transform(final List<Record> recordList) {
         List<Eresource> eresources = new ArrayList<Eresource>();
         Record bib = recordList.get(0);
         String keywords = WHITESPACE.matcher(getKeywords(bib)).replaceAll(" ");
@@ -21,15 +30,6 @@ public abstract class AbstractBibMarcTransformer extends AbstractMarcTransformer
             eresources.add(createAltTitleEresource(recordList, keywords, items));
         }
         return eresources;
-    }
-
-    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-
-    private ItemCount itemCount;
-
-    public AbstractBibMarcTransformer(final ItemCount itemCount, final KeywordsStrategy keywordsStrategy) {
-        super(keywordsStrategy);
-        this.itemCount = itemCount;
     }
 
     protected abstract Eresource createAltTitleEresource(List<Record> recordList, String keywords, int[] items);

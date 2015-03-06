@@ -11,13 +11,14 @@ import edu.stanford.irt.eresources.Loader;
 
 public class ClassesTransformerTest {
 
-    private ClassesTransformer processor;
-    
     private Loader loader;
+
+    private ClassesTransformer processor;
 
     @Before
     public void setUp() {
-        this.processor = new ClassesTransformer(getClass().getResourceAsStream("/edu/stanford/irt/eresources/classes2er.xsl"), "lane-host");
+        this.processor = new ClassesTransformer(getClass().getResourceAsStream(
+                "/edu/stanford/irt/eresources/classes2er.xsl"), "lane-host");
         this.loader = createMock(Loader.class);
     }
 

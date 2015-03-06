@@ -40,6 +40,11 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
     public int[] getItemCount() {
         return ITEMS;
     }
@@ -47,16 +52,6 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     @Override
     public String getRecordType() {
         return AUTH_TYPE;
-    }
-
-    @Override
-    public String getDescription() {
-        return null;
-    }
-
-    @Override
-    public boolean isCore() {
-        return false;
     }
 
     @Override
@@ -104,6 +99,26 @@ public class AuthMarcEresource extends AbstractMarcEresource {
         return year;
     }
 
+    @Override
+    public boolean isCore() {
+        return false;
+    }
+
+    @Override
+    protected void addPrimaryType(final Collection<String> t) {
+        t.add("other");
+    }
+
+    @Override
+    protected String getPrintOrDigital() {
+        return null;
+    }
+
+    @Override
+    protected String getRealPrimaryType(final String type) {
+        return "Other";
+    }
+
     private String parseYear(final String year) {
         Matcher yearMatcher = ACCEPTED_YEAR_PATTERN.matcher(year);
         if (yearMatcher.matches()) {
@@ -113,20 +128,5 @@ public class AuthMarcEresource extends AbstractMarcEresource {
             return year.replace('u', '5');
         }
         return null;
-    }
-
-    @Override
-    protected String getPrintOrDigital() {
-        return null;
-    }
-
-    @Override
-    protected String getRealPrimaryType(String type) {
-        return "Other";
-    }
-
-    @Override
-    protected void addPrimaryType(Collection<String> t) {
-        t.add("other");
     }
 }

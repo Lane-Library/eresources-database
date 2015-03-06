@@ -31,8 +31,6 @@ import edu.stanford.irt.eresources.VersionComparator;
  */
 public class BibMarcEresource extends AbstractMarcEresource {
 
-    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
-
     public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
@@ -42,6 +40,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
     private static final String[][][] CUSTOM_TYPES = { { { "periodical", "newspaper" }, { "ej" } },
             { { "decision support techniques", "calculators, clinical", "algorithms" }, { "cc" } },
             { { "digital video", "digital video, local" }, { "video" } }, { { "book set" }, { "book" } } };
+
+    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -56,75 +56,6 @@ public class BibMarcEresource extends AbstractMarcEresource {
         this.record = recordList.get(0);
         this.holdings = recordList.subList(1, recordList.size());
         this.items = items;
-    }
-
-    @Override
-    public int[] getItemCount() {
-        return this.items;
-    }
-
-    @Override
-    public String getRecordType() {
-        return BIB_TYPE;
-    }
-
-    public String getType() {
-        return BIB_TYPE;
-    }
-
-    @Override
-    protected void addCustomTypes(final Collection<String> types) {
-        for (String[][] element : CUSTOM_TYPES) {
-            for (int j = 0; j < element[0].length; j++) {
-                if (types.contains(element[0][j])) {
-                    types.add(element[1][0]);
-                    break;
-                }
-            }
-        }
-        Collection<String> subsets = getAllSubsets();
-        if (types.contains("software, installed")) {
-            handleInstalledSoftware(types, subsets);
-        }
-        if (subsets.contains("biotools")) {
-            types.add("software");
-        }
-        if (isBassettRecord()) {
-            types.add("bassett");
-        }
-    }
-
-    protected void addPrimaryType(Collection<String> t) {
-        String mappedPrimaryType = getMappedPrimaryType(getInitialPrimaryType());
-        if ("serial".equals(mappedPrimaryType)) {
-            Collection<String> initialTypes = getInitialTypes();
-            if (initialTypes.contains("book")) {
-                t.add("book" + getPrintOrDigital().toLowerCase());
-            } else if (initialTypes.contains("database")) {
-                //add nothing
-            } else {
-            t.add("journal");
-            t.add("journal" + getPrintOrDigital().toLowerCase());
-            }
-        } else if ("book".equals(mappedPrimaryType)) {
-            t.add("book" + getPrintOrDigital().toLowerCase());
-        } else if ("visual material".equals(mappedPrimaryType)) {
-            Collection<String> initialTypes = getInitialTypes();
-            boolean video = false;
-            for (String type : initialTypes) {
-                if (type.contains("video")) {
-                    video = true;
-                    break;
-                }
-            }
-            if (video) {
-                t.add("video");
-            } else {
-                t.add("image");
-            }
-        } else {
-            t.add(WHITESPACE.matcher(mappedPrimaryType).replaceAll("").toLowerCase());
-        }
     }
 
     @Override
@@ -147,13 +78,17 @@ public class BibMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    public boolean isCore() {
-        boolean i = false;
-        Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
-        while (it.hasNext() && !i) {
-            i = "core material".equalsIgnoreCase(MarcTextUtil.getSubfieldData((DataField) it.next(), 'a'));
-        }
-        return i;
+    public int[] getItemCount() {
+        return this.items;
+    }
+
+    @Override
+    public String getRecordType() {
+        return BIB_TYPE;
+    }
+
+    public String getType() {
+        return BIB_TYPE;
     }
 
     @Override
@@ -189,10 +124,6 @@ public class BibMarcEresource extends AbstractMarcEresource {
         }
         return new ArrayList<Version>(versions);
     }
-    
-    protected Version createVersion(Record record) {
-        return new MarcVersion(record);
-    }
 
     @Override
     public int getYear() {
@@ -206,6 +137,106 @@ public class BibMarcEresource extends AbstractMarcEresource {
             y = Integer.parseInt(beginDate);
         }
         return y;
+    }
+
+    @Override
+    public boolean isCore() {
+        boolean i = false;
+        Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
+        while (it.hasNext() && !i) {
+            i = "core material".equalsIgnoreCase(MarcTextUtil.getSubfieldData((DataField) it.next(), 'a'));
+        }
+        return i;
+    }
+
+    @Override
+    protected void addCustomTypes(final Collection<String> types) {
+        for (String[][] element : CUSTOM_TYPES) {
+            for (int j = 0; j < element[0].length; j++) {
+                if (types.contains(element[0][j])) {
+                    types.add(element[1][0]);
+                    break;
+                }
+            }
+        }
+        Collection<String> subsets = getAllSubsets();
+        if (types.contains("software, installed")) {
+            handleInstalledSoftware(types, subsets);
+        }
+        if (subsets.contains("biotools")) {
+            types.add("software");
+        }
+        if (isBassettRecord()) {
+            types.add("bassett");
+        }
+    }
+
+    @Override
+    protected void addPrimaryType(final Collection<String> t) {
+        String mappedPrimaryType = getMappedPrimaryType(getInitialPrimaryType());
+        if ("serial".equals(mappedPrimaryType)) {
+            Collection<String> initialTypes = getInitialTypes();
+            if (initialTypes.contains("book")) {
+                t.add("book" + getPrintOrDigital().toLowerCase());
+            } else if (initialTypes.contains("database")) {
+                // add nothing
+            } else {
+                t.add("journal");
+                t.add("journal" + getPrintOrDigital().toLowerCase());
+            }
+        } else if ("book".equals(mappedPrimaryType)) {
+            t.add("book" + getPrintOrDigital().toLowerCase());
+        } else if ("visual material".equals(mappedPrimaryType)) {
+            Collection<String> initialTypes = getInitialTypes();
+            boolean video = false;
+            for (String type : initialTypes) {
+                if (type.contains("video")) {
+                    video = true;
+                    break;
+                }
+            }
+            if (video) {
+                t.add("video");
+            } else {
+                t.add("image");
+            }
+        } else {
+            t.add(WHITESPACE.matcher(mappedPrimaryType).replaceAll("").toLowerCase());
+        }
+    }
+
+    protected Version createVersion(final Record record) {
+        return new MarcVersion(record);
+    }
+
+    @Override
+    protected String getPrintOrDigital() {
+        return "Digital";
+    }
+
+    @Override
+    protected String getRealPrimaryType(final String type) {
+        String t = getMappedPrimaryType(type);
+        if ("serial".equals(t)) {
+            Collection<String> initialTypes = getInitialTypes();
+            if (initialTypes.contains("book")) {
+                return "Book " + getPrintOrDigital();
+            } else if (initialTypes.contains("database")) {
+                return "Database";
+            } else {
+                return "Journal " + getPrintOrDigital();
+            }
+        } else if ("book".equals(t)) {
+            return "Book " + getPrintOrDigital();
+        } else if ("visual material".equals(t)) {
+            if (getTypes().contains("video")) {
+                return "Video";
+            } else {
+                return "Image";
+            }
+        } else {
+            return t;
+        }
     }
 
     private Collection<String> getAllSubsets() {
@@ -269,35 +300,5 @@ public class BibMarcEresource extends AbstractMarcEresource {
             return year.replace('u', '5');
         }
         return null;
-    }
-
-    @Override
-    protected String getPrintOrDigital() {
-        return "Digital";
-    }
-
-    @Override
-    protected String getRealPrimaryType(String type) {
-        String t = getMappedPrimaryType(type);
-        if ("serial".equals(t)) {
-            Collection<String> initialTypes = getInitialTypes();
-            if (initialTypes.contains("book")) {
-                return "Book " + getPrintOrDigital();
-            } else if (initialTypes.contains("database")) {
-                return "Database";
-            } else {
-            return "Journal " + getPrintOrDigital();
-            }
-        } else if ("book".equals(t)) {
-            return "Book " + getPrintOrDigital();
-        } else if ("visual material".equals(t)) {
-            if (getTypes().contains("video")) {
-                return "Video";
-            } else {
-                return "Image";
-            }
-        } else {
-            return t;
-        }
     }
 }

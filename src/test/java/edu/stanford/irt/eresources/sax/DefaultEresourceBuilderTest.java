@@ -33,15 +33,15 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testCharacters() throws SAXException {
-        this.builder.characters("characters".toCharArray(), 0, "characters".length());
-    }
-    
-    @Test
     public void test() throws SAXException, IOException {
         XMLReader reader = XMLReaderFactory.createXMLReader();
         reader.setContentHandler(this.builder);
         reader.parse(getClass().getResource("eresources.xml").toExternalForm());
+    }
+
+    @Test
+    public void testCharacters() throws SAXException {
+        this.builder.characters("characters".toCharArray(), 0, "characters".length());
     }
 
     @Test

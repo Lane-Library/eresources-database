@@ -30,20 +30,20 @@ import edu.stanford.irt.eresources.sax.EresourceHandler;
 
 public class ClassesTransformer implements Transformer<InputStream>, EresourceHandler {
 
+    private DefaultEresourceBuilder eresourceBuilder;
+
+    private List<Eresource> eresources;
+
     private ErrorHandler errorHandler = new DefaultHandler();
 
     /** the DocumentBuilderFactory. */
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-    private DefaultEresourceBuilder eresourceBuilder;
-
-    private List<Eresource> eresources;
+    private String laneHost;
 
     private javax.xml.transform.Transformer transformer;
 
-    private String laneHost;
-
-    public ClassesTransformer(final InputStream input, String laneHost) {
+    public ClassesTransformer(final InputStream input, final String laneHost) {
         this.laneHost = laneHost;
         try {
             this.transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(input));
@@ -55,7 +55,12 @@ public class ClassesTransformer implements Transformer<InputStream>, EresourceHa
     }
 
     @Override
-    public List<Eresource> transform(InputStream input) {
+    public void handleEresource(final Eresource eresource) {
+        this.eresources.add(eresource);
+    }
+
+    @Override
+    public List<Eresource> transform(final InputStream input) {
         this.eresources = new ArrayList<Eresource>();
         try {
             InputSource source;
@@ -68,10 +73,5 @@ public class ClassesTransformer implements Transformer<InputStream>, EresourceHa
             throw new EresourceException(e);
         }
         return this.eresources;
-    }
-
-    @Override
-    public void handleEresource(final Eresource eresource) {
-        this.eresources.add(eresource);
     }
 }

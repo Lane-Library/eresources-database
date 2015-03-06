@@ -32,19 +32,13 @@ public class AbstractMarcEresourceTest {
         }
 
         @Override
-        public String getRecordType() {
-            return "test";
-        }
-
-        @Override
-        protected String getPrintOrDigital() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public String getDescription() {
             return null;
+        }
+
+        @Override
+        public String getRecordType() {
+            return "test";
         }
 
         @Override
@@ -68,6 +62,12 @@ public class AbstractMarcEresourceTest {
         public boolean isCore() {
             // TODO Auto-generated method stub
             return false;
+        }
+
+        @Override
+        protected String getPrintOrDigital() {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 
@@ -103,33 +103,6 @@ public class AbstractMarcEresourceTest {
         expect(this.subfield.getData()).andReturn("Books.");
         replay(this.record, this.field, this.subfield);
         assertEquals("books", this.eresource.getPrimaryType());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public void testGetTitle() {
-        expect(this.record.getVariableField("245")).andReturn(this.field);
-        List<Subfield> subfields = new ArrayList<Subfield>();
-        for (int i = 0; i < 5; i++) {
-            subfields.add(this.subfield);
-        }
-        expect(this.field.getSubfields()).andReturn(subfields);
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("The a");
-        expect(this.subfield.getCode()).andReturn('b');
-        expect(this.subfield.getData()).andReturn("b /");
-        expect(this.subfield.getCode()).andReturn('n');
-        expect(this.subfield.getData()).andReturn("n");
-        expect(this.subfield.getCode()).andReturn('p');
-        expect(this.subfield.getData()).andReturn("p");
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("q");
-        expect(this.record.getVariableField("250")).andReturn(this.field);
-        expect(this.field.getSubfield('a')).andReturn(this.subfield);
-        expect(this.subfield.getData()).andReturn("3rd ed.");
-        expect(this.field.getIndicator2()).andReturn('4');
-        replay(this.record, this.field, this.subfield);
-        assertEquals("a b n p q. 3rd ed.", this.eresource.getTitle());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -195,6 +168,33 @@ public class AbstractMarcEresourceTest {
         replay(this.record);
         assertEquals(12, this.eresource.getRecordId());
         verify(this.record);
+    }
+
+    @Test
+    public void testGetTitle() {
+        expect(this.record.getVariableField("245")).andReturn(this.field);
+        List<Subfield> subfields = new ArrayList<Subfield>();
+        for (int i = 0; i < 5; i++) {
+            subfields.add(this.subfield);
+        }
+        expect(this.field.getSubfields()).andReturn(subfields);
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("The a");
+        expect(this.subfield.getCode()).andReturn('b');
+        expect(this.subfield.getData()).andReturn("b /");
+        expect(this.subfield.getCode()).andReturn('n');
+        expect(this.subfield.getData()).andReturn("n");
+        expect(this.subfield.getCode()).andReturn('p');
+        expect(this.subfield.getData()).andReturn("p");
+        expect(this.subfield.getCode()).andReturn('q');
+        expect(this.subfield.getData()).andReturn("q");
+        expect(this.record.getVariableField("250")).andReturn(this.field);
+        expect(this.field.getSubfield('a')).andReturn(this.subfield);
+        expect(this.subfield.getData()).andReturn("3rd ed.");
+        expect(this.field.getIndicator2()).andReturn('4');
+        replay(this.record, this.field, this.subfield);
+        assertEquals("a b n p q. 3rd ed.", this.eresource.getTitle());
+        verify(this.record, this.field, this.subfield);
     }
 
     @Test

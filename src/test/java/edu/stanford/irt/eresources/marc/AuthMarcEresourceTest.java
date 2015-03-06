@@ -19,14 +19,17 @@ import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 
-
 public class AuthMarcEresourceTest {
-    
-    private AuthMarcEresource eresource;
-    private Record record;
-    private DataField field;
-    private Subfield subfield;
+
     private ControlField controlfield;
+
+    private AuthMarcEresource eresource;
+
+    private DataField field;
+
+    private Record record;
+
+    private Subfield subfield;
 
     @Before
     public void setUp() {
@@ -35,11 +38,6 @@ public class AuthMarcEresourceTest {
         this.field = createMock(DataField.class);
         this.subfield = createMock(Subfield.class);
         this.controlfield = createMock(ControlField.class);
-    }
-
-    @Test
-    public void testGetItemCount() {
-        assertArrayEquals(new int[] {0, 0}, this.eresource.getItemCount());
     }
 
     @Test
@@ -62,13 +60,13 @@ public class AuthMarcEresourceTest {
 
     @Test
     public void testDoMeshTerms() {
-        expect(this.record.getVariableFields("650")).andReturn(Collections.<VariableField>singletonList(this.field));
+        expect(this.record.getVariableFields("650")).andReturn(Collections.<VariableField> singletonList(this.field));
         expect(this.field.getIndicator1()).andReturn('4');
         expect(this.field.getIndicator2()).andReturn('7');
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("mesh");
         replay(this.record, this.field, this.subfield);
-        assertArrayEquals(new String[] {"mesh"}, this.eresource.getMeshTerms().toArray());
+        assertArrayEquals(new String[] { "mesh" }, this.eresource.getMeshTerms().toArray());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -83,7 +81,7 @@ public class AuthMarcEresourceTest {
 
     @Test
     public void testDoVersions() {
-        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField>singletonList(this.field));
+        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> singletonList(this.field));
         expect(this.field.getSubfield('u')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("url");
         replay(this.record, this.field, this.subfield);
@@ -93,12 +91,17 @@ public class AuthMarcEresourceTest {
 
     @Test
     public void testDoYear() {
-        expect(this.record.getVariableFields("943")).andReturn(Collections.<VariableField>singletonList(this.field));
+        expect(this.record.getVariableFields("943")).andReturn(Collections.<VariableField> singletonList(this.field));
         expect(this.field.getSubfield('b')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("19uu");
         replay(this.record, this.field, this.subfield);
         assertEquals(1955, this.eresource.getYear());
         verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testGetItemCount() {
+        assertArrayEquals(new int[] { 0, 0 }, this.eresource.getItemCount());
     }
 
     @Test

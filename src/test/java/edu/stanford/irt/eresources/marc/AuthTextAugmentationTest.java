@@ -24,19 +24,19 @@ public class AuthTextAugmentationTest {
 
     private AuthTextAugmentation augmentation;
 
+    private DataSource dataSource;
+
+    private Executor executor;
+
     private DataField field;
+
+    private MarcReader marcReader;
 
     private MarcReaderFactory marcReaderFactory;
 
     private Record record;
 
     private Subfield subfield;
-
-    private Executor executor;
-
-    private DataSource dataSource;
-    
-    private MarcReader marcReader;
 
     @Before
     public void setUp() {

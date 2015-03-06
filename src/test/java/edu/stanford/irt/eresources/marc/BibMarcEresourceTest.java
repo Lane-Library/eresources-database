@@ -35,7 +35,7 @@ public class BibMarcEresourceTest {
     @Before
     public void setUp() {
         this.record = createMock(Record.class);
-        this.eresource = new BibMarcEresource(Arrays.asList(new Record[] {this.record, this.record}), "keywords",
+        this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }), "keywords",
                 new int[] { 1, 1 });
         this.field = createMock(DataField.class);
         this.subfield = createMock(Subfield.class);

@@ -38,16 +38,16 @@ public class PrintMarcEresource extends BibMarcEresource {
     }
 
     @Override
-    protected Version createVersion(Record record) {
+    protected Version createVersion(final Record record) {
         return new PrintMarcVersion(record);
-    }
-
-    private Version getCatalogVersion() {
-        return new CatalogVersion(getRecordId());
     }
 
     @Override
     protected String getPrintOrDigital() {
         return "Print";
+    }
+
+    private Version getCatalogVersion() {
+        return new CatalogVersion(getRecordId());
     }
 }

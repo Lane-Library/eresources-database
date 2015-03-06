@@ -11,15 +11,9 @@ import com.ibm.icu.text.Normalizer;
 // TODO: create a TitleStrategy class
 public class AltTitleMarcEresource extends BibMarcEresource {
 
-    @Override
-    public boolean isClone() {
-        return true;
-    }
-
     private Record record;
 
-    public AltTitleMarcEresource(final List<Record> recordList, final String keywords,
-            final int[] items) {
+    public AltTitleMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
         super(recordList, keywords, items);
         this.record = recordList.get(0);
     }
@@ -34,5 +28,10 @@ public class AltTitleMarcEresource extends BibMarcEresource {
             }
         }
         return title.toString();
+    }
+
+    @Override
+    public boolean isClone() {
+        return true;
     }
 }

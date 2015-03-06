@@ -15,10 +15,10 @@ public class AuthMarcTransformerTest {
 
     private KeywordsStrategy keywordsStrategy;
 
-    private AuthMarcTransformer processor;
-    
     private Loader loader;
-    
+
+    private AuthMarcTransformer processor;
+
     private Record record;
 
     @Before

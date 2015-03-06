@@ -12,7 +12,7 @@ public abstract class AbstractMarcTransformer<T> implements Transformer<T> {
         this.keywordsStrategy = keywordsStrategy;
     }
 
-   protected String getKeywords(final Record record) {
+    protected String getKeywords(final Record record) {
         return this.keywordsStrategy.getKeywords(record);
     }
 }

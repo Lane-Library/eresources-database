@@ -15,13 +15,15 @@ import org.junit.Test;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 
-
 public class VersionSQLTranslatorTest {
-    
-    private VersionSQLTranslator translator;
-    private LinkSQLTranslator linkTranslator;
-    private Version version;
+
     private Link link;
+
+    private LinkSQLTranslator linkTranslator;
+
+    private VersionSQLTranslator translator;
+
+    private Version version;
 
     @Before
     public void setUp() {
@@ -43,7 +45,9 @@ public class VersionSQLTranslatorTest {
         expect(this.linkTranslator.getInsertSQL(this.link)).andReturn("link");
         replay(this.linkTranslator, this.version, this.link);
         List<String> sql = this.translator.getInsertSQL(this.version, 0);
-        assertEquals("INSERT INTO VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, ADDITIONAL_TEXT, PUBLISHER, HOLDINGS_DATES) VALUES (VERSION_ID_SEQ.NEXTVAL, ERESOURCE_ID_SEQ.CURRVAL,'T','F',0,'additionalText','publisher','holdingsAndDates')", sql.get(0));
+        assertEquals(
+                "INSERT INTO VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, ADDITIONAL_TEXT, PUBLISHER, HOLDINGS_DATES) VALUES (VERSION_ID_SEQ.NEXTVAL, ERESOURCE_ID_SEQ.CURRVAL,'T','F',0,'additionalText','publisher','holdingsAndDates')",
+                sql.get(0));
         assertEquals("INSERT INTO SUBSET VALUES (VERSION_ID_SEQ.CURRVAL,ERESOURCE_ID_SEQ.CURRVAL,'subset')", sql.get(1));
         assertEquals("link", sql.get(2));
         verify(this.linkTranslator, this.version, this.link);

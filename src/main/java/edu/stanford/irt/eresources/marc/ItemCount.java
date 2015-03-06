@@ -25,8 +25,7 @@ public class ItemCount {
             + "GROUP BY bi.bib_id";
 
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) "
-            + "FROM lmldb.bib_item, lmldb.item_status "
-            + "WHERE bib_item.item_id = item_status.item_id "
+            + "FROM lmldb.bib_item, lmldb.item_status " + "WHERE bib_item.item_id = item_status.item_id "
             + "GROUP BY bib_id";
 
     private Map<String, Integer> availables;

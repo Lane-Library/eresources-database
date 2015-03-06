@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StartDate {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(StartDate.class);
 
     private Date startDate;

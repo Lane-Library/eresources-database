@@ -144,6 +144,10 @@ public class MarcVersion extends AbstractVersion {
         return this.record.toString();
     }
 
+    protected Link createLink(final DataField field, final Version version) {
+        return new MarcLink(field, this);
+    }
+
     private void addCustomSubsets(final Collection<String> subsets) {
         for (Link link : getLinks()) {
             String label = link.getLabel();
@@ -156,15 +160,12 @@ public class MarcVersion extends AbstractVersion {
     private void setupLinks() {
         this.links = new ArrayList<Link>();
         for (VariableField field : this.record.getVariableFields("856")) {
-            if ("http://lane.stanford.edu/secure/ejpw.html".equals(MarcTextUtil.getSubfieldData((DataField) field, 'u'))) {
+            if ("http://lane.stanford.edu/secure/ejpw.html"
+                    .equals(MarcTextUtil.getSubfieldData((DataField) field, 'u'))) {
                 this.hasGetPassword = true;
             } else {
                 this.links.add(createLink((DataField) field, this));
             }
         }
-    }
-    
-    protected Link createLink(DataField field, Version version) {
-        return new MarcLink((DataField) field, this);
     }
 }

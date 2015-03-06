@@ -15,13 +15,16 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
-
 public class KeywordsStrategyTest {
-    
-    private KeywordsStrategy strategy;
+
     private AuthTextAugmentation augmentation;
-    private Record record;
+
     private DataField field;
+
+    private Record record;
+
+    private KeywordsStrategy strategy;
+
     private Subfield subfield;
 
     @Before
@@ -44,7 +47,7 @@ public class KeywordsStrategyTest {
             subfields.add(this.subfield);
         }
         expect(this.record.getDataFields()).andReturn(fields);
-        expect(field.getTag()).andReturn("020");
+        expect(this.field.getTag()).andReturn("020");
         expect(this.field.getSubfields()).andReturn(subfields);
         expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("020a");

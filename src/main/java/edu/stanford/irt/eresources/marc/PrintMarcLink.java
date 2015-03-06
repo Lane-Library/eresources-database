@@ -4,10 +4,9 @@ import org.marc4j.marc.DataField;
 
 import edu.stanford.irt.eresources.Version;
 
-
 public class PrintMarcLink extends MarcLink {
 
-    public PrintMarcLink(DataField dataField, Version version) {
+    public PrintMarcLink(final DataField dataField, final Version version) {
         super(dataField, version);
     }
 

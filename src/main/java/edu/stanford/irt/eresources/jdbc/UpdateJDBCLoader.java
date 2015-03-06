@@ -20,8 +20,6 @@ import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.StartDate;
 
 public class UpdateJDBCLoader extends JDBCLoader {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(UpdateJDBCLoader.class);
 
     private static final String DELETE_ERESOURCE = "DELETE FROM ERESOURCE WHERE ERESOURCE_ID = ";
 
@@ -34,6 +32,8 @@ public class UpdateJDBCLoader extends JDBCLoader {
     private static final String DELETE_TYPE = "DELETE FROM TYPE WHERE ERESOURCE_ID = ";
 
     private static final String DELETE_VERSION = "DELETE FROM VERSION WHERE ERESOURCE_ID = ";
+
+    private static final Logger LOG = LoggerFactory.getLogger(UpdateJDBCLoader.class);
 
     private EresourceSQLTranslator translator;
 

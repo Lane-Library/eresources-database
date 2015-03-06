@@ -28,16 +28,18 @@ import edu.stanford.irt.eresources.Loader;
 import edu.stanford.irt.eresources.StartDate;
 
 public class JDBCLoader implements Loader {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(JDBCLoader.class);
 
     private static final String CURRENT_ID_SQL = "SELECT ERESOURCE_ID_SEQ.CURRVAL FROM DUAL";
 
     private static final String DESCRIPTION_SQL = "SELECT DESCRIPTION FROM ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
 
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCLoader.class);
+
     private static final String TEXT_PREFIX = "TEXT:";
 
     private static final String TEXT_SQL = "SELECT TEXT FROM ERESOURCE WHERE ERESOURCE_ID = ? FOR UPDATE NOWAIT";
+
+    protected int count;
 
     private List<String> callStatements = Collections.emptyList();
 
@@ -49,6 +51,8 @@ public class JDBCLoader implements Loader {
 
     private PreparedStatement descStmt;
 
+    private StartDate startDate;
+
     private Statement stmt;
 
     private PreparedStatement textStmt;
@@ -56,10 +60,6 @@ public class JDBCLoader implements Loader {
     private EresourceSQLTranslator translator;
 
     private String userName;
-
-    private StartDate startDate;
-
-    protected int count;
 
     public JDBCLoader(final DataSource dataSource, final EresourceSQLTranslator translator, final StartDate startDate) {
         this.dataSource = dataSource;
@@ -89,9 +89,13 @@ public class JDBCLoader implements Loader {
     public void setUserName(final String userName) {
         this.userName = userName;
     }
-    
+
     protected Connection getConnection() {
         return this.connection;
+    }
+
+    protected void initializeStartDate(final StartDate startDate, final Connection connection) throws SQLException {
+        startDate.initialize(new Date(0));
     }
 
     protected void insertEresource(final Eresource eresource) throws SQLException, IOException {
@@ -111,14 +115,14 @@ public class JDBCLoader implements Loader {
     }
 
     protected void postProcess() throws SQLException {
-        LOG.info("handled " + count + " eresources");
+        LOG.info("handled " + this.count + " eresources");
         if (this.count > 0) {
-        for (String call : this.callStatements) {
-            if ((call.indexOf("{0}") > 0) && (null != this.userName)) {
-                call = MessageFormat.format(call, new Object[] { this.userName });
+            for (String call : this.callStatements) {
+                if ((call.indexOf("{0}") > 0) && (null != this.userName)) {
+                    call = MessageFormat.format(call, new Object[] { this.userName });
+                }
+                executeCall(call);
             }
-            executeCall(call);
-        }
         }
         this.descStmt.close();
         this.textStmt.close();
@@ -145,10 +149,6 @@ public class JDBCLoader implements Loader {
             }
         }
         initializeStartDate(this.startDate, this.connection);
-    }
-
-    protected void initializeStartDate(StartDate startDate, Connection connection) throws SQLException {
-        startDate.initialize(new Date(0));
     }
 
     private void executeCall(final String call) throws SQLException {

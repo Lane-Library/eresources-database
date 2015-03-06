@@ -9,7 +9,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.irt.eresources.EresourceException;
 
-public class DefaultEresourceBuilder extends DefaultHandler  {
+public class DefaultEresourceBuilder extends DefaultHandler {
 
     private SAXEresource currentEresource;
 
@@ -22,8 +22,8 @@ public class DefaultEresourceBuilder extends DefaultHandler  {
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private EresourceHandler eresourceHandler;
-    
-    public DefaultEresourceBuilder(EresourceHandler eresourceHandler) {
+
+    public DefaultEresourceBuilder(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
     }
 
@@ -85,8 +85,7 @@ public class DefaultEresourceBuilder extends DefaultHandler  {
     }
 
     @Override
-    public void startElement(final String uri, final String localName, final String name, final Attributes atts)
-            {
+    public void startElement(final String uri, final String localName, final String name, final Attributes atts) {
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
             this.currentEresource = new SAXEresource();

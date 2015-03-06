@@ -55,16 +55,6 @@ public class SAXVersion extends AbstractVersion {
             this.subsets.add(subset);
         }
     }
-    
-    @Override
-    public String getHoldingsAndDates() {
-        StringBuilder sb = new StringBuilder(" ");
-        if (this.summaryHoldings != null) {
-            sb.append(this.summaryHoldings);
-        }
-        maybeAppend(sb, this.dates);
-        return sb.toString();
-    }
 
     @Override
     public String getAdditionalText() {
@@ -82,6 +72,16 @@ public class SAXVersion extends AbstractVersion {
     @Override
     public String getDescription() {
         return this.description;
+    }
+
+    @Override
+    public String getHoldingsAndDates() {
+        StringBuilder sb = new StringBuilder(" ");
+        if (this.summaryHoldings != null) {
+            sb.append(this.summaryHoldings);
+        }
+        maybeAppend(sb, this.dates);
+        return sb.toString();
     }
 
     @Override

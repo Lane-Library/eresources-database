@@ -16,7 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class Main {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private boolean killPrevious;
@@ -25,11 +25,11 @@ public class Main {
 
     private String version;
 
-    public Main(final List<ETLProcessor<?>> processors, String version) {
+    public Main(final List<ETLProcessor<?>> processors, final String version) {
         this(processors, version, false);
     }
 
-    public Main(final List<ETLProcessor<?>> processors, String version, final boolean killPrevious) {
+    public Main(final List<ETLProcessor<?>> processors, final String version, final boolean killPrevious) {
         this.processors = processors;
         this.version = version;
         this.killPrevious = killPrevious;

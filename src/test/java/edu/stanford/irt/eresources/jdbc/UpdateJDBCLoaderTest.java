@@ -39,11 +39,11 @@ public class UpdateJDBCLoaderTest {
 
     private ResultSet resultSet;
 
+    private StartDate startDate;
+
     private Statement stmt;
 
     private EresourceSQLTranslator translator;
-
-    private StartDate startDate;
 
     @Before
     public void setUp() {
@@ -92,9 +92,11 @@ public class UpdateJDBCLoaderTest {
         expect(this.translator.getInsertSQL(this.eresource)).andReturn(sql);
         this.stmt.addBatch("foo");
         expect(this.stmt.executeBatch()).andReturn(new int[0]);
-        replay(this.startDate, this.eresource, this.dataSource, this.translator, this.connection, this.stmt, this.resultSet);
+        replay(this.startDate, this.eresource, this.dataSource, this.translator, this.connection, this.stmt,
+                this.resultSet);
         this.loader.preProcess();
         this.loader.load(Collections.singletonList(this.eresource));
-        verify(this.startDate, this.eresource, this.dataSource, this.translator, this.connection, this.stmt, this.resultSet);
+        verify(this.startDate, this.eresource, this.dataSource, this.translator, this.connection, this.stmt,
+                this.resultSet);
     }
 }

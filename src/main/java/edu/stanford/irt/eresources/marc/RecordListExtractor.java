@@ -9,25 +9,21 @@ import org.marc4j.marc.Record;
 
 import edu.stanford.irt.eresources.Extractor;
 
-
 public class RecordListExtractor implements Extractor<List<Record>> {
 
     private static final String HOLDINGS_CHARS = "uvxy";
-    
-    private MarcReader marcReader;
-    private Record lastRecord;
-    private List<Record> nextList;
+
     boolean started = false;
-    
-    public RecordListExtractor(MarcReader marcReader) {
+
+    private Record lastRecord;
+
+    private MarcReader marcReader;
+
+    private List<Record> nextList;
+
+    public RecordListExtractor(final MarcReader marcReader) {
         this.marcReader = marcReader;
     }
-
-
-    private boolean isHolding(final Record record) {
-        return HOLDINGS_CHARS.indexOf(record.getLeader().getTypeOfRecord()) > -1;
-    }
-
 
     @Override
     public boolean hasNext() {
@@ -40,7 +36,14 @@ public class RecordListExtractor implements Extractor<List<Record>> {
         }
         return hasNext;
     }
-    
+
+    @Override
+    public List<Record> next() {
+        List<Record> next = this.nextList;
+        this.nextList = getNextList();
+        return next;
+    }
+
     private List<Record> getNextList() {
         List<Record> recordList = null;
         if (this.marcReader.hasNext()) {
@@ -54,7 +57,7 @@ public class RecordListExtractor implements Extractor<List<Record>> {
                     recordList.add(record);
                 }
             }
-            while(this.marcReader.hasNext() && isHolding(record = this.marcReader.next())) {
+            while (this.marcReader.hasNext() && isHolding(record = this.marcReader.next())) {
                 recordList.add(record);
             }
             this.lastRecord = isHolding(record) ? null : record;
@@ -64,11 +67,7 @@ public class RecordListExtractor implements Extractor<List<Record>> {
         return recordList;
     }
 
-
-    @Override
-    public List<Record> next() {
-        List<Record> next = this.nextList;
-        this.nextList = getNextList();
-        return next;
+    private boolean isHolding(final Record record) {
+        return HOLDINGS_CHARS.indexOf(record.getLeader().getTypeOfRecord()) > -1;
     }
 }

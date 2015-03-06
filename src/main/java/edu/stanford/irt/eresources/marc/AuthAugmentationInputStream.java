@@ -12,8 +12,7 @@ public class AuthAugmentationInputStream extends AuthInputStream {
 
     private String controlNumber;
 
-    public AuthAugmentationInputStream(final String controlNumber, final DataSource dataSource,
-            final Executor executor) {
+    public AuthAugmentationInputStream(final String controlNumber, final DataSource dataSource, final Executor executor) {
         super(dataSource, executor);
         this.controlNumber = controlNumber;
     }

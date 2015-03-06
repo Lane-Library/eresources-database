@@ -43,11 +43,11 @@ public class WebpageFileTransformer implements Transformer<File>, EresourceHandl
 
     private HTMLConfiguration htmlConfig = new HTMLConfiguration();
 
-    private javax.xml.transform.Transformer transformer;
+    private String laneHost;
 
     private DOMParser parser;
 
-    private String laneHost;
+    private javax.xml.transform.Transformer transformer;
 
     public WebpageFileTransformer(final String basePath, final InputStream input, final String laneHost) {
         this.basePath = basePath;

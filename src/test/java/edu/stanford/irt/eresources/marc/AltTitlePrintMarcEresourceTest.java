@@ -16,16 +16,15 @@ import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
 
-
 public class AltTitlePrintMarcEresourceTest {
+
+    private AltTitlePrintMarcEresource eresource;
 
     private DataField field;
 
     private Record record;
 
     private Subfield subfield;
-
-    private AltTitlePrintMarcEresource eresource;
 
     @Before
     public void setUp() {

@@ -20,20 +20,18 @@ public class AbstractBibMarcTransformerTest {
 
     private class TestAbstractBibMarcTransformer extends AbstractBibMarcTransformer {
 
-        public TestAbstractBibMarcTransformer(final ItemCount itemCount,
-                final KeywordsStrategy keywordsStrategy) {
+        public TestAbstractBibMarcTransformer(final ItemCount itemCount, final KeywordsStrategy keywordsStrategy) {
             super(itemCount, keywordsStrategy);
         }
 
         @Override
-        protected Eresource createAltTitleEresource(final List<Record> recordList,
-                final String keywords, final int[] items) {
+        protected Eresource createAltTitleEresource(final List<Record> recordList, final String keywords,
+                final int[] items) {
             return null;
         }
 
         @Override
-        protected Eresource createEresource(final List<Record> recordList, final String keywords,
-                final int[] items) {
+        protected Eresource createEresource(final List<Record> recordList, final String keywords, final int[] items) {
             return null;
         }
     }
@@ -44,18 +42,17 @@ public class AbstractBibMarcTransformerTest {
 
     private KeywordsStrategy keywordStrategy;
 
+    private Loader loader;
+
     private AbstractBibMarcTransformer processor;
 
     private Record record;
-    
-    private Loader loader;
 
     @Before
     public void setUp() {
         this.itemCount = createMock(ItemCount.class);
         this.keywordStrategy = createMock(KeywordsStrategy.class);
-        this.processor = new TestAbstractBibMarcTransformer(this.itemCount,
-                this.keywordStrategy);
+        this.processor = new TestAbstractBibMarcTransformer(this.itemCount, this.keywordStrategy);
         this.record = createMock(Record.class);
         this.field = createMock(VariableField.class);
         this.loader = createMock(Loader.class);
@@ -67,10 +64,8 @@ public class AbstractBibMarcTransformerTest {
         expect(this.record.getControlNumber()).andReturn("12");
         expect(this.itemCount.itemCount("12")).andReturn(new int[] { 1, 1 });
         expect(this.record.getVariableField("249")).andReturn(this.field);
-        replay(this.loader, this.itemCount, this.keywordStrategy, this.record,
-                this.field);
-        this.processor.transform(Arrays.asList(new Record[] {this.record, this.record}));
-        verify(this.loader, this.itemCount, this.keywordStrategy, this.record,
-                this.field);
+        replay(this.loader, this.itemCount, this.keywordStrategy, this.record, this.field);
+        this.processor.transform(Arrays.asList(new Record[] { this.record, this.record }));
+        verify(this.loader, this.itemCount, this.keywordStrategy, this.record, this.field);
     }
 }
