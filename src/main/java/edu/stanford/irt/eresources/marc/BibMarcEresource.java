@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -51,6 +52,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
 
     private Record record;
 
+    private List<Version> versions;
+
     public BibMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
         super(recordList.get(0), keywords);
         this.record = recordList.get(0);
@@ -93,60 +96,59 @@ public class BibMarcEresource extends AbstractMarcEresource {
 
     @Override
     public Date getUpdated() {
-        Date d;
         try {
-            d = this.dateFormat.parse(((ControlField) this.record.getVariableField("005")).getData());
+            Date updated = this.dateFormat.parse(((ControlField) this.record.getVariableField("005")).getData());
+            for (Record holding : this.holdings) {
+                Date holdingUpdated = this.dateFormat.parse(((ControlField) holding.getVariableField("005")).getData());
+                if (holdingUpdated.compareTo(updated) > 0) {
+                    updated = holdingUpdated;
+                }
+            }
+            return updated;
         } catch (ParseException e) {
             throw new EresourceException(e);
         }
-        for (Record holding : this.holdings) {
-            Date holdingUpdated;
-            try {
-                holdingUpdated = this.dateFormat.parse(((ControlField) holding.getVariableField("005")).getData());
-            } catch (ParseException e) {
-                throw new EresourceException(e);
-            }
-            if (holdingUpdated.compareTo(d) > 0) {
-                d = holdingUpdated;
-            }
-        }
-        return d;
     }
 
     @Override
     public List<Version> getVersions() {
-        Collection<Version> versions = new TreeSet<Version>(new VersionComparator());
-        for (Record holding : this.holdings) {
-            Version version = createVersion(holding);
-            if (version.getLinks().size() > 0) {
-                versions.add(version);
+        if (this.versions == null) {
+            Collection<Version> versions = new TreeSet<Version>(new VersionComparator());
+            for (Record holding : this.holdings) {
+                Version version = createVersion(holding);
+                if (version.getLinks().size() > 0) {
+                    versions.add(version);
+                }
             }
+            this.versions = Collections.unmodifiableList(new ArrayList<Version>(versions));
         }
-        return new ArrayList<Version>(versions);
+        return this.versions;
     }
 
     @Override
     public int getYear() {
-        int y = 0;
-        String currentText = ((ControlField) this.record.getVariableField("008")).getData();
-        String endDate = parseYear(currentText.substring(11, 15));
-        String beginDate = parseYear(currentText.substring(7, 11));
-        if (null != endDate) {
-            y = Integer.parseInt(endDate);
-        } else if (null != beginDate) {
-            y = Integer.parseInt(beginDate);
+        int year = 0;
+        String dateField = ((ControlField) this.record.getVariableField("008")).getData();
+        String endDate = parseYear(dateField.substring(11, 15));
+        if (endDate != null) {
+            year = Integer.parseInt(endDate);
+        } else {
+            String beginDate = parseYear(dateField.substring(7, 11));
+            if (beginDate != null) {
+                year = Integer.parseInt(beginDate);
+            }
         }
-        return y;
+        return year;
     }
 
     @Override
     public boolean isCore() {
-        boolean i = false;
+        boolean isCore = false;
         Iterator<VariableField> it = this.record.getVariableFields("655").iterator();
-        while (it.hasNext() && !i) {
-            i = "core material".equalsIgnoreCase(MarcTextUtil.getSubfieldData((DataField) it.next(), 'a'));
+        while (it.hasNext() && !isCore) {
+            isCore = "core material".equalsIgnoreCase(MarcTextUtil.getSubfieldData((DataField) it.next(), 'a'));
         }
-        return i;
+        return isCore;
     }
 
     @Override
@@ -172,20 +174,20 @@ public class BibMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    protected void addPrimaryType(final Collection<String> t) {
+    protected void addPrimaryType(final Collection<String> types) {
         String mappedPrimaryType = getMappedPrimaryType(getInitialPrimaryType());
         if ("serial".equals(mappedPrimaryType)) {
             Collection<String> initialTypes = getInitialTypes();
             if (initialTypes.contains("book")) {
-                t.add("book" + getPrintOrDigital().toLowerCase());
+                types.add("book" + getPrintOrDigital().toLowerCase());
             } else if (initialTypes.contains("database")) {
                 // add nothing
             } else {
-                t.add("journal");
-                t.add("journal" + getPrintOrDigital().toLowerCase());
+                types.add("journal");
+                types.add("journal" + getPrintOrDigital().toLowerCase());
             }
         } else if ("book".equals(mappedPrimaryType)) {
-            t.add("book" + getPrintOrDigital().toLowerCase());
+            types.add("book" + getPrintOrDigital().toLowerCase());
         } else if ("visual material".equals(mappedPrimaryType)) {
             Collection<String> initialTypes = getInitialTypes();
             boolean video = false;
@@ -196,12 +198,12 @@ public class BibMarcEresource extends AbstractMarcEresource {
                 }
             }
             if (video) {
-                t.add("video");
+                types.add("video");
             } else {
-                t.add("image");
+                types.add("image");
             }
         } else {
-            t.add(WHITESPACE.matcher(mappedPrimaryType).replaceAll("").toLowerCase());
+            types.add(WHITESPACE.matcher(mappedPrimaryType).replaceAll("").toLowerCase());
         }
     }
 
@@ -216,8 +218,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
 
     @Override
     protected String getRealPrimaryType(final String type) {
-        String t = getMappedPrimaryType(type);
-        if ("serial".equals(t)) {
+        String mappedType = getMappedPrimaryType(type);
+        if ("serial".equals(mappedType)) {
             Collection<String> initialTypes = getInitialTypes();
             if (initialTypes.contains("book")) {
                 return "Book " + getPrintOrDigital();
@@ -226,16 +228,16 @@ public class BibMarcEresource extends AbstractMarcEresource {
             } else {
                 return "Journal " + getPrintOrDigital();
             }
-        } else if ("book".equals(t)) {
+        } else if ("book".equals(mappedType)) {
             return "Book " + getPrintOrDigital();
-        } else if ("visual material".equals(t)) {
+        } else if ("visual material".equals(mappedType)) {
             if (getTypes().contains("video")) {
                 return "Video";
             } else {
                 return "Image";
             }
         } else {
-            return t;
+            return mappedType;
         }
     }
 
@@ -286,7 +288,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
         Iterator<VariableField> it = this.record.getVariableFields("035").iterator();
         while (!isBassett && it.hasNext()) {
             String value = MarcTextUtil.getSubfieldData((DataField) it.next(), 'a');
-            isBassett = value != null && value.indexOf("Bassett") > -1;
+            isBassett = value.indexOf("Bassett") > -1;
         }
         return isBassett;
     }
