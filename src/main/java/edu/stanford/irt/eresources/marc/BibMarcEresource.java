@@ -288,7 +288,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
         Iterator<VariableField> it = this.record.getVariableFields("035").iterator();
         while (!isBassett && it.hasNext()) {
             String value = MarcTextUtil.getSubfieldData((DataField) it.next(), 'a');
-            isBassett = value.indexOf("Bassett") > -1;
+            isBassett = value != null && value.indexOf("Bassett") > -1;
         }
         return isBassett;
     }
