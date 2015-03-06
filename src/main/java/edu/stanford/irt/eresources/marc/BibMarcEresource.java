@@ -113,14 +113,14 @@ public class BibMarcEresource extends AbstractMarcEresource {
     @Override
     public List<Version> getVersions() {
         if (this.versions == null) {
-            Collection<Version> versions = new TreeSet<Version>(new VersionComparator());
+            Collection<Version> versionSet = new TreeSet<Version>(new VersionComparator());
             for (Record holding : this.holdings) {
                 Version version = createVersion(holding);
                 if (version.getLinks().size() > 0) {
-                    versions.add(version);
+                    versionSet.add(version);
                 }
             }
-            this.versions = Collections.unmodifiableList(new ArrayList<Version>(versions));
+            this.versions = Collections.unmodifiableList(new ArrayList<Version>(versionSet));
         }
         return this.versions;
     }
