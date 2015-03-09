@@ -281,9 +281,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>edu.stanford.irt.marc4j</groupId>
-            <artifactId>marc4j-jdk15</artifactId>
-            <version>2.3.5</version>
+            <groupId>edu.stanford.irt</groupId>
+            <artifactId>marc4j</artifactId>
+            <version>2.3.6</version>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>

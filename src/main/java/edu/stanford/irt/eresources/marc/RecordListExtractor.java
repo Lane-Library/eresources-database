@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.marc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.marc4j.MarcReader;
 import org.marc4j.marc.Record;
@@ -27,42 +28,41 @@ public class RecordListExtractor implements Extractor<List<Record>> {
 
     @Override
     public boolean hasNext() {
-        boolean hasNext = false;
-        if (this.nextList != null) {
-            hasNext = true;
-        } else if (!this.started) {
-            hasNext = (this.nextList = getNextList()) != null;
-            this.started = true;
+        if (this.nextList == null) {
+            this.nextList = getNextList();
         }
-        return hasNext;
+        return this.nextList != null;
     }
 
     @Override
     public List<Record> next() {
-        List<Record> next = this.nextList;
-        this.nextList = getNextList();
-        return next;
+        if (hasNext()) {
+            List<Record> next = this.nextList;
+            this.nextList = null;
+            return next;
+        } else {
+            throw new NoSuchElementException("no next next recordList");
+        }
     }
 
     private List<Record> getNextList() {
         List<Record> recordList = null;
-        if (this.marcReader.hasNext()) {
-            Record record = this.marcReader.next();
+        if (this.lastRecord == null && this.marcReader.hasNext()) {
+            this.lastRecord = this.marcReader.next();
+        }
+        if (this.lastRecord != null) {
             recordList = new ArrayList<Record>();
-            if (!this.started) {
-                recordList.add(record);
-            } else {
-                recordList.add(this.lastRecord);
-                if (isHolding(record)) {
-                    recordList.add(record);
+            recordList.add(this.lastRecord);
+            this.lastRecord = null;
+            while(this.marcReader.hasNext()) {
+                Record next = this.marcReader.next();
+                if (isHolding(next)) {
+                    recordList.add(next);
+                } else {
+                    this.lastRecord = next;
+                    break;
                 }
             }
-            while (this.marcReader.hasNext() && isHolding(record = this.marcReader.next())) {
-                recordList.add(record);
-            }
-            this.lastRecord = isHolding(record) ? null : record;
-        } else if (this.lastRecord != null) {
-            return Collections.singletonList(this.lastRecord);
         }
         return recordList;
     }

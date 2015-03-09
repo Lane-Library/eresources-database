@@ -102,7 +102,6 @@ public class JDBCLoaderTest {
         List<String> sql = new ArrayList<String>();
         sql.add("TEXT:text");
         expect(this.translator.getInsertSQL(this.eresource)).andReturn(sql);
-        ;
         expect(this.stmt.executeBatch()).andReturn(null);
         expect(this.stmt.executeQuery("SELECT ERESOURCE_ID_SEQ.CURRVAL FROM DUAL")).andReturn(this.resultSet);
         expect(this.resultSet.next()).andReturn(true);
