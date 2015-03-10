@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -13,8 +12,6 @@ import edu.stanford.irt.eresources.Extractor;
 public class RecordListExtractor implements Extractor<List<Record>> {
 
     private static final String HOLDINGS_CHARS = "uvxy";
-
-    boolean started = false;
 
     private Record lastRecord;
 
