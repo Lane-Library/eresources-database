@@ -3,20 +3,20 @@ package edu.stanford.irt.eresources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ETLProcessor<T> {
+public class ETLProcessor<E, L extends Eresource> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ETLProcessor.class);
 
-    private Extractor<T> extractor;
+    private Extractor<E> extractor;
 
-    private Loader loader;
+    private Loader<L> loader;
 
     private String name;
 
-    private Transformer<T> transformer;
+    private Transformer<E, L> transformer;
 
-    public ETLProcessor(final String name, final Extractor<T> extractor, final Transformer<T> transformer,
-            final Loader loader) {
+    public ETLProcessor(final String name, final Extractor<E> extractor, final Transformer<E, L> transformer,
+            final Loader<L> loader) {
         this.name = name;
         this.extractor = extractor;
         this.transformer = transformer;
@@ -26,9 +26,6 @@ public class ETLProcessor<T> {
     public void process() {
         LOG.info("start " + this.name);
         while (this.extractor.hasNext()) {
-            // T t = this.extractor.next();
-            // List<Eresource> ers = this.transformer.transform(t);
-            // this.loader.load(ers);
             this.loader.load(this.transformer.transform(this.extractor.next()));
         }
         LOG.info("end " + this.name);

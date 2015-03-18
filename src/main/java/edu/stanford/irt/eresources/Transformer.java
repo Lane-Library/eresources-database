@@ -2,7 +2,7 @@ package edu.stanford.irt.eresources;
 
 import java.util.List;
 
-public interface Transformer<T> {
+public interface Transformer<E, L extends Eresource> {
 
-    List<Eresource> transform(T input);
+    List<L> transform(E input);
 }

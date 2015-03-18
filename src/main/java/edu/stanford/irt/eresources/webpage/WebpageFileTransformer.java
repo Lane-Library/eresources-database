@@ -31,7 +31,7 @@ import edu.stanford.irt.eresources.Transformer;
 import edu.stanford.irt.eresources.sax.DefaultEresourceBuilder;
 import edu.stanford.irt.eresources.sax.EresourceHandler;
 
-public class WebpageFileTransformer implements Transformer<File>, EresourceHandler {
+public class WebpageFileTransformer implements Transformer<File, Eresource>, EresourceHandler {
 
     private String basePath;
 
