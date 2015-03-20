@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources.marc;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,11 +40,6 @@ public class CatalogVersion extends AbstractVersion {
     public String getPublisher() {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public Collection<String> getSubsets() {
-        return Collections.emptySet();
     }
 
     @Override

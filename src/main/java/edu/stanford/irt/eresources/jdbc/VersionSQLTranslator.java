@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.jdbc;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import edu.stanford.irt.eresources.Link;
@@ -25,21 +24,8 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
                 .append(apostrophize(vr.getAdditionalText())).append(COMMA).append(apostrophize(vr.getPublisher()))
                 .append(COMMA).append(apostrophize(vr.getHoldingsAndDates())).append(END_PAREN);
         sql.add(sb.toString());
-        sql.addAll(getInsertSubsetSQL(vr));
         for (Link link : vr.getLinks()) {
             sql.add(this.linkTranslator.getInsertSQL(link));
-        }
-        return sql;
-    }
-
-    private Collection<String> getInsertSubsetSQL(final Version vr) {
-        Collection<String> sql = new ArrayList<String>();
-        StringBuilder sb = new StringBuilder();
-        for (String subset : vr.getSubsets()) {
-            sb.setLength(0);
-            sb.append("INSERT INTO SUBSET VALUES (").append("VERSION_ID_SEQ.CURRVAL,")
-            .append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(subset)).append(END_PAREN);
-            sql.add(sb.toString());
         }
         return sql;
     }

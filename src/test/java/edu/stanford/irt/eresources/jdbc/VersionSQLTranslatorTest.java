@@ -40,7 +40,6 @@ public class VersionSQLTranslatorTest {
         expect(this.version.getAdditionalText()).andReturn("additionalText");
         expect(this.version.getPublisher()).andReturn("publisher");
         expect(this.version.getHoldingsAndDates()).andReturn("holdingsAndDates");
-        expect(this.version.getSubsets()).andReturn(Collections.singleton("subset"));
         expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
         expect(this.linkTranslator.getInsertSQL(this.link)).andReturn("link");
         replay(this.linkTranslator, this.version, this.link);
@@ -48,8 +47,7 @@ public class VersionSQLTranslatorTest {
         assertEquals(
                 "INSERT INTO VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, ADDITIONAL_TEXT, PUBLISHER, HOLDINGS_DATES) VALUES (VERSION_ID_SEQ.NEXTVAL, ERESOURCE_ID_SEQ.CURRVAL,'T','F',0,'additionalText','publisher','holdingsAndDates')",
                 sql.get(0));
-        assertEquals("INSERT INTO SUBSET VALUES (VERSION_ID_SEQ.CURRVAL,ERESOURCE_ID_SEQ.CURRVAL,'subset')", sql.get(1));
-        assertEquals("link", sql.get(2));
+        assertEquals("link", sql.get(1));
         verify(this.linkTranslator, this.version, this.link);
     }
 }

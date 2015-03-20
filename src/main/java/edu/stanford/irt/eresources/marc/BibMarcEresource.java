@@ -161,12 +161,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
                 }
             }
         }
-        Collection<String> subsets = getAllSubsets();
         if (types.contains("software, installed")) {
-            handleInstalledSoftware(types, subsets);
-        }
-        if (subsets.contains("biotools")) {
-            types.add("software");
+            handleInstalledSoftware(types);
         }
         if (isBassettRecord()) {
             types.add("bassett");
@@ -241,19 +237,11 @@ public class BibMarcEresource extends AbstractMarcEresource {
         }
     }
 
-    private Collection<String> getAllSubsets() {
-        Collection<String> subsets = new ArrayList<String>();
-        for (Version version : getVersions()) {
-            subsets.addAll(version.getSubsets());
-        }
-        return subsets;
-    }
-
-    private void handleInstalledSoftware(final Collection<String> types, final Collection<String> subsets) {
+    private void handleInstalledSoftware(final Collection<String> types) {
         if (types.contains("statistics")) {
             types.add("statistics software, installed");
         }
-        if (subsets.contains("biotools")) {
+        if (types.contains("subset, biotools")) {
             types.add("biotools software, installed");
         }
         for (Version version : getVersions()) {
