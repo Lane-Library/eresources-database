@@ -21,19 +21,22 @@ public abstract class AbstractMarcEresource implements Eresource {
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "cc", "database", "book", "ej", "atlases, pictorial",
-            "redwood software, installed", "duck software, installed", "stone software, installed",
-            "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
-            "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-            "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog" };
+        "redwood software, installed", "duck software, installed", "stone software, installed",
+        "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
+        "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
+        "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog",
+        "subset, biotools"};
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
-            { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
-            { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-            { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
-                    "digital videos, local", "digital videos, local, public" },
-            { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
+        { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
+        { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
+        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos", "digital videos, local", "digital videos, local, public" },
+        { "book", "book set", "book sets", "books" },
+        { "database", "databases" },
+        { "graphic", "graphics" },
+        { "software", "software, biocomputational", "software, educational", "software, statistical"}};
 
     private static final int[] NOITEMS = new int[] { 0, 0 };
 
