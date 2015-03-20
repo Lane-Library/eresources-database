@@ -210,11 +210,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if (types.contains("statistics")) {
                 eresource.addType("statistics software, installed");
             }
-            for (Version verzion : eresource.getVersions()) {
-                Version version = verzion;
-                if (version.getSubsets().contains(BIOTOOLS)) {
-                    eresource.addType("biotools software, installed");
-                }
+            if (types.contains("subset, biotools")) {
+                eresource.addType("biotools software, installed");
+            }
+            for (Version version : eresource.getVersions()) {
                 // software installed in various locations have the location in
                 // the label
                 for (Link link : version.getLinks()) {
@@ -341,14 +340,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void handleMfhdSubfield() {
-        if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
-            String subset = this.currentText.toString().substring(8).toLowerCase();
-            if ("proxy".equals(subset)) {
+        if ("655".equals(this.tag) && "a".equals(this.code)) {
+            String subset = this.currentText.toString().toLowerCase();
+            if ("subset, proxy".equals(subset)) {
                 this.currentVersion.setProxy(true);
-            } else if ("noproxy".equals(subset)) {
+            } else if ("subset, noproxy".equals(subset)) {
                 this.currentVersion.setProxy(false);
-            } else {
-                maybeAddSubset(subset);
             }
         } else if ("844".equals(this.tag) && "a".equals(this.code)) {
             this.currentVersion.setPublisher(this.currentText.toString());
@@ -377,14 +374,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected void maybeAddCatalogLink() {
         // by default do nothing
-    }
-
-    protected void maybeAddSubset(final String subset) {
-        this.currentVersion.addSubset(subset);
-        if (BIOTOOLS.equals(subset)) {
-            // subset, biotools will count as type: software
-            this.currentEresource.addType("software");
-        }
     }
 
     protected void maybeSetInstruction(final SAXLink link, final String instruction) {

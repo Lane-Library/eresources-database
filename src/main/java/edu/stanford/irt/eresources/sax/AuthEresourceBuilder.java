@@ -284,16 +284,13 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     private void handleMfhdSubfield() {
-        if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
-            String subset = this.currentText.toString().substring(8).toLowerCase();
-            if ("proxy".equals(subset)) {
+        if ("655".equals(this.tag) && "a".equals(this.code)) {
+            String subset = this.currentText.toString().toLowerCase();
+            if ("subset, proxy".equals(subset)) {
                 this.currentVersion.setProxy(true);
-            } else if ("noproxy".equals(subset)) {
+            } else if ("subset, noproxy".equals(subset)) {
                 this.currentVersion.setProxy(false);
-            } else {
-                this.currentVersion.addSubset(subset);
             }
-            this.currentVersion.addSubset(subset);
         } else if ("856".equals(this.tag)) {
             if ("q".equals(this.code) && (null == this.q)) {
                 this.q = this.currentText.toString();
