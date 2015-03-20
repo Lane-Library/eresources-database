@@ -21,15 +21,15 @@ public class Main {
 
     private boolean killPrevious;
 
-    private Collection<ETLProcessor<?, ?>> processors = Collections.<ETLProcessor<?, ?>> emptyList();
+    private Collection<ETLProcessor<?>> processors = Collections.<ETLProcessor<?>> emptyList();
 
     private String version;
 
-    public Main(final List<ETLProcessor<?, ?>> processors, final String version) {
+    public Main(final List<ETLProcessor<?>> processors, final String version) {
         this(processors, version, false);
     }
 
-    public Main(final List<ETLProcessor<?, ?>> processors, final String version, final boolean killPrevious) {
+    public Main(final List<ETLProcessor<?>> processors, final String version, final boolean killPrevious) {
         this.processors = processors;
         this.version = version;
         this.killPrevious = killPrevious;
@@ -52,7 +52,7 @@ public class Main {
     public void run() {
         LOG.info(this.version + " starting up");
         managePIDFile();
-        for (ETLProcessor<?, ?> processor : this.processors) {
+        for (ETLProcessor<?> processor : this.processors) {
             processor.process();
         }
     }

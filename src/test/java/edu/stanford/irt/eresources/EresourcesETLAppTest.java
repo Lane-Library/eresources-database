@@ -22,7 +22,7 @@ public class EresourcesETLAppTest {
 
     private DataSource dataSource;
 
-    private ETLProcessor<?, ?> processor;
+    private ETLProcessor<?> processor;
 
     private Statement statement;
 

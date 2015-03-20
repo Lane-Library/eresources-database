@@ -27,7 +27,7 @@ import edu.stanford.irt.eresources.EresourceException;
 import edu.stanford.irt.eresources.Loader;
 import edu.stanford.irt.eresources.StartDate;
 
-public class JDBCLoader implements Loader<Eresource> {
+public class JDBCLoader implements Loader {
 
     private static final String CURRENT_ID_SQL = "SELECT ERESOURCE_ID_SEQ.CURRVAL FROM DUAL";
 

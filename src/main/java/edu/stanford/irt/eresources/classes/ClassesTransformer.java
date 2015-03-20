@@ -28,7 +28,7 @@ import edu.stanford.irt.eresources.Transformer;
 import edu.stanford.irt.eresources.sax.DefaultEresourceBuilder;
 import edu.stanford.irt.eresources.sax.EresourceHandler;
 
-public class ClassesTransformer implements Transformer<InputStream, Eresource>, EresourceHandler {
+public class ClassesTransformer implements Transformer<InputStream>, EresourceHandler {
 
     private DefaultEresourceBuilder eresourceBuilder;
 

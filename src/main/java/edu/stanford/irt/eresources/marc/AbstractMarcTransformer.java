@@ -2,10 +2,9 @@ package edu.stanford.irt.eresources.marc;
 
 import org.marc4j.marc.Record;
 
-import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Transformer;
 
-public abstract class AbstractMarcTransformer<L> implements Transformer<L, Eresource> {
+public abstract class AbstractMarcTransformer<E> implements Transformer<E> {
 
     private KeywordsStrategy keywordsStrategy;
 

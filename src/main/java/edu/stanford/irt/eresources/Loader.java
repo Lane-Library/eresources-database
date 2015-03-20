@@ -2,7 +2,7 @@ package edu.stanford.irt.eresources;
 
 import java.util.List;
 
-public interface Loader<L extends Eresource> {
+public interface Loader {
 
-    void load(List<L> eresources);
+    void load(List<Eresource> eresources);
 }
