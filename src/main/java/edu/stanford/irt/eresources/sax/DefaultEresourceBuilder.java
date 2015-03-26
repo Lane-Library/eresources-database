@@ -49,6 +49,15 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentVersion.setDates(this.currentText.toString());
         } else if ("summary-holdings".equals(name)) {
             this.currentVersion.setSummaryHoldings(this.currentText.toString());
+        } else if ("subset".equals(name)) {
+            String subset = this.currentText.toString();
+            if ("proxy".equals(subset)) {
+                this.currentVersion.setProxy(true);
+            } else if ("noproxy".equals(subset)) {
+                this.currentVersion.setProxy(false);
+            } else {
+                this.currentVersion.addSubset(subset);
+            }
         } else if ("publisher".equals(name)) {
             this.currentVersion.setPublisher(this.currentText.toString());
         } else if ("type".equals(name)) {

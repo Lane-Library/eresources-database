@@ -8,18 +8,23 @@ import java.util.List;
 
 public class EresourceSQLTranslator extends AbstractSQLTranslator {
 
-    private static final String INSERT_ERESOURCE = "INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, AUTHOR, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (";
+    private static final String INSERT_ERESOURCE = "ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, AUTHOR, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (";
 
     private DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private VersionSQLTranslator versionTranslator;
 
     public EresourceSQLTranslator() {
-        this.versionTranslator = new VersionSQLTranslator();
+        this("");
+    }
+
+    public EresourceSQLTranslator(final String tablePrefix) {
+        super(tablePrefix);
+        this.versionTranslator = new VersionSQLTranslator(tablePrefix);
     }
 
     public String getEresourceIdSQL(final Eresource er) {
-        StringBuilder sb = new StringBuilder("SELECT ERESOURCE_ID FROM ")
+        StringBuilder sb = new StringBuilder("SELECT ERESOURCE_ID FROM ").append(this.getTablePrefix())
                 .append("ERESOURCE WHERE RECORD_ID = ").append(er.getRecordId()).append(" AND RECORD_TYPE = '")
                 .append(er.getRecordType()).append(APOS);
         return sb.toString();
@@ -29,8 +34,8 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
         List<String> sql = new LinkedList<String>();
         String keywords = er.getKeywords();
         int[] itemCount = er.getItemCount();
-        StringBuilder sb = new StringBuilder(INSERT_ERESOURCE)
-                .append("ERESOURCE_ID_SEQ.NEXTVAL,").append(APOS)
+        StringBuilder sb = new StringBuilder(this.getInsertInto()).append(INSERT_ERESOURCE)
+                .append(this.getTablePrefix()).append("ERESOURCE_ID_SEQ.NEXTVAL,").append(APOS)
                 .append(er.getRecordId()).append(APOS).append(COMMA).append(APOS).append(er.getRecordType())
                 .append(APOS).append(COMMA).append("TO_DATE('").append(this.formatter.format(er.getUpdated()))
                 .append("','YYYYMMDDHH24MISS')").append(COMMA).append(apostrophize(er.getTitle())).append(COMMA)
@@ -58,7 +63,8 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
         StringBuilder sb = new StringBuilder();
         for (String meshTerm : er.getMeshTerms()) {
             sb.setLength(0);
-            sb.append("INSERT INTO MESH VALUES (").append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(meshTerm)).append(END_PAREN);
+            sb.append(this.getInsertInto()).append("MESH VALUES (").append(this.getTablePrefix())
+                    .append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(meshTerm)).append(END_PAREN);
             sql.add(sb.toString());
         }
         return sql;
@@ -69,7 +75,8 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
         StringBuilder sb = new StringBuilder();
         for (String type : er.getTypes()) {
             sb.setLength(0);
-            sb.append("INSERT INTO TYPE VALUES (").append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(type)).append(END_PAREN);
+            sb.append(this.getInsertInto()).append("TYPE VALUES (").append(this.getTablePrefix())
+                    .append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(type)).append(END_PAREN);
             sql.add(sb.toString());
         }
         return sql;

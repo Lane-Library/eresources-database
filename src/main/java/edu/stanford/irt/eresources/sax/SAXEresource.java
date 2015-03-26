@@ -23,8 +23,7 @@ public class SAXEresource implements Cloneable, Eresource {
         "redwood software, installed", "duck software, installed", "stone software, installed",
         "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
         "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-        "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog",
-        "subset, biotools"};
+        "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -33,11 +32,9 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = {
         { "ej", "periodical", "newspaper", "periodicals", "newspapers" },
         { "cc", "decision support techniques", "calculators, clinical", "algorithms" },
-        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos", "digital videos, local", "digital videos, local, public" },
-        { "book", "book set", "book sets", "books" },
-        { "database", "databases" },
-        { "graphic", "graphics" },
-        { "software", "software, biocomputational", "software, educational", "software, statistical"}};
+        { "video", "digital video", "digital video, local", "digital video, local, public", "digital videos",
+            "digital videos, local", "digital videos, local, public" },
+            { "book", "book set", "book sets", "books" }, { "database", "databases" }, { "graphic", "graphics" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 

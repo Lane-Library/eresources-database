@@ -12,6 +12,16 @@ import edu.stanford.irt.eresources.Version;
 
 public class SAXVersion implements Version {
 
+    private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
+
+    private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
+        "mobile resources", "biotools" };
+    static {
+        for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
+            ALLOWED_SUBSETS.add(subset);
+        }
+    }
+
     private String dates;
 
     private String description;
@@ -24,6 +34,8 @@ public class SAXVersion implements Version {
 
     private String publisher;
 
+    private Set<String> subsets;
+
     private String summaryHoldings;
 
     public void addLink(final Link link) {
@@ -31,6 +43,15 @@ public class SAXVersion implements Version {
             this.links = new LinkedList<Link>();
         }
         this.links.add(link);
+    }
+
+    public void addSubset(final String subset) {
+        if (ALLOWED_SUBSETS.contains(subset)) {
+            if (null == this.subsets) {
+                this.subsets = new HashSet<String>();
+            }
+            this.subsets.add(subset);
+        }
     }
     
     @Override
@@ -109,6 +130,18 @@ public class SAXVersion implements Version {
     @Override
     public String getPublisher() {
         return this.publisher;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see edu.stanford.irt.eresources.Version#getSubsets()
+     */
+    @Override
+    public Collection<String> getSubsets() {
+        if (null == this.subsets) {
+            return Collections.emptySet();
+        }
+        return Collections.unmodifiableCollection(this.subsets);
     }
 
     /*

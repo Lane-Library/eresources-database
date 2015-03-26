@@ -22,6 +22,7 @@
             <type>lanesite</type>
             <keywords> <xsl:value-of select="$keywords"/> </keywords>
             <version>
+                <subset>noproxy</subset>
                 <link>
                     <label>
                         <xsl:value-of select="$excerpt"/><xsl:text> . . .</xsl:text>
