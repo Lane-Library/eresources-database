@@ -8,6 +8,9 @@
             </link>
             <date>date</date>
             <summary-holdings>summary-holdings</summary-holdings>
+            <subset>subset</subset>
+            <subset>proxy</subset>
+            <subset>noproxy</subset>
             <publisher>publisher</publisher>
             <description>description</description>
         </version>

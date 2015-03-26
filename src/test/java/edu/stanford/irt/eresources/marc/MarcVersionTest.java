@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -98,6 +99,17 @@ public class MarcVersionTest {
         expect(this.subfield.getData()).andReturn("publisher");
         replay(this.record, this.field, this.subfield);
         assertEquals("publisher", this.version.getPublisher());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testGetSubsets() {
+        expect(this.record.getVariableFields("655")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.field.getSubfield('a')).andReturn(this.subfield);
+        expect(this.subfield.getData()).andReturn("Subset, Biotools");
+        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> emptyList());
+        replay(this.record, this.field, this.subfield);
+        assertArrayEquals(new String[] { "biotools" }, this.version.getSubsets().toArray());
         verify(this.record, this.field, this.subfield);
     }
 

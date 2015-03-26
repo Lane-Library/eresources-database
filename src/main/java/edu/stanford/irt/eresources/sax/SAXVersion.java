@@ -1,13 +1,26 @@
 package edu.stanford.irt.eresources.sax;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.stanford.irt.eresources.AbstractVersion;
 import edu.stanford.irt.eresources.Link;
 
 public class SAXVersion extends AbstractVersion {
+
+    private static final Set<String> ALLOWED_SUBSETS = new HashSet<String>();
+
+    private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
+            "mobile resources", "biotools" };
+    static {
+        for (String subset : ALLOWED_SUBSETS_INITIALIZER) {
+            ALLOWED_SUBSETS.add(subset);
+        }
+    }
 
     private String additionalText;
 
@@ -23,6 +36,8 @@ public class SAXVersion extends AbstractVersion {
 
     private String publisher;
 
+    private Set<String> subsets;
+
     private String summaryHoldings;
 
     public void addLink(final Link link) {
@@ -30,6 +45,15 @@ public class SAXVersion extends AbstractVersion {
             this.links = new ArrayList<Link>();
         }
         this.links.add(link);
+    }
+
+    public void addSubset(final String subset) {
+        if (ALLOWED_SUBSETS.contains(subset)) {
+            if (null == this.subsets) {
+                this.subsets = new HashSet<String>();
+            }
+            this.subsets.add(subset);
+        }
     }
 
     @Override
@@ -71,6 +95,14 @@ public class SAXVersion extends AbstractVersion {
     @Override
     public String getPublisher() {
         return this.publisher;
+    }
+
+    @Override
+    public Collection<String> getSubsets() {
+        if (null == this.subsets) {
+            return Collections.emptySet();
+        }
+        return Collections.unmodifiableCollection(this.subsets);
     }
 
     @Override

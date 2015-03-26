@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Before;
@@ -34,6 +35,11 @@ public class AbstractVersionTest {
         @Override
         public String getPublisher() {
             return "publisher";
+        }
+
+        @Override
+        public Collection<String> getSubsets() {
+            return null;
         }
 
         @Override

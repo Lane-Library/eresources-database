@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface Version {
@@ -15,6 +16,8 @@ public interface Version {
     List<Link> getLinks();
 
     String getPublisher();
+
+    Collection<String> getSubsets();
 
     String getSummaryHoldings();
 

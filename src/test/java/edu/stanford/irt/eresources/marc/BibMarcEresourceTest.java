@@ -52,6 +52,9 @@ public class BibMarcEresourceTest {
     @Test
     public void testAddCustomTypes() {
         setupLinks();
+        expect(this.record.getVariableFields("655")).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getSubfield('a')).andReturn(this.subfield);
+        expect(this.subfield.getData()).andReturn("655a");
         expect(this.record.getVariableFields("035")).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
         Set<String> types = new HashSet<String>();
@@ -62,6 +65,7 @@ public class BibMarcEresourceTest {
 
     @Test
     public void testAddCustomTypesBassett() {
+        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> emptyList());
         expect(this.record.getVariableFields("035")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Bassett");
@@ -73,7 +77,22 @@ public class BibMarcEresourceTest {
     }
 
     @Test
+    public void testAddCustomTypesBiotools() {
+        setupLinks();
+        expect(this.record.getVariableFields("655")).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getSubfield('a')).andReturn(this.subfield);
+        expect(this.subfield.getData()).andReturn("Subset, Biotools");
+        expect(this.record.getVariableFields("035")).andReturn(Collections.<VariableField> emptyList());
+        replay(this.record, this.field, this.subfield);
+        Set<String> types = new HashSet<String>();
+        this.eresource.addCustomTypes(types);
+        assertTrue(types.contains("software"));
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
     public void testAddCustomTypesInstalledSoftware() {
+        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> emptyList());
         expect(this.record.getVariableFields("035")).andReturn(Collections.<VariableField> emptyList());
         replay(this.record, this.field, this.subfield);
         Set<String> types = new HashSet<String>();
@@ -287,8 +306,11 @@ public class BibMarcEresourceTest {
 
     @Test
     public void testGetRealPrimaryTypeVisualMaterial() {
-        expect(this.record.getVariableFields("655")).andReturn(Collections.emptyList()).times(2);
+        expect(this.record.getVariableFields("655")).andReturn(Collections.emptyList());
+        setupLinks();
+        expect(this.record.getVariableFields("655")).andReturn(Collections.emptyList());
         expect(this.record.getVariableFields("035")).andReturn(Collections.emptyList());
+        expect(this.record.getVariableFields("655")).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
         assertEquals("Image", this.eresource.getRealPrimaryType("visual material"));
         verify(this.record, this.field, this.subfield);
@@ -299,6 +321,8 @@ public class BibMarcEresourceTest {
         expect(this.record.getVariableFields("655")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Digital Video.");
+        setupLinks();
+        expect(this.record.getVariableFields("655")).andReturn(Collections.emptyList());
         expect(this.record.getVariableFields("035")).andReturn(Collections.emptyList());
         expect(this.record.getVariableFields("655")).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
