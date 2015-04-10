@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Lane Insights</title>
+	<atom:link href="http://laneblog.stanford.edu/feed/" rel="self" type="application/rss+xml" />
+	<link>https://laneblog.stanford.edu</link>
+	<description>What&#039;s happening at Lane</description>
+	<lastBuildDate>Tue, 07 Apr 2015 22:15:20 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=4.1.1</generator>
+	<item>
+		<title>Tech Tip Tuesday: The Many Faces of Lane Search &#8211; Part 3</title>
+		<link>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-3/</link>
+		<comments>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-3/#comments</comments>
+		<pubDate>Tue, 07 Apr 2015 22:15:20 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[Technical Tips]]></category>
+		<category><![CDATA[Lane Search]]></category>
+		<category><![CDATA[Tech Tips]]></category>
+
+		<guid isPermaLink="false">https://laneblog.stanford.edu/?p=216</guid>
+		<description><![CDATA[]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-3/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>TODAY (4/6) is Gear Up for Research Day 2015</title>
+		<link>https://laneblog.stanford.edu/today-46-is-gear-up-for-research-day-2015/</link>
+		<comments>https://laneblog.stanford.edu/today-46-is-gear-up-for-research-day-2015/#comments</comments>
+		<pubDate>Mon, 06 Apr 2015 17:30:12 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[Events]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[events]]></category>
+		<category><![CDATA[Gear Up Day]]></category>
+		<category><![CDATA[Gear Up Day 2015]]></category>
+		<category><![CDATA[publishing]]></category>
+
+		<guid isPermaLink="false">https://laneblog.stanford.edu/?p=213</guid>
+		<description><![CDATA[Join Lane Medical Library, the Stanford University Libraries, and the Office of the Vice Provost of Graduate Education (VPGE) as we present Gear Up for Research Day 2015! Drop by the Mackenzie Room at the Huang Engineering Center any time from noon to 5pm! There are still seats left in the publishing workshops with Springer, [&#8230;]]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/today-46-is-gear-up-for-research-day-2015/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Tech Tip Tuesday: The Many Faces of Lane Search &#8211; Part 2</title>
+		<link>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-2/</link>
+		<comments>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-2/#comments</comments>
+		<pubDate>Tue, 31 Mar 2015 22:53:45 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[Technical Tips]]></category>
+		<category><![CDATA[Lane Search]]></category>
+		<category><![CDATA[Tech Tips]]></category>
+
+		<guid isPermaLink="false">https://laneblog.stanford.edu/?p=203</guid>
+		<description><![CDATA[]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-2/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Tech Tip Tuesday: The Many Faces of Lane Search &#8211; Part 1</title>
+		<link>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-1/</link>
+		<comments>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-1/#comments</comments>
+		<pubDate>Tue, 24 Mar 2015 18:28:50 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[Technical Tips]]></category>
+		<category><![CDATA[Lane Search]]></category>
+		<category><![CDATA[Tech Tips]]></category>
+
+		<guid isPermaLink="false">https://laneblog.stanford.edu/?p=199</guid>
+		<description><![CDATA[]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/tech-tip-tuesday-the-many-faces-of-lane-search-part-1/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Tech Tip Tuesday: 4 Ways BrowZine Makes Keeping up with Scholarly Journals a Breeze</title>
+		<link>https://laneblog.stanford.edu/tech-tip-tuesday-4-ways-browzine-makes-keeping-up-with-scholarly-journals-a-breeze/</link>
+		<comments>https://laneblog.stanford.edu/tech-tip-tuesday-4-ways-browzine-makes-keeping-up-with-scholarly-journals-a-breeze/#comments</comments>
+		<pubDate>Tue, 17 Mar 2015 10:30:50 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[Technical Tips]]></category>
+		<category><![CDATA[Mobile Apps]]></category>
+		<category><![CDATA[Tech Tips]]></category>
+
+		<guid isPermaLink="false">https://laneblog.stanford.edu/?p=184</guid>
+		<description><![CDATA[Keeping up with your favorite scholarly journals can be a full time job, which is what makes mobile apps like BrowZine such an asset to have on your devices. BrowZine is a great free app (available in the iTunes App Store, Google Play, and the Amazon App Store) that allows you to browse, read, and monitor [&#8230;]]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/tech-tip-tuesday-4-ways-browzine-makes-keeping-up-with-scholarly-journals-a-breeze/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Tech Tip Tuesday: 5 Facts About Lane&#8217;s My Bookmarks</title>
+		<link>https://laneblog.stanford.edu/tech-tip-tuesday-5-facts-about-lanes-my-bookmarks/</link>
+		<comments>https://laneblog.stanford.edu/tech-tip-tuesday-5-facts-about-lanes-my-bookmarks/#comments</comments>
+		<pubDate>Tue, 10 Mar 2015 16:34:50 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[Technical Tips]]></category>
+		<category><![CDATA[bookmarks]]></category>
+		<category><![CDATA[Tech Tips]]></category>
+
+		<guid isPermaLink="false">https://laneblog.stanford.edu/?p=176</guid>
+		<description><![CDATA[Did you know that Lane Medical Library has its own bookmarking tool? Here are 5 facts about this great but little-known tool: You can start using Lane&#8217;s bookmarking tool by logging in to Lane&#8217;s homepage. You can bookmark any of the links on our page, including search results. You can drag the &#8220;Lane Library Bookmark&#8221; button [&#8230;]]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/tech-tip-tuesday-5-facts-about-lanes-my-bookmarks/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+		</item>
+		<item>
+		<title>New Mobile Apps Class</title>
+		<link>https://laneblog.stanford.edu/new-mobile-apps-class/</link>
+		<comments>https://laneblog.stanford.edu/new-mobile-apps-class/#comments</comments>
+		<pubDate>Fri, 06 Mar 2015 00:13:46 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[Classes]]></category>
+		<category><![CDATA[News]]></category>
+		<category><![CDATA[classes]]></category>
+		<category><![CDATA[Mobile Apps]]></category>
+
+		<guid isPermaLink="false">https://laneblog.stanford.edu/?p=172</guid>
+		<description><![CDATA[Having trouble keeping up with all the great new biomedical apps out there? Then check out our brand new Mobile Apps class. Register now and join Clinical Librarian Nicole Capdarest-Arest on March 10th from 10:00am-11:15am in Alway Computer Lab M206 for this great new class!]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/new-mobile-apps-class/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Tech Tip Tuesday: The New DynaMed App</title>
+		<link>https://laneblog.stanford.edu/tech-tip-tuesday-the-new-dynamed-app/</link>
+		<comments>https://laneblog.stanford.edu/tech-tip-tuesday-the-new-dynamed-app/#comments</comments>
+		<pubDate>Tue, 03 Mar 2015 10:00:00 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[Technical Tips]]></category>
+		<category><![CDATA[DynaMed]]></category>
+		<category><![CDATA[Mobile Apps]]></category>
+		<category><![CDATA[Tech Tips]]></category>
+
+		<guid isPermaLink="false">https://laneblog.stanford.edu/?p=162</guid>
+		<description><![CDATA[Have you tried DynaMed&#8217;s new and improved mobile app? The new version of this evidence-based point-of-care clinical reference boasts some great new features, including a streamlined authentication process, making it easier for you to access the DynaMed content Lane has licensed for your use. Check out the video and read further to learn how to download this great free [&#8230;]]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/tech-tip-tuesday-the-new-dynamed-app/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Lane Medical Library is Celebrating!</title>
+		<link>https://laneblog.stanford.edu/lane-medical-library-is-celebrating/</link>
+		<comments>https://laneblog.stanford.edu/lane-medical-library-is-celebrating/#comments</comments>
+		<pubDate>Tue, 16 Dec 2014 00:36:52 +0000</pubDate>
+		<dc:creator><![CDATA[Nicole Chiodo]]></dc:creator>
+				<category><![CDATA[New Website Features]]></category>
+		<category><![CDATA[News]]></category>
+
+		<guid isPermaLink="false">http://lane-local-02.stanford.edu/blog/?p=76</guid>
+		<description><![CDATA[This year Lane Medical Library proudly celebrates 20 years on the World Wide Web! Back in 1994 when Lane made its online debut, the Web was very different from the dynamic, information dense, social platform it is today. The Web itself was only 5 years old, the new Mosaic browser was making the Web a [&#8230;]]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/lane-medical-library-is-celebrating/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>ClinicalKey Is Replacing MD Consult</title>
+		<link>https://laneblog.stanford.edu/clinicalkey-is-replacing-md-consult/</link>
+		<comments>https://laneblog.stanford.edu/clinicalkey-is-replacing-md-consult/#comments</comments>
+		<pubDate>Mon, 15 Dec 2014 19:32:21 +0000</pubDate>
+		<dc:creator><![CDATA[Mary Buttner]]></dc:creator>
+				<category><![CDATA[New Journals/Books/etc...]]></category>
+
+		<guid isPermaLink="false">http://lane-local-02.stanford.edu/blog/?p=70</guid>
+		<description><![CDATA[ClinicalKey is replacing MD Consult and it is now live. December 1 will be the public launch of ClinicalKey. Try it out! Users will need to update their links to reserve items for Winter Quarter. MD Consult will cease on December 31, 2014. ClinicalKey includes over 1120 books and 600 journals. It contains videos, images, [&#8230;]]]></description>
+		<wfw:commentRss>https://laneblog.stanford.edu/clinicalkey-is-replacing-md-consult/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>
