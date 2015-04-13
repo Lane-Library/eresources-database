@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <bean id="laneblogProcessor"
+        class="edu.stanford.irt.eresources.sax.LaneblogEresourceProcessor">
+        <property name="contentHandler" ref="laneblogTransformer"/>
+        <property name="rssURL" value="${eresources.laneblog-rss-url}"/>
+    </bean>
+    <bean id= "laneblogTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/laneblogRSS2er.xsl"/>
+        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+        <property name="namespace" value=""/>
+        <property name="element" value="rss"/>
+        <property name="contentHandler" ref="laneblogBuilder"/>
+    </bean>
+    <bean id="laneblogBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+</beans>
