@@ -22,13 +22,11 @@ public class CatalogVersion extends AbstractVersion {
 
     @Override
     public String getDates() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -39,7 +37,6 @@ public class CatalogVersion extends AbstractVersion {
 
     @Override
     public String getPublisher() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -50,13 +47,11 @@ public class CatalogVersion extends AbstractVersion {
 
     @Override
     public String getSummaryHoldings() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public boolean hasGetPasswordLink() {
-        // TODO Auto-generated method stub
         return false;
     }
 

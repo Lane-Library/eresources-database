@@ -18,7 +18,6 @@ public class CatalogLink implements Link {
 
     @Override
     public String getInstruction() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -39,6 +38,5 @@ public class CatalogLink implements Link {
 
     @Override
     public void setVersion(final Version version) {
-        // TODO Auto-generated method stub
     }
 }

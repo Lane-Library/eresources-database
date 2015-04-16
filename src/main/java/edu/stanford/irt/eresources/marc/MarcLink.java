@@ -78,7 +78,6 @@ public class MarcLink extends AbstractLink {
 
     @Override
     public void setVersion(final Version version) {
-        // TODO Auto-generated method stub
     }
 
     private void doInstruction() {

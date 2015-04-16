@@ -43,7 +43,6 @@ public class AbstractMarcEresourceTest {
 
         @Override
         public Date getUpdated() {
-            // TODO Auto-generated method stub
             return null;
         }
 
@@ -54,19 +53,16 @@ public class AbstractMarcEresourceTest {
 
         @Override
         public int getYear() {
-            // TODO Auto-generated method stub
             return 0;
         }
 
         @Override
         public boolean isCore() {
-            // TODO Auto-generated method stub
             return false;
         }
 
         @Override
         protected String getPrintOrDigital() {
-            // TODO Auto-generated method stub
             return null;
         }
     }
