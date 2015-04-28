@@ -9,13 +9,6 @@
 				<bean class="edu.stanford.irt.eresources.PubmedInProcessDataFetcher" >
     				<property name="basePath" value="${eresources.pubmedprocessor.inprocessPath}"/>
 				</bean>
-				<bean class="edu.stanford.irt.eresources.PubmedFtpDataFetcher" >
-					<property name="basePath" value="${eresources.pubmedprocessor.updatepath}"/>
-					<property name="ftpPath" value="${eresources.pubmedprocessor.ftp.pathname}"/>
-					<property name="ftpHost" value="${eresources.pubmedprocessor.ftp.hostname}"/>
-					<property name="ftpUser" value="${eresources.pubmedprocessor.ftp.username}"/>
-					<property name="ftpPass" value="${eresources.pubmedprocessor.ftp.password}"/>
-				</bean>
 			</list>
         </constructor-arg>
         <property name="killPrevious" value="false"/>
@@ -28,7 +21,7 @@
                 <property name="contentHandler" ref="pubmedTransformer"/>
             </bean>
         </property>
-        <property name="basePath" value="${eresources.pubmedprocessor.updatepath}"/>
+        <property name="basePath" value="${eresources.pubmedprocessor.inprocessPath}"/>
     </bean>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
         <property name="logEresource" value="true"/>
