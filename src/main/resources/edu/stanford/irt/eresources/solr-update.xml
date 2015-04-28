@@ -5,7 +5,6 @@
     <import resource="solr-load.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrUpdate" parent="abstractSolrLoader">
         <property name="killPrevious" value="false"/>
-        <property name="optimize" value="false"/>
     </bean>
     <bean id="bibInputStream" class="edu.stanford.irt.eresources.UpdateBibInputStream">
         <property name="dataSource" ref="voyagerDataSource"/>

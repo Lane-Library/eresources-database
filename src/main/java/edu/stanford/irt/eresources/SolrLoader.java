@@ -13,7 +13,6 @@ import java.util.Queue;
 import java.util.concurrent.Executor;
 
 import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -28,9 +27,6 @@ public class SolrLoader {
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
         try {
             loader.load();
-            if (loader.optimize) {
-                loader.optimize();
-            }
         } finally {
             executor.shutdown();
         }
@@ -45,8 +41,6 @@ public class SolrLoader {
     private boolean killPrevious;
 
     private Logger log = LoggerFactory.getLogger(getClass());
-
-    private boolean optimize;
 
     private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
 
@@ -116,19 +110,6 @@ public class SolrLoader {
         });
     }
 
-    public void optimize() {
-        if (this.count <= 0) {
-            this.log.info("nothing loaded ... skipping optimization");
-        } else {
-            this.log.info("optimizing solr core");
-            try {
-                this.solrServer.optimize();
-            } catch (SolrServerException | IOException e) {
-                throw new EresourceDatabaseException("solr optimize failed", e);
-            }
-        }
-    }
-
     public void setExecutor(final Executor executor) {
         this.executor = executor;
     }
@@ -139,10 +120,6 @@ public class SolrLoader {
 
     public void setKillPrevious(final boolean killPrevious) {
         this.killPrevious = killPrevious;
-    }
-
-    public void setOptimize(final boolean optimize) {
-        this.optimize = optimize;
     }
 
     public void setProcessors(final Collection<AbstractEresourceProcessor> processors) {
