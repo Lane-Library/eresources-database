@@ -17,24 +17,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class SolrEresourceHandler implements EresourceHandler {
 
-    private static final int SORT_TITLE_MAX = 150;
-
     public static final int TEN = 10;
 
     public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
-    private static String getSortTitle(final String title) {
-        if (null == title || title.isEmpty()) {
-            return title;
-        }
-        String sortTitle = title.toLowerCase().replaceAll("[^0-9a-z ]", "").trim();
-        try {
-            sortTitle = sortTitle.substring(0, SORT_TITLE_MAX);
-        } catch (IndexOutOfBoundsException e) {
-            // OK
-        }
-        return sortTitle;
-    }
+    private static final int SORT_TITLE_MAX = 150;
 
     private int count = 0;
 
@@ -56,13 +43,17 @@ public class SolrEresourceHandler implements EresourceHandler {
         this.solrMaxDocs = solrMaxDocs;
     }
 
-    private void addSolrDocs() {
-        try {
-            this.solrServer.add(this.solrDocs);
-            this.solrDocs.clear();
-        } catch (SolrServerException | IOException e) {
-            throw new EresourceDatabaseException("solr add failed", e);
+    private static String getSortTitle(final String title) {
+        if (null == title || title.isEmpty()) {
+            return title;
         }
+        String sortTitle = title.toLowerCase().replaceAll("[^0-9a-z ]", "").trim();
+        try {
+            sortTitle = sortTitle.substring(0, SORT_TITLE_MAX);
+        } catch (IndexOutOfBoundsException e) {
+            // OK
+        }
+        return sortTitle;
     }
 
     @Override
@@ -83,6 +74,35 @@ public class SolrEresourceHandler implements EresourceHandler {
             throw new EresourceDatabaseException(e);
         }
         this.count++;
+    }
+
+    @Override
+    public void run() {
+        synchronized (this.queue) {
+            while (!this.queue.isEmpty() || this.keepGoing) {
+                try {
+                    Eresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
+                    if (eresource != null) {
+                        insertEresource(eresource);
+                    }
+                } catch (InterruptedException e) {
+                    throw new EresourceDatabaseException(
+                            "\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
+                }
+                if (this.solrDocs.size() >= this.solrMaxDocs) {
+                    addSolrDocs();
+                }
+            }
+            this.queue.notifyAll();
+            if (!this.solrDocs.isEmpty()) {
+                addSolrDocs();
+            }
+        }
+    }
+
+    @Override
+    public void stop() {
+        this.keepGoing = false;
     }
 
     protected void insertEresource(final Eresource eresource) {
@@ -167,32 +187,12 @@ public class SolrEresourceHandler implements EresourceHandler {
         this.solrDocs.add(doc);
     }
 
-    @Override
-    public void run() {
-        synchronized (this.queue) {
-            while (!this.queue.isEmpty() || this.keepGoing) {
-                try {
-                    Eresource eresource = this.queue.poll(1, TimeUnit.SECONDS);
-                    if (eresource != null) {
-                        insertEresource(eresource);
-                    }
-                } catch (InterruptedException e) {
-                    throw new EresourceDatabaseException(
-                            "\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
-                }
-                if (this.solrDocs.size() >= this.solrMaxDocs) {
-                    addSolrDocs();
-                }
-            }
-            this.queue.notifyAll();
-            if (!this.solrDocs.isEmpty()) {
-                addSolrDocs();
-            }
+    private void addSolrDocs() {
+        try {
+            this.solrServer.add(this.solrDocs);
+            this.solrDocs.clear();
+        } catch (SolrServerException | IOException e) {
+            throw new EresourceDatabaseException("solr add failed", e);
         }
-    }
-
-    @Override
-    public void stop() {
-        this.keepGoing = false;
     }
 }

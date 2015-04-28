@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class PubmedFtpDataFetcher implements DataFetcher {
 
     private String basePath;
-    
+
     private String ftpHost;
 
     private String ftpPass;
@@ -36,7 +36,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             client.enterLocalPassiveMode();
             client.changeWorkingDirectory(this.ftpPath);
             for (FTPFile file : client.listFiles(".", filter)) {
-                fos = new FileOutputStream(basePath + "/" + file.getName());
+                fos = new FileOutputStream(this.basePath + "/" + file.getName());
                 this.log.info("fetching: " + file);
                 if (client.retrieveFile(file.getName(), fos)) {
                     fos.close();
@@ -62,7 +62,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
         }
         this.basePath = basePath;
     }
-    
+
     public void setFtpHost(final String ftpHost) {
         if (null == ftpHost) {
             throw new IllegalArgumentException("null ftpHost");

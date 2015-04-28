@@ -20,17 +20,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class SolrLoader {
 
-    public static void main(final String[] args) throws IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/"
-                + args[0] + ".xml");
-        SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
-        ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
-        try {
-            loader.load();
-        } finally {
-            executor.shutdown();
-        }
-    }
+    protected SolrServer solrServer;
 
     private int count;
 
@@ -46,12 +36,18 @@ public class SolrLoader {
 
     private Queue<Eresource> queue;
 
-    protected SolrServer solrServer;
-
     private String version;
 
-    protected Date getUpdatedDate() {
-        return new Date(0);
+    public static void main(final String[] args) throws IOException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/"
+                + args[0] + ".xml");
+        SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
+        ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
+        try {
+            loader.load();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     public void load() throws IOException {
@@ -75,6 +71,41 @@ public class SolrLoader {
         }
         this.count = this.handler.getCount();
         this.log.info("handled " + this.count + " eresources.");
+    }
+
+    public void setExecutor(final Executor executor) {
+        this.executor = executor;
+    }
+
+    public void setHandler(final EresourceHandler handler) {
+        this.handler = handler;
+    }
+
+    public void setKillPrevious(final boolean killPrevious) {
+        this.killPrevious = killPrevious;
+    }
+
+    public void setProcessors(final Collection<AbstractEresourceProcessor> processors) {
+        if (null == processors) {
+            throw new IllegalArgumentException("null processors");
+        }
+        this.processors = processors;
+    }
+
+    public void setQueue(final Queue<Eresource> queue) {
+        this.queue = queue;
+    }
+
+    public void setSolrServer(final SolrServer solrServer) {
+        this.solrServer = solrServer;
+    }
+
+    public void setVersion(final String version) {
+        this.version = version;
+    }
+
+    protected Date getUpdatedDate() {
+        return new Date(0);
     }
 
     private void managePIDFile() throws IOException {
@@ -108,36 +139,5 @@ public class SolrLoader {
                 }
             }
         });
-    }
-
-    public void setExecutor(final Executor executor) {
-        this.executor = executor;
-    }
-
-    public void setHandler(final EresourceHandler handler) {
-        this.handler = handler;
-    }
-
-    public void setKillPrevious(final boolean killPrevious) {
-        this.killPrevious = killPrevious;
-    }
-
-    public void setProcessors(final Collection<AbstractEresourceProcessor> processors) {
-        if (null == processors) {
-            throw new IllegalArgumentException("null processors");
-        }
-        this.processors = processors;
-    }
-
-    public void setQueue(final Queue<Eresource> queue) {
-        this.queue = queue;
-    }
-
-    public void setSolrServer(final SolrServer solrServer) {
-        this.solrServer = solrServer;
-    }
-
-    public void setVersion(final String version) {
-        this.version = version;
     }
 }

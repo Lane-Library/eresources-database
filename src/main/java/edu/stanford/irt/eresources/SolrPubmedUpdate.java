@@ -19,6 +19,19 @@ public class SolrPubmedUpdate extends SolrLoader {
     }
 
     @Override
+    public void load() throws IOException {
+        super.load();
+        try {
+            // pubmed2er.stx handles deletes from NCBI by zeroing out record data
+            // here we delete them ... records lacking year and title
+            this.solrServer.deleteByQuery("recordType:pubmed AND year:0 AND title:''");
+            this.solrServer.commit();
+        } catch (SolrServerException e) {
+            throw new EresourceDatabaseException(e);
+        }
+    }
+
+    @Override
     protected Date getUpdatedDate() {
         SolrQuery query = new SolrQuery();
         query.setQuery("recordType:pubmed");
@@ -38,18 +51,5 @@ public class SolrPubmedUpdate extends SolrLoader {
             updated = (Date) firstResult.getFieldValue("updated");
         }
         return updated;
-    }
-
-    @Override
-    public void load() throws IOException {
-        super.load();
-        try {
-            // pubmed2er.stx handles deletes from NCBI by zeroing out record data
-            // here we delete them ... records lacking year and title
-            this.solrServer.deleteByQuery("recordType:pubmed AND year:0 AND title:''");
-            this.solrServer.commit();
-        } catch (SolrServerException e) {
-            throw new EresourceDatabaseException(e);
-        }
     }
 }

@@ -58,22 +58,6 @@ public class PubmedSearcher {
         this.xpath = XPathFactory.newInstance().newXPath();
     }
 
-    private String getContent(final String url) {
-        String htmlContent = null;
-        HttpResponse res = null;
-        HttpGet method = new HttpGet(url);
-        method.setConfig(HTTP_CONFIG);
-        try {
-            res = PubmedSearcher.httpClient.execute(method);
-            if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                htmlContent = EntityUtils.toString(res.getEntity());
-            }
-        } catch (Exception e) {
-            method.abort();
-        }
-        return htmlContent;
-    }
-
     /**
      * @param query
      *            PubMed search string
@@ -108,5 +92,21 @@ public class PubmedSearcher {
 
     public String getType() {
         return this.type;
+    }
+
+    private String getContent(final String url) {
+        String htmlContent = null;
+        HttpResponse res = null;
+        HttpGet method = new HttpGet(url);
+        method.setConfig(HTTP_CONFIG);
+        try {
+            res = PubmedSearcher.httpClient.execute(method);
+            if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                htmlContent = EntityUtils.toString(res.getEntity());
+            }
+        } catch (Exception e) {
+            method.abort();
+        }
+        return htmlContent;
     }
 }

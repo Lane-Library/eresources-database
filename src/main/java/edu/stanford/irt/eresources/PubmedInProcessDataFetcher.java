@@ -66,6 +66,32 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
 
     private PubmedSearcher searcher;
 
+    @Override
+    public void getUpdateFiles() {
+        String date = getLastUpdateDate();
+        String query;
+        if (null == date || date.isEmpty()) {
+            query = INITIAL_QUERY;
+        } else {
+            query = UPDATES_QUERY.replace("?", date);
+        }
+        try {
+            query = URLEncoder.encode(query, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new EresourceDatabaseException(e);
+        }
+        this.searcher = new PubmedSearcher("In-Process and As Supplied by Publisher", query);
+        pmidListToFiles(this.searcher.getPmids());
+        writeLastRunDate();
+    }
+
+    public void setBasePath(final String basePath) {
+        if (null == basePath) {
+            throw new IllegalArgumentException("null basePath");
+        }
+        this.basePath = basePath;
+    }
+
     private String getContent(final String url) {
         String xmlContent = null;
         HttpResponse res = null;
@@ -103,25 +129,6 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
             throw new EresourceDatabaseException(e);
         }
         return updateDate;
-    }
-
-    @Override
-    public void getUpdateFiles() {
-        String date = getLastUpdateDate();
-        String query;
-        if (null == date || date.isEmpty()) {
-            query = INITIAL_QUERY;
-        } else {
-            query = UPDATES_QUERY.replace("?", date);
-        }
-        try {
-            query = URLEncoder.encode(query, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new EresourceDatabaseException(e);
-        }
-        this.searcher = new PubmedSearcher("In-Process and As Supplied by Publisher", query);
-        pmidListToFiles(this.searcher.getPmids());
-        writeLastRunDate();
     }
 
     private void pmidListToFiles(final List<String> pmids) {
@@ -169,13 +176,6 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
                 throw new EresourceDatabaseException(e);
             }
         }
-    }
-
-    public void setBasePath(final String basePath) {
-        if (null == basePath) {
-            throw new IllegalArgumentException("null basePath");
-        }
-        this.basePath = basePath;
     }
 
     private void writeLastRunDate() {

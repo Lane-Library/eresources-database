@@ -17,6 +17,20 @@ public class SolrReload extends SolrLoader {
         SolrLoader.main(new String[] { "solr-reload" });
     }
 
+    @Override
+    public void load() throws IOException {
+        // fetch most recently updated eresource date from solr
+        String lastUpdate = getLastUpdate();
+        super.load();
+        try {
+            // delete everything older than lastUpdate
+            this.solrServer.deleteByQuery("NOT recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
+            this.solrServer.commit();
+        } catch (SolrServerException e) {
+            throw new EresourceDatabaseException(e);
+        }
+    }
+
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
         query.setQuery("NOT recordType:pubmed");
@@ -38,19 +52,5 @@ public class SolrReload extends SolrLoader {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
         return df.format(updated);
-    }
-
-    @Override
-    public void load() throws IOException {
-        // fetch most recently updated eresource date from solr
-        String lastUpdate = getLastUpdate();
-        super.load();
-        try {
-            // delete everything older than lastUpdate
-            this.solrServer.deleteByQuery("NOT recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
-            this.solrServer.commit();
-        } catch (SolrServerException e) {
-            throw new EresourceDatabaseException(e);
-        }
     }
 }

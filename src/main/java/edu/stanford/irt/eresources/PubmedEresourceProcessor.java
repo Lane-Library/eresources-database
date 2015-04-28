@@ -23,26 +23,6 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
 
     private XMLReader xmlReader;
 
-    private List<File> getXMLFiles(final File directory) {
-        List<File> result = new LinkedList<File>();
-        File[] files = directory.listFiles(new FileFilter() {
-
-            @Override
-            public boolean accept(final File file) {
-                String name = file.getName();
-                return file.isDirectory() || name.endsWith(".xml") || name.endsWith(".xml.gz");
-            }
-        });
-        for (File file : files) {
-            if (file.isDirectory()) {
-                result.addAll(getXMLFiles(file));
-            } else {
-                result.add(file);
-            }
-        }
-        return result;
-    }
-
     @Override
     public void process() {
         if (null == this.basePath) {
@@ -88,5 +68,25 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             throw new IllegalArgumentException("null xmlReader");
         }
         this.xmlReader = xmlReader;
+    }
+
+    private List<File> getXMLFiles(final File directory) {
+        List<File> result = new LinkedList<File>();
+        File[] files = directory.listFiles(new FileFilter() {
+
+            @Override
+            public boolean accept(final File file) {
+                String name = file.getName();
+                return file.isDirectory() || name.endsWith(".xml") || name.endsWith(".xml.gz");
+            }
+        });
+        for (File file : files) {
+            if (file.isDirectory()) {
+                result.addAll(getXMLFiles(file));
+            } else {
+                result.add(file);
+            }
+        }
+        return result;
     }
 }

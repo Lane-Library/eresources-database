@@ -13,6 +13,20 @@ import org.apache.solr.common.SolrDocumentList;
 
 public class SolrPubmedReload extends SolrLoader {
 
+    @Override
+    public void load() throws IOException {
+        // fetch most recently updated eresource date from solr
+        String lastUpdate = getLastUpdate();
+        super.load();
+        try {
+            // delete everything older than lastUpdate
+            this.solrServer.deleteByQuery("recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
+            this.solrServer.commit();
+        } catch (SolrServerException e) {
+            throw new EresourceDatabaseException(e);
+        }
+    }
+
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
         query.setQuery("recordType:pubmed");
@@ -34,19 +48,5 @@ public class SolrPubmedReload extends SolrLoader {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
         return df.format(updated);
-    }
-
-    @Override
-    public void load() throws IOException {
-        // fetch most recently updated eresource date from solr
-        String lastUpdate = getLastUpdate();
-        super.load();
-        try {
-            // delete everything older than lastUpdate
-            this.solrServer.deleteByQuery("recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
-            this.solrServer.commit();
-        } catch (SolrServerException e) {
-            throw new EresourceDatabaseException(e);
-        }
     }
 }

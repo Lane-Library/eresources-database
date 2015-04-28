@@ -16,7 +16,7 @@ public class PubmedSpecialTypesManager {
     public PubmedSpecialTypesManager(final Collection<PubmedSearcher> searchers) {
         this.searchers = searchers;
     }
-    
+
     public Collection<String> getTypes(final String pmid) {
         if (null == this.specialPmids || this.specialPmids.isEmpty()) {
             init();
@@ -44,5 +44,4 @@ public class PubmedSpecialTypesManager {
             }
         }
     }
-
 }
