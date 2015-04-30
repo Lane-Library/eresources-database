@@ -56,7 +56,7 @@ public class MarcVersion extends AbstractVersion {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = createAdditionalText();
+            this.additionalText = getDescription();
         }
         return this.additionalText;
     }

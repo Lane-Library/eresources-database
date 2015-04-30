@@ -29,24 +29,23 @@ public class SAXLinkTest {
         this.link.setVersion(version);
         this.link.setInstruction("instruction");
         expect(version.getPublisher()).andReturn("publisher");
+        expect(version.getAdditionalText()).andReturn("additional text");
         replay(version);
-        assertEquals(" instruction publisher", this.link.getAdditionalText());
+        assertEquals("publisher, additional text, instruction", this.link.getAdditionalText());
         verify(version);
-        assertEquals(" instruction publisher", this.link.getAdditionalText());
+        assertEquals("publisher, additional text, instruction", this.link.getAdditionalText());
     }
 
     @Test
     public void testGetLinkText() {
         Version version = createMock(Version.class);
         this.link.setVersion(version);
-        expect(version.getSummaryHoldings()).andReturn("summaryHoldings");
+        expect(version.getHoldingsAndDates()).andReturn("summaryHoldings, dates");
         expect(version.getLinks()).andReturn(Collections.<Link> singletonList(this.link));
-        expect(version.getDates()).andReturn("dates");
-        expect(version.getDescription()).andReturn("description");
         replay(version);
-        assertEquals("summaryHoldings, dates description", this.link.getLinkText());
+        assertEquals("summaryHoldings, dates", this.link.getLinkText());
         verify(version);
-        assertEquals("summaryHoldings, dates description", this.link.getLinkText());
+        assertEquals("summaryHoldings, dates", this.link.getLinkText());
     }
 
     @Test

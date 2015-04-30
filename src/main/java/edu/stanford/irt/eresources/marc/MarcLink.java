@@ -39,7 +39,7 @@ public class MarcLink extends AbstractLink {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = getAdditionalText(getInstruction(), this.version.getPublisher());
+            this.additionalText = getAdditionalText(getInstruction(), this.version.getAdditionalText(), this.version.getPublisher());
         }
         return this.additionalText;
     }

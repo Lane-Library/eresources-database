@@ -38,27 +38,11 @@ public class MarcVersionTest {
 
     @Test
     public void testGetAdditionalText() {
-        expect(this.record.getVariableField("866")).andReturn(this.field);
-        expect(this.field.getSubfield('v')).andReturn(this.subfield);
-        expect(this.subfield.getData()).andReturn("summaryHoldings");
-        expect(this.record.getVariableField("866")).andReturn(this.field);
-        expect(this.field.getSubfield('y')).andReturn(this.subfield);
-        expect(this.subfield.getData()).andReturn("dates");
-        expect(this.record.getVariableField("844")).andReturn(this.field);
-        expect(this.field.getSubfield('a')).andReturn(this.subfield);
-        expect(this.subfield.getData()).andReturn("publisher");
         expect(this.record.getVariableFields("866")).andReturn(Collections.<VariableField> singletonList(this.field));
         expect(this.field.getSubfields('z')).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("description");
-        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> singletonList(this.field));
-        expect(this.field.getSubfield('u')).andReturn(this.subfield);
-        expect(this.subfield.getData()).andReturn("url");
-        expect(this.field.getSubfield('q')).andReturn(this.subfield);
-        expect(this.subfield.getData()).andReturn("label");
-        expect(this.field.getSubfields('i')).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getData()).andReturn("instruction");
         replay(this.record, this.field, this.subfield);
-        assertEquals(" summaryHoldings, dates, publisher, description, instruction ", this.version.getAdditionalText());
+        assertEquals("description", this.version.getAdditionalText());
         verify(this.record, this.field, this.subfield);
     }
 

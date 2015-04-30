@@ -24,8 +24,7 @@ public abstract class AbstractMarcEresource implements Eresource {
         "redwood software, installed", "duck software, installed", "stone software, installed",
         "m051 software, installed", "lksc-student software, installed", "lksc-public software, installed",
         "software, installed", "software", "statistics", "video", "graphic", "lanesite", "print", "bassett",
-        "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog",
-        "subset, biotools"};
+        "statistics software, installed", "biotools software, installed", "laneclass", "lanepage", "catalog"};
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
@@ -262,7 +261,7 @@ public abstract class AbstractMarcEresource implements Eresource {
         if (PRIMARY_TYPES.containsKey(type)) {
             return PRIMARY_TYPES.get(type);
         } else {
-            return type;
+            return "Other";
         }
     }
 

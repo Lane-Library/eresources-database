@@ -38,11 +38,6 @@ public class AbstractVersionTest {
         }
 
         @Override
-        public Collection<String> getSubsets() {
-            return null;
-        }
-
-        @Override
         public String getSummaryHoldings() {
             return "summaryHoldings";
         }
@@ -56,6 +51,11 @@ public class AbstractVersionTest {
         public boolean isProxy() {
             return false;
         }
+
+        @Override
+        public Collection<String> getSubsets() {
+            return null;
+        }
     }
 
     private AbstractVersion version;
@@ -66,7 +66,7 @@ public class AbstractVersionTest {
     }
 
     @Test
-    public void testCreateAdditionalText() {
-        assertEquals(" summaryHoldings, dates, publisher, description ", this.version.createAdditionalText());
+    public void testGetHoldingsAndDates() {
+        assertEquals("summaryHoldings, dates", this.version.getHoldingsAndDates());
     }
 }

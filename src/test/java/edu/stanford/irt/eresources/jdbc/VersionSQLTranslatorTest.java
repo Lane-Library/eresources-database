@@ -37,8 +37,6 @@ public class VersionSQLTranslatorTest {
     public void testGetInsertSQL() {
         expect(this.version.isProxy()).andReturn(true);
         expect(this.version.hasGetPasswordLink()).andReturn(false);
-        expect(this.version.getAdditionalText()).andReturn("additionalText");
-        expect(this.version.getPublisher()).andReturn("publisher");
         expect(this.version.getHoldingsAndDates()).andReturn("holdingsAndDates");
         expect(this.version.getSubsets()).andReturn(Collections.singleton("subset"));
         expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
@@ -46,7 +44,7 @@ public class VersionSQLTranslatorTest {
         replay(this.linkTranslator, this.version, this.link);
         List<String> sql = this.translator.getInsertSQL(this.version, 0);
         assertEquals(
-                "INSERT INTO VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, ADDITIONAL_TEXT, PUBLISHER, HOLDINGS_DATES) VALUES (VERSION_ID_SEQ.NEXTVAL, ERESOURCE_ID_SEQ.CURRVAL,'T','F',0,'additionalText','publisher','holdingsAndDates')",
+                "INSERT INTO VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, HOLDINGS_DATES) VALUES (VERSION_ID_SEQ.NEXTVAL, ERESOURCE_ID_SEQ.CURRVAL,'T','F',0,'holdingsAndDates')",
                 sql.get(0));
         assertEquals("INSERT INTO SUBSET VALUES (VERSION_ID_SEQ.CURRVAL,ERESOURCE_ID_SEQ.CURRVAL,'subset')", sql.get(1));
         assertEquals("link", sql.get(2));

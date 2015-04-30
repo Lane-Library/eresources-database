@@ -112,7 +112,7 @@ public class BibMarcEresourceTest {
         replay(this.record, this.field, this.subfield);
         Set<String> types = new HashSet<String>();
         this.eresource.addPrimaryType(types);
-        assertTrue(types.contains("primarytype"));
+        assertTrue(types.contains("other"));
         verify(this.record, this.field, this.subfield);
     }
 
@@ -265,7 +265,7 @@ public class BibMarcEresourceTest {
     @Test
     public void testGetRealPrimaryType() {
         replay(this.record, this.field, this.subfield);
-        assertEquals("type", this.eresource.getRealPrimaryType("type"));
+        assertEquals("Other", this.eresource.getRealPrimaryType("type"));
         verify(this.record, this.field, this.subfield);
     }
 

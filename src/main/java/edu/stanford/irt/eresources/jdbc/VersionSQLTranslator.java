@@ -9,7 +9,7 @@ import edu.stanford.irt.eresources.Version;
 
 public class VersionSQLTranslator extends AbstractSQLTranslator {
 
-    private static final String INSERT_VERSION = "INSERT INTO VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, ADDITIONAL_TEXT, PUBLISHER, HOLDINGS_DATES) VALUES (";
+    private static final String INSERT_VERSION = "INSERT INTO VERSION (VERSION_ID, ERESOURCE_ID, PROXY, GETPASSWORD, SEQNUM, HOLDINGS_DATES) VALUES (";
 
     private LinkSQLTranslator linkTranslator;
 
@@ -22,8 +22,7 @@ public class VersionSQLTranslator extends AbstractSQLTranslator {
         StringBuilder sb = new StringBuilder(INSERT_VERSION).append("VERSION_ID_SEQ.NEXTVAL, ")
                 .append("ERESOURCE_ID_SEQ.CURRVAL,").append(vr.isProxy() ? "'T'" : "'F'").append(COMMA)
                 .append(vr.hasGetPasswordLink() ? "'T'" : "'F'").append(COMMA).append(order).append(COMMA)
-                .append(apostrophize(vr.getAdditionalText())).append(COMMA).append(apostrophize(vr.getPublisher()))
-                .append(COMMA).append(apostrophize(vr.getHoldingsAndDates())).append(END_PAREN);
+                .append(apostrophize(vr.getHoldingsAndDates())).append(END_PAREN);
         sql.add(sb.toString());
         sql.addAll(getInsertSubsetSQL(vr));
         for (Link link : vr.getLinks()) {

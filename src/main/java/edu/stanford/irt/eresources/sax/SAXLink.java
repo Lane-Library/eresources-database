@@ -20,7 +20,7 @@ public class SAXLink extends AbstractLink {
     @Override
     public String getAdditionalText() {
         if (this.additionalText == null) {
-            this.additionalText = getAdditionalText(this.instruction, this.version.getPublisher());
+            this.additionalText = getAdditionalText(this.instruction, this.version.getAdditionalText(), this.version.getPublisher());
         }
         return this.additionalText;
     }

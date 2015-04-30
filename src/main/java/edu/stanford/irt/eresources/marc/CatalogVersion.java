@@ -17,7 +17,7 @@ public class CatalogVersion extends AbstractVersion {
 
     @Override
     public String getAdditionalText() {
-        return " Lane Catalog record ";
+        return "Lane Catalog record ";
     }
 
     @Override

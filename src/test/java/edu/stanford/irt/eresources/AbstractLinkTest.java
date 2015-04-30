@@ -57,17 +57,15 @@ public class AbstractLinkTest {
 
     @Test
     public void testGetAdditionalText() {
-        assertEquals(" instruction publisher", this.link.getAdditionalText("instruction", "publisher"));
+        assertEquals("publisher, additional text, instruction", this.link.getAdditionalText("instruction", "additional text", "publisher"));
     }
 
     @Test
     public void testGetLinkText() {
-        expect(this.version.getSummaryHoldings()).andReturn("summaryHoldings");
+        expect(this.version.getHoldingsAndDates()).andReturn("summaryHoldings, dates");
         expect(this.version.getLinks()).andReturn(Collections.<Link> singletonList(this.link));
-        expect(this.version.getDates()).andReturn("dates");
-        expect(this.version.getDescription()).andReturn("description");
         replay(this.version);
-        assertEquals("summaryHoldings, dates description", this.link.getLinkText("label", this.version));
+        assertEquals("summaryHoldings, dates", this.link.getLinkText("label", this.version));
         verify(this.version);
     }
 }

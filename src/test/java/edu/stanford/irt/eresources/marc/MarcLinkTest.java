@@ -38,9 +38,10 @@ public class MarcLinkTest {
     public void testGetAdditionalText() {
         expect(this.field.getSubfields('i')).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("subfieldI");
+        expect(this.version.getAdditionalText()).andReturn("additional text");
         expect(this.version.getPublisher()).andReturn("publisher");
         replay(this.field, this.version, this.subfield);
-        assertEquals(" subfieldI publisher", this.link.getAdditionalText());
+        assertEquals("publisher, additional text, subfieldI", this.link.getAdditionalText());
         verify(this.field, this.version, this.subfield);
     }
 
@@ -66,12 +67,13 @@ public class MarcLinkTest {
     public void testGetLinkText() {
         expect(this.field.getSubfield('q')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("subfieldQ");
-        expect(this.version.getSummaryHoldings()).andReturn("summaryHoldings");
+        expect(this.version.getHoldingsAndDates()).andReturn("summaryHoldings, dates");
+//        expect(this.version.getSummaryHoldings()).andReturn("summaryHoldings");
         expect(this.version.getLinks()).andReturn(Collections.<Link> singletonList(this.link));
-        expect(this.version.getDates()).andReturn("dates");
-        expect(this.version.getDescription()).andReturn("description");
+//        expect(this.version.getDates()).andReturn("dates");
+//        expect(this.version.getDescription()).andReturn("description");
         replay(this.field, this.version, this.subfield);
-        assertEquals("summaryHoldings, dates description", this.link.getLinkText());
+        assertEquals("summaryHoldings, dates", this.link.getLinkText());
         verify(this.field, this.version, this.subfield);
     }
 

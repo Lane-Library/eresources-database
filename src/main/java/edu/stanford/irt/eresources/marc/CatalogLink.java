@@ -13,7 +13,7 @@ public class CatalogLink implements Link {
 
     @Override
     public String getAdditionalText() {
-        return "";
+        return null;
     }
 
     @Override

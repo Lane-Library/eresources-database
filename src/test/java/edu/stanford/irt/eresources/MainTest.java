@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EresourcesETLAppTest {
+public class MainTest {
 
     private Main app;
 
