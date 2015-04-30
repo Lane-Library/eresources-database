@@ -9,24 +9,16 @@ import java.util.Date;
 
 public class DBUpdate extends DBLoader {
 
+    private static final String SELECT = "SELECT MAX(UPDATED) FROM ERESOURCE";
+
     public static void main(final String[] args) throws SQLException, IOException {
         DBLoader.main(new String[] { "db-update" });
-    }
-
-    private String selectQuery;
-
-    public DBUpdate() {
-        this("");
-    }
-
-    public DBUpdate(final String tablePrefix) {
-        this.selectQuery = "SELECT MAX(UPDATED) FROM " + tablePrefix + "ERESOURCE";
     }
 
     @Override
     protected Date getUpdatedDate(final Statement stmt) throws SQLException {
         Timestamp timeLastUpdated = null;
-        try (ResultSet rs = stmt.executeQuery(this.selectQuery)) {
+        try (ResultSet rs = stmt.executeQuery(SELECT)) {
             if (!rs.next()) {
                 throw new EresourceDatabaseException("unable to get MAX(UPDATED)");
             }
