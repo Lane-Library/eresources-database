@@ -76,12 +76,12 @@ public class SAXVersion extends AbstractVersion {
 
     @Override
     public String getHoldingsAndDates() {
-        StringBuilder sb = new StringBuilder(" ");
+        StringBuilder sb = new StringBuilder();
         if (this.summaryHoldings != null) {
             sb.append(this.summaryHoldings);
         }
         maybeAppend(sb, this.dates);
-        return sb.toString();
+        return sb.length() == 0 ? null : sb.toString();
     }
 
     @Override
