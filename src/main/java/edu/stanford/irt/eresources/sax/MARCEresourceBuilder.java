@@ -360,7 +360,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("y".equals(this.code)) {
                 this.currentVersion.setDates(this.currentText.toString());
             } else if ("z".equals(this.code)) {
-                this.currentVersion.setDescription(this.currentText.toString());
+                this.currentVersion.setAdditionalText(this.currentText.toString());
             }
         } else if ("856".equals(this.tag)) {
             if ("q".equals(this.code) && (null == this.q)) {
@@ -370,7 +370,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("u".equals(this.code)) {
                 this.currentLink.setUrl(this.currentText.toString());
             } else if ("i".equals(this.code)) {
-                maybeSetInstruction(this.currentLink, this.currentText.toString());
+                maybeSetAdditionalText(this.currentLink, this.currentText.toString());
             }
         }
     }
@@ -387,7 +387,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    protected void maybeSetInstruction(final SAXLink link, final String instruction) {
+    protected void maybeSetAdditionalText(final SAXLink link, final String instruction) {
         link.setInstruction(instruction);
     }
 
@@ -491,7 +491,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentVersion.addLink(this.currentLink);
             }
         } else if ("866".equals(this.tag) && (++this.countOf866 > 1)) {
-            this.currentVersion.setDescription("");
+            this.currentVersion.setAdditionalText("");
         }
     }
 

@@ -75,7 +75,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         } else if ("instruction".equals(name)) {
             this.currentLink.setInstruction(this.currentText.toString());
         } else if ("description".equals(name)) {
-            this.currentVersion.setDescription(this.currentText.toString());
+            this.currentVersion.setAdditionalText(this.currentText.toString());
         } else if (!"eresources".equals(name)) {
             throw new EresourceDatabaseException("cant handle " + name);
         }

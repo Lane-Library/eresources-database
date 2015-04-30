@@ -5,7 +5,7 @@ import java.util.Collection;
 public class PrintMARCEresourceBuilder extends MARCEresourceBuilder {
 
     @Override
-    protected void maybeSetInstruction(SAXLink link, String instruction) {
+    protected void maybeSetAdditionalText(SAXLink link, String additionalText) {
         // do nothing
     }
 

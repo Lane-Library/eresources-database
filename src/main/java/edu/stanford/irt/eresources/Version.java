@@ -5,11 +5,9 @@ import java.util.List;
 
 public interface Version {
 
-    String getAdditionalText();
-
     String getDates();
 
-    String getDescription();
+    String getAdditionalText();
 
     String getHoldingsAndDates();
 
