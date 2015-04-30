@@ -61,7 +61,7 @@ public class SAXVersion implements Version {
             sb.append(this.summaryHoldings);
         }
         maybeAppend(sb, this.dates);
-        return sb.toString();
+        return sb.length() == 0 ? null : sb.toString();
     }
 
     /*
