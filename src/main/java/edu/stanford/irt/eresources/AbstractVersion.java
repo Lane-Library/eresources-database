@@ -10,7 +10,7 @@ public abstract class AbstractVersion implements Version {
         if (summaryHoldings != null) {
             sb.append(summaryHoldings);
         }
-        if (dates != null) {
+        if (dates != null && !dates.isEmpty()) {
             if (sb.length() > 0) {
                 sb.append(", ");
             }
