@@ -41,8 +41,8 @@
         <property name="password" value="${eresources.voyagerdb.password}"/>
     </bean>
     <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" destroy-method="destroy">
-        <property name="corePoolSize" value="4"/>
-        <property name="maxPoolSize" value="4"/>
+        <property name="corePoolSize" value="5"/>
+        <property name="maxPoolSize" value="5"/>
         <property name="queueCapacity" value="0"/>
     </bean>
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
