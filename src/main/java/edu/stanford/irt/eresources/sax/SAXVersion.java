@@ -24,7 +24,7 @@ public class SAXVersion implements Version {
 
     private String dates;
 
-    private String description;
+    private String additionalText;
 
     private boolean hasGetPasswordLink = false;
 
@@ -56,41 +56,12 @@ public class SAXVersion implements Version {
     
     @Override
     public String getHoldingsAndDates() {
-        StringBuilder sb = new StringBuilder(" ");
+        StringBuilder sb = new StringBuilder();
         if (this.summaryHoldings != null) {
             sb.append(this.summaryHoldings);
         }
         maybeAppend(sb, this.dates);
-        return sb.toString();
-    }
-
-    @Override
-    public String getAdditionalText() {
-        StringBuilder sb = new StringBuilder(" ");
-        if (this.summaryHoldings != null) {
-            sb.append(this.summaryHoldings);
-        }
-        maybeAppend(sb, this.dates);
-        maybeAppend(sb, this.publisher);
-        maybeAppend(sb, this.description);
-        if (this.links != null && !this.links.isEmpty()) {
-            Link firstLink = this.links.get(0);
-            String label = firstLink.getLabel();
-            if (sb.length() == 1 && label != null) {
-                sb.append(label);
-            }
-            String instruction = firstLink.getInstruction();
-            if (instruction != null) {
-                if (sb.length() > 1) {
-                    sb.append(", ");
-                }
-                sb.append(instruction);
-            }
-        }
-        if (sb.length() > 1) {
-            sb.append(" ");
-        }
-        return sb.toString();
+        return sb.length() == 0 ? null : sb.toString();
     }
 
     /*
@@ -107,8 +78,8 @@ public class SAXVersion implements Version {
      * @see edu.stanford.irt.eresources.Version#getDescription()
      */
     @Override
-    public String getDescription() {
-        return this.description;
+    public String getAdditionalText() {
+        return this.additionalText;
     }
 
     /*
@@ -179,8 +150,8 @@ public class SAXVersion implements Version {
         this.dates = dates;
     }
 
-    public void setDescription(final String description) {
-        this.description = description;
+    public void setAdditionalText(final String additionalText) {
+        this.additionalText = additionalText;
     }
 
     public void setHasGetPasswordLink(final boolean hasGetPasswordLink) {

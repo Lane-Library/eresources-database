@@ -13,57 +13,43 @@ public class SAXLink implements Link {
 
     private Version version;
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getAdditionalText()
-     */
     @Override
     public String getAdditionalText() {
         StringBuilder sb = new StringBuilder();
-        if (this.instruction != null) {
-            sb.append(" ").append(this.instruction);
+        String publisher = this.version.getPublisher();
+        String versionText = this.version.getAdditionalText();
+        if (publisher != null && !publisher.isEmpty()) {
+            sb.append(publisher);
         }
-        if (this.version.getPublisher() != null) {
-            sb.append(" ").append(this.version.getPublisher());
+        if (versionText != null && !versionText.isEmpty()) {
+            if (sb.length() > 0) {
+                sb.append(", ");
+            }
+            sb.append(versionText);
         }
-        return sb.toString();
+        if (this.instruction != null && !this.instruction.isEmpty()) {
+            if (sb.length() > 0) {
+                sb.append(", ");
+            }
+            sb.append(this.instruction);
+        }
+        return sb.length() == 0 ? null : sb.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getInstruction()
-     */
-    @Override
-    public String getInstruction() {
-        return this.instruction;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getLabel()
-     */
     @Override
     public String getLabel() {
         return this.label;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getLinkText()
-     */
     @Override
     public String getLinkText() {
         StringBuilder sb = new StringBuilder();
         if ("impact factor".equalsIgnoreCase(this.label)) {
             sb.append("Impact Factor");
         } else {
-            String summaryHoldings = this.version.getSummaryHoldings();
-            if (summaryHoldings != null && this.version.getLinks().size() == 1) {
-                sb.append(summaryHoldings);
-                String dates = this.version.getDates();
-                if (dates != null && dates.length() > 0) {
-                    sb.append(", ").append(dates);
-                }
+            String holdingsAndDates = this.version.getHoldingsAndDates();
+            if (holdingsAndDates != null && this.version.getLinks().size() == 1) {
+                sb.append(holdingsAndDates);
             } else {
                 if (this.label != null) {
                     sb.append(this.label);
@@ -72,18 +58,10 @@ public class SAXLink implements Link {
             if (sb.length() == 0) {
                 sb.append(this.label);
             }
-            String description = this.version.getDescription();
-            if (description != null && description.length() > 0) {
-                sb.append(" ").append(description);
-            }
         }
         return sb.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Link#getUrl()
-     */
     @Override
     public String getUrl() {
         return this.url;

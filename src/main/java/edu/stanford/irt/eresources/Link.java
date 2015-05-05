@@ -4,8 +4,6 @@ public interface Link {
 
     String getAdditionalText();
 
-    String getInstruction();
-
     String getLabel();
 
     String getLinkText();

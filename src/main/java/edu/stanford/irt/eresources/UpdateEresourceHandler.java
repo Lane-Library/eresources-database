@@ -12,40 +12,26 @@ import javax.sql.DataSource;
 
 public class UpdateEresourceHandler extends DefaultEresourceHandler {
 
-    private static final String DELETE_FROM = "DELETE FROM ";
+    private static final String DELETEFROM = "DELETE FROM ";
 
-    private String deleteEresource;
+    private static final String DELETE_ERESOURCE = DELETEFROM + "ERESOURCE WHERE ERESOURCE_ID = ";
 
-    private String deleteLink;
+    private static final String DELETE_LINK = DELETEFROM + "LINK WHERE ERESOURCE_ID = ";
 
-    private String deleteMesh;
+    private static final String DELETE_MESH = DELETEFROM + "MESH WHERE ERESOURCE_ID = ";
 
-    private String deleteSubset;
+    private static final String DELETE_SUBSET = DELETEFROM + "SUBSET WHERE ERESOURCE_ID = ";
 
-    private String deleteType;
+    private static final String DELETE_TYPE = DELETEFROM + "TYPE WHERE ERESOURCE_ID = ";
 
-    private String deleteVersion;
-
-    private String tablePrefix;
+    private static final String DELETE_VERSION = DELETEFROM + "VERSION WHERE ERESOURCE_ID = ";
 
     private EresourceSQLTranslator translator;
 
     public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
             final EresourceSQLTranslator translator) {
-        this(dataSource, queue, translator, "");
-    }
-
-    public UpdateEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
-            final EresourceSQLTranslator translator, final String tablePrefix) {
-        super(dataSource, queue, translator, tablePrefix);
+        super(dataSource, queue, translator);
         this.translator = translator;
-        this.tablePrefix = tablePrefix;
-        this.deleteEresource = DELETE_FROM + this.tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ";
-        this.deleteVersion = DELETE_FROM + this.tablePrefix + "VERSION WHERE ERESOURCE_ID = ";
-        this.deleteLink = DELETE_FROM + this.tablePrefix + "LINK WHERE ERESOURCE_ID = ";
-        this.deleteType = DELETE_FROM + this.tablePrefix + "TYPE WHERE ERESOURCE_ID = ";
-        this.deleteSubset = DELETE_FROM + this.tablePrefix + "SUBSET WHERE ERESOURCE_ID = ";
-        this.deleteMesh = DELETE_FROM + this.tablePrefix + "MESH WHERE ERESOURCE_ID = ";
     }
 
     protected UpdateEresourceHandler() {
@@ -62,12 +48,12 @@ public class UpdateEresourceHandler extends DefaultEresourceHandler {
                 }
             }
             for (String id : ids) {
-                stmt.addBatch(this.deleteEresource + id);
-                stmt.addBatch(this.deleteVersion + id);
-                stmt.addBatch(this.deleteLink + id);
-                stmt.addBatch(this.deleteType + id);
-                stmt.addBatch(this.deleteSubset + id);
-                stmt.addBatch(this.deleteMesh + id);
+                stmt.addBatch(DELETE_ERESOURCE + id);
+                stmt.addBatch(DELETE_VERSION + id);
+                stmt.addBatch(DELETE_LINK + id);
+                stmt.addBatch(DELETE_TYPE + id);
+                stmt.addBatch(DELETE_SUBSET + id);
+                stmt.addBatch(DELETE_MESH + id);
                 stmt.executeBatch();
             }
         }

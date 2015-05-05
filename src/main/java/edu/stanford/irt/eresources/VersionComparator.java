@@ -52,7 +52,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      *
      * <pre>
      * ++ dates or summaryHoldings end in "-"
-     * -- description has "delayed" in it
+     * -- additionalText has "delayed" in it
      * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
      * </pre>
@@ -85,8 +85,8 @@ public class VersionComparator implements Comparator<Version>, Serializable {
                 score--;
             }
         }
-        String description = version.getDescription();
-        if (description != null && description.contains("delayed")) {
+        String additionalText = version.getAdditionalText();
+        if (additionalText != null && additionalText.contains("delayed")) {
             score--;
         }
         // make sure installed software product description is first:

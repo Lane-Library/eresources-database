@@ -33,10 +33,15 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
-    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Journal", "Periodicals", "Newspapers" },
+    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { 
+    	{ "Journal", "Periodicals", "Newspapers" },
         { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
         { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-        { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Graphic", "Graphics" }, { "Article", "Articles" } };
+        { "Book", "Book Sets", "Books" },
+        { "Database", "Databases" }, 
+        { "Graphic", "Graphics" }, 
+        { "Article", "Articles" },
+        { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical"}};
 
     private static final String ENG = "English";
 
@@ -380,9 +385,6 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public String getTitle() {
-        if (this.title != null && this.title.length() > 512) {
-            return this.title.substring(0, 511);
-        }
         return this.title;
     }
 
