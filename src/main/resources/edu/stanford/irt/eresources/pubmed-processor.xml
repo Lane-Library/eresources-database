@@ -25,9 +25,22 @@
         <constructor-arg name="searchers">
             <list>
 			    <bean class="edu.stanford.irt.eresources.PubmedSearcher">
-			        <constructor-arg name="type" value="Systematic Review"/>
+			        <constructor-arg name="field" value="publicationType"/>
+			        <constructor-arg name="value" value="Systematic Review"/>
 			        <constructor-arg name="query" value="systematic[sb]"/>
 			    </bean>
+			    <!-- examples: fields don't exist in solr
+			    <bean class="edu.stanford.irt.eresources.PubmedSearcher">
+			        <constructor-arg name="field" value="questionType"/>
+			        <constructor-arg name="value" value="Harm"/>
+                    <constructor-arg name="query" value="(adverse+effects+[sh]+OR+complications+[sh]+OR+%22risk%22+[mh]+OR+mortality+[sh]+OR+%22survival+analysis%22+[mh]+OR+epidem*+[tw]+OR+cluster*+[tw]+OR+hospitalizations+[tw]+OR+frequen*+[tw]+OR+prevalen*+[tw]+OR+rate*+[tw]+OR+incidence+[tw]+OR+morbid*+[tw]+OR+mortali*+[tw]+OR+occur*+[tw]+OR+surveillance+[tw])+AND+%22humans%22[mesh]"/>
+                </bean>
+                <bean class="edu.stanford.irt.eresources.PubmedSearcher">
+                    <constructor-arg name="field" value="isChild"/>
+                    <constructor-arg name="value" value="true"/>
+                    <constructor-arg name="query" value="(child*+[tiab]+OR+teen*+[tiab]+OR+adolesc*+[tiab]+OR+pediatric*+[tiab]+OR+infant*+[tiab]+OR+newborn*+[tiab]+OR+neonat*+[tiab]+OR+%22infant%22[MeSH+Terms]+OR+%22child%22[MeSH+Terms]+OR+%22adolescent%22[MeSH+Terms])"/>
+			    </bean>
+			     -->
             </list>
         </constructor-arg>
     </bean>

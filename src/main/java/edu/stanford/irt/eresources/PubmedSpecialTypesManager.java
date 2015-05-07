@@ -11,13 +11,13 @@ public class PubmedSpecialTypesManager {
 
     private Collection<PubmedSearcher> searchers;
 
-    private Map<String, Collection<String>> specialPmids;
+    private Map<String, Collection<String[]>> specialPmids;
 
     public PubmedSpecialTypesManager(final Collection<PubmedSearcher> searchers) {
         this.searchers = searchers;
     }
 
-    public Collection<String> getTypes(final String pmid) {
+    public Collection<String[]> getTypes(final String pmid) {
         if (null == this.specialPmids || this.specialPmids.isEmpty()) {
             init();
         }
@@ -28,18 +28,20 @@ public class PubmedSpecialTypesManager {
     }
 
     private void init() {
-        this.specialPmids = new HashMap<String, Collection<String>>();
+        this.specialPmids = new HashMap<String, Collection<String[]>>();
         for (PubmedSearcher searcher : this.searchers) {
-            String type = searcher.getType();
+            String field = searcher.getField();
+            String value = searcher.getValue();
             List<String> pmids = searcher.getPmids();
             for (String pmid : pmids) {
-                Collection<String> values;
+                Collection<String[]> values;
                 if (this.specialPmids.containsKey(pmid)) {
                     values = this.specialPmids.get(pmid);
                 } else {
-                    values = new ArrayList<String>();
+                    values = new ArrayList<String[]>();
                 }
-                values.add(type);
+                String[] fieldAndValue = { field, value };
+                values.add(fieldAndValue);
                 this.specialPmids.put(pmid, values);
             }
         }

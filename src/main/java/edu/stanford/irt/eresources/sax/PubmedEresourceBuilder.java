@@ -137,9 +137,7 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             this.currentEresource = new SAXEresource();
             this.currentEresource.setRecordId(Integer.parseInt(id));
             this.currentEresource.setRecordType(atts.getValue("type"));
-            for (String type : this.specialTypesManager.getTypes(id)) {
-                this.currentEresource.addPublicationType(type);
-            }
+            getSpecialTypesForPmid(id);
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(atts.getValue("update")));
             } catch (ParseException e) {
@@ -149,6 +147,18 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             this.currentVersion = new SAXVersion();
         } else if ("link".equals(name)) {
             this.currentLink = new SAXLink();
+        }
+    }
+
+    private void getSpecialTypesForPmid(final String pmid) {
+        for (String[] fieldAndValue : this.specialTypesManager.getTypes(pmid)) {
+            String field = fieldAndValue[0];
+            String value = fieldAndValue[1];
+            if ("publicationType".equals(field)) {
+                this.currentEresource.addPublicationType(value);
+            } else {
+                throw new EresourceDatabaseException("unknown field: " + field + " pmid " + pmid + " value " + value);
+            }
         }
     }
 }
