@@ -8,10 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Executor;
@@ -44,26 +44,7 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                 PreparedStatement getBibStmt = conn.prepareStatement(getBibQuery());
                 PreparedStatement getMfhdStmt = conn.prepareStatement(getMfhdQuery())) {
             prepareListStatement(getListStmt);
-            Map<String, Collection<String>> ids = new HashMap<String, Collection<String>>();
-            String lastBib = null;
-            Collection<String> mfhds = null;
-            try (ResultSet rs = getListStmt.executeQuery()) {
-                int columnCount = rs.getMetaData().getColumnCount();
-                while (rs.next()) {
-                    String currentBib = rs.getString(1);
-                    if (columnCount > 1) {
-                        String currentMfhd = rs.getString(2);
-                        if (!currentBib.equals(lastBib)) {
-                            lastBib = currentBib;
-                            mfhds = new LinkedList<String>();
-                            ids.put(currentBib, mfhds);
-                        }
-                        mfhds.add(currentMfhd);
-                    } else {
-                        ids.put(currentBib, Collections.<String> emptySet());
-                    }
-                }
-            }
+            Map<String, Collection<String>> ids = getIdMap(getListStmt);
             for (Entry<String, Collection<String>> entry : ids.entrySet()) {
                 String bibId = entry.getKey();
                 getBibStmt.setString(1, bibId);
@@ -127,5 +108,26 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
         for (int i = 1; i <= qmarkCount; i++) {
             stmt.setTimestamp(i, this.startDate);
         }
+    }
+
+    private Map<String, Collection<String>> getIdMap(final PreparedStatement getListStmt) throws SQLException {
+        Map<String, Collection<String>> ids = new HashMap<String, Collection<String>>();
+        try (ResultSet rs = getListStmt.executeQuery()) {
+            int columnCount = rs.getMetaData().getColumnCount();
+            while (rs.next()) {
+                String bibId = rs.getString(1);
+                if (columnCount > 1) {
+                    Collection<String> mfhds = ids.get(bibId);
+                    if (mfhds == null) {
+                        mfhds = new ArrayList<String>();
+                        ids.put(bibId, mfhds);
+                    }
+                    mfhds.add(rs.getString(2));
+                } else {
+                    ids.put(bibId, Collections.<String> emptySet());
+                }
+            }
+        }
+        return ids;
     }
 }
