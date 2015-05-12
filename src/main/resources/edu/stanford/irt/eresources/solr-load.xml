@@ -6,7 +6,6 @@
     <import resource="web-processor.xml"/>
     <import resource="auth-processor.xml"/>
     <import resource="classes-processor.xml"/>
-    <import resource="print-processor.xml"/>
     <import resource="laneblog-processor.xml"/>
     <bean id="abstractSolrLoader" class="edu.stanford.irt.eresources.SolrLoader" abstract="true">
         <property name="killPrevious" value="true"/>
@@ -17,7 +16,6 @@
                 <ref bean="webProcessor"/>
                 <ref bean="authProcessor"/>
                 <ref bean="classesProcessor"/>
-                <ref bean="printProcessor"/>
                 <ref bean="laneblogProcessor"/>
             </list>
         </property>
