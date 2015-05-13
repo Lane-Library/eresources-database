@@ -553,7 +553,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String getPrintOrDigital() {
         String printOrDigital = null;
-        if ("print".equals(this.recordType)) {
+        if (this.types.contains("Print")) {
             printOrDigital = "Print";
         } else {
             printOrDigital = "Digital";
