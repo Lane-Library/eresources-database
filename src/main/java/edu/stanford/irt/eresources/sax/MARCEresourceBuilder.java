@@ -144,7 +144,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 if (this.currentVersion.getLinks().size() == 0) {
                     this.currentEresource.addType("Print");
                     SAXLink link = new SAXLink();
-                    link.setLabel("Lane Catalog record");
+                    link.setLabel("Lane Catalog Record");
                     link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
                     this.currentVersion.addLink(link);
                 }
