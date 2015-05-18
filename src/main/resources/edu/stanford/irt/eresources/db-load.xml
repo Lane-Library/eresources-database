@@ -8,6 +8,7 @@
     <import resource="classes-processor.xml"/>
     <import resource="print-processor.xml"/>
     <import resource="laneblog-processor.xml"/>
+    <import resource="select-processor.xml"/>
     <bean id="abstractDbLoader" class="edu.stanford.irt.eresources.DBLoader" abstract="true">
         <property name="userName" value="${eresources.eresourcesdb.username}"/>
         <property name="dataSource" ref="erdbDataSource"/>
@@ -19,6 +20,7 @@
                 <ref bean="classesProcessor"/>
                 <ref bean="printProcessor"/>
                 <ref bean="laneblogProcessor"/>
+                <ref bean="selectProcessor"/>
             </list>
         </property>
         <property name="version" value="${project.version}"/>
@@ -52,7 +54,7 @@
         class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="proxyTargetClass" value="true"/>
         <property name="beanNames"
-            value="dbLoader,bibProcessor,webProcessor,authProcessor,classesProcessor,printProcessor,laneblogProcessor,eresourceHandler"/>
+            value="dbLoader,bibProcessor,webProcessor,authProcessor,classesProcessor,printProcessor,laneblogProcessor,selectProcessor,eresourceHandler"/>
         <property name="interceptorNames"
             value="exceptionAdvisor,beforeMethodAdvisor,afterMethodAdvisor"/>
     </bean>

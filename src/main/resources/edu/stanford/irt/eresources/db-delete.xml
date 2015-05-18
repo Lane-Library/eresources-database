@@ -30,4 +30,8 @@
         <property name="dataSource" ref="voyagerDataSource"/>
         <property name="executor" ref="executor"/>
     </bean>
+    <bean id="selectBibInputStream" class="edu.stanford.irt.eresources.SelectBibInputStream">
+        <property name="dataSource" ref="voyagerDataSource"/>
+        <property name="executor" ref="executor"/>
+    </bean>
 </beans>
