@@ -77,7 +77,7 @@ public class SAXEresource implements Cloneable, Eresource {
             PRIMARY_TYPES.put("document", "Book");
             PRIMARY_TYPES.put("documents", "Book");
             PRIMARY_TYPES.put("laneclass", "Lane Class");
-            PRIMARY_TYPES.put("lanepage", "Lane Webpage");
+            PRIMARY_TYPES.put("lanepage", "Lane Web Page");
             PRIMARY_TYPES.put("leaflet", "Book");
             PRIMARY_TYPES.put("leaflets", "Book");
             PRIMARY_TYPES.put("pamphlet", "Book");
