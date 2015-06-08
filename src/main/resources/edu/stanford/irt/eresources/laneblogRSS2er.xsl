@@ -13,6 +13,7 @@
 			<keywords>
 				<xsl:value-of select="concat(title, ' ', description)" />
 			</keywords>
+			<year><xsl:value-of select="replace(pubDate,'.* (\d{4}).*','$1')"/></year>
 			<version>
 				<link>
 					<subset>noproxy</subset>
