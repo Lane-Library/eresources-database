@@ -114,6 +114,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         List<Version> versions = new LinkedList<Version>();
         int[] itemCount = eresource.getItemCount();
         key.append(recordType).append("-").append(Integer.toString(eresource.getRecordId()));
+        if (eresource.isClone()) {
+            key.append("-clone");
+        }
         doc.addField("id", key.toString());
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
         doc.addField("recordType", eresource.getRecordType());

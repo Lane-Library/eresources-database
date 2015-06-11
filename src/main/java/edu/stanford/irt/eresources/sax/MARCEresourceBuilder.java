@@ -511,8 +511,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 try {
                     SAXEresource clone = (SAXEresource) this.currentEresource.clone();
                     clone.setTitle(this.preferredTitle.toString());
-                    // clone needs different id so solr doesn't just overwrite parent record
-                    clone.setRecordId(Math.abs(clone.getTitle().hashCode()));
                     this.hasPreferredTitle = false;
                     this.preferredTitle.setLength(0);
                     this.eresourceHandler.handleEresource(clone);
