@@ -64,6 +64,7 @@
                         <stx:value-of select="$title"/>
                     </stx:otherwise>
                 </stx:choose>
+                <stx:if test="$title = ''">[No title available]</stx:if>
             </stx:assign>
             <title><stx:value-of select="$title"/></title>
             <stx:if test="$description != ''">
