@@ -388,6 +388,9 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public String getTitle() {
+        if (null == this.title) {
+            this.title = "[No title available]";
+        }
         return this.title;
     }
 
