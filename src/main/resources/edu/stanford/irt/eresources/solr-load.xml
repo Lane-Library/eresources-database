@@ -6,7 +6,6 @@
     <import resource="web-processor.xml"/>
     <import resource="auth-processor.xml"/>
     <import resource="classes-processor.xml"/>
-    <import resource="print-processor.xml"/>
     <import resource="laneblog-processor.xml"/>
     <bean id="abstractSolrLoader" class="edu.stanford.irt.eresources.SolrLoader" abstract="true">
         <property name="killPrevious" value="true"/>
@@ -17,7 +16,6 @@
                 <ref bean="webProcessor"/>
                 <ref bean="authProcessor"/>
                 <ref bean="classesProcessor"/>
-                <ref bean="printProcessor"/>
                 <ref bean="laneblogProcessor"/>
             </list>
         </property>
@@ -43,8 +41,8 @@
         <property name="password" value="${eresources.voyagerdb.password}"/>
     </bean>
     <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" destroy-method="destroy">
-        <property name="corePoolSize" value="4"/>
-        <property name="maxPoolSize" value="4"/>
+        <property name="corePoolSize" value="5"/>
+        <property name="maxPoolSize" value="5"/>
         <property name="queueCapacity" value="0"/>
     </bean>
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

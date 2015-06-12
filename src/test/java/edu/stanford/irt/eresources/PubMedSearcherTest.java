@@ -16,14 +16,16 @@ public class PubMedSearcherTest {
     @Before
     public void setUp() throws Exception {
         this.searchers = new ArrayList<PubmedSearcher>();
-        this.searchers.add(new PubmedSearcher("type_foo", "24120354"));
-        this.searchers.add(new PubmedSearcher("type_bar", "24120355"));
+        this.searchers.add(new PubmedSearcher("field_foo", "value_foo", "24120354"));
+        this.searchers.add(new PubmedSearcher("field_bar", "value_bar", "24120355"));
     }
 
     @Test
     public final void test() throws Exception {
         PubmedSpecialTypesManager manager = new PubmedSpecialTypesManager(this.searchers);
-        assertTrue(manager.getTypes("24120354").contains("type_foo"));
-        assertTrue(manager.getTypes("24120355").contains("type_bar"));
+        assertTrue(manager.getTypes("24120354").iterator().next()[0].equals("field_foo"));
+        assertTrue(manager.getTypes("24120354").iterator().next()[1].equals("value_foo"));
+        assertTrue(manager.getTypes("24120355").iterator().next()[0].equals("field_bar"));
+        assertTrue(manager.getTypes("24120355").iterator().next()[1].equals("value_bar"));
     }
 }

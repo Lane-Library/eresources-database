@@ -80,7 +80,7 @@ public class PubmedInProcessDataFetcher implements DataFetcher {
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }
-        this.searcher = new PubmedSearcher("In-Process and As Supplied by Publisher", query);
+        this.searcher = new PubmedSearcher("No Field", "In-Process and As Supplied by Publisher", query);
         pmidListToFiles(this.searcher.getPmids());
         writeLastRunDate();
     }

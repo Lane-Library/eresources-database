@@ -32,14 +32,18 @@ import org.xml.sax.SAXException;
  */
 public class PubmedSearcher {
 
-    private static final String BASE_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&retmax=5000000&email=ryanmax@stanford.edu&term=";
+    private static final String BASE_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&email=ryanmax@stanford.edu&term=";
 
     private static final RequestConfig HTTP_CONFIG = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES)
             .build();
 
     private static final HttpClient httpClient = HttpClients.createDefault();
 
+    private static final int RET_MAX = 500000;
+
     private DocumentBuilderFactory factory;
+
+    private String field;
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -47,15 +51,20 @@ public class PubmedSearcher {
 
     private String query;
 
-    private String type;
+    private String value;
 
     private XPath xpath;
 
-    public PubmedSearcher(final String type, final String query) {
-        this.type = type;
+    public PubmedSearcher(final String field, final String value, final String query) {
+        this.field = field;
         this.query = query;
+        this.value = value;
         this.factory = DocumentBuilderFactory.newInstance();
         this.xpath = XPathFactory.newInstance().newXPath();
+    }
+
+    public String getField() {
+        return this.field;
     }
 
     /**
@@ -74,24 +83,32 @@ public class PubmedSearcher {
         if (this.query == null) {
             throw new IllegalStateException("null query");
         }
-        String xmlContent = getContent(BASE_URL + this.query);
-        Document doc;
-        NodeList nodes = null;
-        try {
-            doc = this.factory.newDocumentBuilder().parse(new ByteArrayInputStream(xmlContent.getBytes()));
-            nodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
-        } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
-            this.log.error("failed to fetch pmids", e);
-        }
-        for (int n = 0; n < nodes.getLength(); n++) {
-            Node node = nodes.item(n);
-            this.pmids.add(node.getTextContent().trim());
+        int retStart = 0;
+        int retMax = RET_MAX;
+        while (retMax >= RET_MAX) {
+            String xmlContent = getContent(BASE_URL + this.query + "&retmax=" + RET_MAX + "&retstart=" + retStart);
+            retStart = retStart + RET_MAX;
+            Document doc;
+            NodeList retmaxNode = null;
+            NodeList pmidNodes = null;
+            try {
+                doc = this.factory.newDocumentBuilder().parse(new ByteArrayInputStream(xmlContent.getBytes()));
+                retmaxNode = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
+                retMax = Integer.parseInt(retmaxNode.item(0).getTextContent().trim());
+                pmidNodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
+            } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
+                this.log.error("failed to fetch pmids", e);
+            }
+            for (int n = 0; n < pmidNodes.getLength(); n++) {
+                Node node = pmidNodes.item(n);
+                this.pmids.add(node.getTextContent().trim());
+            }
         }
         return this.pmids;
     }
 
-    public String getType() {
-        return this.type;
+    public String getValue() {
+        return this.value;
     }
 
     private String getContent(final String url) {

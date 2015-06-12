@@ -13,13 +13,12 @@ import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
+import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
 public class SAXEresource implements Cloneable, Eresource {
     
-    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
-
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Clinical Decision Tools", "Database",
@@ -33,16 +32,23 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
 
-    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Journal", "Periodicals", "Newspapers" },
+    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { 
+    	{ "Journal", "Periodicals", "Newspapers" },
         { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
         { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-        { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Graphic", "Graphics" }, { "Article", "Articles" } };
+        { "Book", "Book Sets", "Books" },
+        { "Database", "Databases" }, 
+        { "Graphic", "Graphics" }, 
+        { "Article", "Articles" },
+        { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical"}};
 
     private static final String ENG = "English";
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
+
+    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -71,7 +77,7 @@ public class SAXEresource implements Cloneable, Eresource {
             PRIMARY_TYPES.put("document", "Book");
             PRIMARY_TYPES.put("documents", "Book");
             PRIMARY_TYPES.put("laneclass", "Lane Class");
-            PRIMARY_TYPES.put("lanepage", "Lane Webpage");
+            PRIMARY_TYPES.put("lanepage", "Lane Web Page");
             PRIMARY_TYPES.put("leaflet", "Book");
             PRIMARY_TYPES.put("leaflets", "Book");
             PRIMARY_TYPES.put("pamphlet", "Book");
@@ -109,6 +115,8 @@ public class SAXEresource implements Cloneable, Eresource {
     private String pmid;
 
     private String primaryType;
+
+    private String printOrDigital;
 
     private Collection<String> publicationAuthors;
 
@@ -380,9 +388,6 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public String getTitle() {
-        if (this.title != null && this.title.length() > 512) {
-            return this.title.substring(0, 511);
-        }
         return this.title;
     }
 
@@ -550,12 +555,18 @@ public class SAXEresource implements Cloneable, Eresource {
     }
 
     private String getPrintOrDigital() {
-        String printOrDigital = null;
-        if ("print".equals(this.recordType)) {
-            printOrDigital = "Print";
-        } else {
-            printOrDigital = "Digital";
+        if (null != this.printOrDigital) {
+            return this.printOrDigital;
         }
-        return printOrDigital;
+        this.printOrDigital = "Print";
+        for (Version v : this.versions) {
+            for (Link l : v.getLinks()) {
+                if (!"Lane Catalog Record".equalsIgnoreCase(l.getLabel())) {
+                    this.printOrDigital = "Digital";
+                    return this.printOrDigital;
+                }
+            }
+        }
+        return this.printOrDigital;
     }
 }

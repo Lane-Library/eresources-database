@@ -19,23 +19,23 @@ public class DeleteEresourceHandler implements EresourceHandler {
 
     private static final String DELETE_FROM = "DELETE FROM ";
 
+    private static final String DELETE_FROM_ERESOURCE = DELETE_FROM + "ERESOURCE WHERE ERESOURCE_ID = ";
+
+    private static final String DELETE_FROM_VERSION = DELETE_FROM + "VERSION WHERE ERESOURCE_ID = ";
+
+    private static final String DELETE_FROM_LINK = DELETE_FROM + "LINK WHERE ERESOURCE_ID = ";
+
+    private static final String DELETE_FROM_TYPE = DELETE_FROM + "TYPE WHERE ERESOURCE_ID = ";
+
+    private static final String DELETE_FROM_MESH = DELETE_FROM + "MESH WHERE ERESOURCE_ID = ";
+    
+    private static final String GET_ID = "SELECT ERESOURCE_ID FROM ERESOURCE WHERE RECORD_TYPE = ? and RECORD_ID = ?";
+    
+    private static final String SELECT = "SELECT RECORD_TYPE, RECORD_ID FROM ERESOURCE";
+
     private int count = 0;
 
     private DataSource dataSource;
-
-    private String deleteEresource;
-
-    private String deleteLink;
-
-    private String deleteMesh;
-
-    private String deleteSubset;
-
-    private String deleteType;
-
-    private String deleteVersion;
-
-    private String getID;
 
     private Map<String, Set<Integer>> ids;
 
@@ -43,29 +43,10 @@ public class DeleteEresourceHandler implements EresourceHandler {
 
     private BlockingQueue<Eresource> queue;
 
-    private String selectSQL;
-
-    private String tablePrefix;
-
     public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue) {
-        this(dataSource, queue, "");
-    }
-
-    public DeleteEresourceHandler(final DataSource dataSource, final BlockingQueue<Eresource> queue,
-            final String tablePrefix) {
         this.dataSource = dataSource;
         this.queue = queue;
-        this.tablePrefix = tablePrefix;
         this.ids = new HashMap<String, Set<Integer>>();
-        this.deleteEresource = DELETE_FROM + this.tablePrefix + "ERESOURCE WHERE ERESOURCE_ID = ";
-        this.deleteVersion = DELETE_FROM + this.tablePrefix + "VERSION WHERE ERESOURCE_ID = ";
-        this.deleteLink = DELETE_FROM + this.tablePrefix + "LINK WHERE ERESOURCE_ID = ";
-        this.deleteType = DELETE_FROM + this.tablePrefix + "TYPE WHERE ERESOURCE_ID = ";
-        this.deleteSubset = DELETE_FROM + this.tablePrefix + "SUBSET WHERE ERESOURCE_ID = ";
-        this.deleteMesh = DELETE_FROM + this.tablePrefix + "MESH WHERE ERESOURCE_ID = ";
-        this.getID = "SELECT ERESOURCE_ID FROM " + this.tablePrefix
-                + "ERESOURCE WHERE RECORD_TYPE = ? and RECORD_ID = ?";
-        this.selectSQL = "SELECT RECORD_TYPE, RECORD_ID FROM " + this.tablePrefix + "ERESOURCE";
     }
 
     protected DeleteEresourceHandler() {
@@ -89,7 +70,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
     public void run() {
         try (Connection conn = this.dataSource.getConnection();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(this.selectSQL)) {
+                ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
                 String recordType = rs.getString("RECORD_TYPE");
                 Integer recordId = Integer.valueOf(rs.getInt("RECORD_ID"));
@@ -116,7 +97,7 @@ public class DeleteEresourceHandler implements EresourceHandler {
             }
             try (Connection conn = this.dataSource.getConnection();
                     Statement stmt = conn.createStatement();
-                    PreparedStatement pstmt = conn.prepareStatement(this.getID)) {
+                    PreparedStatement pstmt = conn.prepareStatement(GET_ID)) {
                 for (Entry<String, Set<Integer>> entry : this.ids.entrySet()) {
                     String recordType = entry.getKey();
                     for (Integer recordId : entry.getValue()) {
@@ -125,12 +106,11 @@ public class DeleteEresourceHandler implements EresourceHandler {
                         try (ResultSet rs = pstmt.executeQuery()) {
                             while (rs.next()) {
                                 int id = rs.getInt(1);
-                                stmt.addBatch(this.deleteEresource + id);
-                                stmt.addBatch(this.deleteVersion + id);
-                                stmt.addBatch(this.deleteLink + id);
-                                stmt.addBatch(this.deleteType + id);
-                                stmt.addBatch(this.deleteSubset + id);
-                                stmt.addBatch(this.deleteMesh + id);
+                                stmt.addBatch(DELETE_FROM_ERESOURCE + id);
+                                stmt.addBatch(DELETE_FROM_VERSION + id);
+                                stmt.addBatch(DELETE_FROM_LINK + id);
+                                stmt.addBatch(DELETE_FROM_TYPE + id);
+                                stmt.addBatch(DELETE_FROM_MESH + id);
                                 stmt.executeBatch();
                                 this.count++;
                             }
