@@ -274,8 +274,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
                 this.currentEresource.setPrimaryType(type);
             }
-        } else if ("650".equals(this.tag) && "a".equals(this.code) && "4".equals(this.ind1)
-                && ("237".indexOf(this.ind2) > -1)) {
+        } else if ("650".equals(this.tag) && "a".equals(this.code) && "2".equals(this.ind2)) {
             String mesh = this.currentText.toString();
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
