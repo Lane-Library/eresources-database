@@ -331,8 +331,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         }
         if (("100".equals(this.tag) || "700".equals(this.tag)) && "a".equals(this.code)) {
-            String auth = this.currentText.toString();
-            while (auth.endsWith(".") || auth.endsWith(",")) {
+            String auth = this.currentText.toString().replaceFirst(",$", "");
+            if (auth.endsWith(".") && !auth.matches(".* \\w\\.")) {
                 auth = auth.substring(0, auth.length() - 1);
             }
             this.currentEresource.addPublicationAuthor(auth);
