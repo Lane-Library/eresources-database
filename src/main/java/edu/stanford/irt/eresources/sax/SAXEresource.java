@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,6 +43,8 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final String ENG = "English";
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
+
+    private static final String PERIOD = ".";
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
@@ -115,7 +118,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String printOrDigital;
 
-    private Collection<String> publicationAuthors;
+    private Collection<String> publicationAuthors = new ArrayList<String>();
 
     private String publicationAuthorsText;
 
@@ -157,9 +160,6 @@ public class SAXEresource implements Cloneable, Eresource {
     }
 
     public void addPublicationAuthor(final String author) {
-        if (this.publicationAuthors == null) {
-            this.publicationAuthors = new HashSet<String>();
-        }
         this.publicationAuthors.add(author);
     }
 
@@ -297,6 +297,9 @@ public class SAXEresource implements Cloneable, Eresource {
 
     @Override
     public String getPublicationAuthorsText() {
+        if (null == this.publicationAuthorsText) {
+            this.publicationAuthorsText = buildPublicationAuthorsText();
+        }
         return this.publicationAuthorsText;
     }
 
@@ -549,6 +552,21 @@ public class SAXEresource implements Cloneable, Eresource {
 
     protected boolean isAllowable(final String type) {
         return ALLOWED_TYPES.contains(type);
+    }
+
+    private String buildPublicationAuthorsText() {
+        StringBuilder sb = new StringBuilder();
+        for (String auth : this.publicationAuthors) {
+            while (auth.endsWith(PERIOD)) {
+                auth = auth.substring(0, auth.length() - 1);
+            }
+            sb.append(auth).append("; ");
+        }
+        if (sb.length() > 2) {
+            sb.delete(sb.length() - 2, sb.length());
+            sb.append(PERIOD);
+        }
+        return sb.toString();
     }
 
     private String getPrintOrDigital() {

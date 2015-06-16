@@ -43,17 +43,17 @@ public class SolrEresourceHandler implements EresourceHandler {
         this.solrMaxDocs = solrMaxDocs;
     }
 
-    private static String getSortTitle(final String title) {
-        if (null == title || title.isEmpty()) {
-            return title;
+    private static String getSortText(final String text) {
+        if (null == text || text.isEmpty()) {
+            return text;
         }
-        String sortTitle = title.toLowerCase().replaceAll("[^0-9a-z ]", "").trim();
+        String sortText = text.toLowerCase().replaceAll("[^0-9a-z ]", "").trim();
         try {
-            sortTitle = sortTitle.substring(0, SORT_TITLE_MAX);
+            sortText = sortText.substring(0, SORT_TITLE_MAX);
         } catch (IndexOutOfBoundsException e) {
             // OK
         }
-        return sortTitle;
+        return sortText;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         String recordType = eresource.getRecordType();
         StringBuffer key = new StringBuffer();
         String title = eresource.getTitle();
-        String sortTitle = getSortTitle(title);
+        String sortTitle = getSortText(title);
         List<Version> versions = new LinkedList<Version>();
         int[] itemCount = eresource.getItemCount();
         key.append(recordType).append("-").append(Integer.toString(eresource.getRecordId()));
@@ -158,6 +158,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         publicationAuthorsText = (null != publicationAuthorsText) ? publicationAuthorsText : eresource.getAuthor();
         if (null != publicationAuthorsText) {
             doc.addField("publicationAuthorsText", publicationAuthorsText);
+            doc.addField("authors_sort", getSortText(publicationAuthorsText));
         }
         String publicationText = eresource.getPublicationText();
         if (null != publicationText) {
