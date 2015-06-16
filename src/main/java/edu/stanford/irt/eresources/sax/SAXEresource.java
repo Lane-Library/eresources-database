@@ -557,9 +557,6 @@ public class SAXEresource implements Cloneable, Eresource {
     private String buildPublicationAuthorsText() {
         StringBuilder sb = new StringBuilder();
         for (String auth : this.publicationAuthors) {
-            while (auth.endsWith(PERIOD)) {
-                auth = auth.substring(0, auth.length() - 1);
-            }
             sb.append(auth).append("; ");
         }
         if (sb.length() > 2) {

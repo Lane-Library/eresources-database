@@ -145,7 +145,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.currentEresource.addType("Print");
                     SAXLink link = new SAXLink();
                     link.setLabel("Lane Catalog Record");
-                    link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
+                    link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
+                            + this.currentEresource.getRecordId());
                     this.currentVersion.addLink(link);
                 }
                 this.currentEresource.addVersion(this.currentVersion);
@@ -330,7 +331,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         }
         if (("100".equals(this.tag) || "700".equals(this.tag)) && "a".equals(this.code)) {
-            this.currentEresource.addPublicationAuthor(this.currentText.toString().replaceFirst(",$", ""));
+            String auth = this.currentText.toString();
+            while (auth.endsWith(".") || auth.endsWith(",")) {
+                auth = auth.substring(0, auth.length() - 1);
+            }
+            this.currentEresource.addPublicationAuthor(auth);
         }
         if (("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) && "0".equals(this.code)) {
             String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString());
