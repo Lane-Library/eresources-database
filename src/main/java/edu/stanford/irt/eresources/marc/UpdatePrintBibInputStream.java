@@ -80,11 +80,6 @@ public class UpdatePrintBibInputStream extends UpdateBibInputStream {
           + "  FROM LMLDB.BIB_INDEX "
           + "  WHERE INDEX_CODE   = '655H' "
           + "  AND NORMAL_HEADING = 'SUBSET CIRCBIB' "
-          + "  UNION " 
-          + "  SELECT BIB_ID " 
-          + "  FROM LMLDB.BIB_INDEX " 
-          + "  WHERE INDEX_CODE   = '655H' " 
-          + "  AND NORMAL_HEADING = 'LANESELECT' " 
           + "  ) ";
 
     public UpdatePrintBibInputStream(final DataSource dataSource, final Executor executor, final StartDate startDate) {

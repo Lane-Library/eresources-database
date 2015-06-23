@@ -55,11 +55,6 @@ public class PrintBibInputStream extends BibInputStream {
           + "  FROM LMLDB.BIB_INDEX "
           + "  WHERE INDEX_CODE   = '655H' "
           + "  AND NORMAL_HEADING = 'SUBSET CIRCBIB' "
-          + "  UNION " 
-          + "  SELECT BIB_ID " 
-          + "  FROM LMLDB.BIB_INDEX " 
-          + "  WHERE INDEX_CODE   = '655H' " 
-          + "  AND NORMAL_HEADING = 'LANESELECT' " 
           + "  )";
 
     public PrintBibInputStream(final DataSource dataSource, final Executor executor) {
