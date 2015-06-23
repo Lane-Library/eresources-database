@@ -17,7 +17,7 @@
             </bean>
         </constructor-arg>
         <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.BibMarcTransformer">
+            <bean class="edu.stanford.irt.eresources.marc.PrintMarcTransformer">
                 <constructor-arg ref="itemCount"/>
                 <constructor-arg ref="keywordsStrategy"/>
             </bean>
