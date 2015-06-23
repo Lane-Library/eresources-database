@@ -8,6 +8,7 @@
     <import resource="classes-processor.xml"/>
     <import resource="print-processor.xml"/>
     <import resource="laneblog-processor.xml"/>
+    <import resource="select-processor.xml"/>
     <bean id="ETL" class="edu.stanford.irt.eresources.Main">
         <constructor-arg>
             <list>
