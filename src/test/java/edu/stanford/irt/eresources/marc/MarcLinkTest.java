@@ -69,7 +69,7 @@ public class MarcLinkTest {
         expect(this.subfield.getData()).andReturn("subfieldQ");
         expect(this.version.getHoldingsAndDates()).andReturn("summaryHoldings, dates");
 //        expect(this.version.getSummaryHoldings()).andReturn("summaryHoldings");
-        expect(this.version.getLinks()).andReturn(Collections.<Link> singletonList(this.link));
+        expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
 //        expect(this.version.getDates()).andReturn("dates");
 //        expect(this.version.getDescription()).andReturn("description");
         replay(this.field, this.version, this.subfield);

@@ -65,7 +65,7 @@ public class BibMarcEresourceTest {
 
     @Test
     public void testAddCustomTypesBassett() {
-        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> emptyList());
+        expect(this.record.getVariableFields("856")).andReturn(Collections.emptyList());
         expect(this.record.getVariableFields("035")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Bassett");
@@ -82,7 +82,7 @@ public class BibMarcEresourceTest {
         expect(this.record.getVariableFields("655")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Subset, Biotools");
-        expect(this.record.getVariableFields("035")).andReturn(Collections.<VariableField> emptyList());
+        expect(this.record.getVariableFields("035")).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
         Set<String> types = new HashSet<String>();
         this.eresource.addCustomTypes(types);
@@ -92,8 +92,8 @@ public class BibMarcEresourceTest {
 
     @Test
     public void testAddCustomTypesInstalledSoftware() {
-        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> emptyList());
-        expect(this.record.getVariableFields("035")).andReturn(Collections.<VariableField> emptyList());
+        expect(this.record.getVariableFields("856")).andReturn(Collections.emptyList());
+        expect(this.record.getVariableFields("035")).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
         Set<String> types = new HashSet<String>();
         types.add("newspaper");
@@ -215,7 +215,7 @@ public class BibMarcEresourceTest {
     @Test
     public void testGetDescription505() {
         expect(this.record.getVariableFields("520")).andReturn(Collections.emptyList());
-        expect(this.record.getVariableFields("505")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("505")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("data");
         replay(this.record, this.field, this.subfield);
@@ -225,7 +225,7 @@ public class BibMarcEresourceTest {
 
     @Test
     public void testGetDescription520() {
-        expect(this.record.getVariableFields("520")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("520")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("data");
         replay(this.record, this.field, this.subfield);
@@ -251,7 +251,7 @@ public class BibMarcEresourceTest {
 
     @Test
     public void testGetMeshTerms() {
-        expect(this.record.getVariableFields("650")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("650")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getIndicator1()).andReturn('4');
         expect(this.field.getIndicator2()).andReturn('7');
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
@@ -446,7 +446,7 @@ public class BibMarcEresourceTest {
     }
 
     private void setupLinks() {
-        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("856")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('u')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("856u");
         expect(this.field.getSubfield('q')).andReturn(this.subfield);
@@ -457,7 +457,7 @@ public class BibMarcEresourceTest {
         expect(this.record.getVariableField("866")).andReturn(this.field);
         expect(this.field.getSubfield('y')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("866y");
-        expect(this.record.getVariableFields("866")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("866")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfields('z')).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("866z");
         expect(this.record.getVariableField("866")).andReturn(this.field);
@@ -466,7 +466,7 @@ public class BibMarcEresourceTest {
         expect(this.record.getVariableField("866")).andReturn(this.field);
         expect(this.field.getSubfield('y')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("866y");
-        expect(this.record.getVariableFields("866")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("866")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfields('z')).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("866z");
         expect(this.record.getVariableField("866")).andReturn(this.field);

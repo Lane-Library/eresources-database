@@ -63,7 +63,7 @@ public class AbstractLinkTest {
     @Test
     public void testGetLinkText() {
         expect(this.version.getHoldingsAndDates()).andReturn("summaryHoldings, dates");
-        expect(this.version.getLinks()).andReturn(Collections.<Link> singletonList(this.link));
+        expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
         replay(this.version);
         assertEquals("summaryHoldings, dates", this.link.getLinkText("label", this.version));
         verify(this.version);

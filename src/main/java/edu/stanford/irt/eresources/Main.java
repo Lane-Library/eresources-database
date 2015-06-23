@@ -21,7 +21,7 @@ public class Main {
 
     private boolean killPrevious;
 
-    private Collection<ETLProcessor<?>> processors = Collections.<ETLProcessor<?>> emptyList();
+    private Collection<ETLProcessor<?>> processors = Collections.emptyList();
 
     private String version;
 

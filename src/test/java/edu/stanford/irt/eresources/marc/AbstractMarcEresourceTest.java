@@ -92,7 +92,7 @@ public class AbstractMarcEresourceTest {
 
     @Test
     public void testDoPrimaryType() {
-        expect(this.record.getVariableFields("655")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("655")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getIndicator1()).andReturn('4');
         expect(this.field.getIndicator2()).andReturn('7');
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
@@ -136,7 +136,7 @@ public class AbstractMarcEresourceTest {
 
     @Test
     public void testGetMeshTerms() {
-        expect(this.record.getVariableFields("650")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("650")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getIndicator1()).andReturn('4');
         expect(this.field.getIndicator2()).andReturn('7');
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
@@ -148,7 +148,7 @@ public class AbstractMarcEresourceTest {
 
     @Test
     public void testGetPrimaryType() {
-        expect(this.record.getVariableFields("655")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("655")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getIndicator1()).andReturn('4');
         expect(this.field.getIndicator2()).andReturn('7');
         expect(this.field.getSubfield('a')).andReturn(this.subfield);

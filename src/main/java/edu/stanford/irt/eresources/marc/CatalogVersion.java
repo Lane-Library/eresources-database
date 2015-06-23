@@ -12,7 +12,7 @@ public class CatalogVersion extends AbstractVersion {
     private List<Link> links;
 
     public CatalogVersion(final int recordId) {
-        this.links = Collections.<Link> singletonList(new CatalogLink(recordId));
+        this.links = Collections.singletonList(new CatalogLink(recordId));
     }
 
     @Override

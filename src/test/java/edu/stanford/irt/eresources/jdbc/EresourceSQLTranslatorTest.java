@@ -61,7 +61,7 @@ public class EresourceSQLTranslatorTest {
         expect(this.eresource.getTypes()).andReturn(Collections.singleton("type"));
         expect(this.eresource.getMeshTerms()).andReturn(Collections.singleton("mesh"));
         expect(this.eresource.getVersions()).andReturn(Collections.singleton(this.version));
-        expect(this.versionTranslator.getInsertSQL(this.version, 0)).andReturn(Collections.<String> emptyList());
+        expect(this.versionTranslator.getInsertSQL(this.version, 0)).andReturn(Collections.emptyList());
         replay(this.eresource, this.version, this.versionTranslator);
         List<String> sql = this.translator.getInsertSQL(this.eresource);
         String dateString = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(0));

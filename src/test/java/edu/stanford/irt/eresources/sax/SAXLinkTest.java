@@ -41,7 +41,7 @@ public class SAXLinkTest {
         Version version = createMock(Version.class);
         this.link.setVersion(version);
         expect(version.getHoldingsAndDates()).andReturn("summaryHoldings, dates");
-        expect(version.getLinks()).andReturn(Collections.<Link> singletonList(this.link));
+        expect(version.getLinks()).andReturn(Collections.singletonList(this.link));
         replay(version);
         assertEquals("summaryHoldings, dates", this.link.getLinkText());
         verify(version);

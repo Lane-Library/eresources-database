@@ -38,7 +38,7 @@ public class MarcVersionTest {
 
     @Test
     public void testGetAdditionalText() {
-        expect(this.record.getVariableFields("866")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("866")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfields('z')).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("description");
         replay(this.record, this.field, this.subfield);
@@ -58,7 +58,7 @@ public class MarcVersionTest {
 
     @Test
     public void testGetDescription() {
-        expect(this.record.getVariableFields("866")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("866")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfields('z')).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("description");
         replay(this.record, this.field, this.subfield);
@@ -68,7 +68,7 @@ public class MarcVersionTest {
 
     @Test
     public void testGetLinks() {
-        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("856")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('u')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("url");
         replay(this.record, this.field, this.subfield);
@@ -88,10 +88,10 @@ public class MarcVersionTest {
 
     @Test
     public void testGetSubsets() {
-        expect(this.record.getVariableFields("655")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("655")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Subset, Biotools");
-        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> emptyList());
+        expect(this.record.getVariableFields("856")).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
         assertArrayEquals(new String[] { "biotools" }, this.version.getSubsets().toArray());
         verify(this.record, this.field, this.subfield);
@@ -109,7 +109,7 @@ public class MarcVersionTest {
 
     @Test
     public void testHasGetPasswordLink() {
-        expect(this.record.getVariableFields("856")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("856")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('u')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("http://lane.stanford.edu/secure/ejpw.html");
         replay(this.record, this.field, this.subfield);
@@ -119,7 +119,7 @@ public class MarcVersionTest {
 
     @Test
     public void testIsProxy() {
-        expect(this.record.getVariableFields("655")).andReturn(Collections.<VariableField> singletonList(this.field));
+        expect(this.record.getVariableFields("655")).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfield('a')).andReturn(this.subfield);
         expect(this.subfield.getData()).andReturn("Subset, NoProxy");
         replay(this.record, this.field, this.subfield);
