@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+    
+    <bean id="selectProcessor" class="edu.stanford.irt.eresources.ETLProcessor">
+        <constructor-arg>
+            <idref bean="selectProcessor"/>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.RecordListExtractor">
+                <constructor-arg>
+                    <bean class="org.marc4j.MarcStreamReader">
+                        <constructor-arg ref="selectBibInputStream"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.BibMarcTransformer">
+                <constructor-arg ref="itemCount"/>
+                <constructor-arg ref="keywordsStrategy"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg ref="loader"/>
+    </bean>
+</beans>

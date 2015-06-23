@@ -17,6 +17,7 @@
                 <ref bean="classesProcessor"/>
                 <ref bean="printProcessor"/>
                 <ref bean="laneblogProcessor"/>
+                <ref bean="selectProcessor"/>
             </list>
         </constructor-arg>
         <constructor-arg value="${project.version}"/>

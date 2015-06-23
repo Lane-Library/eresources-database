@@ -67,4 +67,8 @@
         <constructor-arg ref="voyagerDataSource"/>
         <constructor-arg ref="executor"/>
     </bean>
+    <bean id="selectBibInputStream" class="edu.stanford.irt.eresources.marc.SelectBibInputStream">
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
+    </bean>
 </beans>

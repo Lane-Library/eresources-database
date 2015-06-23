@@ -37,4 +37,9 @@
         <constructor-arg ref="executor"/>
         <constructor-arg ref="startDate"/>
     </bean>
+    <bean id="selectBibInputStream" class="edu.stanford.irt.eresources.marc.UpdateSelectBibInputStream">
+        <constructor-arg ref="voyagerDataSource"/>
+        <constructor-arg ref="executor"/>
+        <constructor-arg ref="startDate"/>
+    </bean>
 </beans>
