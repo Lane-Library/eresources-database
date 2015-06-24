@@ -26,7 +26,7 @@ public class SAXEresource implements Cloneable, Eresource {
             "Book", "Journal", "Atlases, Pictorial", "Software, Installed - Redwood Room",
             "Software, Installed - Duck Room", "Software, Installed - Stone Room", "Software, Installed - M051",
             "Software, Installed - LKSC Student", "Software, Installed - LKSC Public", "Software, Installed",
-            "Software", "Statistics", "Video", "Graphic", "Lane Class", "Lane Web Page", "Print", "Bassett",
+            "Software", "Statistics", "Video", "Image", "Lane Class", "Lane Web Page", "Print", "Bassett",
             "Statistics Software, Installed", "Biotools Software, Installed", "Catalog" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
@@ -36,7 +36,7 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Journal", "Periodicals", "Newspapers" },
             { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
             { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-            { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Graphic", "Graphics" },
+            { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Image", "Graphics" },
             { "Article", "Articles" },
             { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" } };
 
