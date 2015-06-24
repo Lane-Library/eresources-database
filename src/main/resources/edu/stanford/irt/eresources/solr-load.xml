@@ -52,7 +52,7 @@
         class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="proxyTargetClass" value="true"/>
         <property name="beanNames"
-            value="solrIndexer,bibProcessor,webProcessor,authProcessor,classesProcessor,printProcessor,laneblogProcessor"/>
+            value="solrIndexer,bibProcessor,webProcessor,authProcessor,classesProcessor,laneblogProcessor"/>
         <property name="interceptorNames"
             value="exceptionAdvisor,beforeMethodAdvisor,afterMethodAdvisor"/>
     </bean>

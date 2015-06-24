@@ -8,8 +8,4 @@
         <property name="dataSource" ref="voyagerDataSource"/>
         <property name="executor" ref="executor"/>
     </bean>
-    <bean id="printBibInputStream" class="edu.stanford.irt.eresources.PrintBibInputStream">
-        <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
-    </bean>
 </beans>
