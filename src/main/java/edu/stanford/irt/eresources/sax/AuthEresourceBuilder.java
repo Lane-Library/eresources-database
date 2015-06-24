@@ -131,7 +131,7 @@ public class AuthEresourceBuilder extends DefaultHandler implements EresourceBui
             this.currentEresource = new SAXEresource();
             this.currentVersion = new SAXVersion();
             this.currentEresource.setRecordType("auth");
-            this.currentEresource.addType("catalog");
+            //this.currentEresource.addType("catalog");
         }
         if (SUBFIELD.equals(name)) {
             this.code = atts.getValue("code");
