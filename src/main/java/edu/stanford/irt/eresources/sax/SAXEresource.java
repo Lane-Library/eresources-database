@@ -410,7 +410,9 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public Collection<String> getTypes() {
-        this.types.add(getPrintOrDigital() + " (Lane Catalog)");
+        if ("bib".equals(this.recordType)) {
+            this.types.add(getPrintOrDigital() + " (Lane Catalog)");
+        }
         // this.types.add(getPrimaryType());
         // this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll(""));
         if (getPrimaryType().startsWith("Journal")) {
