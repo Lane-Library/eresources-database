@@ -69,8 +69,8 @@ public class SAXEresource implements Cloneable, Eresource {
         PRIMARY_TYPES.put("cartographic materials", "Other");
         PRIMARY_TYPES.put("collection", "Database");
         PRIMARY_TYPES.put("collections", "Database");
-        PRIMARY_TYPES.put("component", "Other");
-        PRIMARY_TYPES.put("components", "Other");
+        PRIMARY_TYPES.put("component", "Component");
+        PRIMARY_TYPES.put("components", "Component");
         PRIMARY_TYPES.put("computer file", "Software");
         PRIMARY_TYPES.put("computer files", "Software");
         PRIMARY_TYPES.put("database", "Database");
@@ -275,6 +275,18 @@ public class SAXEresource implements Cloneable, Eresource {
                 type = "Database";
             } else {
                 type = "Journal " + getPrintOrDigital();
+            }
+        } else if ("Component".equals(this.primaryType)) {
+            if (this.types.contains("Article") && this.types.contains("Chapter")) {
+                type = "Article/Chapter";
+            }
+            else if (this.types.contains("Article")) {
+                    type = "Article";
+            }
+            else if (this.types.contains("Chapter")) {
+                type = "Chapter";
+            } else {
+                type = "Other";
             }
         } else if ("Visual Material".equals(this.primaryType)) {
             if (this.types.contains("Video")) {
