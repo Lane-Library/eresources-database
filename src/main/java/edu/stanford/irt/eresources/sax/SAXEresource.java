@@ -22,12 +22,12 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Chapter", "Clinical Decision Tools", "Database",
+    private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Audio", "Chapter", "Clinical Decision Tools", "Database",
             "Book", "Journal", "Atlases, Pictorial", "Software, Installed - Redwood Room",
             "Software, Installed - Duck Room", "Software, Installed - Stone Room", "Software, Installed - M051",
             "Software, Installed - LKSC Student", "Software, Installed - LKSC Public", "Software, Installed",
             "Software", "Statistics", "Video", "Image", "Lane Class", "Lane Web Page", "Print", "Bassett",
-            "Statistics Software, Installed", "Biotools Software, Installed" };
+            "Statistics Software, Installed", "Biotools Software, Installed", "Website" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
