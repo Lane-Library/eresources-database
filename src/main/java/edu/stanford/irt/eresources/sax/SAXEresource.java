@@ -22,7 +22,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Clinical Decision Tools", "Database",
+    private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Chapter", "Clinical Decision Tools", "Database",
             "Book", "Journal", "Atlases, Pictorial", "Software, Installed - Redwood Room",
             "Software, Installed - Duck Room", "Software, Installed - Stone Room", "Software, Installed - M051",
             "Software, Installed - LKSC Student", "Software, Installed - LKSC Public", "Software, Installed",
@@ -38,6 +38,7 @@ public class SAXEresource implements Cloneable, Eresource {
             { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
             { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Image", "Graphics" },
             { "Article", "Articles" },
+            { "Chapter", "Chapters" },
             { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" } };
 
     private static final String ENG = "English";
