@@ -38,6 +38,8 @@ public class SAXEresource implements Cloneable, Eresource {
             { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
             { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Image", "Graphics" },
             { "Article", "Articles" },
+            { "Website", "Websites" },
+            { "Audio", "Sound Recordings" },
             { "Chapter", "Chapters" },
             { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" } };
 
