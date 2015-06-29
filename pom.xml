@@ -11,7 +11,7 @@
     <name>eresources-database</name>
     <version>2.0.0-SNAPSHOT</version>
     <scm>
-        <developerConnection>scm:git:ssh://corn.stanford.edu/afs/ir/group/lane/git/eresources-database.git</developerConnection>
+        <developerConnection>scm:git:ssh://lane-local-02.stanford.edu/afs/ir/group/lane/git/eresources-database.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <distributionManagement>
