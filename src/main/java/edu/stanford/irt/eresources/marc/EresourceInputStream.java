@@ -80,22 +80,19 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
         try (PreparedStatement getListStmt = conn.prepareStatement(getSelectIDListSQL())) {
             prepareListStatement(getListStmt);
             Map<String, Collection<String>> ids = new HashMap<String, Collection<String>>();
-            String lastBib = null;
-            Collection<String> mfhds = null;
             try (ResultSet rs = getListStmt.executeQuery()) {
                 int columnCount = rs.getMetaData().getColumnCount();
                 while (rs.next()) {
-                    String currentBib = rs.getString(1);
+                    String bibId = rs.getString(1);
                     if (columnCount > 1) {
-                        String currentMfhd = rs.getString(2);
-                        if (!currentBib.equals(lastBib)) {
-                            lastBib = currentBib;
+                        Collection<String> mfhds = ids.get(bibId);
+                        if (mfhds == null) {
                             mfhds = new ArrayList<String>();
-                            ids.put(currentBib, mfhds);
+                            ids.put(bibId, mfhds);
                         }
-                        mfhds.add(currentMfhd);
+                        mfhds.add(rs.getString(2));
                     } else {
-                        ids.put(currentBib, Collections.emptySet());
+                        ids.put(bibId, Collections.<String> emptySet());
                     }
                 }
             }
