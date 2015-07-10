@@ -15,6 +15,8 @@ import org.apache.solr.common.SolrInputDocument;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.stanford.lane.mesh.MeshMapManager;
+
 public class SolrEresourceHandler implements EresourceHandler {
 
     public static final int TEN = 10;
@@ -28,6 +30,8 @@ public class SolrEresourceHandler implements EresourceHandler {
     private volatile boolean keepGoing = true;
 
     private ObjectMapper mapper = new ObjectMapper();
+
+    private MeshMapManager meshManager = new MeshMapManager();
 
     private BlockingQueue<Eresource> queue;
 
@@ -142,6 +146,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);
+            doc.addField("mesh_parents", this.meshManager.getParentHeadings(mesh));
         }
         for (String type : eresource.getTypes()) {
             doc.addField("type", type);
