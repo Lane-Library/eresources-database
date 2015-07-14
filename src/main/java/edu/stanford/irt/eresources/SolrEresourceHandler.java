@@ -49,9 +49,9 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private static String getSortText(final String text) {
         if (null == text || text.isEmpty()) {
-            return text;
+            return "";
         }
-        String sortText = text.toLowerCase().replaceAll("[^0-9a-z ]", "").trim();
+        String sortText = text;
         try {
             sortText = sortText.substring(0, SORT_TITLE_MAX);
         } catch (IndexOutOfBoundsException e) {
