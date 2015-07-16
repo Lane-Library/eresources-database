@@ -66,10 +66,10 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     @Override
     public List<Version> getVersions() {
         MarcVersion version = new MarcVersion(this.record);
-        if (version.getLinks().size() > 0) {
-            return Collections.singletonList(new MarcVersion(this.record));
-        } else {
+        if (version.getLinks().isEmpty()) {
             return Collections.emptyList();
+        } else {
+            return Collections.singletonList(new MarcVersion(this.record));
         }
     }
 

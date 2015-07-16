@@ -65,10 +65,10 @@ public class BibMarcEresource extends AbstractMarcEresource {
     public String getDescription() {
         String description = null;
         List<VariableField> fields = this.record.getVariableFields("520");
-        if (fields.size() == 0) {
+        if (fields.isEmpty()) {
             fields = this.record.getVariableFields("505");
         }
-        if (fields.size() > 0) {
+        if (!fields.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             for (VariableField field : fields) {
                 for (Subfield subfield : ((DataField) field).getSubfields()) {
@@ -116,7 +116,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
             Collection<Version> versionSet = new TreeSet<Version>(new VersionComparator());
             for (Record holding : this.holdings) {
                 Version version = createVersion(holding);
-                if (version.getLinks().size() > 0) {
+                if (!version.getLinks().isEmpty()) {
                     versionSet.add(version);
                 }
             }
