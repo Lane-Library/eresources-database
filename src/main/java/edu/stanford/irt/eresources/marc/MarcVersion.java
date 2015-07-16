@@ -28,9 +28,6 @@ public class MarcVersion extends AbstractVersion {
     private static final String[] ALLOWED_SUBSETS_INITIALIZER = { "mobile applications", "pda tools",
         "mobile resources", "biotools" };
 
-    // private static final String[][] CUSTOM_SUBSETS = { { "redwood room", "redwood" }, { "stone room", "stone" },
-    // { "duck room", "duck" }, { "m230", "m230" }, { "public kiosks", "lksc-public" },
-    // { "student computing", "lksc-student" } };
     private static final Pattern PATTERN = Pattern.compile(" =");
     static {
         for (String subset : ALLOWED_SUBSETS_INITIALIZER) {

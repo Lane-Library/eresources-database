@@ -38,5 +38,6 @@ public class CatalogLink implements Link {
 
     @Override
     public void setVersion(final Version version) {
+        // not implemented
     }
 }

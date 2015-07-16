@@ -78,10 +78,11 @@ public class MarcLink extends AbstractLink {
 
     @Override
     public void setVersion(final Version version) {
+        // not implemented
     }
 
     private void doInstruction() {
-        // TODO: review getting last ^i, that's what happens with SAX;
+        // TODO: review getting last subfield i, that's what happens with SAX;
         for (Subfield subfield : this.dataField.getSubfields('i')) {
             this.instruction = subfield.getData();
         }

@@ -46,7 +46,7 @@ public class WebpageFileExtractor implements Extractor<File> {
 
     private List<File> getHTMLPages(final File directory, final long date) {
         List<File> result = new ArrayList<File>();
-        File[] files = directory.listFiles(new FileFilter() {
+        File[] fileArray = directory.listFiles(new FileFilter() {
 
             @Override
             public boolean accept(final File file) {
@@ -60,8 +60,8 @@ public class WebpageFileExtractor implements Extractor<File> {
                 return accept;
             }
         });
-        if (files != null) {
-            for (File file : files) {
+        if (fileArray != null) {
+            for (File file : fileArray) {
                 if (file.isDirectory()) {
                     result.addAll(getHTMLPages(file, date));
                 } else {
