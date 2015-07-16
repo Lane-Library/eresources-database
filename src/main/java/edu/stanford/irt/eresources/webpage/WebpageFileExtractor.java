@@ -60,11 +60,13 @@ public class WebpageFileExtractor implements Extractor<File> {
                 return accept;
             }
         });
-        for (File file : files) {
-            if (file.isDirectory()) {
-                result.addAll(getHTMLPages(file, date));
-            } else {
-                result.add(file);
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    result.addAll(getHTMLPages(file, date));
+                } else {
+                    result.add(file);
+                }
             }
         }
         return result;
