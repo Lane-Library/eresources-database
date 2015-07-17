@@ -25,7 +25,7 @@ public abstract class AbstractBibMarcTransformer extends AbstractMarcTransformer
         List<Eresource> eresources = new ArrayList<Eresource>();
         Record bib = recordList.get(0);
         String keywords = WHITESPACE.matcher(getKeywords(bib)).replaceAll(" ");
-        ItemCount itemCount = this.itemCounter.itemCount(bib.getControlNumber());
+        ItemCount itemCount = this.itemCounter.getItemCount(bib.getControlNumber());
         eresources.add(createEresource(recordList, keywords, itemCount));
         if (bib.getVariableField("249") != null) {
             eresources.add(createAltTitleEresource(recordList, keywords, itemCount));

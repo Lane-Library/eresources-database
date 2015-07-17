@@ -39,7 +39,7 @@ public class ItemCounter {
         this.dataSource = dataSource;
     }
 
-    public ItemCount itemCount(final String bibId) {
+    public ItemCount getItemCount(final String bibId) {
         if (this.totals == null) {
             this.initialize();
         }

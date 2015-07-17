@@ -58,8 +58,8 @@ public class ItemCountTest {
         this.pstmt.close();
         this.connection.close();
         replay(this.dataSource, this.connection, this.pstmt, this.resultSet);
-        assertEquals(1, this.itemCounter.itemCount("1").getTotal());
-        assertEquals(2, this.itemCounter.itemCount("1").getAvailable());
+        assertEquals(1, this.itemCounter.getItemCount("1").getTotal());
+        assertEquals(2, this.itemCounter.getItemCount("1").getAvailable());
         verify(this.dataSource, this.connection, this.pstmt, this.resultSet);
     }
 }

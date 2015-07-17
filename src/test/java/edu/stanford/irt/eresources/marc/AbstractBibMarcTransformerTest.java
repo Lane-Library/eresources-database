@@ -64,7 +64,7 @@ public class AbstractBibMarcTransformerTest {
     public void testDoProcess() {
         expect(this.keywordStrategy.getKeywords(this.record)).andReturn("keywords");
         expect(this.record.getControlNumber()).andReturn("12");
-        expect(this.itemCounter.itemCount("12")).andReturn(new ItemCount(1, 1));
+        expect(this.itemCounter.getItemCount("12")).andReturn(new ItemCount(1, 1));
         expect(this.record.getVariableField("249")).andReturn(this.field);
         replay(this.loader, this.itemCounter, this.keywordStrategy, this.record, this.field);
         this.processor.transform(Arrays.asList(new Record[] { this.record, this.record }));
