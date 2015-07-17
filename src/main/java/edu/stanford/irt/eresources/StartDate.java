@@ -12,7 +12,7 @@ public class StartDate {
     private Date startDate;
 
     public Date getStartDate() {
-        return this.startDate;
+        return new Date(this.startDate.getTime());
     }
 
     public void initialize(final Date startDate) {
@@ -20,6 +20,6 @@ public class StartDate {
             throw new IllegalStateException("already initialized with " + this.startDate);
         }
         LOG.info(startDate.toString());
-        this.startDate = startDate;
+        this.startDate = new Date(startDate.getTime());
     }
 }

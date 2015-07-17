@@ -4,7 +4,6 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -26,6 +25,7 @@ import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 
 import edu.stanford.irt.eresources.EresourceException;
+import edu.stanford.irt.eresources.ItemCount;
 
 public class BibMarcEresourceTest {
 
@@ -43,7 +43,7 @@ public class BibMarcEresourceTest {
     public void setUp() {
         this.record = createMock(Record.class);
         this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }), "keywords",
-                new int[] { 1, 1 });
+                new ItemCount(1, 1));
         this.field = createMock(DataField.class);
         this.subfield = createMock(Subfield.class);
         this.controlfield = createMock(ControlField.class);
@@ -245,7 +245,8 @@ public class BibMarcEresourceTest {
     @Test
     public void testGetItemCount() {
         replay(this.record, this.field, this.subfield);
-        assertArrayEquals(new int[] { 1, 1 }, this.eresource.getItemCount());
+        assertEquals(1, this.eresource.getItemCount().getTotal());
+        assertEquals(1, this.eresource.getItemCount().getAvailable());
         verify(this.record, this.field, this.subfield);
     }
 

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.Version;
 
 public class EresourceSQLTranslator extends AbstractSQLTranslator {
@@ -30,7 +31,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
     public List<String> getInsertSQL(final Eresource er) {
         List<String> sql = new ArrayList<String>();
         String keywords = er.getKeywords();
-        int[] itemCount = er.getItemCount();
+        ItemCount itemCount = er.getItemCount();
         String description = er.getDescription();
         StringBuilder sb = new StringBuilder(INSERT_ERESOURCE).append("ERESOURCE_ID_SEQ.NEXTVAL,").append(APOS)
                 .append(er.getRecordId()).append(APOS).append(COMMA).append(APOS).append(er.getRecordType())
@@ -38,9 +39,9 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
                 .append("','YYYYMMDDHH24MISS')").append(COMMA).append(apostrophize(er.getTitle())).append(COMMA)
                 .append(apostrophize(er.getAuthor())).append(COMMA).append(apostrophize(er.getPrimaryType()))
                 .append(COMMA).append(er.isCore() ? "'Y'" : NULL).append(COMMA)
-                .append(er.getYear() > 0 ? Integer.toString(er.getYear()) : NULL).append(COMMA).append(itemCount[0])
-                .append(COMMA).append(itemCount[1]).append(COMMA).append(description != null ? "empty_clob()" : NULL)
-                .append(", empty_clob())");
+                .append(er.getYear() > 0 ? Integer.toString(er.getYear()) : NULL).append(COMMA)
+                .append(itemCount.getTotal()).append(COMMA).append(itemCount.getAvailable()).append(COMMA)
+                .append(description != null ? "empty_clob()" : NULL).append(", empty_clob())");
         sql.add(sb.toString());
         sql.add("TEXT:" + keywords);
         if (description != null) {
@@ -61,7 +62,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
         for (String meshTerm : er.getMeshTerms()) {
             sb.setLength(0);
             sb.append("INSERT INTO MESH VALUES (").append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(meshTerm))
-            .append(END_PAREN);
+                    .append(END_PAREN);
             sql.add(sb.toString());
         }
         return sql;
@@ -73,7 +74,7 @@ public class EresourceSQLTranslator extends AbstractSQLTranslator {
         for (String type : er.getTypes()) {
             sb.setLength(0);
             sb.append("INSERT INTO TYPE VALUES (").append("ERESOURCE_ID_SEQ.CURRVAL,").append(apostrophize(type))
-            .append(END_PAREN);
+                    .append(END_PAREN);
             sql.add(sb.toString());
         }
         return sql;

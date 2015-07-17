@@ -23,6 +23,7 @@ import org.marc4j.marc.VariableField;
 import com.ibm.icu.text.Normalizer;
 
 import edu.stanford.irt.eresources.EresourceException;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
@@ -39,8 +40,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
     private static final String BIB_TYPE = "bib";
 
     private static final String[][][] CUSTOM_TYPES = { { { "periodical", "newspaper" }, { "ej" } },
-            { { "decision support techniques", "calculators, clinical", "algorithms" }, { "cc" } },
-            { { "digital video", "digital video, local" }, { "video" } }, { { "book set" }, { "book" } } };
+        { { "decision support techniques", "calculators, clinical", "algorithms" }, { "cc" } },
+        { { "digital video", "digital video, local" }, { "video" } }, { { "book set" }, { "book" } } };
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s*");
 
@@ -48,17 +49,17 @@ public class BibMarcEresource extends AbstractMarcEresource {
 
     private List<Record> holdings;
 
-    private int[] items;
+    private ItemCount itemCount;
 
     private Record record;
 
     private List<Version> versions;
 
-    public BibMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
+    public BibMarcEresource(final List<Record> recordList, final String keywords, final ItemCount itemCount) {
         super(recordList.get(0), keywords);
         this.record = recordList.get(0);
         this.holdings = recordList.subList(1, recordList.size());
-        this.items = items;
+        this.itemCount = itemCount;
     }
 
     @Override
@@ -81,8 +82,8 @@ public class BibMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    public int[] getItemCount() {
-        return this.items;
+    public ItemCount getItemCount() {
+        return this.itemCount;
     }
 
     @Override

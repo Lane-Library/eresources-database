@@ -18,6 +18,7 @@ import org.marc4j.marc.Subfield;
 import org.marc4j.marc.VariableField;
 
 import edu.stanford.irt.eresources.EresourceException;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.Version;
 
 public class AuthMarcEresource extends AbstractMarcEresource {
@@ -28,7 +29,7 @@ public class AuthMarcEresource extends AbstractMarcEresource {
 
     private static final String AUTH_TYPE = "auth";
 
-    private static final int[] ITEMS = new int[] { 0, 0 };
+    private static final ItemCount ITEMS = new ItemCount(0, 0);
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -45,7 +46,7 @@ public class AuthMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    public int[] getItemCount() {
+    public ItemCount getItemCount() {
         return ITEMS;
     }
 

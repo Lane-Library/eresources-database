@@ -8,13 +8,15 @@ import org.marc4j.marc.Subfield;
 
 import com.ibm.icu.text.Normalizer;
 
+import edu.stanford.irt.eresources.ItemCount;
+
 // TODO: create a TitleStrategy class
 public class AltTitleMarcEresource extends BibMarcEresource {
 
     private Record record;
 
-    public AltTitleMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
-        super(recordList, keywords, items);
+    public AltTitleMarcEresource(final List<Record> recordList, final String keywords, final ItemCount itemCount) {
+        super(recordList, keywords, itemCount);
         this.record = recordList.get(0);
     }
 

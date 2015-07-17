@@ -7,16 +7,17 @@ import java.util.regex.Pattern;
 import org.marc4j.marc.Record;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.ItemCount;
 
 public abstract class AbstractBibMarcTransformer extends AbstractMarcTransformer<List<Record>> {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
-    private ItemCount itemCount;
+    private ItemCounter itemCounter;
 
-    public AbstractBibMarcTransformer(final ItemCount itemCount, final KeywordsStrategy keywordsStrategy) {
+    public AbstractBibMarcTransformer(final ItemCounter itemCounter, final KeywordsStrategy keywordsStrategy) {
         super(keywordsStrategy);
-        this.itemCount = itemCount;
+        this.itemCounter = itemCounter;
     }
 
     @Override
@@ -24,15 +25,15 @@ public abstract class AbstractBibMarcTransformer extends AbstractMarcTransformer
         List<Eresource> eresources = new ArrayList<Eresource>();
         Record bib = recordList.get(0);
         String keywords = WHITESPACE.matcher(getKeywords(bib)).replaceAll(" ");
-        int[] items = this.itemCount.itemCount(bib.getControlNumber());
-        eresources.add(createEresource(recordList, keywords, items));
+        ItemCount itemCount = this.itemCounter.itemCount(bib.getControlNumber());
+        eresources.add(createEresource(recordList, keywords, itemCount));
         if (bib.getVariableField("249") != null) {
-            eresources.add(createAltTitleEresource(recordList, keywords, items));
+            eresources.add(createAltTitleEresource(recordList, keywords, itemCount));
         }
         return eresources;
     }
 
-    protected abstract Eresource createAltTitleEresource(List<Record> recordList, String keywords, int[] items);
+    protected abstract Eresource createAltTitleEresource(List<Record> recordList, String keywords, ItemCount itemCount);
 
-    protected abstract Eresource createEresource(List<Record> recordList, String keywords, int[] items);
+    protected abstract Eresource createEresource(List<Record> recordList, String keywords, ItemCount itemCount);
 }

@@ -25,7 +25,7 @@
         <constructor-arg value="true"/>
     </bean>
     <bean id="startDate" class="edu.stanford.irt.eresources.StartDate"/>
-    <bean id="itemCount" class="edu.stanford.irt.eresources.marc.ItemCount">
+    <bean id="itemCount" class="edu.stanford.irt.eresources.marc.ItemCounter">
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
     <bean id="keywordsStrategy" class="edu.stanford.irt.eresources.marc.KeywordsStrategy">

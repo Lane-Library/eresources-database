@@ -126,7 +126,8 @@ public class AbstractMarcEresourceTest {
 
     @Test
     public void testGetItemCount() {
-        assertArrayEquals(new int[] { 0, 0 }, this.eresource.getItemCount());
+        assertEquals(0, this.eresource.getItemCount().getTotal());
+        assertEquals(0, this.eresource.getItemCount().getAvailable());
     }
 
     @Test

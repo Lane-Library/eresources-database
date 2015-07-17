@@ -5,7 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,7 +23,7 @@ public class ItemCountTest {
 
     private DataSource dataSource;
 
-    private ItemCount itemCount;
+    private ItemCounter itemCounter;
 
     private Statement pstmt;
 
@@ -32,7 +32,7 @@ public class ItemCountTest {
     @Before
     public void setUp() {
         this.dataSource = createMock(DataSource.class);
-        this.itemCount = new ItemCount(this.dataSource);
+        this.itemCounter = new ItemCounter(this.dataSource);
         this.connection = createMock(Connection.class);
         this.pstmt = createMock(Statement.class);
         this.resultSet = createMock(ResultSet.class);
@@ -58,7 +58,8 @@ public class ItemCountTest {
         this.pstmt.close();
         this.connection.close();
         replay(this.dataSource, this.connection, this.pstmt, this.resultSet);
-        assertArrayEquals(new int[] { 1, 2 }, this.itemCount.itemCount("1"));
+        assertEquals(1, this.itemCounter.itemCount("1").getTotal());
+        assertEquals(2, this.itemCounter.itemCount("1").getAvailable());
         verify(this.dataSource, this.connection, this.pstmt, this.resultSet);
     }
 }

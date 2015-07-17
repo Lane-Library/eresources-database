@@ -17,7 +17,6 @@ import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
-import org.marc4j.marc.VariableField;
 
 public class AuthMarcEresourceTest {
 
@@ -101,7 +100,8 @@ public class AuthMarcEresourceTest {
 
     @Test
     public void testGetItemCount() {
-        assertArrayEquals(new int[] { 0, 0 }, this.eresource.getItemCount());
+        assertEquals(0, this.eresource.getItemCount().getTotal());
+        assertEquals(0, this.eresource.getItemCount().getAvailable());
     }
 
     @Test

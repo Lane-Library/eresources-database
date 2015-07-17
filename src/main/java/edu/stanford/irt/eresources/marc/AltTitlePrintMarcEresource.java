@@ -8,12 +8,14 @@ import org.marc4j.marc.Subfield;
 
 import com.ibm.icu.text.Normalizer;
 
+import edu.stanford.irt.eresources.ItemCount;
+
 public class AltTitlePrintMarcEresource extends PrintMarcEresource {
 
     private Record record;
 
-    public AltTitlePrintMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
-        super(recordList, keywords, items);
+    public AltTitlePrintMarcEresource(final List<Record> recordList, final String keywords, final ItemCount itemCount) {
+        super(recordList, keywords, itemCount);
         this.record = recordList.get(0);
     }
 

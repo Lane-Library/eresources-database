@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.Version;
 
 public class EresourceSQLTranslatorTest {
@@ -48,7 +49,7 @@ public class EresourceSQLTranslatorTest {
     @Test
     public void testGetInsertSQL() {
         expect(this.eresource.getKeywords()).andReturn("keywords");
-        expect(this.eresource.getItemCount()).andReturn(new int[] { 1, 1 });
+        expect(this.eresource.getItemCount()).andReturn(new ItemCount(1, 1));
         expect(this.eresource.getDescription()).andReturn("description");
         expect(this.eresource.getRecordId()).andReturn(1);
         expect(this.eresource.getRecordType()).andReturn("type");
@@ -69,7 +70,7 @@ public class EresourceSQLTranslatorTest {
                 "INSERT INTO ERESOURCE (ERESOURCE_ID , RECORD_ID, RECORD_TYPE, UPDATED, TITLE, AUTHOR, PRIMARY_TYPE, CORE, YEAR, TOTAL, AVAILABLE, DESCRIPTION, TEXT) VALUES (ERESOURCE_ID_SEQ.NEXTVAL,'1','type',TO_DATE('"
                         + dateString
                         + "','YYYYMMDDHH24MISS'),'title','author','primaryType',NULL,2010,1,1,empty_clob(), empty_clob())",
-                        sql.get(0));
+                sql.get(0));
         assertEquals("TEXT:keywords", sql.get(1));
         assertEquals("DESCRIPTION:description", sql.get(2));
         assertEquals("INSERT INTO TYPE VALUES (ERESOURCE_ID_SEQ.CURRVAL,'type')", sql.get(3));

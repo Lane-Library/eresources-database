@@ -8,13 +8,14 @@ import java.util.TreeSet;
 
 import org.marc4j.marc.Record;
 
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
 public class PrintMarcEresource extends BibMarcEresource {
 
-    public PrintMarcEresource(final List<Record> recordList, final String keywords, final int[] items) {
-        super(recordList, keywords, items);
+    public PrintMarcEresource(final List<Record> recordList, final String keywords, final ItemCount itemCount) {
+        super(recordList, keywords, itemCount);
     }
 
     @Override

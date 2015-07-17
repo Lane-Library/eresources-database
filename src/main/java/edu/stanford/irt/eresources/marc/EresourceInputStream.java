@@ -50,16 +50,9 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                 OutputStream out = this.output) {
             Map<String, Collection<String>> ids = getIds(conn);
             for (Entry<String, Collection<String>> entry : ids.entrySet()) {
-                String bibId = entry.getKey();
-                getBibStmt.setString(1, bibId);
-                try (ResultSet rs = getBibStmt.executeQuery();) {
-                    sendBytes(rs);
-                }
+                sendBytes(getBibStmt, entry.getKey());
                 for (String mfhdId : entry.getValue()) {
-                    getMfhdStmt.setString(1, mfhdId);
-                    try (ResultSet rs = getMfhdStmt.executeQuery();) {
-                        sendBytes(rs);
-                    }
+                    sendBytes(getMfhdStmt, mfhdId);
                 }
             }
         } catch (SQLException | IOException e) {
@@ -74,35 +67,43 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
     protected abstract String getSelectIDListSQL();
 
     protected void prepareListStatement(final PreparedStatement stmt) throws SQLException {
+        // do nothing
+    }
+
+    private Map<String, Collection<String>> getIdMapFromResultSet(final ResultSet rs) throws SQLException {
+        Map<String, Collection<String>> ids = new HashMap<String, Collection<String>>();
+        int columnCount = rs.getMetaData().getColumnCount();
+        while (rs.next()) {
+            String bibId = rs.getString(1);
+            if (columnCount > 1) {
+                Collection<String> mfhds = ids.get(bibId);
+                if (mfhds == null) {
+                    mfhds = new ArrayList<String>();
+                    ids.put(bibId, mfhds);
+                }
+                mfhds.add(rs.getString(2));
+            } else {
+                ids.put(bibId, Collections.emptySet());
+            }
+        }
+        return ids;
     }
 
     private Map<String, Collection<String>> getIds(final Connection conn) throws SQLException {
         try (PreparedStatement getListStmt = conn.prepareStatement(getSelectIDListSQL())) {
             prepareListStatement(getListStmt);
-            Map<String, Collection<String>> ids = new HashMap<String, Collection<String>>();
             try (ResultSet rs = getListStmt.executeQuery()) {
-                int columnCount = rs.getMetaData().getColumnCount();
-                while (rs.next()) {
-                    String bibId = rs.getString(1);
-                    if (columnCount > 1) {
-                        Collection<String> mfhds = ids.get(bibId);
-                        if (mfhds == null) {
-                            mfhds = new ArrayList<String>();
-                            ids.put(bibId, mfhds);
-                        }
-                        mfhds.add(rs.getString(2));
-                    } else {
-                        ids.put(bibId, Collections.emptySet());
-                    }
-                }
+                return getIdMapFromResultSet(rs);
             }
-            return ids;
         }
     }
 
-    private void sendBytes(final ResultSet rs) throws SQLException, IOException {
-        while (rs.next()) {
-            this.output.write(rs.getBytes(2));
+    private void sendBytes(final PreparedStatement stmt, final String id) throws SQLException, IOException {
+        stmt.setString(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                this.output.write(rs.getBytes(2));
+            }
         }
     }
 }

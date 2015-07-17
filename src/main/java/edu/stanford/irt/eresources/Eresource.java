@@ -9,7 +9,7 @@ public interface Eresource {
 
     String getDescription();
 
-    int[] getItemCount();
+    ItemCount getItemCount();
 
     String getKeywords();
 

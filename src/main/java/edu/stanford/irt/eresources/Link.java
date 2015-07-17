@@ -12,6 +12,11 @@ public interface Link {
 
     String getUrl();
 
+    /**
+     * @deprecated Links should be immutable
+     * @param version
+     *            a Version
+     */
     @Deprecated
     void setVersion(Version version);
 }
