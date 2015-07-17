@@ -49,18 +49,11 @@ public class DefaultEresourceBuilder extends DefaultHandler {
             this.currentLink.setVersion(this.currentVersion);
             this.currentLink = null;
         });
-        this.endElementHandlers.put("url", () -> {
-            this.currentLink.setUrl(this.currentText.toString());
-        });
-        this.endElementHandlers.put("label", () -> {
-            this.currentLink.setLabel(this.currentText.toString());
-        });
-        this.endElementHandlers.put("date", () -> {
-            this.currentVersion.setDates(this.currentText.toString());
-        });
-        this.endElementHandlers.put("summary-holdings", () -> {
-            this.currentVersion.setSummaryHoldings(this.currentText.toString());
-        });
+        this.endElementHandlers.put("url", () -> this.currentLink.setUrl(this.currentText.toString()));
+        this.endElementHandlers.put("label", () -> this.currentLink.setLabel(this.currentText.toString()));
+        this.endElementHandlers.put("date", () -> this.currentVersion.setDates(this.currentText.toString()));
+        this.endElementHandlers.put("summary-holdings",
+                () -> this.currentVersion.setSummaryHoldings(this.currentText.toString()));
         this.endElementHandlers.put("subset", () -> {
             String subset = this.currentText.toString();
             if ("proxy".equals(subset)) {
@@ -71,35 +64,22 @@ public class DefaultEresourceBuilder extends DefaultHandler {
                 this.currentVersion.addSubset(subset);
             }
         });
-        this.endElementHandlers.put("publisher", () -> {
-            this.currentVersion.setPublisher(this.currentText.toString());
-        });
-        this.endElementHandlers.put("type", () -> {
-            this.currentEresource.addType(this.currentText.toString());
-        });
+        this.endElementHandlers.put("publisher", () -> this.currentVersion.setPublisher(this.currentText.toString()));
+        this.endElementHandlers.put("type", () -> this.currentEresource.addType(this.currentText.toString()));
         this.endElementHandlers.put("primaryType", () -> {
             String type = this.currentText.toString();
             this.currentEresource.setPrimaryType(type);
             this.currentEresource.addType(type);
         });
-        this.endElementHandlers.put("keywords", () -> {
-            this.currentEresource.setKeywords(this.currentText.toString());
-        });
-        this.endElementHandlers.put("mesh", () -> {
-            this.currentEresource.addMeshTerm(this.currentText.toString());
-        });
-        this.endElementHandlers.put("title", () -> {
-            this.currentEresource.setTitle(this.currentText.toString());
-        });
-        this.endElementHandlers.put("instruction", () -> {
-            this.currentLink.setInstruction(this.currentText.toString());
-        });
-        this.endElementHandlers.put("description", () -> {
-            this.currentVersion.setDescription(this.currentText.toString());
-        });
+        this.endElementHandlers.put("keywords", () -> this.currentEresource.setKeywords(this.currentText.toString()));
+        this.endElementHandlers.put("mesh", () -> this.currentEresource.addMeshTerm(this.currentText.toString()));
+        this.endElementHandlers.put("title", () -> this.currentEresource.setTitle(this.currentText.toString()));
+        this.endElementHandlers.put("instruction", () -> this.currentLink.setInstruction(this.currentText.toString()));
+        this.endElementHandlers.put("description",
+                () -> this.currentVersion.setDescription(this.currentText.toString()));
         this.endElementHandlers.put("eresources", () -> {
-            return;
-        });
+            // do nothing
+            });
     }
 
     @Override
