@@ -73,7 +73,7 @@ public class AuthTextAugmentation {
 
     public void save() throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("augmentations.obj"))) {
-            oos.writeObject(this.augmentations);
+            oos.writeObject(HashMap.class.cast(this.augmentations));
         }
     }
 
