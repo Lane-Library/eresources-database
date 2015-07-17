@@ -9,17 +9,17 @@ public class StartDate {
 
     private static final Logger LOG = LoggerFactory.getLogger(StartDate.class);
 
-    private Date startDate;
+    private Date date;
 
     public Date getStartDate() {
-        return new Date(this.startDate.getTime());
+        return new Date(this.date.getTime());
     }
 
-    public void initialize(final Date startDate) {
-        if (this.startDate != null) {
-            throw new IllegalStateException("already initialized with " + this.startDate);
+    public void initialize(final Date date) {
+        if (this.date != null) {
+            throw new IllegalStateException("already initialized with " + this.date);
         }
-        LOG.info(startDate.toString());
-        this.startDate = new Date(startDate.getTime());
+        LOG.info(date.toString());
+        this.date = new Date(date.getTime());
     }
 }
