@@ -92,7 +92,7 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                         }
                         mfhds.add(rs.getString(2));
                     } else {
-                        ids.put(bibId, Collections.<String> emptySet());
+                        ids.put(bibId, Collections.emptySet());
                     }
                 }
             }
