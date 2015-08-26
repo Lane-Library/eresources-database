@@ -130,6 +130,7 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationPages)"/>
             <keywords><stx:value-of select="normalize-space($keywords)"/></keywords>
         </eresource>
     </stx:template>
