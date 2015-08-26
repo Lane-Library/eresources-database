@@ -132,6 +132,9 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $title)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $description)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $authorsText)"/>
+            <stx:for-each-item name="author" select="tokenize($authorsFull, ':::')">
+	            <stx:assign name="keywords" select="concat($keywords, ' ', substring-after($author,', '))"/>
+            </stx:for-each-item>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitle)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitleFull)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
