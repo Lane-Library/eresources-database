@@ -115,6 +115,11 @@ public class SolrEresourceHandler implements EresourceHandler {
         StringBuffer key = new StringBuffer();
         String title = eresource.getTitle();
         String sortTitle = getSortText(title);
+        String keywords = eresource.getKeywords();
+        String publicationText = eresource.getPublicationText();
+        if (null != publicationText) {
+            keywords = keywords + " " + publicationText;
+        }
         List<Version> versions = new LinkedList<Version>();
         int[] itemCount = eresource.getItemCount();
         key.append(recordType).append("-").append(Integer.toString(eresource.getRecordId()));
@@ -125,7 +130,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
         doc.addField("recordType", eresource.getRecordType());
         doc.addField("description", eresource.getDescription());
-        doc.addField("text", eresource.getKeywords());
+        doc.addField("text", keywords);
         doc.addField("title", title);
         doc.addField("title_sort", sortTitle);
         doc.addField("primaryType", eresource.getPrimaryType());
@@ -165,7 +170,6 @@ public class SolrEresourceHandler implements EresourceHandler {
             doc.addField("publicationAuthorsText", publicationAuthorsText);
             doc.addField("authors_sort", getSortText(publicationAuthorsText));
         }
-        String publicationText = eresource.getPublicationText();
         if (null != publicationText) {
             doc.addField("publicationText", publicationText);
         }
