@@ -20,6 +20,8 @@
     <stx:variable name="publicationYear"/>
     <stx:variable name="authorIndex"/>
     <stx:variable name="authors"/>
+    <stx:variable name="authorsFull"/>
+    <stx:variable name="authorsPreviousLN"/>
     <stx:variable name="authorsText"/>
     <stx:variable name="languages"/>
     
@@ -41,6 +43,8 @@
         <stx:assign name="publicationYear" select="''"/>
         <stx:assign name="authorIndex" select="0"/>
         <stx:assign name="authors" select="''"/>
+        <stx:assign name="authorsFull" select="''"/>
+        <stx:assign name="authorsPreviousLN" select="''"/>
         <stx:assign name="authorsText" select="''"/>
         <stx:assign name="languages" select="''"/>
         <stx:process-children/>
@@ -102,6 +106,9 @@
                 <publicationType><stx:value-of select="$ptype"/></publicationType>
             </stx:for-each-item>
             <stx:for-each-item name="author" select="tokenize($authors, ':::')">
+                <publicationAuthor><stx:value-of select="$author"/></publicationAuthor>
+            </stx:for-each-item>
+            <stx:for-each-item name="author" select="tokenize($authorsFull, ':::')">
                 <publicationAuthor><stx:value-of select="$author"/></publicationAuthor>
             </stx:for-each-item>
             <stx:assign name="authorIndex" select="count(tokenize($authors, ':::'))"/>
@@ -215,12 +222,28 @@
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/AuthorList/Author/LastName|MedlineCitation/Article/AuthorList/Author/CollectiveName">
+    	<stx:if test="name(.) = 'LastName'">
+    	   <stx:assign name="authorsPreviousLN" select="."/>
+    	</stx:if>
         <stx:choose>
             <stx:when test="$authors = ''">
                 <stx:assign name="authors" select="."/>
             </stx:when>
             <stx:otherwise>
                 <stx:assign name="authors" select="concat($authors, ':::', .)"/>
+            </stx:otherwise>
+        </stx:choose>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/Article/AuthorList/Author/ForeName">
+        <stx:choose>
+            <!-- skip forenames that are just initials -->
+            <stx:when test="string-length(.) = 1 or (string-length(.) = 3 and contains(.,' '))  "/>
+            <stx:when test="$authorsFull = ''">
+                <stx:assign name="authorsFull" select="concat($authorsPreviousLN, ', ', .)"/>
+            </stx:when>
+            <stx:otherwise>
+                <stx:assign name="authorsFull" select="concat($authorsFull, ':::', $authorsPreviousLN, ', ', .)"/>
             </stx:otherwise>
         </stx:choose>
     </stx:template>
