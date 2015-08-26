@@ -135,7 +135,10 @@
             <stx:for-each-item name="author" select="tokenize($authorsFull, ':::')">
 	            <stx:assign name="keywords" select="concat($keywords, ' ', substring-after($author,', '))"/>
             </stx:for-each-item>
+            <!-- duplicated when publicationText added to keywords in SolrEresourceHandler; 
+                 date, vol, etc are also duplicated but they are useful broken out like this
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitle)"/>
+            -->
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitleFull)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
@@ -181,7 +184,7 @@
     </stx:template>
 
     <stx:template match="MedlineCitation/Article/Journal/ISOAbbreviation">
-        <stx:assign name="publicationTitle" select="."/>
+        <stx:assign name="publicationTitle" select="replace(.,'\.','')"/>
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/Journal/Title">
