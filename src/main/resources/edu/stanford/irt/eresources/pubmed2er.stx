@@ -148,12 +148,16 @@
         </eresource>
     </stx:template>
     
-    <!-- reduce keywords to fields we extract
     <stx:template match="*">
-        <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
+        <!-- fields not otherwise indexed get added to keywords here
+            fields to skip as per NCBI: http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.All_Fields_ALL
+            "Place of Publication, Transliterated Title, Create Date, Completion Date, Entrez Date, MeSH Date, and Modification Date"
+        -->
+        <stx:if test="not(contains('Year|Month|Day|Country|CopyrightInformation',name(.)))">
+	        <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
+        </stx:if>
         <stx:process-children/>
     </stx:template>
-    -->
             
     <stx:template match="MedlineCitation/PMID">
         <stx:assign name="pmid" select="."/>
