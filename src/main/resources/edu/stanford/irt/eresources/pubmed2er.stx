@@ -248,7 +248,7 @@
     <stx:template match="MedlineCitation/Article/AuthorList/Author/ForeName">
         <stx:choose>
             <!-- skip forenames that are a single initial -->
-            <stx:when test="string-length(.) = 1/">
+            <stx:when test="string-length(.) = 1"/>
             <!-- skip forenames that are just 2 initials but add them to keywords to support single initial searching: Fineberg H -->
             <stx:when test="string-length(.) = 3 and contains(.,' ')">
                 <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
