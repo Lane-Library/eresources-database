@@ -137,7 +137,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
                 this.currentEresource = new SAXEresource();
                 setRecordType();
-                //this.currentEresource.addType("Catalog");
+                // this.currentEresource.addType("Catalog");
             }
         } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
@@ -257,15 +257,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     protected void handleBibSubfield() {
         if ("655".equals(this.tag) && "a".equals(this.code)) {
             String type = this.currentText.toString();
-            // remove trailing periods, some probably should have them but
-            // voyager puts them on everything :-(
-            int lastPeriod = type.lastIndexOf('.');
-            if (lastPeriod >= 0) {
-                int lastPosition = type.length() - 1;
-                if (lastPeriod == lastPosition) {
-                    type = type.substring(0, lastPosition);
-                }
-            }
+            type = maybeStripTrailingPeriod(type);
             this.currentEresource.addType(type);
             if ("Core Material".equals(type)) {
                 this.currentEresource.setIsCore(true);
@@ -275,6 +267,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if ("650".equals(this.tag) && "a".equals(this.code) && "2".equals(this.ind2)) {
             String mesh = this.currentText.toString();
+            mesh = maybeStripTrailingPeriod(mesh);
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
             if ("abnpq".indexOf(this.code) > -1) {
@@ -534,6 +527,19 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else {
             this.recordHasError = false;
         }
+    }
+
+    // remove trailing periods, some probably should have them but
+    // voyager puts them on everything :-(
+    private String maybeStripTrailingPeriod(final String string) {
+        int lastPeriod = string.lastIndexOf('.');
+        if (lastPeriod >= 0) {
+            int lastPosition = string.length() - 1;
+            if (lastPeriod == lastPosition) {
+                return string.substring(0, lastPosition);
+            }
+        }
+        return string;
     }
 
     private String parseYear(final String year) {
