@@ -4,7 +4,6 @@
     pass-through="none">
     
     <stx:variable name="pmid"/>
-    <stx:variable name="doi"/>
     <stx:variable name="title"/>
     <stx:variable name="vernacularTitle"/>
     <stx:variable name="keywords"/>
@@ -27,7 +26,6 @@
     
     <stx:template match="MedlineCitation">
         <stx:assign name="pmid" select="''"/>
-        <stx:assign name="doi" select="''"/>
         <stx:assign name="title" select="''"/>
         <stx:assign name="vernacularTitle" select="''"/>
         <stx:assign name="keywords" select="''"/>
@@ -53,10 +51,6 @@
         </stx:if>
         
         <eresource id="{$pmid}" type="pubmed" update="19690101000000">
-            <pmid><stx:value-of select="$pmid"/></pmid>
-            <stx:if test="$doi != ''">
-                <doi><stx:value-of select="$doi"/></doi>
-            </stx:if>
             <type>Article</type>
             <primaryType>Article</primaryType>
             <stx:assign name="title">
@@ -128,7 +122,6 @@
                 <publicationLanguage><stx:value-of select="$lang"/></publicationLanguage>
             </stx:for-each-item>
             <stx:assign name="keywords" select="concat($keywords, ' ', $pmid)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', $doi)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $title)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $description)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $authorsText)"/>
@@ -161,11 +154,6 @@
             
     <stx:template match="MedlineCitation/PMID">
         <stx:assign name="pmid" select="."/>
-        <stx:process-children/>
-    </stx:template>
-    
-    <stx:template match="MedlineCitation/Article/ELocationID[@EIdType='doi' and not(@ValidYN='N')]">
-        <stx:assign name="doi" select="."/>
         <stx:process-children/>
     </stx:template>
     

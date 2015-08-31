@@ -159,14 +159,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String type : eresource.getTypes()) {
             doc.addField("type", type);
         }
-        String pmid = eresource.getPmid();
-        if (null != pmid) {
-            doc.addField("pmid", pmid);
-        }
-        String doi = eresource.getDoi();
-        if (null != doi) {
-            doc.addField("doi", doi);
-        }
         String publicationAuthorsText = eresource.getPublicationAuthorsText();
         publicationAuthorsText = (null != publicationAuthorsText) ? publicationAuthorsText : eresource.getAuthor();
         if (null != publicationAuthorsText) {

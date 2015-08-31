@@ -101,10 +101,6 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             this.currentEresource.setPublicationVolume(this.currentText.toString());
         } else if ("year".equals(name)) {
             this.currentEresource.setYear(Integer.parseInt(this.currentText.toString()));
-        } else if ("pmid".equals(name)) {
-            this.currentEresource.setPmid(this.currentText.toString());
-        } else if ("doi".equals(name)) {
-            this.currentEresource.setDoi(this.currentText.toString());
         } else if ("primaryType".equals(name)) {
             this.currentEresource.setPrimaryType(this.currentText.toString());
         } else if (!"eresources".equals(name)) {

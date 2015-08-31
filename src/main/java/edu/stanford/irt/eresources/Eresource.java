@@ -9,15 +9,11 @@ public interface Eresource {
 
     String getDescription();
 
-    String getDoi();
-
     int[] getItemCount();
 
     String getKeywords();
 
     Collection<String> getMeshTerms();
-
-    String getPmid();
 
     String getPrimaryType();
 

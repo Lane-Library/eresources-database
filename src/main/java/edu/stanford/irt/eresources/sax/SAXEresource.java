@@ -105,8 +105,6 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String description;
 
-    private String doi;
-
     private boolean isClone = false;
 
     private boolean isCore = false;
@@ -114,8 +112,6 @@ public class SAXEresource implements Cloneable, Eresource {
     private String keywords;
 
     private Collection<String> meshTerms;
-
-    private String pmid;
 
     private String primaryType;
 
@@ -217,11 +213,6 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.description;
     }
 
-    @Override
-    public String getDoi() {
-        return this.doi;
-    }
-
     /*
      * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getItemCount()
@@ -250,11 +241,6 @@ public class SAXEresource implements Cloneable, Eresource {
             return Collections.emptySet();
         }
         return this.meshTerms;
-    }
-
-    @Override
-    public String getPmid() {
-        return this.pmid;
     }
 
     /*
@@ -483,10 +469,6 @@ public class SAXEresource implements Cloneable, Eresource {
         this.description = description;
     }
 
-    public void setDoi(final String doi) {
-        this.doi = doi;
-    }
-
     public void setIsCore(final boolean isCore) {
         this.isCore = isCore;
     }
@@ -497,10 +479,6 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void setKeywords(final String keywords) {
         this.keywords = keywords;
-    }
-
-    public void setPmid(final String pmid) {
-        this.pmid = pmid;
     }
 
     public void setPrimaryType(final String type) {
