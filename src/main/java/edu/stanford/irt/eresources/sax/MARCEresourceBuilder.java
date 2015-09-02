@@ -337,6 +337,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         if ("041".equals(this.tag)) {
             this.currentEresource.addPublicationLanguage(this.currentText.toString());
         }
+        if ("830".equals(this.tag) && "a".equals(this.code)) {
+            String suba = this.currentText.toString().toLowerCase();
+            if (suba.contains("stanford") && suba.contains("grand rounds")) {
+                this.currentEresource.addType("Grand Rounds");
+            }
+        }
     }
 
     protected void handleMfhdData(final String name) {
