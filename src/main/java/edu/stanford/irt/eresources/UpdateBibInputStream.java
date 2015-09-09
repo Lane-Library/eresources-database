@@ -34,6 +34,10 @@ public class UpdateBibInputStream extends BibInputStream {
             + "  AND bib_item.item_id               = item_status_1.item_id "
             + "  AND item_status_1.item_status_date > ? "
             + "  )"
+            + "AND bib_master.bib_id NOT IN ("
+            + "  select distinct bib_id from lmldb.bib_index where index_code = '0350' and NORMAL_HEADING like 'PMID %' "
+            + "  INTERSECT "
+            + "  select distinct bib_id from lmldb.bib_index where index_code = '655H' and NORMAL_HEADING like 'ARTICLES') "
             + "ORDER BY bib_id, mfhd_id";
     
     @Override
