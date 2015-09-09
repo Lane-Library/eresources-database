@@ -477,6 +477,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.currentEresource.setTitle(this.currentEresource.getTitle() + this.editionOrVersion);
             this.editionOrVersion.setLength(0);
         }
+        this.currentEresource.setTitle(maybeStripTrailingSlash(this.currentEresource.getTitle()));
     }
 
     private void handleMfhdControlfield() {
@@ -546,6 +547,14 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if (lastPeriod == lastPosition) {
                 return string.substring(0, lastPosition);
             }
+        }
+        return string;
+    }
+
+    // remove trailing slashes on titles
+    private String maybeStripTrailingSlash(final String string) {
+        if (string.endsWith(" /")) {
+            return string.substring(0, string.length() - 2);
         }
         return string;
     }
