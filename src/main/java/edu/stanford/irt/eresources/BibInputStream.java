@@ -15,10 +15,15 @@ public class BibInputStream extends EresourceInputStream {
             + "AND bib_master.bib_id             = bib_mfhd.bib_id "
             + "AND mfhd_master.suppress_in_opac != 'Y' "
             + "AND bib_master.suppress_in_opac  != 'Y' "
-            + "AND bib_master.bib_id NOT IN ("
-            + "  select distinct bib_id from lmldb.bib_index where index_code = '0350' and NORMAL_HEADING like 'PMID %' "
-            + "  INTERSECT "
-            + "  select distinct bib_id from lmldb.bib_index where index_code = '655H' and NORMAL_HEADING like 'ARTICLES') "
+            + "AND bib_master.bib_id NOT IN ( "
+            + "  SELECT DISTINCT bib_id FROM lmldb.bib_index "
+            + "  WHERE index_code = '0350' "
+            + "  AND NORMAL_HEADING like 'PMID %' "
+            + "  AND bib_id IN ( "
+            + "      SELECT DISTINCT bib_id FROM lmldb.bib_index "
+            + "      WHERE index_code = '655H' "
+            + "      AND NORMAL_HEADING like 'ARTICLES') "
+            + "  ) "
             + "ORDER BY bib_id, mfhd_id";
 
     @Override
