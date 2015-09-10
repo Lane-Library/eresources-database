@@ -93,6 +93,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private int countOf866;
 
+    private int countOf773;
+
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private ItemCount itemCount;
@@ -208,6 +210,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.isBib = false;
             this.isMfhd = false;
             this.countOf866 = 0;
+            this.countOf773 = 0;
         }
     }
 
@@ -346,13 +349,22 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         }
         if ("773".equals(this.tag)) {
-            if ("p".equals(this.code)) {
-                this.currentEresource.setPublicationTitle(this.currentText.toString());
-                this.currentEresource.setPublicationText(this.currentText.append(". ").toString());
+            if (this.countOf773 == 0) {
+                if ("tp".indexOf(this.code) > -1) {
+                    this.currentEresource.setPublicationTitle(this.currentText.toString());
+                }
+            } else if (this.countOf773 > 0) {
+                if ("t".equals(this.code)) {
+                    this.currentEresource.setPublicationText(this.currentEresource.getPublicationText() + "; "
+                            + this.currentText.toString());
+                }
             }
-            if ("dg".indexOf(this.code) > -1 && null != this.currentEresource.getPublicationText()) {
+            if ("dg".indexOf(this.code) > -1) {
                 this.currentEresource.setPublicationText(this.currentEresource.getPublicationText() + " "
                         + this.currentText.toString());
+            }
+            if ("w".equals(this.code)) {
+                this.countOf773++;
             }
         }
     }
