@@ -345,6 +345,16 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentEresource.addType("Grand Rounds");
             }
         }
+        if ("773".equals(this.tag)) {
+            if ("p".equals(this.code)) {
+                this.currentEresource.setPublicationTitle(this.currentText.toString());
+                this.currentEresource.setPublicationText(this.currentText.append(". ").toString());
+            }
+            if ("dg".indexOf(this.code) > -1 && null != this.currentEresource.getPublicationText()) {
+                this.currentEresource.setPublicationText(this.currentEresource.getPublicationText() + " "
+                        + this.currentText.toString());
+            }
+        }
     }
 
     protected void handleMfhdData(final String name) {
