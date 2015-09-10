@@ -553,8 +553,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     // remove trailing slashes on titles
     private String maybeStripTrailingSlash(final String string) {
-        if (null != string && string.endsWith(" /")) {
-            return string.substring(0, string.length() - 2);
+        if (null != string && string.endsWith("/")) {
+            return string.substring(0, string.length() - 1).trim();
         }
         return string;
     }
