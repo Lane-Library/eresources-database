@@ -152,9 +152,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);
             doc.addField("mesh_parents", this.meshManager.getParentHeadings(mesh));
-            if (!this.meshManager.isChecktag(mesh) && !"nomesh".equals(mesh)) {
-                doc.addField("meshNoCT", mesh);
-            }
         }
         for (String type : eresource.getTypes()) {
             doc.addField("type", type);
