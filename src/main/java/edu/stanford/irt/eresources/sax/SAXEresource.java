@@ -558,7 +558,7 @@ public class SAXEresource implements Cloneable, Eresource {
         if (sb.length() > 2) {
             sb.delete(sb.length() - 2, sb.length());
         }
-        if (sb.length() > 0 && sb.lastIndexOf(PERIOD) != sb.length()) {
+        if (sb.length() > 0 && sb.lastIndexOf(PERIOD) != sb.length() - 1) {
             sb.append(PERIOD);
         }
         return sb.toString();
