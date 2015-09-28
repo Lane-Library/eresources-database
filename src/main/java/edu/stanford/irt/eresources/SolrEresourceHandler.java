@@ -171,6 +171,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         for (String author : eresource.getPublicationAuthors()) {
             doc.addField("publicationAuthor", author);
+            doc.addField("author", author);
         }
         for (String pubLanguage : eresource.getPublicationLanguages()) {
             doc.addField("publicationLanguage", pubLanguage);
