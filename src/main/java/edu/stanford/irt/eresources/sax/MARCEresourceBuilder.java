@@ -451,7 +451,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     // 852
     // Bibliographic
     // 010-099
-    // Retain only, 020, 022, 030, 035, 050, 060
+    // Retain only, 020, 022, 030, 035
     // 100-899 [note that non-Roman script occurs in 880]
     // 900-999
     // Retain only: 901, 902, 903, 907^x, 907^y, 941, 942, 943 [907^x&y will
@@ -463,8 +463,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 return tagNumber == 852;
             } else if (this.isBib) {
                 return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
-                        || (tagNumber == 30) || (tagNumber == 35) || (tagNumber == 50) || (tagNumber == 60)
-                        || ((tagNumber >= 901) && (tagNumber <= 903)) || ((tagNumber >= 941) && (tagNumber <= 943))
+                        || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
+                        || ((tagNumber >= 941) && (tagNumber <= 943))
                         || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
             }
         } catch (NumberFormatException e) {
