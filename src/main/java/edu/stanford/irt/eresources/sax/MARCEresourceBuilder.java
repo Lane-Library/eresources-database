@@ -144,6 +144,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
                 this.currentEresource.addVersion(this.currentVersion);
+                StringBuilder combinedKeywords = new StringBuilder();
+                combinedKeywords.append(this.currentEresource.getKeywords());
+                combinedKeywords.append(this.content.toString().replaceAll("\\s\\s+", " "));
+                this.currentEresource.setKeywords(combinedKeywords.toString());
+                this.content.setLength(0);
             } else if (this.isBib) {
                 if (this.description520.length() > 0) {
                     this.currentEresource.setDescription(this.description520.toString());
@@ -442,26 +447,30 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         this.currentEresource.setRecordType("bib");
     }
 
+    // Holdings
+    // 852
     // Bibliographic
     // 010-099
-    // Retain only, 020, 022, 030, 035
+    // Retain only, 020, 022, 030, 035, 050, 060
     // 100-899 [note that non-Roman script occurs in 880]
     // 900-999
     // Retain only: 901, 902, 903, 907^x, 907^y, 941, 942, 943 [907^x&y will
     // eventually be changed into 655 values]
     private boolean checkSaveContent() {
-        if (!this.isBib) {
-            return false;
-        }
         try {
             int tagNumber = Integer.parseInt(this.tag);
-            return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
-                    || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
-                    || ((tagNumber >= 941) && (tagNumber <= 943))
-                    || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
+            if (this.isMfhd) {
+                return tagNumber == 852;
+            } else if (this.isBib) {
+                return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
+                        || (tagNumber == 30) || (tagNumber == 35) || (tagNumber == 50) || (tagNumber == 60)
+                        || ((tagNumber >= 901) && (tagNumber <= 903)) || ((tagNumber >= 941) && (tagNumber <= 943))
+                        || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
+            }
         } catch (NumberFormatException e) {
             return false;
         }
+        return false;
     }
 
     private void handleBibControlfield() {
