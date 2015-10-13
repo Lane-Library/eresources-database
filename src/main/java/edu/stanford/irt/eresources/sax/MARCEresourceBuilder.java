@@ -91,9 +91,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected String z;
 
-    private int countOf866;
-
     private int countOf773;
+
+    private int countOf866;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -143,13 +143,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
-                if (this.currentVersion.getLinks().size() == 0) {
-                    SAXLink link = new SAXLink();
-                    link.setLabel("Lane Catalog Record");
-                    link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
-                            + this.currentEresource.getRecordId());
-                    this.currentVersion.addLink(link);
-                }
                 this.currentEresource.addVersion(this.currentVersion);
             } else if (this.isBib) {
                 if (this.description520.length() > 0) {
@@ -415,7 +408,22 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void maybeAddCatalogLink() {
-        // by default do nothing
+        if (!"bib".equals(this.currentEresource.getRecordType())) {
+            return;
+        }
+        boolean needsLink = true;
+        for (Version version : this.currentEresource.getVersions()) {
+            if (version.getLinks().size() > 0) {
+                needsLink = false;
+            }
+        }
+        if (needsLink) {
+            SAXLink link = new SAXLink();
+            link.setLabel("Lane Catalog Record");
+            link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
+            this.currentVersion.addLink(link);
+            this.currentEresource.addVersion(this.currentVersion);
+        }
     }
 
     protected void maybeAddSubset(final String subset) {
