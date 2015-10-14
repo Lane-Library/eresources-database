@@ -68,10 +68,7 @@ public class PubmedSearcher {
     }
 
     /**
-     * @param query
-     *            PubMed search string
      * @return a list of pmids
-     * @throws Exception
      */
     public List<String> getPmids() {
         if (this.pmids == null) {
