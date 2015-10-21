@@ -287,6 +287,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
             } else if ("c".equals(this.code)) {
                 this.currentEresource.setAuthor(this.currentText.toString());
+            } else if ("h".equals(this.code) && this.currentText.toString().contains("digital")) {
+                this.currentEresource.isDigital();
             }
         } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
             if ("abnpq".indexOf(this.code) > -1) {

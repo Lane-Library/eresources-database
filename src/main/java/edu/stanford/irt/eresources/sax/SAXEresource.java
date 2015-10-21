@@ -109,6 +109,8 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private boolean isCore = false;
 
+    private boolean isDigital;
+
     private String keywords;
 
     private Collection<String> meshTerms;
@@ -267,11 +269,9 @@ public class SAXEresource implements Cloneable, Eresource {
         } else if ("Component".equals(this.primaryType)) {
             if (this.types.contains("Article") && this.types.contains("Chapter")) {
                 type = "Article/Chapter";
-            }
-            else if (this.types.contains("Article")) {
+            } else if (this.types.contains("Article")) {
                     type = "Article";
-            }
-            else if (this.types.contains("Chapter")) {
+            } else if (this.types.contains("Chapter")) {
                 type = "Chapter";
             } else {
                 type = "Other";
@@ -453,6 +453,10 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.isCore;
     }
 
+    public void isDigital() {
+        this.isDigital = true;
+    }
+
     @Override
     public boolean isEnglish() {
         if (null != this.publicationLanguages) {
@@ -569,14 +573,8 @@ public class SAXEresource implements Cloneable, Eresource {
             return this.printOrDigital;
         }
         this.printOrDigital = "Print";
-        for (Version v : this.versions) {
-            for (Link l : v.getLinks()) {
-                if (!"lane catalog record".equalsIgnoreCase(l.getLabel())
-                        && !"impact factor".equalsIgnoreCase(l.getLabel())) {
-                    this.printOrDigital = "Digital";
-                    return this.printOrDigital;
-                }
-            }
+        if (this.isDigital) {
+            this.printOrDigital = "Digital";
         }
         return this.printOrDigital;
     }
