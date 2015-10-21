@@ -444,7 +444,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void maybeSetAdditionalText(final SAXLink link, final String instruction) {
-        link.setInstruction(instruction);
+        // case 112154, 101898
+        if (!"click link above for location/circulation status.".equalsIgnoreCase(instruction)) {
+            link.setInstruction(instruction);
+        }
     }
 
     protected void setRecordType() {
