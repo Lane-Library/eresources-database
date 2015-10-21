@@ -571,7 +571,8 @@ public class SAXEresource implements Cloneable, Eresource {
         this.printOrDigital = "Print";
         for (Version v : this.versions) {
             for (Link l : v.getLinks()) {
-                if (!"Lane Catalog Record".equalsIgnoreCase(l.getLabel())) {
+                if (!"lane catalog record".equalsIgnoreCase(l.getLabel())
+                        && !"impact factor".equalsIgnoreCase(l.getLabel())) {
                     this.printOrDigital = "Digital";
                     return this.printOrDigital;
                 }
