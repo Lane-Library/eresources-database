@@ -416,18 +416,22 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         if (!"bib".equals(this.currentEresource.getRecordType())) {
             return;
         }
-        boolean needsLink = true;
+        int linkCount = 0;
         for (Version version : this.currentEresource.getVersions()) {
-            if (version.getLinks().size() > 0) {
-                needsLink = false;
+            for (Link link : version.getLinks()) {
+                if (!"impact factor".equalsIgnoreCase(link.getLabel())) {
+                    linkCount++;
+                }
             }
         }
-        if (needsLink) {
+        if (linkCount == 0) {
             SAXLink link = new SAXLink();
             link.setLabel("Lane Catalog Record");
             link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
-            this.currentVersion.addLink(link);
-            this.currentEresource.addVersion(this.currentVersion);
+            this.currentVersion.addLink(0, link);
+            if (this.currentEresource.getVersions().isEmpty()) {
+                this.currentEresource.addVersion(this.currentVersion);
+            }
         }
     }
 

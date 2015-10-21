@@ -38,6 +38,13 @@ public class SAXVersion implements Version {
 
     private String summaryHoldings;
 
+    public void addLink(final int index, final Link link) {
+        if (null == this.links) {
+            this.links = new LinkedList<Link>();
+        }
+        this.links.add(index, link);
+    }
+
     public void addLink(final Link link) {
         if (null == this.links) {
             this.links = new LinkedList<Link>();
