@@ -355,13 +355,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
             } else if (this.countOf773 > 0) {
                 if ("t".equals(this.code)) {
-                    this.currentEresource.setPublicationText(this.currentEresource.getPublicationText() + "; "
-                            + this.currentText.toString());
+                    this.currentEresource.setPublicationText(
+                            this.currentEresource.getPublicationText() + "; " + this.currentText.toString());
                 }
             }
             if ("dg".indexOf(this.code) > -1) {
-                this.currentEresource.setPublicationText(this.currentEresource.getPublicationText() + " "
-                        + this.currentText.toString());
+                this.currentEresource.setPublicationText(
+                        this.currentEresource.getPublicationText() + " " + this.currentText.toString());
             }
             if ("w".equals(this.code)) {
                 this.countOf773++;
