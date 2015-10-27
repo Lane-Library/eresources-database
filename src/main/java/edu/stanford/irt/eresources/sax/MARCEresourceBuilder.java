@@ -59,6 +59,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected SAXVersion currentVersion;
 
+    protected StringBuilder dateForPrintSummaryHoldings = new StringBuilder();
+
     protected StringBuilder description505 = new StringBuilder();
 
     protected StringBuilder description520 = new StringBuilder();
@@ -367,6 +369,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.countOf773++;
             }
         }
+        if ("149".equals(this.tag) && "d".equals(this.code)) {
+            this.dateForPrintSummaryHoldings.append(this.currentText);
+        } else if ("260".equals(this.tag) && "c".equals(this.code) && this.dateForPrintSummaryHoldings.length() == 0) {
+            this.dateForPrintSummaryHoldings.append(this.currentText);
+        }
     }
 
     protected void handleMfhdData(final String name) {
@@ -431,10 +438,14 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             link.setLabel("Lane Catalog Record");
             link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
             this.currentVersion.addLink(0, link);
+            if (null == this.currentVersion.getDates()) {
+                this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
+            }
             if (this.currentEresource.getVersions().isEmpty()) {
                 this.currentEresource.addVersion(this.currentVersion);
             }
         }
+        this.dateForPrintSummaryHoldings.setLength(0);
     }
 
     protected void maybeAddSubset(final String subset) {
