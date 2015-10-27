@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
-import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
@@ -52,6 +51,7 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s*");
+
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -270,7 +270,7 @@ public class SAXEresource implements Cloneable, Eresource {
             if (this.types.contains("Article") && this.types.contains("Chapter")) {
                 type = "Article/Chapter";
             } else if (this.types.contains("Article")) {
-                    type = "Article";
+                type = "Article";
             } else if (this.types.contains("Chapter")) {
                 type = "Chapter";
             } else {
@@ -398,13 +398,12 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public Collection<String> getTypes() {
-//        if ("bib".equals(this.recordType)) {
-//            this.types.add(getPrintOrDigital() + " (Lane Catalog)");
-//        }
         // this.types.add(getPrimaryType());
         // this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll(""));
         if (getPrimaryType().startsWith("Journal")) {
             this.types.add("Journal");
+        } else if (getPrimaryType().startsWith("Book")) {
+            this.types.add("Book");
         }
         return Collections.unmodifiableCollection(this.types);
     }
