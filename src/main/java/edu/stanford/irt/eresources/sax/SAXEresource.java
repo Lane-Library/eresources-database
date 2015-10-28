@@ -288,6 +288,17 @@ public class SAXEresource implements Cloneable, Eresource {
         return type;
     }
 
+    public String getPrintOrDigital() {
+        if (null != this.printOrDigital) {
+            return this.printOrDigital;
+        }
+        this.printOrDigital = "Print";
+        if (this.isDigital) {
+            this.printOrDigital = "Digital";
+        }
+        return this.printOrDigital;
+    }
+
     @Override
     public Collection<String> getPublicationAuthors() {
         if (null == this.publicationAuthors) {
@@ -565,16 +576,5 @@ public class SAXEresource implements Cloneable, Eresource {
             sb.append(PERIOD);
         }
         return sb.toString();
-    }
-
-    private String getPrintOrDigital() {
-        if (null != this.printOrDigital) {
-            return this.printOrDigital;
-        }
-        this.printOrDigital = "Print";
-        if (this.isDigital) {
-            this.printOrDigital = "Digital";
-        }
-        return this.printOrDigital;
     }
 }
