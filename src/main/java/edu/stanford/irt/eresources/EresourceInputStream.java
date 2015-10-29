@@ -52,7 +52,6 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                     while (rs.next()) {
                         this.output.write(rs.getBytes(2));
                     }
-                    rs.close();
                 }
                 for (String mfhdId : entry.getValue()) {
                     getMfhdStmt.setString(1, mfhdId);
@@ -60,7 +59,6 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                         while (rs.next()) {
                             this.output.write(rs.getBytes(2));
                         }
-                        rs.close();
                     }
                 }
             }
@@ -129,7 +127,6 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                     ids.put(bibId, Collections.<String> emptySet());
                 }
             }
-            rs.close();
         }
         return ids;
     }
