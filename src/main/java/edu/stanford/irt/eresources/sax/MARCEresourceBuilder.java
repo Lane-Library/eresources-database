@@ -276,17 +276,19 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
             if ("abnpq".indexOf(this.code) > -1) {
+                String data = this.currentText.toString();
+                if ("b".equals(this.code)) {
+                    // remove trailing slash from subtitle (subfield b)
+                    data = SPACE_SLASH.matcher(data).replaceFirst("");
+                    // prepend a space colon to subtitles if missing (we don't include ^h in title)
+                    if (this.title.indexOf(":") != this.title.length() - 1) {
+                        this.title.append(" :");
+                    }
+                }
                 if (this.title.length() > 0) {
                     this.title.append(' ');
                 }
-                if ("b".equals(this.code)) {
-                    // remove trailing slash from subtitle (subfield b)
-                    String data = this.currentText.toString();
-                    data = SPACE_SLASH.matcher(data).replaceFirst("");
-                    this.title.append(data);
-                } else {
-                    this.title.append(this.currentText);
-                }
+                this.title.append(data);
             } else if ("c".equals(this.code)) {
                 this.currentEresource.setAuthor(this.currentText.toString());
             } else if ("h".equals(this.code) && this.currentText.toString().contains("digital")) {
