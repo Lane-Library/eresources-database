@@ -295,18 +295,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentEresource.isDigital();
             }
         } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
-            if ("abnpq".indexOf(this.code) > -1) {
-                if (this.preferredTitle.length() > 0) {
-                    this.preferredTitle.append(' ');
-                }
-                if ("b".equals(this.code)) {
-                    // remove trailing slash from subtitle (subfield b)
-                    String data = this.currentText.toString();
-                    data = SPACE_SLASH.matcher(data).replaceFirst("");
-                    this.preferredTitle.append(data);
-                } else {
-                    this.preferredTitle.append(this.currentText);
-                }
+            if ("a".equals(this.code)) {
+                this.preferredTitle.append(this.currentText);
             }
         } else if ("250".equals(this.tag) && "a".equals(this.code)) {
             this.editionOrVersion.append(". ");
