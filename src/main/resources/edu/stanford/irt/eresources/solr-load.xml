@@ -33,11 +33,18 @@
     <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue">
         <constructor-arg value="10000"/>
     </bean>
-    <bean id="voyagerDataSource" class="oracle.jdbc.pool.OracleConnectionPoolDataSource">
-        <property name="URL" value="${eresources.voyagerdb.url}"/>
-        <property name="user" value="${eresources.voyagerdb.username}"/>
-        <property name="password" value="${eresources.voyagerdb.password}"/>
-    </bean>
+	<bean id="voyagerDataSource" class="oracle.ucp.jdbc.PoolDataSourceFactory" factory-method="getPoolDataSource">
+		<property name="URL" value="${eresources.voyagerdb.url}"/>
+		<property name="user" value="${eresources.voyagerdb.username}"/>
+		<property name="password" value="${eresources.voyagerdb.password}"/>
+	    <property name="connectionFactoryClassName" value="oracle.jdbc.pool.OracleDataSource" />
+	    <property name="minPoolSize" value="2" />
+	    <property name="maxPoolSize" value="5" />
+	    <property name="initialPoolSize" value="2" />
+	    <property name="inactiveConnectionTimeout" value="0" />
+	    <property name="validateConnectionOnBorrow" value="true" />
+	    <property name="maxStatements" value="10" />
+	</bean>
     <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" destroy-method="destroy">
         <property name="corePoolSize" value="5"/>
         <property name="maxPoolSize" value="5"/>
