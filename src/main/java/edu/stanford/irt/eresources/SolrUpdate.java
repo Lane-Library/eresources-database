@@ -22,8 +22,8 @@ public class SolrUpdate extends SolrLoader {
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {
-            rsp = this.solrServer.query(query);
-        } catch (SolrServerException e) {
+            rsp = this.solrClient.query(query);
+        } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
         SolrDocumentList rdocs = rsp.getResults();

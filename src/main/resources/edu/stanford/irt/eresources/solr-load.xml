@@ -20,14 +20,14 @@
         <property name="version" value="${project.version}"/>
         <property name="executor" ref="executor"/>
         <property name="queue" ref="queue"/>
-        <property name="solrServer" ref="solrServer"/>
+        <property name="solrClient" ref="solrClient"/>
     </bean>
     <bean id="eresourceHandler" class="edu.stanford.irt.eresources.SolrEresourceHandler">
         <constructor-arg ref="queue"/>
-        <constructor-arg name="solrServer" ref="solrServer"/>
+        <constructor-arg name="solrClient" ref="solrClient"/>
         <constructor-arg name="solrMaxDocs" value="${eresources.solr-max-docs}"/>
     </bean>
-    <bean id="solrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+    <bean id="solrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient">
         <constructor-arg value="${eresources.solr-url-laneSearch}"/>
     </bean>
     <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue">

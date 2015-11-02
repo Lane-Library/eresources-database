@@ -20,8 +20,8 @@ public class SolrPubmedReload extends SolrLoader {
         super.load();
         try {
             // delete everything older than lastUpdate
-            this.solrServer.deleteByQuery("recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
-            this.solrServer.commit();
+            this.solrClient.deleteByQuery("recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
+            this.solrClient.commit();
         } catch (SolrServerException e) {
             throw new EresourceDatabaseException(e);
         }
@@ -33,8 +33,8 @@ public class SolrPubmedReload extends SolrLoader {
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {
-            rsp = this.solrServer.query(query);
-        } catch (SolrServerException e) {
+            rsp = this.solrClient.query(query);
+        } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
         SolrDocumentList rdocs = rsp.getResults();

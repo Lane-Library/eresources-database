@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -35,15 +35,16 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private BlockingQueue<Eresource> queue;
 
+    private SolrClient solrClient;
+
     private Collection<SolrInputDocument> solrDocs = new ArrayList<SolrInputDocument>();
 
     private int solrMaxDocs;
 
-    private SolrServer solrServer;
-
-    public SolrEresourceHandler(final BlockingQueue<Eresource> queue, final SolrServer solrServer, final int solrMaxDocs) {
+    public SolrEresourceHandler(final BlockingQueue<Eresource> queue, final SolrClient solrClient,
+            final int solrMaxDocs) {
         this.queue = queue;
-        this.solrServer = solrServer;
+        this.solrClient = solrClient;
         this.solrMaxDocs = solrMaxDocs;
     }
 
@@ -90,8 +91,8 @@ public class SolrEresourceHandler implements EresourceHandler {
                         insertEresource(eresource);
                     }
                 } catch (InterruptedException e) {
-                    throw new EresourceDatabaseException(
-                            "\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
+                    throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(),
+                            e);
                 }
                 if (this.solrDocs.size() >= this.solrMaxDocs) {
                     addSolrDocs();
@@ -195,7 +196,7 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private void addSolrDocs() {
         try {
-            this.solrServer.add(this.solrDocs);
+            this.solrClient.add(this.solrDocs);
             this.solrDocs.clear();
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException("solr add failed", e);

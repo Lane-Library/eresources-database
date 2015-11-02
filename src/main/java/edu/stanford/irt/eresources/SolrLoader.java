@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.Executor;
 
-import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -20,7 +20,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class SolrLoader {
 
-    protected SolrServer solrServer;
+    protected SolrClient solrClient;
 
     private int count;
 
@@ -39,8 +39,8 @@ public class SolrLoader {
     private String version;
 
     public static void main(final String[] args) throws IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/"
-                + args[0] + ".xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+                "edu/stanford/irt/eresources/" + args[0] + ".xml");
         SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
         try {
@@ -96,8 +96,8 @@ public class SolrLoader {
         this.queue = queue;
     }
 
-    public void setSolrServer(final SolrServer solrServer) {
-        this.solrServer = solrServer;
+    public void setSolrClient(final SolrClient solrClient) {
+        this.solrClient = solrClient;
     }
 
     public void setVersion(final String version) {

@@ -24,8 +24,8 @@ public class SolrPubmedUpdate extends SolrLoader {
         try {
             // pubmed2er.stx handles deletes from NCBI by zeroing out record data
             // here we delete them ... records lacking year and title
-            this.solrServer.deleteByQuery("recordType:pubmed AND year:0 AND title:''");
-            this.solrServer.commit();
+            this.solrClient.deleteByQuery("recordType:pubmed AND year:0 AND title:''");
+            this.solrClient.commit();
         } catch (SolrServerException e) {
             throw new EresourceDatabaseException(e);
         }
@@ -38,8 +38,8 @@ public class SolrPubmedUpdate extends SolrLoader {
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {
-            rsp = this.solrServer.query(query);
-        } catch (SolrServerException e) {
+            rsp = this.solrClient.query(query);
+        } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
         SolrDocumentList rdocs = rsp.getResults();
