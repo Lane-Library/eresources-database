@@ -55,6 +55,8 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      * -- additionalText has "delayed" in it
      * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
+     * -- catalog links (print)
+     *    catalog links before impact factor (case 112189: records with only an impact factor link)
      * </pre>
      *
      * @param version
@@ -65,11 +67,14 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         if (links.isEmpty()) {
             return Integer.MIN_VALUE;
         }
-        int score = 0;
+        if (links.get(0).getUrl().startsWith("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=")) {
+            return -98;
+        }
         if ("Impact Factor".equals(links.get(0).getLabel())) {
             return -99;
         }
         String summaryHoldings = version.getSummaryHoldings();
+        int score = 0;
         if (summaryHoldings != null) {
             if (summaryHoldings.endsWith("-") || summaryHoldings.startsWith("v. 1-")) {
                 score++;
