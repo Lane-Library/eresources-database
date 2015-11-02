@@ -67,7 +67,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         if (links.isEmpty()) {
             return Integer.MIN_VALUE;
         }
-        if (links.get(0).getUrl().startsWith("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=")) {
+        if (firstLinkIsCatalogLink(version)) {
             return -98;
         }
         if ("Impact Factor".equals(links.get(0).getLabel())) {
@@ -117,6 +117,16 @@ public class VersionComparator implements Comparator<Version>, Serializable {
             }
         }
         return score;
+    }
+
+    private boolean firstLinkIsCatalogLink(final Version version) {
+        if (!version.getLinks().isEmpty()) {
+            String url = version.getLinks().get(0).getUrl();
+            if (null != url) {
+                return url.startsWith("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=");
+            }
+        }
+        return false;
     }
 
     private int getYearsCovered(final Version version) {
