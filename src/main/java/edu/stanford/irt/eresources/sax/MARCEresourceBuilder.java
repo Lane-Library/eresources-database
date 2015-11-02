@@ -145,6 +145,16 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if (RECORD.equals(name)) {
             if (this.isMfhd) {
+                if (this.currentVersion.getLinks().size() == 0) {
+                    SAXLink link = new SAXLink();
+                    link.setLabel("Lane Catalog Record");
+                    link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
+                            + this.currentEresource.getRecordId());
+                    this.currentVersion.addLink(link);
+                    if (null == this.currentVersion.getDates()) {
+                        this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
+                    }
+                }
                 this.currentEresource.addVersion(this.currentVersion);
                 StringBuilder combinedKeywords = new StringBuilder();
                 combinedKeywords.append(this.currentEresource.getKeywords());
@@ -414,20 +424,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void maybeAddCatalogLink() {
-        if ("bib".equals(this.currentEresource.getRecordType())
-                && "Print".equals(this.currentEresource.getPrintOrDigital())) {
-            SAXLink link = new SAXLink();
-            link.setLabel("Lane Catalog Record");
-            link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + this.currentEresource.getRecordId());
-            this.currentVersion.addLink(0, link);
-            if (null == this.currentVersion.getDates()) {
-                this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
-            }
-            if (this.currentEresource.getVersions().isEmpty()) {
-                this.currentEresource.addVersion(this.currentVersion);
-            }
-        }
-        this.dateForPrintSummaryHoldings.setLength(0);
+        // by default do nothing
     }
 
     protected void maybeAddSubset(final String subset) {
@@ -561,6 +558,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     private void handlePreviousRecord() {
         createCustomTypes(this.currentEresource);
         maybeAddCatalogLink();
+        this.dateForPrintSummaryHoldings.setLength(0);
         if (!this.recordHasError) {
             this.eresourceHandler.handleEresource(this.currentEresource);
             if (this.hasPreferredTitle) {
