@@ -109,7 +109,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private boolean isCore = false;
 
-    private boolean isDigital;
+    private boolean isDigital = false;
 
     private String keywords;
 
@@ -452,8 +452,8 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.isCore;
     }
 
-    public void isDigital() {
-        this.isDigital = true;
+    public boolean isDigital() {
+        return this.isDigital;
     }
 
     @Override
@@ -474,6 +474,10 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void setIsCore(final boolean isCore) {
         this.isCore = isCore;
+    }
+
+    public void setIsDigital(final boolean isDigital) {
+        this.isDigital = isDigital;
     }
 
     public void setItemCount(final int[] count) {
