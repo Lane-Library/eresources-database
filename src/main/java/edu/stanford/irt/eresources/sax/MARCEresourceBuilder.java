@@ -272,8 +272,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             String type = this.currentText.toString();
             type = maybeStripTrailingPeriod(type);
             this.currentEresource.addType(type);
-            if ("LaneConnex".equalsIgnoreCase(type)) {
+            if ("Core Material".equalsIgnoreCase(type)) {
                 this.currentEresource.setIsCore(true);
+            } else if ("LaneConnex".equalsIgnoreCase(type)) {
+                this.currentEresource.setIsLaneConnex(true);
             }
             if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
                 this.currentEresource.setPrimaryType(type);

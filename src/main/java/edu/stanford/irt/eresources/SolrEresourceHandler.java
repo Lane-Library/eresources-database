@@ -149,6 +149,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("title_starts", "ertlsw" + Character.toString(firstCharOfTitle));
         doc.addField("isCore", Boolean.toString(eresource.isCore()));
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
+        doc.addField("isLaneConnex", Boolean.toString(eresource.isLaneConnex()));
         doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);

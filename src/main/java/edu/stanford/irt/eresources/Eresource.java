@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 
 public interface Eresource {
-    
+
     String getAuthor();
 
     String getDescription();
@@ -48,4 +48,6 @@ public interface Eresource {
     boolean isCore();
 
     boolean isEnglish();
+
+    boolean isLaneConnex();
 }

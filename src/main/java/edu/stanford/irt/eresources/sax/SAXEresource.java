@@ -111,6 +111,8 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private boolean isDigital = false;
 
+    private boolean isLaneConnex = false;
+
     private String keywords;
 
     private Collection<String> meshTerms;
@@ -464,6 +466,10 @@ public class SAXEresource implements Cloneable, Eresource {
         return false;
     }
 
+    public boolean isLaneConnex() {
+        return this.isLaneConnex;
+    }
+
     public void setAuthor(final String author) {
         this.author = author;
     }
@@ -478,6 +484,10 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void setIsDigital(final boolean isDigital) {
         this.isDigital = isDigital;
+    }
+
+    public void setIsLaneConnex(final boolean isLaneConnex) {
+        this.isLaneConnex = isLaneConnex;
     }
 
     public void setItemCount(final int[] count) {
