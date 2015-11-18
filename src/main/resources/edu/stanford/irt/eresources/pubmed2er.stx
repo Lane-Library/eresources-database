@@ -300,6 +300,9 @@
         <stx:process-children/>
     </stx:template>
     
+    <!-- delete comments and corrections -->
+    <stx:template match="MedlineCitation/CommentsCorrectionsList"/>
+    
     <stx:template match="DeleteCitation/PMID">
         <eresource id="{.}" type="pubmed" update="19690101000000">
             <type>article</type>
