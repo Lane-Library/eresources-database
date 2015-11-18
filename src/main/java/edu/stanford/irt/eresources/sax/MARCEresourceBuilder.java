@@ -447,7 +447,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     // Holdings
-    // 852
+    // 852, 866
     // Bibliographic
     // 010-099
     // Retain only, 020, 022, 030, 035
@@ -459,7 +459,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         try {
             int tagNumber = Integer.parseInt(this.tag);
             if (this.isMfhd) {
-                return tagNumber == 852;
+                return (tagNumber == 852 || tagNumber == 866);
             } else if (this.isBib) {
                 return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
                         || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
