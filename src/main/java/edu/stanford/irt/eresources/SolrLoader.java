@@ -116,11 +116,11 @@ public class SolrLoader {
             pid = reader.readLine();
             reader.close();
             if (this.killPrevious) {
-                LoggerFactory.getLogger(DBReload.class).warn("pid " + pid + " exists, killing . . .");
+                LoggerFactory.getLogger(SolrLoader.class).warn("pid " + pid + " exists, killing . . .");
                 Runtime.getRuntime().exec(new String[] { "kill", pid });
             } else {
                 IllegalStateException e = new IllegalStateException("pid " + pid + " already running");
-                LoggerFactory.getLogger(DBUpdate.class).error(e.getMessage());
+                LoggerFactory.getLogger(SolrLoader.class).error(e.getMessage());
                 throw e;
             }
         }
