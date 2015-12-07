@@ -300,8 +300,16 @@
         <stx:process-children/>
     </stx:template>
     
-    <!-- delete comments and corrections -->
-    <stx:template match="MedlineCitation/CommentsCorrectionsList"/>
+    <!-- delete comments and corrections that are NOT retractions -->
+    <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections[@RefType!='RetractionIn']"/>
+    
+    <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections[@RefType='RetractionIn']/RefSource">
+        <stx:assign name="title" select="concat($title, ' Retracted in: ', .)"/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections[@RefType='RetractionIn']/PMID">
+        <stx:assign name="title" select="concat($title, ' [PMID ', ., ']')"/>
+    </stx:template>
     
     <stx:template match="DeleteCitation/PMID">
         <eresource id="{.}" type="pubmed" update="19690101000000">
