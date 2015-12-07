@@ -301,23 +301,22 @@
     </stx:template>
     
     <!-- delete comments and corrections that are NOT RectractionIn, PartialRectractionIn or ErratumIn -->
-    <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections[not(contains('RetractionIn,ErratumIn',@RefType))]"/>
+    <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections[not(contains('PartialRetractionIn,RetractionIn,ErratumIn',@RefType))]"/>
         
-    <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections[contains('RetractionIn,ErratumIn',@RefType)]">
+    <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections[contains('PartialRetractionIn,RetractionIn,ErratumIn',@RefType)]">
         <stx:variable name="childNodesAsText">
-            <stx:process-children />
+            <stx:process-children/>
         </stx:variable>
         <!--  limit to CommentsCorrections with a PMID element -->
         <stx:if test="contains($childNodesAsText,'PMID')">
             <stx:variable name="label">
                 <stx:choose>
-                    <stx:when test="@RefType = 'ErratumIn'"> Erratum in: </stx:when>
-                    <stx:when test="@RefType = 'RetractionIn'"> Retraction in: </stx:when>
-                    <stx:when test="@RefType = 'PartialRetractionIn'"> Partial retraction in: </stx:when>
+                    <stx:when test="@RefType = 'ErratumIn'">Erratum in</stx:when>
+                    <stx:when test="@RefType = 'RetractionIn'">Retraction in</stx:when>
+                    <stx:when test="@RefType = 'PartialRetractionIn'">Partial retraction in</stx:when>
                 </stx:choose>
             </stx:variable>
-            <stx:assign name="title" select="concat($title, $label)"/>
-            <stx:assign name="title" select="concat($title, $childNodesAsText, '.')"/>
+            <stx:assign name="title" select="concat($title, ' [', $label, ': ', $childNodesAsText, ']')"/>
         </stx:if>
     </stx:template>
     
@@ -326,7 +325,7 @@
     </stx:template>
     
     <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections/PMID">
-        <stx:value-of select="concat(' [PMID:', ., ']')"/>
+        <stx:value-of select="concat(' PMID:', .)"/>
     </stx:template>
     
     <stx:template match="DeleteCitation/PMID">
