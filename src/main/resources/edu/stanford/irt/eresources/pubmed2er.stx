@@ -129,7 +129,7 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $description)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $authorsText)"/>
             <stx:for-each-item name="author" select="tokenize($authorsFull, ':::')">
-	            <stx:assign name="keywords" select="concat($keywords, ' ', substring-after($author,', '))"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', substring-after($author,', '))"/>
             </stx:for-each-item>
             <!-- duplicated when publicationText added to keywords in SolrEresourceHandler; 
                  date, vol, etc are also duplicated but they are useful broken out like this
@@ -150,7 +150,7 @@
             "Place of Publication, Transliterated Title, Create Date, Completion Date, Entrez Date, MeSH Date, and Modification Date"
         -->
         <stx:if test="not(contains('Year|Month|Day|Country|CopyrightInformation',name(.)))">
-	        <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
+            <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
         </stx:if>
         <stx:process-children/>
     </stx:template>
@@ -228,9 +228,9 @@
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/AuthorList/Author/LastName|MedlineCitation/Article/AuthorList/Author/CollectiveName">
-    	<stx:if test="name(.) = 'LastName'">
-    	   <stx:assign name="authorsPreviousLN" select="."/>
-    	</stx:if>
+        <stx:if test="name(.) = 'LastName'">
+           <stx:assign name="authorsPreviousLN" select="."/>
+        </stx:if>
         <stx:choose>
             <stx:when test="$authors = ''">
                 <stx:assign name="authors" select="."/>
@@ -263,16 +263,16 @@
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/PublicationTypeList/PublicationType">
-		<stx:if test="string:toLowerCase(.) != 'journal article'" xmlns:string="java:java.lang.String">
-	        <stx:choose>
-	            <stx:when test="$publicationType = ''">
-	                <stx:assign name="publicationType" select="."/>
-	            </stx:when>
-	            <stx:otherwise>
-	                <stx:assign name="publicationType" select="concat($publicationType, ':::', .)"/>
-	            </stx:otherwise>
-	        </stx:choose>
-		</stx:if>
+        <stx:if test="string:toLowerCase(.) != 'journal article'" xmlns:string="java:java.lang.String">
+            <stx:choose>
+                <stx:when test="$publicationType = ''">
+                    <stx:assign name="publicationType" select="."/>
+                </stx:when>
+                <stx:otherwise>
+                    <stx:assign name="publicationType" select="concat($publicationType, ':::', .)"/>
+                </stx:otherwise>
+            </stx:choose>
+        </stx:if>
         <stx:process-children/>
     </stx:template>
     
