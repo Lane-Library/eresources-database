@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
@@ -49,8 +48,6 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final String PERIOD = ".";
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
-
-    private static final Pattern WHITESPACE = Pattern.compile("\\s*");
 
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
@@ -401,7 +398,6 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public Collection<String> getTypes() {
         // this.types.add(getPrimaryType());
-        // this.types.add(WHITESPACE.matcher(getPrimaryType()).replaceAll(""));
         if (getPrimaryType().startsWith("Journal")) {
             this.types.add("Journal");
         } else if (getPrimaryType().startsWith("Book")) {
