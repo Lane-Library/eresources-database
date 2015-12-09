@@ -398,10 +398,10 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public Collection<String> getTypes() {
         // this.types.add(getPrimaryType());
-        if (getPrimaryType().startsWith("Journal")) {
-            this.types.add("Journal");
-        } else if (getPrimaryType().startsWith("Book")) {
-            this.types.add("Book");
+        String pType = getPrimaryType();
+        if (pType.startsWith("Book") || pType.startsWith("Journal")) {
+            this.types.add(pType);
+            this.types.add(pType.split(" ")[0]);
         }
         return Collections.unmodifiableCollection(this.types);
     }
