@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <import resource="solr-pubmed-load.xml"/>
+    <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrPubmedUpdate" parent="abstractSolrLoader">
+        <constructor-arg name="dataFetchers">
+			<list>
+				<bean class="edu.stanford.irt.eresources.PubmedPublisherDataFetcher" >
+    				<property name="basePath" value="${eresources.pubmedprocessor.publisherPath}"/>
+				</bean>
+			</list>
+        </constructor-arg>
+        <property name="killPrevious" value="false"/>
+    </bean>
+    <!--  override pubmedProcessor from pubmed-processor.xml so we can set basePath -->
+    <bean id="pubmedProcessor" class="edu.stanford.irt.eresources.PubmedEresourceProcessor">
+        <property name="xmlReader">
+            <bean class="edu.stanford.irt.eresources.JaxpXMLReader">
+                <property name="contentHandler" ref="pubmedTransformer"/>
+            </bean>
+        </property>
+        <property name="basePath" value="${eresources.pubmedprocessor.publisherPath}"/>
+    </bean>
+    <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
+        <property name="logEresource" value="true"/>
+    </bean>
+</beans>
