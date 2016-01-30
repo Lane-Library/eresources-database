@@ -180,6 +180,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         for (String pubType : eresource.getPublicationTypes()) {
             doc.addField("publicationType", pubType);
+            for (String parentType : this.meshManager.getParentHeadingsLimitToPubmedPublicationTypes(pubType)) {
+                doc.addField("publicationType", parentType);
+            }
         }
         for (Version version : eresource.getVersions()) {
             versions.add(version);
