@@ -338,7 +338,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 auth = auth.substring(0, auth.length() - 1);
             }
             // case 115239: don't include journal editors
-            if (!"700".equals(this.tag) && !this.currentEresource.getPrimaryType().startsWith("Journal")) {
+            if (!("700".equals(this.tag) && this.currentEresource.getPrimaryType().startsWith("Journal"))) {
                 this.currentEresource.addPublicationAuthor(auth);
             }
         }
