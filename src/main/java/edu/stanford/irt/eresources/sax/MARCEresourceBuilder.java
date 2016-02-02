@@ -337,7 +337,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if (auth.endsWith(".") && !auth.matches(".* \\w\\.")) {
                 auth = auth.substring(0, auth.length() - 1);
             }
-            this.currentEresource.addPublicationAuthor(auth);
+            // case 115239: don't include journal editors
+            if (!"700".equals(this.tag) && !this.currentEresource.getPrimaryType().startsWith("Journal")) {
+                this.currentEresource.addPublicationAuthor(auth);
+            }
         }
         if (("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) && "0".equals(this.code)) {
             String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString());
