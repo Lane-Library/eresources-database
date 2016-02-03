@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -22,6 +23,12 @@ public class SolrEresourceHandler implements EresourceHandler {
     public static final int TEN = 10;
 
     public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+
+    private static final Pattern CHILD = Pattern.compile(".*\\b(?:child|teen|adolesc|pediatric|infant|newborn).*",
+            Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern CHILD_MESH = Pattern.compile("^(?:infant|child|adolescent).*",
+            Pattern.CASE_INSENSITIVE);
 
     private static final int SORT_TITLE_MAX = 150;
 
@@ -147,6 +154,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         // ertlsw = random, uncommon string so single letter isn't stopword'd out of results
         doc.addField("title_starts", "ertlsw" + Character.toString(firstCharOfTitle));
+        doc.addField("isChild", Boolean.toString(isChild(eresource)));
         doc.addField("isCore", Boolean.toString(eresource.isCore()));
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
         doc.addField("isLaneConnex", Boolean.toString(eresource.isLaneConnex()));
@@ -205,5 +213,31 @@ public class SolrEresourceHandler implements EresourceHandler {
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException("solr add failed", e);
         }
+    }
+
+    /**
+     * Determine if this eresoruce is about children </br>
+     * Could use PubmedSpecialTypesManager instead but would miss Lane Catalog child articles </br>
+     * Strategy is based on PubMed search in pubmed_allchild search engine: (child* [tiab] OR teen* [tiab] OR adolesc*
+     * [tiab] OR pediatric* [tiab] OR infant* [tiab] OR newborn* [tiab] OR neonat* [tiab] OR "infant"[MeSH Terms] OR
+     * "child"[MeSH Terms] OR "adolescent"[MeSH Terms])
+     *
+     * @param eresource
+     * @return true if this eresource is about children
+     */
+    private boolean isChild(final Eresource eresource) {
+        for (String m : eresource.getMeshTerms()) {
+            if (CHILD_MESH.matcher(m).matches()) {
+                return true;
+            }
+        }
+        StringBuilder tiab = new StringBuilder();
+        tiab.append(eresource.getTitle());
+        tiab.append(" ");
+        tiab.append(eresource.getDescription());
+        if (CHILD.matcher(tiab.toString()).matches()) {
+            return true;
+        }
+        return false;
     }
 }
