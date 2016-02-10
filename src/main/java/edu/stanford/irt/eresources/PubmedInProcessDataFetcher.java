@@ -12,8 +12,8 @@ import java.util.Properties;
 
 /**
  * fetch "as supplied by publisher" records from PubMed because they are not included in the licensed PubMed/Medline FTP
- * feed; queries just grab everything added in the last day so duplication can occur between this and the FTP data
- * fetcher
+ * feed; query includes every citation created in the last day; duplication can occur between this and FTP data fetcher;
+ * explanation of CRDT http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Create_Date_CRDT
  *
  * @author ryanmax
  */
@@ -23,7 +23,7 @@ public class PubmedInProcessDataFetcher extends AbstractPubmedDataFetcher implem
 
     private static final String PROP_NAME = "pubmed.inprocess.lastUpdate";
 
-    private static final String UPDATES_QUERY = "(\"?\"[EDAT] : \"3000\"[EDAT]) ";
+    private static final String UPDATES_QUERY = "(\"?\"[CRDT] : \"3000\"[CRDT]) ";
 
     private Properties properties;
 
