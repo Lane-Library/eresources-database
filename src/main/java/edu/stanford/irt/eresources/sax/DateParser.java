@@ -13,7 +13,7 @@ final class DateParser {
 
     private static final Pattern EIGHT_DIGITS = Pattern.compile("\\d{8}");
 
-    private static final String FOUR_ZEROS = "0000";
+    private static final String JAN_01 = "0101";
 
     private static final Pattern YEAR = Pattern.compile("\\d{4}");
 
@@ -65,7 +65,7 @@ final class DateParser {
         if (EIGHT_DIGITS.matcher(cleaned).matches()) {
             formattedDate = cleaned;
         } else if (YEAR.matcher(cleaned).matches()) {
-            formattedDate = cleaned + FOUR_ZEROS;
+            formattedDate = cleaned + JAN_01;
         } else if (YEAR_MON_DAY.matcher(cleaned).matches()) {
             formattedDate = DESIRED_FORMAT.format(YEAR_MONTH_DAY_FORMAT.parse(cleaned));
         } else if (YEAR_MON.matcher(cleaned).matches()) {
@@ -84,13 +84,13 @@ final class DateParser {
             Matcher m = YEAR_FIRST_ANYWHERE.matcher(cleaned);
             m.matches();
             String year = m.group(1);
-            formattedDate = year + FOUR_ZEROS;
+            formattedDate = year + JAN_01;
         }
         return formattedDate;
     }
 
     private static final String parseSeason(final String season) {
-        String mmdd = FOUR_ZEROS;
+        String mmdd = JAN_01;
         if ("winter".equalsIgnoreCase(season)) {
             mmdd = "0101";
         } else if ("spring".equalsIgnoreCase(season)) {
