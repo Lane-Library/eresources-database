@@ -22,7 +22,7 @@
             <type>Lane Web Page</type>
             <keywords> <xsl:value-of select="$keywords"/> </keywords>
             <year><xsl:value-of select="substring(@update,1,4)"/></year>
-            <date><xsl:value-of select="substring(@update,1,8)"/></date>
+            <er-date><xsl:value-of select="substring(@update,1,8)"/></er-date>
             <version>
                 <subset>noproxy</subset>
                 <link>
