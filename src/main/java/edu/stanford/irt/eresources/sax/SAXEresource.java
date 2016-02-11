@@ -209,7 +209,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     @Override
     public String getDate() {
-        if (null == this.date) {
+        if (null == this.date || "0".equals(this.date) || this.date.isEmpty()) {
             if (null != this.publicationDate) {
                 this.date = DateParser.parseDate(this.publicationDate);
             } else if (this.year > 0) {
