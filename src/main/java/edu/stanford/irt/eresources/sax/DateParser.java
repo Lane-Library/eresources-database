@@ -61,7 +61,7 @@ final class DateParser {
      */
     private static String doDateParse(final String date) throws ParseException {
         String formattedDate = ZERO;
-        String cleaned = date.replaceFirst("(.*)(\\-.*)", "$1").trim();
+        String cleaned = date.replaceFirst("(.*)((?:\\-|/).*)", "$1").trim();
         if (EIGHT_DIGITS.matcher(cleaned).matches()) {
             formattedDate = cleaned;
         } else if (YEAR.matcher(cleaned).matches()) {

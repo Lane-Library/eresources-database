@@ -23,6 +23,7 @@ public class DateParserTest {
         assertEquals("20160701", DateParser.parseDate("2016 Summer"));
         assertEquals("20161001", DateParser.parseDate("2016 fall"));
         assertEquals("20160401", DateParser.parseDate("2016 spring-summer"));
+        assertEquals("20160401", DateParser.parseDate("2016 spring/summer"));
         assertEquals("20160101", DateParser.parseDate("2016 foo"));
         assertEquals("20160101", DateParser.parseDate("foo 2016"));
         assertEquals("20160101", DateParser.parseDate("bar 2016 foo"));

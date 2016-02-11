@@ -360,7 +360,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         if ("773".equals(this.tag)) {
             if (this.countOf773 == 0) {
                 if ("d".indexOf(this.code) > -1) {
-                    this.currentEresource.setDate(this.currentText.toString());
+                    this.currentEresource.setDate(this.currentText.toString().replaceAll("(:|;)", " "));
                 }
                 if ("tp".indexOf(this.code) > -1) {
                     this.currentEresource.setPublicationTitle(this.currentText.toString());
