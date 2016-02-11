@@ -17,7 +17,7 @@ final class DateParser {
 
     private static final Pattern YEAR = Pattern.compile("\\d{4}");
 
-    private static final Pattern YEAR_FIRST_ANYWHERE = Pattern.compile("\\b(?:.*)??(\\d{4})\\b(?:.*)");
+    private static final Pattern YEAR_FIRST_ANYWHERE = Pattern.compile("\\b(\\d{4})\\b");
 
     private static final Pattern YEAR_MON = Pattern.compile("\\d{4} [A-Z][a-z]{2}");
 
@@ -80,9 +80,9 @@ final class DateParser {
             String year = m.group(1);
             String season = m.group(2);
             formattedDate = year + parseSeason(season);
-        } else if (YEAR_FIRST_ANYWHERE.matcher(cleaned).matches()) {
+        } else if (YEAR_FIRST_ANYWHERE.matcher(cleaned).find()) {
             Matcher m = YEAR_FIRST_ANYWHERE.matcher(cleaned);
-            m.matches();
+            m.find();
             String year = m.group(1);
             formattedDate = year + JAN_01;
         }

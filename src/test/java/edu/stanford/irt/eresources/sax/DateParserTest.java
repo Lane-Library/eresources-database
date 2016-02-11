@@ -31,5 +31,6 @@ public class DateParserTest {
         assertEquals("20160218", DateParser.parseDate("2016 2 18"));
         assertEquals("20160201", DateParser.parseDate("2016 2"));
         assertEquals("20160201", DateParser.parseDate("2016 02"));
+        assertEquals("19530101", DateParser.parseDate("[1953]"));
     }
 }
