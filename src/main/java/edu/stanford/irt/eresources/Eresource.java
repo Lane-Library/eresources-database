@@ -7,6 +7,8 @@ public interface Eresource {
 
     String getAuthor();
 
+    String getDate();
+
     String getDescription();
 
     int[] getItemCount();

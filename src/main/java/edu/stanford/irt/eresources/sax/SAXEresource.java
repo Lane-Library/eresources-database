@@ -100,6 +100,8 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private int[] count = new int[] { 0, 0 };
 
+    private String date;
+
     private String description;
 
     private boolean isClone = false;
@@ -203,6 +205,18 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public String getAuthor() {
         return this.author;
+    }
+
+    @Override
+    public String getDate() {
+        if (null == this.date) {
+            if (null != this.publicationDate) {
+                this.date = DateParser.parseDate(this.publicationDate);
+            } else if (this.year > 0) {
+                this.date = DateParser.parseDate(Integer.toString(this.year));
+            }
+        }
+        return this.date;
     }
 
     /*
@@ -468,6 +482,10 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void setAuthor(final String author) {
         this.author = author;
+    }
+
+    public void setDate(final String date) {
+        this.date = DateParser.parseDate(date);
     }
 
     public void setDescription(final String description) {
