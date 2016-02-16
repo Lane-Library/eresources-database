@@ -17,11 +17,11 @@ import java.util.Properties;
  *
  * @author ryanmax
  */
-public class PubmedInProcessDataFetcher extends AbstractPubmedDataFetcher implements DataFetcher {
+public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher implements DataFetcher {
 
-    private static final String PROP_FILE = "inprocess.properties";
+    private static final String PROP_FILE = "createDate.properties";
 
-    private static final String PROP_NAME = "pubmed.inprocess.lastUpdate";
+    private static final String PROP_NAME = "pubmed.createDate.lastUpdate";
 
     private static final String UPDATES_QUERY = "(\"?\"[CRDT] : \"3000\"[CRDT]) ";
 
@@ -40,8 +40,8 @@ public class PubmedInProcessDataFetcher extends AbstractPubmedDataFetcher implem
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }
-        this.searcher = new PubmedSearcher("No Field", "In-Process", query);
-        pmidListToFiles(this.searcher.getPmids(), "inprocess-");
+        this.searcher = new PubmedSearcher("No Field", "Create Date", query);
+        pmidListToFiles(this.searcher.getPmids(), "createDate-");
         writeLastRunDate();
     }
 
