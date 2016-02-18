@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <bean id="sagesProcessor"
+        class="edu.stanford.irt.eresources.sax.videos.sages.SagesEresourceProcessor">
+        <property name="contentHandler" ref="sagesTransformer"/>
+        <property name="URLs">
+        	<list>
+        		<value>http://www.sages.org/video/page/2/</value>
+			 	<!-- <value>http://www.sages.org/video-category/video-atlas-airway</value>
+        	 	<value>http://www.sages.org/video-category/video-atlas-esophagus</value> -->
+        	 	<!-- <value>http://www.sages.org/video-category/video-atlas-stomach</value> -->
+        	 	<!-- <value>http://www.sages.org/video-category/video-atlas-duodenum</value>
+        	 	<value>http://www.sages.org/video-category/video-atlas-small-bowel</value>
+        	 	<value>http://www.sages.org/video-category/video-atlas-colon</value> -->
+        	</list>
+       	</property>
+        <property name="nextPageExpression">
+        	<value>//a[@class='nextpostslink']/@href</value>
+        </property>	 
+    </bean>
+    <bean id= "sagesTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/videos/sages2er.xsl"/>
+        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+        <property name="namespace" value=""/>
+        <property name="element" value="eresources"/>
+        <property name="contentHandler" ref="sagesBuilder"/>
+    </bean>
+    <bean id="sagesBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+</beans>

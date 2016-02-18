@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <bean id="nejmProcessor"
+        class="edu.stanford.irt.eresources.sax.videos.nejm.NejmEresourceProcessor">
+        <property name="contentHandler" ref="nejmTransformer"/>
+        <property name="URL">
+			<value>http://search.nejm.org/search?cnt=200&amp;af=mpdesc%3Avideosinclinicalmedicine&amp;start_month=1&amp;start_year=2006&amp;w=*&amp;restrict=doctype%3Amedia&amp;srt=0&amp;isort=date&amp;ts=rss</value>
+		</property>
+    </bean>
+    <bean id= "nejmTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/videos/nejm2er.xsl"/>
+        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+        <property name="namespace" value=""/>
+        <property name="element" value="eresources"/>
+        <property name="contentHandler" ref="nejmBuilder"/>
+    </bean>
+    <bean id="nejmBuilder" class="edu.stanford.irt.eresources.sax.videos.nejm.NejmEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+        <property name="expression">
+        	<list>
+        	<value>substring-after(/html/body/div[@id='main']/div[@id='content']/dl/dd[@id='article'], 'in the video.')</value>
+        	<value>substring-after(/html/body/div[@id='main']/div[@id='content']/dl/dd[@id='article'], 'About the Procedure')</value>
+        	</list>
+        </property>
+    </bean>
+</beans>

@@ -75,7 +75,11 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         } else if ("instruction".equals(name)) {
             this.currentLink.setInstruction(this.currentText.toString());
         } else if ("description".equals(name)) {
-            this.currentVersion.setAdditionalText(this.currentText.toString());
+            this.currentEresource.setDescription(this.currentText.toString());
+        } else if ("publicationAuthorsText".equals(name)) {
+            this.currentEresource.setPublicationAuthorsText(this.currentText.toString());    
+        }else if ("publicationAuthor".equals(name)) {
+                this.currentEresource.addPublicationAuthor(this.currentText.toString());    
         } else if ("year".equals(name)) {
             this.currentEresource.setYear(Integer.parseInt(this.currentText.toString()));
         } else if (!"eresources".equals(name)) {
@@ -114,5 +118,13 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         } else if ("link".equals(name)) {
             this.currentLink = new SAXLink();
         }
+    }
+    
+    protected SAXEresource getCurrentEresource(){
+        return this.currentEresource;
+    }
+    
+    protected String getCurrentText(){
+        return this.currentText.toString();
     }
 }
