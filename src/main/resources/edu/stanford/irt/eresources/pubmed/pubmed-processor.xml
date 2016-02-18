@@ -11,7 +11,7 @@
     </bean>
 
     <bean id="pubmedTransformer" class="edu.stanford.lane.catalog.impl.xml.TraxTransformer" init-method="init">
-        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/pubmed2er.stx"/>
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/pubmed/pubmed2er.stx"/>
         <property name="transformerFactory" value="net.sf.joost.trax.TransformerFactoryImpl"/>
         <property name="contentHandler" ref="pubmedBuilder"/>
     </bean>

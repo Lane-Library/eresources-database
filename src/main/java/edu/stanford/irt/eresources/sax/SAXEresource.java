@@ -20,12 +20,12 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
 
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Audio", "Chapter", "Clinical Decision Tools", "Database",
-            "Book", "Journal", "Atlases, Pictorial", "Software, Installed - Redwood Room",
-            "Software, Installed - Duck Room", "Software, Installed - Stone Room", "Software, Installed - M051",
-            "Software, Installed - LKSC Student", "Software, Installed - LKSC Public", "Software, Installed",
-            "Software", "Statistics", "Video", "Image", "Lane Class", "Lane Web Page", "Print", "Bassett",
-            "Statistics Software, Installed", "Biotools Software, Installed", "Website", "Grand Rounds", "Instructional Video" };
+    private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Audio", "Chapter",
+            "Clinical Decision Tools", "Database", "Book", "Journal", "Atlases, Pictorial",
+            "Software, Installed - Redwood Room", "Software, Installed - Duck Room", "Software, Installed - Stone Room",
+            "Software, Installed - M051", "Software, Installed - LKSC Student", "Software, Installed - LKSC Public",
+            "Software, Installed", "Software", "Statistics", "Video", "Image", "Lane Class", "Lane Web Page", "Print",
+            "Bassett", "Statistics Software, Installed", "Biotools Software, Installed", "Website", "Grand Rounds",  "Instructional Video" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -35,9 +35,7 @@ public class SAXEresource implements Cloneable, Eresource {
             { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
             { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
             { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Image", "Graphics" },
-            { "Article", "Articles" },
-            { "Website", "Websites" },
-            { "Audio", "Sound Recordings" },
+            { "Article", "Articles" }, { "Website", "Websites" }, { "Audio", "Sound Recordings" },
             { "Chapter", "Chapters" },
             { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" } };
 
@@ -99,6 +97,8 @@ public class SAXEresource implements Cloneable, Eresource {
     private String author;
 
     private int[] count = new int[] { 0, 0 };
+
+    private String date;
 
     private String description;
 
@@ -203,6 +203,18 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public String getAuthor() {
         return this.author;
+    }
+
+    @Override
+    public String getDate() {
+        if (null == this.date || "0".equals(this.date) || this.date.isEmpty()) {
+            if (null != this.publicationDate) {
+                this.date = DateParser.parseDate(this.publicationDate);
+            } else if (this.year > 0) {
+                this.date = DateParser.parseDate(Integer.toString(this.year));
+            }
+        }
+        return this.date;
     }
 
     /*
@@ -468,6 +480,10 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void setAuthor(final String author) {
         this.author = author;
+    }
+
+    public void setDate(final String date) {
+        this.date = DateParser.parseDate(date);
     }
 
     public void setDescription(final String description) {

@@ -12,18 +12,18 @@ import java.util.Properties;
 
 /**
  * fetch "as supplied by publisher" records from PubMed because they are not included in the licensed PubMed/Medline FTP
- * feed; queries just grab everything added in the last day so duplication can occur between this and the FTP data
- * fetcher
+ * feed; query includes every citation created in the last day; duplication can occur between this and FTP data fetcher;
+ * explanation of CRDT http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.Create_Date_CRDT
  *
  * @author ryanmax
  */
-public class PubmedInProcessDataFetcher extends AbstractPubmedDataFetcher implements DataFetcher {
+public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher implements DataFetcher {
 
-    private static final String PROP_FILE = "inprocess.properties";
+    private static final String PROP_FILE = "createDate.properties";
 
-    private static final String PROP_NAME = "pubmed.inprocess.lastUpdate";
+    private static final String PROP_NAME = "pubmed.createDate.lastUpdate";
 
-    private static final String UPDATES_QUERY = "(\"?\"[EDAT] : \"3000\"[EDAT]) ";
+    private static final String UPDATES_QUERY = "(\"?\"[CRDT] : \"3000\"[CRDT]) ";
 
     private Properties properties;
 
@@ -40,8 +40,8 @@ public class PubmedInProcessDataFetcher extends AbstractPubmedDataFetcher implem
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }
-        this.searcher = new PubmedSearcher("No Field", "In-Process", query);
-        pmidListToFiles(this.searcher.getPmids(), "inprocess-");
+        this.searcher = new PubmedSearcher("No Field", "Create Date", query);
+        pmidListToFiles(this.searcher.getPmids(), "createDate-");
         writeLastRunDate();
     }
 

@@ -25,6 +25,7 @@
             <type>Lane Web Page</type>
             <keywords><xsl:value-of select="concat($description, ' ', $title)"/></keywords>
             <year><xsl:value-of select="replace(event_dates/start_date[1],'.*(\d{4}).*','$1')"/></year>
+            <er-date><xsl:value-of select="replace(event_dates/start_date[1],'(\d{1,2})/(\d{1,2})/(\d{4}) .*','$3 $1 $2')"/></er-date>
             <version>
                 <link>
                     <label><xsl:value-of select="concat(substring($description, 1, 36),' . . .')"/></label>

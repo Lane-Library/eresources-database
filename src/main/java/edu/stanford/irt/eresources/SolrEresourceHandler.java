@@ -145,6 +145,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("totalItems", Integer.toString(itemCount[0]));
         doc.addField("availableItems", Integer.toString(itemCount[1]));
         doc.addField("year", Integer.toString(eresource.getYear()));
+        doc.addField("date", eresource.getDate());
         char firstCharOfTitle = '0';
         if (null != sortTitle && !sortTitle.isEmpty()) {
             firstCharOfTitle = sortTitle.trim().substring(0, 1).charAt(0);

@@ -24,7 +24,7 @@ public class SolrReload extends SolrLoader {
         super.load();
         try {
             // delete everything older than lastUpdate
-            this.solrClient.deleteByQuery("NOT recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
+            this.solrClient.deleteByQuery("(recordType:bib OR recordType:class OR recordType:laneblog OR recordType:web) AND updated:[* TO " + lastUpdate + "]");
             this.solrClient.commit();
         } catch (SolrServerException e) {
             throw new EresourceDatabaseException(e);
@@ -33,7 +33,7 @@ public class SolrReload extends SolrLoader {
 
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
-        query.setQuery("NOT recordType:pubmed");
+        query.setQuery("recordType:bib OR recordType:class OR recordType:laneblog OR recordType:web");
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {

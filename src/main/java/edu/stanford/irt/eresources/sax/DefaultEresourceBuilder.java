@@ -82,6 +82,8 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
                 this.currentEresource.addPublicationAuthor(this.currentText.toString());    
         } else if ("year".equals(name)) {
             this.currentEresource.setYear(Integer.parseInt(this.currentText.toString()));
+        } else if ("er-date".equals(name)) {
+            this.currentEresource.setDate(this.currentText.toString());
         } else if (!"eresources".equals(name)) {
             throw new EresourceDatabaseException("cant handle " + name);
         }

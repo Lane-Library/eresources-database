@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.sax.videos.jove;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;

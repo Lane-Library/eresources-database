@@ -2,12 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
-    <import resource="solr-pubmed-load.xml"/>
+    <import resource="pubmed-load.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrPubmedUpdate" parent="abstractSolrLoader">
         <constructor-arg name="dataFetchers">
 			<list>
 				<bean class="edu.stanford.irt.eresources.PubmedFtpDataFetcher" >
-					<property name="basePath" value="${eresources.pubmedprocessor.updatepath}"/>
+					<property name="basePath" value="${eresources.pubmedprocessor.ftpPath}"/>
 					<property name="ftpPath" value="${eresources.pubmedprocessor.ftp.pathname}"/>
 					<property name="ftpHost" value="${eresources.pubmedprocessor.ftp.hostname}"/>
 					<property name="ftpUser" value="${eresources.pubmedprocessor.ftp.username}"/>
@@ -24,7 +24,7 @@
                 <property name="contentHandler" ref="pubmedTransformer"/>
             </bean>
         </property>
-        <property name="basePath" value="${eresources.pubmedprocessor.updatepath}"/>
+        <property name="basePath" value="${eresources.pubmedprocessor.ftpPath}"/>
     </bean>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
         <property name="logEresource" value="true"/>
