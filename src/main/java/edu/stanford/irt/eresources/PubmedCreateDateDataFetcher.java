@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -47,13 +49,11 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
 
     private String getLastUpdateDate() {
         String updateDate = null;
-        FileInputStream in = null;
         this.propertiesFile = new File(PROP_FILE);
-        try {
-            if (!this.propertiesFile.exists()) {
-                throw new EresourceDatabaseException("missing " + PROP_FILE);
-            }
-            in = new FileInputStream(this.propertiesFile);
+        if (!this.propertiesFile.exists()) {
+            throw new EresourceDatabaseException("missing " + PROP_FILE);
+        }
+        try (InputStream in = new FileInputStream(this.propertiesFile)) {
             this.properties = new Properties();
             this.properties.load(in);
             if (this.properties.containsKey(PROP_NAME)) {
@@ -61,30 +61,16 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
-        } finally {
-            try {
-                in.close();
-            } catch (IOException e) {
-                throw new EresourceDatabaseException(e);
-            }
         }
         return updateDate;
     }
 
     private void writeLastRunDate() {
         this.properties.setProperty(PROP_NAME, new SimpleDateFormat("yyyy/MM/dd").format(new Date()));
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(this.propertiesFile);
+        try (OutputStream fos = new FileOutputStream(this.propertiesFile)) {
             this.properties.store(fos, null);
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                throw new EresourceDatabaseException(e);
-            }
         }
     }
 }
