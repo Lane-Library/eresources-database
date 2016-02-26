@@ -85,7 +85,11 @@ public abstract class AbstractPubmedDataFetcher {
                 LOG.error("exiting eutils fetch");
                 return;
             }
-            writeContent(content, baseFilename + i + ".xml");
+            try {
+                writeContent(content, baseFilename + i + ".xml");
+            } catch (IOException e) {
+                throw new EresourceDatabaseException(e);
+            }
         }
     }
 
@@ -111,25 +115,14 @@ public abstract class AbstractPubmedDataFetcher {
         return xmlContent;
     }
 
-    private void writeContent(final String content, final String filename) {
+    private void writeContent(final String content, final String filename) throws IOException {
         File directory = new File(this.basePath + "/" + TODAY);
         if (!directory.exists() && !directory.mkdir()) {
             LOG.error("can't make " + directory.getAbsolutePath());
         }
         File f = new File(directory.getAbsolutePath() + "/" + filename);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(f);
-            fos.write(content.getBytes(StandardCharsets.UTF_8));
-            fos.close();
-        } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                throw new EresourceDatabaseException(e);
-            }
-        }
+        FileOutputStream fos = new FileOutputStream(f);
+        fos.write(content.getBytes(StandardCharsets.UTF_8));
+        fos.close();
     }
 }
