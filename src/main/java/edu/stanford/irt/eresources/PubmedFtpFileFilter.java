@@ -28,7 +28,7 @@ public class PubmedFtpFileFilter implements FTPFileFilter {
         List<String> fileList = new LinkedList<String>();
         File[] files = directory.listFiles();
         for (File file : files) {
-            if (!file.isDirectory()) {
+            if (null != file && !file.isDirectory()) {
                 fileList.add(file.getName());
             }
         }
