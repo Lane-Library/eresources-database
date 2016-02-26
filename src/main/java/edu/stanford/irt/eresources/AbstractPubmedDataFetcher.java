@@ -121,8 +121,16 @@ public abstract class AbstractPubmedDataFetcher {
             LOG.error("can't make " + directory.getAbsolutePath());
         }
         File f = new File(directory.getAbsolutePath() + "/" + filename);
-        FileOutputStream fos = new FileOutputStream(f);
-        fos.write(content.getBytes(StandardCharsets.UTF_8));
-        fos.close();
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(f);
+            fos.write(content.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            throw new EresourceDatabaseException(e);
+        } finally {
+            if (null != fos) {
+                fos.close();
+            }
+        }
     }
 }
