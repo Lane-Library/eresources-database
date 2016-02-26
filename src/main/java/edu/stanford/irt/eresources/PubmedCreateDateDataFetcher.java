@@ -50,7 +50,9 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
         FileInputStream in = null;
         this.propertiesFile = new File(PROP_FILE);
         try {
-            this.propertiesFile.createNewFile();
+            if (!this.propertiesFile.exists()) {
+                throw new EresourceDatabaseException("missing " + PROP_FILE);
+            }
             in = new FileInputStream(this.propertiesFile);
             this.properties = new Properties();
             this.properties.load(in);
@@ -59,6 +61,12 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                throw new EresourceDatabaseException(e);
+            }
         }
         return updateDate;
     }
@@ -71,6 +79,12 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
             this.properties.store(fos, null);
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                throw new EresourceDatabaseException(e);
+            }
         }
     }
 }
