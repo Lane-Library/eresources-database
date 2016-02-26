@@ -21,17 +21,9 @@ final class DateParser {
 
     private static final Pattern YEAR_MON_DAY = Pattern.compile("\\d{4} [A-Z][a-z]{2} \\d{1,2}");
 
-    private static final DateFormat YEAR_MONTH_DAY_FORMAT = new SimpleDateFormat("yyyy MMM dd", Locale.ENGLISH);
-
-    private static final DateFormat YEAR_MONTH_FORMAT = new SimpleDateFormat("yyyy MMM", Locale.ENGLISH);
-
     private static final Pattern YEAR_NUMON = Pattern.compile("\\d{4} \\d{1,2}");
 
     private static final Pattern YEAR_NUMON_DAY = Pattern.compile("\\d{4} \\d{1,2} \\d{1,2}");
-
-    private static final DateFormat YEAR_NUMONTH_DAY_FORMAT = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
-
-    private static final DateFormat YEAR_NUMONTH_FORMAT = new SimpleDateFormat("yyyy MM", Locale.ENGLISH);
 
     private static final Pattern YEAR_SEASON = Pattern.compile("(\\d{4}) (winter|spring|summer|fall)",
             Pattern.CASE_INSENSITIVE);
@@ -63,6 +55,10 @@ final class DateParser {
      */
     private static String doDateParse(final String date) throws ParseException {
         DateFormat desiredFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+        DateFormat yearMonthDayFormat = new SimpleDateFormat("yyyy MMM dd", Locale.ENGLISH);
+        DateFormat yearMonthFormat = new SimpleDateFormat("yyyy MMM", Locale.ENGLISH);
+        DateFormat yearNumMonthDayFormat = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
+        DateFormat yearNumMonthFormat = new SimpleDateFormat("yyyy MM", Locale.ENGLISH);
         String formattedDate = ZERO;
         String cleaned = date.replaceFirst("(.*)((?:\\-|/).*)", "$1").trim();
         if (EIGHT_DIGITS.matcher(cleaned).matches()) {
@@ -70,13 +66,13 @@ final class DateParser {
         } else if (YEAR.matcher(cleaned).matches()) {
             formattedDate = cleaned + JAN_01;
         } else if (YEAR_MON_DAY.matcher(cleaned).matches()) {
-            formattedDate = desiredFormat.format(YEAR_MONTH_DAY_FORMAT.parse(cleaned));
+            formattedDate = desiredFormat.format(yearMonthDayFormat.parse(cleaned));
         } else if (YEAR_MON.matcher(cleaned).matches()) {
-            formattedDate = desiredFormat.format(YEAR_MONTH_FORMAT.parse(cleaned));
+            formattedDate = desiredFormat.format(yearMonthFormat.parse(cleaned));
         } else if (YEAR_NUMON_DAY.matcher(cleaned).matches()) {
-            formattedDate = desiredFormat.format(YEAR_NUMONTH_DAY_FORMAT.parse(cleaned));
+            formattedDate = desiredFormat.format(yearNumMonthDayFormat.parse(cleaned));
         } else if (YEAR_NUMON.matcher(cleaned).matches()) {
-            formattedDate = desiredFormat.format(YEAR_NUMONTH_FORMAT.parse(cleaned));
+            formattedDate = desiredFormat.format(yearNumMonthFormat.parse(cleaned));
         } else if (YEAR_SEASON.matcher(cleaned).matches()) {
             Matcher m = YEAR_SEASON.matcher(cleaned);
             m.matches();
