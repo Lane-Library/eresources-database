@@ -7,14 +7,29 @@ import java.util.Properties;
 
 public class LanguageMap {
 
+    private static String FILENAME = "languages.properties";
+
     private final Properties properties = new Properties();
 
     public LanguageMap() {
+        FileInputStream fis = null;
         try {
-            File file = new File("languages.properties");
-            this.properties.load(new FileInputStream(file));
+            File file = new File(FILENAME);
+            if (!file.exists()) {
+                throw new EresourceDatabaseException("missing " + FILENAME);
+            }
+            fis = new FileInputStream(file);
+            this.properties.load(fis);
         } catch (IOException e) {
-            throw new EresourceDatabaseException("missing language properties file", e);
+            throw new EresourceDatabaseException(e);
+        } finally {
+            try {
+                if (null != fis) {
+                    fis.close();
+                }
+            } catch (IOException e) {
+                throw new EresourceDatabaseException(e);
+            }
         }
     }
 
