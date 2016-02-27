@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -28,6 +27,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
     public void getUpdateFiles() {
         PubmedFtpFileFilter filter = new PubmedFtpFileFilter(this.basePath);
         FTPClient client = new FTPClient();
+        FileOutputStream fos = null;
         try {
             LOG.info("connecting to ftp host: " + this.ftpHost);
             client.connect(this.ftpHost);
@@ -36,19 +36,19 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             client.enterLocalPassiveMode();
             client.changeWorkingDirectory(this.ftpPath);
             for (FTPFile file : client.listFiles(".", filter)) {
-                try (OutputStream fos = new FileOutputStream(this.basePath + "/" + file.getName())) {
-                    LOG.info("fetching: " + file);
-                    if (client.retrieveFile(file.getName(), fos)) {
-                        fos.close();
-                    }
-                } catch (IOException e) {
-                    throw new EresourceDatabaseException(e);
+                fos = new FileOutputStream(this.basePath + "/" + file.getName());
+                LOG.info("fetching: " + file);
+                if (client.retrieveFile(file.getName(), fos)) {
+                    fos.close();
                 }
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
         } finally {
             try {
+                if (fos != null) {
+                    fos.close();
+                }
                 client.disconnect();
             } catch (IOException e) {
                 LOG.error("couldn't disconnect", e);
