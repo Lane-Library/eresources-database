@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -8,7 +9,9 @@ import java.util.Comparator;
  *
  * @author ryanmax
  */
-public class PubmedFilenameComparator implements Comparator<File> {
+public class PubmedFilenameComparator implements Comparator<File>, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Override
     public int compare(final File f1, final File f2) {
