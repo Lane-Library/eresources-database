@@ -59,13 +59,10 @@ public class SolrEresourceHandler implements EresourceHandler {
         if (null == text || text.isEmpty()) {
             return "";
         }
-        String sortText = text;
-        try {
-            sortText = sortText.substring(0, SORT_TITLE_MAX);
-        } catch (IndexOutOfBoundsException e) {
-            // OK
+        if (text.length() > SORT_TITLE_MAX) {
+            return text.substring(0, SORT_TITLE_MAX);
         }
-        return sortText;
+        return text;
     }
 
     @Override
@@ -119,8 +116,6 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     protected void insertEresource(final Eresource eresource) {
         SolrInputDocument doc = new SolrInputDocument();
-        String recordType = eresource.getRecordType();
-        StringBuffer key = new StringBuffer();
         String title = eresource.getTitle();
         String sortTitle = getSortText(title);
         String keywords = eresource.getKeywords();
@@ -130,11 +125,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         List<Version> versions = new LinkedList<Version>();
         int[] itemCount = eresource.getItemCount();
-        key.append(recordType).append("-").append(Integer.toString(eresource.getRecordId()));
-        if (eresource.isClone()) {
-            key.append("-clone");
-        }
-        doc.addField("id", key.toString());
+        doc.addField("id", createKey(eresource));
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
         doc.addField("recordType", eresource.getRecordType());
         doc.addField("description", eresource.getDescription());
@@ -146,15 +137,8 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("availableItems", Integer.toString(itemCount[1]));
         doc.addField("year", Integer.toString(eresource.getYear()));
         doc.addField("date", eresource.getDate());
-        char firstCharOfTitle = '0';
-        if (null != sortTitle && !sortTitle.isEmpty()) {
-            firstCharOfTitle = sortTitle.trim().substring(0, 1).charAt(0);
-        }
-        if (!Character.isLetter((int) firstCharOfTitle)) {
-            firstCharOfTitle = '1';
-        }
         // ertlsw = random, uncommon string so single letter isn't stopword'd out of results
-        doc.addField("title_starts", "ertlsw" + Character.toString(firstCharOfTitle));
+        doc.addField("title_starts", "ertlsw" + getFirstCharacter(sortTitle));
         doc.addField("isChild", Boolean.toString(isChild(eresource)));
         doc.addField("isCore", Boolean.toString(eresource.isCore()));
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
@@ -216,8 +200,28 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
     }
 
+    private String createKey(final Eresource eresource) {
+        StringBuilder key = new StringBuilder();
+        key.append(eresource.getRecordType()).append("-").append(Integer.toString(eresource.getRecordId()));
+        if (eresource.isClone()) {
+            key.append("-clone");
+        }
+        return key.toString();
+    }
+
+    private String getFirstCharacter(final String sortTitle) {
+        char firstCharOfTitle = '0';
+        if (null != sortTitle && !sortTitle.isEmpty()) {
+            firstCharOfTitle = sortTitle.trim().substring(0, 1).charAt(0);
+        }
+        if (!Character.isLetter((int) firstCharOfTitle)) {
+            firstCharOfTitle = '1';
+        }
+        return Character.toString(firstCharOfTitle);
+    }
+
     /**
-     * Determine if this eresoruce is about children </br>
+     * Determine if this eresource is about children </br>
      * Could use PubmedSpecialTypesManager instead but would miss Lane Catalog child articles </br>
      * Strategy is based on PubMed search in pubmed_allchild search engine: (child* [tiab] OR teen* [tiab] OR adolesc*
      * [tiab] OR pediatric* [tiab] OR infant* [tiab] OR newborn* [tiab] OR neonat* [tiab] OR "infant"[MeSH Terms] OR
