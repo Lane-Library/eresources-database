@@ -2,10 +2,12 @@ package edu.stanford.irt.eresources;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -20,6 +22,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class SolrLoader {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SolrLoader.class);
+
     protected SolrClient solrClient;
 
     private int count;
@@ -29,8 +33,6 @@ public class SolrLoader {
     private EresourceHandler handler;
 
     private boolean killPrevious;
-
-    private Logger log = LoggerFactory.getLogger(getClass());
 
     private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
 
@@ -51,7 +53,7 @@ public class SolrLoader {
     }
 
     public void load() throws IOException {
-        this.log.info(this.version + " starting up");
+        LOG.info(this.version + " starting up");
         managePIDFile();
         Date updated = getUpdatedDate();
         this.executor.execute(this.handler);
@@ -70,7 +72,7 @@ public class SolrLoader {
             }
         }
         this.count = this.handler.getCount();
-        this.log.info("handled " + this.count + " eresources.");
+        LOG.info("handled " + this.count + " eresources.");
     }
 
     public void setExecutor(final Executor executor) {
@@ -112,7 +114,8 @@ public class SolrLoader {
         final File pidFile = new File("eresources.pid");
         String pid = null;
         if (!pidFile.createNewFile()) {
-            BufferedReader reader = new BufferedReader(new FileReader(pidFile));
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(pidFile), StandardCharsets.UTF_8));
             pid = reader.readLine();
             reader.close();
             if (this.killPrevious) {
@@ -128,7 +131,7 @@ public class SolrLoader {
         int index = pid.indexOf('@');
         pid = pid.substring(0, index);
         try (FileOutputStream out = new FileOutputStream(pidFile)) {
-            out.write(pid.getBytes());
+            out.write(pid.getBytes(StandardCharsets.UTF_8));
         }
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
