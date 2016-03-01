@@ -10,11 +10,23 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class SolrVideosReload extends SolrLoader {
 
+    private static String recordType = null;
+
     public static void main(final String[] args) throws IOException {
-        SolrLoader.main(new String[] { "solr-videos-reload" });
+        recordType = args[0];
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/videos/" + recordType + "-processor.xml");
+        SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
+        ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
+        try {
+            loader.load();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     @Override
@@ -24,16 +36,17 @@ public class SolrVideosReload extends SolrLoader {
         super.load();
         try {
             // delete everything older than lastUpdate
-            this.solrClient.deleteByQuery("type:\"Instructional Videos\" AND updated:[* TO " + lastUpdate + "]");
+            this.solrClient.deleteByQuery("type:\"Instructional Video\" AND updated:[* TO " + lastUpdate + "] AND recordType:"+recordType);
             this.solrClient.commit();
         } catch (SolrServerException e) {
             throw new EresourceDatabaseException(e);
         }
     }
 
+    
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
-        query.setQuery("type:\"Instructional Video\"");
+        query.setQuery("type:\"Instructional Video\" AND recordType:"+recordType);
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {
@@ -41,6 +54,7 @@ public class SolrVideosReload extends SolrLoader {
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
+
         SolrDocumentList rdocs = rsp.getResults();
         Date updated;
         if (rdocs.isEmpty()) {

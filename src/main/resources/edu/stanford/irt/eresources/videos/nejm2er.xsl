@@ -6,7 +6,7 @@
 <xsl:template match="item">
 	<eresource>
 			<xsl:attribute name="id"><xsl:value-of select="substring-after(@rdf:about, 'NEJMvcm')"/></xsl:attribute>
-			<xsl:attribute name="type">njem</xsl:attribute>
+			<xsl:attribute name="type">nejm</xsl:attribute>
 			<xsl:attribute name="update">19690101000000</xsl:attribute>
 			<title><xsl:value-of select="title"/></title>
 			<primaryType>Visual Material</primaryType>
@@ -16,6 +16,7 @@
 				<xsl:value-of select="concat(title, ' ' , description)"/>
 			</keywords>
 			<year><xsl:value-of select="substring-before(dc:date, '-')"/></year>
+			<er-date><xsl:value-of select="replace(./dc:date,'(\d{4})-(\d{1,2})-(\d{1,2}).*','$1 $2 $3')"/></er-date>
 			<version>
 				<link>
 					<url>

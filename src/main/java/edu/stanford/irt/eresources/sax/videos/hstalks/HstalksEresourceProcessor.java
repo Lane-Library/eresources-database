@@ -1,5 +1,7 @@
 package edu.stanford.irt.eresources.sax.videos.hstalks;
 
+
+import org.apache.commons.lang.StringEscapeUtils;
 import org.xml.sax.helpers.AttributesImpl;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,22 +30,25 @@ public class HstalksEresourceProcessor extends JsonVideoEresourceProcessor {
                             String description = null;
                             String year = null;
                             String url = null;
+                            String date = null;
                             String title = videoNode.path("title").textValue();
                             
                             if (null != title) {
+                                title = StringEscapeUtils.unescapeXml(title);
                                 keywords.append(title);
                             }
                             
                             JsonNode node = videoNode.path("synopsis_fields");
                             if (node != null && node.path("slide") != null) {
-                                description = node.path("slide").textValue();
+                                description = StringEscapeUtils.unescapeXml( node.path("slide").textValue());
                                 keywords.append(" " + description);
                             }
                             
                             if (videoNode.path("original_pub_date") != null) {
-                                year = videoNode.path("original_pub_date").textValue();
-                                if (year.length() > 3) {
-                                    year = year.substring(0, 4);
+                                String dateStr = videoNode.path("original_pub_date").textValue();
+                                if (dateStr.length() > 3) {
+                                    year = dateStr.substring(0, 4);
+                                    date = dateStr;
                                 }
                             }
                             
@@ -51,7 +56,7 @@ public class HstalksEresourceProcessor extends JsonVideoEresourceProcessor {
                                 url = "https://hstalks.com".concat(videoNode.path("url").asText());
                             }
                             
-                            super.processJson(id, ERESOURCE_TYPE, title, description, keywords.toString(), year, url);
+                            super.processJson(id, ERESOURCE_TYPE, title, description, keywords.toString(), year, date, url, null);
                         }
                     }
                     offSet = offSet + 10;

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+     
+     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrVideosReload" parent="abstractSolrLoader">
+    		<property name="processors">
+			<list>
+				 <ref bean="nejmProcessor" /> 
+			</list>
+        </property>
+    </bean>
+    
     <bean id="nejmProcessor"
         class="edu.stanford.irt.eresources.sax.videos.nejm.NejmEresourceProcessor">
         <property name="contentHandler" ref="nejmTransformer"/>
@@ -23,4 +32,7 @@
         	</list>
         </property>
     </bean>
+    
+    <import resource="video-reload.xml"/>
+    
 </beans>

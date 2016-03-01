@@ -32,6 +32,7 @@ public class JoveEresourceProcessor extends VideoEresourceProcessor {
                     Document doc = getDocument(nextPageUrl);
                     this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
                     nextPageUrl = (String)this.nextPageExpression.evaluate(doc, XPathConstants.STRING);
+                    Thread.sleep(500);
                 }
             } 
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
