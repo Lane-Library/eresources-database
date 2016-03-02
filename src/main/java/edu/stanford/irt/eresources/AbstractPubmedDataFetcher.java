@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,8 +30,6 @@ import org.springframework.util.StringUtils;
  */
 public abstract class AbstractPubmedDataFetcher {
 
-    private static final String _TODAY = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-
     private static final String BASE_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?email=ryanmax@stanford.edu&db=pubmed&mode=xml&id=";
 
     private static final RequestConfig HTTP_CONFIG = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES)
@@ -38,13 +37,15 @@ public abstract class AbstractPubmedDataFetcher {
 
     private static final HttpClient httpClient = HttpClients.createDefault();
 
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractPubmedDataFetcher.class);
+
     private static final int PMIDS_PER_REQUEST = 500;
 
     private static final int SLEEP_TIME = 500;
 
-    private String basePath;
+    private static final String TODAY = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-    private Logger log = LoggerFactory.getLogger(getClass());
+    private String basePath;
 
     public void setBasePath(final String basePath) {
         if (null == basePath) {
@@ -55,12 +56,12 @@ public abstract class AbstractPubmedDataFetcher {
 
     protected void pmidListToFiles(final List<String> pmids, final String baseFilename) {
         List<String> myPmids = (ArrayList<String>) ((ArrayList<String>) pmids).clone();
-        File directory = new File(this.basePath + "/" + _TODAY);
+        new File(this.basePath + "/" + TODAY);
         int i = 0;
         int start;
         int end;
         String url;
-        while (myPmids.size() > 0) {
+        while (!myPmids.isEmpty()) {
             start = i * PMIDS_PER_REQUEST;
             end = ++i * PMIDS_PER_REQUEST;
             if (end > pmids.size()) {
@@ -79,21 +80,13 @@ public abstract class AbstractPubmedDataFetcher {
                 content = getContent(url);
             }
             if (null == content) {
-                this.log.error("ncbi not responding; request: " + url);
+                LOG.error("ncbi not responding; request: " + url);
                 // return without throwing an exception so other data fetching can complete
-                this.log.error("exiting eutils fetch");
+                LOG.error("exiting eutils fetch");
                 return;
             }
-            if (!directory.exists()) {
-                directory.mkdir();
-            }
-            File f = new File(directory.getAbsolutePath() + "/" + baseFilename + i + ".xml");
-            FileOutputStream fos = null;
             try {
-                f.createNewFile();
-                fos = new FileOutputStream(f);
-                fos.write(content.getBytes());
-                fos.close();
+                writeContent(content, baseFilename + i + ".xml");
             } catch (IOException e) {
                 throw new EresourceDatabaseException(e);
             }
@@ -110,8 +103,9 @@ public abstract class AbstractPubmedDataFetcher {
             if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 xmlContent = EntityUtils.toString(res.getEntity());
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             method.abort();
+            throw new EresourceDatabaseException(e);
         }
         try {
             Thread.sleep(SLEEP_TIME);
@@ -119,5 +113,24 @@ public abstract class AbstractPubmedDataFetcher {
             throw new EresourceDatabaseException(e);
         }
         return xmlContent;
+    }
+
+    private void writeContent(final String content, final String filename) throws IOException {
+        File directory = new File(this.basePath + "/" + TODAY);
+        if (!directory.exists() && !directory.mkdir()) {
+            LOG.error("can't make " + directory.getAbsolutePath());
+        }
+        File f = new File(directory.getAbsolutePath() + "/" + filename);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(f);
+            fos.write(content.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            throw new EresourceDatabaseException(e);
+        } finally {
+            if (null != fos) {
+                fos.close();
+            }
+        }
     }
 }

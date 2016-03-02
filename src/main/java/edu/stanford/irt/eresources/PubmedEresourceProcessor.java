@@ -17,9 +17,9 @@ import org.xml.sax.XMLReader;
 
 public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
 
-    private String basePath;
+    private static final Logger LOG = LoggerFactory.getLogger(PubmedEresourceProcessor.class);
 
-    private Logger log = LoggerFactory.getLogger(getClass());
+    private String basePath;
 
     private XMLReader xmlReader;
 
@@ -33,25 +33,10 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
         }
         List<File> filesToParse = getXMLFiles(new File(this.basePath));
         Collections.sort(filesToParse, new PubmedFilenameComparator());
-        while (filesToParse.size() > 0) {
-            InputSource source = new InputSource();
+        while (!filesToParse.isEmpty()) {
             File file = filesToParse.remove(0);
             if (getStartTime() <= file.lastModified()) {
-                try {
-                    if (file.getName().matches(".*\\.gz")) {
-                        source.setByteStream(new GZIPInputStream(new FileInputStream(file)));
-                    } else {
-                        source.setByteStream(new FileInputStream(file));
-                    }
-                    this.xmlReader.parse(source);
-                    // touch file so we don't load it next time
-                    file.setLastModified(System.currentTimeMillis());
-                    this.log.info("processed: " + file);
-                } catch (IOException e) {
-                    throw new EresourceDatabaseException(e);
-                } catch (SAXException e) {
-                    throw new EresourceDatabaseException(e);
-                }
+                parseFile(file);
             }
         }
     }
@@ -80,13 +65,37 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
                 return file.isDirectory() || name.endsWith(".xml") || name.endsWith(".xml.gz");
             }
         });
-        for (File file : files) {
-            if (file.isDirectory()) {
-                result.addAll(getXMLFiles(file));
-            } else {
-                result.add(file);
+        if (null != files) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    result.addAll(getXMLFiles(file));
+                } else {
+                    result.add(file);
+                }
             }
         }
         return result;
+    }
+
+    private void parseFile(final File file) {
+        InputSource source = new InputSource();
+        try {
+            if (file.getName().matches(".*\\.gz")) {
+                source.setByteStream(new GZIPInputStream(new FileInputStream(file)));
+            } else {
+                source.setByteStream(new FileInputStream(file));
+            }
+            this.xmlReader.parse(source);
+            // touch file so we don't load it next time
+            if (file.setLastModified(System.currentTimeMillis())) {
+                LOG.info("processed: " + file);
+            } else {
+                LOG.error("couldn't update file's timestamp; make sure it's not loading on every run");
+            }
+        } catch (IOException e) {
+            throw new EresourceDatabaseException(e);
+        } catch (SAXException e) {
+            throw new EresourceDatabaseException(e);
+        }
     }
 }

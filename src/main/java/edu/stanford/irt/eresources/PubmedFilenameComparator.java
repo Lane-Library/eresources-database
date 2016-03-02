@@ -1,14 +1,20 @@
 package edu.stanford.irt.eresources;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Comparator;
+import java.util.regex.Pattern;
 
 /**
  * Alpha and numeric sort of files so PubMed updates are applied in order
  *
  * @author ryanmax
  */
-public class PubmedFilenameComparator implements Comparator<File> {
+public class PubmedFilenameComparator implements Comparator<File>, Serializable {
+
+    private static final Pattern DIGIT = Pattern.compile("\\d");
+
+    private static final long serialVersionUID = 1L;
 
     @Override
     public int compare(final File f1, final File f2) {
@@ -27,6 +33,10 @@ public class PubmedFilenameComparator implements Comparator<File> {
     }
 
     private long getDigitsFromFile(final File file) {
-        return Long.parseLong(file.getAbsolutePath().replaceAll("[^\\d]", ""));
+        String path = file.getAbsolutePath();
+        if (DIGIT.matcher(path).find()) {
+            return Long.parseLong(file.getAbsolutePath().replaceAll("[^\\d]", ""));
+        }
+        return 0;
     }
 }

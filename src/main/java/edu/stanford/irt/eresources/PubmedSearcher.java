@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,13 +40,13 @@ public class PubmedSearcher {
 
     private static final HttpClient httpClient = HttpClients.createDefault();
 
+    private static final Logger LOG = LoggerFactory.getLogger(PubmedSearcher.class);
+
     private static final int RET_MAX = 500000;
 
     private DocumentBuilderFactory factory;
 
     private String field;
-
-    private Logger log = LoggerFactory.getLogger(getClass());
 
     private List<String> pmids;
 
@@ -89,16 +90,19 @@ public class PubmedSearcher {
             NodeList retmaxNode = null;
             NodeList pmidNodes = null;
             try {
-                doc = this.factory.newDocumentBuilder().parse(new ByteArrayInputStream(xmlContent.getBytes()));
+                doc = this.factory.newDocumentBuilder()
+                        .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
                 retmaxNode = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
                 retMax = Integer.parseInt(retmaxNode.item(0).getTextContent().trim());
                 pmidNodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
             } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
-                this.log.error("failed to fetch pmids", e);
+                LOG.error("failed to fetch pmids", e);
             }
-            for (int n = 0; n < pmidNodes.getLength(); n++) {
-                Node node = pmidNodes.item(n);
-                this.pmids.add(node.getTextContent().trim());
+            if (null != pmidNodes) {
+                for (int n = 0; n < pmidNodes.getLength(); n++) {
+                    Node node = pmidNodes.item(n);
+                    this.pmids.add(node.getTextContent().trim());
+                }
             }
         }
         return this.pmids;
@@ -118,8 +122,9 @@ public class PubmedSearcher {
             if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 htmlContent = EntityUtils.toString(res.getEntity());
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             method.abort();
+            throw new EresourceDatabaseException(e);
         }
         return htmlContent;
     }

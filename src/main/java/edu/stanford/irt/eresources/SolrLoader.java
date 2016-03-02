@@ -1,11 +1,6 @@
 package edu.stanford.irt.eresources;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -20,6 +15,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class SolrLoader {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SolrLoader.class);
+
     protected SolrClient solrClient;
 
     private int count;
@@ -27,8 +24,6 @@ public class SolrLoader {
     private Executor executor;
 
     private EresourceHandler handler;
-
-    private Logger log = LoggerFactory.getLogger(getClass());
 
     private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
 
@@ -49,7 +44,7 @@ public class SolrLoader {
     }
 
     public void load() throws IOException {
-        this.log.info(this.version + " starting up");
+        LOG.info(this.version + " starting up");
         Date updated = getUpdatedDate();
         this.executor.execute(this.handler);
         for (AbstractEresourceProcessor processor : this.processors) {
@@ -67,7 +62,7 @@ public class SolrLoader {
             }
         }
         this.count = this.handler.getCount();
-        this.log.info("handled " + this.count + " eresources.");
+        LOG.info("handled " + this.count + " eresources.");
     }
 
     public void setExecutor(final Executor executor) {

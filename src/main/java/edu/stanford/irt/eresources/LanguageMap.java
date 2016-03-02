@@ -3,18 +3,24 @@ package edu.stanford.irt.eresources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class LanguageMap {
 
+    private static String FILENAME = "languages.properties";
+
     private final Properties properties = new Properties();
 
     public LanguageMap() {
-        try {
-            File file = new File("languages.properties");
-            this.properties.load(new FileInputStream(file));
+        File file = new File(FILENAME);
+        if (!file.exists()) {
+            throw new EresourceDatabaseException("missing " + FILENAME);
+        }
+        try (InputStream in = new FileInputStream(file)) {
+            this.properties.load(in);
         } catch (IOException e) {
-            throw new EresourceDatabaseException("missing language properties file", e);
+            throw new EresourceDatabaseException(e);
         }
     }
 

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 public class PubmedFtpDataFetcher implements DataFetcher {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PubmedFtpDataFetcher.class);
+
     private String basePath;
 
     private String ftpHost;
@@ -21,15 +23,13 @@ public class PubmedFtpDataFetcher implements DataFetcher {
 
     private String ftpUser;
 
-    private Logger log = LoggerFactory.getLogger(getClass());
-
     @Override
     public void getUpdateFiles() {
         PubmedFtpFileFilter filter = new PubmedFtpFileFilter(this.basePath);
         FTPClient client = new FTPClient();
         FileOutputStream fos = null;
         try {
-            this.log.info("connecting to ftp host: " + this.ftpHost);
+            LOG.info("connecting to ftp host: " + this.ftpHost);
             client.connect(this.ftpHost);
             client.login(this.ftpUser, this.ftpPass);
             client.setFileType(FTP.BINARY_FILE_TYPE);
@@ -37,13 +37,13 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             client.changeWorkingDirectory(this.ftpPath);
             for (FTPFile file : client.listFiles(".", filter)) {
                 fos = new FileOutputStream(this.basePath + "/" + file.getName());
-                this.log.info("fetching: " + file);
+                LOG.info("fetching: " + file);
                 if (client.retrieveFile(file.getName(), fos)) {
                     fos.close();
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new EresourceDatabaseException(e);
         } finally {
             try {
                 if (fos != null) {
@@ -51,7 +51,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
                 }
                 client.disconnect();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOG.error("couldn't disconnect", e);
             }
         }
     }
