@@ -6,7 +6,6 @@
 	
 
     <bean id="abstractSolrLoader" class="edu.stanford.irt.eresources.SolrLoader" abstract="true">
-        <property name="killPrevious" value="true"/>
         <property name="handler" ref="eresourceHandler"/>
         <property name="version" value="${project.version}"/>
         <property name="executor" ref="executor"/>
@@ -37,7 +36,7 @@
         class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="proxyTargetClass" value="true"/>
         <property name="beanNames"
-            value="accessmedicineProcessor,nejmProcessor,medlineplusProcessor,sagesProcessor,hstalksProcessor,joveProcessor,clinicalkeyProcessor"/>
+            value="accessmedicineProcessor,nejmProcessor,medlineplusProcessor,sagesProcessor,hstalksProcessor,joveProcessor,clinicalkeyProcessor,stanfordmedicine25"/>
         <property name="interceptorNames"
             value="exceptionAdvisor,beforeMethodAdvisor,afterMethodAdvisor"/>
     </bean>

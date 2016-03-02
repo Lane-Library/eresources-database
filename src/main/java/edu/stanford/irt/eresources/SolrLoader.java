@@ -28,8 +28,6 @@ public class SolrLoader {
 
     private EresourceHandler handler;
 
-    private boolean killPrevious;
-
     private Logger log = LoggerFactory.getLogger(getClass());
 
     private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
@@ -52,7 +50,6 @@ public class SolrLoader {
 
     public void load() throws IOException {
         this.log.info(this.version + " starting up");
-        managePIDFile();
         Date updated = getUpdatedDate();
         this.executor.execute(this.handler);
         for (AbstractEresourceProcessor processor : this.processors) {
@@ -81,10 +78,6 @@ public class SolrLoader {
         this.handler = handler;
     }
 
-    public void setKillPrevious(final boolean killPrevious) {
-        this.killPrevious = killPrevious;
-    }
-
     public void setProcessors(final Collection<AbstractEresourceProcessor> processors) {
         if (null == processors) {
             throw new IllegalArgumentException("null processors");
@@ -108,36 +101,4 @@ public class SolrLoader {
         return new Date(0);
     }
 
-    private void managePIDFile() throws IOException {
-        final File pidFile = new File("eresources.pid");
-        String pid = null;
-        if (!pidFile.createNewFile()) {
-            BufferedReader reader = new BufferedReader(new FileReader(pidFile));
-            pid = reader.readLine();
-            reader.close();
-            if (this.killPrevious) {
-                LoggerFactory.getLogger(SolrLoader.class).warn("pid " + pid + " exists, killing . . .");
-                Runtime.getRuntime().exec(new String[] { "kill", pid });
-            } else {
-                IllegalStateException e = new IllegalStateException("pid " + pid + " already running");
-                LoggerFactory.getLogger(SolrLoader.class).error(e.getMessage());
-                throw e;
-            }
-        }
-        pid = ManagementFactory.getRuntimeMXBean().getName();
-        int index = pid.indexOf('@');
-        pid = pid.substring(0, index);
-        try (FileOutputStream out = new FileOutputStream(pidFile)) {
-            out.write(pid.getBytes());
-        }
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            @Override
-            public void run() {
-                if (!pidFile.delete()) {
-                    throw new IllegalStateException("failed to delete pid file");
-                }
-            }
-        });
-    }
-}
+   }
