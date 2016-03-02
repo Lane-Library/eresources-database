@@ -14,4 +14,15 @@
     <bean id="clinicalkeyBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
     </bean>
+    
+     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrVideosReload" parent="abstractSolrLoader">
+    		<property name="processors">
+			<list>
+				 <ref bean="clinicalkeyProcessor" /> 
+			</list>
+        </property>
+    </bean>
+    
+    <import resource="video-reload.xml"/>
+    
 </beans>

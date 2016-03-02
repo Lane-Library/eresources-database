@@ -1,12 +1,9 @@
 package edu.stanford.irt.eresources.sax.videos;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 
 import org.apache.http.Header;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -14,7 +11,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.cyberneko.html.HTMLConfiguration;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -46,9 +42,11 @@ public abstract class JsonVideoEresourceProcessor extends AbstractEresourceProce
 
     protected static final String VIDEO = "Video";
 
-    protected static final String INSTRUCTIONAL_VIDEO = "Intructional Video";
+    protected static final String INSTRUCTIONAL_VIDEO = "Instructional Video";
 
     protected static final String YEAR = "year";
+    
+    protected static final String AUTHORS = "publicationAuthorsText";
 
     protected static final String DESCRIPTION = "description";
 
@@ -60,6 +58,8 @@ public abstract class JsonVideoEresourceProcessor extends AbstractEresourceProce
 
     protected static final String KEYWORDS = "keywords";
 
+    protected static final String ER_DATE = "er-date";
+    
     protected ContentHandler contentHandler;
 
     protected List<String> URLs;
@@ -87,15 +87,6 @@ public abstract class JsonVideoEresourceProcessor extends AbstractEresourceProce
             res = (CloseableHttpResponse) httpClient.execute(get);
             
             ObjectMapper mapper = new ObjectMapper();
-            
-            InputStream in = res.getEntity().getContent();
-            System.out.print("\n\n\n\n");
-            int c = -1;
-            while((c = in.read()) != -1){
-                System.out.print((char)c);
-            }
-            System.out.print("\n\n\n\n");
-            
             return mapper.readValue(res.getEntity().getContent(), JsonNode.class);
         } catch (Exception e) {
             throw new EresourceDatabaseException(e);
@@ -108,7 +99,7 @@ public abstract class JsonVideoEresourceProcessor extends AbstractEresourceProce
 
 
     protected void processJson(String id, String eresoursceType, String title, String description, String keywords,
-            String year, String url) throws SAXException {
+            String year, String date, String url , String authors) throws SAXException {
         startEresourceElement(id, eresoursceType);
         if (title != null) {
             createElement(TITLE, title);
@@ -120,10 +111,16 @@ public abstract class JsonVideoEresourceProcessor extends AbstractEresourceProce
         if (null != year) {
             createElement(YEAR, year);
         }
+        if (date != null) {
+            createElement(ER_DATE,date);
+        }
         this.contentHandler.startElement("", VERSION, VERSION, new AttributesImpl());
         this.contentHandler.startElement("", LINK, LINK, new AttributesImpl());
         if (null != url) {
             createElement(URL, url);
+        }
+        if (null != authors) {
+            createElement(AUTHORS, authors);
         }
         this.contentHandler.endElement("", LINK, LINK);
         this.contentHandler.endElement("", VERSION, VERSION);

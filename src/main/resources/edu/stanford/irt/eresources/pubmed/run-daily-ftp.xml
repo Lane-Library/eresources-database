@@ -15,7 +15,6 @@
 				</bean>
 			</list>
         </constructor-arg>
-        <property name="killPrevious" value="false"/>
     </bean>
     <!--  override pubmedProcessor from pubmed-processor.xml so we can set basePath -->
     <bean id="pubmedProcessor" class="edu.stanford.irt.eresources.PubmedEresourceProcessor">

@@ -23,6 +23,7 @@
 				<year>
 					<xsl:value-of select="replace(./div/dl[@class='post-meta']/dd[1]/text(),'.*/(\d{4})','$1')" />
 				</year>
+				<er-date><xsl:value-of select="replace(./div/dl[@class='post-meta']/dd[1]/text(),'(\d{1,2})/(\d{1,2})/(\d{4}).*','$3 $1 $2')"/></er-date>
 				<version>
 					<link>
 						<url>

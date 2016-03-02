@@ -4,29 +4,9 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
 	
-    <import resource="videos/accessmedicine-processor.xml"/>
-    <import resource="videos/nejm-processor.xml"/>
- 	<import resource="videos/medlineplus-processor.xml"/>
-	<import resource="videos/sages-processor.xml"/>	
-	<import resource="videos/hstalks-processor.xml"/>
-	<import resource="videos/jove-processor.xml"/>
-	<import resource="videos/clinicalkey-processor.xml"/>
-	<bean id="solrLoader" class="edu.stanford.irt.eresources.SolrVideosReload" parent="abstractSolrLoader"/>
 
     <bean id="abstractSolrLoader" class="edu.stanford.irt.eresources.SolrLoader" abstract="true">
-        <property name="killPrevious" value="true"/>
         <property name="handler" ref="eresourceHandler"/>
-		<property name="processors">
-			<list>
-				<!-- <ref bean="accessmedicineProcessor" />
-			 	<ref bean="nejmProcessor" /> 
-				<ref bean="medlineplusProcessor" /> --> 
-				<!-- <ref bean="sagesProcessor"/>-->
-				<!-- <ref bean="hstalksProcessor"/> --> 
-				<!-- <ref bean="joveProcessor"/> -->
-				<ref bean="clinicalkeyProcessor"/>
-			</list>
-        </property>
         <property name="version" value="${project.version}"/>
         <property name="executor" ref="executor"/>
         <property name="queue" ref="queue"/>
@@ -56,7 +36,7 @@
         class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="proxyTargetClass" value="true"/>
         <property name="beanNames"
-            value="accessmedicineProcessor,nejmProcessor,medlineplusProcessor,sagesProcessor,hstalksProcessor,joveProcessor,clinicalkeyProcessor"/>
+            value="accessmedicineProcessor,nejmProcessor,medlineplusProcessor,sagesProcessor,hstalksProcessor,joveProcessor,clinicalkeyProcessor,stanfordmedicine25"/>
         <property name="interceptorNames"
             value="exceptionAdvisor,beforeMethodAdvisor,afterMethodAdvisor"/>
     </bean>

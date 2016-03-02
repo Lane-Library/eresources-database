@@ -25,6 +25,8 @@ public class MedlineplusEresourceProcessor extends VideoEresourceProcessor {
     
     List<String> expressions = null;
     
+    private int id = 0;
+    
     @Override
     public void process() {
         try {
@@ -58,7 +60,7 @@ public class MedlineplusEresourceProcessor extends VideoEresourceProcessor {
             for (String url : urls) {
                 Document doc = getDocument(url);
                 Element root = doc.getDocumentElement();
-                root.setAttribute("id", Integer.toString(Math.abs(url.hashCode())));
+                root.setAttribute("id", String.valueOf(++id));
                 root.setAttribute("url", url);
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
             } 

@@ -29,15 +29,14 @@ public class SagesEresourceProcessor extends VideoEresourceProcessor {
             int pageIndex = 10;
             for (String url : URLs) {
                while (url != null && !"".equals(url)) {
-                   System.out.println("url "+url);
-                    Document doc = getDocument(url);
-                    Element root = doc.getDocumentElement();
-                    root.setAttribute("id", Integer.toString(pageIndex));
-                    pageIndex = pageIndex +10;
-                    this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
-                    Thread.sleep(1000);
-                    url = (String) this.nextPageExpression.evaluate(doc, XPathConstants.STRING);
-                }
+                   Document doc = getDocument(url);
+                   Element root = doc.getDocumentElement();
+                   root.setAttribute("id", Integer.toString(pageIndex));
+                   pageIndex = pageIndex +10;
+                   this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+                   Thread.sleep(100);
+                   url = (String) this.nextPageExpression.evaluate(doc, XPathConstants.STRING);
+                 }
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();

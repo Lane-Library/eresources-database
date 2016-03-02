@@ -7,7 +7,6 @@
     <import resource="classes-processor.xml"/>
     <import resource="laneblog-processor.xml"/>
     <bean id="abstractSolrLoader" class="edu.stanford.irt.eresources.SolrLoader" abstract="true">
-        <property name="killPrevious" value="true"/>
         <property name="handler" ref="eresourceHandler"/>
         <property name="processors">
             <list>

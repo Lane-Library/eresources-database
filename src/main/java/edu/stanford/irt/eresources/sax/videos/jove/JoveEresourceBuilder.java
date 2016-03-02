@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.sax.videos.jove;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -44,8 +45,12 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
 
     CloseableHttpClient httpClient; 
     
+    NumberFormat nf = null;
+    
     public JoveEresourceBuilder() {
-        httpClient = HttpClients.createDefault();
+        this.httpClient = HttpClients.createDefault();
+        this.nf = NumberFormat.getInstance();
+        this.nf.setMinimumIntegerDigits(2);
     }
     
     
@@ -68,35 +73,6 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
     }
 
 
-    private String getDescription(Document doc) throws XPathExpressionException {
-        return (String)this.descriptionExpression.evaluate(doc, XPathConstants.STRING);
-    }
-
-    private String getAuthor(Document doc) throws XPathExpressionException {
-        String authors =  (String) this.authorExpression.evaluate(doc, XPathConstants.STRING);
-        authors = authors.replaceAll("\\d", "");
-        authors = authors.replaceAll(",,", ",");
-        authors = authors.replaceAll("\\*", "");
-        return authors;
-    }
-
-    private int getYear(Document doc, String url) throws XPathExpressionException{
-        String date =  (String) this.yearExpression.evaluate(doc, XPathConstants.STRING);
-        date = date.substring( date.lastIndexOf("/")+1);
-        date = date.trim().replace(",","");
-        if("".equals(date) || date == null ){
-            return 0;
-        }
-        try{
-           return Integer.valueOf(date);
-        }
-        catch(NumberFormatException e){
-           log.debug("exception date" +date + "\t\t"+url );
-        }
-        return 0;
-    }
-    
-   
     private void getAdditionalField(String url, SAXEresource eresource) {
         CloseableHttpResponse response = null;
         try {
@@ -115,8 +91,8 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
             eresource.setDescription(description);
             String authors = getAuthor(doc);
             eresource.setAuthor(authors);
-            int year = getYear(doc, url);
-            eresource.setYear(year);
+            setDate(doc, url, eresource);
+            Thread.sleep(1000);
         } catch (Exception e) {
             throw new EresourceDatabaseException(e);
         } finally {
@@ -129,6 +105,36 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
         }
     }
     
+    
+
+    private String getDescription(Document doc) throws XPathExpressionException {
+        return (String)this.descriptionExpression.evaluate(doc, XPathConstants.STRING);
+    }
+
+    private String getAuthor(Document doc) throws XPathExpressionException {
+        String authors =  (String) this.authorExpression.evaluate(doc, XPathConstants.STRING);
+        authors = authors.replaceAll("\\d", "");
+        authors = authors.replaceAll(",,", ",");
+        authors = authors.replaceAll("\\*", "");
+        return authors;
+    }
+
+    private void setDate(Document doc, String url, SAXEresource eresource) throws XPathExpressionException{
+        String dateStr =  (String) this.yearExpression.evaluate(doc, XPathConstants.STRING);
+        String[] date = dateStr.split("/");
+        
+       if(date.length == 3 ){
+           String year = date[2].replace(",", "").trim();
+           eresource.setDate(year.concat(nf.format(Long.valueOf( date[0].trim()))).concat(nf.format(Long.valueOf(date[1].trim()))));
+           eresource.setYear(Integer.valueOf(year));
+       }
+       else{
+           eresource.setYear(0);
+       }
+        
+    }
+    
+   
     public void setDescriptionExpression(String expression) {
         try {
             this.descriptionExpression = xPath.compile(expression);

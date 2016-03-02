@@ -14,12 +14,13 @@
 				   <xsl:value-of select="$title"/>
 			</title>
 			<primaryType>Visual Material</primaryType>
-			<type>Instructional Video</type>
 			<type>Video</type>
+			<type>Instructional Video</type>
 			<keywords>
 				   <xsl:value-of select="concat($title, ' ',  $description[1])"/>
 			</keywords>
 			<year><xsl:value-of select="replace(.//span[@itemprop='dateModified']/text(),'.*/(\d{4})','$1')"/></year>
+			<er-date><xsl:value-of select="replace(.//span[@itemprop='dateModified']/text(),'(\d{1,2})/(\d{1,2})/(\d{4}).*','$3 $1 $2')"/></er-date>
 			<version>
 				<link>
 					<url>
@@ -44,7 +45,7 @@
 				<xsl:value-of select="substring-before(substring-after(.//div[@class='nlmTime']/script, 'utcYear = '), ';')"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:text>1969</xsl:text>
+				<xsl:text>0</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
@@ -57,7 +58,7 @@
 			</title>
 			<primaryType>Visual Material</primaryType>
 			<type>Video</type>
-			<type>Web Video</type>
+			<type>Instructional Video</type>
 			<keywords>
 				   <xsl:value-of select="concat($title,' ', $description)"/>
 			</keywords>

@@ -9,7 +9,6 @@
         	 	<value>http://accessmedicine.mhmedical.com/MultimediaResourceList.aspx</value>
         	</list>
         	</property>
-        	 
     </bean>
     <bean id= "accessmedicineTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/videos/accessmedicine2er.xsl"/>
@@ -21,4 +20,14 @@
     <bean id="accessmedicineBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
     </bean>
+    
+    <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrVideosReload" parent="abstractSolrLoader">
+    		<property name="processors">
+			<list>
+				 <ref bean="accessmedicineProcessor" /> 
+			</list>
+        </property>
+    </bean>
+    
+    <import resource="video-reload.xml"/>
 </beans>
