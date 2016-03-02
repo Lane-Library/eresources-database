@@ -21,9 +21,9 @@ final class DateParser {
 
     private static final Pattern YEAR_MON_DAY = Pattern.compile("\\d{4} [A-Z][a-z]{2} \\d{1,2}");
 
-    private static final Pattern YEAR_NUMON = Pattern.compile("\\d{4} \\d{1,2}");
+    private static final Pattern YEAR_NUMON = Pattern.compile("\\d{4} ([0-1]\\d|\\d)");
 
-    private static final Pattern YEAR_NUMON_DAY = Pattern.compile("\\d{4} \\d{1,2} \\d{1,2}");
+    private static final Pattern YEAR_NUMON_DAY = Pattern.compile("\\d{4} ([0-1]\\d|\\d) \\d{1,2}");
 
     private static final Pattern YEAR_SEASON = Pattern.compile("(\\d{4}) (winter|spring|summer|fall)",
             Pattern.CASE_INSENSITIVE);
