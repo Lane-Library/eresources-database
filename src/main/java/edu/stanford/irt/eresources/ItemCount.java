@@ -20,6 +20,9 @@ public class ItemCount {
             + "AND item_status_1.item_status_date < item_status_2.item_status_date) "
             + "WHERE item_status_2.item_id       IS NULL "
             + "AND bi.item_id                     = item_status_1.item_id " + "AND item_status_1.item_status      = 1 "
+            // case 117007: "missing", "withdrawn", etc. items should not be marked as available
+            + "AND bi.item_id NOT IN "
+            + "    (SELECT item_id FROM lmldb.item_status WHERE item_status >= '12' and item_status <= '17')"
             + "GROUP BY bi.bib_id";
 
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) "
