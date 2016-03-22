@@ -26,7 +26,7 @@ public class HstalksEresourceProcessor extends JsonVideoEresourceProcessor {
                         JsonNode videoNode = jsonResult.get(i);
                         String id = videoNode.path("id").textValue();
                         if (null != id && !"".equals(id)) {
-                            StringBuilder keywords = new StringBuilder();
+                            StringBuilder keywords = new StringBuilder(ERESOURCE_TYPE.concat(" "));
                             String description = null;
                             String year = null;
                             String url = null;
@@ -56,7 +56,7 @@ public class HstalksEresourceProcessor extends JsonVideoEresourceProcessor {
                                 url = "https://hstalks.com".concat(videoNode.path("url").asText());
                             }
                             
-                            super.processJson(id, ERESOURCE_TYPE, title, description, keywords.toString(), year, date, url, null);
+                            super.processEresource(id, ERESOURCE_TYPE, title, description, keywords.toString(), year, date, url, null);
                         }
                     }
                     offSet = offSet + 10;

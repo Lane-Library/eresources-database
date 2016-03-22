@@ -22,6 +22,9 @@
 						</url>
 					</link>
 				</version>
+				<keywords>
+					<xsl:value-of select="concat('jove ' ,   ./td[3]),' ',./td[6]" />
+				</keywords>	
 			</eresource>
 	</xsl:template> 
 </xsl:stylesheet>

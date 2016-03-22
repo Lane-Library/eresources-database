@@ -17,7 +17,7 @@
 				<type>Video</type>
 				<type>Instructional Video</type>
 				<keywords>
-					<xsl:value-of select="concat(./td[2], ' ', ./td[3]),' ',./td[6]" />
+					<xsl:value-of select="concat('accessmedicine ' , ./td[2], ' ', ./td[3]),' ',./td[6]" />
 				</keywords>
 				<year>
 					<xsl:value-of select="replace(./td[6],'.*/(\d{4})','$1')" />

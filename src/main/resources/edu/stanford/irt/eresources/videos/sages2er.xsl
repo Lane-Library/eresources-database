@@ -18,7 +18,7 @@
 				<type>Instructional Video</type>
 				<type>Video</type>
 				<keywords>
-					<xsl:value-of select="concat(./div/h3, ' ', ./div/p/text())"></xsl:value-of>
+					<xsl:value-of select="concat('sages ',./div/h3, ' ', ./div/p/text())"></xsl:value-of>
 				</keywords>
 				<year>
 					<xsl:value-of select="replace(./div/dl[@class='post-meta']/dd[1]/text(),'.*/(\d{4})','$1')" />
