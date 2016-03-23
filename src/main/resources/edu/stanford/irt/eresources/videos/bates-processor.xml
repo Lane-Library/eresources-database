@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <bean id="batesProcessor"   class="edu.stanford.irt.eresources.sax.videos.bates.BatesEresourceProcessor">
+        <property name="contentHandler" ref="batesBuilder"/>
+  		<property name="URLs">
+        	<list>
+        		<value>http://med.stanford.edu/irt/edtech/video/bates/</value>
+        	</list>
+       </property>       
+ 		<property name="title"><value>Bates' Guide to the Physical Examination Videos</value></property>
+		<property name="description"><value>
+			12 downloadable videos covering physical examination of:
+			Abdomen.
+			Breast and axillae.
+			Cardiovascular: neck vessels and heart.
+			Cardiovascular: peripheral vascular system.
+			Female genitalia, anus, and rectum.
+			Head, eyes and ears.
+			Male genitalia, rectum and hernias.
+			Musculoskeletal system.
+			Neurologic: motor system &amp; reflexes
+			Neurological: cranial nerves and sensory system.
+			Nose, mouth and neck.
+			Thorax and lungs.</value>
+		</property>
+		<property name="year"><value>2009</value></property>
+		<property name="authors"><value>Bates, Barbara</value></property>
+    </bean>
+  <bean id="batesBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+    
+     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrVideosReload" parent="abstractSolrLoader">
+    		<property name="processors">
+			<list>
+				 <ref bean="batesProcessor" /> 
+			</list>
+        </property>
+    </bean>
+    
+    <import resource="video-reload.xml"/>
+    
+</beans>

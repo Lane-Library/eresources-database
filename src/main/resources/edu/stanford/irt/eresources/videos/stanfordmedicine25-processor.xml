@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<bean id="solrLoader" class="edu.stanford.irt.eresources.SolrVideosReload" parent="abstractSolrLoader">
+		<property name="processors">
+			<list>
+				<ref bean="stanfordmedicine25Processor" />
+			</list>
+		</property>
+	</bean>
+    
+    
+    <bean id="stanfordmedicine25Processor"
+        class="edu.stanford.irt.eresources.sax.videos.stanfordmedicine25.Stanfordmedicine25EresourceProcessor">
+        <property name="contentHandler" ref="stanfordmedicine25Transformer"/>
+        <property name="URLs">
+        	<list>
+        		<value>http://stanfordmedicine25.stanford.edu/the25.html</value>
+        		<value>http://stanfordmedicine25.stanford.edu</value>
+			</list>
+       	</property>
+       	<property name="linksExpression">
+			<value>//div[@class='block-content']/h3/a/@href</value>
+		</property>        	 
+    </bean>
+    <bean id= "stanfordmedicine25Transformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/videos/stanfordmedicine25-2er.xsl"/>
+        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+        <property name="namespace" value=""/>
+        <property name="element" value="eresources"/>
+        <property name="contentHandler" ref="stanfordmedicine25Builder"/>
+    </bean>
+    <bean id="stanfordmedicine25Builder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+    
+    <import resource="video-reload.xml"/>
+    
+</beans>
