@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eresources-database</artifactId>
     <name>eresources-database</name>
-    <version>solr-1.10-SNAPSHOT</version>
+    <version>solr-1.11-SNAPSHOT</version>
     <scm>
         <developerConnection>scm:git:file:///afs/ir/group/lane/git/eresources-database.git</developerConnection>
     <tag>HEAD</tag>
