@@ -188,6 +188,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
         }
+       
         this.solrDocs.add(doc);
     }
 
@@ -200,13 +201,14 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
     }
 
+    
+    
     private String createKey(final Eresource eresource) {
-        StringBuilder key = new StringBuilder();
-        key.append(eresource.getRecordType()).append("-").append(Integer.toString(eresource.getRecordId()));
+        String key = eresource.getId();
         if (eresource.isClone()) {
-            key.append("-clone");
+            key = key.concat("-clone");
         }
-        return key.toString();
+        return key;
     }
 
     private String getFirstCharacter(final String sortTitle) {

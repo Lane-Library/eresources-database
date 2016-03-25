@@ -17,6 +17,7 @@ public class SolrVideosReload extends SolrLoader {
 
     private static String recordType = null;
 
+    @SuppressWarnings("resource")
     public static void main(final String[] args) throws IOException {
         recordType = args[0];
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/videos/" + recordType + "-processor.xml");
@@ -36,7 +37,7 @@ public class SolrVideosReload extends SolrLoader {
         super.load();
         try {
             // delete everything older than lastUpdate
-            this.solrClient.deleteByQuery("type:\"Instructional Video\" AND updated:[* TO " + lastUpdate + "] AND recordType:"+recordType);
+            this.solrClient.deleteByQuery("type:\"Video: Instructional\" AND updated:[* TO " + lastUpdate + "] AND id:"+recordType.concat("-*"));
             this.solrClient.commit();
         } catch (SolrServerException e) {
             throw new EresourceDatabaseException(e);
@@ -46,7 +47,7 @@ public class SolrVideosReload extends SolrLoader {
     
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
-        query.setQuery("type:\"Instructional Video\" AND recordType:"+recordType);
+        query.setQuery("type:\"Video: Instructional\" AND id:"+recordType.concat("-*"));
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {

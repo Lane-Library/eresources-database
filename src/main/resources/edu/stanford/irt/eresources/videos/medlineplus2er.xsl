@@ -7,15 +7,16 @@
 	<eresource>
 	<xsl:variable name="title" select=".//div[@id='d-article']/div/div/h1/text()"/>
 	<xsl:variable name="description" select=".//div[@class='ibox-note']/p/text()"/>
-			<xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
-			<xsl:attribute name="type">medlineplus</xsl:attribute>
+			<xsl:attribute name="id">medlineplus-<xsl:value-of select="@id"/></xsl:attribute>
+			<xsl:attribute name="recordId"><xsl:value-of select="@id"/></xsl:attribute>
+			<xsl:attribute name="type">instructional_videos</xsl:attribute>
 			<xsl:attribute name="update">19690101000000</xsl:attribute>
 			<title>
 				   <xsl:value-of select="$title"/>
 			</title>
 			<primaryType>Visual Material</primaryType>
 			<type>Video</type>
-			<type>Instructional Video</type>
+			<type>Video: Instructional</type>
 			<keywords>
 				   <xsl:value-of select="concat('medlineplus ', $title, ' ',  $description[1])"/>
 			</keywords>
@@ -50,15 +51,16 @@
 		</xsl:choose>
 	</xsl:variable>
 	<eresource>
-			<xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
-			<xsl:attribute name="type">medlineplus</xsl:attribute>
+			<xsl:attribute name="id">medlineplus-<xsl:value-of select="@id"/></xsl:attribute>
+			<xsl:attribute name="recordId"><xsl:value-of select="@id"/></xsl:attribute>
+			<xsl:attribute name="type">instructional_videos</xsl:attribute>
 			<xsl:attribute name="update">19690101000000</xsl:attribute>
 			<title>
 			 	<xsl:value-of select="$title"/>
 			</title>
 			<primaryType>Visual Material</primaryType>
 			<type>Video</type>
-			<type>Instructional Video</type>
+			<type>Video: Instructional</type>
 			<keywords>
 				   <xsl:value-of select="concat($title,' ', $description)"/>
 			</keywords>

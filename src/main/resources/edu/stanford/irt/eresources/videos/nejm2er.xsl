@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" version="2.0">
 
 
 <xsl:template match="item">
+	<xsl:variable name="title" select="title"/>
+	<xsl:variable name="description" select="description"/>
 	<eresource>
-			<xsl:attribute name="id"><xsl:value-of select="substring-after(@rdf:about, 'NEJMvcm')"/></xsl:attribute>
-			<xsl:attribute name="type">nejm</xsl:attribute>
+			<xsl:attribute name="id">nejm-<xsl:value-of select="substring-after(@rdf:about, 'NEJMvcm')"/></xsl:attribute>
+			<xsl:attribute name="recordId"><xsl:value-of select="substring-after(@rdf:about, 'NEJMvcm')"/></xsl:attribute>
+			<xsl:attribute name="type">instructional_videos</xsl:attribute>
 			<xsl:attribute name="update">19690101000000</xsl:attribute>
-			<title><xsl:value-of select="title"/></title>
+			<title><xsl:value-of select="$title"/></title>
 			<primaryType>Visual Material</primaryType>
-			<type>Instructional Video</type>
+			<type>Video: Instructional</type>
 			<type>Video</type>
 			<keywords>
 				<xsl:value-of select="concat('nejm' , $title, ' ' , $description)"/>
@@ -27,5 +29,7 @@
 	</eresource>
 	
 </xsl:template>
+
+
 
 </xsl:stylesheet>

@@ -16,6 +16,11 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
     
     protected List<String> URLs;
     
+    public static final String EXTRENAL_VIDEO = "instructional_videos";
+    
+    public static final String INSTRUCTIONAL_VIDEO = "Video: Instructional";
+    
+    public static final String VIDEO_PHYSICAL_EXAM = "Video: Physical Exam";
         
     protected static final String ERESOURCES = "eresources";
 
@@ -24,6 +29,8 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
     protected static final String TITLE = "title";
 
     protected static final String ID = "id";
+    
+    protected static final String RECORD_ID = "recordId";
 
     protected static final String TYPE = "type";
 
@@ -36,9 +43,7 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
     protected static final String VISUAL_MATERIAL = "Visual Material";
 
     protected static final String VIDEO = "Video";
-
-    protected static final String INSTRUCTIONAL_VIDEO = "Instructional Video";
-
+   
     protected static final String YEAR = "year";
     
     protected static final String AUTHORS = "publicationAuthorsText";
@@ -51,13 +56,16 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 
     protected static final String URL = "url";
 
+    protected static final String LABEL = "label";
+    
     protected static final String KEYWORDS = "keywords";
 
     protected static final String ER_DATE = "er-date";
     
-    protected void startEresourceElement(String id, String type) throws SAXException {
+    protected void startEresourceElement(String id, String recordId, String type) throws SAXException {
         AttributesImpl attrs = new AttributesImpl();
         attrs.addAttribute("", ID, ID, CDATA, id);
+        attrs.addAttribute("", RECORD_ID, RECORD_ID, CDATA, recordId);
         attrs.addAttribute("", TYPE, TYPE, CDATA, type);
         attrs.addAttribute("", UPDATE, UPDATE, CDATA, "19690101000000");
         this.contentHandler.startElement("", ERESOURCE, ERESOURCE, attrs);
@@ -72,9 +80,9 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
         this.contentHandler.endElement("", name, name);
     }
     
-    protected void processEresource(String id, String eresoursceType, String title, String description, String keywords,
-            String year, String date, String url , String authors) throws SAXException {
-        startEresourceElement(id, eresoursceType);
+    protected void processEresource(String id, String recordId, String eresoursceType, String title, String description, String keywords,
+            String year, String date, String url, String authors) throws SAXException {
+        startEresourceElement(id, recordId, eresoursceType);
         if (title != null) {
             createElement(TITLE, title);
         }

@@ -482,6 +482,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private void handleBibControlfield() {
         if ("001".equals(this.tag)) {
+            this.currentEresource.setId("bib-"+this.currentText.toString());
             this.currentEresource.setRecordId(Integer.parseInt(this.currentText.toString()));
         } else if ("005".equals(this.tag)) {
             try {

@@ -8,14 +8,15 @@
 		<xsl:for-each select=".//div[@class='index-post']">
 			<xsl:variable name="id" select="position()" />
 			<eresource>
-				<xsl:attribute name="id"><xsl:value-of select="concat($pageId, $id)" /></xsl:attribute>
-				<xsl:attribute name="type">sages</xsl:attribute>
+				<xsl:attribute name="id">sages-<xsl:value-of select="concat($pageId, $id)" /></xsl:attribute>
+				<xsl:attribute name="recordId"><xsl:value-of select="concat($pageId, $id)" /></xsl:attribute>
+				<xsl:attribute name="type">instructional_videos</xsl:attribute>
 				<xsl:attribute name="update">1969010100000</xsl:attribute>
 				<title>
 					<xsl:value-of select="./div/h3/a/text()"/>
 				</title>
 				<primaryType>Visual Material</primaryType>
-				<type>Instructional Video</type>
+				<type>Video: Instructional</type>
 				<type>Video</type>
 				<keywords>
 					<xsl:value-of select="concat('sages ',./div/h3, ' ', ./div/p/text())"></xsl:value-of>

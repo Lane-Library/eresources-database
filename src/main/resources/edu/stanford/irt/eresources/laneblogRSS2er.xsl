@@ -3,7 +3,7 @@
 	version="2.0">
 
 	<xsl:template match="channel/item">
-		<eresource id="{substring-after(guid,'?p=')}" type="laneblog"
+		<eresource  id="laneblog-{substring-after(guid,'?p=')}" recordId="{substring-after(guid,'?p=')}" type="laneblog"
 			update="19690101000000">
 			<title>
 				<xsl:value-of select="title" />

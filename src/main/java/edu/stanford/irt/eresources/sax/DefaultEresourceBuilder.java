@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -108,7 +109,8 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
             this.currentEresource = new SAXEresource();
-            this.currentEresource.setRecordId(Integer.parseInt(atts.getValue("id")));
+            this.currentEresource.setId(atts.getValue("id"));
+            this.currentEresource.setRecordId(Integer.parseInt(atts.getValue("recordId")));
             this.currentEresource.setRecordType(atts.getValue("type"));
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(atts.getValue("update")));

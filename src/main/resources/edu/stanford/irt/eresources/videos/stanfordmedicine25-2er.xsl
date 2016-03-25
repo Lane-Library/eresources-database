@@ -17,14 +17,17 @@
 			<xsl:variable name="description" select=".//h2[contains(., 'Introduction' )]/../../../div[@class='parbase section text']//p"/>
 			<xsl:variable name="title" select="normalize-space(.//hgroup[ ./h1[@class='black']/text() != ''])"></xsl:variable>
 			<eresource>
-				<xsl:attribute name="id"><xsl:value-of select="$pageid" /></xsl:attribute>
-				<xsl:attribute name="type">stanfordmedicine25</xsl:attribute>
+				<xsl:attribute name="id">stanfordmedicine25-<xsl:value-of select="$pageid" /></xsl:attribute>
+				<xsl:attribute name="recordId"><xsl:value-of select="$pageid" /></xsl:attribute>
+				<xsl:attribute name="type">instructional_videos</xsl:attribute>
 				<xsl:attribute name="update">1969010100000</xsl:attribute>
 				<title>
 					<xsl:value-of select="$title"/> 
 				</title>
 				<primaryType>Visual Material</primaryType>
-				<type>Instructional Video</type>
+				<type>Video: Instructional</type>
+				<type>Video: StanfordMed</type>
+				<type>Video: Physical Exam</type>
 				<type>Video</type>
 				 <keywords>
 					<xsl:value-of select="concat('physical exam ', ' stanfordmedicine25 stanfordmedicine ', $title , ' ', string-join($description, ' ' ))"></xsl:value-of>					

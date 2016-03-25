@@ -7,8 +7,7 @@
 		<xsl:for-each select="tr[position() >1]">
 
 			<eresource>
-			
-				<xsl:attribute name="id">accessmedicine-<xsl:value-of select="./td[1]/text()" /></xsl:attribute>
+				<xsl:attribute name="id">accesssurgery-<xsl:value-of select="./td[1]/text()" /></xsl:attribute>
 				<xsl:attribute name="recordId"><xsl:value-of select="./td[1]/text()" /></xsl:attribute>
 				<xsl:attribute name="type">instructional_videos</xsl:attribute>
 				<xsl:attribute name="update">19690101000000</xsl:attribute>
@@ -18,8 +17,9 @@
 				<primaryType>Visual Material</primaryType>
 				<type>Video</type>
 				<type>Video: Instructional</type>
+				<type>Video: Surgery</type>
 				<keywords>
-					<xsl:value-of select="concat('accessmedicine ' , ./td[2], ' ', ./td[3]),' ',./td[6]" />
+					<xsl:value-of select="concat('accesssurgery ' , ./td[2], ' ', ./td[3]),' ',./td[6]" />
 				</keywords>
 				<year>
 					<xsl:value-of select="replace(./td[6],'.*/(\d{4})','$1')" />

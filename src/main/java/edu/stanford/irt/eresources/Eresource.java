@@ -32,6 +32,8 @@ public interface Eresource {
     Collection<String> getPublicationTypes();
 
     int getRecordId();
+    
+    String getId();
 
     String getRecordType();
 

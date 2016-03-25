@@ -4,16 +4,19 @@
 
 	
 	<xsl:template match="article[contains(@class, 'article_summary_container')]">
-			<xsl:variable name="id" select="substring-before(substring-after(@id,'_'),'_')" ></xsl:variable> 
+			<xsl:variable name="id" select="substring-before(substring-after(@id,'_'),'_')" /> 
+			<xsl:variable name="title" select="./h2/a/text()[1]" />
 			<eresource>
-				<xsl:attribute name="id"><xsl:value-of select="$id"/></xsl:attribute>
-				<xsl:attribute name="type">jove</xsl:attribute>
+				<xsl:attribute name="id">jove-<xsl:value-of select="$id"/></xsl:attribute>
+				<xsl:attribute name="recordId"><xsl:value-of select="$id"/></xsl:attribute>
+				<xsl:attribute name="type">instructional_videos</xsl:attribute>
 				<xsl:attribute name="update">1969010100000</xsl:attribute>
 				<title>
-					 <xsl:value-of select="./h2/a/text()"/> 
+					 <xsl:value-of select="$title"/> 
 				</title>
 				<primaryType>Visual Material</primaryType>
-				<type>Instructional Video</type>
+				<type>Video: Instructional</type>
+				<type>Video: Lab Protocols</type>
 				<type>Video</type>
 				<version>
 					<link>
@@ -23,7 +26,7 @@
 					</link>
 				</version>
 				<keywords>
-					<xsl:value-of select="concat('jove ' ,   ./td[3]),' ',./td[6]" />
+					<xsl:value-of select="concat('jove ' ,  $title )" />
 				</keywords>	
 			</eresource>
 	</xsl:template> 

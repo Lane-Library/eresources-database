@@ -52,7 +52,7 @@
             <stx:assign name="publicationYear" select="substring($publicationDate,1,4)"/>
         </stx:if>
         
-        <eresource id="{$pmid}" type="pubmed" update="19690101000000">
+        <eresource id="pubmed-{$pmid}" recordId="{$pmid}" type="pubmed" update="19690101000000">
             <type>Article</type>
             <primaryType>Article</primaryType>
             <stx:assign name="title">

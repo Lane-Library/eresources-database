@@ -5,7 +5,7 @@
     <xsl:param name="lane-host"/>
     
     <xsl:template match="h:html">
-        <eresource id="{@id}" type="web" update="{@update}">
+        <eresource  id="web-{@id}" recordId="{@id}" type="web" update="{@update}">
             <xsl:variable name="url">
                 <xsl:value-of select="$lane-host"/>
                 <xsl:value-of select="@file"/>

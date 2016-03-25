@@ -131,11 +131,12 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             throws SAXException {
         this.currentText.setLength(0);
         if ("eresource".equals(name)) {
-            String id = atts.getValue("id");
+            String recordId = atts.getValue("recordId");
             this.currentEresource = new SAXEresource();
-            this.currentEresource.setRecordId(Integer.parseInt(id));
+            this.currentEresource.setRecordId(Integer.parseInt(recordId));
             this.currentEresource.setRecordType(atts.getValue("type"));
-            getSpecialTypesForPmid(id);
+            this.currentEresource.setId(atts.getValue("id"));
+            getSpecialTypesForPmid(recordId);
             try {
                 this.currentEresource.setUpdated(this.dateFormat.parse(atts.getValue("update")));
             } catch (ParseException e) {

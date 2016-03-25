@@ -67,7 +67,7 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
             String url = this.text.toString();
             SAXEresource eresource = super.getCurrentEresource();
             getAdditionalField(url, eresource);
-            eresource.setKeywords(eresource.getTitle() + " " + eresource.getAuthor() + " " + eresource.getDescription());
+            eresource.setKeywords("jove "+ eresource.getTitle().trim() + " " + eresource.getAuthor().trim() + " " + eresource.getDescription().trim());
         }
         this.text = new StringBuilder();
     }

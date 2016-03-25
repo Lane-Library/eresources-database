@@ -13,6 +13,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.sax.videos.AbstractVideoEresourceProcessor;
 import edu.stanford.irt.eresources.sax.videos.JsonVideoEresourceProcessor;
 
 public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
@@ -83,7 +84,7 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
                             }    
                        }
                        
-                       super.processEresource(id, ERESOURCE_TYPE, title, description, keywords.toString(), year, null, url, authors);
+                       super.processEresource(ERESOURCE_TYPE+"-"+ id, id, AbstractVideoEresourceProcessor.EXTRENAL_VIDEO , title, description, keywords.toString(), year, null, url, authors);
                     }
                 }
                 offSet = offSet + 100;

@@ -9,14 +9,15 @@
 		<xsl:variable name="title" select="./div/div[@class='span7']/a/text()" />
 		<xsl:variable name="description" select="normalize-space(./div/div[@class='span7']/ul)" />
 		<eresource>
-			<xsl:attribute name="id"><xsl:value-of select="concat($page_id, position())" /></xsl:attribute>
-			<xsl:attribute name="type">kanopy</xsl:attribute>
+			<xsl:attribute name="id">kanopy-<xsl:value-of select="concat($page_id, position())" /></xsl:attribute>
+			<xsl:attribute name="recordId"><xsl:value-of select="concat($page_id, position())" /></xsl:attribute>
+			<xsl:attribute name="type">instructional_videos</xsl:attribute>
 			<xsl:attribute name="update">1969010100000</xsl:attribute>
 			<title>
 				<xsl:value-of select="$title" />
 			</title>
 			<primaryType>Visual Material</primaryType>
-			<type>Instructional Video</type>
+			<type>Video: Instructional</type>
 			<type>Video</type>
 			<version>
 				<link>

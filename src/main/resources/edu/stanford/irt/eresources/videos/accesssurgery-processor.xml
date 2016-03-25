@@ -14,7 +14,7 @@
     </bean>
 	<bean id="accessmedicineTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer"
 		init-method="init">
-		<property name="stylesheet" value="classpath://edu/stanford/irt/eresources/videos/accessmedicine2er.xsl" />
+		<property name="stylesheet" value="classpath://edu/stanford/irt/eresources/videos/accesssurgery2er.xsl" />
 		<property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl" />
 		<property name="namespace" value="" />
 		<property name="element" value="eresources" />

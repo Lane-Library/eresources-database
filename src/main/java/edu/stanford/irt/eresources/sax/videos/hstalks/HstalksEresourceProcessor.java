@@ -7,6 +7,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.sax.videos.AbstractVideoEresourceProcessor;
 import edu.stanford.irt.eresources.sax.videos.JsonVideoEresourceProcessor;
 
 public class HstalksEresourceProcessor extends JsonVideoEresourceProcessor {
@@ -56,7 +57,7 @@ public class HstalksEresourceProcessor extends JsonVideoEresourceProcessor {
                                 url = "https://hstalks.com".concat(videoNode.path("url").asText());
                             }
                             
-                            super.processEresource(id, ERESOURCE_TYPE, title, description, keywords.toString(), year, date, url, null);
+                            super.processEresource(ERESOURCE_TYPE+"-"+id, id , AbstractVideoEresourceProcessor.EXTRENAL_VIDEO , title, description, keywords.toString(), year, date, url, null);
                         }
                     }
                     offSet = offSet + 10;
