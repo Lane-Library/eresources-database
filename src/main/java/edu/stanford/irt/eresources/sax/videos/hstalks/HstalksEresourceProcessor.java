@@ -26,7 +26,8 @@ public class HstalksEresourceProcessor extends JsonVideoEresourceProcessor {
                     for (int i = 0; i < jsonResult.size(); i++) {
                         JsonNode videoNode = jsonResult.get(i);
                         String id = videoNode.path("id").textValue();
-                        if (null != id && !"".equals(id)) {
+                        String status = videoNode.path("status").textValue();
+                        if (null != id && !"".equals(id) && "RELEASED".equals(status)) {
                             StringBuilder keywords = new StringBuilder(ERESOURCE_TYPE.concat(" "));
                             String description = null;
                             String year = null;
