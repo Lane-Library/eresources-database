@@ -329,7 +329,7 @@
     </stx:template>
     
     <stx:template match="DeleteCitation/PMID">
-        <eresource id="{.}" type="pubmed" update="19690101000000">
+        <eresource id="pubmed-{.}" recordId="{.}" type="pubmed" update="19690101000000">
             <type>article</type>
         </eresource>
     </stx:template>
