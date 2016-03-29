@@ -91,6 +91,7 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
             eresource.setDescription(description);
             String authors = getAuthor(doc);
             eresource.setAuthor(authors);
+            eresource.setKeywords("jove ".concat(description).concat(" ").concat(eresource.getTitle()).concat(" ").concat(authors));
             setDate(doc, url, eresource);
             Thread.sleep(1000);
         } catch (Exception e) {
