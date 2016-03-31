@@ -30,7 +30,7 @@
 				<type>Video: Physical Exam</type>
 				<type>Video</type>
 				 <keywords>
-					<xsl:value-of select="concat('physical exam ', ' stanfordmedicine25 stanfordmedicine ', $title , ' ', string-join($description, ' ' ))"></xsl:value-of>					
+					<xsl:value-of select="concat(' stanfordmedicine25 stanfordmedicine ', $title , ' ', string-join($description, ' ' ))"></xsl:value-of>					
 				</keywords>
 				<version>
 					<link>
