@@ -25,9 +25,6 @@
 						</url>
 					</link>
 				</version>
-				<keywords>
-					<xsl:value-of select="concat('jove ' ,  $title )" />
-				</keywords>	
 			</eresource>
 	</xsl:template> 
 </xsl:stylesheet>

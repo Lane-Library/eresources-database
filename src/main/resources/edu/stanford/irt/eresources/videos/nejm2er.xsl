@@ -15,7 +15,7 @@
 			<type>Video: Instructional</type>
 			<type>Video</type>
 			<keywords>
-				<xsl:value-of select="concat('nejm' , $title, ' ' , $description)"/>
+				<xsl:value-of select="concat('nejm ' , $title, ' ' , $description)"/>
 			</keywords>
 			<year><xsl:value-of select="substring-before(dc:date, '-')"/></year>
 			<er-date><xsl:value-of select="replace(./dc:date,'(\d{4})-(\d{1,2})-(\d{1,2}).*','$1 $2 $3')"/></er-date>
