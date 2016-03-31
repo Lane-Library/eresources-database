@@ -118,18 +118,14 @@ public class SolrEresourceHandler implements EresourceHandler {
         SolrInputDocument doc = new SolrInputDocument();
         String title = eresource.getTitle();
         String sortTitle = getSortText(title);
-        String keywords = eresource.getKeywords();
-        String publicationText = eresource.getPublicationText();
-        if (null != publicationText) {
-            keywords = keywords + " " + publicationText;
-        }
+    
         List<Version> versions = new LinkedList<Version>();
         int[] itemCount = eresource.getItemCount();
         doc.addField("id", createKey(eresource));
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
         doc.addField("recordType", eresource.getRecordType());
         doc.addField("description", eresource.getDescription());
-        doc.addField("text", keywords);
+        doc.addField("text", getKeywords(eresource));
         doc.addField("title", title);
         doc.addField("title_sort", sortTitle);
         doc.addField("primaryType", eresource.getPrimaryType());
@@ -157,6 +153,7 @@ public class SolrEresourceHandler implements EresourceHandler {
             doc.addField("publicationAuthorsText", publicationAuthorsText);
             doc.addField("authors_sort", getSortText(publicationAuthorsText));
         }
+        String publicationText = eresource.getPublicationText();
         if (null != publicationText) {
             doc.addField("publicationText", publicationText);
         }
@@ -192,6 +189,23 @@ public class SolrEresourceHandler implements EresourceHandler {
         this.solrDocs.add(doc);
     }
 
+    private String getKeywords(Eresource eresource){
+        StringBuilder keywords = new StringBuilder();
+        String publicationText = eresource.getPublicationText();
+        String text = eresource.getKeywords();
+        if(null != text){
+            keywords.append(" ".concat(text).concat(" "));
+        }
+        if (null != publicationText) {
+            keywords.append(" " + publicationText.concat(" "));
+        }
+        for (String type : eresource.getTypes()) {
+            keywords.append(" ".concat(type).concat(" "));
+        }
+       
+        return keywords.toString();
+    }
+    
     private void addSolrDocs() {
         try {
             this.solrClient.add(this.solrDocs);
