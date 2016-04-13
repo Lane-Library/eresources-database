@@ -37,7 +37,6 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
     private Logger log = LoggerFactory.getLogger(JoveEresourceBuilder.class);
     
     private XPathExpression descriptionExpression = null;
-    private XPathExpression authorExpression = null;
     private XPathExpression yearExpression = null;
 
     Header USER_AGENT = new BasicHeader("User-Agent",
@@ -67,7 +66,7 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
             String url = this.text.toString();
             SAXEresource eresource = super.getCurrentEresource();
             getAdditionalField(url, eresource);
-            eresource.setKeywords("jove "+ eresource.getTitle().trim() + " " + eresource.getAuthor().trim() + " " + eresource.getDescription().trim());
+            eresource.setKeywords("jove "+ eresource.getTitle().trim() + " "  + eresource.getDescription().trim());
         }
         this.text = new StringBuilder();
     }
@@ -89,9 +88,7 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
             Document doc = parser.getDocument();
             String description = getDescription(doc);
             eresource.setDescription(description);
-            String authors = getAuthor(doc);
-            eresource.setAuthor(authors);
-            eresource.setKeywords("jove ".concat(description).concat(" ").concat(eresource.getTitle()).concat(" ").concat(authors));
+            eresource.setKeywords("jove ".concat(description).concat(" ").concat(eresource.getTitle()));
             setDate(doc, url, eresource);
             Thread.sleep(1000);
         } catch (Exception e) {
@@ -112,13 +109,6 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
         return (String)this.descriptionExpression.evaluate(doc, XPathConstants.STRING);
     }
 
-    private String getAuthor(Document doc) throws XPathExpressionException {
-        String authors =  (String) this.authorExpression.evaluate(doc, XPathConstants.STRING);
-        authors = authors.replaceAll("\\d", "");
-        authors = authors.replaceAll(",,", ",");
-        authors = authors.replaceAll("\\*", "");
-        return authors;
-    }
 
     private void setDate(Document doc, String url, SAXEresource eresource) throws XPathExpressionException{
         String dateStr =  (String) this.yearExpression.evaluate(doc, XPathConstants.STRING);
@@ -144,14 +134,7 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
         }
     }
     
-    public void setAuthorExpression(String expression) {
-        try {
-            this.authorExpression = xPath.compile(expression);
-        } catch (XPathExpressionException e) {
-            throw new EresourceDatabaseException(e);
-        }
-    }
-    
+  
     public void setYearExpression(String expression) {
         try {
             this.yearExpression = xPath.compile(expression);

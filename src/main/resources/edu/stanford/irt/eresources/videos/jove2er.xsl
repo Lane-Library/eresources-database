@@ -25,6 +25,9 @@
 						</url>
 					</link>
 				</version>
+				<xsl:for-each select="./p[@class='article_authors']/a" >
+					<publicationAuthor><xsl:value-of select="./text()"/></publicationAuthor>
+				</xsl:for-each>
 			</eresource>
 	</xsl:template> 
 </xsl:stylesheet>

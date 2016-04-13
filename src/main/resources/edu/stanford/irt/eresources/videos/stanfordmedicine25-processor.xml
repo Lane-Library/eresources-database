@@ -16,7 +16,6 @@
         <property name="URLs">
         	<list>
         		<value>http://stanfordmedicine25.stanford.edu/the25.html</value>
-        		<value>http://stanfordmedicine25.stanford.edu</value>
 			</list>
        	</property>
        	<property name="linksExpression">

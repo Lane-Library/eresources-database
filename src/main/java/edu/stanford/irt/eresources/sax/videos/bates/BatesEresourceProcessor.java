@@ -1,5 +1,8 @@
 package edu.stanford.irt.eresources.sax.videos.bates;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -13,7 +16,7 @@ public class BatesEresourceProcessor extends AbstractVideoEresourceProcessor {
     private String title = null;
     private String description = null;
     private String year = null;
-    private String authors = null;
+    private List<String> authors = null;
     
     
     @Override
@@ -52,7 +55,8 @@ public class BatesEresourceProcessor extends AbstractVideoEresourceProcessor {
         this.year = year;
     }
 
-    public void setAuthors(String authors) {
-        this.authors = authors;
+    public void setAuthors(String author) {
+        this.authors = new ArrayList<String>();
+        this.authors.add(author);
     }
 }

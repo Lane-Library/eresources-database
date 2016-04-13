@@ -46,7 +46,7 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
    
     protected static final String YEAR = "year";
     
-    protected static final String AUTHORS = "publicationAuthorsText";
+    protected static final String AUTHORS = "publicationAuthor";
 
     protected static final String DESCRIPTION = "description";
 
@@ -81,7 +81,7 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
     }
     
     protected void processEresource(String id, String recordId, String eresoursceType, String title, String description, String keywords,
-            String year, String date, String url, String authors) throws SAXException {
+            String year, String date, String url, List<String> authors) throws SAXException {
         startEresourceElement(id, recordId, eresoursceType);
         if (title != null) {
             createElement(TITLE, title);
@@ -102,14 +102,19 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
             createElement(URL, url);
         }
         if (null != authors) {
-            createElement(AUTHORS, authors);
+            createAuthorElement(authors);
         }
         this.contentHandler.endElement("", LINK, LINK);
         this.contentHandler.endElement("", VERSION, VERSION);
         this.contentHandler.endElement("", ERESOURCE, ERESOURCE);
     }
     
-    
+    private void createAuthorElement(List<String> authors) throws SAXException{
+        for (String author : authors) {
+            createElement(AUTHORS, author);
+        }
+        
+    }
 
     
     public void setContentHandler(final ContentHandler contentHandler) {

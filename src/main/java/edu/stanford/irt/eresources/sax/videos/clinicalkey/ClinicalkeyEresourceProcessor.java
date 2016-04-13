@@ -41,57 +41,62 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
                         String description = null;
                         String year = null;
                         String url = null;
-                        String authors = null;
-                        String title = videoNode.path("itemtitle").textValue();
-                        if (null != title) {
-                            keywords.append(title);
-                        }
-                        if (null != videoNode.path("sourcetitle") && videoNode.path("sourcetitle").textValue() != null) {
-                            keywords.append(" " + videoNode.path("sourcetitle").textValue());
-                        }
-                        if (videoNode.path("summary_s") != null && videoNode.path("summary_s").textValue() != null) {
+                        List<String> authors = new ArrayList<String>();
+                        String title = null;
+                        String unmodifiedTitle = videoNode.path("itemtitle").textValue();
+                        if (videoNode.path("summary_s") != null && videoNode.path("summary_s").textValue() != null
+                                && !videoNode.path("summary_s").textValue().equals(title)
+                                && videoNode.path("summary_s").textValue().indexOf("no summary available") == -1) {
                             description = videoNode.path("summary_s").textValue();
                             keywords.append(" " + description);
+                        }
+                        if (null != unmodifiedTitle) {
+                            keywords.append(" "+unmodifiedTitle+" ");
+                            String pattern = ".*video\\s*.*(\\d*)\\s?-\\s?.*";
+                            title = unmodifiedTitle;
+                            if (title.toLowerCase().matches(pattern)) {
+                                title = title.substring(title.indexOf("- ") + 1).trim();
+                            }
+                            String digitOnly = "(\\d+\\-?)+|(\\d+\\.?)+";
+                            if(title.matches(digitOnly)){
+                                title = title+" "+ videoNode.path("sourcetitle").textValue();
+                            }
+                           
+                        }
+                        if (null != videoNode.path("sourcetitle") && videoNode.path("sourcetitle").textValue() != null) {
+                            keywords.append(" " + videoNode.path("sourcetitle").textValue()+" ");
                         }
                         if (videoNode.path("copyrightyear") != null && videoNode.path("copyrightyear").get(0) != null) {
                             year = videoNode.path("copyrightyear").get(0).textValue();
                         }
                         if (null != videoNode.path("refimage") && null != videoNode.path("refimage").get(0).textValue()) {
-                            String encodedTitle = URLEncoder.encode(title, "UTF-8");
-                            url = "https://www.clinicalkey.com/#!/search/".concat(encodedTitle).concat("/%7B%22facetquery%22:%5B%22+contenttype:VD%22%5D,%22query%22:%22")
-                                    .concat(encodedTitle).concat("%22%7D");
+                                String encodedTitle = URLEncoder.encode(unmodifiedTitle, "UTF-8");
+                                url = "https://www.clinicalkey.com/#!/search/".concat(encodedTitle).concat("/%7B%22facetquery%22:%5B%22+contenttype:VD%22%5D,%22query%22:%22")
+                                        .concat(encodedTitle).concat("%22%7D");
                         }
                         if (videoNode.path("authorlist") != null) {
                             List<String> alreadyIn = new ArrayList<String>();
-                            StringBuilder sb = new StringBuilder();
-                            JsonNode authorList =  videoNode.path("authorlist");
+                            JsonNode authorList = videoNode.path("authorlist");
                             for (int j = 0; j < maxAuthor; j++) {
-                                if (null != authorList.get(j) ) {
+                                if (null != authorList.get(j)) {
                                     String author = authorList.get(j).textValue().trim();
-                                    if(!alreadyIn.contains(author)){
-                                        sb.append(author);
-                                        sb.append("; ");
+                                    if (!alreadyIn.contains(author)) {
+                                        authors.add(author);
                                         alreadyIn.add(author);
                                     }
                                 }
                             }
-                            authors = sb.toString().trim();
-                            if(authors.length()>0){
-                                authors = authors.substring(0, authors.length()-1);
-                            }
-                            if( maxAuthor < authorList.size()){
-                               authors = authors + ";.....";   
-                            }    
-                       }
-                       
-                       super.processEresource(ERESOURCE_TYPE+"-"+ id, id, AbstractVideoEresourceProcessor.EXTRENAL_VIDEO , title, description, keywords.toString(), year, null, url, authors);
+                        }
+                        super.processEresource(ERESOURCE_TYPE + "-" + id, id,
+                                AbstractVideoEresourceProcessor.EXTRENAL_VIDEO, title, description,
+                                keywords.toString(), year, null, url, authors);
                     }
                 }
                 offSet = offSet + 100;
                 Thread.sleep(100);
                 jsonMap = getJsonNode(this.URLs.get(1).concat(String.valueOf(offSet)));
                 jsonResult = jsonMap.findPath("docs");
-             }
+            }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (Exception e) {

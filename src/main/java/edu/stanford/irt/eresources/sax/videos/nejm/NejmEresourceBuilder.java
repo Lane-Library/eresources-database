@@ -43,7 +43,7 @@ public class NejmEresourceBuilder extends DefaultEresourceBuilder {
             String url = this.text.toString();
             SAXEresource eresource = super.getCurrentEresource();
             getAdditionalField(url, eresource);
-            eresource.setKeywords(eresource.getTitle() + " " + eresource.getAuthor() + " " + eresource.getDescription());
+            eresource.setKeywords(eresource.getTitle() + " " + eresource.getDescription());
         }
         this.text = new StringBuilder();
     }

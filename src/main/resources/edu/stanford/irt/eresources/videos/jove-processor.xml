@@ -14,13 +14,13 @@
 		<property name="contentHandler" ref="joveTransformer" />
 		<property name="URLs">
 			<list>
-				<value>http://www.jove.com/biology?page=1</value> 
+		    	<value>http://www.jove.com/biology?page=1</value> 
 				<value>http://www.jove.com/neuro?page=1</value> 
 				<value>http://www.jove.com/med?page=1</value> 
 				<value>http://www.jove.com/bioengineering?page=1</value> 
-				<value>http://www.jove.com/i2?page=1</value> 
+			 	<value>http://www.jove.com/i2?page=1</value> 
 				<value>http://www.jove.com/behavior?page=1</value> 
-				<value>http://www.jove.com/devbio?page=1</value>  
+				<value>http://www.jove.com/devbio?page=1</value> 
 			</list>
 		</property>
 		<property name="nextPageExpression">
@@ -40,9 +40,6 @@
 		<property name="eresourceHandler" ref="eresourceHandler" />
 		<property name="descriptionExpression">
 			<value>//div[@id='section_body_abstract']/p</value>
-		</property>
-		<property name="authorExpression">
-			<value>//p[@class='authors']</value>
 		</property>
 		<property name="yearExpression">
 			<value>//div[@id='section_body_summary']/p/strong[contains(text(), 'Date Published')]/ancestor::p/text()[1]</value>
