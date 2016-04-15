@@ -1,9 +1,13 @@
 package edu.stanford.irt.eresources.sax.videos.clinicalkey;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -31,6 +35,8 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             JsonNode jsonMap = getJsonNode(this.URLs.get(1).concat(String.valueOf(offSet)));
             JsonNode jsonResult = jsonMap.findPath("docs");
+            BufferedWriter bw = new BufferedWriter(new FileWriter("/tmp/clinicalKeyTitle.txt"));
+            
             while (jsonResult.size() != 0) {
                 for (int i = 0; i < jsonResult.size(); i++) {
                     JsonNode videoNode = jsonResult.get(i);
@@ -52,16 +58,44 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
                         }
                         if (null != unmodifiedTitle) {
                             keywords.append(" "+unmodifiedTitle+" ");
-                            String pattern = ".*video\\s*.*(\\d*)\\s?-\\s?.*";
-                            title = unmodifiedTitle;
-                            if (title.toLowerCase().matches(pattern)) {
-                                title = title.substring(title.indexOf("- ") + 1).trim();
+                            title = unmodifiedTitle.replace("(with videos)", "");
+                            Pattern pattern = Pattern.compile(".*\\s?video\\s?\\d*.?\\W*\\d*\\s*\\W*\\s", Pattern.CASE_INSENSITIVE); 
+                            Matcher match = pattern.matcher(title);
+                            if(match.find()){
+                                title = match.replaceFirst("").trim();
                             }
-                            String digitOnly = "(\\d+\\-?)+|(\\d+\\.?)+";
-                            if(title.matches(digitOnly)){
+                            pattern = Pattern.compile("^movie\\s?.?\\d*\\W*\\d*.?\\s*\\W*\\s", Pattern.CASE_INSENSITIVE); 
+                            match = pattern.matcher(title);
+                            if(match.find()){
+                                title = match.replaceFirst("").trim();
+                            }
+                            pattern = Pattern.compile("^Animation\\s?.?\\d*\\W*\\d*.?\\s*\\W*\\s", Pattern.CASE_INSENSITIVE); 
+                            match = pattern.matcher(title);
+                            if(match.find()){
+                                title = match.replaceFirst("").trim();
+                            }
+                            //if 12.3 or 12-3 as title we will append the source title
+                            String stringPattern = "(\\d+\\-?)+|(\\d+\\.?)+";
+                            if(title.matches(stringPattern)){
                                 title = title+" "+ videoNode.path("sourcetitle").textValue();
                             }
-                           
+                            
+                            pattern = Pattern.compile("^(\\d*\\W*\\s*)*"); 
+                            match = pattern.matcher(title);
+                            if(match.find()){
+                                title = match.replaceFirst("").trim();
+                            }
+                            pattern = Pattern.compile("^\\d+\\W?\\d*\\w*\\W?", Pattern.CASE_INSENSITIVE); 
+                            match = pattern.matcher(title);
+                            if(match.find()){
+                                title = match.replaceFirst("").trim();
+                            }
+                            
+                            if( "".equals(title.trim()) || title.length() < 5){
+                                title = videoNode.path("sourcetitle").textValue();
+                            }
+                            
+                            bw.write(unmodifiedTitle + "\t"+title+"\n");
                         }
                         if (null != videoNode.path("sourcetitle") && videoNode.path("sourcetitle").textValue() != null) {
                             keywords.append(" " + videoNode.path("sourcetitle").textValue()+" ");
@@ -95,8 +129,10 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
                 offSet = offSet + 100;
                 Thread.sleep(100);
                 jsonMap = getJsonNode(this.URLs.get(1).concat(String.valueOf(offSet)));
-                jsonResult = jsonMap.findPath("docs");
+                jsonResult = jsonMap.findPath("docs");               
             }
+            
+            bw.close();
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (Exception e) {
