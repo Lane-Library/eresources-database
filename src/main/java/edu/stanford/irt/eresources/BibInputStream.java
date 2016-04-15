@@ -2,9 +2,9 @@ package edu.stanford.irt.eresources;
 
 public class BibInputStream extends EresourceInputStream {
 
-    private static final String BIB_QUERY = "SELECT SEQNUM, RECORD_SEGMENT FROM LMLDB.BIB_DATA WHERE BIB_ID = ?";
+    private static final String BIB_QUERY = "SELECT SEQNUM, RECORD_SEGMENT FROM LMLDB.BIB_DATA WHERE BIB_ID = ? ORDER BY SEQNUM";
 
-    private static final String MFHD_QUERY = "SELECT SEQNUM, RECORD_SEGMENT FROM LMLDB.MFHD_DATA WHERE MFHD_ID = ?";
+    private static final String MFHD_QUERY = "SELECT SEQNUM, RECORD_SEGMENT FROM LMLDB.MFHD_DATA WHERE MFHD_ID = ? ORDER BY SEQNUM";
 
     private static final String QUERY = "SELECT DISTINCT bib_mfhd.bib_id, "
             + "  bib_mfhd.mfhd_id "
