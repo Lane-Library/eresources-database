@@ -6,8 +6,9 @@
 	<xsl:param name="lane-host" />
 
 	<xsl:template match="/lc:classes">
-			<xsl:apply-templates select="event_data" />
-		
+		<xsl:for-each-group select="event_data" group-by="event_name">
+            <xsl:apply-templates select="current-group()[last()]"/>
+        </xsl:for-each-group>
 	</xsl:template>
 
 	<xsl:template match="event_data">
@@ -41,7 +42,7 @@
 								<xsl:value-of select="concat($lane-host, '/classes-consult/laneclass.html?class-id=', $id)" />
 						</xsl:when>
 						<xsl:otherwise>
-								<xsl:value-of select="concat($lane-host, '/classes-consult/archives.html?class-id=', $id)" />
+								<xsl:value-of select="concat($lane-host, '/classes-consult/archive.html?class-id=', $id)" />
 						</xsl:otherwise>
 					</xsl:choose>
 					</url>						
