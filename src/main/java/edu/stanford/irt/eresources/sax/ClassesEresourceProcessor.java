@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.sax;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,7 +29,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String ERESOURCES = "eresources";
 
-    private String allClassesURL;
+    private List<String> allClassesURL;
 
     private ContentHandler contentHandler;
 
@@ -42,36 +43,36 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
     @Override
     public void process() {
         try {
-            URL url;
-            url = new URL(this.allClassesURL);
-            InputSource source;
-            source = new InputSource(url.openConnection().getInputStream());
-            DocumentBuilder parser;
-            parser = this.factory.newDocumentBuilder();
-            parser.setErrorHandler(this.errorHandler);
-            Document doc = parser.parse(source);
-            Date sometimeEarlier = new Date(1);
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            if (sometimeEarlier.getTime() > getStartTime()) {
-                this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+            for (String urlString : allClassesURL) {
+                URL url = new URL(urlString);
+                InputSource source = new InputSource(url.openConnection().getInputStream());
+                process(source);
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (SAXException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (ParserConfigurationException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (TransformerConfigurationException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (TransformerException e) {
+        } catch (Exception e) {
             throw new EresourceDatabaseException(e);
         }
     }
 
-    public void setAllClassesURL(final String allClassesURL) {
+    public void process(InputSource source) {
+        try {
+            DocumentBuilder parser;
+            parser = this.factory.newDocumentBuilder();
+            parser.setErrorHandler(this.errorHandler);
+            Document doc = parser.parse(source);
+            Date sometimeEarlier = new Date(0);
+            if (sometimeEarlier.getTime() > getStartTime()) {
+                this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+            }
+        } catch (Exception e) {
+            throw new EresourceDatabaseException(e);
+        }
+    }
+
+    public void setAllClassesURL(final List<String> allClassesURL) {
         this.allClassesURL = allClassesURL;
     }
 
