@@ -58,7 +58,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
             parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);
-            Date sometimeEarlier = new Date(0);
+            Date sometimeEarlier = new Date(1);
             if (sometimeEarlier.getTime() > getStartTime()) {
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
             }
