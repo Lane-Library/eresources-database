@@ -42,7 +42,6 @@ public class Stanfordmedicine25EresourceProcessor extends VideoEresourceProcesso
     private void process(NodeList nodes) throws TransformerConfigurationException, TransformerException {
         for (int i = 0; i < nodes.getLength(); i++) {
             String href = super.URLs.get(1).concat(nodes.item(i).getTextContent());
-            // String href = "http://stanfordmedicine25.stanford.edu/the25/tendon.html";
             Document doc = getDocument(href);
             Element root = doc.getDocumentElement();
             root.setAttribute("pageid", String.valueOf(i));
