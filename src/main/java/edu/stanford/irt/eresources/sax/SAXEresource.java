@@ -97,8 +97,6 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String id;
     
-    private String author;
-
     private int[] count = new int[] { 0, 0 };
 
     private String date;
