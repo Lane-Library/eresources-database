@@ -64,7 +64,7 @@ public class NejmEresourceBuilder extends DefaultEresourceBuilder {
             Document doc = parser.getDocument();
             String description = getDescription(doc);
             eresource.setDescription(description);
-            eresource.setAuthor(getAuthor(doc));            
+            eresource.setPublicationAuthorsText(getAuthor(doc));
         } catch (Exception e) {
             throw new EresourceDatabaseException(e);
         } finally {
