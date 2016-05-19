@@ -5,8 +5,6 @@ import java.util.Date;
 
 public interface Eresource {
 
-    String getAuthor();
-
     String getDate();
 
     String getDescription();

@@ -204,11 +204,6 @@ public class SAXEresource implements Cloneable, Eresource {
     }
 
     @Override
-    public String getAuthor() {
-        return this.author;
-    }
-
-    @Override
     public String getDate() {
         if (null == this.date || "0".equals(this.date) || this.date.isEmpty()) {
             if (null != this.publicationDate) {
@@ -479,10 +474,6 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public boolean isLaneConnex() {
         return this.isLaneConnex;
-    }
-
-    public void setAuthor(final String author) {
-        this.author = author;
     }
 
     public void setDate(final String date) {
