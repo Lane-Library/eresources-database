@@ -9,6 +9,8 @@ public interface Eresource {
 
     String getDescription();
 
+    String getId();
+
     int[] getItemCount();
 
     String getKeywords();
@@ -30,8 +32,6 @@ public interface Eresource {
     Collection<String> getPublicationTypes();
 
     int getRecordId();
-    
-    String getId();
 
     String getRecordType();
 
