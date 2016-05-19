@@ -25,8 +25,9 @@ public class SAXEresource implements Cloneable, Eresource {
             "Software, Installed - Redwood Room", "Software, Installed - Duck Room", "Software, Installed - Stone Room",
             "Software, Installed - M051", "Software, Installed - LKSC Student", "Software, Installed - LKSC Public",
             "Software, Installed", "Software", "Statistics", "Video", "Image", "Lane Class", "Lane Web Page", "Print",
-            "Bassett", "Statistics Software, Installed", "Biotools Software, Installed", "Website", "Grand Rounds",  "Video: Instructional",
-            "Video: Physical Exam", "Video: Lab Protocols", "Video: StanfordMed", "Video: Surgery"};
+            "Bassett", "Statistics Software, Installed", "Biotools Software, Installed", "Website", "Grand Rounds",
+            "Video: Instructional", "Video: Physical Exam", "Video: Lab Protocols", "Video: StanfordMed",
+            "Video: Surgery" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -47,7 +48,6 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final String PERIOD = ".";
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
-
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -95,13 +95,13 @@ public class SAXEresource implements Cloneable, Eresource {
         PRIMARY_TYPES.put("websites", "Website");
     }
 
-    private String id;
-    
     private int[] count = new int[] { 0, 0 };
 
     private String date;
 
     private String description;
+
+    private String id;
 
     private boolean isClone = false;
 
@@ -220,6 +220,11 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public String getDescription() {
         return this.description;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
     }
 
     /*
@@ -482,6 +487,10 @@ public class SAXEresource implements Cloneable, Eresource {
         this.description = description;
     }
 
+    public void setId(final String id) {
+        this.id = id;
+    }
+
     public void setIsCore(final boolean isCore) {
         this.isCore = isCore;
     }
@@ -554,16 +563,6 @@ public class SAXEresource implements Cloneable, Eresource {
         this.year = year;
     }
 
-    
-    public String getId() {
-        return id;
-    }
-
-    
-    public void setId(String id) {
-        this.id = id;
-    }
-    
     @Override
     public String toString() {
         return new StringBuilder(this.recordType).append(':').append(this.recordId).append(' ').append(this.title)
