@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources.sax;
 
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,14 +72,20 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentEresource.addMeshTerm(this.currentText.toString());
         } else if ("title".equals(name)) {
             this.currentEresource.setTitle(this.currentText.toString());
+        } else if ("title_alt".equals(name)) {
+            this.currentEresource.addAlternativeTitle(this.currentText.toString());
+        } else if ("title_related".equals(name)) {
+            this.currentEresource.addRelatedTitle(this.currentText.toString());
+        } else if ("title_short".equals(name)) {
+            this.currentEresource.setShortTitle(this.currentText.toString());
         } else if ("instruction".equals(name)) {
             this.currentLink.setInstruction(this.currentText.toString());
         } else if ("description".equals(name)) {
             this.currentEresource.setDescription(this.currentText.toString());
         } else if ("publicationAuthorsText".equals(name)) {
-            this.currentEresource.setPublicationAuthorsText(this.currentText.toString());    
-        }else if ("publicationAuthor".equals(name)) {
-                this.currentEresource.addPublicationAuthor(this.currentText.toString());    
+            this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
+        } else if ("publicationAuthor".equals(name)) {
+            this.currentEresource.addPublicationAuthor(this.currentText.toString());
         } else if ("year".equals(name)) {
             this.currentEresource.setYear(Integer.parseInt(this.currentText.toString()));
         } else if ("er-date".equals(name)) {
@@ -123,12 +128,12 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentLink = new SAXLink();
         }
     }
-    
-    protected SAXEresource getCurrentEresource(){
+
+    protected SAXEresource getCurrentEresource() {
         return this.currentEresource;
     }
-    
-    protected String getCurrentText(){
+
+    protected String getCurrentText() {
         return this.currentText.toString();
     }
 }

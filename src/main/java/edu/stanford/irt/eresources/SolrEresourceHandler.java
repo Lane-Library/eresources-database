@@ -127,6 +127,13 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("description", eresource.getDescription());
         doc.addField("text", getKeywords(eresource));
         doc.addField("title", title);
+        for (String altTitle : eresource.getAlternativeTitles()) {
+            doc.addField("title_alt", altTitle);
+        }
+        for (String altTitle : eresource.getRelatedTitles()) {
+            doc.addField("title_related", altTitle);
+        }
+        doc.addField("title_short", eresource.getShortTitle());
         doc.addField("title_sort", sortTitle);
         doc.addField("primaryType", eresource.getPrimaryType());
         doc.addField("totalItems", Integer.toString(itemCount[0]));

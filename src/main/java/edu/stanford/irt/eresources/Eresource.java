@@ -5,6 +5,8 @@ import java.util.Date;
 
 public interface Eresource {
 
+    Collection<String> getAlternativeTitles();
+
     String getDate();
 
     String getDescription();
@@ -31,9 +33,13 @@ public interface Eresource {
 
     Collection<String> getPublicationTypes();
 
+    Collection<String> getRelatedTitles();
+
     int getRecordId();
 
     String getRecordType();
+
+    String getShortTitle();
 
     String getTitle();
 

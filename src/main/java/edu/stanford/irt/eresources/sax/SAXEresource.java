@@ -95,6 +95,8 @@ public class SAXEresource implements Cloneable, Eresource {
         PRIMARY_TYPES.put("websites", "Website");
     }
 
+    private Collection<String> alternativeTitles;
+
     private int[] count = new int[] { 0, 0 };
 
     private String date;
@@ -143,6 +145,10 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String recordType;
 
+    private Collection<String> relatedTitles;
+
+    private String shortTitle;
+
     private String title;
 
     private Collection<String> types = new HashSet<String>();
@@ -152,6 +158,13 @@ public class SAXEresource implements Cloneable, Eresource {
     private Set<Version> versions;
 
     private int year;
+
+    public void addAlternativeTitle(final String title) {
+        if (null == this.alternativeTitles) {
+            this.alternativeTitles = new HashSet<String>();
+        }
+        this.alternativeTitles.add(title);
+    }
 
     public void addMeshTerm(final String meshTerm) {
         if (null == this.meshTerms) {
@@ -178,6 +191,13 @@ public class SAXEresource implements Cloneable, Eresource {
         this.publicationTypes.add(publicationType);
     }
 
+    public void addRelatedTitle(final String title) {
+        if (null == this.relatedTitles) {
+            this.relatedTitles = new HashSet<String>();
+        }
+        this.relatedTitles.add(title);
+    }
+
     public void addType(final String type) {
         String typeToAdd = getCompositeType(type);
         if (isAllowable(typeToAdd)) {
@@ -199,6 +219,14 @@ public class SAXEresource implements Cloneable, Eresource {
         SAXEresource clone = (SAXEresource) super.clone();
         clone.isClone = true;
         return clone;
+    }
+
+    @Override
+    public Collection<String> getAlternativeTitles() {
+        if (null == this.alternativeTitles) {
+            return Collections.emptySet();
+        }
+        return this.alternativeTitles;
     }
 
     @Override
@@ -395,6 +423,19 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.recordType;
     }
 
+    @Override
+    public Collection<String> getRelatedTitles() {
+        if (null == this.relatedTitles) {
+            return Collections.emptySet();
+        }
+        return this.relatedTitles;
+    }
+
+    @Override
+    public String getShortTitle() {
+        return this.shortTitle;
+    }
+
     /*
      * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getTitle()
@@ -549,6 +590,10 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void setRecordType(final String recordType) {
         this.recordType = recordType;
+    }
+
+    public void setShortTitle(final String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 
     public void setTitle(final String title) {
