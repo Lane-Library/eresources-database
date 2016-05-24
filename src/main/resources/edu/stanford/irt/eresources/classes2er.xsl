@@ -15,6 +15,8 @@
 		<xsl:variable name="id" select="module_id" />
 		<xsl:variable name="title" select="normalize-space(event_name)" />
 		<xsl:variable name="description" select="normalize-space(event_description)" />
+		<xsl:variable name="firstName" select="event_instructors/instructor/fname"/>
+		<xsl:variable name="lastName" select="event_instructors/instructor/lname"/>
 		<eresource id="class-{$id}" recordId="{$id}" type="class" update="19690101000000">
 			<title>
 				<xsl:value-of select="$title" />
@@ -23,7 +25,7 @@
 			<type>Lane Class</type>
 			<type>Lane Web Page</type>
 			<keywords>
-				<xsl:value-of select="concat($description, ' ', $title)" />
+				<xsl:value-of select="concat($description, ' ', $title, ' ', string-join( $firstName,' '), ' ', string-join( $lastName, ' '))" />
 			</keywords>
 			<year>
 				<xsl:value-of select="replace(event_dates/start_date[1],'.*(\d{4}).*','$1')" />
