@@ -5,11 +5,11 @@ import java.util.Date;
 
 public interface Eresource {
 
-    String getAuthor();
-
     String getDate();
 
     String getDescription();
+
+    String getId();
 
     int[] getItemCount();
 
@@ -32,8 +32,6 @@ public interface Eresource {
     Collection<String> getPublicationTypes();
 
     int getRecordId();
-    
-    String getId();
 
     String getRecordType();
 

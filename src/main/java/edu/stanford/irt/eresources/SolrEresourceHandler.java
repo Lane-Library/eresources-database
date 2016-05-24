@@ -148,7 +148,6 @@ public class SolrEresourceHandler implements EresourceHandler {
             doc.addField("type", type);
         }
         String publicationAuthorsText = eresource.getPublicationAuthorsText();
-        publicationAuthorsText = (null != publicationAuthorsText) ? publicationAuthorsText : eresource.getAuthor();
         if (null != publicationAuthorsText) {
             doc.addField("publicationAuthorsText", publicationAuthorsText);
             doc.addField("authors_sort", getSortText(publicationAuthorsText));
