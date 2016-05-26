@@ -33,6 +33,14 @@
 			<er-date>
 				<xsl:value-of select="replace(event_dates/start_date[1],'(\d{1,2})/(\d{1,2})/(\d{4}) .*','$3 $1 $2')" />
 			</er-date>
+			<xsl:for-each select="./event_instructors/instructor" >
+				 <xsl:if test="not(contains(./lname, ','))">
+				 	<publicationAuthor><xsl:value-of select="concat(./lname , ', ' , ./fname)"/></publicationAuthor>
+				 </xsl:if>
+				 <xsl:if test="contains(./lname, ',')">
+				 	<publicationAuthor><xsl:value-of select="concat(substring-before(./lname, ',') , ', ' , ./fname)"/></publicationAuthor>
+				 </xsl:if>
+			</xsl:for-each>
 			<version>
 				<link>
 					<label>
