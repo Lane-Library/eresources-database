@@ -118,7 +118,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         SolrInputDocument doc = new SolrInputDocument();
         String title = eresource.getTitle();
         String sortTitle = getSortText(title);
-    
         List<Version> versions = new LinkedList<Version>();
         int[] itemCount = eresource.getItemCount();
         doc.addField("id", createKey(eresource));
@@ -184,27 +183,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
         }
-       
         this.solrDocs.add(doc);
     }
 
-    private String getKeywords(Eresource eresource){
-        StringBuilder keywords = new StringBuilder();
-        String publicationText = eresource.getPublicationText();
-        String text = eresource.getKeywords();
-        if(null != text){
-            keywords.append(" ".concat(text).concat(" "));
-        }
-        if (null != publicationText) {
-            keywords.append(" " + publicationText.concat(" "));
-        }
-        for (String type : eresource.getTypes()) {
-            keywords.append(" ".concat(type).concat(" "));
-        }
-       
-        return keywords.toString();
-    }
-    
     private void addSolrDocs() {
         try {
             this.solrClient.add(this.solrDocs);
@@ -214,8 +195,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
     }
 
-    
-    
     private String createKey(final Eresource eresource) {
         String key = eresource.getId();
         if (eresource.isClone()) {
@@ -233,6 +212,22 @@ public class SolrEresourceHandler implements EresourceHandler {
             firstCharOfTitle = '1';
         }
         return Character.toString(firstCharOfTitle);
+    }
+
+    private String getKeywords(final Eresource eresource) {
+        StringBuilder keywords = new StringBuilder();
+        String publicationText = eresource.getPublicationText();
+        String text = eresource.getKeywords();
+        if (null != text) {
+            keywords.append(" ".concat(text).concat(" "));
+        }
+        if (null != publicationText) {
+            keywords.append(" " + publicationText.concat(" "));
+        }
+        for (String type : eresource.getTypes()) {
+            keywords.append(" ".concat(type).concat(" "));
+        }
+        return keywords.toString();
     }
 
     /**
