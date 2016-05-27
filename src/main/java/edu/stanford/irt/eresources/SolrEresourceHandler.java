@@ -30,7 +30,7 @@ public class SolrEresourceHandler implements EresourceHandler {
     private static final Pattern CHILD_MESH = Pattern.compile("^(?:infant|child|adolescent).*",
             Pattern.CASE_INSENSITIVE);
 
-    private static final int SORT_TITLE_MAX = 150;
+    private static final int SORT_TEXT_MAX = 150;
 
     private int count = 0;
 
@@ -59,8 +59,8 @@ public class SolrEresourceHandler implements EresourceHandler {
         if (null == text || text.isEmpty()) {
             return "";
         }
-        if (text.length() > SORT_TITLE_MAX) {
-            return text.substring(0, SORT_TITLE_MAX);
+        if (text.length() > SORT_TEXT_MAX) {
+            return text.substring(0, SORT_TEXT_MAX);
         }
         return text;
     }
@@ -149,7 +149,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         String publicationAuthorsText = eresource.getPublicationAuthorsText();
         if (null != publicationAuthorsText) {
             doc.addField("publicationAuthorsText", publicationAuthorsText);
-            doc.addField("authors_sort", getSortText(publicationAuthorsText));
         }
         String publicationText = eresource.getPublicationText();
         if (null != publicationText) {
@@ -159,10 +158,13 @@ public class SolrEresourceHandler implements EresourceHandler {
         if (null != publicationTitle) {
             doc.addField("publicationTitle", publicationTitle);
         }
+        StringBuilder authorSort = new StringBuilder();
         for (String author : eresource.getPublicationAuthors()) {
             doc.addField("publicationAuthor", author);
             doc.addField("author", author);
+            authorSort.append(author);
         }
+        doc.addField("authors_sort", getSortText(authorSort.toString()));
         for (String pubLanguage : eresource.getPublicationLanguages()) {
             doc.addField("publicationLanguage", pubLanguage);
         }
