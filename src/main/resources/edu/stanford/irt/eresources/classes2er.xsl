@@ -33,6 +33,9 @@
 			<er-date>
 				<xsl:value-of select="replace(event_dates/start_date[1],'(\d{1,2})/(\d{1,2})/(\d{4}) .*','$3 $1 $2')" />
 			</er-date>
+			<description>
+				<xsl:value-of select="$description" />
+			</description>
 			<xsl:for-each select="./event_instructors/instructor" >
 				 <xsl:if test="not(contains(./lname, ','))">
 				 	<publicationAuthor><xsl:value-of select="concat(./lname , ', ' , ./fname)"/></publicationAuthor>
@@ -55,8 +58,7 @@
 								<xsl:value-of select="concat($lane-host, '/classes-consult/archive.html?class-id=', $id)" />
 						</xsl:otherwise>
 					</xsl:choose>
-					</url>						
-					
+					</url>	
 				</link>
 			</version>
 		</eresource>
