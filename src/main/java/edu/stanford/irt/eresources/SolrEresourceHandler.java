@@ -120,7 +120,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         String sortTitle = getSortText(title);
         List<Version> versions = new LinkedList<Version>();
         int[] itemCount = eresource.getItemCount();
-        doc.addField("id", createKey(eresource));
+        doc.addField("id", eresource.getId());
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
         doc.addField("recordType", eresource.getRecordType());
         doc.addField("description", eresource.getDescription());
@@ -193,14 +193,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException("solr add failed", e);
         }
-    }
-
-    private String createKey(final Eresource eresource) {
-        String key = eresource.getId();
-        if (eresource.isClone()) {
-            key = key.concat("-clone");
-        }
-        return key;
     }
 
     private String getFirstCharacter(final String sortTitle) {
