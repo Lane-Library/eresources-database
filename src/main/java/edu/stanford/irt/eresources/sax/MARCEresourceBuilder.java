@@ -83,8 +83,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected String q;
 
-    protected boolean recordHasError = false;
-
     protected String tag;
 
     protected StringBuilder title = new StringBuilder();
@@ -566,24 +564,20 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         createCustomTypes(this.currentEresource);
         maybeAddCatalogLink();
         this.dateForPrintSummaryHoldings.setLength(0);
-        if (!this.recordHasError) {
-            this.eresourceHandler.handleEresource(this.currentEresource);
-            if (!this.preferredTitles.isEmpty()) {
-                try {
-                    int cloned = 0;
-                    for (String preferredTitle : this.preferredTitles) {
-                        SAXEresource clone = (SAXEresource) this.currentEresource.clone();
-                        clone.setTitle(preferredTitle);
-                        clone.setId(this.currentEresource.getId() + "-clone-" + ++cloned);
-                        this.eresourceHandler.handleEresource(clone);
-                    }
-                    this.preferredTitles.clear();
-                } catch (CloneNotSupportedException e) {
-                    throw new EresourceDatabaseException(e);
+        this.eresourceHandler.handleEresource(this.currentEresource);
+        if (!this.preferredTitles.isEmpty()) {
+            try {
+                int cloned = 0;
+                for (String preferredTitle : this.preferredTitles) {
+                    SAXEresource clone = (SAXEresource) this.currentEresource.clone();
+                    clone.setTitle(preferredTitle);
+                    clone.setId(this.currentEresource.getId() + "-clone-" + ++cloned);
+                    this.eresourceHandler.handleEresource(clone);
                 }
+                this.preferredTitles.clear();
+            } catch (CloneNotSupportedException e) {
+                throw new EresourceDatabaseException(e);
             }
-        } else {
-            this.recordHasError = false;
         }
     }
 
