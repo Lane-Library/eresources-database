@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,8 +71,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected EresourceHandler eresourceHandler;
 
-    protected boolean hasPreferredTitle = false;
-
     protected String ind1;
 
     protected String ind2;
@@ -79,11 +79,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected boolean isMfhd;
 
-    protected StringBuilder preferredTitle = new StringBuilder();
+    protected List<String> preferredTitles = new ArrayList<>();
 
     protected String q;
-
-    protected boolean recordHasError = false;
 
     protected String tag;
 
@@ -306,9 +304,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("h".equals(this.code) && this.currentText.toString().contains("digital")) {
                 this.currentEresource.setIsDigital(true);
             }
-        } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
+        } else if ("249".equals(this.tag)) {
             if ("a".equals(this.code)) {
-                this.preferredTitle.append(this.currentText);
+                this.preferredTitles.add(this.currentText.toString());
             }
         } else if ("250".equals(this.tag) && "a".equals(this.code)) {
             this.editionOrVersion.append(". ");
@@ -482,7 +480,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private void handleBibControlfield() {
         if ("001".equals(this.tag)) {
-            this.currentEresource.setId("bib-"+this.currentText.toString());
+            this.currentEresource.setId("bib-" + this.currentText.toString());
             this.currentEresource.setRecordId(Integer.parseInt(this.currentText.toString()));
         } else if ("005".equals(this.tag)) {
             try {
@@ -518,8 +516,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
             }
             this.title.setLength(0);
-        } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
-            this.hasPreferredTitle = true;
         } else if ("250".equals(this.tag)) {
             this.currentEresource.setTitle(this.currentEresource.getTitle() + this.editionOrVersion);
             this.editionOrVersion.setLength(0);
@@ -568,21 +564,20 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         createCustomTypes(this.currentEresource);
         maybeAddCatalogLink();
         this.dateForPrintSummaryHoldings.setLength(0);
-        if (!this.recordHasError) {
-            this.eresourceHandler.handleEresource(this.currentEresource);
-            if (this.hasPreferredTitle) {
-                try {
+        this.eresourceHandler.handleEresource(this.currentEresource);
+        if (!this.preferredTitles.isEmpty()) {
+            try {
+                int cloned = 0;
+                for (String preferredTitle : this.preferredTitles) {
                     SAXEresource clone = (SAXEresource) this.currentEresource.clone();
-                    clone.setTitle(this.preferredTitle.toString());
-                    this.hasPreferredTitle = false;
-                    this.preferredTitle.setLength(0);
+                    clone.setTitle(preferredTitle);
+                    clone.setId(this.currentEresource.getId() + "-clone-" + ++cloned);
                     this.eresourceHandler.handleEresource(clone);
-                } catch (CloneNotSupportedException e) {
-                    throw new EresourceDatabaseException(e);
                 }
+                this.preferredTitles.clear();
+            } catch (CloneNotSupportedException e) {
+                throw new EresourceDatabaseException(e);
             }
-        } else {
-            this.recordHasError = false;
         }
     }
 

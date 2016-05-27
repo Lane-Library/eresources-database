@@ -30,7 +30,7 @@ public class SolrEresourceHandler implements EresourceHandler {
     private static final Pattern CHILD_MESH = Pattern.compile("^(?:infant|child|adolescent).*",
             Pattern.CASE_INSENSITIVE);
 
-    private static final int SORT_TITLE_MAX = 150;
+    private static final int SORT_TEXT_MAX = 150;
 
     private int count = 0;
 
@@ -59,8 +59,8 @@ public class SolrEresourceHandler implements EresourceHandler {
         if (null == text || text.isEmpty()) {
             return "";
         }
-        if (text.length() > SORT_TITLE_MAX) {
-            return text.substring(0, SORT_TITLE_MAX);
+        if (text.length() > SORT_TEXT_MAX) {
+            return text.substring(0, SORT_TEXT_MAX);
         }
         return text;
     }
@@ -118,10 +118,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         SolrInputDocument doc = new SolrInputDocument();
         String title = eresource.getTitle();
         String sortTitle = getSortText(title);
-    
         List<Version> versions = new LinkedList<Version>();
         int[] itemCount = eresource.getItemCount();
-        doc.addField("id", createKey(eresource));
+        doc.addField("id", eresource.getId());
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
         doc.addField("recordType", eresource.getRecordType());
         doc.addField("description", eresource.getDescription());
@@ -140,6 +139,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
         doc.addField("isLaneConnex", Boolean.toString(eresource.isLaneConnex()));
         doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
+        doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
+        doc.addField("publicationText", eresource.getPublicationText());
+        doc.addField("publicationTitle", eresource.getPublicationTitle());
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);
             doc.addField("mesh_parents", this.meshManager.getParentHeadings(mesh));
@@ -147,23 +149,13 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String type : eresource.getTypes()) {
             doc.addField("type", type);
         }
-        String publicationAuthorsText = eresource.getPublicationAuthorsText();
-        if (null != publicationAuthorsText) {
-            doc.addField("publicationAuthorsText", publicationAuthorsText);
-            doc.addField("authors_sort", getSortText(publicationAuthorsText));
-        }
-        String publicationText = eresource.getPublicationText();
-        if (null != publicationText) {
-            doc.addField("publicationText", publicationText);
-        }
-        String publicationTitle = eresource.getPublicationTitle();
-        if (null != publicationTitle) {
-            doc.addField("publicationTitle", publicationTitle);
-        }
+        StringBuilder authorSort = new StringBuilder();
         for (String author : eresource.getPublicationAuthors()) {
             doc.addField("publicationAuthor", author);
             doc.addField("author", author);
+            authorSort.append(author);
         }
+        doc.addField("authors_sort", getSortText(authorSort.toString()));
         for (String pubLanguage : eresource.getPublicationLanguages()) {
             doc.addField("publicationLanguage", pubLanguage);
         }
@@ -184,27 +176,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
         }
-       
         this.solrDocs.add(doc);
     }
 
-    private String getKeywords(Eresource eresource){
-        StringBuilder keywords = new StringBuilder();
-        String publicationText = eresource.getPublicationText();
-        String text = eresource.getKeywords();
-        if(null != text){
-            keywords.append(" ".concat(text).concat(" "));
-        }
-        if (null != publicationText) {
-            keywords.append(" " + publicationText.concat(" "));
-        }
-        for (String type : eresource.getTypes()) {
-            keywords.append(" ".concat(type).concat(" "));
-        }
-       
-        return keywords.toString();
-    }
-    
     private void addSolrDocs() {
         try {
             this.solrClient.add(this.solrDocs);
@@ -212,16 +186,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException("solr add failed", e);
         }
-    }
-
-    
-    
-    private String createKey(final Eresource eresource) {
-        String key = eresource.getId();
-        if (eresource.isClone()) {
-            key = key.concat("-clone");
-        }
-        return key;
     }
 
     private String getFirstCharacter(final String sortTitle) {
@@ -233,6 +197,22 @@ public class SolrEresourceHandler implements EresourceHandler {
             firstCharOfTitle = '1';
         }
         return Character.toString(firstCharOfTitle);
+    }
+
+    private String getKeywords(final Eresource eresource) {
+        StringBuilder keywords = new StringBuilder();
+        String publicationText = eresource.getPublicationText();
+        String text = eresource.getKeywords();
+        if (null != text) {
+            keywords.append(" ".concat(text).concat(" "));
+        }
+        if (null != publicationText) {
+            keywords.append(" " + publicationText.concat(" "));
+        }
+        for (String type : eresource.getTypes()) {
+            keywords.append(" ".concat(type).concat(" "));
+        }
+        return keywords.toString();
     }
 
     /**
