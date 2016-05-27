@@ -139,24 +139,15 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
         doc.addField("isLaneConnex", Boolean.toString(eresource.isLaneConnex()));
         doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
+        doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
+        doc.addField("publicationText", eresource.getPublicationText());
+        doc.addField("publicationTitle", eresource.getPublicationTitle());
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);
             doc.addField("mesh_parents", this.meshManager.getParentHeadings(mesh));
         }
         for (String type : eresource.getTypes()) {
             doc.addField("type", type);
-        }
-        String publicationAuthorsText = eresource.getPublicationAuthorsText();
-        if (null != publicationAuthorsText) {
-            doc.addField("publicationAuthorsText", publicationAuthorsText);
-        }
-        String publicationText = eresource.getPublicationText();
-        if (null != publicationText) {
-            doc.addField("publicationText", publicationText);
-        }
-        String publicationTitle = eresource.getPublicationTitle();
-        if (null != publicationTitle) {
-            doc.addField("publicationTitle", publicationTitle);
         }
         StringBuilder authorSort = new StringBuilder();
         for (String author : eresource.getPublicationAuthors()) {
