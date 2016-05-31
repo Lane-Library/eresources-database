@@ -15,6 +15,8 @@
 		<xsl:variable name="id" select="module_id" />
 		<xsl:variable name="title" select="normalize-space(event_name)" />
 		<xsl:variable name="description" select="normalize-space(event_description)" />
+		<xsl:variable name="firstName" select="event_instructors/instructor/fname"/>
+		<xsl:variable name="lastName" select="event_instructors/instructor/lname"/>
 		<eresource id="class-{$id}" recordId="{$id}" type="class" update="19690101000000">
 			<title>
 				<xsl:value-of select="$title" />
@@ -23,7 +25,7 @@
 			<type>Lane Class</type>
 			<type>Lane Web Page</type>
 			<keywords>
-				<xsl:value-of select="concat($description, ' ', $title)" />
+				<xsl:value-of select="concat($description, ' ', $title, ' ', string-join( $firstName,' '), ' ', string-join( $lastName, ' '))" />
 			</keywords>
 			<year>
 				<xsl:value-of select="replace(event_dates/start_date[1],'.*(\d{4}).*','$1')" />
@@ -31,6 +33,17 @@
 			<er-date>
 				<xsl:value-of select="replace(event_dates/start_date[1],'(\d{1,2})/(\d{1,2})/(\d{4}) .*','$3 $1 $2')" />
 			</er-date>
+			<description>
+				<xsl:value-of select="$description" />
+			</description>
+			<xsl:for-each select="./event_instructors/instructor" >
+				 <xsl:if test="not(contains(./lname, ','))">
+				 	<publicationAuthor><xsl:value-of select="concat(./lname , ', ' , ./fname)"/></publicationAuthor>
+				 </xsl:if>
+				 <xsl:if test="contains(./lname, ',')">
+				 	<publicationAuthor><xsl:value-of select="concat(substring-before(./lname, ',') , ', ' , ./fname)"/></publicationAuthor>
+				 </xsl:if>
+			</xsl:for-each>
 			<version>
 				<link>
 					<label>
@@ -45,8 +58,7 @@
 								<xsl:value-of select="concat($lane-host, '/classes-consult/archive.html?class-id=', $id)" />
 						</xsl:otherwise>
 					</xsl:choose>
-					</url>						
-					
+					</url>	
 				</link>
 			</version>
 		</eresource>
