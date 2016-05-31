@@ -289,9 +289,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
             if ("abnpq".indexOf(this.code) > -1) {
                 String data = this.currentText.toString();
-                if ("a".equals(this.code)) {
-                    this.currentEresource.setShortTitle(data);
-                } else if ("b".equals(this.code)) {
+                if ("b".equals(this.code)) {
                     // remove trailing slash from subtitle (subfield b)
                     data = SPACE_SLASH.matcher(data).replaceFirst("");
                     // prepend a space colon to subtitles if missing (we don't include ^h in title)
@@ -308,7 +306,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("h".equals(this.code) && this.currentText.toString().contains("digital")) {
                 this.currentEresource.setIsDigital(true);
             }
-        } else if ((this.tag.matches("(130|149|210|246|247)")) && "a".equals(this.code)) {
+        } else if ((this.tag.equals("149")) && "a".equals(this.code)) {
+            this.currentEresource.setShortTitle(this.currentText.toString());
+        } else if ((this.tag.matches("(130|210|246|247)")) && "a".equals(this.code)) {
             this.currentEresource.addAlternativeTitle(this.currentText.toString());
         } else if ("249".equals(this.tag) && (!this.hasPreferredTitle)) {
             if ("a".equals(this.code)) {
@@ -325,19 +325,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
             this.description520.append(this.currentText.toString());
         } else if ("505".equals(this.tag)) {
-            String data = this.currentText.toString();
-            if ("t".equals(this.code)) {
-                this.currentEresource.addRelatedTitle(data);
-            }
             if (this.description505.length() > 0) {
                 this.description505.append(' ');
             }
-            this.description505.append(data);
-        } else if ("730".equals(this.tag) && ("2".equals(this.ind2) || " ".equals(this.ind2))
-                && "a".equals(this.code)) {
-            this.currentEresource.addRelatedTitle(this.currentText.toString());
-        } else if ("740".equals(this.tag) && "a".equals(this.code)) {
-            this.currentEresource.addRelatedTitle(this.currentText.toString());
+            this.description505.append(this.currentText.toString());
         }
         if ("650".equals(this.tag) && "0".equals(this.code)) {
             String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString());

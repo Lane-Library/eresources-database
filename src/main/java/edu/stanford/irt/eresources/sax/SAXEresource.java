@@ -145,8 +145,6 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String recordType;
 
-    private Collection<String> relatedTitles;
-
     private String shortTitle;
 
     private String title;
@@ -189,13 +187,6 @@ public class SAXEresource implements Cloneable, Eresource {
             this.publicationTypes = new HashSet<String>();
         }
         this.publicationTypes.add(publicationType);
-    }
-
-    public void addRelatedTitle(final String title) {
-        if (null == this.relatedTitles) {
-            this.relatedTitles = new HashSet<String>();
-        }
-        this.relatedTitles.add(title);
     }
 
     public void addType(final String type) {
@@ -421,14 +412,6 @@ public class SAXEresource implements Cloneable, Eresource {
     @Override
     public String getRecordType() {
         return this.recordType;
-    }
-
-    @Override
-    public Collection<String> getRelatedTitles() {
-        if (null == this.relatedTitles) {
-            return Collections.emptySet();
-        }
-        return this.relatedTitles;
     }
 
     @Override

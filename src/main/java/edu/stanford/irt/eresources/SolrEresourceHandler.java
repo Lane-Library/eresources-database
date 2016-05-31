@@ -130,9 +130,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String altTitle : eresource.getAlternativeTitles()) {
             doc.addField("title_alt", altTitle);
         }
-        for (String altTitle : eresource.getRelatedTitles()) {
-            doc.addField("title_related", altTitle);
-        }
         doc.addField("title_short", eresource.getShortTitle());
         doc.addField("title_sort", sortTitle);
         doc.addField("primaryType", eresource.getPrimaryType());
