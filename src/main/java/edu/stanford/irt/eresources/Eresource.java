@@ -5,6 +5,8 @@ import java.util.Date;
 
 public interface Eresource {
 
+    Collection<String> getAbbreviatedTitles();
+
     Collection<String> getAlternativeTitles();
 
     String getDate();

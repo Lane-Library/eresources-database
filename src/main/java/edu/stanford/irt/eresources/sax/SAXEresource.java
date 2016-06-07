@@ -95,6 +95,8 @@ public class SAXEresource implements Cloneable, Eresource {
         PRIMARY_TYPES.put("websites", "Website");
     }
 
+    private Collection<String> abbreviatedTitles;
+
     private Collection<String> alternativeTitles;
 
     private int[] count = new int[] { 0, 0 };
@@ -157,6 +159,13 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private int year;
 
+    public void addAbbreviatedTitle(final String title) {
+        if (null == this.abbreviatedTitles) {
+            this.abbreviatedTitles = new HashSet<String>();
+        }
+        this.abbreviatedTitles.add(title);
+    }
+
     public void addAlternativeTitle(final String title) {
         if (null == this.alternativeTitles) {
             this.alternativeTitles = new HashSet<String>();
@@ -210,6 +219,14 @@ public class SAXEresource implements Cloneable, Eresource {
         SAXEresource clone = (SAXEresource) super.clone();
         clone.isClone = true;
         return clone;
+    }
+
+    @Override
+    public Collection<String> getAbbreviatedTitles() {
+        if (null == this.abbreviatedTitles) {
+            return Collections.emptySet();
+        }
+        return this.abbreviatedTitles;
     }
 
     @Override

@@ -72,6 +72,8 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentEresource.addMeshTerm(this.currentText.toString());
         } else if ("title".equals(name)) {
             this.currentEresource.setTitle(this.currentText.toString());
+        } else if ("title_abbr".equals(name)) {
+            this.currentEresource.addAbbreviatedTitle(this.currentText.toString());
         } else if ("title_alt".equals(name)) {
             this.currentEresource.addAlternativeTitle(this.currentText.toString());
         } else if ("title_short".equals(name)) {

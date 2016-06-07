@@ -71,6 +71,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected EresourceHandler eresourceHandler;
 
+    protected boolean hasAbbreviatedTitle = false;
+
     protected String ind1;
 
     protected String ind2;
@@ -304,9 +306,20 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else if ("h".equals(this.code) && this.currentText.toString().contains("digital")) {
                 this.currentEresource.setIsDigital(true);
             }
+        } else if ("246".equals(this.tag)) {
+            String data = this.currentText.toString();
+            if ("i".equals(this.code) && data.equalsIgnoreCase("Acronym/initialism:")) {
+                this.hasAbbreviatedTitle = true;
+            } else if ("a".equals(this.code)) {
+                this.currentEresource.addAlternativeTitle(data);
+                if (this.hasAbbreviatedTitle) {
+                    this.currentEresource.addAbbreviatedTitle(data);
+                    this.hasAbbreviatedTitle = false;
+                }
+            }
         } else if ((this.tag.equals("149")) && "a".equals(this.code)) {
             this.currentEresource.setShortTitle(this.currentText.toString());
-        } else if ((this.tag.matches("(130|210|246|247)")) && "a".equals(this.code)) {
+        } else if ((this.tag.matches("(130|210|247)")) && "a".equals(this.code)) {
             this.currentEresource.addAlternativeTitle(this.currentText.toString());
         } else if ("249".equals(this.tag)) {
             if ("a".equals(this.code)) {

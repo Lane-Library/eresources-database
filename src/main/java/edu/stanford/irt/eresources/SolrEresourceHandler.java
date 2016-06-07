@@ -126,6 +126,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("description", eresource.getDescription());
         doc.addField("text", getKeywords(eresource));
         doc.addField("title", title);
+        for (String altTitle : eresource.getAbbreviatedTitles()) {
+            doc.addField("title_abbr", altTitle);
+        }
         for (String altTitle : eresource.getAlternativeTitles()) {
             doc.addField("title_alt", altTitle);
         }
