@@ -17,10 +17,14 @@
         <property name="eresourceHandler" ref="eresourceHandler"/>
         <property name="authTextAugmentation" ref="authTextAugmentation"/>
         <property name="itemCount" ref="itemCount"/>
+        <property name="reservesTextAugmentation" ref="reservesTextAugmentation"/>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.sax.AuthTextAugmentation">
         <property name="dataSource" ref="voyagerDataSource"/>
         <property name="executor" ref="executor"/>
+    </bean>
+    <bean id="reservesTextAugmentation" class="edu.stanford.irt.eresources.sax.ReservesTextAugmentation">
+        <property name="dataSource" ref="voyagerDataSource"/>
     </bean>
     <bean id="itemCount" class="edu.stanford.irt.eresources.ItemCount">
         <constructor-arg ref="voyagerDataSource"/>
