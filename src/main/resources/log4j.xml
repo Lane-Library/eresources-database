@@ -10,6 +10,21 @@
             <param name="ConversionPattern" value="%d %p [%t][%c] - %m%n"/>
         </layout>
     </appender>
+    <appender name="error-mail" class="edu.stanford.irt.eresources.LimitedSMTPAppender">
+        <!--  limit to 25 mails in an hour -->
+        <param name="limit" value="25"/>
+        <param name="cycleSeconds" value="3600"/>
+        <param name="Threshold" value="ERROR"/>
+        <param name="To" value="ryanmax@stanford.edu"/>
+        <param name="From" value="ryanmax@stanford.edu"/>
+        <param name="Subject" value="er-db error"/>
+        <param name="SMTPHost" value="medmail.stanford.edu"/>
+        <param name="BufferSize" value="512"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{ISO8601}] %-5p %c %m %n"/>
+        </layout>
+    </appender>
+
     <category name="edu.stanford.irt.eresources" additivity="false">
         <priority value="debug"/>
         <appender-ref ref="console"/>
@@ -17,5 +32,6 @@
     <root>
         <level value="info"/>
         <appender-ref ref="console"/>
+        <appender-ref ref="error-mail"/>
     </root>
 </log4j:configuration>
