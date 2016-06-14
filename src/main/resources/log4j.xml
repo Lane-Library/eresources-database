@@ -15,9 +15,9 @@
         <param name="limit" value="25"/>
         <param name="cycleSeconds" value="3600"/>
         <param name="Threshold" value="ERROR"/>
-        <param name="To" value="ryanmax@stanford.edu"/>
-        <param name="From" value="ryanmax@stanford.edu"/>
-        <param name="Subject" value="er-db error"/>
+        <param name="To" value="${log4j.env.ERROR-mailto}"/>
+        <param name="From" value="${log4j.env.mailfrom}"/>
+        <param name="Subject" value="${log4j.env.hostname} er-db error"/>
         <param name="SMTPHost" value="medmail.stanford.edu"/>
         <param name="BufferSize" value="512"/>
         <layout class="org.apache.log4j.PatternLayout">
