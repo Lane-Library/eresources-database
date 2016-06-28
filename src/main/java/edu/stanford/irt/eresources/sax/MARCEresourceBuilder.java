@@ -85,6 +85,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected String q;
 
+    protected ReservesTextAugmentation reservesTextAugmentation;
+
     protected String tag;
 
     protected StringBuilder title = new StringBuilder();
@@ -144,12 +146,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 // this.currentEresource.addType("Catalog");
             }
         } else if (RECORD.equals(name)) {
+            String recordId = Integer.toString(this.currentEresource.getRecordId());
             if (this.isMfhd) {
                 if (this.currentVersion.getLinks().size() == 0) {
                     SAXLink link = new SAXLink();
                     link.setLabel("Lane Catalog Record");
-                    link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID="
-                            + this.currentEresource.getRecordId());
+                    link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + recordId);
                     this.currentVersion.addLink(link);
                     if (null == this.currentVersion.getDates()) {
                         this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
@@ -158,6 +160,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentEresource.addVersion(this.currentVersion);
                 StringBuilder combinedKeywords = new StringBuilder();
                 combinedKeywords.append(this.currentEresource.getKeywords());
+                combinedKeywords.append(' ');
                 combinedKeywords.append(this.content.toString().replaceAll("\\s\\s+", " "));
                 this.currentEresource.setKeywords(combinedKeywords.toString());
                 this.content.setLength(0);
@@ -169,7 +172,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
                 this.description520.setLength(0);
                 this.description505.setLength(0);
-                this.currentEresource.setKeywords(this.content.toString().replaceAll("\\s\\s+", " "));
+                StringBuilder combinedKeywords = new StringBuilder();
+                combinedKeywords.append(this.content.toString().replaceAll("\\s\\s+", " "));
+                combinedKeywords.append(' ');
+                combinedKeywords.append(this.reservesTextAugmentation.getReservesAugmentations(recordId));
+                this.currentEresource.setKeywords(combinedKeywords.toString());
                 this.content.setLength(0);
             }
         } else if (this.isBib) {
@@ -190,6 +197,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     public void setItemCount(final ItemCount itemCount) {
         this.itemCount = itemCount;
+    }
+
+    public void setReservesTextAugmentation(final ReservesTextAugmentation reservesTextAugmentation) {
+        this.reservesTextAugmentation = reservesTextAugmentation;
     }
 
     @Override
