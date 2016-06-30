@@ -57,4 +57,23 @@ public class AbstractPubmedDataFetcherTest {
         this.fetcher.pmidListToFiles(pmids, "baseFilename");
         assertTrue(new File(BP + "/" + TODAY + "/baseFilename1.xml").exists());
     }
+
+    @Test
+    public final void testPmidListToFilesIOError() throws Exception {
+        FileUtils.forceDelete(new File(BP));
+        List<String> pmids = new ArrayList<>();
+        pmids.add("12345");
+        if (EutilsIsReachable.eutilsIsReachable()) {
+            this.thrown.expect(EresourceDatabaseException.class);
+        }
+        this.fetcher.pmidListToFiles(pmids, "baseFilename");
+        new File(BP).mkdir();
+    }
+
+    @Test
+    public final void testSetBasePathNull() {
+        this.thrown.expect(IllegalArgumentException.class);
+        PubmedDataFetcherTest myFetcher = new PubmedDataFetcherTest();
+        myFetcher.setBasePath(null);
+    }
 }
