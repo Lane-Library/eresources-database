@@ -106,16 +106,16 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
             public boolean accept(final File file) {
                 String name = file.getName();
                 return name.endsWith(".html")
-                        || (file.isDirectory() && !".svn".equals(name) && !"includes".equals(name)
-                                && !"search".equals(name) && !"tobacco".equals(name) && !"samples".equals(name) && !"m"
-                                .equals(name));
+                        || (file.isDirectory() && !name.matches("(.svn|includes|search|samples|m)"));
             }
         });
-        for (File file : files) {
-            if (file.isDirectory()) {
-                result.addAll(getHTMLPages(file));
-            } else {
-                result.add(file);
+        if (null != files) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    result.addAll(getHTMLPages(file));
+                } else {
+                    result.add(file);
+                }
             }
         }
         return result;
