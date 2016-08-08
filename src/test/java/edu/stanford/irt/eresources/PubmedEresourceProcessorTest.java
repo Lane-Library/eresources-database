@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 public class PubmedEresourceProcessorTest {
@@ -30,7 +31,19 @@ public class PubmedEresourceProcessorTest {
         this.xmlReader = EasyMock.mock(XMLReader.class);
         this.processor.setXmlReader(this.xmlReader);
         this.xmlReader.parse(isA(InputSource.class));
-        EasyMock.expectLastCall();
+        EasyMock.expectLastCall().times(2);
+        EasyMock.replay(this.xmlReader);
+        this.processor.process();
+        EasyMock.verify(this.xmlReader);
+    }
+
+    @Test(expected = EresourceDatabaseException.class)
+    public final void testException() throws Exception {
+        this.processor.setBasePath("src/test/resources/edu/stanford/irt/eresources");
+        this.xmlReader = EasyMock.mock(XMLReader.class);
+        this.processor.setXmlReader(this.xmlReader);
+        this.xmlReader.parse(isA(InputSource.class));
+        EasyMock.expectLastCall().andThrow(new SAXException("sax exception"));
         EasyMock.replay(this.xmlReader);
         this.processor.process();
         EasyMock.verify(this.xmlReader);
