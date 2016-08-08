@@ -22,16 +22,16 @@ import edu.stanford.irt.eresources.sax.SAXEresource;
 
 public class JomiEresourceBuilder extends DefaultEresourceBuilder {
 
-    private StringBuilder text = new StringBuilder();
+    String expression = null;
 
     XPath xPath = XPathFactory.newInstance().newXPath();
 
-    String expression = null;
+    private StringBuilder text = new StringBuilder();
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
         super.characters(ch, start, length);
-        text.append(ch, start, length);
+        this.text.append(ch, start, length);
     }
 
     @Override
@@ -41,12 +41,15 @@ public class JomiEresourceBuilder extends DefaultEresourceBuilder {
             String url = this.text.toString();
             SAXEresource eresource = super.getCurrentEresource();
             getDescription(url, eresource);
-            
         }
         this.text = new StringBuilder();
     }
 
-    private void getDescription(String url, SAXEresource eresource) {
+    public void setExpression(final String expression) {
+        this.expression = expression;
+    }
+
+    private void getDescription(final String url, final SAXEresource eresource) {
         CloseableHttpResponse response = null;
         try {
             CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -60,22 +63,19 @@ public class JomiEresourceBuilder extends DefaultEresourceBuilder {
             DOMParser parser = new DOMParser(conf);
             parser.parse(source);
             Document doc = parser.getDocument();
-            String description = (String) xPath.compile(this.expression).evaluate(doc, XPathConstants.STRING);
+            String description = (String) this.xPath.compile(this.expression).evaluate(doc, XPathConstants.STRING);
             eresource.setDescription(description);
-            eresource.setKeywords( eresource.getKeywords().concat(description));
+            eresource.setKeywords(eresource.getKeywords().concat(description));
         } catch (Exception e) {
             throw new EresourceDatabaseException(e);
         } finally {
             try {
-                if(response != null){
+                if (response != null) {
                     response.close();
                 }
             } catch (IOException e) {
                 throw new EresourceDatabaseException(e);
             }
         }
-    }
-   public void setExpression(String expression) {
-        this.expression = expression;
     }
 }
