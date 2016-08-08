@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources.sax.videos.nejm;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
@@ -53,16 +52,14 @@ public class NejmEresourceBuilder extends DefaultEresourceBuilder {
     }
 
     private void getAdditionalField(final String url, final SAXEresource eresource) {
-        CloseableHttpResponse response = null;
-        try {
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-            HttpGet httpget = new HttpGet(url);
-            response = httpclient.execute(httpget);
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpget = new HttpGet(url);
+        HTMLConfiguration conf = new HTMLConfiguration();
+        conf.setFeature("http://xml.org/sax/features/namespaces", false);
+        conf.setProperty("http://cyberneko.org/html/properties/default-encoding", "UTF-8");
+        conf.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
+        try (CloseableHttpResponse response = httpclient.execute(httpget)) {
             InputSource source = new InputSource(response.getEntity().getContent());
-            HTMLConfiguration conf = new HTMLConfiguration();
-            conf.setFeature("http://xml.org/sax/features/namespaces", false);
-            conf.setProperty("http://cyberneko.org/html/properties/default-encoding", "UTF-8");
-            conf.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
             DOMParser parser = new DOMParser(conf);
             parser.parse(source);
             Document doc = parser.getDocument();
@@ -71,12 +68,6 @@ public class NejmEresourceBuilder extends DefaultEresourceBuilder {
             eresource.setPublicationAuthorsText(getAuthor(doc));
         } catch (Exception e) {
             throw new EresourceDatabaseException(e);
-        } finally {
-            try {
-                response.close();
-            } catch (IOException e) {
-                throw new EresourceDatabaseException(e);
-            }
         }
     }
 
