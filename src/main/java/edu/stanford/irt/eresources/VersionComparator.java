@@ -47,6 +47,18 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         return 1;
     }
 
+    private int calculateDatesScore(final String dates, final int score) {
+        int calculatedScore = score;
+        if (dates != null) {
+            if (dates.endsWith("-")) {
+                calculatedScore++;
+            } else if (dates.endsWith(".")) {
+                calculatedScore--;
+            }
+        }
+        return calculatedScore;
+    }
+
     /**
      * Calculate sorting score for version based on:
      *
@@ -73,23 +85,9 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         if ("Impact Factor".equals(links.get(0).getLabel())) {
             return -99;
         }
-        String summaryHoldings = version.getSummaryHoldings();
         int score = 0;
-        if (summaryHoldings != null) {
-            if (summaryHoldings.endsWith("-") || summaryHoldings.startsWith("v. 1-")) {
-                score++;
-            } else if (summaryHoldings.endsWith(".")) {
-                score--;
-            }
-        }
-        String dates = version.getDates();
-        if (dates != null) {
-            if (dates.endsWith("-")) {
-                score++;
-            } else if (dates.endsWith(".")) {
-                score--;
-            }
-        }
+        score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
+        score = calculateDatesScore(version.getDates(), score);
         String additionalText = version.getAdditionalText();
         if (additionalText != null && additionalText.contains("delayed")) {
             score--;
@@ -117,6 +115,18 @@ public class VersionComparator implements Comparator<Version>, Serializable {
             }
         }
         return score;
+    }
+
+    private int calculateSummaryHoldingsScore(final String summaryHoldings, final int score) {
+        int calculatedScore = score;
+        if (summaryHoldings != null) {
+            if (summaryHoldings.endsWith("-") || summaryHoldings.startsWith("v. 1-")) {
+                calculatedScore++;
+            } else if (summaryHoldings.endsWith(".")) {
+                calculatedScore--;
+            }
+        }
+        return calculatedScore;
     }
 
     private boolean firstLinkIsCatalogLink(final Version version) {
