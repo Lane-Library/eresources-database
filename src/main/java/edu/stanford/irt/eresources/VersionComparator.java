@@ -47,6 +47,14 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         return 1;
     }
 
+    private int calculateAdditionalTextScore(final String additionalText, final int score) {
+        int calculatedScore = score;
+        if (additionalText != null && additionalText.contains("delayed")) {
+            calculatedScore--;
+        }
+        return calculatedScore;
+    }
+
     private int calculateDatesScore(final String dates, final int score) {
         int calculatedScore = score;
         if (dates != null) {
@@ -88,15 +96,18 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         int score = 0;
         score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
         score = calculateDatesScore(version.getDates(), score);
-        String additionalText = version.getAdditionalText();
-        if (additionalText != null && additionalText.contains("delayed")) {
-            score--;
-        }
+        score = calculateAdditionalTextScore(version.getAdditionalText(), score);
         // make sure installed software product description is first:
-        if (score == 0 && "Product Description".equals(links.get(0).getLabel())) {
-            score = 1;
-        }
+        score = calculateInstalledSoftwareScore(links.get(0).getLabel(), score);
         return score;
+    }
+
+    private int calculateInstalledSoftwareScore(final String linkLabel, final int score) {
+        int calculatedScore = score;
+        if (score == 0 && "Product Description".equals(linkLabel)) {
+            calculatedScore = 1;
+        }
+        return calculatedScore;
     }
 
     /**
