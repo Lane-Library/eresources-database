@@ -33,7 +33,7 @@ import org.xml.sax.SAXException;
  */
 public class PubmedSearcher {
 
-    private static final String BASE_URL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&email=ryanmax@stanford.edu&term=";
+    private static final String BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&email=ryanmax@stanford.edu&term=";
 
     private static final RequestConfig HTTP_CONFIG = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES)
             .build();

@@ -42,16 +42,10 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     public void setBasePath(final String basePath) {
-        if (null == basePath) {
-            throw new IllegalArgumentException("null basePath");
-        }
         this.basePath = basePath;
     }
 
     public void setXmlReader(final XMLReader xmlReader) {
-        if (null == xmlReader) {
-            throw new IllegalArgumentException("null xmlReader");
-        }
         this.xmlReader = xmlReader;
     }
 

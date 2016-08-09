@@ -14,9 +14,6 @@ public class LanguageMap {
 
     public LanguageMap() {
         File file = new File(FILENAME);
-        if (!file.exists()) {
-            throw new EresourceDatabaseException("missing " + FILENAME);
-        }
         try (InputStream in = new FileInputStream(file)) {
             this.properties.load(in);
         } catch (IOException e) {

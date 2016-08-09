@@ -143,12 +143,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 }
                 this.currentEresource = new SAXEresource();
                 setRecordType();
-                // this.currentEresource.addType("Catalog");
             }
         } else if (RECORD.equals(name)) {
             String recordId = Integer.toString(this.currentEresource.getRecordId());
             if (this.isMfhd) {
-                if (this.currentVersion.getLinks().size() == 0) {
+                if (this.currentVersion.getLinks().isEmpty()) {
                     SAXLink link = new SAXLink();
                     link.setLabel("Lane Catalog Record");
                     link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + recordId);
@@ -319,7 +318,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         } else if ("246".equals(this.tag)) {
             String data = this.currentText.toString();
-            if ("i".equals(this.code) && data.equalsIgnoreCase("Acronym/initialism:")) {
+            if ("i".equals(this.code) && "Acronym/initialism:".equalsIgnoreCase(data)) {
                 this.hasAbbreviatedTitle = true;
             } else if ("a".equals(this.code)) {
                 this.currentEresource.addAlternativeTitle(data);
@@ -328,7 +327,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.hasAbbreviatedTitle = false;
                 }
             }
-        } else if ((this.tag.equals("149")) && "a".equals(this.code)) {
+        } else if ("149".equals(this.tag) && "a".equals(this.code)) {
             this.currentEresource.setShortTitle(this.currentText.toString());
         } else if ((this.tag.matches("(130|210|247)")) && "a".equals(this.code)) {
             this.currentEresource.addAlternativeTitle(this.currentText.toString());
@@ -391,11 +390,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 if ("tp".indexOf(this.code) > -1) {
                     this.currentEresource.setPublicationTitle(this.currentText.toString());
                 }
-            } else if (this.countOf773 > 0) {
-                if ("t".equals(this.code)) {
-                    this.currentEresource.setPublicationText(
-                            this.currentEresource.getPublicationText() + "; " + this.currentText.toString());
-                }
+            } else if (this.countOf773 > 0 && "t".equals(this.code)) {
+                this.currentEresource.setPublicationText(
+                        this.currentEresource.getPublicationText() + "; " + this.currentText.toString());
             }
             if ("dg".indexOf(this.code) > -1) {
                 this.currentEresource.setPublicationText(
@@ -493,7 +490,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         try {
             int tagNumber = Integer.parseInt(this.tag);
             if (this.isMfhd) {
-                return (tagNumber == 852 || tagNumber == 866);
+                return tagNumber == 852 || tagNumber == 866;
             } else if (this.isBib) {
                 return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
                         || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))

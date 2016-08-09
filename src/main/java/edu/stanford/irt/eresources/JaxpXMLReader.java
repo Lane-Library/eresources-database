@@ -13,7 +13,6 @@ import edu.stanford.lane.catalog.ParserCreationException;
  */
 public class JaxpXMLReader extends XMLFilterImpl {
 
-    // TODO: copied from catalog project only to set the load-external-dtd feature; better way?
     public JaxpXMLReader() {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();

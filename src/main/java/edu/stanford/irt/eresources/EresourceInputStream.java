@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.sql.Connection;
@@ -42,34 +43,21 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(getSelectIDListSQL());
                 PreparedStatement getBibStmt = conn.prepareStatement(getBibQuery());
-                PreparedStatement getMfhdStmt = conn.prepareStatement(getMfhdQuery())) {
+                PreparedStatement getMfhdStmt = conn.prepareStatement(getMfhdQuery());
+                OutputStream ops = this.output) {
             prepareListStatement(getListStmt);
             Map<String, Collection<String>> ids = getIdMap(getListStmt);
             for (Entry<String, Collection<String>> entry : ids.entrySet()) {
                 String bibId = entry.getKey();
                 getBibStmt.setString(1, bibId);
-                try (ResultSet rs = getBibStmt.executeQuery();) {
-                    while (rs.next()) {
-                        this.output.write(rs.getBytes(2));
-                    }
-                }
+                executeQueryAndWriteBytes(getBibStmt, ops);
                 for (String mfhdId : entry.getValue()) {
                     getMfhdStmt.setString(1, mfhdId);
-                    try (ResultSet rs = getMfhdStmt.executeQuery();) {
-                        while (rs.next()) {
-                            this.output.write(rs.getBytes(2));
-                        }
-                    }
+                    executeQueryAndWriteBytes(getMfhdStmt, ops);
                 }
             }
         } catch (SQLException | IOException e) {
             throw new EresourceDatabaseException(e);
-        } finally {
-            try {
-                this.output.close();
-            } catch (IOException e) {
-                throw new EresourceDatabaseException(e);
-            }
         }
     }
 
@@ -107,6 +95,15 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
         }
         for (int i = 1; i <= qmarkCount; i++) {
             stmt.setTimestamp(i, this.startDate);
+        }
+    }
+
+    private void executeQueryAndWriteBytes(final PreparedStatement pStatement, final OutputStream ops)
+            throws SQLException, IOException {
+        try (ResultSet rs = pStatement.executeQuery();) {
+            while (rs.next()) {
+                ops.write(rs.getBytes(2));
+            }
         }
     }
 
