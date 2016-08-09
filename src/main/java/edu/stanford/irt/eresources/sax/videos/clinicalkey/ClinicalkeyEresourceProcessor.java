@@ -1,7 +1,5 @@
 package edu.stanford.irt.eresources.sax.videos.clinicalkey;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ import edu.stanford.irt.eresources.sax.videos.JsonVideoEresourceProcessor;
 
 public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
 
-    private final String ERESOURCE_TYPE = "clinicalkey";
+    private static final String ERESOURCE_TYPE = "clinicalkey";
 
     @Override
     public void process() {
@@ -35,7 +33,6 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             JsonNode jsonMap = getJsonNode(this.URLs.get(1).concat(String.valueOf(offSet)));
             JsonNode jsonResult = jsonMap.findPath("docs");
-            BufferedWriter bw = new BufferedWriter(new FileWriter("/tmp/clinicalKeyTitle.txt"));
             
             while (jsonResult.size() != 0) {
                 for (int i = 0; i < jsonResult.size(); i++) {
@@ -51,7 +48,7 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
                         String title = null;
                         String unmodifiedTitle = videoNode.path("itemtitle").textValue();
                         if (videoNode.path("summary_s") != null && videoNode.path("summary_s").textValue() != null
-                                && !videoNode.path("summary_s").textValue().equals(title)
+                                && !videoNode.path("summary_s").textValue().equals(unmodifiedTitle)
                                 && videoNode.path("summary_s").textValue().indexOf("no summary available") == -1) {
                             description = videoNode.path("summary_s").textValue();
                             keywords.append(" " + description);
@@ -94,8 +91,7 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
                             if( "".equals(title.trim()) || title.length() < 5){
                                 title = videoNode.path("sourcetitle").textValue();
                             }
-                            
-                            bw.write(unmodifiedTitle + "\t"+title+"\n");
+                           
                         }
                         if (null != videoNode.path("sourcetitle") && videoNode.path("sourcetitle").textValue() != null) {
                             keywords.append(" " + videoNode.path("sourcetitle").textValue()+" ");
@@ -131,8 +127,6 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
                 jsonMap = getJsonNode(this.URLs.get(1).concat(String.valueOf(offSet)));
                 jsonResult = jsonMap.findPath("docs");               
             }
-            
-            bw.close();
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (Exception e) {
