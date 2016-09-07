@@ -84,16 +84,22 @@ public class PubmedSearcher {
         int retStart = 0;
         int retMax = RET_MAX;
         while (retMax >= RET_MAX) {
-            String xmlContent = getContent(BASE_URL + this.query + "&retmax=" + RET_MAX + "&retstart=" + retStart);
+            String q = BASE_URL + this.query + "&retmax=" + RET_MAX + "&retstart=" + retStart;
+            String xmlContent = getContent(q);
             retStart = retStart + RET_MAX;
             Document doc;
-            NodeList retmaxNode = null;
+            Node retmaxNode = null;
+            NodeList retmaxNodes = null;
             NodeList pmidNodes = null;
             try {
                 doc = this.factory.newDocumentBuilder()
                         .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
-                retmaxNode = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
-                retMax = Integer.parseInt(retmaxNode.item(0).getTextContent().trim());
+                retmaxNodes = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
+                retmaxNode = retmaxNodes.item(0);
+                if (null == retmaxNode || null == retmaxNode.getTextContent()) {
+                    LOG.error("null eSearchResult/RetMax for " + q);
+                }
+                retMax = Integer.parseInt(retmaxNode.getTextContent().trim());
                 pmidNodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
             } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
                 LOG.error("failed to fetch pmids", e);
@@ -125,6 +131,9 @@ public class PubmedSearcher {
         } catch (IOException e) {
             method.abort();
             throw new EresourceDatabaseException(e);
+        }
+        if (null == htmlContent) {
+            LOG.error("null htmlContent for " + url);
         }
         return htmlContent;
     }
