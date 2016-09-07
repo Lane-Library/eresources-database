@@ -3,7 +3,10 @@
         xmlns:h="http://www.w3.org/1999/xhtml" version="2.0">
     
     <xsl:param name="lane-host"/>
-    
+
+    <!--  http://stackoverflow.com/questions/33256226/warning-messages-appeared-after-upgrade-saxon-to-9-5-1-8 -->    
+    <xsl:template match="dummy-template-to-suppress-namespace-check-message-when-no-html-files-are-processed"/>
+
     <xsl:template match="h:html">
         <eresource  id="web-{@id}" recordId="{@id}" type="web" update="{@update}">
             <xsl:variable name="url">
