@@ -28,6 +28,7 @@
     <category name="edu.stanford.irt.eresources" additivity="false">
         <priority value="debug"/>
         <appender-ref ref="console"/>
+        <appender-ref ref="error-mail"/>
     </category>
     <root>
         <level value="info"/>
