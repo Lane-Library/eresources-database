@@ -17,7 +17,11 @@ public class PubmedFtpDataFetcher implements DataFetcher {
 
     private String ftpHost;
 
+    private String ftpPass;
+
     private String ftpPath;
+
+    private String ftpUser;
 
     @Override
     public void getUpdateFiles() {
@@ -27,6 +31,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
         try {
             LOG.info("connecting to ftp host: " + this.ftpHost);
             client.connect(this.ftpHost);
+            client.login(this.ftpUser, this.ftpPass);
             client.setFileType(FTP.BINARY_FILE_TYPE);
             client.enterLocalPassiveMode();
             client.changeWorkingDirectory(this.ftpPath);
@@ -65,10 +70,24 @@ public class PubmedFtpDataFetcher implements DataFetcher {
         this.ftpHost = ftpHost;
     }
 
+    public void setFtpPass(final String ftpPass) {
+        if (null == ftpPass) {
+            throw new IllegalArgumentException("null ftpPass");
+        }
+        this.ftpPass = ftpPass;
+    }
+
     public void setFtpPath(final String ftpPath) {
         if (null == ftpPath) {
             throw new IllegalArgumentException("null ftpPath");
         }
         this.ftpPath = ftpPath;
+    }
+
+    public void setFtpUser(final String ftpUser) {
+        if (null == ftpUser) {
+            throw new IllegalArgumentException("null ftpUser");
+        }
+        this.ftpUser = ftpUser;
     }
 }
