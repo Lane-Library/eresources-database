@@ -57,6 +57,9 @@ public class PubmedSearcher {
     private XPath xpath;
 
     public PubmedSearcher(final String field, final String value, final String query) {
+        if (query == null) {
+            throw new IllegalStateException("null query");
+        }
         this.field = field;
         this.query = query;
         this.value = value;
@@ -78,9 +81,15 @@ public class PubmedSearcher {
         if (!this.pmids.isEmpty()) {
             return this.pmids;
         }
-        if (this.query == null) {
-            throw new IllegalStateException("null query");
-        }
+        return doGet();
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    private List<String> doGet() {
+        List<String> pmidList = new ArrayList<>();
         int retStart = 0;
         int retMax = RET_MAX;
         while (retMax >= RET_MAX) {
@@ -98,24 +107,19 @@ public class PubmedSearcher {
                 retmaxNode = retmaxNodes.item(0);
                 if (null == retmaxNode || null == retmaxNode.getTextContent()) {
                     LOG.error("null eSearchResult/RetMax for " + q);
+                } else {
+                    retMax = Integer.parseInt(retmaxNode.getTextContent().trim());
+                    pmidNodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
                 }
-                retMax = Integer.parseInt(retmaxNode.getTextContent().trim());
-                pmidNodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
             } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
                 LOG.error("failed to fetch pmids", e);
             }
-            if (null != pmidNodes) {
-                for (int n = 0; n < pmidNodes.getLength(); n++) {
-                    Node node = pmidNodes.item(n);
-                    this.pmids.add(node.getTextContent().trim());
-                }
+            for (int n = 0; null != pmidNodes && n < pmidNodes.getLength(); n++) {
+                Node node = pmidNodes.item(n);
+                pmidList.add(node.getTextContent().trim());
             }
         }
-        return this.pmids;
-    }
-
-    public String getValue() {
-        return this.value;
+        return pmidList;
     }
 
     private String getContent(final String url) {
