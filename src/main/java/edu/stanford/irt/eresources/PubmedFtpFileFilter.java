@@ -21,7 +21,11 @@ public class PubmedFtpFileFilter implements FTPFileFilter {
     @Override
     public boolean accept(final FTPFile file) {
         String name = file.getName();
-        return name.endsWith(".xml.gz") && !this.processedFiles.contains(name);
+        if (name.endsWith(".xml.gz") || name.endsWith(".xml")) {
+            name = name.replaceFirst("\\.xml(\\.gz)?", "");
+            return !this.processedFiles.contains(name);
+        }
+        return false;
     }
 
     private List<String> getProcessedFiles(final File directory) {
@@ -30,7 +34,7 @@ public class PubmedFtpFileFilter implements FTPFileFilter {
         if (null != files) {
             for (File file : files) {
                 if (!file.isDirectory()) {
-                    fileList.add(file.getName());
+                    fileList.add(file.getName().replaceFirst("\\.xml(\\.gz)?", ""));
                 }
             }
         }
