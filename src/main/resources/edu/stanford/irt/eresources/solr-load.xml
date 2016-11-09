@@ -8,14 +8,6 @@
     <import resource="laneblog-processor.xml"/>
     <bean id="abstractSolrLoader" class="edu.stanford.irt.eresources.SolrLoader" abstract="true">
         <property name="handler" ref="eresourceHandler"/>
-        <property name="processors">
-            <list>
-                <ref bean="bibProcessor"/>
-                <ref bean="webProcessor"/>
-                <ref bean="classesProcessor"/>
-                <ref bean="laneblogProcessor"/>
-            </list>
-        </property>
         <property name="version" value="${project.version}"/>
         <property name="executor" ref="executor"/>
         <property name="queue" ref="queue"/>
