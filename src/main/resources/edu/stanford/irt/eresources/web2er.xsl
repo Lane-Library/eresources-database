@@ -27,7 +27,6 @@
             <year><xsl:value-of select="substring(@update,1,4)"/></year>
             <er-date><xsl:value-of select="substring(@update,1,8)"/></er-date>
             <version>
-                <subset>noproxy</subset>
                 <link>
                     <label>
                         <xsl:value-of select="$excerpt"/><xsl:text> . . .</xsl:text>

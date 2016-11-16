@@ -17,7 +17,6 @@
 			<er-date><xsl:value-of select="replace(pubDate,'.*, (\d{2}) ([A-Z][a-z]{2}) (\d{4}).*','$3 $2 $1')"/></er-date>
 			<version>
 				<link>
-					<subset>noproxy</subset>
 					<label>
 						<xsl:value-of select="concat(substring(description, 1, 36),' . . .')" />
 					</label>

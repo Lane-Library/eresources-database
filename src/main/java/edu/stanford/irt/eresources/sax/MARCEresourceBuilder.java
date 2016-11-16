@@ -242,9 +242,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
             for (Version verzion : eresource.getVersions()) {
                 Version version = verzion;
-                if (version.getSubsets().contains(BIOTOOLS)) {
-                    eresource.addType("Biotools Software, Installed");
-                }
                 // software installed in various locations have the location in
                 // the label
                 for (Link link : version.getLinks()) {
@@ -420,16 +417,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void handleMfhdSubfield() {
-        if ("655".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("Subset, ") == 0)) {
-            String subset = this.currentText.toString().substring(8).toLowerCase();
-            if ("proxy".equals(subset)) {
-                this.currentVersion.setProxy(true);
-            } else if ("noproxy".equals(subset)) {
-                this.currentVersion.setProxy(false);
-            } else {
-                maybeAddSubset(subset);
-            }
-        } else if ("844".equals(this.tag) && "a".equals(this.code)) {
+        if ("844".equals(this.tag) && "a".equals(this.code)) {
             this.currentVersion.setPublisher(this.currentText.toString());
         } else if ("866".equals(this.tag) && this.countOf866 == 0) {
             if ("v".equals(this.code)) {
@@ -456,14 +444,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected void maybeAddCatalogLink() {
         // by default do nothing
-    }
-
-    protected void maybeAddSubset(final String subset) {
-        this.currentVersion.addSubset(subset);
-        if (BIOTOOLS.equals(subset)) {
-            // subset, biotools will count as type: software
-            this.currentEresource.addType("Software");
-        }
     }
 
     protected void maybeSetAdditionalText(final SAXLink link, final String instruction) {

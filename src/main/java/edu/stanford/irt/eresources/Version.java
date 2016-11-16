@@ -15,8 +15,6 @@ public interface Version {
 
     String getPublisher();
 
-    Collection<String> getSubsets();
-
     String getSummaryHoldings();
 
     boolean hasGetPasswordLink();
