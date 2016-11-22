@@ -32,18 +32,19 @@ public class SolrLoader {
     private String version;
 
     public static void main(final String[] args) throws IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-                "edu/stanford/irt/eresources/" + args[0] + ".xml");
-        SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
-        ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
-        try {
-            loader.load();
-        } finally {
-            executor.shutdown();
+        try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+                "edu/stanford/irt/eresources/" + args[0] + ".xml")) {
+            SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
+            ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
+            try {
+                loader.load();
+            } finally {
+                executor.shutdown();
+            }
         }
     }
 
-    public void load() throws IOException {
+    public void load() {
         LOG.info(this.version + " starting up");
         Date updated = getUpdatedDate();
         this.executor.execute(this.handler);
@@ -95,5 +96,4 @@ public class SolrLoader {
     protected Date getUpdatedDate() {
         return new Date(0);
     }
-
-   }
+}
