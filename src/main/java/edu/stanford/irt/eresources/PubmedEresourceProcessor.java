@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,11 +74,13 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
 
     private void parseFile(final File file) {
         InputSource source = new InputSource();
-        try {
+        try (InputStream stream = new FileInputStream(file)) {
             if (file.getName().matches(".*\\.gz")) {
-                source.setByteStream(new GZIPInputStream(new FileInputStream(file)));
+                try (InputStream gzstream = new GZIPInputStream(stream)) {
+                    source.setByteStream(gzstream);
+                }
             } else {
-                source.setByteStream(new FileInputStream(file));
+                source.setByteStream(stream);
             }
             this.xmlReader.parse(source);
             // touch file so we don't load it next time
