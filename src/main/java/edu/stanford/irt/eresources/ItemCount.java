@@ -54,12 +54,12 @@ public class ItemCount {
 
     private Map<Integer, Integer> createItemCountMap(final String query) {
         Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-        try (Connection conn = this.dataSource.getConnection(); Statement statement = conn.createStatement()) {
-            ResultSet rs = statement.executeQuery(query);
+        try (Connection conn = this.dataSource.getConnection();
+                Statement statement = conn.createStatement();
+                ResultSet rs = statement.executeQuery(query)) {
             while (rs.next()) {
                 map.put(Integer.valueOf(rs.getInt(1)), Integer.valueOf(rs.getInt(2)));
             }
-            rs.close();
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
