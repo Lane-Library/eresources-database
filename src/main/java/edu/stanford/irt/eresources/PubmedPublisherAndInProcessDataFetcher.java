@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * fetch "as supplied by publisher" and "in-process" records from PubMed because they are not included in the licensed
@@ -19,7 +20,7 @@ public class PubmedPublisherAndInProcessDataFetcher extends AbstractPubmedDataFe
     public void getUpdateFiles() {
         String query = QUERY;
         try {
-            query = URLEncoder.encode(query, "UTF-8");
+            query = URLEncoder.encode(query, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }

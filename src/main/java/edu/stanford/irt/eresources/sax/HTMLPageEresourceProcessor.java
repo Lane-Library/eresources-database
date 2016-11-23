@@ -5,6 +5,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -65,7 +66,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                     LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
                     continue;
                 }
-                source.setEncoding("UTF-8");
+                source.setEncoding(StandardCharsets.UTF_8.name());
                 DOMParser parser = new DOMParser(config);
                 parser.parse(source);
                 Document doc = parser.getDocument();

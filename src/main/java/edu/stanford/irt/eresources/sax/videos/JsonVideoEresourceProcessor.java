@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.sax.videos;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
@@ -33,7 +34,7 @@ public abstract class JsonVideoEresourceProcessor extends AbstractVideoEresource
         try {
             HTMLConfiguration config = new HTMLConfiguration();
             config.setFeature("http://xml.org/sax/features/namespaces", false);
-            config.setProperty("http://cyberneko.org/html/properties/default-encoding", "UTF-8");
+            config.setProperty("http://cyberneko.org/html/properties/default-encoding", StandardCharsets.UTF_8.name());
             config.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
             HttpGet get = new HttpGet(url);
             get.addHeader(USER_AGENT);

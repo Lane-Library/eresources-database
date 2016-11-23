@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax.videos.nejm;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
@@ -56,7 +57,7 @@ public class NejmEresourceBuilder extends DefaultEresourceBuilder {
         HttpGet httpget = new HttpGet(url);
         HTMLConfiguration conf = new HTMLConfiguration();
         conf.setFeature("http://xml.org/sax/features/namespaces", false);
-        conf.setProperty("http://cyberneko.org/html/properties/default-encoding", "UTF-8");
+        conf.setProperty("http://cyberneko.org/html/properties/default-encoding", StandardCharsets.UTF_8.name());
         conf.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
         try (CloseableHttpResponse response = httpclient.execute(httpget)) {
             InputSource source = new InputSource(response.getEntity().getContent());

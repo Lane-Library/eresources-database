@@ -70,7 +70,7 @@ public abstract class AbstractPubmedDataFetcher {
             List<String> sublist = pmids.subList(start, end);
             myPmids.removeAll(sublist);
             try {
-                url = BASE_URL + URLEncoder.encode(StringUtils.collectionToCommaDelimitedString(sublist), "UTF-8");
+                url = BASE_URL + URLEncoder.encode(StringUtils.collectionToCommaDelimitedString(sublist), StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {
                 throw new EresourceDatabaseException(e);
             }

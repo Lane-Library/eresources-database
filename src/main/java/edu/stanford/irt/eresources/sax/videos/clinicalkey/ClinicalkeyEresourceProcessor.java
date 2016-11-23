@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.sax.videos.clinicalkey;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -90,7 +91,7 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
 		String url = null;
 		if (null != videoNode.path("refimage")
 				&& null != videoNode.path("refimage").get(0).textValue()) {
-			String encodedTitle = URLEncoder.encode(title, "UTF-8");
+			String encodedTitle = URLEncoder.encode(title, StandardCharsets.UTF_8.name());
 			url = "https://www.clinicalkey.com/#!/search/".concat(encodedTitle)
 					.concat("/%7B%22facetquery%22:%5B%22+contenttype:VD%22%5D,%22query%22:%22")
 					.concat(encodedTitle).concat("%22%7D");

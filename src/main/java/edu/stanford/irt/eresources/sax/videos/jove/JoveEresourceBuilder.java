@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.sax.videos.jove;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 
 import javax.xml.xpath.XPath;
@@ -81,7 +82,7 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
             InputSource source = new InputSource(response.getEntity().getContent());
             HTMLConfiguration conf = new HTMLConfiguration();
             conf.setFeature("http://xml.org/sax/features/namespaces", false);
-            conf.setProperty("http://cyberneko.org/html/properties/default-encoding", "UTF-8");
+            conf.setProperty("http://cyberneko.org/html/properties/default-encoding", StandardCharsets.UTF_8.name());
             conf.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
             DOMParser parser = new DOMParser(conf);
             parser.parse(source);

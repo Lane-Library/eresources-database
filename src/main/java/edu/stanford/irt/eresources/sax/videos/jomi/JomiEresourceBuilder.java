@@ -1,5 +1,7 @@
 package edu.stanford.irt.eresources.sax.videos.jomi;
 
+import java.nio.charset.StandardCharsets;
+
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
@@ -52,7 +54,7 @@ public class JomiEresourceBuilder extends DefaultEresourceBuilder {
         HttpGet httpget = new HttpGet(url);
         HTMLConfiguration conf = new HTMLConfiguration();
         conf.setFeature("http://xml.org/sax/features/namespaces", false);
-        conf.setProperty("http://cyberneko.org/html/properties/default-encoding", "UTF-8");
+        conf.setProperty("http://cyberneko.org/html/properties/default-encoding", StandardCharsets.UTF_8.name());
         conf.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
         try (CloseableHttpResponse response = httpclient.execute(httpget)) {
             InputSource source = new InputSource(response.getEntity().getContent());

@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax.videos;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.xml.transform.TransformerFactory;
@@ -68,13 +69,13 @@ public class VideoEresourceProcessor extends AbstractEresourceProcessor {
     protected Document getDocument(final String url) {
         HTMLConfiguration config = new HTMLConfiguration();
         config.setFeature("http://xml.org/sax/features/namespaces", false);
-        config.setProperty("http://cyberneko.org/html/properties/default-encoding", "UTF-8");
+        config.setProperty("http://cyberneko.org/html/properties/default-encoding", StandardCharsets.UTF_8.name());
         config.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
         HttpGet get = new HttpGet(url);
         get.addHeader(USER_AGENT);
         try (CloseableHttpResponse res = (CloseableHttpResponse) this.httpClient.execute(get)) {
             InputSource source = new InputSource(res.getEntity().getContent());
-            source.setEncoding("UTF-8");
+            source.setEncoding(StandardCharsets.UTF_8.name());
             DOMParser parser = new DOMParser(config);
             parser.parse(source);
             return parser.getDocument();

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -36,7 +37,7 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
         String date = getLastUpdateDate();
         String query = UPDATES_QUERY.replace("?", date);
         try {
-            query = URLEncoder.encode(query, "UTF-8");
+            query = URLEncoder.encode(query, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }
