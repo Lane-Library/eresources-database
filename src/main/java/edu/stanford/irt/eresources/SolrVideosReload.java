@@ -20,7 +20,8 @@ public class SolrVideosReload extends SolrLoader {
     @SuppressWarnings("resource")
     public static void main(final String[] args) throws IOException {
         recordType = args[0];
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("edu/stanford/irt/eresources/videos/" + recordType + "-processor.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+                "edu/stanford/irt/eresources/videos/" + recordType + "-processor.xml");
         SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
         try {
@@ -31,23 +32,23 @@ public class SolrVideosReload extends SolrLoader {
     }
 
     @Override
-    public void load() throws IOException {
+    public void load() {
         // fetch most recently updated eresource date from solr
         String lastUpdate = getLastUpdate();
         super.load();
         try {
             // delete everything older than lastUpdate
-            this.solrClient.deleteByQuery("type:\"Video: Instructional\" AND updated:[* TO " + lastUpdate + "] AND id:"+recordType.concat("-*"));
+            this.solrClient.deleteByQuery("type:\"Video: Instructional\" AND updated:[* TO " + lastUpdate + "] AND id:"
+                    + recordType.concat("-*"));
             this.solrClient.commit();
         } catch (SolrServerException e) {
             throw new EresourceDatabaseException(e);
         }
     }
 
-    
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
-        query.setQuery("type:\"Video: Instructional\" AND id:"+recordType.concat("-*"));
+        query.setQuery("type:\"Video: Instructional\" AND id:" + recordType.concat("-*"));
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {
@@ -55,7 +56,6 @@ public class SolrVideosReload extends SolrLoader {
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
-
         SolrDocumentList rdocs = rsp.getResults();
         Date updated;
         if (rdocs.isEmpty()) {
