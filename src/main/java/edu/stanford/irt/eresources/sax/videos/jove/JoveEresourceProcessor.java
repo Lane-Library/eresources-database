@@ -14,27 +14,26 @@ import org.xml.sax.helpers.AttributesImpl;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.sax.videos.VideoEresourceProcessor;
 
-
 public class JoveEresourceProcessor extends VideoEresourceProcessor {
-    
-    private XPath xPath = XPathFactory.newInstance().newXPath();
-    
+
     private XPathExpression nextPageExpression;
-    
+
+    private XPath xPath = XPathFactory.newInstance().newXPath();
+
     @Override
     public void process() {
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            for (int index = 0; index < URLs.size(); index++) {
-                String nextPageUrl = URLs.get(index);
-                while(! "".equals(nextPageUrl)){
+            for (int index = 0; index < this.URLs.size(); index++) {
+                String nextPageUrl = this.URLs.get(index);
+                while (!"".equals(nextPageUrl)) {
                     Document doc = getDocument(nextPageUrl);
                     this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
-                    nextPageUrl = (String)this.nextPageExpression.evaluate(doc, XPathConstants.STRING);
+                    nextPageUrl = (String) this.nextPageExpression.evaluate(doc, XPathConstants.STRING);
                     Thread.sleep(500);
                 }
-            } 
+            }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (Exception e) {
@@ -42,9 +41,7 @@ public class JoveEresourceProcessor extends VideoEresourceProcessor {
         }
     }
 
-    
-    public void setNextPageExpression(String nextPageExpression) throws XPathExpressionException {
-        this.nextPageExpression =  xPath.compile(nextPageExpression);
+    public void setNextPageExpression(final String nextPageExpression) throws XPathExpressionException {
+        this.nextPageExpression = this.xPath.compile(nextPageExpression);
     }
-
 }
