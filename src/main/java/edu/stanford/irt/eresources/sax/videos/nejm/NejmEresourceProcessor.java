@@ -24,13 +24,13 @@ public class NejmEresourceProcessor extends AbstractEresourceProcessor {
 
     private ContentHandler contentHandler;
 
-    private String URL;
-
     private ErrorHandler errorHandler = new DefaultHandler();
 
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
     private TransformerFactory tf = TransformerFactory.newInstance();
+
+    private String URL;
 
     @Override
     public void process() {
