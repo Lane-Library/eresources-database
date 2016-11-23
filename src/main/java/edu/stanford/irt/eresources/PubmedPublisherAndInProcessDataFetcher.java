@@ -14,8 +14,6 @@ public class PubmedPublisherAndInProcessDataFetcher extends AbstractPubmedDataFe
 
     private static final String QUERY = "publisher [sb] OR inprocess [sb]";
 
-    private PubmedSearcher searcher;
-
     @Override
     public void getUpdateFiles() {
         String query = QUERY;
@@ -24,7 +22,7 @@ public class PubmedPublisherAndInProcessDataFetcher extends AbstractPubmedDataFe
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }
-        this.searcher = new PubmedSearcher("No Field", "As Supplied by Publisher And In-Process", query);
-        pmidListToFiles(this.searcher.getPmids(), "publisher-inprocess-");
+        PubmedSearcher searcher = new PubmedSearcher("No Field", "As Supplied by Publisher And In-Process", query);
+        pmidListToFiles(searcher.getPmids(), "publisher-inprocess-");
     }
 }
