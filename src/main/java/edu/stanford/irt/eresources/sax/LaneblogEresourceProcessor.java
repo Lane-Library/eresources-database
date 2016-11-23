@@ -46,17 +46,6 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    private long getUpdateDate(final Document doc) {
-        NodeList nodeList = doc.getElementsByTagName("lastBuildDate");
-        Element lastBuildDateEl = (Element) nodeList.item(0);
-        try {
-            Date lastBuildDate = this.dateFormat.parse(lastBuildDateEl.getTextContent());
-            return lastBuildDate.getTime();
-        } catch (DOMException | ParseException e) {
-            throw new EresourceDatabaseException(e);
-        }
-    }
-
     @Override
     public void process() {
         try {
@@ -94,5 +83,16 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
     public void setRssURL(final String allClassesURL) {
         this.rssURL = allClassesURL;
+    }
+
+    private long getUpdateDate(final Document doc) {
+        NodeList nodeList = doc.getElementsByTagName("lastBuildDate");
+        Element lastBuildDateEl = (Element) nodeList.item(0);
+        try {
+            Date lastBuildDate = this.dateFormat.parse(lastBuildDateEl.getTextContent());
+            return lastBuildDate.getTime();
+        } catch (DOMException | ParseException e) {
+            throw new EresourceDatabaseException(e);
+        }
     }
 }
