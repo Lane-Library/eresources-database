@@ -28,7 +28,7 @@ public class PubmedSpecialTypesManager {
     }
 
     private void init() {
-        this.specialPmids = new HashMap<String, Collection<String[]>>();
+        this.specialPmids = new HashMap<>();
         for (PubmedSearcher searcher : this.searchers) {
             String field = searcher.getField();
             String value = searcher.getValue();
@@ -38,7 +38,7 @@ public class PubmedSpecialTypesManager {
                 if (this.specialPmids.containsKey(pmid)) {
                     values = this.specialPmids.get(pmid);
                 } else {
-                    values = new ArrayList<String[]>();
+                    values = new ArrayList<>();
                 }
                 String[] fieldAndValue = { field, value };
                 values.add(fieldAndValue);
