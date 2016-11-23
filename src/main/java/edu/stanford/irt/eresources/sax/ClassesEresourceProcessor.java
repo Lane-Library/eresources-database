@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
@@ -15,6 +18,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -48,7 +52,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (Exception e) {
+        } catch (SAXException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
     }
@@ -63,7 +67,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
             if (sometimeEarlier.getTime() > getStartTime()) {
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
             }
-        } catch (Exception e) {
+        } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
     }
