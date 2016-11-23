@@ -73,7 +73,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                 if (file.lastModified() > getStartTime() && isSearchable(doc)) {
                     Element root = doc.getDocumentElement();
                     root.setAttribute("id", Integer.toString(fileName.hashCode()));
-                    root.setAttribute("update", this.dateFormat.format(file.lastModified()));
+                    root.setAttribute("update", this.dateFormat.format(Long.valueOf(file.lastModified())));
                     root.setAttribute("file", fileName.substring(this.basePath.length()));
                     tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
                 }
