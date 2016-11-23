@@ -30,18 +30,18 @@ import edu.stanford.irt.eresources.sax.SAXEresource;
 
 public class JoveEresourceBuilder extends DefaultEresourceBuilder {
 
-    CloseableHttpClient httpClient;
-
-    NumberFormat nf = null;
-
-    Header USER_AGENT = new BasicHeader("User-Agent",
-            "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:34.0) Gecko/20100101 Firefox/34.");
-
     private XPathExpression descriptionExpression = null;
+
+    private CloseableHttpClient httpClient;
 
     private Logger log = LoggerFactory.getLogger(JoveEresourceBuilder.class);
 
+    private NumberFormat nf = null;
+
     private StringBuilder text = new StringBuilder();
+
+    private Header USER_AGENT = new BasicHeader("User-Agent",
+            "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:34.0) Gecko/20100101 Firefox/34.");
 
     private XPath xPath = XPathFactory.newInstance().newXPath();
 
