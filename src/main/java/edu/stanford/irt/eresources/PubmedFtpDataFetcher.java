@@ -29,7 +29,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
         FTPClient client = new FTPClient();
         FileOutputStream fos = null;
         try {
-            LOG.info("connecting to ftp host: " + this.ftpHost);
+            LOG.info("connecting to ftp host: {}", this.ftpHost);
             client.connect(this.ftpHost);
             client.login(this.ftpUser, this.ftpPass);
             client.setFileType(FTP.BINARY_FILE_TYPE);
@@ -37,7 +37,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             client.changeWorkingDirectory(this.ftpPath);
             for (FTPFile file : client.listFiles(".", filter)) {
                 fos = new FileOutputStream(this.basePath + "/" + file.getName());
-                LOG.info("fetching: " + file);
+                LOG.info("fetching: {}", file);
                 if (client.retrieveFile(file.getName(), fos)) {
                     fos.close();
                 }
