@@ -35,8 +35,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
-    private static final String BIOTOOLS = "biotools";
-
     private static final String CONTROLFIELD = "controlfield";
 
     private static final String DATAFIELD = "datafield";
@@ -71,7 +69,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected EresourceHandler eresourceHandler;
 
-    protected boolean hasAbbreviatedTitle = false;
+    protected boolean hasAbbreviatedTitle;
 
     protected String ind1;
 
@@ -419,7 +417,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     protected void handleMfhdSubfield() {
         if ("844".equals(this.tag) && "a".equals(this.code)) {
             this.currentVersion.setPublisher(this.currentText.toString());
-        } else if ("866".equals(this.tag) && this.countOf866 == 0) {
+        } else if (this.countOf866 == 0 && "866".equals(this.tag)) {
             if ("v".equals(this.code)) {
                 String holdings = this.currentText.toString();
                 holdings = holdings.replaceAll(" =", "");
@@ -432,7 +430,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if ("856".equals(this.tag)) {
             if ("q".equals(this.code) && (null == this.q)) {
                 this.q = this.currentText.toString();
-            } else if ("z".equals(this.code) && (null == this.z)) {
+            } else if (null == this.z && "z".equals(this.code)) {
                 this.z = this.currentText.toString();
             } else if ("u".equals(this.code)) {
                 this.currentLink.setUrl(this.currentText.toString());
@@ -478,7 +476,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                         || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
             }
         } catch (NumberFormatException e) {
-            return false;
+            LoggerFactory.getLogger(getClass()).error("can't parse tag '{}'", this.tag, e);
         }
         return false;
     }
@@ -574,9 +572,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             try {
                 int cloned = 0;
                 for (String preferredTitle : this.preferredTitles) {
+                    cloned++;
                     SAXEresource clone = (SAXEresource) this.currentEresource.clone();
                     clone.setTitle(preferredTitle);
-                    clone.setId(this.currentEresource.getId() + "-clone-" + ++cloned);
+                    clone.setId(this.currentEresource.getId() + "-clone-" + cloned);
                     this.eresourceHandler.handleEresource(clone);
                 }
                 this.preferredTitles.clear();
