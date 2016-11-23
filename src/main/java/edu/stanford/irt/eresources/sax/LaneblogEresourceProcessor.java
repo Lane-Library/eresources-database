@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -49,12 +50,10 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
     @Override
     public void process() {
         try {
-            URL url;
-            url = new URL(this.rssURL);
-            InputSource source;
-            source = new InputSource(url.openConnection().getInputStream());
-            DocumentBuilder parser;
-            parser = this.factory.newDocumentBuilder();
+            URL url = new URL(this.rssURL);
+            InputSource source = new InputSource(url.openConnection().getInputStream());
+            this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);
             this.contentHandler.startDocument();
