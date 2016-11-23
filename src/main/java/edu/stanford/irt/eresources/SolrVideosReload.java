@@ -17,17 +17,17 @@ public class SolrVideosReload extends SolrLoader {
 
     private static String recordType = null;
 
-    @SuppressWarnings("resource")
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String[] args) {
         recordType = args[0];
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-                "edu/stanford/irt/eresources/videos/" + recordType + "-processor.xml");
-        SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
-        ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
-        try {
-            loader.load();
-        } finally {
-            executor.shutdown();
+        try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+                "edu/stanford/irt/eresources/videos/" + recordType + "-processor.xml")) {
+            SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
+            ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
+            try {
+                loader.load();
+            } finally {
+                executor.shutdown();
+            }
         }
     }
 
@@ -41,7 +41,7 @@ public class SolrVideosReload extends SolrLoader {
             this.solrClient.deleteByQuery("type:\"Video: Instructional\" AND updated:[* TO " + lastUpdate + "] AND id:"
                     + recordType.concat("-*"));
             this.solrClient.commit();
-        } catch (SolrServerException e) {
+        } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
     }
