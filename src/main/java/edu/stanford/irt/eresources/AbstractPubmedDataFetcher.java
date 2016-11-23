@@ -80,7 +80,7 @@ public abstract class AbstractPubmedDataFetcher {
                 content = getContent(url);
             }
             if (null == content) {
-                LOG.error("ncbi not responding; request: " + url);
+                LOG.error("ncbi not responding; request: {}", url);
                 // return without throwing an exception so other data fetching can complete
                 LOG.error("exiting eutils fetch");
                 return;
@@ -118,7 +118,7 @@ public abstract class AbstractPubmedDataFetcher {
     private void writeContent(final String content, final String filename) throws IOException {
         File directory = new File(this.basePath + "/" + TODAY);
         if (!directory.exists() && !directory.mkdir()) {
-            LOG.error("can't make " + directory.getAbsolutePath());
+            LOG.error("can't make {}", directory.getAbsolutePath());
         }
         File f = new File(directory.getAbsolutePath() + "/" + filename);
         FileOutputStream fos = null;

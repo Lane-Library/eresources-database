@@ -44,7 +44,7 @@ public class SolrLoader {
     }
 
     public void load() {
-        LOG.info(this.version + " starting up");
+        LOG.info("starting up version {}", this.version);
         Date updated = getUpdatedDate();
         this.executor.execute(this.handler);
         for (AbstractEresourceProcessor processor : this.processors) {
@@ -62,7 +62,7 @@ public class SolrLoader {
             }
         }
         this.count = this.handler.getCount();
-        LOG.info("handled " + this.count + " eresources.");
+        LOG.info("handled {} eresources.", Integer.toString(this.count));
     }
 
     public void setExecutor(final Executor executor) {
