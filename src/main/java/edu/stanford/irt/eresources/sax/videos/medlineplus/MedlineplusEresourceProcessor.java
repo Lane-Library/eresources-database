@@ -21,11 +21,11 @@ import edu.stanford.irt.eresources.sax.videos.VideoEresourceProcessor;
 
 public class MedlineplusEresourceProcessor extends VideoEresourceProcessor {
 
-    List<String> expressions = null;
-
-    XPath xPath = XPathFactory.newInstance().newXPath();
+    private List<String> expressions = null;
 
     private int id = 0;
+
+    private XPath xPath = XPathFactory.newInstance().newXPath();
 
     @Override
     public void process() {

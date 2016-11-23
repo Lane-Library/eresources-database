@@ -24,11 +24,11 @@ import edu.stanford.irt.eresources.sax.SAXEresource;
 
 public class NejmEresourceBuilder extends DefaultEresourceBuilder {
 
-    List<String> expression = null;
-
-    XPath xPath = XPathFactory.newInstance().newXPath();
+    private List<String> expression = null;
 
     private StringBuilder text = new StringBuilder();
+
+    private XPath xPath = XPathFactory.newInstance().newXPath();
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
