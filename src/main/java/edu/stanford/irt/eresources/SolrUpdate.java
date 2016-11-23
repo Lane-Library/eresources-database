@@ -11,7 +11,7 @@ import org.apache.solr.common.SolrDocumentList;
 
 public class SolrUpdate extends SolrLoader {
 
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String[] args) {
         SolrLoader.main(new String[] { "solr-update" });
     }
 

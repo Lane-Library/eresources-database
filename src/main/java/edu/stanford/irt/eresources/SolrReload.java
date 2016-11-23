@@ -13,12 +13,12 @@ import org.apache.solr.common.SolrDocumentList;
 
 public class SolrReload extends SolrLoader {
 
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String[] args) {
         SolrLoader.main(new String[] { "solr-reload" });
     }
 
     @Override
-    public void load() throws IOException {
+    public void load() {
         // fetch most recently updated eresource date from solr
         String lastUpdate = getLastUpdate();
         super.load();
@@ -26,7 +26,7 @@ public class SolrReload extends SolrLoader {
             // delete everything older than lastUpdate
             this.solrClient.deleteByQuery("(recordType:bib OR recordType:class OR recordType:laneblog OR recordType:web) AND updated:[* TO " + lastUpdate + "]");
             this.solrClient.commit();
-        } catch (SolrServerException e) {
+        } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
     }

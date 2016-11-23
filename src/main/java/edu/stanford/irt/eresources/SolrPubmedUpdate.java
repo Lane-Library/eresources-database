@@ -19,14 +19,14 @@ public class SolrPubmedUpdate extends SolrLoader {
     }
 
     @Override
-    public void load() throws IOException {
+    public void load() {
         super.load();
         try {
             // pubmed2er.stx handles deletes from NCBI by zeroing out record data
             // here we delete them ... records lacking year and title
             this.solrClient.deleteByQuery("recordType:pubmed AND year:0 AND title:''");
             this.solrClient.commit();
-        } catch (SolrServerException e) {
+        } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
     }

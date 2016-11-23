@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -31,7 +30,7 @@ public class SolrLoader {
 
     private String version;
 
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String[] args) {
         try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 "edu/stanford/irt/eresources/" + args[0] + ".xml")) {
             SolrLoader loader = (SolrLoader) context.getBean("solrLoader");

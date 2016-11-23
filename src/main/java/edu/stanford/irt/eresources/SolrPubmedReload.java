@@ -14,7 +14,7 @@ import org.apache.solr.common.SolrDocumentList;
 public class SolrPubmedReload extends SolrLoader {
 
     @Override
-    public void load() throws IOException {
+    public void load() {
         // fetch most recently updated eresource date from solr
         String lastUpdate = getLastUpdate();
         super.load();
@@ -22,7 +22,7 @@ public class SolrPubmedReload extends SolrLoader {
             // delete everything older than lastUpdate
             this.solrClient.deleteByQuery("recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
             this.solrClient.commit();
-        } catch (SolrServerException e) {
+        } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
     }
