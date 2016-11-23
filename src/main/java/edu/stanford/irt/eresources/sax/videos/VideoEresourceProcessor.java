@@ -36,7 +36,7 @@ public class VideoEresourceProcessor extends AbstractEresourceProcessor {
 
     protected List<String> URLs;
 
-    HttpClient httpClient = null;
+    private HttpClient httpClient = null;
 
     public VideoEresourceProcessor() {
         this.httpClient = HttpClients.createDefault();
