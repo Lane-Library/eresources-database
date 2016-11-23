@@ -84,21 +84,20 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      */
     private int calculateHoldingsScore(final Version version) {
         List<Link> links = version.getLinks();
-        if (links.isEmpty()) {
-            return Integer.MIN_VALUE;
-        }
-        if (firstLinkIsCatalogLink(version)) {
-            return -98;
-        }
-        if ("Impact Factor".equals(links.get(0).getLabel())) {
-            return -99;
-        }
         int score = 0;
-        score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
-        score = calculateDatesScore(version.getDates(), score);
-        score = calculateAdditionalTextScore(version.getAdditionalText(), score);
-        // make sure installed software product description is first:
-        score = calculateInstalledSoftwareScore(links.get(0).getLabel(), score);
+        if (links.isEmpty()) {
+            score = Integer.MIN_VALUE;
+        } else if (firstLinkIsCatalogLink(version)) {
+            score = -98;
+        } else if ("Impact Factor".equals(links.get(0).getLabel())) {
+            score = -99;
+        } else {
+            score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
+            score = calculateDatesScore(version.getDates(), score);
+            score = calculateAdditionalTextScore(version.getAdditionalText(), score);
+            // make sure installed software product description is first:
+            score = calculateInstalledSoftwareScore(links.get(0).getLabel(), score);
+        }
         return score;
     }
 
