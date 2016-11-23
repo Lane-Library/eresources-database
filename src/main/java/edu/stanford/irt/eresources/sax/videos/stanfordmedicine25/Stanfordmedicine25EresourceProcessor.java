@@ -20,9 +20,9 @@ import edu.stanford.irt.eresources.sax.videos.VideoEresourceProcessor;
 
 public class Stanfordmedicine25EresourceProcessor extends VideoEresourceProcessor {
 
-    XPathExpression linksExpression;
+    private XPathExpression linksExpression;
 
-    XPath xPath = XPathFactory.newInstance().newXPath();
+    private XPath xPath = XPathFactory.newInstance().newXPath();
 
     @Override
     public void process() {

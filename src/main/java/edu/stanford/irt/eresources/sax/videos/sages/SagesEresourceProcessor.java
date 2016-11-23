@@ -17,9 +17,9 @@ import edu.stanford.irt.eresources.sax.videos.VideoEresourceProcessor;
 
 public class SagesEresourceProcessor extends VideoEresourceProcessor {
 
-    XPathExpression nextPageExpression;
+    private XPathExpression nextPageExpression;
 
-    XPath xPath = XPathFactory.newInstance().newXPath();
+    private XPath xPath = XPathFactory.newInstance().newXPath();
 
     @Override
     public void process() {
