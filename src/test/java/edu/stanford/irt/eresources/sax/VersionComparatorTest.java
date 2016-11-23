@@ -37,6 +37,23 @@ public class VersionComparatorTest {
     }
 
     @Test
+    public void testCompareCatalogBeforeImpactFactor() {
+        this.v1.setSummaryHoldings("v. 1.");
+        this.v2.setSummaryHoldings("v. 1.");
+        this.v1.setDates("1999-2000.");
+        this.v2.setDates("1999-2000.");
+        SAXLink l1 = new SAXLink();
+        l1.setLabel("Impact Factor");
+        l1.setUrl("foo");
+        SAXLink l2 = new SAXLink();
+        l2.setLabel("Catalog Link");
+        l2.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=foo");
+        this.v1.addLink(l1);
+        this.v2.addLink(l2);
+        assertTrue(this.comparator.compare(this.v1, this.v2) > 0);
+    }
+
+    @Test
     public void testCompareClosedDates() {
         this.v1.setDates("1999-2000.");
         this.v2.setDates("1999-2000.");
