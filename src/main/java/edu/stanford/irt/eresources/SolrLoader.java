@@ -18,8 +18,6 @@ public class SolrLoader {
 
     protected SolrClient solrClient;
 
-    private int count;
-
     private Executor executor;
 
     private EresourceHandler handler;
@@ -61,8 +59,7 @@ public class SolrLoader {
                 }
             }
         }
-        this.count = this.handler.getCount();
-        LOG.info("handled {} eresources.", Integer.toString(this.count));
+        LOG.info("handled {} eresources.", Integer.toString(this.handler.getCount()));
     }
 
     public void setExecutor(final Executor executor) {
