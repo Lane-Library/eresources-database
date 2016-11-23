@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -80,13 +79,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (SAXException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (TransformerConfigurationException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (TransformerException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (IOException e) {
+        } catch (IOException | SAXException | TransformerException e) {
             throw new EresourceDatabaseException(e);
         }
     }
@@ -100,7 +93,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<File> getHTMLPages(final File directory) {
-        List<File> result = new LinkedList<File>();
+        List<File> result = new LinkedList<>();
         File[] files = directory.listFiles(new FileFilter() {
 
             @Override
