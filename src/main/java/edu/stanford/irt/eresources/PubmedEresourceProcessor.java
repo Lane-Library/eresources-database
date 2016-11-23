@@ -51,7 +51,6 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<File> getXMLFiles(final File directory) {
-        List<File> result = new LinkedList<File>();
         File[] files = directory.listFiles(new FileFilter() {
 
             @Override
@@ -60,6 +59,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
                 return file.isDirectory() || name.endsWith(".xml") || name.endsWith(".xml.gz");
             }
         });
+        List<File> result = new LinkedList<>();
         if (null != files) {
             for (File file : files) {
                 if (file.isDirectory()) {
