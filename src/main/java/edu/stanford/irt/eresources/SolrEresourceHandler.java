@@ -118,7 +118,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         SolrInputDocument doc = new SolrInputDocument();
         String title = eresource.getTitle();
         String sortTitle = getSortText(title);
-        List<Version> versions = new LinkedList<>();
         int[] itemCount = eresource.getItemCount();
         doc.addField("id", eresource.getId());
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
@@ -172,14 +171,7 @@ public class SolrEresourceHandler implements EresourceHandler {
                 doc.addField("publicationType", parentType);
             }
         }
-        for (Version version : eresource.getVersions()) {
-            versions.add(version);
-        }
-        try {
-            doc.addField("versionsJson", this.mapper.writeValueAsString(versions));
-        } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
-        }
+        doc.addField("versionsJson", versionsToJson(eresource));
         this.solrDocs.add(doc);
     }
 
@@ -243,5 +235,19 @@ public class SolrEresourceHandler implements EresourceHandler {
             return true;
         }
         return false;
+    }
+
+    private String versionsToJson(final Eresource eresource) {
+        String json;
+        List<Version> versions = new LinkedList<>();
+        for (Version version : eresource.getVersions()) {
+            versions.add(version);
+        }
+        try {
+            json = this.mapper.writeValueAsString(versions);
+        } catch (IOException e) {
+            throw new EresourceDatabaseException(e);
+        }
+        return json;
     }
 }
