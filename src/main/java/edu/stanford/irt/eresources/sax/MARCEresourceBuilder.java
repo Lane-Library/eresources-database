@@ -85,7 +85,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected ReservesTextAugmentation reservesTextAugmentation;
 
-    protected String tag;
+    protected String tag = "";
 
     protected StringBuilder title = new StringBuilder();
 
@@ -465,18 +465,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     // Retain only: 901, 902, 903, 907^x, 907^y, 941, 942, 943 [907^x&y will
     // eventually be changed into 655 values]
     private boolean checkSaveContent() {
-        try {
-            int tagNumber = Integer.parseInt(this.tag);
-            if (this.isMfhd) {
-                return tagNumber == 852 || tagNumber == 866;
-            } else if (this.isBib) {
-                return ((tagNumber >= 100) && (tagNumber < 900)) || (tagNumber == 20) || (tagNumber == 22)
-                        || (tagNumber == 30) || (tagNumber == 35) || ((tagNumber >= 901) && (tagNumber <= 903))
-                        || ((tagNumber >= 941) && (tagNumber <= 943))
-                        || ((tagNumber == 907) && ("xy".indexOf(this.code) > -1));
-            }
-        } catch (NumberFormatException e) {
-            LoggerFactory.getLogger(getClass()).error("can't parse tag '{}'", this.tag, e);
+        int tagNumber = Integer.parseInt(this.tag);
+        if (this.isMfhd) {
+            return tagNumber == 852 || tagNumber == 866;
+        } else if (this.isBib) {
+            return (tagNumber >= 100 && tagNumber < 900)
+                    || "020 022 030 035 901 902 903 941 942 943".indexOf(this.tag) != -1
+                    || (tagNumber == 907 && "xy".indexOf(this.code) > -1);
         }
         return false;
     }
