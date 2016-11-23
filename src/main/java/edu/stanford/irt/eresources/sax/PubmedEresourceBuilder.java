@@ -92,8 +92,6 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             this.currentEresource.setPublicationVolume(this.currentText.toString());
         } else if ("year".equals(name)) {
             this.currentEresource.setYear(Integer.parseInt(this.currentText.toString()));
-        } else if ("date".equals(name)) {
-            this.currentEresource.setDate(this.currentText.toString());
         } else if ("primaryType".equals(name)) {
             this.currentEresource.setPrimaryType(this.currentText.toString());
         } else if (!"eresources".equals(name)) {
@@ -101,6 +99,7 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
         }
     }
 
+    @Override
     public void setEresourceHandler(final EresourceHandler eresourceHandler) {
         this.eresourceHandler = eresourceHandler;
     }
