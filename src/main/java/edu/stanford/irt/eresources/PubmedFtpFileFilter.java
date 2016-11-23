@@ -1,21 +1,18 @@
 package edu.stanford.irt.eresources;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
 
 public class PubmedFtpFileFilter implements FTPFileFilter {
 
-    private String basePath;
-
-    private List<String> processedFiles;
+    private Set<String> processedFiles;
 
     public PubmedFtpFileFilter(final String basePath) {
-        this.basePath = basePath;
-        this.processedFiles = getProcessedFiles(new File(this.basePath));
+        this.processedFiles = getProcessedFiles(new File(basePath));
     }
 
     @Override
@@ -28,8 +25,8 @@ public class PubmedFtpFileFilter implements FTPFileFilter {
         return false;
     }
 
-    private List<String> getProcessedFiles(final File directory) {
-        List<String> fileList = new LinkedList<String>();
+    private Set<String> getProcessedFiles(final File directory) {
+        Set<String> fileList = new HashSet<String>();
         File[] files = directory.listFiles();
         if (null != files) {
             for (File file : files) {
