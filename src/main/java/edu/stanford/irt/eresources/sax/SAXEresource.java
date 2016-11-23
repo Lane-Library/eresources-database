@@ -45,9 +45,9 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
-    private static final String PERIOD = ".";
-
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
+
+    private static final String SEMICOLON_SPACE = "; ";
     static {
         for (String type : ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -628,13 +628,13 @@ public class SAXEresource implements Cloneable, Eresource {
     private String buildPublicationAuthorsText() {
         StringBuilder sb = new StringBuilder();
         for (String auth : this.publicationAuthors) {
-            sb.append(auth).append("; ");
+            sb.append(auth).append(SEMICOLON_SPACE);
         }
-        if (sb.length() > 2) {
+        if (sb.toString().endsWith(SEMICOLON_SPACE)) {
             sb.delete(sb.length() - 2, sb.length());
         }
-        if (sb.length() > 0 && sb.lastIndexOf(PERIOD) != sb.length() - 1) {
-            sb.append(PERIOD);
+        if (sb.length() > 0 && !sb.toString().endsWith(".")) {
+            sb.append('.');
         }
         return sb.toString();
     }
