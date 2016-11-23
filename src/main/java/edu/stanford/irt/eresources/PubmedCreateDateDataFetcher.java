@@ -31,8 +31,6 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
 
     private File propertiesFile;
 
-    private PubmedSearcher searcher;
-
     @Override
     public void getUpdateFiles() {
         String date = getLastUpdateDate();
@@ -42,8 +40,7 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
         } catch (UnsupportedEncodingException e) {
             throw new EresourceDatabaseException(e);
         }
-        this.searcher = new PubmedSearcher("No Field", "Create Date", query);
-        pmidListToFiles(this.searcher.getPmids(), "createDate-");
+        pmidListToFiles(new PubmedSearcher("No Field", "Create Date", query).getPmids(), "createDate-");
         writeLastRunDate();
     }
 
