@@ -125,16 +125,18 @@ public class PubmedSearcher {
     private String getContent(final String url) {
         String htmlContent = null;
         HttpResponse res = null;
-        HttpGet method = new HttpGet(url);
-        method.setConfig(HTTP_CONFIG);
+        HttpGet get = new HttpGet(url);
+        get.setConfig(HTTP_CONFIG);
         try {
-            res = PubmedSearcher.httpClient.execute(method);
+            res = PubmedSearcher.httpClient.execute(get);
             if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 htmlContent = EntityUtils.toString(res.getEntity());
             }
         } catch (IOException e) {
-            method.abort();
+            get.abort();
             throw new EresourceDatabaseException(e);
+        } finally {
+            get.reset();
         }
         if (null == htmlContent) {
             LOG.error("null htmlContent for {}", url);
