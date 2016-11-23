@@ -89,9 +89,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             } else {
                 LOG.error("couldn't update file's timestamp; make sure it's not loading on every run");
             }
-        } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (SAXException e) {
+        } catch (IOException | SAXException e) {
             throw new EresourceDatabaseException(e);
         }
     }
