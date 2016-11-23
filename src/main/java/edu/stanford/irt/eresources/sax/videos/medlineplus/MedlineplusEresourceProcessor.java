@@ -21,23 +21,24 @@ import edu.stanford.irt.eresources.sax.videos.VideoEresourceProcessor;
 
 public class MedlineplusEresourceProcessor extends VideoEresourceProcessor {
 
-    XPath xPath = XPathFactory.newInstance().newXPath();
-    
     List<String> expressions = null;
-    
+
+    XPath xPath = XPathFactory.newInstance().newXPath();
+
     private int id = 0;
-    
+
     @Override
     public void process() {
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            //entry url one the Health Videos and the other Surgical Videos
-            for (int index = 0; index < URLs.size(); index++) {
+            // entry url one the Health Videos and the other Surgical Videos
+            for (int index = 0; index < this.URLs.size(); index++) {
                 Set<String> links = new HashSet<String>();
-                Document doc = getDocument(URLs.get(index));
-                // All links from Health Videos or Surgical Videos page 
-                NodeList nodes = (NodeList) xPath.compile(this.expressions.get(index)).evaluate(doc,  XPathConstants.NODESET);
+                Document doc = getDocument(this.URLs.get(index));
+                // All links from Health Videos or Surgical Videos page
+                NodeList nodes = (NodeList) this.xPath.compile(this.expressions.get(index)).evaluate(doc,
+                        XPathConstants.NODESET);
                 for (int i = 0; i < nodes.getLength(); i++) {
                     Node node = nodes.item(i);
                     String href = node.getTextContent();
@@ -55,24 +56,21 @@ public class MedlineplusEresourceProcessor extends VideoEresourceProcessor {
         }
     }
 
-    public void process(Set<String> urls ) {
+    public void process(final Set<String> urls) {
         try {
             for (String url : urls) {
                 Document doc = getDocument(url);
                 Element root = doc.getDocumentElement();
-                root.setAttribute("id", String.valueOf(++id));
+                root.setAttribute("id", String.valueOf(++this.id));
                 root.setAttribute("url", url);
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
-            } 
-    } catch (Exception e) {
-        throw new EresourceDatabaseException(e);
-    }
+            }
+        } catch (Exception e) {
+            throw new EresourceDatabaseException(e);
+        }
     }
 
-
-    
-    public void setExpressions(List<String> expressions) {
+    public void setExpressions(final List<String> expressions) {
         this.expressions = expressions;
     }
-    
 }
