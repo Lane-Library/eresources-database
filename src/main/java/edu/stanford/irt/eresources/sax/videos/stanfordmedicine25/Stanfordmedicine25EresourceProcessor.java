@@ -13,6 +13,7 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -34,7 +35,7 @@ public class Stanfordmedicine25EresourceProcessor extends VideoEresourceProcesso
             process(nodes);
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (Exception e) {
+        } catch (SAXException | XPathExpressionException | TransformerException e) {
             throw new EresourceDatabaseException(e);
         }
     }

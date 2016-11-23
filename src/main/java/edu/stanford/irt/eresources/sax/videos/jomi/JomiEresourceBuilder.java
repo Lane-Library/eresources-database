@@ -1,9 +1,11 @@
 package edu.stanford.irt.eresources.sax.videos.jomi;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -24,9 +26,9 @@ public class JomiEresourceBuilder extends DefaultEresourceBuilder {
 
     private String expression = null;
 
-    private XPath xPath = XPathFactory.newInstance().newXPath();
-
     private StringBuilder text = new StringBuilder();
+
+    private XPath xPath = XPathFactory.newInstance().newXPath();
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
@@ -64,7 +66,7 @@ public class JomiEresourceBuilder extends DefaultEresourceBuilder {
             String description = (String) this.xPath.compile(this.expression).evaluate(doc, XPathConstants.STRING);
             eresource.setDescription(description);
             eresource.setKeywords(eresource.getKeywords().concat(description));
-        } catch (Exception e) {
+        } catch (XPathException | SAXException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
     }

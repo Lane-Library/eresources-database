@@ -1,15 +1,18 @@
 package edu.stanford.irt.eresources.sax.videos.sages;
 
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -40,7 +43,7 @@ public class SagesEresourceProcessor extends VideoEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (Exception e) {
+        } catch (InterruptedException | TransformerException | XPathException | SAXException e) {
             throw new EresourceDatabaseException(e);
         }
     }

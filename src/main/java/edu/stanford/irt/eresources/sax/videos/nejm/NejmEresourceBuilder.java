@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax.videos.nejm;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class NejmEresourceBuilder extends DefaultEresourceBuilder {
             String description = getDescription(doc);
             eresource.setDescription(description);
             eresource.setPublicationAuthorsText(getAuthor(doc));
-        } catch (Exception e) {
+        } catch (SAXException | IOException | XPathExpressionException e) {
             throw new EresourceDatabaseException(e);
         }
     }

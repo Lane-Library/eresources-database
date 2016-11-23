@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.sax.videos;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
@@ -18,6 +19,7 @@ import org.cyberneko.html.HTMLConfiguration;
 import org.w3c.dom.Document;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
@@ -53,7 +55,7 @@ public class VideoEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (Exception e) {
+        } catch (SAXException | TransformerException e) {
             throw new EresourceDatabaseException(e);
         }
     }

@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax.videos.jove;
 
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.xpath.XPath;
@@ -9,6 +10,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -36,7 +38,7 @@ public class JoveEresourceProcessor extends VideoEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (Exception e) {
+        } catch (InterruptedException | SAXException | TransformerException | XPathExpressionException e) {
             throw new EresourceDatabaseException(e);
         }
     }

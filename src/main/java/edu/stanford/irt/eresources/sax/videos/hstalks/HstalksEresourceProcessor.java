@@ -1,6 +1,9 @@
 package edu.stanford.irt.eresources.sax.videos.hstalks;
 
+import java.io.IOException;
+
 import org.apache.commons.lang.StringEscapeUtils;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -64,7 +67,7 @@ public class HstalksEresourceProcessor extends JsonVideoEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (Exception e) {
+        } catch (SAXException | InterruptedException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
     }

@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
@@ -106,7 +107,7 @@ public class JoveEresourceBuilder extends DefaultEresourceBuilder {
             eresource.setKeywords("jove ".concat(description).concat(" ").concat(eresource.getTitle()));
             setDate(doc, url, eresource);
             Thread.sleep(1000);
-        } catch (Exception e) {
+        } catch (SAXException | InterruptedException | IOException | XPathException e) {
             throw new EresourceDatabaseException(e);
         } finally {
             try {

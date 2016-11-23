@@ -35,7 +35,7 @@ public class BatesEresourceProcessor extends AbstractVideoEresourceProcessor {
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
             Thread.sleep(1000);
-        } catch (Exception e) {
+        } catch (SAXException | InterruptedException e) {
             throw new EresourceDatabaseException(e);
         }
     }

@@ -9,6 +9,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
+import org.apache.xerces.xni.parser.XMLConfigurationException;
 import org.cyberneko.html.HTMLConfiguration;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -39,7 +40,7 @@ public abstract class JsonVideoEresourceProcessor extends AbstractVideoEresource
             res = (CloseableHttpResponse) this.httpClient.execute(get);
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(res.getEntity().getContent(), JsonNode.class);
-        } catch (Exception e) {
+        } catch (XMLConfigurationException e) {
             throw new EresourceDatabaseException(e);
         } finally {
             if (res != null) {

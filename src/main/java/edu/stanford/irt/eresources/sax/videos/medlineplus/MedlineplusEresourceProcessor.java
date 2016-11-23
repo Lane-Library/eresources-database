@@ -4,16 +4,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -51,7 +54,7 @@ public class MedlineplusEresourceProcessor extends VideoEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (Exception e) {
+        } catch (SAXException | XPathException e) {
             throw new EresourceDatabaseException(e);
         }
     }
@@ -65,7 +68,7 @@ public class MedlineplusEresourceProcessor extends VideoEresourceProcessor {
                 root.setAttribute("url", url);
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
             }
-        } catch (Exception e) {
+        } catch (TransformerException e) {
             throw new EresourceDatabaseException(e);
         }
     }
