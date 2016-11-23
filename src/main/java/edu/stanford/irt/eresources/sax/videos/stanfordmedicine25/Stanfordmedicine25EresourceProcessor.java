@@ -20,9 +20,9 @@ import edu.stanford.irt.eresources.sax.videos.VideoEresourceProcessor;
 
 public class Stanfordmedicine25EresourceProcessor extends VideoEresourceProcessor {
 
-    XPath xPath = XPathFactory.newInstance().newXPath();
-
     XPathExpression linksExpression;
+
+    XPath xPath = XPathFactory.newInstance().newXPath();
 
     @Override
     public void process() {
@@ -39,7 +39,11 @@ public class Stanfordmedicine25EresourceProcessor extends VideoEresourceProcesso
         }
     }
 
-    private void process(NodeList nodes) throws TransformerConfigurationException, TransformerException {
+    public void setLinksExpression(final String expression) throws XPathExpressionException {
+        this.linksExpression = this.xPath.compile(expression);
+    }
+
+    private void process(final NodeList nodes) throws TransformerConfigurationException, TransformerException {
         for (int i = 0; i < nodes.getLength(); i++) {
             String href = super.URLs.get(1).concat(nodes.item(i).getTextContent());
             Document doc = getDocument(href);
@@ -48,9 +52,5 @@ public class Stanfordmedicine25EresourceProcessor extends VideoEresourceProcesso
             root.setAttribute("url", href);
             this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
         }
-    }
-
-    public void setLinksExpression(String expression) throws XPathExpressionException {
-        this.linksExpression = xPath.compile(expression);
     }
 }
