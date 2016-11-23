@@ -50,13 +50,13 @@ public class JomiEresourceBuilder extends DefaultEresourceBuilder {
     }
 
     private void getDescription(final String url, final SAXEresource eresource) {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpget = new HttpGet(url);
         HTMLConfiguration conf = new HTMLConfiguration();
         conf.setFeature("http://xml.org/sax/features/namespaces", false);
         conf.setProperty("http://cyberneko.org/html/properties/default-encoding", StandardCharsets.UTF_8.name());
         conf.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
-        try (CloseableHttpResponse response = httpclient.execute(httpget)) {
+        try (CloseableHttpClient httpclient = HttpClients.createDefault();
+                CloseableHttpResponse response = httpclient.execute(httpget)) {
             InputSource source = new InputSource(response.getEntity().getContent());
             DOMParser parser = new DOMParser(conf);
             parser.parse(source);
