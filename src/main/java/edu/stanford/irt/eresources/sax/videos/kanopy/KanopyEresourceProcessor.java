@@ -17,9 +17,9 @@ import edu.stanford.irt.eresources.sax.videos.VideoEresourceProcessor;
 
 public class KanopyEresourceProcessor extends VideoEresourceProcessor {
 
-    private XPath xPath = XPathFactory.newInstance().newXPath();
-
     private XPathExpression nextPageExpression;
+
+    private XPath xPath = XPathFactory.newInstance().newXPath();
 
     @Override
     public void process() {
@@ -29,13 +29,13 @@ public class KanopyEresourceProcessor extends VideoEresourceProcessor {
             int page = 0;
             String totalVideos = null;
             while (!"0".equals(totalVideos)) {
-                Document doc = getDocument(URLs.get(0).concat(String.valueOf(page++)));
+                Document doc = getDocument(this.URLs.get(0).concat(String.valueOf(page++)));
                 Element root = doc.getDocumentElement();
                 Node node = doc.createElement("page_id");
                 node.setTextContent(String.valueOf(page * 10));
                 root.appendChild(node);
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
-                totalVideos = nextPageExpression.evaluate(doc);
+                totalVideos = this.nextPageExpression.evaluate(doc);
                 Thread.sleep(1000);
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
@@ -45,7 +45,7 @@ public class KanopyEresourceProcessor extends VideoEresourceProcessor {
         }
     }
 
-    public void setNextPageExpression(String nextPageExpression) throws XPathExpressionException {
-        this.nextPageExpression = xPath.compile(nextPageExpression);
+    public void setNextPageExpression(final String nextPageExpression) throws XPathExpressionException {
+        this.nextPageExpression = this.xPath.compile(nextPageExpression);
     }
 }
