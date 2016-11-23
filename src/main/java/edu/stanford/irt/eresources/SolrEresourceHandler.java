@@ -44,7 +44,7 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private SolrClient solrClient;
 
-    private Collection<SolrInputDocument> solrDocs = new ArrayList<SolrInputDocument>();
+    private Collection<SolrInputDocument> solrDocs = new ArrayList<>();
 
     private int solrMaxDocs;
 
@@ -118,7 +118,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         SolrInputDocument doc = new SolrInputDocument();
         String title = eresource.getTitle();
         String sortTitle = getSortText(title);
-        List<Version> versions = new LinkedList<Version>();
+        List<Version> versions = new LinkedList<>();
         int[] itemCount = eresource.getItemCount();
         doc.addField("id", eresource.getId());
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
