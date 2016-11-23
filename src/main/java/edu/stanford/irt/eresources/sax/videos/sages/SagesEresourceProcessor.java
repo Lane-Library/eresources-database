@@ -17,9 +17,9 @@ import edu.stanford.irt.eresources.sax.videos.VideoEresourceProcessor;
 
 public class SagesEresourceProcessor extends VideoEresourceProcessor {
 
-    XPath xPath = XPathFactory.newInstance().newXPath();
-
     XPathExpression nextPageExpression;
+
+    XPath xPath = XPathFactory.newInstance().newXPath();
 
     @Override
     public void process() {
@@ -27,16 +27,16 @@ public class SagesEresourceProcessor extends VideoEresourceProcessor {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             int pageIndex = 10;
-            for (String url : URLs) {
-               while (url != null && !"".equals(url)) {
-                   Document doc = getDocument(url);
-                   Element root = doc.getDocumentElement();
-                   root.setAttribute("id", Integer.toString(pageIndex));
-                   pageIndex = pageIndex +10;
-                   this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
-                   Thread.sleep(100);
-                   url = (String) this.nextPageExpression.evaluate(doc, XPathConstants.STRING);
-                 }
+            for (String url : this.URLs) {
+                while (url != null && !"".equals(url)) {
+                    Document doc = getDocument(url);
+                    Element root = doc.getDocumentElement();
+                    root.setAttribute("id", Integer.toString(pageIndex));
+                    pageIndex = pageIndex + 10;
+                    this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+                    Thread.sleep(100);
+                    url = (String) this.nextPageExpression.evaluate(doc, XPathConstants.STRING);
+                }
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
@@ -45,8 +45,7 @@ public class SagesEresourceProcessor extends VideoEresourceProcessor {
         }
     }
 
-    
-    public void setNextPageExpression(String nextPageExpression) throws XPathExpressionException {
-        this.nextPageExpression = xPath.compile(nextPageExpression);
+    public void setNextPageExpression(final String nextPageExpression) throws XPathExpressionException {
+        this.nextPageExpression = this.xPath.compile(nextPageExpression);
     }
 }
