@@ -106,7 +106,7 @@ public class PubmedSearcher {
                 retmaxNodes = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
                 retmaxNode = retmaxNodes.item(0);
                 if (null == retmaxNode || null == retmaxNode.getTextContent()) {
-                    LOG.error("null eSearchResult/RetMax for " + q);
+                    LOG.error("null eSearchResult/RetMax for {}", q);
                 } else {
                     retMax = Integer.parseInt(retmaxNode.getTextContent().trim());
                     pmidNodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
@@ -137,7 +137,7 @@ public class PubmedSearcher {
             throw new EresourceDatabaseException(e);
         }
         if (null == htmlContent) {
-            LOG.error("null htmlContent for " + url);
+            LOG.error("null htmlContent for {}", url);
         }
         return htmlContent;
     }
