@@ -55,7 +55,7 @@ public abstract class AbstractPubmedDataFetcher {
     }
 
     protected void pmidListToFiles(final List<String> pmids, final String baseFilename) {
-        List<String> myPmids = (ArrayList<String>) ((ArrayList<String>) pmids).clone();
+        List<String> myPmids = (ArrayList) ((ArrayList) pmids).clone();
         new File(this.basePath + "/" + TODAY);
         int i = 0;
         int start;
@@ -70,7 +70,8 @@ public abstract class AbstractPubmedDataFetcher {
             List<String> sublist = pmids.subList(start, end);
             myPmids.removeAll(sublist);
             try {
-                url = BASE_URL + URLEncoder.encode(StringUtils.collectionToCommaDelimitedString(sublist), StandardCharsets.UTF_8.name());
+                url = BASE_URL + URLEncoder.encode(StringUtils.collectionToCommaDelimitedString(sublist),
+                        StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {
                 throw new EresourceDatabaseException(e);
             }
@@ -96,20 +97,23 @@ public abstract class AbstractPubmedDataFetcher {
     private String getContent(final String url) {
         String xmlContent = null;
         HttpResponse res = null;
-        HttpGet method = new HttpGet(url);
-        method.setConfig(HTTP_CONFIG);
+        HttpGet get = new HttpGet(url);
+        get.setConfig(HTTP_CONFIG);
         try {
-            res = AbstractPubmedDataFetcher.httpClient.execute(method);
+            res = AbstractPubmedDataFetcher.httpClient.execute(get);
             if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 xmlContent = EntityUtils.toString(res.getEntity());
             }
         } catch (IOException e) {
-            method.abort();
+            get.abort();
             throw new EresourceDatabaseException(e);
+        } finally {
+            get.reset();
         }
         try {
             Thread.sleep(SLEEP_TIME);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new EresourceDatabaseException(e);
         }
         return xmlContent;
