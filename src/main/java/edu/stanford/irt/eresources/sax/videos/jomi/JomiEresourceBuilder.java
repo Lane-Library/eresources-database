@@ -22,9 +22,9 @@ import edu.stanford.irt.eresources.sax.SAXEresource;
 
 public class JomiEresourceBuilder extends DefaultEresourceBuilder {
 
-    String expression = null;
+    private String expression = null;
 
-    XPath xPath = XPathFactory.newInstance().newXPath();
+    private XPath xPath = XPathFactory.newInstance().newXPath();
 
     private StringBuilder text = new StringBuilder();
 
