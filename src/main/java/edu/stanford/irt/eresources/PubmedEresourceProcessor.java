@@ -85,7 +85,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             this.xmlReader.parse(source);
             // touch file so we don't load it next time
             if (file.setLastModified(System.currentTimeMillis())) {
-                LOG.info("processed: " + file);
+                LOG.info("processed: {}", file);
             } else {
                 LOG.error("couldn't update file's timestamp; make sure it's not loading on every run");
             }
