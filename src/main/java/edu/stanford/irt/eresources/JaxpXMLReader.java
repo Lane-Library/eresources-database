@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 

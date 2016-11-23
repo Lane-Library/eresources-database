@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
@@ -40,7 +41,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            for (String urlString : allClassesURL) {
+            for (String urlString : this.allClassesURL) {
                 URL url = new URL(urlString);
                 InputSource source = new InputSource(url.openConnection().getInputStream());
                 process(source);
@@ -52,10 +53,10 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
         }
     }
 
-    public void process(InputSource source) {
+    public void process(final InputSource source) {
         try {
-            DocumentBuilder parser;
-            parser = this.factory.newDocumentBuilder();
+            this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);
             Date sometimeEarlier = new Date(1);

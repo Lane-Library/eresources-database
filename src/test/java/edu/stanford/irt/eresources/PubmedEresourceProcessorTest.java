@@ -2,6 +2,8 @@ package edu.stanford.irt.eresources;
 
 import static org.easymock.EasyMock.isA;
 
+import javax.xml.XMLConstants;
+
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,6 +32,8 @@ public class PubmedEresourceProcessorTest {
         this.processor.setBasePath("src/test/resources/edu/stanford/irt/eresources");
         this.xmlReader = EasyMock.mock(XMLReader.class);
         this.processor.setXmlReader(this.xmlReader);
+        this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        EasyMock.expectLastCall().times(2);
         this.xmlReader.parse(isA(InputSource.class));
         EasyMock.expectLastCall().times(2);
         EasyMock.replay(this.xmlReader);
@@ -42,6 +46,7 @@ public class PubmedEresourceProcessorTest {
         this.processor.setBasePath("src/test/resources/edu/stanford/irt/eresources");
         this.xmlReader = EasyMock.mock(XMLReader.class);
         this.processor.setXmlReader(this.xmlReader);
+        this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         this.xmlReader.parse(isA(InputSource.class));
         EasyMock.expectLastCall().andThrow(new SAXException("sax exception"));
         EasyMock.replay(this.xmlReader);

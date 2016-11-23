@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources.sax.videos.nejm;
 
 import java.net.URL;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
@@ -37,6 +38,7 @@ public class NejmEresourceProcessor extends AbstractEresourceProcessor {
         try {
             URL url = new URL(this.URL);
             InputSource source = new InputSource(url.openConnection().getInputStream());
+            this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);

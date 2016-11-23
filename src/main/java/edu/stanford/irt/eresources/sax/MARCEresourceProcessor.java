@@ -3,6 +3,8 @@ package edu.stanford.irt.eresources.sax;
 import java.io.IOException;
 import java.sql.Timestamp;
 
+import javax.xml.XMLConstants;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -29,6 +31,7 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
         InputSource source = new InputSource();
         try {
             source.setByteStream(this.inputStream);
+            this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.xmlReader.parse(source);
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);

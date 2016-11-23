@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import javax.xml.XMLConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -82,6 +84,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             } else {
                 source.setByteStream(stream);
             }
+            this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.xmlReader.parse(source);
             // touch file so we don't load it next time
             if (file.setLastModified(System.currentTimeMillis())) {

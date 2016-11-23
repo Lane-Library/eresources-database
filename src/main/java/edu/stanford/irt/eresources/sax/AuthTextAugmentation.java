@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
+import javax.xml.XMLConstants;
 
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -77,10 +78,11 @@ public class AuthTextAugmentation extends DefaultHandler {
             this.currentText.setLength(0);
             this.tag = null;
             XMLReader xmlReader = new UTF8ComposingMarcReader();
-            xmlReader.setContentHandler(this);
             try {
-                xmlReader.parse(new InputSource(new AuthAugmentationInputStream(controlNumber, this.dataSource,
-                        this.executor)));
+                xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+                xmlReader.setContentHandler(this);
+                xmlReader.parse(new InputSource(
+                        new AuthAugmentationInputStream(controlNumber, this.dataSource, this.executor)));
             } catch (IOException e) {
                 throw new EresourceDatabaseException(e);
             } catch (SAXException e) {

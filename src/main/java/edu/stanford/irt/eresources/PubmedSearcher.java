@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
@@ -101,6 +102,7 @@ public class PubmedSearcher {
             NodeList retmaxNodes = null;
             NodeList pmidNodes = null;
             try {
+                this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
                 doc = this.factory.newDocumentBuilder()
                         .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
                 retmaxNodes = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
