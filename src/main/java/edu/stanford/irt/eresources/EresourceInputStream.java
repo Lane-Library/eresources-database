@@ -108,7 +108,7 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
     }
 
     private Map<String, Collection<String>> getIdMap(final PreparedStatement getListStmt) throws SQLException {
-        Map<String, Collection<String>> ids = new HashMap<String, Collection<String>>();
+        Map<String, Collection<String>> ids = new HashMap<>();
         try (ResultSet rs = getListStmt.executeQuery()) {
             int columnCount = rs.getMetaData().getColumnCount();
             while (rs.next()) {
@@ -116,7 +116,7 @@ public abstract class EresourceInputStream extends PipedInputStream implements R
                 if (columnCount > 1) {
                     Collection<String> mfhds = ids.get(bibId);
                     if (mfhds == null) {
-                        mfhds = new ArrayList<String>();
+                        mfhds = new ArrayList<>();
                         ids.put(bibId, mfhds);
                     }
                     mfhds.add(rs.getString(2));
