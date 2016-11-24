@@ -200,13 +200,13 @@ public class SolrEresourceHandler implements EresourceHandler {
         String publicationText = eresource.getPublicationText();
         String text = eresource.getKeywords();
         if (null != text) {
-            keywords.append(" ".concat(text).concat(" "));
+            keywords.append(' ').append(text).append(' ');
         }
         if (null != publicationText) {
-            keywords.append(" " + publicationText.concat(" "));
+            keywords.append(' ').append(publicationText).append(' ');
         }
         for (String type : eresource.getTypes()) {
-            keywords.append(" ".concat(type).concat(" "));
+            keywords.append(' ').append(type).append(' ');
         }
         return keywords.toString();
     }
@@ -229,7 +229,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         StringBuilder tiab = new StringBuilder();
         tiab.append(eresource.getTitle());
-        tiab.append(" ");
+        tiab.append(' ');
         tiab.append(eresource.getDescription());
         if (CHILD.matcher(tiab.toString()).matches()) {
             return true;
