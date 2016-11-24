@@ -27,8 +27,8 @@ public class JoveEresourceProcessor extends VideoEresourceProcessor {
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            for (int index = 0; index < this.URLs.size(); index++) {
-                String nextPageUrl = this.URLs.get(index);
+            for (int index = 0; index < this.urls.size(); index++) {
+                String nextPageUrl = this.urls.get(index);
                 while (!"".equals(nextPageUrl)) {
                     Document doc = getDocument(nextPageUrl);
                     this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));

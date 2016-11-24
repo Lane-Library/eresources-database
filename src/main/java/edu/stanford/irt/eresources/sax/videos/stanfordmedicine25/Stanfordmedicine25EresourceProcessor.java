@@ -28,7 +28,7 @@ public class Stanfordmedicine25EresourceProcessor extends VideoEresourceProcesso
     @Override
     public void process() {
         try {
-            Document doc = getDocument(super.URLs.get(0));
+            Document doc = getDocument(super.urls.get(0));
             NodeList nodes = (NodeList) this.linksExpression.evaluate(doc, XPathConstants.NODESET);
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
@@ -46,7 +46,7 @@ public class Stanfordmedicine25EresourceProcessor extends VideoEresourceProcesso
 
     private void process(final NodeList nodes) throws TransformerConfigurationException, TransformerException {
         for (int i = 0; i < nodes.getLength(); i++) {
-            String href = super.URLs.get(1).concat(nodes.item(i).getTextContent());
+            String href = super.urls.get(1).concat(nodes.item(i).getTextContent());
             Document doc = getDocument(href);
             Element root = doc.getDocumentElement();
             root.setAttribute("pageid", String.valueOf(i));

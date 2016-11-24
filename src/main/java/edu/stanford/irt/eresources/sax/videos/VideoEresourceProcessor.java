@@ -37,7 +37,7 @@ public class VideoEresourceProcessor extends AbstractEresourceProcessor {
 
     protected TransformerFactory tf = TransformerFactory.newInstance();
 
-    protected List<String> URLs;
+    protected List<String> urls;
 
     private HttpClient httpClient = null;
 
@@ -50,7 +50,7 @@ public class VideoEresourceProcessor extends AbstractEresourceProcessor {
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            for (String url : this.URLs) {
+            for (String url : this.urls) {
                 Document doc = getDocument(url);
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
             }
@@ -66,7 +66,7 @@ public class VideoEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     public void setURLs(final List<String> urls) {
-        this.URLs = urls;
+        this.urls = urls;
     }
 
     protected Document getDocument(final String url) {

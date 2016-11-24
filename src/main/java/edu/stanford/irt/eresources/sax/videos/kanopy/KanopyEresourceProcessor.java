@@ -31,7 +31,7 @@ public class KanopyEresourceProcessor extends VideoEresourceProcessor {
             int page = 0;
             String totalVideos = null;
             while (!"0".equals(totalVideos)) {
-                Document doc = getDocument(this.URLs.get(0).concat(String.valueOf(page++)));
+                Document doc = getDocument(this.urls.get(0).concat(String.valueOf(page++)));
                 Element root = doc.getDocumentElement();
                 Node node = doc.createElement("page_id");
                 node.setTextContent(String.valueOf(page * 10));

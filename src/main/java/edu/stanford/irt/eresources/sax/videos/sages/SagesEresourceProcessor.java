@@ -30,7 +30,7 @@ public class SagesEresourceProcessor extends VideoEresourceProcessor {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             int pageIndex = 10;
-            for (String url : this.URLs) {
+            for (String url : this.urls) {
                 while (url != null && !"".equals(url)) {
                     Document doc = getDocument(url);
                     Element root = doc.getDocumentElement();
