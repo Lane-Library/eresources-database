@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax.videos;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -64,8 +65,8 @@ public class VideoEresourceProcessor extends AbstractEresourceProcessor {
         this.contentHandler = contentHandler;
     }
 
-    public void setURLs(final List<String> URLs) {
-        this.URLs = URLs;
+    public void setURLs(final List<String> urls) {
+        this.URLs = urls;
     }
 
     protected Document getDocument(final String url) {
@@ -81,8 +82,10 @@ public class VideoEresourceProcessor extends AbstractEresourceProcessor {
             DOMParser parser = new DOMParser(config);
             parser.parse(source);
             return parser.getDocument();
-        } catch (Exception e) {
+        } catch (SAXException | IOException e) {
             throw new EresourceDatabaseException(e);
+        } finally {
+            get.reset();
         }
     }
 }
