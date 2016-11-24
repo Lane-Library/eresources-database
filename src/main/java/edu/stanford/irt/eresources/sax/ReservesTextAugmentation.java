@@ -31,7 +31,7 @@ public class ReservesTextAugmentation extends DefaultHandler {
             + "AND expire_date > SYSDATE GROUP BY bib_item.bib_id, department_name, course_number, "
             + "  last_name, first_name ORDER BY bib_item.bib_id";
 
-    private Map<String, String> augmentations = new HashMap<String, String>();
+    private Map<String, String> augmentations = new HashMap<>();
 
     private DataSource dataSource;
 

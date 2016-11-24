@@ -55,7 +55,7 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
 							}
 							String year = getYear(videoNode);
 							String url = getUrl(videoNode, unmodifiedTitle);
-							List<String> authors = new ArrayList<String>();
+							List<String> authors = new ArrayList<>();
 							getAuthors( videoNode,  authors);
 							super.processEresource(ERESOURCE_TYPE + "-" + id, id,
 									AbstractVideoEresourceProcessor.EXTRENAL_VIDEO, title, description,
@@ -102,7 +102,7 @@ public class ClinicalkeyEresourceProcessor extends JsonVideoEresourceProcessor {
 	private void getAuthors(JsonNode videoNode, List<String> authors){
 		if (videoNode.path("authorlist") != null) {
 			int maxAuthor = 10;
-			List<String> alreadyIn = new ArrayList<String>();
+			List<String> alreadyIn = new ArrayList<>();
 			JsonNode authorList = videoNode.path("authorlist");
 			for (int j = 0; j < maxAuthor; j++) {
 				if (null != authorList.get(j)) {

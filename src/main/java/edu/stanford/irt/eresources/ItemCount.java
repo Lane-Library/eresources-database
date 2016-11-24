@@ -53,7 +53,7 @@ public class ItemCount {
     }
 
     private Map<Integer, Integer> createItemCountMap(final String query) {
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> map = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();
                 Statement statement = conn.createStatement();
                 ResultSet rs = statement.executeQuery(query)) {

@@ -25,7 +25,7 @@ public class SAXVersion implements Version {
 
     public void addLink(final Link link) {
         if (null == this.links) {
-            this.links = new LinkedList<Link>();
+            this.links = new LinkedList<>();
         }
         this.links.add(link);
     }

@@ -41,7 +41,7 @@ public class BatesEresourceProcessor extends AbstractVideoEresourceProcessor {
     }
 
     public void setAuthors(final String author) {
-        this.authors = new ArrayList<String>();
+        this.authors = new ArrayList<>();
         this.authors.add(author);
     }
 

@@ -26,7 +26,7 @@ import edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader;
 
 public class AuthTextAugmentation extends DefaultHandler {
 
-    private Map<String, String> augmentations = new HashMap<String, String>();
+    private Map<String, String> augmentations = new HashMap<>();
 
     private StringBuilder augmentationText = new StringBuilder();
 
@@ -44,14 +44,14 @@ public class AuthTextAugmentation extends DefaultHandler {
     public AuthTextAugmentation() {
         // create a new augmentation map each Sunday:
         if (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-            this.augmentations = new HashMap<String, String>();
+            this.augmentations = new HashMap<>();
             // otherwise use the existing one:
         } else {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("augmentations.obj"))) {
                 this.augmentations = (Map<String, String>) ois.readObject();
             } catch (IOException e) {
                 LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
-                this.augmentations = new HashMap<String, String>();
+                this.augmentations = new HashMap<>();
             } catch (ClassNotFoundException e) {
                 throw new EresourceDatabaseException(e);
             }

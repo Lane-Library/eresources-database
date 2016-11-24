@@ -26,7 +26,7 @@ public class PubmedFtpFileFilter implements FTPFileFilter {
     }
 
     private Set<String> getProcessedFiles(final File directory) {
-        Set<String> fileList = new HashSet<String>();
+        Set<String> fileList = new HashSet<>();
         File[] files = directory.listFiles();
         if (null != files) {
             for (File file : files) {

@@ -18,7 +18,7 @@ import edu.stanford.irt.eresources.VersionComparator;
 
 public class SAXEresource implements Cloneable, Eresource {
 
-    private static final Set<String> ALLOWED_TYPES = new HashSet<String>();
+    private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Audio", "Chapter",
             "Clinical Decision Tools", "Database", "Book", "Journal", "Atlases, Pictorial",
@@ -31,7 +31,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
-    private static final Map<String, String> COMPOSITE_TYPES = new HashMap<String, String>();
+    private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Journal", "Periodicals", "Newspapers" },
             { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
@@ -45,7 +45,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
-    private static final Map<String, String> PRIMARY_TYPES = new HashMap<String, String>();
+    private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
 
     private static final String SEMICOLON_SPACE = "; ";
     static {
@@ -123,7 +123,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String printOrDigital;
 
-    private Collection<String> publicationAuthors = new ArrayList<String>();
+    private Collection<String> publicationAuthors = new ArrayList<>();
 
     private String publicationAuthorsText;
 
@@ -151,7 +151,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private String title;
 
-    private Collection<String> types = new HashSet<String>();
+    private Collection<String> types = new HashSet<>();
 
     private Date updated;
 
@@ -161,21 +161,21 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void addAbbreviatedTitle(final String title) {
         if (null == this.abbreviatedTitles) {
-            this.abbreviatedTitles = new HashSet<String>();
+            this.abbreviatedTitles = new HashSet<>();
         }
         this.abbreviatedTitles.add(title);
     }
 
     public void addAlternativeTitle(final String title) {
         if (null == this.alternativeTitles) {
-            this.alternativeTitles = new HashSet<String>();
+            this.alternativeTitles = new HashSet<>();
         }
         this.alternativeTitles.add(title);
     }
 
     public void addMeshTerm(final String meshTerm) {
         if (null == this.meshTerms) {
-            this.meshTerms = new HashSet<String>();
+            this.meshTerms = new HashSet<>();
         }
         this.meshTerms.add(meshTerm);
     }
@@ -186,14 +186,14 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void addPublicationLanguage(final String publicationLanguage) {
         if (this.publicationLanguages == null) {
-            this.publicationLanguages = new HashSet<String>();
+            this.publicationLanguages = new HashSet<>();
         }
         this.publicationLanguages.add(LANGUAGE_MAP.getLanguage(publicationLanguage.toLowerCase()));
     }
 
     public void addPublicationType(final String publicationType) {
         if (this.publicationTypes == null) {
-            this.publicationTypes = new HashSet<String>();
+            this.publicationTypes = new HashSet<>();
         }
         this.publicationTypes.add(publicationType);
     }
@@ -207,7 +207,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void addVersion(final Version version) {
         if (this.versions == null) {
-            this.versions = new TreeSet<Version>(COMPARATOR);
+            this.versions = new TreeSet<>(COMPARATOR);
         }
         if (version.getLinks().size() > 0) {
             this.versions.add(version);

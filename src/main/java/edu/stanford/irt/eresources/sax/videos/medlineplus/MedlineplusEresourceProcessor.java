@@ -37,7 +37,7 @@ public class MedlineplusEresourceProcessor extends VideoEresourceProcessor {
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             // entry url one the Health Videos and the other Surgical Videos
             for (int index = 0; index < this.URLs.size(); index++) {
-                Set<String> links = new HashSet<String>();
+                Set<String> links = new HashSet<>();
                 Document doc = getDocument(this.URLs.get(index));
                 // All links from Health Videos or Surgical Videos page
                 NodeList nodes = (NodeList) this.xPath.compile(this.expressions.get(index)).evaluate(doc,
