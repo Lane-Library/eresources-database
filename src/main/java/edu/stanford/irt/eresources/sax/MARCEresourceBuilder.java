@@ -85,7 +85,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected ReservesTextAugmentation reservesTextAugmentation;
 
-    protected String tag = "";
+    protected String tag = "000";
 
     protected StringBuilder title = new StringBuilder();
 
