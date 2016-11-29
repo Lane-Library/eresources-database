@@ -78,22 +78,22 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
         InputSource source = new InputSource();
         try (InputStream stream = new FileInputStream(file)) {
             if (file.getName().matches(".*\\.gz")) {
-                try (InputStream gzstream = new GZIPInputStream(stream)) {
-                    source.setByteStream(gzstream);
-                }
+                InputStream gzstream = new GZIPInputStream(stream);
+                source.setByteStream(gzstream);
             } else {
                 source.setByteStream(stream);
             }
             this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.xmlReader.parse(source);
-            // touch file so we don't load it next time
-            if (file.setLastModified(System.currentTimeMillis())) {
-                LOG.info("processed: {}", file);
-            } else {
-                LOG.error("couldn't update file's timestamp; make sure it's not loading on every run");
-            }
         } catch (IOException | SAXException e) {
+            LOG.error("problem parsing {}", file);
             throw new EresourceDatabaseException(e);
+        }
+        // touch file so we don't load it next time
+        if (file.setLastModified(System.currentTimeMillis())) {
+            LOG.info("processed: {}", file);
+        } else {
+            LOG.error("couldn't update file's timestamp; make sure it's not loading on every run");
         }
     }
 }
