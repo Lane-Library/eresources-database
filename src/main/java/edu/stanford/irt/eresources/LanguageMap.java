@@ -1,7 +1,5 @@
 package edu.stanford.irt.eresources;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -11,8 +9,8 @@ public class LanguageMap {
     private final Properties properties = new Properties();
 
     public LanguageMap() {
-        File file = new File("languages.properties");
-        try (InputStream in = new FileInputStream(file)) {
+        try (InputStream in = ClassLoader
+                .getSystemResourceAsStream("edu/stanford/irt/eresources/languages.properties")) {
             this.properties.load(in);
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
