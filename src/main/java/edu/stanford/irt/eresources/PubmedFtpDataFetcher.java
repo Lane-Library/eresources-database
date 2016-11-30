@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -58,6 +59,10 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             throw new IllegalArgumentException("null basePath");
         }
         this.basePath = basePath;
+        File dir = new File(this.basePath);
+        if (!dir.exists() && !dir.mkdirs()) {
+            throw new IllegalArgumentException("missing and can't create " + this.basePath );
+        }
     }
 
     public void setFtpHost(final String ftpHost) {

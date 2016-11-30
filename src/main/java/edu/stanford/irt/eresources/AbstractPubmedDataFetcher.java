@@ -52,6 +52,10 @@ public abstract class AbstractPubmedDataFetcher {
             throw new IllegalArgumentException("null basePath");
         }
         this.basePath = basePath;
+        File dir = new File(this.basePath);
+        if (!dir.exists() && !dir.mkdirs()) {
+            throw new IllegalArgumentException("missing and can't create " + this.basePath);
+        }
     }
 
     protected void pmidListToFiles(final List<String> pmids, final String baseFilename) {

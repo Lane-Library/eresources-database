@@ -71,6 +71,13 @@ public class AbstractPubmedDataFetcherTest {
     }
 
     @Test
+    public final void testSetBasePathEmpty() {
+        this.thrown.expect(IllegalArgumentException.class);
+        PubmedDataFetcherTest myFetcher = new PubmedDataFetcherTest();
+        myFetcher.setBasePath("");
+    }
+
+    @Test
     public final void testSetBasePathNull() {
         this.thrown.expect(IllegalArgumentException.class);
         PubmedDataFetcherTest myFetcher = new PubmedDataFetcherTest();
