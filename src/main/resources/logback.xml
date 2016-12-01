@@ -22,12 +22,9 @@
         </encoder>
     </appender>
 
-     <logger name="edu.stanford.irt.eresources" level="INFO" additivity="false" >
-        <appender-ref ref="LOG"/>
-    </logger> 
-
     <root level="INFO">
         <appender-ref ref="console"/>
+        <appender-ref ref="LOG"/>
     </root>
 
 </configuration> 
