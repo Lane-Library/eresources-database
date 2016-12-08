@@ -9,8 +9,7 @@ public class LanguageMap {
     private final Properties properties = new Properties();
 
     public LanguageMap() {
-        try (InputStream in = ClassLoader
-                .getSystemResourceAsStream("edu/stanford/irt/eresources/languages.properties")) {
+        try (InputStream in = LanguageMap.class.getResourceAsStream("languages.properties")) {
             this.properties.load(in);
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
