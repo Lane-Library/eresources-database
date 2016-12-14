@@ -116,11 +116,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.currentEresource.setItemCount(this.itemCount.itemCount(this.currentEresource.getRecordId()));
             handlePreviousRecord();
         }
-        try {
-            this.authTextAugmentation.save();
-        } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
-        }
     }
 
     @Override

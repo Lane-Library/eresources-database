@@ -1,128 +1,100 @@
 package edu.stanford.irt.eresources.sax;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Calendar;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 import javax.sql.DataSource;
-import javax.xml.XMLConstants;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
 
-//import edu.stanford.irt.eresources.AuthAugmentationInputStream;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
-import edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader;
 
-public class AuthTextAugmentation extends DefaultHandler {
+public class AuthTextAugmentation {
+
+    private static final String AUGMENTATION_FILE = "auth-augmentations.obj";
+
+    private static final Logger LOG = LoggerFactory.getLogger(AuthTextAugmentation.class);
+
+    private static final int ONE_DAY = 1000 * 60 * 60 * 24;
+
+    // verified by DM: people records won't have 450's and MeSH records won't have 400's
+    private static final String SQL = "SELECT concat('Z',auth_id), LMLDB.GETALLTAGS(auth_id,'A','400 450',2) FROM LMLDB.AUTH_MASTER";
 
     private Map<String, String> augmentations = new HashMap<>();
 
-    private StringBuilder augmentationText = new StringBuilder();
-
-    private String code;
-
-    private StringBuilder currentText = new StringBuilder();
-
     private DataSource dataSource;
 
-    private Executor executor;
-
-    private String tag;
-
     @SuppressWarnings("unchecked")
-    public AuthTextAugmentation() {
-        // create a new augmentation map each Sunday:
-        if (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+    public String getAuthAugmentations(final String controlNumber) {
+        File objFile = new File(AUGMENTATION_FILE);
+        if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - ONE_DAY) {
             this.augmentations = new HashMap<>();
-            // otherwise use the existing one:
+            buildAugmentations();
         } else {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("augmentations.obj"))) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(objFile))) {
                 this.augmentations = (Map<String, String>) ois.readObject();
             } catch (IOException e) {
-                LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
-                this.augmentations = new HashMap<>();
+                LOG.error(e.getMessage(), e);
             } catch (ClassNotFoundException e) {
                 throw new EresourceDatabaseException(e);
             }
         }
+        return this.augmentations.get(controlNumber);
     }
 
-    @Override
-    public void characters(final char[] chars, final int start, final int length) throws SAXException {
-        this.currentText.append(chars, start, length);
-    }
-
-    @Override
-    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-        if ("subfield".equals(localName) && checkSaveContent()) {
-            this.augmentationText.append(' ').append(this.currentText);
+    /**
+     * example input: 450:8 :$1--$aF01.829.500$xMorals // 450:8 :$1--$aK01.752.566$xMorals // 450:8 :$eIncludes
+     * broader:$aMorality$3M0014053$4T026943$91977-03-17
+     *
+     * @param marc
+     *            A {@code String} of pseudo marc from Voyager
+     * @return A {@code String} of subfield a data
+     */
+    public String parseSubfieldAs(final String marc) {
+        StringBuilder sb = new StringBuilder();
+        String[] fields = marc.split("// ");
+        for (String field : fields) {
+            sb.append(field.replaceFirst(".*\\$a([^\\$]+)(\\$.*)?", "$1"));
+            sb.append(' ');
         }
-    }
-
-    // FIXME: load once a week
-    public String getAuthAugmentations(final String controlNumber) {
-        String result = this.augmentations.get(controlNumber);
-//        if (null == result) {
-//            this.augmentationText.setLength(0);
-//            this.code = null;
-//            this.currentText.setLength(0);
-//            this.tag = null;
-//            XMLReader xmlReader = new UTF8ComposingMarcReader();
-//            try {
-//                xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-//                xmlReader.setContentHandler(this);
-//                xmlReader.parse(new InputSource(
-//                        new AuthAugmentationInputStream(controlNumber, this.dataSource, this.executor)));
-//            } catch (IOException e) {
-//                throw new EresourceDatabaseException(e);
-//            } catch (SAXException e) {
-//                throw new EresourceDatabaseException(e);
-//            }
-//            result = this.augmentationText.toString().trim();
-//            this.augmentations.put(controlNumber, result);
-//        }
-        return result;
-    }
-
-    public void save() throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("augmentations.obj"))) {
-            oos.writeObject(this.augmentations);
-        }
+        return sb.toString().trim();
     }
 
     public void setDataSource(final DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public void setExecutor(final Executor executor) {
-        this.executor = executor;
-    }
-
-    @Override
-    public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
-            throws SAXException {
-        this.currentText.setLength(0);
-        if ("subfield".equals(localName)) {
-            this.code = atts.getValue("code");
-        } else if ("datafield".equals(localName)) {
-            this.tag = atts.getValue("tag");
+    private void buildAugmentations() {
+        LOG.info("building authority augmentation object");
+        long now = System.currentTimeMillis();
+        try (Connection conn = this.dataSource.getConnection();
+                PreparedStatement getListStmt = conn.prepareStatement(SQL);
+                ResultSet rs = getListStmt.executeQuery();) {
+            while (rs.next()) {
+                String authId = rs.getString(1);
+                byte[] bytes = rs.getBytes(2);
+                if (null != bytes) {
+                    this.augmentations.put(authId, parseSubfieldAs(new String(bytes, StandardCharsets.UTF_8)));
+                }
+            }
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(AUGMENTATION_FILE))) {
+                oos.writeObject(this.augmentations);
+            }
+            LOG.info("took " + (System.currentTimeMillis() - now) + "ms to execute query: " + SQL);
+        } catch (SQLException | IOException e) {
+            throw new EresourceDatabaseException(e);
         }
-    }
-
-    private boolean checkSaveContent() {
-        // verified by DM: people records won't have 450's and MeSH records
-        // won't have 400's
-        return ("400".equals(this.tag) || "450".equals(this.tag)) && "a".equals(this.code);
     }
 }
