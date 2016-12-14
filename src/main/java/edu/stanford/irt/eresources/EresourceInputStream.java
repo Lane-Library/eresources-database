@@ -51,11 +51,15 @@ public class EresourceInputStream extends PipedInputStream implements Runnable {
     @Override
     public void run() {
         long now = System.currentTimeMillis();
-        try (InputStream input = new VoyagerInputStream2(this.dataSource, prepareSql(this.sqlInputStream), 1);
-                OutputStream ops = this.output) {
+        String sql;
+        try {
+            sql = prepareSql(this.sqlInputStream);
+        } catch (IOException e) {
+            throw new EresourceDatabaseException(e);
+        }
+        try (InputStream input = new VoyagerInputStream2(this.dataSource, sql, 1); OutputStream ops = this.output) {
             IOUtils.copy(input, ops);
-            LOG.info("took " + (System.currentTimeMillis() - now) + "ms to execute query: "
-                    + prepareSql(this.sqlInputStream));
+            LOG.info("took " + (System.currentTimeMillis() - now) + "ms to execute query: " + sql);
         } catch (CatalogSQLException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
