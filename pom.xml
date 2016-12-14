@@ -79,7 +79,7 @@
         <dependency>
             <artifactId>catalog</artifactId>
             <groupId>edu.stanford.irt</groupId>
-            <version>3.6.1</version>
+            <version>3.8.0</version>
         </dependency>
         <dependency>
             <artifactId>nekohtml</artifactId>

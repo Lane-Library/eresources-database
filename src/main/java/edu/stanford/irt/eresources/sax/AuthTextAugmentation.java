@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import edu.stanford.irt.eresources.AuthAugmentationInputStream;
+//import edu.stanford.irt.eresources.AuthAugmentationInputStream;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader;
 
@@ -70,27 +70,28 @@ public class AuthTextAugmentation extends DefaultHandler {
         }
     }
 
+    // FIXME: load once a week
     public String getAuthAugmentations(final String controlNumber) {
         String result = this.augmentations.get(controlNumber);
-        if (null == result) {
-            this.augmentationText.setLength(0);
-            this.code = null;
-            this.currentText.setLength(0);
-            this.tag = null;
-            XMLReader xmlReader = new UTF8ComposingMarcReader();
-            try {
-                xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-                xmlReader.setContentHandler(this);
-                xmlReader.parse(new InputSource(
-                        new AuthAugmentationInputStream(controlNumber, this.dataSource, this.executor)));
-            } catch (IOException e) {
-                throw new EresourceDatabaseException(e);
-            } catch (SAXException e) {
-                throw new EresourceDatabaseException(e);
-            }
-            result = this.augmentationText.toString().trim();
-            this.augmentations.put(controlNumber, result);
-        }
+//        if (null == result) {
+//            this.augmentationText.setLength(0);
+//            this.code = null;
+//            this.currentText.setLength(0);
+//            this.tag = null;
+//            XMLReader xmlReader = new UTF8ComposingMarcReader();
+//            try {
+//                xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+//                xmlReader.setContentHandler(this);
+//                xmlReader.parse(new InputSource(
+//                        new AuthAugmentationInputStream(controlNumber, this.dataSource, this.executor)));
+//            } catch (IOException e) {
+//                throw new EresourceDatabaseException(e);
+//            } catch (SAXException e) {
+//                throw new EresourceDatabaseException(e);
+//            }
+//            result = this.augmentationText.toString().trim();
+//            this.augmentations.put(controlNumber, result);
+//        }
         return result;
     }
 
