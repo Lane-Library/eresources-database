@@ -21,7 +21,6 @@
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.sax.AuthTextAugmentation">
         <property name="dataSource" ref="voyagerDataSource"/>
-        <property name="executor" ref="executor"/>
     </bean>
     <bean id="reservesTextAugmentation" class="edu.stanford.irt.eresources.sax.ReservesTextAugmentation">
         <property name="dataSource" ref="voyagerDataSource"/>
