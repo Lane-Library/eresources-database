@@ -9,6 +9,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ItemCount {
 
     /*
@@ -25,9 +28,10 @@ public class ItemCount {
             + "    (SELECT item_id FROM lmldb.item_status WHERE item_status >= '12' and item_status <= '17')"
             + "GROUP BY bi.bib_id";
 
+    private static final Logger LOG = LoggerFactory.getLogger(ItemCount.class);
+
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) "
-            + "FROM lmldb.bib_item, lmldb.item_status "
-            + "WHERE bib_item.item_id = item_status.item_id "
+            + "FROM lmldb.bib_item, lmldb.item_status " + "WHERE bib_item.item_id = item_status.item_id "
             + "GROUP BY bib_id";
 
     private Map<Integer, Integer> availables;
@@ -53,6 +57,8 @@ public class ItemCount {
     }
 
     private Map<Integer, Integer> createItemCountMap(final String query) {
+        LOG.info("building item count map: " + query);
+        long now = System.currentTimeMillis();
         Map<Integer, Integer> map = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();
                 Statement statement = conn.createStatement();
@@ -63,6 +69,7 @@ public class ItemCount {
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
+        LOG.info("took " + (System.currentTimeMillis() - now) + "ms to execute query: " + query);
         return map;
     }
 
