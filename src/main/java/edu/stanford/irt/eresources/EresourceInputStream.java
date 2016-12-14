@@ -12,11 +12,15 @@ import java.util.concurrent.Executor;
 import javax.sql.DataSource;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.stanford.lane.catalog.CatalogSQLException;
 import edu.stanford.lane.catalog.VoyagerInputStream2;
 
 public class EresourceInputStream extends PipedInputStream implements Runnable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EresourceInputStream.class);
 
     private DataSource dataSource;
 
@@ -49,10 +53,9 @@ public class EresourceInputStream extends PipedInputStream implements Runnable {
         long now = System.currentTimeMillis();
         try (InputStream input = new VoyagerInputStream2(this.dataSource, prepareSql(this.sqlInputStream), 1);
                 OutputStream ops = this.output) {
-            long later = System.currentTimeMillis();
-            System.out.println("time 1: " + (later - now));
             IOUtils.copy(input, ops);
-            System.out.println("time 2: " + (System.currentTimeMillis() - later));
+            LOG.info("took " + (System.currentTimeMillis() - now) + "ms to execute query: "
+                    + prepareSql(this.sqlInputStream));
         } catch (CatalogSQLException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
