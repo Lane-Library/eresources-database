@@ -32,23 +32,24 @@ public class AuthTextAugmentation {
     // verified by DM: people records won't have 450's and MeSH records won't have 400's
     private static final String SQL = "SELECT concat('Z',auth_id), LMLDB.GETALLTAGS(auth_id,'A','400 450',2) FROM LMLDB.AUTH_MASTER";
 
-    private Map<String, String> augmentations = new HashMap<>();
+    private Map<String, String> augmentations;
 
     private DataSource dataSource;
 
     @SuppressWarnings("unchecked")
     public String getAuthAugmentations(final String controlNumber) {
-        File objFile = new File(AUGMENTATION_FILE);
-        if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - ONE_DAY) {
-            this.augmentations = new HashMap<>();
-            buildAugmentations();
-        } else {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(objFile))) {
-                this.augmentations = (Map<String, String>) ois.readObject();
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            } catch (ClassNotFoundException e) {
-                throw new EresourceDatabaseException(e);
+        if (null == this.augmentations) {
+            File objFile = new File(AUGMENTATION_FILE);
+            if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - ONE_DAY) {
+                buildAugmentations();
+            } else {
+                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(objFile))) {
+                    this.augmentations = (Map<String, String>) ois.readObject();
+                } catch (IOException e) {
+                    LOG.error(e.getMessage(), e);
+                } catch (ClassNotFoundException e) {
+                    throw new EresourceDatabaseException(e);
+                }
             }
         }
         return this.augmentations.get(controlNumber);
@@ -78,6 +79,7 @@ public class AuthTextAugmentation {
 
     private void buildAugmentations() {
         LOG.info("building authority augmentation object");
+        this.augmentations = new HashMap<>();
         long now = System.currentTimeMillis();
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
