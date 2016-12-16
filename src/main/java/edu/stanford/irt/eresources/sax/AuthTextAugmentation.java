@@ -25,6 +25,8 @@ public class AuthTextAugmentation {
 
     private static final String AUGMENTATION_FILE = "auth-augmentations.obj";
 
+    private static final int JDBC_FETCH_SIZE = 10000;
+
     private static final Logger LOG = LoggerFactory.getLogger(AuthTextAugmentation.class);
 
     private static final int ONE_DAY = 1000 * 60 * 60 * 24;
@@ -84,6 +86,7 @@ public class AuthTextAugmentation {
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
                 ResultSet rs = getListStmt.executeQuery();) {
+            rs.setFetchSize(JDBC_FETCH_SIZE);
             while (rs.next()) {
                 String authId = rs.getString(1);
                 byte[] bytes = rs.getBytes(2);

@@ -28,6 +28,8 @@ public class ItemCount {
             + "    (SELECT item_id FROM lmldb.item_status WHERE item_status >= '12' and item_status <= '17')"
             + "GROUP BY bi.bib_id";
 
+    private static final int FETCH_SIZE = 100000;
+
     private static final Logger LOG = LoggerFactory.getLogger(ItemCount.class);
 
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) "
@@ -60,9 +62,11 @@ public class ItemCount {
         LOG.info("building item count map: " + query);
         long now = System.currentTimeMillis();
         Map<Integer, Integer> map = new HashMap<>();
+        // set fetch size here
         try (Connection conn = this.dataSource.getConnection();
                 Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery(query)) {
+                ResultSet rs = statement.executeQuery(query);) {
+            rs.setFetchSize(FETCH_SIZE);
             while (rs.next()) {
                 map.put(Integer.valueOf(rs.getInt(1)), Integer.valueOf(rs.getInt(2)));
             }
