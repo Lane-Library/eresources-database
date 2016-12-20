@@ -3,7 +3,7 @@
 
     <property file="eresources.properties" />
 
-    <appender name="LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <File>er.log</File>
         <encoder>
             <pattern>%d %p [%t][%c] - %m%n</pattern>
@@ -34,8 +34,7 @@
     </appender>
 
     <root level="${eresources.log.level}">
-        <appender-ref ref="console"/>
-        <appender-ref ref="LOG"/>
+        <appender-ref ref="${eresources.log.appender}"/>
         <appender-ref ref="email"/>
     </root>
 
