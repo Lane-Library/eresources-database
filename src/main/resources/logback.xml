@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
 
-    <property file="${eresources.log.properties:-eresources.properties}" />
+    <property file="${eresources.log.properties:-application.properties}" />
 
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <File>er.log</File>

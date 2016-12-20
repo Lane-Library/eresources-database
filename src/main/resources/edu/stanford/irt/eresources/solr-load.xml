@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <import resource="properties.xml"/>
     <import resource="bib-processor.xml"/>
     <import resource="web-processor.xml"/>
     <import resource="classes-processor.xml"/>
@@ -40,9 +41,6 @@
         <property name="corePoolSize" value="5"/>
         <property name="maxPoolSize" value="5"/>
         <property name="queueCapacity" value="0"/>
-    </bean>
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations" value="file:eresources.properties"/>
     </bean>
     <bean id="autoProxyCreator"
         class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
