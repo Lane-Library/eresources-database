@@ -2,7 +2,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>19</version>
+        <version>20</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eresources-database</artifactId>
@@ -122,9 +122,12 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <artifactId>log4j</artifactId>
-            <groupId>log4j</groupId>
-            <version>1.2.17</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
@@ -156,12 +159,6 @@
             <version>12.1.0.2</version>
         </dependency>
         <dependency>
-            <artifactId>slf4j-log4j12</artifactId>
-            <groupId>org.slf4j</groupId>
-            <version>1.7.21</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <artifactId>spring-jdbc</artifactId>
             <groupId>org.springframework</groupId>
             <scope>runtime</scope>
@@ -170,11 +167,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
            <artifactId>solr-solrj</artifactId>
@@ -196,6 +188,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
           <groupId>apache-lang</groupId>
