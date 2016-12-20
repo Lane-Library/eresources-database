@@ -2,7 +2,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>19</version>
+        <version>20</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eresources-database</artifactId>
@@ -188,6 +188,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
           <groupId>apache-lang</groupId>
