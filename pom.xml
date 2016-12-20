@@ -9,7 +9,7 @@
     <name>eresources-database</name>
     <version>solr-1.29-SNAPSHOT</version>
     <scm>
-        <developerConnection>scm:git:file:///afs/ir/group/lane/git/eresources-database.git</developerConnection>
+        <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
     <distributionManagement>
