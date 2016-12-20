@@ -80,9 +80,8 @@ public class AuthTextAugmentation {
     }
 
     private void buildAugmentations() {
-        LOG.info("building authority augmentation object");
+        LOG.debug("start building authority augmentation object");
         this.augmentations = new HashMap<>();
-        long now = System.currentTimeMillis();
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
                 ResultSet rs = getListStmt.executeQuery();) {
@@ -97,7 +96,7 @@ public class AuthTextAugmentation {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(AUGMENTATION_FILE))) {
                 oos.writeObject(this.augmentations);
             }
-            LOG.info("took " + (System.currentTimeMillis() - now) + "ms to execute query: " + SQL);
+            LOG.debug("completed building authority augmentation object");
         } catch (SQLException | IOException e) {
             throw new EresourceDatabaseException(e);
         }

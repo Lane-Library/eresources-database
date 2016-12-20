@@ -59,8 +59,7 @@ public class ItemCount {
     }
 
     private Map<Integer, Integer> createItemCountMap(final String query) {
-        LOG.info("building item count map: " + query);
-        long now = System.currentTimeMillis();
+        LOG.debug("start building item count map");
         Map<Integer, Integer> map = new HashMap<>();
         // set fetch size here
         try (Connection conn = this.dataSource.getConnection();
@@ -73,7 +72,7 @@ public class ItemCount {
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
-        LOG.info("took " + (System.currentTimeMillis() - now) + "ms to execute query: " + query);
+        LOG.debug("completed building item count map");
         return map;
     }
 
