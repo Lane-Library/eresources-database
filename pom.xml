@@ -110,18 +110,6 @@
             <version>2.11.0</version>
         </dependency>
         <dependency>
-            <artifactId>cglib</artifactId>
-            <groupId>cglib</groupId>
-            <version>2.2.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <artifactId>icu4j</artifactId>
-            <groupId>com.ibm.icu</groupId>
-            <version>4.8.1.1</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
         </dependency>
