@@ -3,7 +3,6 @@
  */
 package edu.stanford.irt.eresources.sax;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,8 +22,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.ItemCount;
-import edu.stanford.irt.eresources.Link;
-import edu.stanford.irt.eresources.Version;
 
 /**
  * @author ceyates
@@ -235,27 +232,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
             if (types.contains("Statistics")) {
                 eresource.addType("Statistics Software, Installed");
-            }
-            for (Version verzion : eresource.getVersions()) {
-                Version version = verzion;
-                // software installed in various locations have the location in
-                // the label
-                for (Link link : version.getLinks()) {
-                    String label = link.getLabel();
-                    if (label.indexOf("Redwood") == 0) {
-                        eresource.addType("Software, Installed - Redwood Room");
-                    } else if (label.indexOf("Stone") == 0) {
-                        eresource.addType("Software, Installed - Stone Room");
-                    } else if (label.indexOf("Duck") == 0) {
-                        eresource.addType("Software, Installed - Duck Room");
-                    } else if (label.indexOf("M051") == 0) {
-                        eresource.addType("Software, Installed - M051");
-                    } else if (label.indexOf("Public") == 0) {
-                        eresource.addType("Software, Installed - LKSC Public");
-                    } else if (label.indexOf("Student") == 0) {
-                        eresource.addType("Software, Installed - LKSC Student");
-                    }
-                }
             }
         }
     }
