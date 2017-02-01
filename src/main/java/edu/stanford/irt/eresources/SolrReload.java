@@ -13,6 +13,8 @@ import org.apache.solr.common.SolrDocumentList;
 
 public class SolrReload extends SolrLoader {
 
+    private static final String BASE_QUERY = "(recordType:auth OR recordType:bib OR recordType:class OR recordType:laneblog OR recordType:web)";
+
     public static void main(final String[] args) {
         SolrLoader.main(new String[] { "solr-reload" });
     }
@@ -24,7 +26,7 @@ public class SolrReload extends SolrLoader {
         super.load();
         try {
             // delete everything older than lastUpdate
-            this.solrClient.deleteByQuery("(recordType:bib OR recordType:class OR recordType:laneblog OR recordType:web) AND updated:[* TO " + lastUpdate + "]");
+            this.solrClient.deleteByQuery(BASE_QUERY + " AND updated:[* TO " + lastUpdate + "]");
             this.solrClient.commit();
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
@@ -33,7 +35,7 @@ public class SolrReload extends SolrLoader {
 
     private String getLastUpdate() {
         SolrQuery query = new SolrQuery();
-        query.setQuery("recordType:bib OR recordType:class OR recordType:laneblog OR recordType:web");
+        query.setQuery(BASE_QUERY);
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {

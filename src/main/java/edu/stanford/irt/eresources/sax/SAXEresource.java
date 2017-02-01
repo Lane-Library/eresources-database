@@ -91,6 +91,14 @@ public class SAXEresource implements Cloneable, Eresource {
         PRIMARY_TYPES.put("visual materials", "Visual Material");
         PRIMARY_TYPES.put("website", "Website");
         PRIMARY_TYPES.put("websites", "Website");
+        // authority types: keep?
+        PRIMARY_TYPES.put("events", "Event");
+        PRIMARY_TYPES.put("persons", "Person");
+        PRIMARY_TYPES.put("persons, female", "Person");
+        PRIMARY_TYPES.put("persons, male", "Person");
+        PRIMARY_TYPES.put("jurisdictions, subdivisions", "Organization");
+        PRIMARY_TYPES.put("organizations", "Organization");
+        PRIMARY_TYPES.put("organizations, subdivisions", "Organization");
     }
 
     private Collection<String> abbreviatedTitles;
@@ -451,8 +459,10 @@ public class SAXEresource implements Cloneable, Eresource {
     public Collection<String> getTypes() {
         // this.types.add(getPrimaryType());
         String pType = getPrimaryType();
-        if (pType.startsWith("Book") || pType.startsWith("Journal")) {
+        if (!"Other".equals(pType) && !"Article/Chapter".equals(pType)) {
             this.types.add(pType);
+        }
+        if (pType.startsWith("Book") || pType.startsWith("Journal")) {
             this.types.add(pType.split(" ")[0]);
         }
         return Collections.unmodifiableCollection(this.types);

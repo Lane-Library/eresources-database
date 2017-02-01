@@ -28,6 +28,10 @@ import edu.stanford.irt.eresources.ItemCount;
  */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
+    protected static enum RecordTypes {
+        AUTH, BIB, MFHD
+    }
+
     protected static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
@@ -35,6 +39,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     private static final String CONTROLFIELD = "controlfield";
 
     private static final String DATAFIELD = "datafield";
+
+    private static final int LEADER_BYTE_6 = 6;
 
     private static final String RECORD = "record";
 
@@ -72,13 +78,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected String ind2;
 
-    protected boolean isBib;
-
-    protected boolean isMfhd;
-
     protected List<String> preferredTitles = new ArrayList<>();
 
     protected String q;
+
+    protected RecordTypes recordType;
 
     protected ReservesTextAugmentation reservesTextAugmentation;
 
@@ -118,13 +122,15 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
         if ("leader".equals(name)) {
-            if ("uvxy".indexOf(this.currentText.charAt(6)) > -1) {
-                this.isMfhd = true;
-                this.isBib = false;
+            if ("uvxy".indexOf(this.currentText.charAt(LEADER_BYTE_6)) > -1) {
+                this.recordType = RecordTypes.MFHD;
                 this.currentVersion = new SAXVersion();
             } else {
-                this.isBib = true;
-                this.isMfhd = false;
+                this.recordType = RecordTypes.BIB;
+                if ('q' == this.currentText.charAt(LEADER_BYTE_6)) {
+                    this.recordType = RecordTypes.AUTH;
+                    this.currentVersion = new SAXVersion();
+                }
                 if (null != this.currentEresource) {
                     this.currentEresource.setUpdated(this.updated);
                     this.updated = null;
@@ -132,11 +138,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     handlePreviousRecord();
                 }
                 this.currentEresource = new SAXEresource();
-                setRecordType();
+                this.currentEresource.setRecordType(this.recordType.toString().toLowerCase());
             }
         } else if (RECORD.equals(name)) {
             String recordId = Integer.toString(this.currentEresource.getRecordId());
-            if (this.isMfhd) {
+            if (this.recordType == RecordTypes.MFHD) {
                 if (this.currentVersion.getLinks().isEmpty()) {
                     SAXLink link = new SAXLink();
                     link.setLabel("Lane Catalog Record");
@@ -153,7 +159,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 combinedKeywords.append(this.content.toString().replaceAll("\\s\\s+", " "));
                 this.currentEresource.setKeywords(combinedKeywords.toString());
                 this.content.setLength(0);
-            } else if (this.isBib) {
+            } else if (this.recordType == RecordTypes.AUTH) {
+                this.currentEresource.addVersion(this.currentVersion);
+            } else if (this.recordType == RecordTypes.BIB) {
                 if (this.description520.length() > 0) {
                     this.currentEresource.setDescription(this.description520.toString());
                 } else if (this.description505.length() > 0) {
@@ -168,9 +176,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentEresource.setKeywords(combinedKeywords.toString());
                 this.content.setLength(0);
             }
-        } else if (this.isBib) {
+        } else if (this.recordType == RecordTypes.BIB) {
             handleBibData(name);
-        } else if (this.isMfhd) {
+        } else if (this.recordType == RecordTypes.MFHD) {
+            handleMfhdData(name);
+        } else if (this.recordType == RecordTypes.AUTH) {
+            // auths get both bib and mfhd handling so links are extracted 
+            handleBibData(name);
             handleMfhdData(name);
         }
     }
@@ -209,7 +221,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.tag = atts.getValue("tag");
             this.ind1 = atts.getValue("ind1");
             this.ind2 = atts.getValue("ind2");
-            if (this.isMfhd && "856".equals(this.tag)) {
+            if ((this.recordType == RecordTypes.AUTH || this.recordType == RecordTypes.MFHD)
+                    && "856".equals(this.tag)) {
                 this.currentLink = new SAXLink();
                 this.q = null;
                 this.z = null;
@@ -217,8 +230,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if (CONTROLFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
         } else if (RECORD.equals(name)) {
-            this.isBib = false;
-            this.isMfhd = false;
+            this.recordType = null;
             this.countOf866 = 0;
             this.countOf773 = 0;
         }
@@ -425,10 +437,6 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         }
     }
 
-    protected void setRecordType() {
-        this.currentEresource.setRecordType("bib");
-    }
-
     // Holdings
     // 852, 866
     // Bibliographic
@@ -440,9 +448,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     // eventually be changed into 655 values]
     private boolean checkSaveContent() {
         int tagNumber = Integer.parseInt(this.tag);
-        if (this.isMfhd) {
+        if (this.recordType == RecordTypes.MFHD) {
             return tagNumber == 852 || tagNumber == 866;
-        } else if (this.isBib) {
+        } else if (this.recordType == RecordTypes.BIB) {
             return (tagNumber >= 100 && tagNumber < 900)
                     || "020 022 030 035 901 902 903 941 942 943".indexOf(this.tag) != -1
                     || (tagNumber == 907 && "xy".indexOf(this.code) > -1);
@@ -452,7 +460,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private void handleBibControlfield() {
         if ("001".equals(this.tag)) {
-            this.currentEresource.setId("bib-" + this.currentText.toString());
+            this.currentEresource.setId(this.currentEresource.getRecordType() + "-" + this.currentText.toString());
             this.currentEresource.setRecordId(Integer.parseInt(this.currentText.toString()));
         } else if ("005".equals(this.tag)) {
             try {
