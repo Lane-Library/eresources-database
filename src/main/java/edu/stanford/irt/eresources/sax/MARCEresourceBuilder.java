@@ -161,6 +161,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.content.setLength(0);
             } else if (this.recordType == RecordTypes.AUTH) {
                 this.currentEresource.addVersion(this.currentVersion);
+                this.currentEresource.setKeywords(this.content.toString().replaceAll("\\s\\s+", " "));
+                this.content.setLength(0);
             } else if (this.recordType == RecordTypes.BIB) {
                 if (this.description520.length() > 0) {
                     this.currentEresource.setDescription(this.description520.toString());
@@ -450,7 +452,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         int tagNumber = Integer.parseInt(this.tag);
         if (this.recordType == RecordTypes.MFHD) {
             return tagNumber == 852 || tagNumber == 866;
-        } else if (this.recordType == RecordTypes.BIB) {
+        } else if (this.recordType == RecordTypes.BIB || this.recordType == RecordTypes.AUTH) {
             return (tagNumber >= 100 && tagNumber < 900)
                     || "020 022 030 035 901 902 903 941 942 943".indexOf(this.tag) != -1
                     || (tagNumber == 907 && "xy".indexOf(this.code) > -1);
