@@ -183,8 +183,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if (this.recordType == RecordTypes.MFHD) {
             handleMfhdData(name);
         } else if (this.recordType == RecordTypes.AUTH) {
-            // auths get both bib and mfhd handling so links are extracted 
-            handleBibData(name);
+            // auths get mfhd handling so links are extracted
+            handleAuthData(name);
             handleMfhdData(name);
         }
     }
@@ -246,6 +246,25 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
             if (types.contains("Statistics")) {
                 eresource.addType("Statistics Software, Installed");
+            }
+        }
+    }
+
+    protected void handleAuthData(final String name) {
+        // treat auths like bibs with minor exceptions
+        handleBibData(name);
+        if (SUBFIELD.equals(name)) {
+            handleAuthSubfield();
+        }
+    }
+
+    protected void handleAuthSubfield() {
+        if ("943".equals(this.tag) && "b".equals(this.code)) {
+            String type = this.currentText.toString();
+            if ("continuing".equalsIgnoreCase(type)) {
+                this.currentEresource.setYear(THIS_YEAR);
+            } else {
+                this.currentEresource.setYear(Integer.parseInt(type));
             }
         }
     }
@@ -452,10 +471,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         int tagNumber = Integer.parseInt(this.tag);
         if (this.recordType == RecordTypes.MFHD) {
             return tagNumber == 852 || tagNumber == 866;
-        } else if (this.recordType == RecordTypes.BIB || this.recordType == RecordTypes.AUTH) {
+        } else if (this.recordType == RecordTypes.BIB) {
             return (tagNumber >= 100 && tagNumber < 900)
                     || "020 022 030 035 901 902 903 941 942 943".indexOf(this.tag) != -1
                     || (tagNumber == 907 && "xy".indexOf(this.code) > -1);
+        } else if (this.recordType == RecordTypes.AUTH && tagNumber >= 100 && tagNumber <= 943) {
+            return true;
         }
         return false;
     }
