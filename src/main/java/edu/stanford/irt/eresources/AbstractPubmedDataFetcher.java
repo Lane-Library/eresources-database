@@ -59,7 +59,7 @@ public abstract class AbstractPubmedDataFetcher {
     }
 
     protected void pmidListToFiles(final List<String> pmids, final String baseFilename) {
-        List<String> myPmids = (ArrayList) ((ArrayList) pmids).clone();
+        List<String> myPmids = (List) ((ArrayList) pmids).clone();
         new File(this.basePath + "/" + TODAY);
         int i = 0;
         int start;
