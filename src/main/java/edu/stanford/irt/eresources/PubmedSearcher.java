@@ -77,7 +77,6 @@ public class PubmedSearcher {
      */
     public List<String> getPmids() {
         if (this.pmids == null) {
-            this.pmids = new ArrayList<>();
             this.pmids = doGet();
         }
         return this.pmids;
