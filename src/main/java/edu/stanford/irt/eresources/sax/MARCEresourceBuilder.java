@@ -88,6 +88,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected String tag = "000";
 
+    protected String tagAndCode = "0000";
+
     protected StringBuilder title = new StringBuilder();
 
     protected Date updated;
@@ -219,6 +221,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         this.currentText.setLength(0);
         if (SUBFIELD.equals(name)) {
             this.code = atts.getValue("code");
+            this.tagAndCode = this.tag + this.code;
         } else if (DATAFIELD.equals(name)) {
             this.tag = atts.getValue("tag");
             this.ind1 = atts.getValue("ind1");
@@ -280,7 +283,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void handleBibSubfield() {
-        if ("655".equals(this.tag) && "a".equals(this.code)) {
+        if ("655a".equals(this.tagAndCode)) {
             String type = this.currentText.toString();
             type = maybeStripTrailingPeriod(type);
             this.currentEresource.addType(type);
@@ -292,10 +295,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
                 this.currentEresource.setPrimaryType(type);
             }
-        } else if ("650".equals(this.tag) && "a".equals(this.code) && "2356".indexOf(this.ind2) > -1) {
+        } else if ("650a".equals(this.tagAndCode) && "2356".indexOf(this.ind2) > -1) {
             String mesh = maybeStripTrailingPeriod(this.currentText.toString());
             this.currentEresource.addMeshTerm(mesh);
-        } else if ("651".equals(this.tag) && "a".equals(this.code) && "7".equals(this.ind2)) {
+        } else if ("651a".equals(this.tagAndCode) && "7".equals(this.ind2)) {
             String mesh = maybeStripTrailingPeriod(this.currentText.toString());
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
@@ -329,18 +332,16 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.hasAbbreviatedTitle = false;
                 }
             }
-        } else if ("149".equals(this.tag) && "a".equals(this.code)) {
+        } else if ("149a".equals(this.tagAndCode)) {
             this.currentEresource.setShortTitle(this.currentText.toString());
         } else if ((this.tag.matches("(130|210|247)")) && "a".equals(this.code)) {
             this.currentEresource.addAlternativeTitle(this.currentText.toString());
-        } else if ("249".equals(this.tag)) {
-            if ("a".equals(this.code)) {
-                this.preferredTitles.add(this.currentText.toString());
-            }
-        } else if ("250".equals(this.tag) && "a".equals(this.code)) {
+        } else if ("249a".equals(this.tagAndCode)) {
+            this.preferredTitles.add(this.currentText.toString());
+        } else if ("250a".equals(this.tagAndCode)) {
             this.editionOrVersion.append(". ");
             this.editionOrVersion.append(this.currentText);
-        } else if ("035".equals(this.tag) && "a".equals(this.code) && (this.currentText.indexOf("(Bassett)") == 0)) {
+        } else if ("035a".equals(this.tagAndCode) && this.currentText.indexOf("(Bassett)") == 0) {
             this.currentEresource.addType("Bassett");
         } else if ("520".equals(this.tag)) {
             if (this.description520.length() > 0) {
@@ -353,13 +354,13 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
             this.description505.append(this.currentText.toString());
         }
-        if ("650".equals(this.tag) && "0".equals(this.code)) {
+        if ("6500".equals(this.tagAndCode)) {
             String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString());
             if (authText != null && authText.length() > 0) {
                 this.content.append(' ').append(authText).append(' ');
             }
         }
-        if (("100".equals(this.tag) || "700".equals(this.tag)) && "a".equals(this.code)) {
+        if ("100a".equals(this.tagAndCode) || "700a".equals(this.tagAndCode)) {
             String auth = this.currentText.toString().replaceFirst(",$", "");
             if (auth.endsWith(".") && !auth.matches(".* \\w\\.")) {
                 auth = auth.substring(0, auth.length() - 1);
@@ -369,7 +370,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentEresource.addPublicationAuthor(auth);
             }
         }
-        if (("100".equals(this.tag) || "600".equals(this.tag) || "700".equals(this.tag)) && "0".equals(this.code)) {
+        // 100 or 600 or 700 ^0
+        if (this.tagAndCode.matches("[167]000")) {
             String authText = this.authTextAugmentation.getAuthAugmentations(this.currentText.toString());
             if (authText != null && authText.length() > 0) {
                 this.content.append(' ').append(authText).append(' ');
@@ -378,7 +380,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         if ("041".equals(this.tag)) {
             this.currentEresource.addPublicationLanguage(this.currentText.toString());
         }
-        if ("830".equals(this.tag) && "a".equals(this.code)) {
+        if ("830a".equals(this.tagAndCode)) {
             String suba = this.currentText.toString().toLowerCase();
             if (suba.contains("stanford") && suba.contains("grand rounds")) {
                 this.currentEresource.addType("Grand Rounds");
@@ -404,9 +406,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.countOf773++;
             }
         }
-        if ("149".equals(this.tag) && "d".equals(this.code)) {
+        if ("149d".equals(this.tagAndCode)) {
             this.dateForPrintSummaryHoldings.append(this.currentText);
-        } else if ("260".equals(this.tag) && "c".equals(this.code) && this.dateForPrintSummaryHoldings.length() == 0) {
+        } else if ("260c".equals(this.tagAndCode) && this.dateForPrintSummaryHoldings.length() == 0) {
             this.dateForPrintSummaryHoldings.append(this.currentText);
         }
     }
@@ -422,7 +424,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     protected void handleMfhdSubfield() {
-        if ("844".equals(this.tag) && "a".equals(this.code)) {
+        if ("844a".equals(this.tagAndCode)) {
             this.currentVersion.setPublisher(this.currentText.toString());
         } else if (this.countOf866 == 0 && "866".equals(this.tag)) {
             if ("v".equals(this.code)) {
