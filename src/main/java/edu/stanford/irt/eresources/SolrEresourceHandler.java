@@ -80,6 +80,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         try {
             this.queue.put(eresource);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new EresourceDatabaseException(e);
         }
         this.count++;
@@ -95,6 +96,7 @@ public class SolrEresourceHandler implements EresourceHandler {
                         insertEresource(eresource);
                     }
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(),
                             e);
                 }
