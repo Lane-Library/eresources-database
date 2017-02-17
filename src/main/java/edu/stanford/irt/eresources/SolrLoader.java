@@ -60,7 +60,7 @@ public class SolrLoader {
                 }
             }
         }
-        LOG.info("handled {} eresources.", Integer.toString(this.handler.getCount()));
+        LOG.info("handled {} eresources.", this.handler.getCount());
     }
 
     public void setExecutor(final Executor executor) {
