@@ -25,14 +25,14 @@ public class AuthTextAugmentation {
 
     private static final String AUGMENTATION_FILE = "auth-augmentations.obj";
 
-    private static final int JDBC_FETCH_SIZE = 10000;
+    private static final int JDBC_FETCH_SIZE = 10_000;
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthTextAugmentation.class);
 
     private static final int ONE_DAY = 1000 * 60 * 60 * 24;
 
     // verified by DM: people records won't have 450's and MeSH records won't have 400's
-    private static final String SQL = "SELECT concat('Z',auth_id), LMLDB.GETALLTAGS(auth_id,'A','400 450',2) FROM LMLDB.AUTH_MASTER";
+    private static final String SQL = "SELECT concat('Z',auth_id) AS AID, LMLDB.GETALLTAGS(auth_id,'A','400 450',2) AS ADATA FROM LMLDB.AUTH_MASTER";
 
     private Map<String, String> augmentations;
 
@@ -49,7 +49,7 @@ public class AuthTextAugmentation {
                 try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(objFile))) {
                     this.augmentations = (Map<String, String>) ois.readObject();
                 } catch (IOException e) {
-                    LOG.error(e.getMessage(), e);
+                    LOG.error("can't open augmentations file", e);
                 } catch (ClassNotFoundException e) {
                     throw new EresourceDatabaseException(e);
                 }
@@ -85,11 +85,11 @@ public class AuthTextAugmentation {
         this.augmentations = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
-                ResultSet rs = getListStmt.executeQuery();) {
+                ResultSet rs = getListStmt.executeQuery()) {
             rs.setFetchSize(JDBC_FETCH_SIZE);
             while (rs.next()) {
-                String authId = rs.getString(1);
-                byte[] bytes = rs.getBytes(2);
+                String authId = rs.getString("AID");
+                byte[] bytes = rs.getBytes("ADATA");
                 if (null != bytes) {
                     this.augmentations.put(authId, parseSubfieldAs(new String(bytes, StandardCharsets.UTF_8)));
                 }
