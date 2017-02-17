@@ -41,6 +41,7 @@ public class AuthTextAugmentation {
     @SuppressWarnings("unchecked")
     public String getAuthAugmentations(final String controlNumber) {
         if (null == this.augmentations) {
+            this.augmentations = new HashMap<>();
             File objFile = new File(AUGMENTATION_FILE);
             if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - ONE_DAY) {
                 buildAugmentations();
