@@ -46,11 +46,11 @@ public class PubmedCreateDateDataFetcher extends AbstractPubmedDataFetcher imple
     }
 
     private String getLastUpdateDate() {
-        String updateDate = null;
         this.propertiesFile = new File(PROP_FILE);
         if (!this.propertiesFile.exists()) {
             throw new EresourceDatabaseException("missing " + PROP_FILE);
         }
+        String updateDate = null;
         try (InputStream in = new FileInputStream(this.propertiesFile)) {
             this.properties = new Properties();
             this.properties.load(in);
