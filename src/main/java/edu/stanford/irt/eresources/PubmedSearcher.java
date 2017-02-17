@@ -43,7 +43,7 @@ public class PubmedSearcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(PubmedSearcher.class);
 
-    private static final int RET_MAX = 500000;
+    private static final int RET_MAX = 500_000;
 
     private DocumentBuilderFactory factory;
 
@@ -78,11 +78,9 @@ public class PubmedSearcher {
     public List<String> getPmids() {
         if (this.pmids == null) {
             this.pmids = new ArrayList<>();
+            this.pmids = doGet();
         }
-        if (!this.pmids.isEmpty()) {
-            return this.pmids;
-        }
-        return doGet();
+        return this.pmids;
     }
 
     public String getValue() {
@@ -96,6 +94,10 @@ public class PubmedSearcher {
         while (retMax >= RET_MAX) {
             String q = BASE_URL + this.query + "&retmax=" + RET_MAX + "&retstart=" + retStart;
             String xmlContent = getContent(q);
+            if (null == xmlContent) {
+                LOG.error("null xmlContent for {}", q);
+                return pmidList;
+            }
             retStart = retStart + RET_MAX;
             Document doc;
             Node retmaxNode = null;
@@ -139,9 +141,6 @@ public class PubmedSearcher {
             throw new EresourceDatabaseException(e);
         } finally {
             get.reset();
-        }
-        if (null == htmlContent) {
-            LOG.error("null htmlContent for {}", url);
         }
         return htmlContent;
     }
