@@ -55,6 +55,7 @@ public class SolrLoader {
                 try {
                     this.queue.wait();
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     throw new EresourceDatabaseException(e);
                 }
             }
