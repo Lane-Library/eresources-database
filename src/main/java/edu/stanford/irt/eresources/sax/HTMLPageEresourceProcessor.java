@@ -59,12 +59,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                 File file = filesToParse.remove(0);
                 String fileName = file.getAbsolutePath();
                 InputSource source = new InputSource();
-                try {
-                    source.setByteStream(new FileInputStream(file));
-                } catch (FileNotFoundException e) {
-                    LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
-                    continue;
-                }
+                source.setByteStream(new FileInputStream(file));
                 source.setEncoding(StandardCharsets.UTF_8.name());
                 DOMParser parser = new DOMParser(config);
                 parser.parse(source);
@@ -93,7 +88,6 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<File> getHTMLPages(final File directory) {
-        List<File> result = new LinkedList<>();
         File[] files = directory.listFiles(new FileFilter() {
 
             @Override
@@ -103,6 +97,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                         || (file.isDirectory() && !name.matches("(.svn|includes|search|samples|m)"));
             }
         });
+        List<File> result = new LinkedList<>();
         if (null != files) {
             for (File file : files) {
                 if (file.isDirectory()) {
