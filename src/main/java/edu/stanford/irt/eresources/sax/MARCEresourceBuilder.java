@@ -28,7 +28,7 @@ import edu.stanford.irt.eresources.ItemCount;
  */
 public class MARCEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
-    protected static enum RecordTypes {
+    protected enum RecordTypes {
         AUTH, BIB, MFHD
     }
 
@@ -295,10 +295,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             if ("4".equals(this.ind1) && "7".equals(this.ind2)) {
                 this.currentEresource.setPrimaryType(type);
             }
-        } else if ("650a".equals(this.tagAndCode) && "2356".indexOf(this.ind2) > -1) {
-            String mesh = maybeStripTrailingPeriod(this.currentText.toString());
-            this.currentEresource.addMeshTerm(mesh);
-        } else if ("651a".equals(this.tagAndCode) && "7".equals(this.ind2)) {
+        } else if (("650a".equals(this.tagAndCode) && "2356".indexOf(this.ind2) > -1)
+                || ("651a".equals(this.tagAndCode) && "7".equals(this.ind2))) {
             String mesh = maybeStripTrailingPeriod(this.currentText.toString());
             this.currentEresource.addMeshTerm(mesh);
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
@@ -406,9 +404,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.countOf773++;
             }
         }
-        if ("149d".equals(this.tagAndCode)) {
-            this.dateForPrintSummaryHoldings.append(this.currentText);
-        } else if ("260c".equals(this.tagAndCode) && this.dateForPrintSummaryHoldings.length() == 0) {
+        if ("149d".equals(this.tagAndCode)
+                || ("260c".equals(this.tagAndCode) && this.dateForPrintSummaryHoldings.length() == 0)) {
             this.dateForPrintSummaryHoldings.append(this.currentText);
         }
     }
@@ -516,7 +513,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 try {
                     this.currentEresource.setTitle(this.title.substring(Integer.parseInt(this.ind2)));
                 } catch (StringIndexOutOfBoundsException e) {
-                    LoggerFactory.getLogger(getClass()).error(e.getMessage(), e);
+                    LoggerFactory.getLogger(getClass()).error("can't strip non-filing from title using ind2", e);
                     this.currentEresource.setTitle(this.title.toString());
                 }
             }
