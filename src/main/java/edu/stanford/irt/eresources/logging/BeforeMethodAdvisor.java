@@ -51,7 +51,7 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
                 }
             }
             sb.append(");");
-            LoggerFactory.getLogger(advisee.getClass()).info(sb.toString());
+            LoggerFactory.getLogger(advisee.getClass()).info("{}", sb.toString());
         }
     }
 
