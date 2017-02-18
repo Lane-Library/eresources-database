@@ -37,8 +37,8 @@ public class ReturnMethodAdvisor extends DefaultPointcutAdvisor {
                 return;
             }
             StringBuilder sb = new StringBuilder("return ").append(method.getName()).append("()")
-                    .append(returnValue == null ? ";" : " = " + returnValue.toString());
-            LoggerFactory.getLogger(advisee.getClass()).info(sb.toString());
+                    .append(returnValue == null ? ";" : " = " + returnValue);
+            LoggerFactory.getLogger(advisee.getClass()).info("{}", sb);
         }
     }
 
