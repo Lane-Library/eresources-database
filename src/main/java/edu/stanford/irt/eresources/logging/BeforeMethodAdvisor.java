@@ -18,7 +18,7 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
      */
     static class BeforeMethodAdvice implements MethodBeforeAdvice {
 
-        private boolean logEresource = false;
+        private boolean logEresource;
 
         /**
          * logs at INFO level with the thread, object, method and parameters.
