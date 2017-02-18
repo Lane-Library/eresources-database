@@ -39,9 +39,7 @@ public class BeforeMethodAdvisor extends DefaultPointcutAdvisor {
             if (params != null) {
                 for (int i = 0; i < params.length; i++) {
                     if (params[i] instanceof String) {
-                        sb.append('\'');
-                        sb.append(params[i]);
-                        sb.append('\'');
+                        sb.append('\'').append(params[i]).append('\'');
                     } else {
                         sb.append(params[i]);
                     }
