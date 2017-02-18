@@ -606,20 +606,20 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     }
 
     private String parseYear(final String year) {
+        String parsedYear = null;
         Matcher yearMatcher = ACCEPTED_YEAR_PATTERN.matcher(year);
         if (yearMatcher.matches()) {
+            parsedYear = year;
             if ("9999".equals(year)) {
-                return Integer.toString(THIS_YEAR);
-            }
-            if (year.contains("u")) {
+                parsedYear = Integer.toString(THIS_YEAR);
+            } else if (year.contains("u")) {
                 int estimate = Integer.parseInt(year.replace('u', '5'));
                 if (estimate > THIS_YEAR) {
                     estimate = THIS_YEAR;
                 }
-                return Integer.toString(estimate);
+                parsedYear = Integer.toString(estimate);
             }
-            return year;
         }
-        return null;
+        return parsedYear;
     }
 }
