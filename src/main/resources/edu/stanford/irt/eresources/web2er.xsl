@@ -24,8 +24,20 @@
             <primaryType>lanepage</primaryType>
             <type>Lane Web Page</type>
             <keywords> <xsl:value-of select="$keywords"/> </keywords>
-            <year><xsl:value-of select="substring(@update,1,4)"/></year>
-            <er-date><xsl:value-of select="substring(@update,1,8)"/></er-date>
+            <xsl:choose>
+                <!-- kludge to down-weight history content by using it's publication date instead of file date
+                    these pages have lots of content but are rarely clicked
+                    might be nice to parse date from some meta element on page
+                -->
+                <xsl:when test="contains($url,'med-history/wilson')">
+                    <year>1998</year>
+                    <er-date>19980101</er-date>
+                </xsl:when>
+                <xsl:otherwise>
+                    <year><xsl:value-of select="substring(@update,1,4)"/></year>
+                    <er-date><xsl:value-of select="substring(@update,1,8)"/></er-date>
+                </xsl:otherwise>
+            </xsl:choose>
             <version>
                 <link>
                     <label>
