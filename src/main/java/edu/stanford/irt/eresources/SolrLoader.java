@@ -10,7 +10,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class SolrLoader {
 
@@ -32,11 +31,10 @@ public class SolrLoader {
         try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 "edu/stanford/irt/eresources/" + args[0] + ".xml")) {
             SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
-            ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
             try {
                 loader.load();
             } finally {
-                executor.shutdown();
+                context.close();
             }
         }
     }
