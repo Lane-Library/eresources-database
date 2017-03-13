@@ -60,7 +60,7 @@
                     <stx:when test="$vernacularTitle != ''">
                         <stx:value-of select="concat($vernacularTitle, ' ', $title)"/>
                     </stx:when>
-                    <stx:when test="$title = ''">[No title available]</stx:when>
+                    <stx:when test="normalize-space($title) = ''">[No title available]</stx:when>
                     <stx:otherwise>
                         <stx:value-of select="$title"/>
                     </stx:otherwise>
