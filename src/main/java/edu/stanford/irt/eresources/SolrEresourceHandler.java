@@ -188,8 +188,9 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private String getFirstCharacter(final String sortTitle) {
         char firstCharOfTitle = '0';
-        if (null != sortTitle && !sortTitle.isEmpty()) {
-            firstCharOfTitle = sortTitle.trim().substring(0, 1).charAt(0);
+        String title = sortTitle.trim();
+        if (null != title && !title.isEmpty()) {
+            firstCharOfTitle = title.trim().substring(0, 1).charAt(0);
         }
         if (!Character.isLetter((int) firstCharOfTitle)) {
             firstCharOfTitle = '1';
