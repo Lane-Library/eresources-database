@@ -11,7 +11,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 public class SolrVideosReload extends SolrLoader {
 
@@ -22,11 +21,10 @@ public class SolrVideosReload extends SolrLoader {
         try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 "edu/stanford/irt/eresources/videos/" + recordType + "-processor.xml")) {
             SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
-            ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) context.getBean("executor");
             try {
                 loader.load();
             } finally {
-                executor.shutdown();
+                context.close();
             }
         }
     }
