@@ -136,15 +136,15 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <artifactId>ojdbc7</artifactId>
+            <artifactId>ojdbc8</artifactId>
             <groupId>com.oracle</groupId>
-            <version>12.1.0.2</version>
+            <version>12.2.0.1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ucp</artifactId>
-            <version>12.1.0.2</version>
+            <version>12.2.0.1</version>
         </dependency>
         <dependency>
             <artifactId>spring-jdbc</artifactId>
