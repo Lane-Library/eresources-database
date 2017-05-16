@@ -88,6 +88,10 @@ public class SolrLoader {
         this.version = version;
     }
 
+    protected EresourceHandler getHandler() {
+        return this.handler;
+    }
+
     protected Date getUpdatedDate() {
         return new Date(0);
     }
