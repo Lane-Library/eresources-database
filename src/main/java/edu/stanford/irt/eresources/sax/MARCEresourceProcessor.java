@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
 import javax.xml.XMLConstants;
 
@@ -10,27 +9,29 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
+import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
-import edu.stanford.irt.eresources.EresourceInputStream;
 
 public class MARCEresourceProcessor extends AbstractEresourceProcessor {
 
-    private EresourceInputStream inputStream;
+    private CatalogRecordService service;
 
     private XMLReader xmlReader;
 
+    public MARCEresourceProcessor(final CatalogRecordService service) {
+        this.service = service;
+    }
     @Override
     public void process() {
-        if (null == this.inputStream) {
-            throw new IllegalStateException("null inputStream");
+        if (null == this.service) {
+            throw new IllegalStateException("null service");
         }
         if (null == this.xmlReader) {
             throw new IllegalStateException("null xmlReader");
         }
-        this.inputStream.setStartDate(new Timestamp(getStartTime()));
         InputSource source = new InputSource();
         try {
-            source.setByteStream(this.inputStream);
+            source.setByteStream(this.service.getRecordStream(getStartTime()));
             this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.xmlReader.parse(source);
         } catch (IOException e) {
@@ -38,13 +39,6 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
         } catch (SAXException e) {
             throw new EresourceDatabaseException(e);
         }
-    }
-
-    public void setInputStream(final EresourceInputStream inputStream) {
-        if (null == inputStream) {
-            throw new IllegalArgumentException("null inputStream");
-        }
-        this.inputStream = inputStream;
     }
 
     /**
