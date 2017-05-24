@@ -9,11 +9,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.xml.sax.helpers.DefaultHandler;
-
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class JDBCReservesTextAugmentation extends DefaultHandler implements ReservesTextAugmentation {
+public class JDBCReservesTextAugmentation extends AbstractReservesTextAugmentation {
 
     private static final String SQL = "SELECT bib_item.bib_id, department_name, course_number, "
             + "  last_name, first_name FROM lmldb.reserve_list_items, lmldb.reserve_list, "
@@ -31,25 +29,15 @@ public class JDBCReservesTextAugmentation extends DefaultHandler implements Rese
             + "AND expire_date > SYSDATE GROUP BY bib_item.bib_id, department_name, course_number, "
             + "  last_name, first_name ORDER BY bib_item.bib_id";
 
-    private Map<String, String> augmentations = new HashMap<>();
-
     private DataSource dataSource;
-
-    public String getReservesAugmentations(final String controlNumber) {
-        if (this.augmentations.isEmpty()) {
-            buildAugmentations();
-        }
-        if (this.augmentations.containsKey(controlNumber)) {
-            return this.augmentations.get(controlNumber);
-        }
-        return "";
-    }
 
     public void setDataSource(final DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    private void buildAugmentations() {
+    @Override
+    protected Map<String, String> buildAugmentations() {
+        Map<String, String> augmentations = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
                 ResultSet rs = getListStmt.executeQuery();) {
@@ -63,13 +51,14 @@ public class JDBCReservesTextAugmentation extends DefaultHandler implements Rese
                     sb.append(rs.getString(i));
                     sb.append(' ');
                 }
-                if (this.augmentations.containsKey(bibId)) {
-                    sb.append(this.augmentations.get(bibId));
+                if (augmentations.containsKey(bibId)) {
+                    sb.append(augmentations.get(bibId));
                 }
                 this.augmentations.put(bibId, sb.toString());
             }
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
+        return augmentations;
     }
 }
