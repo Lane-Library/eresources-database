@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JDBCItemCount implements ItemCount {
+public class JDBCItemService implements ItemService {
 
     /*
      * this query from: http://stackoverflow.com/questions/7745609/sql-select-only-rows-with-max-value-on-a-column
@@ -30,39 +30,23 @@ public class JDBCItemCount implements ItemCount {
 
     private static final int FETCH_SIZE = 100000;
 
-    private static final Logger LOG = LoggerFactory.getLogger(JDBCItemCount.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCItemService.class);
 
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) "
             + "FROM lmldb.bib_item, lmldb.item_status " + "WHERE bib_item.item_id = item_status.item_id "
             + "GROUP BY bib_id";
 
-    private Map<Integer, Integer> availables;
-
     private DataSource dataSource;
 
-    private Map<Integer, Integer> totals;
-
-    public JDBCItemCount(final DataSource dataSource) {
+    public JDBCItemService(final DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    public int[] itemCount(final int bibId) {
-        if (this.totals == null) {
-            this.initialize();
-        }
-        int[] itemCount = new int[2];
-        itemCount[0] = getCount(bibId, this.totals);
-        if (itemCount[0] > 0) {
-            itemCount[1] = getCount(bibId, this.availables);
-        }
-        return itemCount;
     }
 
     private Map<Integer, Integer> createItemCountMap(final String query) {
         LOG.debug("start building item count map");
         Map<Integer, Integer> map = new HashMap<>();
         // set fetch size here
-        try (Connection conn = this.dataSource.getConnection();
+        try (Connection conn = dataSource.getConnection();
                 Statement statement = conn.createStatement();
                 ResultSet rs = statement.executeQuery(query);) {
             rs.setFetchSize(FETCH_SIZE);
@@ -76,13 +60,13 @@ public class JDBCItemCount implements ItemCount {
         return map;
     }
 
-    private int getCount(final int bibId, final Map<Integer, Integer> map) {
-        Integer count = map.get(Integer.valueOf(bibId));
-        return count != null ? count.intValue() : 0;
+    @Override
+    public Map<Integer, Integer> getTotals() {
+        return createItemCountMap(TOTAL_QUERY);
     }
 
-    private void initialize() {
-        this.totals = createItemCountMap(TOTAL_QUERY);
-        this.availables = createItemCountMap(AVAILABLE_QUERY);
+    @Override
+    public Map<Integer, Integer> getAvailables() {
+        return createItemCountMap(AVAILABLE_QUERY);
     }
 }
