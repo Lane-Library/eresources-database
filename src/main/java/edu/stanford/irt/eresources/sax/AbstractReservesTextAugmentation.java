@@ -4,7 +4,7 @@ import java.util.Map;
 
 public abstract class AbstractReservesTextAugmentation implements ReservesTextAugmentation {
 
-    protected Map<String, String> augmentations;
+    private Map<String, String> augmentations;
 
     @Override
     public String getReservesAugmentations(final String controlNumber) {

@@ -54,7 +54,7 @@ public class JDBCReservesTextAugmentation extends AbstractReservesTextAugmentati
                 if (augmentations.containsKey(bibId)) {
                     sb.append(augmentations.get(bibId));
                 }
-                this.augmentations.put(bibId, sb.toString());
+                augmentations.put(bibId, sb.toString());
             }
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);

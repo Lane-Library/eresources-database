@@ -1,8 +1,5 @@
 package edu.stanford.irt.eresources.sax;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +12,7 @@ import javax.sql.DataSource;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class JDBCAuthTextAugmentation extends AbstractAuthTextAugmentation implements AuthTextAugmentation {
+public class JDBCAuthTextAugmentation extends AbstractAuthTextAugmentation {
 
     private static final int JDBC_FETCH_SIZE = 10_000;
 
@@ -40,14 +37,11 @@ public class JDBCAuthTextAugmentation extends AbstractAuthTextAugmentation imple
                 String authId = rs.getString("AID");
                 byte[] bytes = rs.getBytes("ADATA");
                 if (null != bytes) {
-                    this.augmentations.put(authId, parseSubfieldAs(new String(bytes, StandardCharsets.UTF_8)));
+                    augmentations.put(authId, parseSubfieldAs(new String(bytes, StandardCharsets.UTF_8)));
                 }
             }
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(AUGMENTATION_FILE))) {
-                oos.writeObject(this.augmentations);
-            }
             LOG.debug("completed building authority augmentation object");
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
         return augmentations;
