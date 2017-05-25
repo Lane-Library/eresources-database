@@ -11,22 +11,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class HTTPAuthTextAugmentation extends AbstractAuthTextAugmentation {
-
-    private static final String ENDPOINT_PATH = "augmentations/auth";
+public class HTTPAugmentationsService implements AugmentationsService {
 
     private URI catalogServiceURI;
 
+    private String endpointPath;
+
     private ObjectMapper objectMapper;
 
-    public HTTPAuthTextAugmentation(final ObjectMapper objectMapper, final URI catalogServiceURI) {
+    public HTTPAugmentationsService(final ObjectMapper objectMapper, final URI catalogServiceURI,
+            final String endpointPath) {
         this.objectMapper = objectMapper;
         this.catalogServiceURI = catalogServiceURI;
+        this.endpointPath = endpointPath;
     }
 
     @Override
-    protected Map<String, String> buildAugmentations() {
-        try (InputStream input = new URL(this.catalogServiceURI.toURL(), ENDPOINT_PATH).openStream()) {
+    public Map<String, String> buildAugmentations() {
+        try (InputStream input = new URL(this.catalogServiceURI.toURL(), this.endpointPath).openStream()) {
             return this.objectMapper.readValue(input, new TypeReference<Map<String, String>>() {
             });
         } catch (IOException e) {

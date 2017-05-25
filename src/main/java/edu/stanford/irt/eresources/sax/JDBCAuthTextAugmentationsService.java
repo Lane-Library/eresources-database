@@ -10,23 +10,28 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class JDBCAuthTextAugmentation extends AbstractAuthTextAugmentation {
+public class JDBCAuthTextAugmentationsService implements AugmentationsService {
 
     private static final int JDBC_FETCH_SIZE = 10_000;
+
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCAuthTextAugmentationsService.class);
 
     // verified by DM: people records won't have 450's and MeSH records won't have 400's
     private static final String SQL = "SELECT concat('Z',auth_id) AS AID, LMLDB.GETALLTAGS(auth_id,'A','400 450',2) AS ADATA FROM LMLDB.AUTH_MASTER";
 
     private DataSource dataSource;
 
-    public void setDataSource(final DataSource dataSource) {
+    public JDBCAuthTextAugmentationsService(final DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
-    protected Map<String, String> buildAugmentations() {
+    public Map<String, String> buildAugmentations() {
         LOG.debug("start building authority augmentation object");
         Map<String, String> augmentations = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();

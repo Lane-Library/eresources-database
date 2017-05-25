@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class JDBCReservesTextAugmentation extends AbstractReservesTextAugmentation {
+public class JDBCReservesTextAugmentationsService implements AugmentationsService {
 
     private static final String SQL = "SELECT bib_item.bib_id, department_name, course_number, "
             + "  last_name, first_name FROM lmldb.reserve_list_items, lmldb.reserve_list, "
@@ -31,12 +31,12 @@ public class JDBCReservesTextAugmentation extends AbstractReservesTextAugmentati
 
     private DataSource dataSource;
 
-    public void setDataSource(final DataSource dataSource) {
+    public JDBCReservesTextAugmentationsService(final DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
-    protected Map<String, String> buildAugmentations() {
+    public Map<String, String> buildAugmentations() {
         Map<String, String> augmentations = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
