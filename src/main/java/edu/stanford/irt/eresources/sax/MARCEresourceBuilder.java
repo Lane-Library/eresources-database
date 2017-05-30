@@ -318,6 +318,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
             } else if ("h".equals(this.code) && this.currentText.toString().contains("digital")) {
                 this.currentEresource.setIsDigital(true);
+            } else if ("h".equals(this.code) && this.currentText.toString().contains("videorecording")) {
+                this.currentEresource.addType("Video");
             }
         } else if ("246".equals(this.tag)) {
             String data = this.currentText.toString();
