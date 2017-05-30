@@ -150,9 +150,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     link.setLabel("Lane Catalog Record");
                     link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + recordId);
                     this.currentVersion.addLink(link);
-                    if (null == this.currentVersion.getDates()) {
-                        this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
-                    }
+                }
+                if (null == this.currentVersion.getDates()) {
+                    this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
                 }
                 this.currentEresource.addVersion(this.currentVersion);
                 StringBuilder combinedKeywords = new StringBuilder();
@@ -318,6 +318,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
             } else if ("h".equals(this.code) && this.currentText.toString().contains("digital")) {
                 this.currentEresource.setIsDigital(true);
+            } else if ("h".equals(this.code) && this.currentText.toString().contains("videorecording")) {
+                this.currentEresource.addType("Video");
             }
         } else if ("246".equals(this.tag)) {
             String data = this.currentText.toString();
