@@ -150,9 +150,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     link.setLabel("Lane Catalog Record");
                     link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + recordId);
                     this.currentVersion.addLink(link);
-                    if (null == this.currentVersion.getDates()) {
-                        this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
-                    }
+                }
+                if (null == this.currentVersion.getDates()) {
+                    this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
                 }
                 this.currentEresource.addVersion(this.currentVersion);
                 StringBuilder combinedKeywords = new StringBuilder();
