@@ -35,7 +35,7 @@ public class HTTPItemService implements ItemService {
     }
 
     private Map<Integer, Integer> getMap(final String enpointPath) {
-        try (InputStream input = new URL(this.catalogServiceURI.toURL(), enpointPath).openStream()) {
+        try (InputStream input = IOUtils.getStream(new URL(this.catalogServiceURI.toURL(), enpointPath))) {
             return this.objectMapper.readValue(input, new TypeReference<Map<Integer, Integer>>() {
             });
         } catch (IOException e) {

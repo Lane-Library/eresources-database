@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.IOUtils;
 
 public class HTTPAugmentationsService implements AugmentationsService {
 
@@ -28,7 +29,7 @@ public class HTTPAugmentationsService implements AugmentationsService {
 
     @Override
     public Map<String, String> buildAugmentations() {
-        try (InputStream input = new URL(this.catalogServiceURI.toURL(), this.endpointPath).openStream()) {
+        try (InputStream input = IOUtils.getStream(new URL(this.catalogServiceURI.toURL(), this.endpointPath))) {
             return this.objectMapper.readValue(input, new TypeReference<Map<String, String>>() {
             });
         } catch (IOException e) {

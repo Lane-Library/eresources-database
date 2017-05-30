@@ -24,34 +24,29 @@ public class AuthTextAugmentation {
 
     private Map<String, String> augmentations;
 
-    private AugmentationsService augmentationsService;
-
     public AuthTextAugmentation(final AugmentationsService augmentationsService) {
-        this.augmentationsService = augmentationsService;
+        File objFile = new File(AUGMENTATION_FILE);
+        if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - ONE_DAY) {
+            this.augmentations = augmentationsService.buildAugmentations();
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(AUGMENTATION_FILE))) {
+                oos.writeObject(this.augmentations);
+            } catch (IOException e) {
+                throw new EresourceDatabaseException(e);
+            }
+        } else {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(objFile))) {
+                this.augmentations = (Map<String, String>) ois.readObject();
+            } catch (IOException e) {
+                LOG.error("can't open augmentations file", e);
+                this.augmentations = Collections.emptyMap();
+            } catch (ClassNotFoundException e) {
+                throw new EresourceDatabaseException(e);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
     public String getAuthAugmentations(final String controlNumber) {
-        if (null == this.augmentations) {
-            File objFile = new File(AUGMENTATION_FILE);
-            if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - ONE_DAY) {
-                this.augmentations = this.augmentationsService.buildAugmentations();
-                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(AUGMENTATION_FILE))) {
-                    oos.writeObject(this.augmentations);
-                } catch (IOException e) {
-                    throw new EresourceDatabaseException(e);
-                }
-            } else {
-                try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(objFile))) {
-                    this.augmentations = (Map<String, String>) ois.readObject();
-                } catch (IOException e) {
-                    LOG.error("can't open augmentations file", e);
-                    this.augmentations = Collections.emptyMap();
-                } catch (ClassNotFoundException e) {
-                    throw new EresourceDatabaseException(e);
-                }
-            }
-        }
         return this.augmentations.get(controlNumber);
     }
 }

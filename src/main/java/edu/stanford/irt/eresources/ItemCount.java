@@ -8,33 +8,18 @@ public class ItemCount {
 
     private Map<Integer, Integer> totals;
 
-    private ItemService itemService;
-
     public ItemCount(final ItemService itemService) {
-        this.itemService = itemService;
+        this.availables = itemService.getAvailables();
+        this.totals = itemService.getTotals();
     }
 
     public int[] itemCount(final int bibId) {
         int[] itemCount = new int[2];
-        itemCount[0] = getCount(bibId, getTotals());
+        itemCount[0] = getCount(bibId, this.totals);
         if (itemCount[0] > 0) {
-            itemCount[1] = getCount(bibId, getAvailables());
+            itemCount[1] = getCount(bibId, this.availables);
         }
         return itemCount;
-    }
-
-    private Map<Integer, Integer> getAvailables() {
-        if (this.availables == null) {
-            this.availables = this.itemService.getAvailables();
-        }
-        return this.availables;
-    }
-
-    private Map<Integer, Integer> getTotals() {
-        if (this.totals == null) {
-            this.totals = this.itemService.getTotals();
-        }
-        return this.totals;
     }
 
     private int getCount(final int bibId, final Map<Integer, Integer> map) {

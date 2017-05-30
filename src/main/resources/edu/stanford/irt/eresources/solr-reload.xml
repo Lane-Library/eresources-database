@@ -13,9 +13,7 @@
             </list>
         </property>
     </bean>
-    <bean id="catalogRecordService" class="edu.stanford.irt.eresources.JDBCCatalogRecordService">
-        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
-        <constructor-arg name="executor" ref="executor"/>
-        <constructor-arg value="classpath:/edu/stanford/irt/eresources/sql/reload.sql"/>
+    <bean id="catalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
+        <constructor-arg ref="catalogServiceURI"/>
     </bean>
 </beans>
