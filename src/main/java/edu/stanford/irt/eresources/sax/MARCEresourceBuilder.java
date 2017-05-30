@@ -151,7 +151,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + recordId);
                     this.currentVersion.addLink(link);
                 }
-                if (null == this.currentVersion.getDates()) {
+                if (null == this.currentVersion.getDates() && this.dateForPrintSummaryHoldings.length() > 0) {
                     this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
                 }
                 this.currentEresource.addVersion(this.currentVersion);
