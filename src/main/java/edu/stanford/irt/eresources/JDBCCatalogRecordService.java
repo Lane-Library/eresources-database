@@ -18,9 +18,9 @@ import org.slf4j.LoggerFactory;
 import edu.stanford.lane.catalog.CatalogSQLException;
 import edu.stanford.lane.catalog.VoyagerInputStream2;
 
-public class EresourceInputStream extends PipedInputStream implements Runnable {
+public class JDBCCatalogRecordService extends PipedInputStream implements Runnable, CatalogRecordService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EresourceInputStream.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCCatalogRecordService.class);
 
     private DataSource dataSource;
 
@@ -32,11 +32,17 @@ public class EresourceInputStream extends PipedInputStream implements Runnable {
 
     private Timestamp startDate;
 
-    public EresourceInputStream(final DataSource dataSource, final Executor executor,
+    public JDBCCatalogRecordService(final DataSource dataSource, final Executor executor,
             final InputStream sqlInputStream) {
         this.dataSource = dataSource;
         this.executor = executor;
         this.sqlInputStream = sqlInputStream;
+    }
+
+    @Override
+    public InputStream getRecordStream(long time) {
+        this.startDate = new Timestamp(time);
+        return this;
     }
 
     @Override

@@ -5,7 +5,7 @@
         <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
         <property name="locations">
             <list>
-                <value>file:application.properties</value>
+                <value>file:eresources.properties</value>
                 <value>file:${spring.config.location}/application.properties</value>
             </list>
         </property>

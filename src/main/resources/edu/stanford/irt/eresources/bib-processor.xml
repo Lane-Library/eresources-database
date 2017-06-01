@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     <bean id="bibProcessor" class="edu.stanford.irt.eresources.sax.MARCEresourceProcessor">
-        <property name="inputStream" ref="bibInputStream"/>
+        <constructor-arg ref="${eresources.remoteServiceProtocol}CatalogRecordService"/>
         <property name="xmlReader">
             <bean id="marcReader" class="edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader">
                 <property name="contentHandler" ref="bibBuilder"/>
@@ -20,12 +20,35 @@
         <property name="reservesTextAugmentation" ref="reservesTextAugmentation"/>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.sax.AuthTextAugmentation">
-        <property name="dataSource" ref="voyagerDataSource"/>
+        <constructor-arg ref="${eresources.remoteServiceProtocol}AuthTextAugmentationsService"/>
     </bean>
     <bean id="reservesTextAugmentation" class="edu.stanford.irt.eresources.sax.ReservesTextAugmentation">
-        <property name="dataSource" ref="voyagerDataSource"/>
+        <constructor-arg ref="${eresources.remoteServiceProtocol}ReservesTextAugmentationsService"/>
     </bean>
     <bean id="itemCount" class="edu.stanford.irt.eresources.ItemCount">
+        <constructor-arg ref="${eresources.remoteServiceProtocol}ItemService"/>
+    </bean>
+    <bean id="httpAuthTextAugmentationsService" class="edu.stanford.irt.eresources.sax.HTTPAugmentationsService">
+        <constructor-arg ref="objectMapper"/>
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="augmentations/auth"/>
+    </bean>
+    <bean id="jdbcAuthTextAugmentationsService" class="edu.stanford.irt.eresources.sax.JDBCAuthTextAugmentationsService">
+        <constructor-arg ref="voyagerDataSource"/>
+    </bean>
+    <bean id="httpReservesTextAugmentationsService" class="edu.stanford.irt.eresources.sax.HTTPAugmentationsService">
+        <constructor-arg ref="objectMapper"/>
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="augmentations/reserves"/>
+    </bean>
+    <bean id="jdbcReservesTextAugmentationsService" class="edu.stanford.irt.eresources.sax.JDBCReservesTextAugmentationsService">
+        <constructor-arg ref="voyagerDataSource"/>
+    </bean>
+    <bean id="httpItemService" class="edu.stanford.irt.eresources.HTTPItemService">
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg ref="objectMapper"/>
+    </bean>
+    <bean id="jdbcItemService" class="edu.stanford.irt.eresources.JDBCItemService">
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
 </beans>
