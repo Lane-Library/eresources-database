@@ -12,12 +12,15 @@
             </list>
         </property>
     </bean>
-    <bean id="catalogRecordService" class="edu.stanford.irt.eresources.JDBCCatalogRecordService">
+    <bean id="jdbcCatalogRecordService" class="edu.stanford.irt.eresources.JDBCCatalogRecordService">
         <constructor-arg name="dataSource" ref="voyagerDataSource"/>
         <constructor-arg name="executor" ref="executor"/>
         <constructor-arg value="classpath:/edu/stanford/irt/eresources/sql/update.sql"/>
     </bean>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
         <property name="logEresource" value="true"/>
+    </bean>
+    <bean id="httpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
+        <constructor-arg ref="catalogServiceURI"/>
     </bean>
 </beans>
