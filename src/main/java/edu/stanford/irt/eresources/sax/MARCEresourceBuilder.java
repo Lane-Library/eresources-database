@@ -151,9 +151,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     link.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + recordId);
                     this.currentVersion.addLink(link);
                 }
-                if (null == this.currentVersion.getDates()) {
-                    this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
-                }
+                maybeAddBibDates();
                 this.currentEresource.addVersion(this.currentVersion);
                 StringBuilder combinedKeywords = new StringBuilder();
                 combinedKeywords.append(this.currentEresource.getKeywords());
@@ -583,6 +581,17 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } catch (CloneNotSupportedException e) {
                 throw new EresourceDatabaseException(e);
             }
+        }
+    }
+
+    // pull date from bib when not present elsewhere; apply sparingly because it can be inaccurate for journal
+    // holdings, repetitive on articles/chapters, unnecessary for impact factors
+    private void maybeAddBibDates() {
+        if (null == this.currentVersion.getDates() && null == this.currentVersion.getSummaryHoldings()
+                && !this.currentEresource.getPrimaryType().startsWith("Journal")
+                && !"impact factor".equalsIgnoreCase(this.currentVersion.getLinks().get(0).getLabel())
+                && this.currentEresource.getPublicationText().isEmpty()) {
+            this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
         }
     }
 
