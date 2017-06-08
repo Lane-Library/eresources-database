@@ -588,13 +588,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     // holdings, repetitive on articles/chapters, unnecessary for impact factors
     private void maybeAddBibDates() {
         if (null == this.currentVersion.getDates() && null == this.currentVersion.getSummaryHoldings()
-                && !this.currentEresource.getPrimaryType().startsWith("Journal")
-                && !"impact factor".equalsIgnoreCase(this.currentVersion.getLinks().get(0).getLabel())
-                && this.currentEresource.getPublicationText().isEmpty()) {
+                && this.currentEresource.getPublicationText().isEmpty()
+                && this.currentEresource.getPrimaryType().matches("^(Book|Video).*")) {
             this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
-            LoggerFactory.getLogger(getClass()).debug(this.currentEresource.getPrimaryType() + "\t"
-                    + this.currentEresource.getId() + "\t" + this.currentEresource.getTitle());
-            this.currentEresource.setKeywords(this.currentEresource.getKeywords() + " bibdatez");
         }
     }
 
