@@ -30,13 +30,13 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 
-    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Journal", "Periodicals", "Newspapers" },
+    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Article", "Articles" },
+            { "Audio", "Sound Recordings" }, { "Book", "Book Sets", "Books" }, { "Chapter", "Chapters" },
             { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
+            { "Database", "Databases" }, { "Image", "Graphics" }, { "Journal", "Periodicals", "Newspapers" },
+            { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" },
             { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-            { "Book", "Book Sets", "Books" }, { "Database", "Databases" }, { "Image", "Graphics" },
-            { "Article", "Articles" }, { "Website", "Websites" }, { "Audio", "Sound Recordings" },
-            { "Chapter", "Chapters" },
-            { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" } };
+            { "Website", "Websites" } };
 
     private static final String ENG = "English";
 
