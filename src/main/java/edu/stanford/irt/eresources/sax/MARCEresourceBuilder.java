@@ -589,8 +589,10 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
     private void maybeAddBibDates() {
         if (null == this.currentVersion.getDates() && null == this.currentVersion.getSummaryHoldings()
                 && this.currentEresource.getPublicationText().isEmpty()
+                && !"impact factor".equalsIgnoreCase(this.currentVersion.getLinks().get(0).getLabel())
                 && this.currentEresource.getPrimaryType().matches("^(Book|Video).*")) {
             this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
+            this.currentEresource.setKeywords(this.currentEresource.getKeywords() + " bibdatez");
         }
     }
 
