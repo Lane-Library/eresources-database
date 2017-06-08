@@ -21,10 +21,10 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Atlases, Pictorial", "Audio", "Bassett",
-            "Biotools Software, Installed", "Book", "Chapter", "Clinical Decision Tools", "Database", "Grand Rounds",
-            "Image", "Journal", "Lane Class", "Lane Web Page", "Print", "Software", "Software, Installed",
-            "Statistics Software, Installed", "Statistics", "Video", "Video: Instructional", "Video: Lab Protocols",
-            "Video: Physical Exam", "Video: StanfordMed", "Video: Surgery", "Website" };
+            "Biotools Software, Installed", "Book", "Chapter", "Clinical Decision Tools", "Database", "Dataset",
+            "Grand Rounds", "Image", "Journal", "Lane Class", "Lane Web Page", "Print", "Software",
+            "Software, Installed", "Statistics Software, Installed", "Statistics", "Video", "Video: Instructional",
+            "Video: Lab Protocols", "Video: Physical Exam", "Video: StanfordMed", "Video: Surgery", "Website" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -33,7 +33,8 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Article", "Articles" },
             { "Audio", "Sound Recordings" }, { "Book", "Book Sets", "Books" }, { "Chapter", "Chapters" },
             { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
-            { "Database", "Databases" }, { "Image", "Graphics" }, { "Journal", "Periodicals", "Newspapers" },
+            { "Database", "Databases" }, { "Dataset", "Datasets" }, { "Image", "Graphics" },
+            { "Journal", "Periodicals", "Newspapers" },
             { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" },
             { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
             { "Website", "Websites" } };
