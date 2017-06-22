@@ -21,7 +21,7 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Atlases, Pictorial", "Audio", "Bassett",
-            "Biotools Software, Installed", "Book", "Chapter", "Clinical Decision Tools", "Database", "Dataset",
+            "Biotools Software, Installed", "Book", "Chapter", "Calculators, Formulas, Algorithms", "Database", "Dataset",
             "Grand Rounds", "Image", "Journal", "Lane Class", "Lane Web Page", "Print", "Software",
             "Software, Installed", "Statistics Software, Installed", "Statistics", "Video", "Video: Instructional",
             "Video: Lab Protocols", "Video: Physical Exam", "Video: StanfordMed", "Video: Surgery", "Website" };
@@ -32,7 +32,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Article", "Articles" },
             { "Audio", "Sound Recordings" }, { "Book", "Book Sets", "Books" }, { "Chapter", "Chapters" },
-            { "Clinical Decision Tools", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
+            { "Calculators, Formulas, Algorithms", "Decision Support Techniques", "Calculators, Clinical", "Algorithms" },
             { "Database", "Databases" }, { "Dataset", "Datasets" }, { "Image", "Graphics" },
             { "Journal", "Periodicals", "Newspapers" },
             { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" },
