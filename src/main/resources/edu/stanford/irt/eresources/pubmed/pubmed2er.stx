@@ -165,15 +165,15 @@
         <stx:process-children/>
     </stx:template>
     
-    <stx:template match="MedlineCitation/Article/ArticleTitle">
-        <stx:assign name="title" select="."/>
+    <stx:template match="MedlineCitation/Article/ArticleTitle//text()">
+        <stx:assign name="title" select="concat($title,.)"/>
         <stx:process-children/>
     </stx:template>
     
-    <stx:template match="MedlineCitation/Article/VernacularTitle">
+    <stx:template match="MedlineCitation/Article/VernacularTitle//text()">
         <!-- don't add vernacularTitle if it just duplicates title -->
         <stx:if test=". != replace($title,'(\[|\])','')">
-	        <stx:assign name="vernacularTitle" select="."/>
+	        <stx:assign name="vernacularTitle" select="concat($vernacularTitle,.)"/>
         </stx:if>
         <stx:process-children/>
     </stx:template>
@@ -210,24 +210,16 @@
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/Abstract/AbstractText">
-        <stx:variable name="thisDescription"/>
-        <stx:choose>
-            <stx:when test="@Label">
-                <stx:assign name="thisDescription" select="concat('::',@Label,'##',.)"/>
-            </stx:when>
-            <stx:otherwise>
-                <stx:assign name="thisDescription" select="."/>
-            </stx:otherwise>
-        </stx:choose>
-        <stx:choose>
-            <stx:when test="$description = ''">
-                <stx:assign name="description" select="$thisDescription"/>
-            </stx:when>
-            <stx:otherwise>
-                <stx:assign name="description" select="concat($description, ' ', $thisDescription)"/>
-            </stx:otherwise>
-        </stx:choose>
-        <stx:process-children/>
+            <stx:process-attributes/>
+            <stx:process-children/>
+    </stx:template>
+
+    <stx:template match="MedlineCitation/Article/Abstract/AbstractText/@Label">
+        <stx:assign name="description" select="concat($description,'::',.,'##')"/>
+    </stx:template>
+
+    <stx:template match="MedlineCitation/Article/Abstract/AbstractText//text()">
+        <stx:assign name="description" select="concat($description, .)"/>
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/AuthorList/Author/LastName|MedlineCitation/Article/AuthorList/Author/CollectiveName">
