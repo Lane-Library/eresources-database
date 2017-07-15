@@ -15,25 +15,9 @@ public class SAXLink implements Link {
 
     @Override
     public String getAdditionalText() {
-        StringBuilder sb = new StringBuilder();
-        String publisher = this.version.getPublisher();
-        String versionText = this.version.getAdditionalText();
-        if (publisher != null && !publisher.isEmpty()) {
-            sb.append(publisher);
-        }
-        if (versionText != null && !versionText.isEmpty()) {
-            if (sb.length() > 0) {
-                sb.append(", ");
-            }
-            sb.append(versionText);
-        }
-        if (this.instruction != null && !this.instruction.isEmpty()) {
-            if (sb.length() > 0) {
-                sb.append(", ");
-            }
-            sb.append(this.instruction);
-        }
-        return sb.length() == 0 ? null : sb.toString();
+        // this once appended publisher, versionText and instruction data
+        // only instruction data is required now because publisher and versionText are displayed separately
+        return this.instruction;
     }
 
     @Override
