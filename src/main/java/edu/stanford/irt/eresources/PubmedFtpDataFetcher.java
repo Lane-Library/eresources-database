@@ -24,6 +24,19 @@ public class PubmedFtpDataFetcher implements DataFetcher {
 
     private String ftpUser;
 
+    public PubmedFtpDataFetcher(final String basePathname, final String ftpHostname, final String ftpPathname,
+            final String ftpUsername, final String ftpPassword) {
+        this.basePath = basePathname;
+        this.ftpHost = ftpHostname;
+        this.ftpPath = ftpPathname;
+        this.ftpUser = ftpUsername;
+        this.ftpPass = ftpPassword;
+        File dir = new File(this.basePath);
+        if (!dir.exists() && !dir.mkdirs()) {
+            throw new IllegalArgumentException("missing and can't create " + this.basePath);
+        }
+    }
+
     @Override
     public void getUpdateFiles() {
         PubmedFtpFileFilter filter = new PubmedFtpFileFilter(this.basePath);
@@ -36,12 +49,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             client.enterLocalPassiveMode();
             client.changeWorkingDirectory(this.ftpPath);
             for (FTPFile file : client.listFiles(".", filter)) {
-                try (FileOutputStream fos = new FileOutputStream(this.basePath + "/" + file.getName())) {
-                    LOG.info("fetching: {}", file);
-                    if (client.retrieveFile(file.getName(), fos)) {
-                        fos.close();
-                    }
-                }
+                fetchFile(client, file);
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
@@ -54,42 +62,14 @@ public class PubmedFtpDataFetcher implements DataFetcher {
         }
     }
 
-    public void setBasePath(final String basePath) {
-        if (null == basePath) {
-            throw new IllegalArgumentException("null basePath");
+    private void fetchFile(final FTPClient client, final FTPFile file) {
+        try (FileOutputStream fos = new FileOutputStream(this.basePath + "/" + file.getName())) {
+            LOG.info("fetching: {}", file);
+            if (client.retrieveFile(file.getName(), fos)) {
+                fos.close();
+            }
+        } catch (IOException e) {
+            throw new EresourceDatabaseException(e);
         }
-        this.basePath = basePath;
-        File dir = new File(this.basePath);
-        if (!dir.exists() && !dir.mkdirs()) {
-            throw new IllegalArgumentException("missing and can't create " + this.basePath );
-        }
-    }
-
-    public void setFtpHost(final String ftpHost) {
-        if (null == ftpHost) {
-            throw new IllegalArgumentException("null ftpHost");
-        }
-        this.ftpHost = ftpHost;
-    }
-
-    public void setFtpPass(final String ftpPass) {
-        if (null == ftpPass) {
-            throw new IllegalArgumentException("null ftpPass");
-        }
-        this.ftpPass = ftpPass;
-    }
-
-    public void setFtpPath(final String ftpPath) {
-        if (null == ftpPath) {
-            throw new IllegalArgumentException("null ftpPath");
-        }
-        this.ftpPath = ftpPath;
-    }
-
-    public void setFtpUser(final String ftpUser) {
-        if (null == ftpUser) {
-            throw new IllegalArgumentException("null ftpUser");
-        }
-        this.ftpUser = ftpUser;
     }
 }

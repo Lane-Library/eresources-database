@@ -5,15 +5,15 @@
     <import resource="pubmed-load.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrPubmedUpdate" parent="abstractSolrLoader">
         <constructor-arg name="dataFetchers">
-			<list>
-				<bean class="edu.stanford.irt.eresources.PubmedFtpDataFetcher" >
-					<property name="basePath" value="${eresources.pubmedprocessor.ftpPath}"/>
-					<property name="ftpPath" value="${eresources.pubmedprocessor.ftp.pathname}"/>
-					<property name="ftpHost" value="${eresources.pubmedprocessor.ftp.hostname}"/>
-					<property name="ftpUser" value="${eresources.pubmedprocessor.ftp.username}"/>
-					<property name="ftpPass" value="${eresources.pubmedprocessor.ftp.password}"/>
-				</bean>
-			</list>
+            <list>
+                <bean class="edu.stanford.irt.eresources.PubmedFtpDataFetcher" >
+                    <constructor-arg name="basePathname" value="${eresources.pubmedprocessor.ftpPath}"/>
+                    <constructor-arg name="ftpHostname" value="${eresources.pubmedprocessor.ftp.hostname}"/>
+                    <constructor-arg name="ftpPathname" value="${eresources.pubmedprocessor.ftp.pathname}"/>
+                    <constructor-arg name="ftpUsername" value="${eresources.pubmedprocessor.ftp.username}"/>
+                    <constructor-arg name="ftpPassword" value="${eresources.pubmedprocessor.ftp.password}"/>
+                </bean>
+            </list>
         </constructor-arg>
     </bean>
     <!--  override pubmedProcessor from pubmed-processor.xml so we can set basePath -->
