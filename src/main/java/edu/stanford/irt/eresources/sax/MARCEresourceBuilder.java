@@ -241,11 +241,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected void createCustomTypes(final SAXEresource eresource) {
         Collection<String> types = eresource.getTypes();
-        if (types.contains("Mobile") && eresource.getKeywords().toLowerCase().contains("digipay")) {
+        String keywords = eresource.getKeywords().toLowerCase();
+        if (types.contains("Mobile") && keywords.contains("digipay")) {
             eresource.addType("Mobile Subscription");
         }
         if (types.contains("Software, Installed")) {
-            if (eresource.getKeywords().toLowerCase().contains("subset, biotools")) {
+            if (keywords.contains("subset, biotools")) {
                 eresource.addType("Biotools Software, Installed");
             }
             if (types.contains("Statistics")) {
