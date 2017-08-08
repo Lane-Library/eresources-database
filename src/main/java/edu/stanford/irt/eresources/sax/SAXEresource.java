@@ -65,8 +65,8 @@ public class SAXEresource implements Cloneable, Eresource {
         PRIMARY_TYPES.put("book sets", "Book");
         PRIMARY_TYPES.put("cartographic material", "Other");
         PRIMARY_TYPES.put("cartographic materials", "Other");
-        PRIMARY_TYPES.put("collection", "Database");
-        PRIMARY_TYPES.put("collections", "Database");
+        PRIMARY_TYPES.put("collection", "Collection");
+        PRIMARY_TYPES.put("collections", "Collection");
         PRIMARY_TYPES.put("component", "Component");
         PRIMARY_TYPES.put("components", "Component");
         PRIMARY_TYPES.put("computer file", "Software");
