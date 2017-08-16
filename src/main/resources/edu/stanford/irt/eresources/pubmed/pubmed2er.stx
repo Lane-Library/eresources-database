@@ -4,7 +4,6 @@
     pass-through="none">
     
     <stx:variable name="pmid"/>
-    <stx:variable name="doi"/>
     <stx:variable name="title"/>
     <stx:variable name="vernacularTitle"/>
     <stx:variable name="keywords"/>
@@ -25,9 +24,8 @@
     <stx:variable name="authorsText"/>
     <stx:variable name="languages"/>
     
-    <stx:template match="MedlineCitation">
+    <stx:template match="PubmedArticle">
         <stx:assign name="pmid" select="''"/>
-        <stx:assign name="doi" select="''"/>
         <stx:assign name="title" select="''"/>
         <stx:assign name="vernacularTitle" select="''"/>
         <stx:assign name="keywords" select="''"/>
@@ -124,7 +122,6 @@
                 <publicationLanguage><stx:value-of select="$lang"/></publicationLanguage>
             </stx:for-each-item>
             <stx:assign name="keywords" select="concat($keywords, ' pmid:', $pmid)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' doi:', $doi)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $title)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $description)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $authorsText)"/>
@@ -142,6 +139,7 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationPages)"/>
             <keywords><stx:value-of select="normalize-space($keywords)"/></keywords>
         </eresource>
+        <stx:text>&#10;</stx:text>
     </stx:template>
     
     <stx:template match="*">
@@ -149,19 +147,21 @@
             fields to skip as per NCBI: http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.All_Fields_ALL
             "Place of Publication, Transliterated Title, Create Date, Completion Date, Entrez Date, MeSH Date, and Modification Date"
         -->
-        <stx:if test="not(contains('Year|Month|Day|Country|CopyrightInformation',name(.)))">
-            <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
-        </stx:if>
+        <stx:choose>
+            <stx:when test="contains('ArticleId|ELocationID',name(.))">
+                <!--  prepend id-type to data for better search support: e.g. doi:10.foo, pii:3917, etc. -->
+                <stx:variable name="id-label" select="concat(@IdType,@EIdType)"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', $id-label,':', .)"/>
+            </stx:when>
+            <stx:when test="not(contains('Year|Month|Day|Hour|Minute|Country|CopyrightInformation',name(.)))">
+                <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
+            </stx:when>
+        </stx:choose>
         <stx:process-children/>
     </stx:template>
             
     <stx:template match="MedlineCitation/PMID">
         <stx:assign name="pmid" select="."/>
-        <stx:process-children/>
-    </stx:template>
-    
-    <stx:template match="MedlineCitation/Article/ELocationID[@EIdType='doi' and not(@ValidYN='N')]">
-        <stx:assign name="doi" select="."/>
         <stx:process-children/>
     </stx:template>
     
