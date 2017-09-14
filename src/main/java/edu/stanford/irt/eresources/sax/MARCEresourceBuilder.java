@@ -508,14 +508,15 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private void handleBibDatafield() {
         if ("245".equals(this.tag)) {
+            this.currentEresource.setTitle(this.title.toString());
             if ("0".equals(this.ind2)) {
-                this.currentEresource.setTitle(this.title.toString());
+                this.currentEresource.setSortTitle(this.title.toString());
             } else {
                 try {
-                    this.currentEresource.setTitle(this.title.substring(Integer.parseInt(this.ind2)));
+                    this.currentEresource.setSortTitle(this.title.substring(Integer.parseInt(this.ind2)));
                 } catch (StringIndexOutOfBoundsException e) {
                     LoggerFactory.getLogger(getClass()).error("can't strip non-filing from title using ind2", e);
-                    this.currentEresource.setTitle(this.title.toString());
+                    this.currentEresource.setSortTitle(this.title.toString());
                 }
             }
             this.title.setLength(0);
@@ -575,6 +576,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     cloned++;
                     SAXEresource clone = (SAXEresource) this.currentEresource.clone();
                     clone.setTitle(preferredTitle);
+                    clone.setSortTitle(preferredTitle);
                     clone.setId(this.currentEresource.getId() + "-clone-" + cloned);
                     this.eresourceHandler.handleEresource(clone);
                 }

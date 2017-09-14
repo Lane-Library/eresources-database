@@ -118,15 +118,14 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     protected void insertEresource(final Eresource eresource) {
         SolrInputDocument doc = new SolrInputDocument();
-        String title = eresource.getTitle();
-        String sortTitle = getSortText(title);
+        String sortTitle = getSortText(eresource.getSortTitle());
         int[] itemCount = eresource.getItemCount();
         doc.addField("id", eresource.getId());
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
         doc.addField("recordType", eresource.getRecordType());
         doc.addField("description", eresource.getDescription());
         doc.addField("text", getKeywords(eresource));
-        doc.addField("title", title);
+        doc.addField("title", eresource.getTitle());
         for (String altTitle : eresource.getAbbreviatedTitles()) {
             doc.addField("title_abbr", altTitle);
         }

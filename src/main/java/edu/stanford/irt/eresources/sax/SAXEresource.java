@@ -22,10 +22,9 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Atlases, Pictorial", "Audio", "Bassett",
             "Biotools Software, Installed", "Book", "Chapter", "Calculators, Formulas, Algorithms", "Database",
-            "Dataset", "Grand Rounds", "Image", "Journal", "Lane Class", "Lane Web Page", "Mobile",
-            "Print", "Software", "Software, Installed", "Statistics Software, Installed",
-            "Statistics", "Video", "Video: Instructional", "Video: Lab Protocols", "Video: Physical Exam",
-            "Video: StanfordMed", "Video: Surgery", "Website" };
+            "Dataset", "Grand Rounds", "Image", "Journal", "Lane Class", "Lane Web Page", "Mobile", "Print", "Software",
+            "Software, Installed", "Statistics Software, Installed", "Statistics", "Video", "Video: Instructional",
+            "Video: Lab Protocols", "Video: Physical Exam", "Video: StanfordMed", "Video: Surgery", "Website" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -156,6 +155,8 @@ public class SAXEresource implements Cloneable, Eresource {
     private String recordType;
 
     private String shortTitle;
+
+    private String sortTitle;
 
     private String title;
 
@@ -444,6 +445,11 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.shortTitle;
     }
 
+    @Override
+    public String getSortTitle() {
+        return this.sortTitle;
+    }
+
     /*
      * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Eresource#getTitle()
@@ -604,6 +610,10 @@ public class SAXEresource implements Cloneable, Eresource {
 
     public void setShortTitle(final String shortTitle) {
         this.shortTitle = shortTitle;
+    }
+
+    public void setSortTitle(final String sortTitle) {
+        this.sortTitle = sortTitle;
     }
 
     public void setTitle(final String title) {

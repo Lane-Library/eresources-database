@@ -41,6 +41,8 @@ public interface Eresource {
 
     String getShortTitle();
 
+    String getSortTitle();
+
     String getTitle();
 
     Collection<String> getTypes();
