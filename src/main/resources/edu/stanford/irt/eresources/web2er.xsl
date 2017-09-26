@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        xmlns:h="http://www.w3.org/1999/xhtml" version="2.0">
+        xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        version="2.0">
     
     <xsl:param name="lane-host"/>
 
@@ -17,9 +19,6 @@
                 <xsl:apply-templates/>
             </xsl:variable>
             <xsl:variable name="title" select="normalize-space(h:head/h:title)"/>
-            <xsl:variable name="excerpt">
-                <xsl:value-of select="substring($keywords, string-length($title) + 2, 65)"/>
-            </xsl:variable>
             <title><xsl:value-of select="$title"/></title>
             <primaryType>lanepage</primaryType>
             <type>Lane Web Page</type>
@@ -40,9 +39,6 @@
             </xsl:choose>
             <version>
                 <link>
-                    <label>
-                        <xsl:value-of select="$excerpt"/><xsl:text> . . .</xsl:text>
-                    </label>
                     <url><xsl:value-of select="$url"/></url>
                 </link>
             </version>
@@ -61,7 +57,7 @@
         <xsl:apply-templates select="attribute::node() | child::node()"/>
     </xsl:template>
     
-    <xsl:template match="h:script | h:style"/>
+    <xsl:template match="h:script | h:style | xi:include"/>
     
     <xsl:template match="attribute::node()"/>
     
