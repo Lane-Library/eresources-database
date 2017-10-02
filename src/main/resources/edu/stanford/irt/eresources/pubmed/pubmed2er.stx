@@ -12,6 +12,7 @@
     <stx:variable name="publicationDate"/>
     <stx:variable name="publicationIssue"/>
     <stx:variable name="publicationPages"/>
+    <stx:variable name="publicationNlmId"/>
     <stx:variable name="publicationTitle"/>
     <stx:variable name="publicationTitleFull"/>
     <stx:variable name="publicationType"/>
@@ -35,6 +36,7 @@
         <stx:assign name="publicationDate" select="''"/>
         <stx:assign name="publicationIssue" select="''"/>
         <stx:assign name="publicationPages" select="''"/>
+        <stx:assign name="publicationNlmId" select="''"/>
         <stx:assign name="publicationTitle" select="''"/>
         <stx:assign name="publicationTitleFull" select="''"/>
         <stx:assign name="publicationType" select="''"/>
@@ -145,6 +147,9 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationPages)"/>
+            <stx:if test="$publicationNlmId != ''">
+                <stx:assign name="keywords" select="concat($keywords, ' ', $publicationNlmId, ' ', jmm:getJournalTitles($publicationNlmId))" xmlns:jmm="java:edu.stanford.lane.journals.JournalMapManager" />
+            </stx:if>
             <keywords><stx:value-of select="normalize-space($keywords)"/></keywords>
         </eresource>
         <stx:text>&#10;</stx:text>
@@ -339,6 +344,10 @@
     
     <stx:template match="MedlineCitation/CommentsCorrectionsList/CommentsCorrections/PMID">
         <stx:value-of select="concat(' PMID:', .)"/>
+    </stx:template>
+    
+    <stx:template match="MedlineCitation/MedlineJournalInfo/NlmUniqueID">
+        <stx:assign name="publicationNlmId" select="."/>
     </stx:template>
     
     <stx:template match="DeleteCitation/PMID">

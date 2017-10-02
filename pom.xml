@@ -2,7 +2,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>25</version>
+        <version>27</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eresources-database</artifactId>
@@ -198,5 +198,10 @@
             <groupId>org.easymock</groupId>
             <scope>test</scope>
         </dependency>
- </dependencies>
+        <dependency>
+            <groupId>edu.stanford.irt</groupId>
+            <artifactId>journal-titles</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
 </project>
