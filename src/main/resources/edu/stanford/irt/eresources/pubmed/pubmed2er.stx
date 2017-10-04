@@ -14,7 +14,6 @@
     <stx:variable name="publicationPages"/>
     <stx:variable name="publicationNlmId"/>
     <stx:variable name="publicationTitle"/>
-    <stx:variable name="publicationTitleFull"/>
     <stx:variable name="publicationType"/>
     <stx:variable name="publicationVolume"/>
     <stx:variable name="publicationYear"/>
@@ -38,7 +37,6 @@
         <stx:assign name="publicationPages" select="''"/>
         <stx:assign name="publicationNlmId" select="''"/>
         <stx:assign name="publicationTitle" select="''"/>
-        <stx:assign name="publicationTitleFull" select="''"/>
         <stx:assign name="publicationType" select="''"/>
         <stx:assign name="publicationVolume" select="''"/>
         <stx:assign name="publicationYear" select="''"/>
@@ -142,7 +140,6 @@
                  date, vol, etc are also duplicated but they are useful broken out like this
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitle)"/>
             -->
-            <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitleFull)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
@@ -201,10 +198,6 @@
 
     <stx:template match="MedlineCitation/Article/Journal/ISOAbbreviation">
         <stx:assign name="publicationTitle" select="replace(.,'\.','')"/>
-    </stx:template>
-    
-    <stx:template match="MedlineCitation/Article/Journal/Title">
-        <stx:assign name="publicationTitleFull" select="."/>
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/Journal/JournalIssue/Volume">
