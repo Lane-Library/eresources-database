@@ -514,8 +514,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             } else {
                 try {
                     this.currentEresource.setSortTitle(this.title.substring(Integer.parseInt(this.ind2)));
-                } catch (StringIndexOutOfBoundsException e) {
-                    LoggerFactory.getLogger(getClass()).error("can't strip non-filing from title using ind2", e);
+                } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
+                    LoggerFactory.getLogger(getClass()).error(
+                            "can't strip non-filing from title using ind2; eresource: {}", this.currentEresource, e);
                     this.currentEresource.setSortTitle(this.title.toString());
                 }
             }
