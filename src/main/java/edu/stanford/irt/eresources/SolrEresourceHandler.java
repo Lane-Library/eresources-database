@@ -24,11 +24,15 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
+    private static final Pattern BASIC_NONFILING = Pattern.compile("^\\W?(?:A|An|The) ");
+
     private static final Pattern CHILD = Pattern.compile(".*\\b(?:child|teen|adolesc|pediatric|infant|newborn).*",
             Pattern.CASE_INSENSITIVE);
 
     private static final Pattern CHILD_MESH = Pattern.compile("^(?:infant|child|adolescent).*",
             Pattern.CASE_INSENSITIVE);
+
+    private static final String EMPTY = "";
 
     private static final int SORT_TEXT_MAX = 150;
 
@@ -56,8 +60,8 @@ public class SolrEresourceHandler implements EresourceHandler {
     }
 
     private static String getSortText(final String text) {
-        if (null == text || text.isEmpty()) {
-            return "";
+        if (null == text) {
+            return EMPTY;
         }
         if (text.length() > SORT_TEXT_MAX) {
             return text.substring(0, SORT_TEXT_MAX);
@@ -118,7 +122,7 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     protected void insertEresource(final Eresource eresource) {
         SolrInputDocument doc = new SolrInputDocument();
-        String sortTitle = getSortText(eresource.getSortTitle());
+        String sortTitle = getSortTitle(eresource);
         int[] itemCount = eresource.getItemCount();
         doc.addField("id", eresource.getId());
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
@@ -211,6 +215,22 @@ public class SolrEresourceHandler implements EresourceHandler {
             keywords.append(' ').append(type).append(' ');
         }
         return keywords.toString();
+    }
+
+    /**
+     * sort title is only set for bibs, so default to title for other record types and remove some basic
+     * non-filing strings
+     *
+     * @param eresource
+     * @return sort title
+     */
+    private String getSortTitle(final Eresource eresource) {
+        String st = eresource.getSortTitle();
+        if (null == st) {
+            st = eresource.getTitle();
+            st = BASIC_NONFILING.matcher(st).replaceFirst(EMPTY);
+        }
+        return getSortText(st);
     }
 
     /**
