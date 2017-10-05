@@ -218,15 +218,15 @@ public class SolrEresourceHandler implements EresourceHandler {
     }
 
     /**
-     * sort title is only set for bibs, so default to title for other record types and remove some basic
-     * non-filing strings
+     * sort title is only set for bibs, so default to title for other record types and remove some basic non-filing
+     * strings
      *
      * @param eresource
      * @return sort title
      */
     private String getSortTitle(final Eresource eresource) {
         String st = eresource.getSortTitle();
-        if (null == st) {
+        if (null == st && null != eresource.getTitle()) {
             st = eresource.getTitle();
             st = BASIC_NONFILING.matcher(st).replaceFirst(EMPTY);
         }
