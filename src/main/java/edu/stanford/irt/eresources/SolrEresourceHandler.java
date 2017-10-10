@@ -34,7 +34,7 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private static final String EMPTY = "";
 
-    private static final int SORT_TEXT_MAX = 150;
+    private static final int SORT_TEXT_MAX = 100;
 
     private int count = 0;
 
