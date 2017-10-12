@@ -2,7 +2,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>27</version>
+        <version>28</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eresources-database</artifactId>
@@ -127,7 +127,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>9.8.0-4</version>
+            <version>9.8.0-5</version>
         </dependency>
         <dependency>
             <groupId>net.sf.joost</groupId>
@@ -159,7 +159,7 @@
         <dependency>
            <artifactId>solr-solrj</artifactId>
            <groupId>org.apache.solr</groupId>
-           <version>6.6.1</version>
+           <version>7.0.1</version>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
@@ -201,7 +201,7 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>journal-titles</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </dependency>
     </dependencies>
 </project>
