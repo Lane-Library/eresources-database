@@ -159,7 +159,7 @@
         <dependency>
            <artifactId>solr-solrj</artifactId>
            <groupId>org.apache.solr</groupId>
-           <version>7.0.1</version>
+           <version>6.6.1</version>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
