@@ -42,6 +42,8 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     private static final int LEADER_BYTE_6 = 6;
 
+    private static final String MULTI_SPACES = "\\s\\s+";
+
     private static final String RECORD = "record";
 
     private static final Pattern SPACE_SLASH = Pattern.compile(" /");
@@ -156,12 +158,12 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 StringBuilder combinedKeywords = new StringBuilder();
                 combinedKeywords.append(this.currentEresource.getKeywords());
                 combinedKeywords.append(' ');
-                combinedKeywords.append(this.content.toString().replaceAll("\\s\\s+", " "));
+                combinedKeywords.append(this.content.toString().replaceAll(MULTI_SPACES, " "));
                 this.currentEresource.setKeywords(combinedKeywords.toString());
                 this.content.setLength(0);
             } else if (this.recordType == RecordTypes.AUTH) {
                 this.currentEresource.addVersion(this.currentVersion);
-                this.currentEresource.setKeywords(this.content.toString().replaceAll("\\s\\s+", " "));
+                this.currentEresource.setKeywords(this.content.toString().replaceAll(MULTI_SPACES, " "));
                 this.content.setLength(0);
             } else if (this.recordType == RecordTypes.BIB) {
                 if (this.description520.length() > 0) {
@@ -172,7 +174,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 this.description520.setLength(0);
                 this.description505.setLength(0);
                 StringBuilder combinedKeywords = new StringBuilder();
-                combinedKeywords.append(this.content.toString().replaceAll("\\s\\s+", " "));
+                combinedKeywords.append(this.content.toString().replaceAll(MULTI_SPACES, " "));
                 combinedKeywords.append(' ');
                 combinedKeywords.append(this.reservesTextAugmentation.getReservesAugmentations(recordId));
                 this.currentEresource.setKeywords(combinedKeywords.toString());
