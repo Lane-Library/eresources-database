@@ -62,41 +62,24 @@ public class SAXEresource implements Cloneable, Eresource {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
-        PRIMARY_TYPES.put("article", EresourceConstants.ARTICLE);
         PRIMARY_TYPES.put("articles", EresourceConstants.ARTICLE);
-        PRIMARY_TYPES.put("book", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("books", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("book set", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("book sets", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("cartographic material", EresourceConstants.OTHER);
         PRIMARY_TYPES.put("cartographic materials", EresourceConstants.OTHER);
-        PRIMARY_TYPES.put("collection", EresourceConstants.COLLECTION);
         PRIMARY_TYPES.put("collections", EresourceConstants.COLLECTION);
-        PRIMARY_TYPES.put("component", EresourceConstants.COMPONENT);
         PRIMARY_TYPES.put("components", EresourceConstants.COMPONENT);
-        PRIMARY_TYPES.put("computer file", EresourceConstants.SOFTWARE);
         PRIMARY_TYPES.put("computer files", EresourceConstants.SOFTWARE);
-        PRIMARY_TYPES.put("database", EresourceConstants.DATABASE);
         PRIMARY_TYPES.put("databases", EresourceConstants.DATABASE);
-        PRIMARY_TYPES.put("document", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("documents", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("laneclass", "Lane Class");
         PRIMARY_TYPES.put("lanepage", "Lane Web Page");
-        PRIMARY_TYPES.put("leaflet", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("leaflets", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("pamphlet", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("pamphlets", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("periodical", EresourceConstants.JOURNAL);
         PRIMARY_TYPES.put("periodicals", EresourceConstants.JOURNAL);
-        PRIMARY_TYPES.put("search engine", EresourceConstants.DATABASE);
         PRIMARY_TYPES.put("search engines", EresourceConstants.DATABASE);
-        PRIMARY_TYPES.put("serial", EresourceConstants.SERIAL);
         PRIMARY_TYPES.put("serials", EresourceConstants.SERIAL);
-        PRIMARY_TYPES.put("sound recording", EresourceConstants.AUDIO);
         PRIMARY_TYPES.put("sound recordings", EresourceConstants.AUDIO);
-        PRIMARY_TYPES.put("visual material", EresourceConstants.VISUAL_MATERIAL);
         PRIMARY_TYPES.put("visual materials", EresourceConstants.VISUAL_MATERIAL);
-        PRIMARY_TYPES.put("website", EresourceConstants.WEBSITE);
         PRIMARY_TYPES.put("websites", EresourceConstants.WEBSITE);
         // authority types: keep?
         PRIMARY_TYPES.put("events", "Event");
