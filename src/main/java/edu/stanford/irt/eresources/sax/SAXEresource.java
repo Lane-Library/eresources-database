@@ -23,8 +23,7 @@ public class SAXEresource implements Cloneable, Eresource {
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Atlases, Pictorial", "Audio", "Bassett",
             "Biotools Software, Installed", "Book", "Chapter", "Calculators, Formulas, Algorithms", "Database",
             "Dataset", "Grand Rounds", "Image", "Journal", "Lane Class", "Lane Web Page", "Mobile", "Print", "Software",
-            "Software, Installed", "Statistics Software, Installed", "Statistics", "Video", "Video: Instructional",
-            "Video: Lab Protocols", "Video: Physical Exam", "Video: StanfordMed", "Video: Surgery", "Website" };
+            "Software, Installed", "Statistics Software, Installed", "Statistics", "Video", "Website" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
