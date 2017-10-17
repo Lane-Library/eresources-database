@@ -22,8 +22,9 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Atlases, Pictorial", "Audio", "Bassett",
             "Biotools Software, Installed", "Book", "Chapter", "Calculators, Formulas, Algorithms", "Database",
-            "Dataset", "Grand Rounds", "Image", "Journal", "Lane Class", "Lane Web Page", "Mobile", "Print", "Software",
-            "Software, Installed", "Statistics Software, Installed", "Statistics", "Video", "Website" };
+            "Dataset", "Exam Prep", "Grand Rounds", "Image", "Journal", "Lane Class", "Lane Web Page", "Mobile",
+            "Print", "Software", "Software, Installed", "Statistics Software, Installed", "Statistics", "Video",
+            "Website" };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -33,7 +34,8 @@ public class SAXEresource implements Cloneable, Eresource {
             { "Audio", "Sound Recordings" }, { "Book", "Book Sets", "Books" }, { "Chapter", "Chapters" },
             { "Calculators, Formulas, Algorithms", "Decision Support Techniques", "Calculators, Clinical",
                     "Algorithms" },
-            { "Database", "Databases" }, { "Dataset", "Datasets" }, { "Image", "Graphics" },
+            { "Database", "Databases" }, { "Dataset", "Datasets" },
+            { "Exam Prep", "Examination Questions", "Outlines", "Problems", "Study Guides" }, { "Image", "Graphics" },
             { "Journal", "Periodicals", "Newspapers" }, { "Mobile", "Subset, Mobile" },
             { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" },
             { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
