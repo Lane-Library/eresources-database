@@ -372,24 +372,8 @@ public class SAXEresource implements Cloneable, Eresource {
 
     @Override
     public String getPublicationText() {
-        if (this.publicationText == null) {
-            StringBuilder sb = new StringBuilder();
-            if (this.publicationTitle != null) {
-                sb.append(this.publicationTitle).append(". ");
-                if (this.publicationDate != null) {
-                    sb.append(this.publicationDate);
-                }
-                if (this.publicationVolume != null && this.publicationVolume.length() > 0) {
-                    sb.append(';').append(this.publicationVolume);
-                }
-                if (this.publicationIssue != null && this.publicationIssue.length() > 0) {
-                    sb.append('(').append(this.publicationIssue).append(')');
-                }
-                if (this.publicationPages != null && this.publicationPages.length() > 0) {
-                    sb.append(':').append(this.publicationPages).append('.');
-                }
-            }
-            this.publicationText = sb.toString();
+        if (null == this.publicationText) {
+            this.publicationText = buildPublicationText();
         }
         return this.publicationText;
     }
@@ -643,6 +627,26 @@ public class SAXEresource implements Cloneable, Eresource {
         }
         if (sb.length() > 0 && !sb.toString().endsWith(".")) {
             sb.append('.');
+        }
+        return sb.toString();
+    }
+
+    private String buildPublicationText() {
+        StringBuilder sb = new StringBuilder();
+        if (this.publicationTitle != null) {
+            sb.append(this.publicationTitle).append(". ");
+            if (this.publicationDate != null) {
+                sb.append(this.publicationDate);
+            }
+            if (this.publicationVolume != null && this.publicationVolume.length() > 0) {
+                sb.append(';').append(this.publicationVolume);
+            }
+            if (this.publicationIssue != null && this.publicationIssue.length() > 0) {
+                sb.append('(').append(this.publicationIssue).append(')');
+            }
+            if (this.publicationPages != null && this.publicationPages.length() > 0) {
+                sb.append(':').append(this.publicationPages).append('.');
+            }
         }
         return sb.toString();
     }
