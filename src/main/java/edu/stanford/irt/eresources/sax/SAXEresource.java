@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
@@ -20,26 +21,30 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { "Article", "Atlases, Pictorial", "Audio", "Bassett",
-            "Biotools Software, Installed", "Book", "Chapter", "Calculators, Formulas, Algorithms", "Database",
-            "Dataset", "Exam Prep", "Grand Rounds", "Image", "Journal", "Lane Class", "Lane Web Page", "Mobile",
-            "Print", "Software", "Software, Installed", "Statistics Software, Installed", "Statistics", "Video",
-            "Website" };
+    private static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
+            EresourceConstants.AUDIO, "Bassett", "Biotools Software, Installed", EresourceConstants.BOOK,
+            EresourceConstants.CHAPTER, "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset",
+            "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class",
+            "Lane Web Page", "Mobile", "Print", EresourceConstants.SOFTWARE, "Software, Installed",
+            "Statistics Software, Installed", "Statistics", EresourceConstants.VIDEO, EresourceConstants.WEBSITE };
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 
-    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { "Article", "Articles" },
-            { "Audio", "Sound Recordings" }, { "Book", "Book Sets", "Books" }, { "Chapter", "Chapters" },
+    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { EresourceConstants.ARTICLE, "Articles" },
+            { EresourceConstants.AUDIO, "Sound Recordings" }, { EresourceConstants.BOOK, "Book Sets", "Books" },
+            { EresourceConstants.CHAPTER, "Chapters" },
             { "Calculators, Formulas, Algorithms", "Decision Support Techniques", "Calculators, Clinical",
                     "Algorithms" },
-            { "Database", "Databases" }, { "Dataset", "Datasets" },
-            { "Exam Prep", "Examination Questions", "Outlines", "Problems", "Study Guides" }, { "Image", "Graphics" },
-            { "Journal", "Periodicals", "Newspapers" }, { "Mobile", "Subset, Mobile" },
-            { "Software", "Software, Biocomputational", "Software, Educational", "Software, Statistical" },
-            { "Video", "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-            { "Website", "Websites" } };
+            { EresourceConstants.DATABASE, "Databases" }, { "Dataset", "Datasets" },
+            { "Exam Prep", "Examination Questions", "Outlines", "Problems", "Study Guides" },
+            { EresourceConstants.IMAGE, "Graphics" }, { EresourceConstants.JOURNAL, "Periodicals", "Newspapers" },
+            { "Mobile", "Subset, Mobile" },
+            { EresourceConstants.SOFTWARE, "Software, Biocomputational", "Software, Educational",
+                    "Software, Statistical" },
+            { EresourceConstants.VIDEO, "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
+            { EresourceConstants.WEBSITE, "Websites" } };
 
     private static final String ENG = "English";
 
@@ -57,50 +62,50 @@ public class SAXEresource implements Cloneable, Eresource {
                 COMPOSITE_TYPES.put(element[j], element[0]);
             }
         }
-        PRIMARY_TYPES.put("article", "Article");
-        PRIMARY_TYPES.put("articles", "Article");
-        PRIMARY_TYPES.put("book", "Book");
-        PRIMARY_TYPES.put("books", "Book");
-        PRIMARY_TYPES.put("book set", "Book");
-        PRIMARY_TYPES.put("book sets", "Book");
-        PRIMARY_TYPES.put("cartographic material", "Other");
-        PRIMARY_TYPES.put("cartographic materials", "Other");
-        PRIMARY_TYPES.put("collection", "Collection");
-        PRIMARY_TYPES.put("collections", "Collection");
-        PRIMARY_TYPES.put("component", "Component");
-        PRIMARY_TYPES.put("components", "Component");
-        PRIMARY_TYPES.put("computer file", "Software");
-        PRIMARY_TYPES.put("computer files", "Software");
-        PRIMARY_TYPES.put("database", "Database");
-        PRIMARY_TYPES.put("databases", "Database");
-        PRIMARY_TYPES.put("document", "Book");
-        PRIMARY_TYPES.put("documents", "Book");
+        PRIMARY_TYPES.put("article", EresourceConstants.ARTICLE);
+        PRIMARY_TYPES.put("articles", EresourceConstants.ARTICLE);
+        PRIMARY_TYPES.put("book", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("books", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("book set", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("book sets", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("cartographic material", EresourceConstants.OTHER);
+        PRIMARY_TYPES.put("cartographic materials", EresourceConstants.OTHER);
+        PRIMARY_TYPES.put("collection", EresourceConstants.COLLECTION);
+        PRIMARY_TYPES.put("collections", EresourceConstants.COLLECTION);
+        PRIMARY_TYPES.put("component", EresourceConstants.COMPONENT);
+        PRIMARY_TYPES.put("components", EresourceConstants.COMPONENT);
+        PRIMARY_TYPES.put("computer file", EresourceConstants.SOFTWARE);
+        PRIMARY_TYPES.put("computer files", EresourceConstants.SOFTWARE);
+        PRIMARY_TYPES.put("database", EresourceConstants.DATABASE);
+        PRIMARY_TYPES.put("databases", EresourceConstants.DATABASE);
+        PRIMARY_TYPES.put("document", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("documents", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("laneclass", "Lane Class");
         PRIMARY_TYPES.put("lanepage", "Lane Web Page");
-        PRIMARY_TYPES.put("leaflet", "Book");
-        PRIMARY_TYPES.put("leaflets", "Book");
-        PRIMARY_TYPES.put("pamphlet", "Book");
-        PRIMARY_TYPES.put("pamphlets", "Book");
-        PRIMARY_TYPES.put("periodical", "Journal");
-        PRIMARY_TYPES.put("periodicals", "Journal");
-        PRIMARY_TYPES.put("search engine", "Database");
-        PRIMARY_TYPES.put("search engines", "Database");
-        PRIMARY_TYPES.put("serial", "Serial");
-        PRIMARY_TYPES.put("serials", "Serial");
-        PRIMARY_TYPES.put("sound recording", "Audio");
-        PRIMARY_TYPES.put("sound recordings", "Audio");
-        PRIMARY_TYPES.put("visual material", "Visual Material");
-        PRIMARY_TYPES.put("visual materials", "Visual Material");
-        PRIMARY_TYPES.put("website", "Website");
-        PRIMARY_TYPES.put("websites", "Website");
+        PRIMARY_TYPES.put("leaflet", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("leaflets", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("pamphlet", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("pamphlets", EresourceConstants.BOOK);
+        PRIMARY_TYPES.put("periodical", EresourceConstants.JOURNAL);
+        PRIMARY_TYPES.put("periodicals", EresourceConstants.JOURNAL);
+        PRIMARY_TYPES.put("search engine", EresourceConstants.DATABASE);
+        PRIMARY_TYPES.put("search engines", EresourceConstants.DATABASE);
+        PRIMARY_TYPES.put("serial", EresourceConstants.SERIAL);
+        PRIMARY_TYPES.put("serials", EresourceConstants.SERIAL);
+        PRIMARY_TYPES.put("sound recording", EresourceConstants.AUDIO);
+        PRIMARY_TYPES.put("sound recordings", EresourceConstants.AUDIO);
+        PRIMARY_TYPES.put("visual material", EresourceConstants.VISUAL_MATERIAL);
+        PRIMARY_TYPES.put("visual materials", EresourceConstants.VISUAL_MATERIAL);
+        PRIMARY_TYPES.put("website", EresourceConstants.WEBSITE);
+        PRIMARY_TYPES.put("websites", EresourceConstants.WEBSITE);
         // authority types: keep?
         PRIMARY_TYPES.put("events", "Event");
-        PRIMARY_TYPES.put("persons", "Person");
-        PRIMARY_TYPES.put("persons, female", "Person");
-        PRIMARY_TYPES.put("persons, male", "Person");
-        PRIMARY_TYPES.put("jurisdictions, subdivisions", "Organization");
-        PRIMARY_TYPES.put("organizations", "Organization");
-        PRIMARY_TYPES.put("organizations, subdivisions", "Organization");
+        PRIMARY_TYPES.put("persons", EresourceConstants.PERSON);
+        PRIMARY_TYPES.put("persons, female", EresourceConstants.PERSON);
+        PRIMARY_TYPES.put("persons, male", EresourceConstants.PERSON);
+        PRIMARY_TYPES.put("jurisdictions, subdivisions", EresourceConstants.ORGANIZATION);
+        PRIMARY_TYPES.put("organizations", EresourceConstants.ORGANIZATION);
+        PRIMARY_TYPES.put("organizations, subdivisions", EresourceConstants.ORGANIZATION);
     }
 
     private Collection<String> abbreviatedTitles;
@@ -311,34 +316,34 @@ public class SAXEresource implements Cloneable, Eresource {
     public String getPrimaryType() {
         String type;
         if (this.primaryType == null) {
-            type = "Other";
-        } else if ("Book".equals(this.primaryType)) {
-            type = "Book " + getPrintOrDigital();
-        } else if ("Journal".equals(this.primaryType)) {
-            type = "Journal " + getPrintOrDigital();
-        } else if ("Serial".equals(this.primaryType)) {
-            if (this.types.contains("Book")) {
-                type = "Book " + getPrintOrDigital();
-            } else if (this.types.contains("Database")) {
-                type = "Database";
+            type = EresourceConstants.OTHER;
+        } else if (EresourceConstants.BOOK.equals(this.primaryType)) {
+            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital();
+        } else if (EresourceConstants.JOURNAL.equals(this.primaryType)) {
+            type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital();
+        } else if (EresourceConstants.SERIAL.equals(this.primaryType)) {
+            if (this.types.contains(EresourceConstants.BOOK)) {
+                type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital();
+            } else if (this.types.contains(EresourceConstants.DATABASE)) {
+                type = EresourceConstants.DATABASE;
             } else {
-                type = "Journal " + getPrintOrDigital();
+                type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital();
             }
         } else if ("Component".equals(this.primaryType)) {
-            if (this.types.contains("Article") && this.types.contains("Chapter")) {
+            if (this.types.contains(EresourceConstants.ARTICLE) && this.types.contains(EresourceConstants.CHAPTER)) {
                 type = "Article/Chapter";
-            } else if (this.types.contains("Article")) {
-                type = "Article";
-            } else if (this.types.contains("Chapter")) {
-                type = "Chapter";
+            } else if (this.types.contains(EresourceConstants.ARTICLE)) {
+                type = EresourceConstants.ARTICLE;
+            } else if (this.types.contains(EresourceConstants.CHAPTER)) {
+                type = EresourceConstants.CHAPTER;
             } else {
-                type = "Other";
+                type = EresourceConstants.OTHER;
             }
-        } else if ("Visual Material".equals(this.primaryType)) {
-            if (this.types.contains("Video")) {
-                type = "Video";
+        } else if (EresourceConstants.VISUAL_MATERIAL.equals(this.primaryType)) {
+            if (this.types.contains(EresourceConstants.VIDEO)) {
+                type = EresourceConstants.VIDEO;
             } else {
-                type = "Image";
+                type = EresourceConstants.IMAGE;
             }
         } else {
             type = this.primaryType;
@@ -466,12 +471,11 @@ public class SAXEresource implements Cloneable, Eresource {
      */
     @Override
     public Collection<String> getTypes() {
-        // this.types.add(getPrimaryType());
         String pType = getPrimaryType();
-        if (!"Other".equals(pType) && !"Article/Chapter".equals(pType)) {
+        if (!EresourceConstants.OTHER.equals(pType) && !"Article/Chapter".equals(pType)) {
             this.types.add(pType);
         }
-        if (pType.startsWith("Book") || pType.startsWith("Journal")) {
+        if (pType.startsWith(EresourceConstants.BOOK) || pType.startsWith(EresourceConstants.JOURNAL)) {
             this.types.add(pType.split(" ")[0]);
         }
         return Collections.unmodifiableCollection(this.types);
