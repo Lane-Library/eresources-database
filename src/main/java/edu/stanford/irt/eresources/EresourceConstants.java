@@ -1,6 +1,6 @@
 package edu.stanford.irt.eresources;
 
-public class EresourceConstants {
+public final class EresourceConstants {
 
     public static final String ARTICLE = "Article";
 
