@@ -26,6 +26,11 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
 
     private XMLReader xmlReader;
 
+    public PubmedEresourceProcessor(final String basePath, final XMLReader xmlReader) {
+        this.basePath = basePath;
+        this.xmlReader = xmlReader;
+    }
+
     @Override
     public void process() {
         if (null == this.basePath) {
@@ -42,14 +47,6 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
                 parseFile(file);
             }
         }
-    }
-
-    public void setBasePath(final String basePath) {
-        this.basePath = basePath;
-    }
-
-    public void setXmlReader(final XMLReader xmlReader) {
-        this.xmlReader = xmlReader;
     }
 
     private List<File> getXMLFiles(final File directory) {

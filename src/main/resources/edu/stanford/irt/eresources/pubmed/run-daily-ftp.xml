@@ -18,12 +18,12 @@
     </bean>
     <!--  override pubmedProcessor from pubmed-processor.xml so we can set basePath -->
     <bean id="pubmedProcessor" class="edu.stanford.irt.eresources.PubmedEresourceProcessor">
-        <property name="xmlReader">
+        <constructor-arg name="basePath" value="${eresources.pubmedprocessor.ftpPath}"/>
+        <constructor-arg name="xmlReader">
             <bean class="edu.stanford.irt.eresources.JaxpXMLReader">
                 <property name="contentHandler" ref="pubmedTransformer"/>
             </bean>
-        </property>
-        <property name="basePath" value="${eresources.pubmedprocessor.ftpPath}"/>
+        </constructor-arg>
     </bean>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor" >
         <property name="logEresource" value="true"/>

@@ -11,7 +11,6 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -47,6 +46,11 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
+    public LaneblogEresourceProcessor(final String allClassesURL, final ContentHandler contentHandler) {
+        this.rssURL = allClassesURL;
+        this.contentHandler = contentHandler;
+    }
+
     @Override
     public void process() {
         try {
@@ -63,25 +67,9 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (SAXException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (ParserConfigurationException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (TransformerConfigurationException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (TransformerException e) {
+        } catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
             throw new EresourceDatabaseException(e);
         }
-    }
-
-    public void setContentHandler(final ContentHandler contentHandler) {
-        this.contentHandler = contentHandler;
-    }
-
-    public void setRssURL(final String allClassesURL) {
-        this.rssURL = allClassesURL;
     }
 
     private long getUpdateDate(final Document doc) {

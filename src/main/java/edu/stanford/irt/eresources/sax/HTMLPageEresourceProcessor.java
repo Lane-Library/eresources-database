@@ -3,7 +3,6 @@ package edu.stanford.irt.eresources.sax;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -18,7 +17,6 @@ import javax.xml.transform.sax.SAXResult;
 
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -39,6 +37,11 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
     private ContentHandler contentHandler;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    public HTMLPageEresourceProcessor(final String basePath, final ContentHandler contentHandler) {
+        this.basePath = basePath;
+        this.contentHandler = contentHandler;
+    }
 
     @Override
     public void process() {
@@ -77,14 +80,6 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         } catch (IOException | SAXException | TransformerException e) {
             throw new EresourceDatabaseException(e);
         }
-    }
-
-    public void setBasePath(final String basePath) {
-        this.basePath = basePath;
-    }
-
-    public void setContentHandler(final ContentHandler contentHandler) {
-        this.contentHandler = contentHandler;
     }
 
     private List<File> getHTMLPages(final File directory) {
