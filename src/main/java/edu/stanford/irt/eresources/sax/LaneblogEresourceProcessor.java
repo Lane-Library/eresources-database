@@ -46,8 +46,8 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    public LaneblogEresourceProcessor(final String allClassesURL, final ContentHandler contentHandler) {
-        this.rssURL = allClassesURL;
+    public LaneblogEresourceProcessor(final String rssURL, final ContentHandler contentHandler) {
+        this.rssURL = rssURL;
         this.contentHandler = contentHandler;
     }
 
