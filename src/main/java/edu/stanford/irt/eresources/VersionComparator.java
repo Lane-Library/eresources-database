@@ -1,10 +1,12 @@
 package edu.stanford.irt.eresources;
 
 import java.io.Serializable;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,16 +15,22 @@ import java.util.regex.Pattern;
  */
 public class VersionComparator implements Comparator<Version>, Serializable {
 
+    private static final ZoneId AMERICA_LA = ZoneId.of("America/Los_Angeles");
+
     private static final Pattern CLOSED_DATE_PATTERN = Pattern.compile("(\\d{4})\\-(\\d{4})\\.");
 
     private static final List<String> FAVORED_PUBLISHERS = Arrays.asList("sciencedirect", "wiley", "springer",
             "highwire", "ovid", "nature", "liebert", "informaworld", "karger", "pubmed central");
 
+    private static final int MAX_PUBLISHER_SCORE = 10;
+
+    private static final int MIN_SCORE = -99;
+
     private static final Pattern OPEN_DATE_PATTERN = Pattern.compile(".*(\\d{4})\\-");
 
     private static final long serialVersionUID = 1L;
 
-    private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    private static final int THIS_YEAR = ZonedDateTime.now(AMERICA_LA).getYear();
 
     @Override
     public int compare(final Version v1, final Version v2) {
@@ -88,9 +96,9 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         if (links.isEmpty()) {
             score = Integer.MIN_VALUE;
         } else if (firstLinkIsCatalogLink(version)) {
-            score = -98;
+            score = MIN_SCORE + 1;
         } else if ("Impact Factor".equals(links.get(0).getLabel())) {
-            score = -99;
+            score = MIN_SCORE;
         } else {
             score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
             score = calculateDatesScore(version.getDates(), score);
@@ -119,9 +127,9 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         int score = 1;
         String publisher = version.getPublisher();
         if (publisher != null) {
-            publisher = publisher.toLowerCase();
+            publisher = publisher.toLowerCase(Locale.US);
             if (FAVORED_PUBLISHERS.contains(publisher)) {
-                score = score + (10 - FAVORED_PUBLISHERS.indexOf(publisher));
+                score = score + (MAX_PUBLISHER_SCORE - FAVORED_PUBLISHERS.indexOf(publisher));
             }
         }
         return score;
@@ -156,7 +164,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
             Matcher openMatcher = OPEN_DATE_PATTERN.matcher(dates);
             if (closedMatcher.matches()) {
                 int date1 = Integer.parseInt(closedMatcher.group(1));
-                int date2 = Integer.parseInt(closedMatcher.group(2));
+                int date2 = Integer.parseInt(closedMatcher.group(closedMatcher.groupCount()));
                 return date2 - date1;
             } else if (openMatcher.matches()) {
                 return THIS_YEAR - Integer.parseInt(openMatcher.group(1));
