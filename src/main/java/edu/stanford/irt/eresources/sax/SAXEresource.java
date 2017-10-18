@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -186,7 +187,7 @@ public class SAXEresource implements Cloneable, Eresource {
         if (this.publicationLanguages == null) {
             this.publicationLanguages = new HashSet<>();
         }
-        this.publicationLanguages.add(LANGUAGE_MAP.getLanguage(publicationLanguage.toLowerCase()));
+        this.publicationLanguages.add(LANGUAGE_MAP.getLanguage(publicationLanguage.toLowerCase(Locale.US)));
     }
 
     public void addPublicationType(final String publicationType) {
@@ -541,7 +542,7 @@ public class SAXEresource implements Cloneable, Eresource {
     }
 
     public void setPrimaryType(final String type) {
-        this.primaryType = PRIMARY_TYPES.get(type.toLowerCase());
+        this.primaryType = PRIMARY_TYPES.get(type.toLowerCase(Locale.US));
     }
 
     public void setPublicationAuthorsText(final String authorsText) {

@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -142,7 +143,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     handlePreviousRecord();
                 }
                 this.currentEresource = new SAXEresource();
-                this.currentEresource.setRecordType(this.recordType.toString().toLowerCase());
+                this.currentEresource.setRecordType(this.recordType.toString().toLowerCase(Locale.US));
             }
         } else if (RECORD.equals(name)) {
             String recordId = Integer.toString(this.currentEresource.getRecordId());
@@ -243,7 +244,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
 
     protected void createCustomTypes(final SAXEresource eresource) {
         Collection<String> types = eresource.getTypes();
-        String keywords = eresource.getKeywords().toLowerCase();
+        String keywords = eresource.getKeywords().toLowerCase(Locale.US);
         if (types.contains("Software, Installed")) {
             if (keywords.contains("subset, biotools")) {
                 eresource.addType("Biotools Software, Installed");
@@ -382,7 +383,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             this.currentEresource.addPublicationLanguage(this.currentText.toString());
         }
         if ("830a".equals(this.tagAndCode)) {
-            String suba = this.currentText.toString().toLowerCase();
+            String suba = this.currentText.toString().toLowerCase(Locale.US);
             if (suba.contains("stanford") && suba.contains("grand rounds")) {
                 this.currentEresource.addType("Grand Rounds");
             }
