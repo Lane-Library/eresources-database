@@ -40,6 +40,11 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
+    public ClassesEresourceProcessor(final List<String> allClassesURL, final ContentHandler contentHandler) {
+        this.allClassesURL = allClassesURL;
+        this.contentHandler = contentHandler;
+    }
+
     @Override
     public void process() {
         try {
@@ -70,13 +75,5 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
         } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
-    }
-
-    public void setAllClassesURL(final List<String> allClassesURL) {
-        this.allClassesURL = allClassesURL;
-    }
-
-    public void setContentHandler(final ContentHandler contentHandler) {
-        this.contentHandler = contentHandler;
     }
 }

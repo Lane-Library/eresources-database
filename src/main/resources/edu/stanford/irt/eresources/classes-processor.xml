@@ -2,13 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     <bean id="classesProcessor"
         class="edu.stanford.irt.eresources.sax.ClassesEresourceProcessor">
-        <property name="contentHandler" ref="classesTransformer"/>
-        <property name="allClassesURL">
-        	<list>
-        		<value>${eresources.lane-host}/classes/archives.xml</value>
-        		<value>${eresources.lane-host}/classes/open-classes.xml</value>
-        	</list>
-         </property>
+        <constructor-arg name="contentHandler" ref="classesTransformer"/>
+        <constructor-arg name="allClassesURL">
+            <list>
+                <value>${eresources.lane-host}/classes/archives.xml</value>
+                <value>${eresources.lane-host}/classes/open-classes.xml</value>
+            </list>
+        </constructor-arg>
     </bean>
     <bean id= "classesTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/classes2er.xsl"/>
