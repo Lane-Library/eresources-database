@@ -153,6 +153,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
         doc.addField("publicationText", eresource.getPublicationText());
         doc.addField("publicationTitle", eresource.getPublicationTitle());
+        for (String mesh : eresource.getBroadMeshTerms()) {
+            doc.addField("mesh_broad", mesh);
+        }
         for (String mesh : eresource.getMeshTerms()) {
             doc.addField("mesh", mesh);
             doc.addField("mesh_parents", this.meshManager.getParentHeadings(mesh));

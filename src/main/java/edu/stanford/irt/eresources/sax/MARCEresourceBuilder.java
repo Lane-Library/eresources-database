@@ -301,6 +301,9 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 || ("651a".equals(this.tagAndCode) && "7".equals(this.ind2))) {
             String mesh = maybeStripTrailingPeriod(this.currentText.toString());
             this.currentEresource.addMeshTerm(mesh);
+            if ("42".equals(this.ind1 + this.ind2)) {
+                this.currentEresource.addBroadMeshTerm(mesh);
+            }
         } else if ("245".equals(this.tag) && (null == this.currentEresource.getTitle())) {
             if ("abnpq".indexOf(this.code) > -1) {
                 String data = this.currentText.toString();

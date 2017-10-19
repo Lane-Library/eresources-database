@@ -61,6 +61,8 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentEresource.setKeywords(this.currentText.toString());
         } else if ("mesh".equals(name)) {
             this.currentEresource.addMeshTerm(this.currentText.toString());
+        } else if ("mesh_broad".equals(name)) {
+            this.currentEresource.addBroadMeshTerm(this.currentText.toString());
         } else if ("title".equals(name)) {
             this.currentEresource.setTitle(this.currentText.toString());
         } else if ("title_abbr".equals(name)) {

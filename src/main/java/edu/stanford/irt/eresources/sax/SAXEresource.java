@@ -96,6 +96,8 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private Collection<String> alternativeTitles;
 
+    private Collection<String> broadMeshTerms;
+
     private int[] count = new int[] { 0, 0 };
 
     private String date;
@@ -172,6 +174,13 @@ public class SAXEresource implements Cloneable, Eresource {
         this.alternativeTitles.add(title);
     }
 
+    public void addBroadMeshTerm(final String meshTerm) {
+        if (null == this.broadMeshTerms) {
+            this.broadMeshTerms = new HashSet<>();
+        }
+        this.broadMeshTerms.add(meshTerm);
+    }
+
     public void addMeshTerm(final String meshTerm) {
         if (null == this.meshTerms) {
             this.meshTerms = new HashSet<>();
@@ -234,6 +243,14 @@ public class SAXEresource implements Cloneable, Eresource {
             return Collections.emptySet();
         }
         return this.alternativeTitles;
+    }
+
+    @Override
+    public Collection<String> getBroadMeshTerms() {
+        if (null == this.broadMeshTerms) {
+            return Collections.emptySet();
+        }
+        return this.broadMeshTerms;
     }
 
     @Override

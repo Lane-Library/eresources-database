@@ -9,6 +9,8 @@ public interface Eresource {
 
     Collection<String> getAlternativeTitles();
 
+    Collection<String> getBroadMeshTerms();
+
     String getDate();
 
     String getDescription();
