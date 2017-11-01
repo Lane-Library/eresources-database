@@ -24,12 +24,12 @@
     <bean id="specialTypesManager" class="edu.stanford.irt.eresources.PubmedSpecialTypesManager">
         <constructor-arg name="searchers">
             <list>
-			    <!-- examples: fields don't exist in solr
 			    <bean class="edu.stanford.irt.eresources.PubmedSearcher">
 			        <constructor-arg name="field" value="publicationType"/>
 			        <constructor-arg name="value" value="Systematic Review"/>
 			        <constructor-arg name="query" value="systematic[sb]"/>
 			    </bean>
+			    <!-- examples: fields don't exist in solr
 			    <bean class="edu.stanford.irt.eresources.PubmedSearcher">
 			        <constructor-arg name="field" value="questionType"/>
 			        <constructor-arg name="value" value="Harm"/>
