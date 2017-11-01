@@ -159,33 +159,34 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
         doc.addField("publicationText", eresource.getPublicationText());
         doc.addField("publicationTitle", eresource.getPublicationTitle());
-        for (String mesh : eresource.getBroadMeshTerms()) {
-            doc.addField("mesh_broad", mesh);
-        }
+        Set<String> mesh = new HashSet<>();
         Set<String> meshVariants = new HashSet<>();
-        for (String mesh : eresource.getMeshTerms()) {
-            if (!MeshCheckTags.getCheckTags().contains(mesh)) {
-                meshVariants.addAll(this.meshVariantsManager.getVariants(mesh));
+        Set<String> meshParents = new HashSet<>();
+        for (String heading : eresource.getMeshTerms()) {
+            if (!MeshCheckTags.getCheckTags().contains(heading)) {
+                meshVariants.addAll(this.meshVariantsManager.getVariants(heading));
             }
-            doc.addField("mesh", mesh);
-            doc.addField("mesh_parents", this.meshManager.getParentHeadings(mesh));
+            mesh.add(heading);
+            meshParents.addAll(this.meshManager.getParentHeadings(heading));
         }
-        for (String variant : meshVariants) {
-            doc.addField("mesh_variants", variant);
+        doc.addField("mesh", mesh);
+        doc.addField("mesh_parents", meshParents);
+        doc.addField("mesh_variants", meshVariants);
+        Set<String> meshBroad = new HashSet<>();
+        for (String broadHeading : eresource.getBroadMeshTerms()) {
+            meshBroad.add(broadHeading);
         }
-        for (String type : eresource.getTypes()) {
-            doc.addField("type", type);
-        }
+        doc.addField("mesh_broad", meshBroad);
+        doc.addField("type", eresource.getTypes());
         StringBuilder authorSort = new StringBuilder();
-        for (String author : eresource.getPublicationAuthors()) {
-            doc.addField("publicationAuthor", author);
-            doc.addField("author", author);
+        Collection<String> authors = eresource.getPublicationAuthors();
+        doc.addField("publicationAuthor", authors);
+        doc.addField("author", authors);
+        for (String author : authors) {
             authorSort.append(author);
         }
         doc.addField("authors_sort", getSortText(authorSort.toString()));
-        for (String pubLanguage : eresource.getPublicationLanguages()) {
-            doc.addField("publicationLanguage", pubLanguage);
-        }
+        doc.addField("publicationLanguage", eresource.getPublicationLanguages());
         for (String pubType : eresource.getPublicationTypes()) {
             doc.addField("publicationType", pubType);
             for (String parentType : this.meshManager.getParentHeadingsLimitToPubmedPublicationTypes(pubType)) {
