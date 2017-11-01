@@ -21,6 +21,7 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
     public MARCEresourceProcessor(final CatalogRecordService service) {
         this.service = service;
     }
+
     @Override
     public void process() {
         if (null == this.service) {
@@ -34,9 +35,7 @@ public class MARCEresourceProcessor extends AbstractEresourceProcessor {
             source.setByteStream(this.service.getRecordStream(getStartTime()));
             this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.xmlReader.parse(source);
-        } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (SAXException e) {
+        } catch (IOException | SAXException e) {
             throw new EresourceDatabaseException(e);
         }
     }
