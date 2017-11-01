@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -16,6 +18,8 @@ import org.apache.solr.common.SolrInputDocument;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.stanford.irt.suggest.MeshSuggestionManager;
+import edu.stanford.lane.mesh.MeshCheckTags;
 import edu.stanford.lane.mesh.MeshMapManager;
 
 public class SolrEresourceHandler implements EresourceHandler {
@@ -43,6 +47,8 @@ public class SolrEresourceHandler implements EresourceHandler {
     private ObjectMapper mapper = new ObjectMapper();
 
     private MeshMapManager meshManager = new MeshMapManager();
+
+    private MeshSuggestionManager meshVariantsManager = new MeshSuggestionManager();
 
     private BlockingQueue<Eresource> queue;
 
@@ -156,9 +162,16 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String mesh : eresource.getBroadMeshTerms()) {
             doc.addField("mesh_broad", mesh);
         }
+        Set<String> meshVariants = new HashSet<>();
         for (String mesh : eresource.getMeshTerms()) {
+            if (!MeshCheckTags.getCheckTags().contains(mesh)) {
+                meshVariants.addAll(this.meshVariantsManager.getVariants(mesh));
+            }
             doc.addField("mesh", mesh);
             doc.addField("mesh_parents", this.meshManager.getParentHeadings(mesh));
+        }
+        for (String variant : meshVariants) {
+            doc.addField("mesh_variants", variant);
         }
         for (String type : eresource.getTypes()) {
             doc.addField("type", type);

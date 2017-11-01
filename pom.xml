@@ -191,7 +191,7 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>mesh-parents</artifactId>
-            <version>0.0.6</version>
+            <version>0.0.7</version>
         </dependency>
         <dependency>
             <artifactId>easymock</artifactId>
@@ -201,7 +201,12 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>journal-titles</artifactId>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.irt.suggest</groupId>
+            <artifactId>suggest-query</artifactId>
+            <version>1.0.23</version>
         </dependency>
     </dependencies>
 </project>
