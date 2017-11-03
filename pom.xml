@@ -191,7 +191,7 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>mesh-parents</artifactId>
-            <version>0.0.7</version>
+            <version>0.0.8</version>
         </dependency>
         <dependency>
             <artifactId>easymock</artifactId>
