@@ -143,7 +143,7 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationPages)"/>
-            <stx:call-procedure name="expandPages" />
+            <stx:assign name="keywords" select="concat($keywords, ' ', jpp:parseEndPages($publicationNlmId))" xmlns:jmm="java:edu.stanford.irt.eresources.PagesParser" />
             <stx:if test="$publicationNlmId != ''">
                 <stx:assign name="keywords" select="concat($keywords, ' ', $publicationNlmId, ' ', jmm:getJournalTitles($publicationNlmId))" xmlns:jmm="java:edu.stanford.lane.journals.JournalMapManager" />
             </stx:if>
@@ -348,37 +348,5 @@
             <type>article</type>
         </eresource>
     </stx:template>
-    
-    <stx:procedure name="expandPages">
-        <!--  search queries often include start and end pages
-        parse complete ending from publicationPages containing hyphens
-        examples from https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html :
-        304- 10
-        335-6
-        1199-201
-        24-32, 64
-        31-7 cntd
-        176-8 concl
-        iii-viii
-        XC-CIII
-        P32- 4
-        32P-35P
-        suppl 111-2
-        E101-6
-        44; discussion 44-8
-        925; author reply 925- 6
-        129e1- 4
-        10.1-8
-        -->
-        <stx:if test="contains($publicationPages,'-')">
-            <stx:variable name="start" select="js:replaceFirst($publicationPages,'.*\b(\w+)\-.*','$1')"  xmlns:js="java:java.lang.String" />
-            <stx:variable name="end1" select="normalize-space(substring-after($publicationPages,'-'))"/>
-            <stx:variable name="end" select="js:replaceFirst($end1,'^(\w+).*','$1')"  xmlns:js="java:java.lang.String" />
-            <stx:variable name="base" select="substring($start,1,string-length($start)-string-length($end))"/>
-            <stx:if test="string-length($start)-string-length($end) > 0">
-                <stx:assign name="keywords" select="concat($keywords, ' ', $base, $end)"/>
-            </stx:if>
-        </stx:if>
-    </stx:procedure>
     
 </stx:transform>
