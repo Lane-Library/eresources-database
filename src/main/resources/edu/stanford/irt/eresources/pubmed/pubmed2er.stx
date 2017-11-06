@@ -143,7 +143,7 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationPages)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', jpp:parseEndPages($publicationNlmId))" xmlns:jpp="java:edu.stanford.irt.eresources.PagesParser" />
+            <stx:assign name="keywords" select="concat($keywords, ' ', jpp:parseEndPages($publicationPages))" xmlns:jpp="java:edu.stanford.irt.eresources.PagesParser" />
             <stx:if test="$publicationNlmId != ''">
                 <stx:assign name="keywords" select="concat($keywords, ' ', $publicationNlmId, ' ', jmm:getJournalTitles($publicationNlmId))" xmlns:jmm="java:edu.stanford.lane.journals.JournalMapManager" />
             </stx:if>
