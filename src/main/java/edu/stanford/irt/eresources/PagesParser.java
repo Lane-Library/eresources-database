@@ -43,7 +43,7 @@ public final class PagesParser {
      * extract page endings when pages contain a range
      *
      * @param pages
-     * @return full page ending
+     * @return full page range
      */
     public static String parseEndPages(final String pages) {
         Matcher m = START_END_PATTERN.matcher(pages);
