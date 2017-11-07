@@ -53,7 +53,11 @@ public final class PagesParser {
             int baseLength = start.length() - end.length();
             if (baseLength > 0) {
                 String base = start.substring(0, baseLength);
-                return base + end;
+                StringBuilder sb = new StringBuilder(start);
+                sb.append('-');
+                sb.append(base);
+                sb.append(end);
+                return sb.toString();
             }
         }
         return EMPTY;
