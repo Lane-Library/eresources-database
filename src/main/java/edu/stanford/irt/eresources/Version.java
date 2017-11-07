@@ -1,13 +1,12 @@
 package edu.stanford.irt.eresources;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface Version {
 
-    String getDates();
-
     String getAdditionalText();
+
+    String getDates();
 
     String getHoldingsAndDates();
 
