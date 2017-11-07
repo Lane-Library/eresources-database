@@ -166,10 +166,10 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String heading : eresource.getMeshTerms()) {
             if (!MeshCheckTags.getCheckTags().contains(heading)) {
                 meshVariants.addAll(this.meshVariantsManager.getVariants(heading));
-                meshChildren.addAll(this.meshManager.getChildHeadings(heading));
+                meshChildren.addAll(this.meshManager.getChildHeadingsTreeDepthLimited(heading, 2));
             }
             mesh.add(heading);
-            meshParents.addAll(this.meshManager.getParentHeadings(heading));
+            meshParents.addAll(this.meshManager.getParentHeadings(heading, 2));
         }
         doc.addField("mesh", mesh);
         doc.addField("mesh_children", meshChildren);
