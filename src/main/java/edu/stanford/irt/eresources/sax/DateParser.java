@@ -46,8 +46,10 @@ final class DateParser {
 
     /**
      * PubDate and MedlineDate field descriptions:
-     * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#pubdate PubMed help:
-     * "Publication dates without a month are set to January, multiple months (e.g., Oct-Dec) are set to the first month, and dates without a day are set to the first day of the month. Dates with a season are set as: winter = January, spring = April, summer = July and fall = October."
+     * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#pubdate PubMed help: "Publication dates without a
+     * month are set to January, multiple months (e.g., Oct-Dec) are set to the first month, and dates without a day are
+     * set to the first day of the month. Dates with a season are set as: winter = January, spring = April, summer =
+     * July and fall = October."
      *
      * @param date
      * @return String date in yyyyMMdd format or 0
