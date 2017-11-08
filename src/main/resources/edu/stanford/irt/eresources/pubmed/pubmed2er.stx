@@ -209,6 +209,10 @@
         <stx:choose>
             <stx:when test="name(.) = 'MedlineDate'">
                 <stx:assign name="publicationDate" select="."/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', tph:explodeMonthAbbreviations(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />
+            </stx:when>
+            <stx:when test="name(.) = 'Month'">
+                <stx:assign name="keywords" select="concat($keywords, ' ', tph:explodeMonth(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />
             </stx:when>
             <stx:otherwise>
                 <stx:assign name="publicationDate" select="concat($publicationDate, ., ' ')"/>

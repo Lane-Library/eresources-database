@@ -1,7 +1,16 @@
 package edu.stanford.irt.eresources;
 
+import java.time.DateTimeException;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.TextStyle;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author ryanmax
@@ -10,7 +19,13 @@ public final class TextParserHelper {
 
     private static final String EMPTY = "";
 
+    private static final Pattern MONTH_ABR_PATTERN = Pattern.compile("\\b[A-Za-z]{3}\\b");
+
+    private static final int MONTH_PATTERN_MAX = 4;
+
     private static final Pattern PAGES_START_END_PATTERN = Pattern.compile(".*\\b(\\w+)\\- ?(\\w+)\\b.*");
+
+    private static final String SPACE = " ";
 
     private static final Pattern WORD_BOUNDARY_PATTERN = Pattern.compile("\\b");
 
@@ -18,6 +33,58 @@ public final class TextParserHelper {
 
     private TextParserHelper() {
         // empty private constructor
+    }
+
+    /**
+     * Expand textual variants from a string month. Handles digit, 3 character abbreviations and fully spelled out month
+     * strings. Designed to expand from NCBI's PubDate/Month element:
+     * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#pubdate
+     *
+     * @param month
+     * @return Between 3 and 4 representations of month (eg. "5 05 May", "12 Dec December", "7 07 Jul July")
+     */
+    public static String explodeMonth(final String month) {
+        if (null == month || month.isEmpty()) {
+            return EMPTY;
+        }
+        StringBuilder fmt = new StringBuilder();
+        while (fmt.length() < month.length() && fmt.length() < MONTH_PATTERN_MAX) {
+            fmt.append('M');
+        }
+        Set<String> months = new LinkedHashSet<>();
+        try {
+            DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(fmt.toString()).toFormatter();
+            Month m = Month.from(dtf.parse(month));
+            int digit = m.getValue();
+            months.add(Integer.toString(digit));
+            if (digit < 10) {
+                months.add(String.format("%02d", digit));
+            }
+            months.add(m.getDisplayName(TextStyle.SHORT, Locale.US));
+            months.add(m.getDisplayName(TextStyle.FULL, Locale.US));
+        } catch (DateTimeException e) {
+            // ok if can't parse month
+        }
+        return months.stream().collect(Collectors.joining(SPACE));
+    }
+
+    /**
+     * Expand month abbreviations into textual variants. Designed for NCBI's MedlineDate element:
+     * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#medlinedate
+     *
+     * @param text
+     * @return
+     */
+    public static String explodeMonthAbbreviations(final String text) {
+        if (null == text || text.isEmpty()) {
+            return EMPTY;
+        }
+        Set<String> months = new LinkedHashSet<>();
+        Matcher m = MONTH_ABR_PATTERN.matcher(text);
+        while (m.find()) {
+            months.add(explodeMonth(m.group()));
+        }
+        return months.stream().collect(Collectors.joining(SPACE));
     }
 
     /**
