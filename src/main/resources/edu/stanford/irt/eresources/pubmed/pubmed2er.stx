@@ -140,14 +140,9 @@
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationTitle)"/>
             -->
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationDate)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', tph:unpadZeroPadded($publicationDate))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationVolume)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationIssue)"/>
             <stx:assign name="keywords" select="concat($keywords, ' ', $publicationPages)"/>
-            <stx:assign name="keywords" select="concat($keywords, ' ', jpp:parseEndPages($publicationPages))" xmlns:jpp="java:edu.stanford.irt.eresources.TextParserHelper" />
-            <stx:if test="$publicationNlmId != ''">
-                <stx:assign name="keywords" select="concat($keywords, ' ', $publicationNlmId, ' ', jmm:getJournalTitles($publicationNlmId))" xmlns:jmm="java:edu.stanford.lane.journals.JournalMapManager" />
-            </stx:if>
             <keywords><stx:value-of select="normalize-space($keywords)"/></keywords>
         </eresource>
         <stx:text>&#10;</stx:text>
@@ -209,7 +204,6 @@
         <stx:choose>
             <stx:when test="name(.) = 'MedlineDate'">
                 <stx:assign name="publicationDate" select="."/>
-                <stx:assign name="keywords" select="concat($keywords, ' ', tph:explodeMonthAbbreviations(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />
             </stx:when>
             <stx:when test="name(.) = 'Month'">
                 <stx:assign name="keywords" select="concat($keywords, ' ', tph:explodeMonth(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />

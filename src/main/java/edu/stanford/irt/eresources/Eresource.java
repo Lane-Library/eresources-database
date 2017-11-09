@@ -29,13 +29,21 @@ public interface Eresource {
 
     String getPublicationAuthorsText();
 
+    String getPublicationDate();
+
+    String getPublicationIssue();
+
     Collection<String> getPublicationLanguages();
+
+    String getPublicationPages();
 
     String getPublicationText();
 
     String getPublicationTitle();
 
     Collection<String> getPublicationTypes();
+
+    String getPublicationVolume();
 
     int getRecordId();
 

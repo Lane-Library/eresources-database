@@ -368,10 +368,12 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.publicationAuthorsText;
     }
 
+    @Override
     public String getPublicationDate() {
         return this.publicationDate;
     }
 
+    @Override
     public String getPublicationIssue() {
         return this.publicationIssue;
     }
@@ -384,6 +386,7 @@ public class SAXEresource implements Cloneable, Eresource {
         return Collections.unmodifiableCollection(this.publicationLanguages);
     }
 
+    @Override
     public String getPublicationPages() {
         return this.publicationPages;
     }
@@ -409,6 +412,7 @@ public class SAXEresource implements Cloneable, Eresource {
         return Collections.unmodifiableCollection(this.publicationTypes);
     }
 
+    @Override
     public String getPublicationVolume() {
         return this.publicationVolume;
     }

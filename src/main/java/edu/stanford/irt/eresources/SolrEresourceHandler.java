@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -19,6 +22,7 @@ import org.apache.solr.common.SolrInputDocument;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.stanford.irt.suggest.MeshSuggestionManager;
+import edu.stanford.lane.journals.JournalMapManager;
 import edu.stanford.lane.mesh.MeshCheckTags;
 import edu.stanford.lane.mesh.MeshMapManager;
 
@@ -197,6 +201,7 @@ public class SolrEresourceHandler implements EresourceHandler {
             }
         }
         doc.addField("versionsJson", versionsToJson(eresource));
+        doc.addField("citationText", buildCitationKeywords(eresource));
         this.solrDocs.add(doc);
     }
 
@@ -207,6 +212,23 @@ public class SolrEresourceHandler implements EresourceHandler {
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException("solr add failed", e);
         }
+    }
+
+    private String buildCitationKeywords(final Eresource eresource) {
+        Set<String> strings = new LinkedHashSet<>();
+        String pubDate = eresource.getPublicationDate();
+        String pubPages = eresource.getPublicationPages();
+        String pubTitle = eresource.getPublicationTitle();
+        strings.add(eresource.getPublicationText());
+        strings.add(pubTitle);
+        strings.add(JournalMapManager.getVariantsJournalTitles(pubTitle));
+        strings.add(pubDate);
+        strings.add(TextParserHelper.explodeMonthAbbreviations(pubDate));
+        strings.add(eresource.getPublicationVolume());
+        strings.add(eresource.getPublicationIssue());
+        strings.add(pubPages);
+        strings.add(TextParserHelper.parseEndPages(pubPages));
+        return strings.stream().filter(Objects::nonNull).filter(s -> !s.isEmpty()).collect(Collectors.joining(" "));
     }
 
     private String getFirstCharacter(final String sortTitle) {
@@ -273,10 +295,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         tiab.append(eresource.getTitle());
         tiab.append(' ');
         tiab.append(eresource.getDescription());
-        if (CHILD.matcher(tiab.toString()).matches()) {
-            return true;
-        }
-        return false;
+        return CHILD.matcher(tiab.toString()).matches();
     }
 
     private String versionsToJson(final Eresource eresource) {
