@@ -164,19 +164,16 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("publicationText", eresource.getPublicationText());
         doc.addField("publicationTitle", eresource.getPublicationTitle());
         Set<String> mesh = new HashSet<>();
-        Set<String> meshChildren = new HashSet<>();
         Set<String> meshParents = new HashSet<>();
         Set<String> meshVariants = new HashSet<>();
         for (String heading : eresource.getMeshTerms()) {
             if (!MeshCheckTags.getCheckTags().contains(heading)) {
                 meshVariants.addAll(this.meshVariantsManager.getVariants(heading));
-                meshChildren.addAll(this.meshManager.getChildHeadings(heading, 2, 2));
             }
             mesh.add(heading);
             meshParents.addAll(this.meshManager.getParentHeadings(heading, 1));
         }
         doc.addField("mesh", mesh);
-        doc.addField("mesh_children", meshChildren);
         doc.addField("mesh_parents", meshParents);
         doc.addField("mesh_variants", meshVariants);
         Set<String> meshBroad = new HashSet<>();
