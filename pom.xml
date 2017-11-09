@@ -10,7 +10,7 @@
     <version>solr-2.0.11-bugfix</version>
     <scm>
         <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
-    <tag>eresources-database-solr-2.0.11</tag>
+    <tag>eresources-database-solr-2.0.11-bugfix</tag>
   </scm>
     <distributionManagement>
         <site>
