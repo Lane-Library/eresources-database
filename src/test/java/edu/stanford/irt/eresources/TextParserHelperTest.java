@@ -69,6 +69,7 @@ public class TextParserHelperTest {
         assertEquals("10-18", TextParserHelper.parseEndPages("10.10-8"));
         assertEquals("", TextParserHelper.parseEndPages(""));
         assertEquals("", TextParserHelper.parseEndPages("2620-2623"));
+        assertEquals("", TextParserHelper.parseEndPages(null));
     }
 
     @Test

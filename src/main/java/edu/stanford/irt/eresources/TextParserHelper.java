@@ -115,18 +115,20 @@ public final class TextParserHelper {
      * @return full page range
      */
     public static String parseEndPages(final String pages) {
-        Matcher m = PAGES_START_END_PATTERN.matcher(pages);
-        if (m.matches()) {
-            String start = m.group(1).trim();
-            String end = m.group(m.groupCount()).trim();
-            int baseLength = start.length() - end.length();
-            if (baseLength > 0) {
-                String base = start.substring(0, baseLength);
-                StringBuilder sb = new StringBuilder(start);
-                sb.append('-');
-                sb.append(base);
-                sb.append(end);
-                return sb.toString();
+        if (null != pages && !pages.isEmpty()) {
+            Matcher m = PAGES_START_END_PATTERN.matcher(pages);
+            if (m.matches()) {
+                String start = m.group(1).trim();
+                String end = m.group(m.groupCount()).trim();
+                int baseLength = start.length() - end.length();
+                if (baseLength > 0) {
+                    String base = start.substring(0, baseLength);
+                    StringBuilder sb = new StringBuilder(start);
+                    sb.append('-');
+                    sb.append(base);
+                    sb.append(end);
+                    return sb.toString();
+                }
             }
         }
         return EMPTY;
