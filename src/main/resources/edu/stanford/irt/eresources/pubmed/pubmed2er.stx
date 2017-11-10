@@ -205,13 +205,13 @@
             <stx:when test="name(.) = 'MedlineDate'">
                 <stx:assign name="publicationDate" select="."/>
             </stx:when>
-            <stx:when test="name(.) = 'Month'">
-                <stx:assign name="keywords" select="concat($keywords, ' ', tph:explodeMonth(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />
-            </stx:when>
             <stx:otherwise>
                 <stx:assign name="publicationDate" select="concat($publicationDate, ., ' ')"/>
             </stx:otherwise>
         </stx:choose>
+        <stx:if test="name(.) = 'Month'">
+            <stx:assign name="keywords" select="concat($keywords, ' ', tph:explodeMonth(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />
+        </stx:if>
     </stx:template>
     
     <stx:template match="MedlineCitation/Article/Abstract/AbstractText">
