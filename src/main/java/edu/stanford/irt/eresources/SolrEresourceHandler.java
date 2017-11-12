@@ -1,8 +1,9 @@
 package edu.stanford.irt.eresources;
 
 import java.io.IOException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -30,7 +31,7 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     public static final int TEN = 10;
 
-    public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    public static final int THIS_YEAR = ZonedDateTime.now(ZoneId.of("America/Los_Angeles")).getYear();
 
     private static final Pattern BASIC_NONFILING = Pattern.compile("^\\W?(?:A|An|The) ");
 
@@ -44,7 +45,7 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private static final int SORT_TEXT_MAX = 100;
 
-    private int count = 0;
+    private int count;
 
     private volatile boolean keepGoing = true;
 
@@ -225,7 +226,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         strings.add(eresource.getPublicationIssue());
         strings.add(pubPages);
         strings.add(TextParserHelper.parseEndPages(pubPages));
-        return strings.stream().filter(Objects::nonNull).filter(s -> !s.isEmpty()).collect(Collectors.joining(" "));
+        return strings.stream().filter(Objects::nonNull).filter(String::isEmpty).collect(Collectors.joining(" "));
     }
 
     private String getFirstCharacter(final String sortTitle) {
