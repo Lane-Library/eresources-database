@@ -226,7 +226,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         strings.add(eresource.getPublicationIssue());
         strings.add(pubPages);
         strings.add(TextParserHelper.parseEndPages(pubPages));
-        return strings.stream().filter(Objects::nonNull).filter(String::isEmpty).collect(Collectors.joining(" "));
+        return strings.stream().filter(Objects::nonNull).filter(s -> !s.isEmpty()).collect(Collectors.joining(" "));
     }
 
     private String getFirstCharacter(final String sortTitle) {
