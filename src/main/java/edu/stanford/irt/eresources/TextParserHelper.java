@@ -1,9 +1,9 @@
 package edu.stanford.irt.eresources;
 
-import java.time.DateTimeException;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -62,7 +62,7 @@ public final class TextParserHelper {
             }
             months.add(m.getDisplayName(TextStyle.SHORT, Locale.US));
             months.add(m.getDisplayName(TextStyle.FULL, Locale.US));
-        } catch (DateTimeException e) {
+        } catch (DateTimeParseException e) {
             // ok if can't parse month
         }
         return months.stream().collect(Collectors.joining(SPACE));
