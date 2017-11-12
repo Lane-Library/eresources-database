@@ -57,7 +57,7 @@ public final class TextParserHelper {
             Month m = Month.from(dtf.parse(month));
             int digit = m.getValue();
             months.add(Integer.toString(digit));
-            if (digit < 10) {
+            if (m.compareTo(Month.OCTOBER) < 0) {
                 months.add(String.format("%02d", digit));
             }
             months.add(m.getDisplayName(TextStyle.SHORT, Locale.US));
