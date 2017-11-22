@@ -31,7 +31,7 @@ import edu.stanford.lane.catalog.Record.Subfield;
 /**
  * An Eresource that encapsulates the marc Records from which it is derived.
  */
-public class BibMarcEresource implements Eresource {
+public class BibMarcEresource extends AbstractMARCRecordObject implements Eresource {
 
     public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 

@@ -15,7 +15,7 @@ import edu.stanford.lane.catalog.Record.Subfield;
 /**
  * MarcVersion encapsulates a holding record.
  */
-public class MarcVersion implements Version {
+public class MarcVersion extends AbstractMARCRecordObject implements Version {
 
     private static final Pattern PATTERN = Pattern.compile(" =");
 
@@ -53,7 +53,7 @@ public class MarcVersion implements Version {
 
     @Override
     public String getDates() {
-        String dates = MarcTextUtil.getSubfieldData(this.holding.getFields()
+        String dates = getSubfieldData(this.holding.getFields()
                 .stream()
                 .filter(f -> "866".equals(f.getTag()))
                 .findFirst()
@@ -111,7 +111,7 @@ public class MarcVersion implements Version {
         }
         for (Field field : this.holding.getFields()) {
             if ("856".equals(field.getTag())
-                    && !"http://lane.stanford.edu/secure/ejpw.html".equals(MarcTextUtil.getSubfieldData(field, 'u'))) {
+                    && !"http://lane.stanford.edu/secure/ejpw.html".equals(getSubfieldData(field, 'u'))) {
                 links.add(new MarcLink(field, this));
             }
         }
@@ -120,7 +120,7 @@ public class MarcVersion implements Version {
 
     @Override
     public String getPublisher() {
-        return MarcTextUtil.getSubfieldData(
+        return getSubfieldData(
                 this.holding.getFields()
                 .stream()
                 .filter(f -> "844".equals(f.getTag()))
@@ -130,7 +130,7 @@ public class MarcVersion implements Version {
 
     @Override
     public String getSummaryHoldings() {
-        String value = MarcTextUtil.getSubfieldData(
+        String value = getSubfieldData(
                 this.holding.getFields()
                 .stream()
                 .filter(f -> "866".equals(f.getTag()))

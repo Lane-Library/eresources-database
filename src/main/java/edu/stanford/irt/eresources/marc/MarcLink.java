@@ -10,7 +10,7 @@ import edu.stanford.lane.catalog.Record.Subfield;
 /**
  * A Link that encapsulates the DataField from which it is derived.
  */
-public class MarcLink implements Link {
+public class MarcLink extends AbstractMARCRecordObject implements Link {
 
     private Field field;
 
@@ -33,9 +33,9 @@ public class MarcLink implements Link {
 
     @Override
     public String getLabel() {
-        String l = MarcTextUtil.getSubfieldData(this.field, 'q');
+        String l = getSubfieldData(this.field, 'q');
         if (l == null) {
-            l = MarcTextUtil.getSubfieldData(this.field, 'z');
+            l = getSubfieldData(this.field, 'z');
         }
         if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > 2)) {
             l = l.substring(1, l.length() - 1);
@@ -68,7 +68,7 @@ public class MarcLink implements Link {
 
     @Override
     public String getUrl() {
-        return MarcTextUtil.getSubfieldData(this.field, 'u');
+        return getSubfieldData(this.field, 'u');
     }
 
     @Override
