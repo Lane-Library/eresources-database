@@ -1,0 +1,78 @@
+package edu.stanford.irt.eresources.marc;
+
+import java.util.List;
+
+import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.Version;
+import edu.stanford.lane.catalog.Record.Field;
+import edu.stanford.lane.catalog.Record.Subfield;
+
+/**
+ * A Link that encapsulates the DataField from which it is derived.
+ */
+public class MarcLink implements Link {
+
+    private Field field;
+
+    private Version version;
+
+    public MarcLink(final Field field, final Version version) {
+        this.field = field;
+        this.version = version;
+    }
+
+    @Override
+    public String getAdditionalText() {
+        Subfield i = this.field.getSubfields().stream().filter(s -> s.getCode() == 'i').reduce((a, b) -> b).orElse(null);
+        String text = i != null ? i.getData() : null;
+        if ("click link above for location/circulation status.".equalsIgnoreCase(text)) {
+            text = null;
+        }
+        return text;
+    }
+
+    @Override
+    public String getLabel() {
+        String l = MarcTextUtil.getSubfieldData(this.field, 'q');
+        if (l == null) {
+            l = MarcTextUtil.getSubfieldData(this.field, 'z');
+        }
+        if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > 2)) {
+            l = l.substring(1, l.length() - 1);
+        }
+        return l;
+    }
+
+    @Override
+    public String getLinkText() {
+        StringBuilder sb = new StringBuilder();
+        String l = getLabel();
+        if ("impact factor".equalsIgnoreCase(l)) {
+            sb.append("Impact Factor");
+        } else {
+            String holdingsAndDates = this.version.getHoldingsAndDates();
+            List<Link> links = this.version.getLinks();
+            if (holdingsAndDates != null && links != null && links.size() == 1) {
+                sb.append(holdingsAndDates);
+            } else {
+                if (l != null) {
+                    sb.append(l);
+                }
+            }
+            if (sb.length() == 0) {
+                sb.append(l);
+            }
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String getUrl() {
+        return MarcTextUtil.getSubfieldData(this.field, 'u');
+    }
+
+    @Override
+    public void setVersion(Version version) {
+        // not implemented
+    }
+}

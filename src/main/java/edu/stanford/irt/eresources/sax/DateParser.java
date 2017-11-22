@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-final class DateParser {
+public final class DateParser {
 
     private static final Pattern EIGHT_DIGITS = Pattern.compile("\\d{8}");
 

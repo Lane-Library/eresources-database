@@ -28,9 +28,9 @@ public class SolrReload extends SolrLoader {
     @Override
     public void load() {
         // fetch most recently updated eresource date from solr
-        String lastUpdate = getLastUpdate();
+//        String lastUpdate = getLastUpdate();
         super.load();
-        maybeDeleteOldRecords(lastUpdate);
+//        maybeDeleteOldRecords(lastUpdate);
     }
 
     private String getLastUpdate() {

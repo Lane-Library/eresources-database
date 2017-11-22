@@ -115,14 +115,14 @@ public class SolrEresourceHandler implements EresourceHandler {
                     throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(),
                             e);
                 }
-                if (this.solrDocs.size() >= this.solrMaxDocs) {
-                    addSolrDocs();
-                }
+//                if (this.solrDocs.size() >= this.solrMaxDocs) {
+//                    addSolrDocs();
+//                }
             }
             this.queue.notifyAll();
-            if (!this.solrDocs.isEmpty()) {
-                addSolrDocs();
-            }
+//            if (!this.solrDocs.isEmpty()) {
+//                addSolrDocs();
+//            }
         }
     }
 
