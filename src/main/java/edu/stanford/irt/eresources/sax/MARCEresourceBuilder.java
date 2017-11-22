@@ -604,7 +604,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 && !"impact factor".equalsIgnoreCase(this.currentVersion.getLinks().get(0).getLabel())
                 && this.currentEresource.getPrimaryType().matches("^(Book|Video).*")) {
             this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
-//            this.currentEresource.setKeywords(this.currentEresource.getKeywords() + " bibdatez");
+            this.currentEresource.setKeywords(this.currentEresource.getKeywords() + " bibdatez");
         }
     }
 
