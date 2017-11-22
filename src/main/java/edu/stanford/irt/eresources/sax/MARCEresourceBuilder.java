@@ -319,6 +319,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                     this.title.append(' ');
                 }
                 this.title.append(data);
+                removeTrailingSlashAndSpace(this.title);
             } else if ("c".equals(this.code)) {
                 this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
             } else if ("h".equals(this.code) && this.currentText.toString().contains("digital")) {
@@ -346,6 +347,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
         } else if ("250a".equals(this.tagAndCode)) {
             this.editionOrVersion.append(". ");
             this.editionOrVersion.append(this.currentText);
+            removeTrailingSlashAndSpace(this.editionOrVersion);
         } else if ("035a".equals(this.tagAndCode) && this.currentText.indexOf("(Bassett)") == 0) {
             this.currentEresource.addType("Bassett");
         } else if ("520".equals(this.tag)) {
@@ -602,7 +604,7 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
                 && !"impact factor".equalsIgnoreCase(this.currentVersion.getLinks().get(0).getLabel())
                 && this.currentEresource.getPrimaryType().matches("^(Book|Video).*")) {
             this.currentVersion.setDates(this.dateForPrintSummaryHoldings.toString());
-            this.currentEresource.setKeywords(this.currentEresource.getKeywords() + " bibdatez");
+//            this.currentEresource.setKeywords(this.currentEresource.getKeywords() + " bibdatez");
         }
     }
 
@@ -643,5 +645,11 @@ public class MARCEresourceBuilder extends DefaultHandler implements EresourceBui
             }
         }
         return parsedYear;
+    }
+
+    private void removeTrailingSlashAndSpace(StringBuilder sb) {
+        while (sb.lastIndexOf("/") == sb.length() - 1 || sb.lastIndexOf(" ") == sb.length() - 1) {
+            sb.setLength(sb.length() - 1);
+        }
     }
 }
