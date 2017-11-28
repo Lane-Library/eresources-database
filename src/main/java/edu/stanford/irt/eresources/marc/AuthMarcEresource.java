@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
-import edu.stanford.lane.catalog.Record.Subfield;
 
 public class AuthMarcEresource extends BibMarcEresource {
 
@@ -49,10 +48,7 @@ public class AuthMarcEresource extends BibMarcEresource {
     @Override
     public int getYear() {
         int year;
-        Optional<String> subfield943b = getFieldStream(this.record, "943")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'b')
-                .map(Subfield::getData)
+        Optional<String> subfield943b = getSubfieldDataStream(this.record, "943", "b")
                 .findFirst();
         if (subfield943b.isPresent()) {
             String value = subfield943b.get();

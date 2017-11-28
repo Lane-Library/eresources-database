@@ -64,18 +64,13 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                 .orElse(null);
         }
         if (dates == null && needToAddBibDates(this.eresource)) {
-            dates = getFieldStream(this.bib, "149")
-                    .flatMap(f -> f.getSubfields().stream())
-                    .filter(s -> s.getCode() == 'd')
-                    .map(Subfield::getData)
+            dates = getSubfieldDataStream(this.bib, "149", "d")
                     .findFirst()
                     .orElse(null);
             if (dates == null) {
-                dates = getFieldStream(this.bib, "260")
-                        .flatMap(f -> f.getSubfields().stream())
-                        .filter(s -> s.getCode() == 'c')
-                        .map(Subfield::getData)
-                        .findFirst().orElse("");
+                dates = getSubfieldDataStream(this.bib, "260", "c")
+                        .findFirst()
+                        .orElse("");
             }
         }
         return dates;
@@ -159,10 +154,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public boolean hasGetPasswordLink() {
-        return getFieldStream(this.holding, "856")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'u')
-                .map(Subfield::getData)
+        return getSubfieldDataStream(this.holding, "856", "u")
                 .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
     }
 

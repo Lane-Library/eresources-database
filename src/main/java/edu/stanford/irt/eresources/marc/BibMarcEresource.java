@@ -74,7 +74,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public Collection<String> getAbbreviatedTitles() {
-        return getFieldStream(this.record, "246")
+        return getSubfieldDataStream(getFieldStream(this.record, "246")
                 .filter(f -> {
                     Subfield i = f.getSubfields()
                             .stream()
@@ -87,29 +87,20 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
                             .findFirst()
                             .orElse(null);
                     return i != null && a != null && "Acronym/initialism:".equalsIgnoreCase(i.getData());
-                    })
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+                    }), "a")
                 .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<String> getAlternativeTitles() {
-        return getFieldStream(this.record, "130|210|246|247")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(s -> s.getData())
+        return getSubfieldDataStream(this.record, "130|210|246|247", "a")
                 .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<String> getBroadMeshTerms() {
-        return getFieldStream(this.record, "650")
-                .filter(f -> f.getIndicator1() == '4' && f.getIndicator2() == '2')
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        return getSubfieldDataStream(getFieldStream(this.record, "650")
+                .filter(f -> f.getIndicator1() == '4' && f.getIndicator2() == '2'), "a")
                 .map(this::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet());
     }
@@ -158,18 +149,16 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        getFieldStream(this.record, "520")
-            .flatMap(f -> f.getSubfields().stream())
-            .map(Subfield::getData).forEach(s -> {
+        getSubfieldDataStream(this.record, "520")
+            .forEach(s -> {
                 if (sb.length() > 0) {
                     sb.append(' ');
                 }
                 sb.append(s);
             });
         if (sb.length() == 0) {
-            getFieldStream(this.record, "505")
-                .flatMap(f -> f.getSubfields().stream())
-                .map(Subfield::getData).forEach(s -> {
+            getSubfieldDataStream(this.record, "505")
+                .forEach(s -> {
                     if (sb.length() > 0) {
                         sb.append(' ');
                     }
@@ -191,12 +180,9 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public Collection<String> getMeshTerms() {
-        return getFieldStream(this.record, "650|651")
+        return getSubfieldDataStream(getFieldStream(this.record, "650|651")
                 .filter(f -> ("650".equals(f.getTag()) && "2356".indexOf(f.getIndicator2()) > -1)
-                        || ("651".equals(f.getTag()) && f.getIndicator2() == '7'))
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+                        || ("651".equals(f.getTag()) && f.getIndicator2() == '7')), "a")
                 .map(this::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet());
     }
@@ -211,11 +197,10 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public Collection<String> getPublicationAuthors() {
-        return Collections.unmodifiableCollection(getFieldStream(this.record, "100|700")
+        return Collections.unmodifiableCollection(getSubfieldDataStream(getFieldStream(this.record, "100|700")
                 .filter(f -> "100".equals(f.getTag())
-                        || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal"))))
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a')
-                .map(s -> s.getData()).map(s -> s.replaceFirst(",$", ""))
+                        || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal")))), "a")
+                .map(s -> s.replaceFirst(",$", ""))
                 .map(auth -> auth.endsWith(".") && !auth.matches(".* \\w\\.") ? auth.substring(0, auth.length() - 1)
                         : auth)
                 .collect(Collectors.toList()));
@@ -223,10 +208,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public String getPublicationAuthorsText() {
-        String authorsText = getFieldStream(this.record, "245")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'c')
-                .map(Subfield::getData)
+        String authorsText =  getSubfieldDataStream(this.record, "245", "c")
                 // get the last c
                 .reduce((a, b) -> b)
                 .orElse(null);
@@ -255,9 +237,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
                 .orElse("");
         String lang = field008.substring(35, 38);
         languages.add(LANGUAGE_MAP.getLanguage(lang.toLowerCase(Locale.US)));
-        languages.addAll(getFieldStream(this.record, "041")
-                .flatMap(f -> f.getSubfields().stream())
-                .map(Subfield::getData)
+        languages.addAll(getSubfieldDataStream(this.record, "041")
                 .map(String::toLowerCase)
                 .map(LANGUAGE_MAP::getLanguage)
                 .collect(Collectors.toSet()));
@@ -331,10 +311,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public String getShortTitle() {
-        return getFieldStream(this.record, "149")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        return getSubfieldDataStream(this.record, "149", "a")
                 .findFirst()
                 .orElse(null);
     }
@@ -353,10 +330,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     public String getTitle() {
         StringBuilder sb = getStringBuilderWith245();
         removeTrailingSlashAndSpace(sb);
-        String edition = getFieldStream(this.record, "250")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        String edition = getSubfieldDataStream(this.record, "250", "a")
                 .collect(Collectors.joining(". "));
         if (!edition.isEmpty()) {
             sb.append(". ").append(edition);
@@ -437,10 +411,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public boolean isCore() {
-        return getFieldStream(this.record, "655")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        return getSubfieldDataStream(this.record, "655", "a")
                 .anyMatch("core material"::equalsIgnoreCase);
     }
 
@@ -451,10 +422,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public boolean isLaneConnex() {
-        return getFieldStream(this.record, "655")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        return getSubfieldDataStream(this.record, "655", "a")
                 .anyMatch("laneconnex"::equalsIgnoreCase);
     }
 

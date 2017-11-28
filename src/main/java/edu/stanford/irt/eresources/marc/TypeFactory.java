@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
-import edu.stanford.lane.catalog.Record.Subfield;
 
 public class TypeFactory extends MARCRecordSupport {
 
@@ -81,13 +80,10 @@ public class TypeFactory extends MARCRecordSupport {
     }
 
     public String getPrimaryType(final Record record) {
-        getFieldStream(record, "655");
-        String primaryType = getFieldStream(record, "655")
-                .filter(f -> '4' == f.getIndicator1() && '7' == f.getIndicator2())
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
-                .findFirst().orElse("");
+        String primaryType = getSubfieldDataStream(getFieldStream(record, "655")
+                .filter(f -> '4' == f.getIndicator1() && '7' == f.getIndicator2()), "a")
+                .findFirst()
+                .orElse("");
         primaryType = PRIMARY_TYPES.get(primaryType.toLowerCase(Locale.US));
         String type;
         Collection<String> rawTypes = getRawTypes(record);
@@ -147,10 +143,7 @@ public class TypeFactory extends MARCRecordSupport {
     }
 
     private String getPrintOrDigital(final Record record) {
-        boolean isDigital = getFieldStream(record, "245")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'h')
-                .map(Subfield::getData)
+        boolean isDigital = getSubfieldDataStream(record, "245", "h")
                 .anyMatch(s -> s.contains("digital"));
         if (isDigital) {
             return "Digital";
@@ -162,50 +155,29 @@ public class TypeFactory extends MARCRecordSupport {
     private Collection<String> getRawTypes(final Record record) {
         Set<String> rawTypes = new HashSet<>();
         List<Field> fields655 = getFieldStream(record, "655").collect(Collectors.toList());
-        boolean installedSoftware = fields655.stream()
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        boolean installedSoftware = getSubfieldDataStream(fields655.stream(), "a")
                 .anyMatch("Software, Installed"::equalsIgnoreCase);
         if (installedSoftware) {
-            if (fields655.stream()
-                    .flatMap(f -> f.getSubfields().stream())
-                    .filter(s -> s.getCode() == 'a')
-                    .map(Subfield::getData)
+            if (getSubfieldDataStream(fields655.stream(), "a")
                     .anyMatch("Subset, Biotools"::equalsIgnoreCase)) {
                 rawTypes.add("Biotools Software, Installed");
             }
-            if (fields655.stream()
-                    .flatMap(f -> f.getSubfields().stream())
-                    .filter(s -> s.getCode() == 'a')
-                    .map(Subfield::getData)
+            if (getSubfieldDataStream(fields655.stream(), "a")
                     .anyMatch("Statistics"::equalsIgnoreCase)) {
                 rawTypes.add("Statistics Software, Installed");
             }
         }
-        rawTypes.addAll(fields655.stream()
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        rawTypes.addAll(getSubfieldDataStream(fields655.stream(), "a")
                 .collect(Collectors.toSet()));
-        if (getFieldStream(record, "245")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'h')
-                .map(Subfield::getData)
+        if (getSubfieldDataStream(record, "245", "h")
                 .anyMatch(s -> s.contains("videorecording"))) {
             rawTypes.add("Video");
         }
-        if (getFieldStream(record, "035")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        if (getSubfieldDataStream(record, "035", "a")
                 .anyMatch(s -> s.startsWith("(Bassett)"))) {
             rawTypes.add("Bassett");
         }
-        if (getFieldStream(record, "830")
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a')
-                .map(Subfield::getData)
+        if (getSubfieldDataStream(record, "830", "a")
                 .map(String::toLowerCase)
                 .anyMatch(s -> s.contains("stanford") && s.contains("grand rounds"))) {
             rawTypes.add("Grand Rounds");

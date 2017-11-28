@@ -29,7 +29,8 @@ public class KeywordsStrategy {
         byte leaderByte6 = record.getLeaderByte(6);
         if ("uvxy".indexOf(leaderByte6) > -1) {
             fields.stream().filter(f -> "852".equals(f.getTag()) || "866".equals(f.getTag()))
-                    .flatMap(f -> f.getSubfields().stream()).map(Subfield::getData)
+                    .flatMap(f -> f.getSubfields().stream())
+                    .map(Subfield::getData)
                     .forEach(s -> sb.append(s).append(' '));
         } else if (leaderByte6 == 'q') {
             fields.stream().filter(f -> {
