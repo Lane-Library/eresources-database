@@ -20,8 +20,8 @@ public class TypeFactory extends MARCRecordSupport {
     private static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
             EresourceConstants.AUDIO, "Bassett", "Biotools Software, Installed", EresourceConstants.BOOK,
             EresourceConstants.CHAPTER, "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset",
-            "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL,
-            "Lane Class", "Lane Web Page", "Mobile", "Print", EresourceConstants.SOFTWARE, "Software, Installed",
+            "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class",
+            "Lane Web Page", "Mobile", "Print", EresourceConstants.SOFTWARE, "Software, Installed",
             "Statistics Software, Installed", "Statistics", EresourceConstants.VIDEO, EresourceConstants.WEBSITE };
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
@@ -154,7 +154,8 @@ public class TypeFactory extends MARCRecordSupport {
 
     private Collection<String> getRawTypes(final Record record) {
         Set<String> rawTypes = new HashSet<>();
-        List<Field> fields655 = getFields(record, "655").collect(Collectors.toList());
+        List<Field> fields655 = getFields(record, "655")
+                .collect(Collectors.toList());
         boolean installedSoftware = getSubfieldData(fields655.stream(), "a")
                 .anyMatch("Software, Installed"::equalsIgnoreCase);
         if (installedSoftware) {

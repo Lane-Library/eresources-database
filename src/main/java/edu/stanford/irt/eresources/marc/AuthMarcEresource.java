@@ -53,8 +53,7 @@ public class AuthMarcEresource extends BibMarcEresource {
     @Override
     public int getYear() {
         int year;
-        Optional<String> subfield943b = getSubfieldData(this.record, "943", "b")
-                .findFirst();
+        Optional<String> subfield943b = getSubfieldData(this.record, "943", "b").findFirst();
         if (subfield943b.isPresent()) {
             String value = subfield943b.get();
             if ("continuing".equalsIgnoreCase(value)) {

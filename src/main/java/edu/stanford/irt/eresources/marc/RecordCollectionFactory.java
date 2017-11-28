@@ -11,7 +11,7 @@ public class RecordCollectionFactory {
         this.catalogRecordService = catalogRecordService;
     }
 
-    public RecordCollection newRecordCollection(long startTime) {
+    public RecordCollection newRecordCollection(final long startTime) {
         return new RecordCollection(this.catalogRecordService.getRecordStream(startTime));
     }
 }

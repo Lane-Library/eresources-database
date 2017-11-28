@@ -51,14 +51,15 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
             List<Record> recordList = next();
             Record record = recordList.get(0);
             if (record.getLeaderByte(6) == 'q') {
-                this.eresourceHandler.handleEresource(new AuthMarcEresource(record, this.keywordsStrategy, this.typeFactory));
-            } else {
                 this.eresourceHandler
-                        .handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy, this.itemCount, this.typeFactory));
+                        .handleEresource(new AuthMarcEresource(record, this.keywordsStrategy, this.typeFactory));
+            } else {
+                this.eresourceHandler.handleEresource(
+                        new BibMarcEresource(recordList, this.keywordsStrategy, this.itemCount, this.typeFactory));
                 int altTitleCount = (int) record.getFields().stream().filter(f -> "249".equals(f.getTag())).count();
                 for (int i = 0; i < altTitleCount; i++) {
-                    this.eresourceHandler.handleEresource(
-                            new AltTitleMarcEresource(recordList, this.keywordsStrategy, this.typeFactory, this.itemCount, i + 1));
+                    this.eresourceHandler.handleEresource(new AltTitleMarcEresource(recordList, this.keywordsStrategy,
+                            this.typeFactory, this.itemCount, i + 1));
                 }
             }
         }

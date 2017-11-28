@@ -46,6 +46,11 @@ public class CatalogLink implements Link {
         return this.url;
     }
 
+    @Override
+    public void setVersion(final Version version) {
+        // not implemented
+    }
+
     private void appendHoldingsAndDates(final StringBuilder sb) {
         String holdingsAndDates = this.version.getHoldingsAndDates();
         List<Link> links = this.version.getLinks();
@@ -59,10 +64,5 @@ public class CatalogLink implements Link {
         if (sb.length() == 0) {
             sb.append(this.label);
         }
-    }
-
-    @Override
-    public void setVersion(Version version) {
-        // not implemented
     }
 }

@@ -23,7 +23,11 @@ public class MarcLink implements Link {
 
     @Override
     public String getAdditionalText() {
-        Subfield i = this.field.getSubfields().stream().filter(s -> s.getCode() == 'i').reduce((a, b) -> b).orElse(null);
+        Subfield i = this.field.getSubfields()
+                .stream()
+                .filter(s -> s.getCode() == 'i')
+                .reduce((a, b) -> b)
+                .orElse(null);
         String text = i != null ? i.getData() : null;
         if ("click link above for location/circulation status.".equalsIgnoreCase(text)) {
             text = null;
@@ -34,18 +38,18 @@ public class MarcLink implements Link {
     @Override
     public String getLabel() {
         String l = this.field.getSubfields()
-            .stream()
-            .filter(s -> s.getCode() == 'q')
-            .map(Subfield::getData)
-            .findFirst()
-            .orElse(null);
-        if (l == null) {
-            l = this.field.getSubfields()
                 .stream()
-                .filter(s -> s.getCode() == 'z')
+                .filter(s -> s.getCode() == 'q')
                 .map(Subfield::getData)
                 .findFirst()
                 .orElse(null);
+        if (l == null) {
+            l = this.field.getSubfields()
+                    .stream()
+                    .filter(s -> s.getCode() == 'z')
+                    .map(Subfield::getData)
+                    .findFirst()
+                    .orElse(null);
         }
         if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > 2)) {
             l = l.substring(1, l.length() - 1);
@@ -87,7 +91,7 @@ public class MarcLink implements Link {
     }
 
     @Override
-    public void setVersion(Version version) {
+    public void setVersion(final Version version) {
         // not implemented
     }
 }

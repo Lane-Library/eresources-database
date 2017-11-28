@@ -31,6 +31,14 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         this.eresource = eresource;
     }
 
+    private static boolean isGetPassword856(final Field field) {
+        return field.getSubfields()
+                .stream()
+                .filter(s -> s.getCode() == 'u')
+                .map(Subfield::getData)
+                .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
+    }
+
     @Override
     public String getAdditionalText() {
         String additionalText = null;
@@ -39,8 +47,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         if (fields.size() > 1) {
             additionalText = "";
         } else if (fields.size() == 1) {
-            additionalText = fields.get(0)
-                    .getSubfields().stream()
+            additionalText = fields.get(0).getSubfields().stream()
                     .filter(s -> 'z' == s.getCode())
                     .map(Subfield::getData)
                     .findFirst()
@@ -57,11 +64,11 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         String dates = null;
         if (field != null) {
             dates = field.getSubfields()
-                .stream()
-                .filter(s -> s.getCode() == 'y')
-                .map(Subfield::getData)
-                .findFirst()
-                .orElse(null);
+                    .stream()
+                    .filter(s -> s.getCode() == 'y')
+                    .map(Subfield::getData)
+                    .findFirst()
+                    .orElse(null);
         }
         if (dates == null && needToAddBibDates(this.eresource)) {
             dates = getSubfieldData(this.bib, "149", "d")
@@ -93,8 +100,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
-        boolean has856 = getFields(this.holding, "856")
-                .count() > 0;
+        boolean has856 = getFields(this.holding, "856").count() > 0;
         if (!has856) {
             links.add(new CatalogLink(getFields(this.bib, "001")
                     .map(f -> f.getData())
@@ -107,14 +113,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
             .map(f -> new MarcLink(f, version))
             .forEach(l -> links.add(l));
         return links;
-    }
-    
-    private static boolean isGetPassword856(Field field) {
-        return field.getSubfields()
-                .stream()
-                .filter(s -> s.getCode() == 'u')
-                .map(Subfield::getData)
-                .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
     }
 
     @Override
@@ -142,12 +140,12 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                 .orElse(null);
         if (field != null) {
             value = field.getSubfields()
-                .stream()
-                .filter(s -> s.getCode() == 'v')
-                .map(Subfield::getData)
-                .map(s -> PATTERN.matcher(s).replaceAll(""))
-                .findFirst()
-                .orElse(null);
+                    .stream()
+                    .filter(s -> s.getCode() == 'v')
+                    .map(Subfield::getData)
+                    .map(s -> PATTERN.matcher(s).replaceAll(""))
+                    .findFirst()
+                    .orElse(null);
         }
         return value;
     }

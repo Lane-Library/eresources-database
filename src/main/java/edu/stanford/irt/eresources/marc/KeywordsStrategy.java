@@ -18,7 +18,8 @@ public class KeywordsStrategy {
 
     private ReservesTextAugmentation reservesAugmentation;
 
-    public KeywordsStrategy(final AuthTextAugmentation authTextAugmentation, ReservesTextAugmentation reservesAugmentation) {
+    public KeywordsStrategy(final AuthTextAugmentation authTextAugmentation,
+            final ReservesTextAugmentation reservesAugmentation) {
         this.authTextAugmentation = authTextAugmentation;
         this.reservesAugmentation = reservesAugmentation;
     }
@@ -56,7 +57,12 @@ public class KeywordsStrategy {
                     getKeywordsFromField(tag, field.getSubfields(), sb);
                 }
             }
-            String reservesText = this.reservesAugmentation.getReservesAugmentations(fields.stream().filter(f -> "001".equals(f.getTag())).map(Field::getData).findFirst().orElse("0"));
+            String reservesText = this.reservesAugmentation.getReservesAugmentations(
+                    fields.stream()
+                        .filter(f -> "001".equals(f.getTag()))
+                        .map(Field::getData)
+                        .findFirst()
+                        .orElse("0"));
             if (reservesText != null) {
                 sb.append(' ').append(reservesText);
             }
