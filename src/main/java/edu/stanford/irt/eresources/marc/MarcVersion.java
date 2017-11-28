@@ -15,7 +15,7 @@ import edu.stanford.lane.catalog.Record.Subfield;
 /**
  * MarcVersion encapsulates a holding record.
  */
-public class MarcVersion extends AbstractMARCRecordObject implements Version {
+public class MarcVersion extends MARCRecordSupport implements Version {
 
     private static final Pattern PATTERN = Pattern.compile(" =");
 
@@ -34,9 +34,7 @@ public class MarcVersion extends AbstractMARCRecordObject implements Version {
     @Override
     public String getAdditionalText() {
         String additionalText = null;
-        List<Field> fields = this.holding.getFields()
-                .stream()
-                .filter(f -> "866".equals(f.getTag()))
+        List<Field> fields = getFieldStream(this.holding, "866")
                 .collect(Collectors.toList());
         if (fields.size() > 1) {
             additionalText = "";
@@ -53,24 +51,27 @@ public class MarcVersion extends AbstractMARCRecordObject implements Version {
 
     @Override
     public String getDates() {
-        String dates = getSubfieldData(this.holding.getFields()
-                .stream()
-                .filter(f -> "866".equals(f.getTag()))
+        Field field = getFieldStream(this.holding, "866")
                 .findFirst()
-                .orElse(null), 'y');
+                .orElse(null);
+        String dates = null;
+        if (field != null) {
+            dates = field.getSubfields()
+                .stream()
+                .filter(s -> s.getCode() == 'y')
+                .map(Subfield::getData)
+                .findFirst()
+                .orElse(null);
+        }
         if (dates == null && needToAddBibDates(this.eresource)) {
-            dates = this.bib.getFields()
-                    .stream()
-                    .filter(f -> "149".equals(f.getTag()))
+            dates = getFieldStream(this.bib, "149")
                     .flatMap(f -> f.getSubfields().stream())
                     .filter(s -> s.getCode() == 'd')
                     .map(Subfield::getData)
                     .findFirst()
                     .orElse(null);
             if (dates == null) {
-                dates = this.bib.getFields()
-                        .stream()
-                        .filter(f -> "260".equals(f.getTag()))
+                dates = getFieldStream(this.bib, "260")
                         .flatMap(f -> f.getSubfields().stream())
                         .filter(s -> s.getCode() == 'c')
                         .map(Subfield::getData)
@@ -97,56 +98,68 @@ public class MarcVersion extends AbstractMARCRecordObject implements Version {
     @Override
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
-        boolean has856 = this.holding.getFields()
-                .stream()
-                .filter(f -> "856".equals(f.getTag()))
+        boolean has856 = getFieldStream(this.holding, "856")
                 .count() > 0;
         if (!has856) {
-            links.add(new CatalogLink(this.bib.getFields()
-                    .stream()
-                    .filter(f -> "001".equals(f.getTag()))
+            links.add(new CatalogLink(getFieldStream(this.bib, "001")
                     .map(f -> f.getData())
                     .findFirst()
                     .orElse(null), this));
         }
-        for (Field field : this.holding.getFields()) {
-            if ("856".equals(field.getTag())
-                    && !"http://lane.stanford.edu/secure/ejpw.html".equals(getSubfieldData(field, 'u'))) {
-                links.add(new MarcLink(field, this));
-            }
-        }
+        Version version = this;
+        getFieldStream(this.holding, "856")
+            .filter(f -> !isGetPassword856(f))
+            .map(f -> new MarcLink(f, version))
+            .forEach(l -> links.add(l));
         return links;
+    }
+    
+    private static boolean isGetPassword856(Field field) {
+        return field.getSubfields()
+                .stream()
+                .filter(s -> s.getCode() == 'u')
+                .map(Subfield::getData)
+                .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
     }
 
     @Override
     public String getPublisher() {
-        return getSubfieldData(
-                this.holding.getFields()
-                .stream()
-                .filter(f -> "844".equals(f.getTag()))
+        String publisher = null;
+        Field field = getFieldStream(this.holding, "844")
                 .findFirst()
-                .orElse(null), 'a');
+                .orElse(null);
+        if (field != null) {
+            publisher = field.getSubfields()
+                    .stream()
+                    .filter(s -> s.getCode() == 'a')
+                    .map(Subfield::getData)
+                    .findFirst()
+                    .orElse(null);
+        }
+        return publisher;
     }
 
     @Override
     public String getSummaryHoldings() {
-        String value = getSubfieldData(
-                this.holding.getFields()
-                .stream()
-                .filter(f -> "866".equals(f.getTag()))
+        String value = null;
+        Field field = getFieldStream(this.holding, "866")
                 .findFirst()
-                .orElse(null), 'v');
-        if (value != null) {
-            value = PATTERN.matcher(value).replaceAll("");
+                .orElse(null);
+        if (field != null) {
+            value = field.getSubfields()
+                .stream()
+                .filter(s -> s.getCode() == 'v')
+                .map(Subfield::getData)
+                .map(s -> PATTERN.matcher(s).replaceAll(""))
+                .findFirst()
+                .orElse(null);
         }
         return value;
     }
 
     @Override
     public boolean hasGetPasswordLink() {
-        return this.holding.getFields()
-                .stream()
-                .filter(f -> "856".equals(f.getTag()))
+        return getFieldStream(this.holding, "856")
                 .flatMap(f -> f.getSubfields().stream())
                 .filter(s -> s.getCode() == 'u')
                 .map(Subfield::getData)

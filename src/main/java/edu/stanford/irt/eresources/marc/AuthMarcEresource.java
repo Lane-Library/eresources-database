@@ -49,15 +49,13 @@ public class AuthMarcEresource extends BibMarcEresource {
     @Override
     public int getYear() {
         int year;
-        Optional<String> field943 = this.record.getFields()
-                .stream()
-                .filter(f -> "943".equals(f.getTag()))
+        Optional<String> subfield943b = getFieldStream(this.record, "943")
                 .flatMap(f -> f.getSubfields().stream())
                 .filter(s -> s.getCode() == 'b')
                 .map(Subfield::getData)
                 .findFirst();
-        if (field943.isPresent()) {
-            String value = field943.get();
+        if (subfield943b.isPresent()) {
+            String value = subfield943b.get();
             if ("continuing".equalsIgnoreCase(value)) {
                 year = THIS_YEAR;
             } else {

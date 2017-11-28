@@ -31,7 +31,7 @@ import edu.stanford.lane.catalog.Record.Subfield;
 /**
  * An Eresource that encapsulates the marc Records from which it is derived.
  */
-public class BibMarcEresource extends AbstractMARCRecordObject implements Eresource {
+public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     public static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -74,38 +74,50 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     @Override
     public Collection<String> getAbbreviatedTitles() {
-        List<Field> fields = this.record.getFields().stream().filter(f -> "246".equals(f.getTag()))
-                .collect(Collectors.toList());
-        return fields.stream().filter(f -> {
-            Subfield i = f.getSubfields().stream().filter(s -> s.getCode() == 'i').findFirst().orElse(null);
-            Subfield a = f.getSubfields().stream().filter(s -> s.getCode() == 'a').findFirst().orElse(null);
-            return i != null && a != null && "Acronym/initialism:".equalsIgnoreCase(i.getData());
-        }).flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a').map(Subfield::getData)
+        return getFieldStream(this.record, "246")
+                .filter(f -> {
+                    Subfield i = f.getSubfields()
+                            .stream()
+                            .filter(s -> s.getCode() == 'i')
+                            .findFirst()
+                            .orElse(null);
+                    Subfield a = f.getSubfields()
+                            .stream()
+                            .filter(s -> s.getCode() == 'a')
+                            .findFirst()
+                            .orElse(null);
+                    return i != null && a != null && "Acronym/initialism:".equalsIgnoreCase(i.getData());
+                    })
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
                 .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<String> getAlternativeTitles() {
-        List<Field> fields = this.record.getFields().stream().filter(f -> "130|210|246|247".indexOf(f.getTag()) > -1)
-                .collect(Collectors.toList());
-        return fields.stream().flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a')
-                .map(s -> s.getData()).collect(Collectors.toSet());
+        return getFieldStream(this.record, "130|210|246|247")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(s -> s.getData())
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<String> getBroadMeshTerms() {
-        return this.record.getFields().stream()
-                .filter(f -> "650".equals(f.getTag()) && f.getIndicator1() == '4' && f.getIndicator2() == '2')
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a').map(Subfield::getData)
-                .map(this::maybeStripTrailingPeriod).collect(Collectors.toSet());
+        return getFieldStream(this.record, "650")
+                .filter(f -> f.getIndicator1() == '4' && f.getIndicator2() == '2')
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
+                .map(this::maybeStripTrailingPeriod)
+                .collect(Collectors.toSet());
     }
 
     @Override
     public String getDate() {
         String date = null;
-        List<Field> fields773 = this.record.getFields()
-                .stream()
-                .filter(f -> "773".equals(f.getTag()))
+        List<Field> fields773 = getFieldStream(this.record, "773")
                 .collect(Collectors.toList());
         int subfieldWCount = 0;
         for (int i = 0; i < fields773.size(); i++) {
@@ -125,7 +137,8 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
             date = DateParser.parseDate(date.replaceAll("(:|;)", " "));
         }
         if (null == date || "0".equals(date) || date.isEmpty()) {
-            String field008 = this.record.getFields().stream().filter(f -> "008".equals(f.getTag())).map(Field::getData)
+            String field008 = getFieldStream(this.record, "008")
+                    .map(Field::getData)
                     .findFirst().orElse("");
             String endDate = parseYear(field008.substring(11, 15));
             String beginDate = parseYear(field008.substring(7, 11));
@@ -145,21 +158,23 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        this.record.getFields().stream().filter(f -> "520".equals(f.getTag())).flatMap(f -> f.getSubfields().stream())
+        getFieldStream(this.record, "520")
+            .flatMap(f -> f.getSubfields().stream())
+            .map(Subfield::getData).forEach(s -> {
+                if (sb.length() > 0) {
+                    sb.append(' ');
+                }
+                sb.append(s);
+            });
+        if (sb.length() == 0) {
+            getFieldStream(this.record, "505")
+                .flatMap(f -> f.getSubfields().stream())
                 .map(Subfield::getData).forEach(s -> {
                     if (sb.length() > 0) {
                         sb.append(' ');
                     }
                     sb.append(s);
                 });
-        if (sb.length() == 0) {
-            this.record.getFields().stream().filter(f -> "505".equals(f.getTag()))
-                    .flatMap(f -> f.getSubfields().stream()).map(Subfield::getData).forEach(s -> {
-                        if (sb.length() > 0) {
-                            sb.append(' ');
-                        }
-                        sb.append(s);
-                    });
         }
         return sb.length() > 0 ? sb.toString() : null;
     }
@@ -176,11 +191,14 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     @Override
     public Collection<String> getMeshTerms() {
-        return this.record.getFields().stream()
+        return getFieldStream(this.record, "650|651")
                 .filter(f -> ("650".equals(f.getTag()) && "2356".indexOf(f.getIndicator2()) > -1)
                         || ("651".equals(f.getTag()) && f.getIndicator2() == '7'))
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a').map(Subfield::getData)
-                .map(this::maybeStripTrailingPeriod).collect(Collectors.toSet());
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
+                .map(this::maybeStripTrailingPeriod)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -193,7 +211,7 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     @Override
     public Collection<String> getPublicationAuthors() {
-        return Collections.unmodifiableCollection(this.record.getFields().stream()
+        return Collections.unmodifiableCollection(getFieldStream(this.record, "100|700")
                 .filter(f -> "100".equals(f.getTag())
                         || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal"))))
                 .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a')
@@ -205,8 +223,7 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     @Override
     public String getPublicationAuthorsText() {
-        String authorsText = this.record.getFields().stream()
-                .filter(f -> "245".equals(f.getTag()))
+        String authorsText = getFieldStream(this.record, "245")
                 .flatMap(f -> f.getSubfields().stream())
                 .filter(s -> s.getCode() == 'c')
                 .map(Subfield::getData)
@@ -232,12 +249,17 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
     @Override
     public Collection<String> getPublicationLanguages() {
         Set<String> languages = new HashSet<>();
-        String field008 = this.record.getFields().stream().filter(f -> "008".equals(f.getTag())).map(Field::getData)
-                .findFirst().orElse("");
+        String field008 = getFieldStream(this.record, "008")
+                .map(Field::getData)
+                .findFirst()
+                .orElse("");
         String lang = field008.substring(35, 38);
         languages.add(LANGUAGE_MAP.getLanguage(lang.toLowerCase(Locale.US)));
-        languages.addAll(this.record.getFields().stream().filter(f -> "041".equals(f.getTag()))
-                .flatMap(f -> f.getSubfields().stream()).map(Subfield::getData).map(String::toLowerCase).map(LANGUAGE_MAP::getLanguage)
+        languages.addAll(getFieldStream(this.record, "041")
+                .flatMap(f -> f.getSubfields().stream())
+                .map(Subfield::getData)
+                .map(String::toLowerCase)
+                .map(LANGUAGE_MAP::getLanguage)
                 .collect(Collectors.toSet()));
         return languages;
     }
@@ -245,7 +267,7 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
     @Override
     public String getPublicationText() {
         StringBuilder sb = new StringBuilder();
-        List<Field> fields773 = this.record.getFields().stream().filter(f -> "773".equals(f.getTag()))
+        List<Field> fields773 = getFieldStream(this.record, "773")
                 .collect(Collectors.toList());
         int subfieldWCount = 0;
         for (int i = 0; i < fields773.size(); i++) {
@@ -277,10 +299,8 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     @Override
     public String getPublicationTitle() {
-      List<Field> fields773 = this.record.getFields()
-      .stream()
-      .filter(f -> "773".equals(f.getTag()))
-      .collect(Collectors.toList());
+      List<Field> fields773 = getFieldStream(this.record, "773")
+              .collect(Collectors.toList());
       int countOf733W = 0;
       String data = null;
       for (int i = 0; i < fields773.size() && countOf733W == 0; i++) {
@@ -294,50 +314,14 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
           }
       }
       return data;
-//        String publicationTitle = fields773.stream()
-//                .filter(f -> !f.getSubfields().stream().anyMatch(s -> s.getCode() == 'w'))
-//                .flatMap(f -> f.getSubfields().stream())
-//                .filter(s -> s.getCode() == 't' || s.getCode() == 'p')
-//                .map(Subfield::getData)
-//                .reduce((a, b) -> b)
-//                .orElse(null);
-//        if (publicationTitle == null && !fields773.isEmpty()) {
-//            publicationTitle = fields773.get(0).getSubfields()
-//                    .stream()
-//                    .filter(s -> s.getCode() == 't' || s.getCode() == 'p')
-//                    .peek(s -> System.out.print(s.getCode() + ":"))
-//                    .map(Subfield::getData)
-//                    .peek(System.out::println)
-//                    .reduce((a, b) -> b)
-//                    .orElse(null);
-//        }
-//        List<Field> fields773 = this.record.getFields()
-//                .stream()
-//                .filter(f -> "773".equals(f.getTag()))
-//                .collect(Collectors.toList());
-//        String publicationTitle = null;
-//        for (int i = 0; i < fields773.size(); i++) {
-//            List<Subfield> subfields = fields773.get(i).getSubfields();
-//            boolean hasSubfieldw = subfields.stream().anyMatch(s -> s.getCode() == 'w');
-//            if (publicationTitle == null && hasSubfieldw) {
-//                publicationTitle = subfields.stream().filter(s -> s.getCode() == 't' || s.getCode() == 'p').map(Subfield::getData).reduce((a, b) -> b).orElse(null);
-//            }
-//        }
-//        if (publicationTitle == null) {
-//            publicationTitle = fields773.stream()
-//                .flatMap(f -> f.getSubfields().stream())
-//                .filter(s -> s.getCode() == 't' || s.getCode() == 'p')
-//                .map(Subfield::getData)
-//                .reduce((a, b) -> b)
-//                .orElse(null);
-//        }
-//        return publicationTitle;
     }
 
     @Override
     public int getRecordId() {
-        return Integer.parseInt(this.record.getFields().stream().filter(f -> "001".equals(f.getTag()))
-                .map(f -> f.getData()).findFirst().orElse(null));
+        return Integer.parseInt(getFieldStream(this.record, "001")
+                .map(f -> f.getData())
+                .findFirst()
+                .orElse("0"));
     }
 
     @Override
@@ -347,31 +331,33 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     @Override
     public String getShortTitle() {
-        String shortTitle = this.record.getFields().stream().filter(f -> "149".equals(f.getTag()))
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a').map(Subfield::getData)
-                .findFirst().orElse(null);
-        if (shortTitle == null) {
-            return null;
-        } else {
-            return shortTitle;
-        }
+        return getFieldStream(this.record, "149")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public String getSortTitle() {
         StringBuilder sb = getStringBuilderWith245();
-        int offset = this.record.getFields().stream().filter(f -> "245".equals(f.getTag()))
-                .map(f -> Integer.valueOf(f.getIndicator2()) - 48).findFirst().orElse(0);
+        int offset = getFieldStream(this.record, "245")
+                .map(f -> Integer.valueOf(f.getIndicator2()) - 48)
+                .findFirst()
+                .orElse(0);
         return sb.substring(offset);
     }
 
     @Override
     public String getTitle() {
         StringBuilder sb = getStringBuilderWith245();
-        String edition = this.record.getFields().stream().filter(f -> "250".equals(f.getTag()))
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a').map(Subfield::getData)
-                .collect(Collectors.joining(". "));
         removeTrailingSlashAndSpace(sb);
+        String edition = getFieldStream(this.record, "250")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
+                .collect(Collectors.joining(". "));
         if (!edition.isEmpty()) {
             sb.append(". ").append(edition);
             removeTrailingSlashAndSpace(sb);
@@ -396,11 +382,15 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
     @Override
     public Date getUpdated() {
         try {
-            Date updated = this.dateFormat.parse(this.record.getFields().stream().filter(f -> "005".equals(f.getTag()))
-                    .map(Field::getData).findFirst().orElse(null));
+            Date updated = this.dateFormat.parse(getFieldStream(this.record, "005")
+                    .map(Field::getData)
+                    .findFirst()
+                    .orElse(null));
             for (Record holding : this.holdings) {
-                Date holdingUpdated = this.dateFormat.parse(holding.getFields().stream()
-                        .filter(f -> "005".equals(f.getTag())).map(Field::getData).findFirst().orElse(null));
+                Date holdingUpdated = this.dateFormat.parse(getFieldStream(holding, "005")
+                        .map(Field::getData)
+                        .findFirst()
+                        .orElse(null));
                 if (holdingUpdated.compareTo(updated) > 0) {
                     updated = holdingUpdated;
                 }
@@ -429,8 +419,10 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
     @Override
     public int getYear() {
         int year = 0;
-        String dateField = this.record.getFields().stream().filter(f -> "008".equals(f.getTag())).map(Field::getData)
-                .findFirst().orElse("0000000000000000");
+        String dateField = getFieldStream(this.record, "008")
+                .map(Field::getData)
+                .findFirst()
+                .orElse("0000000000000000");
         String endDate = parseYear(dateField.substring(11, 15));
         if (endDate != null) {
             year = Integer.parseInt(endDate);
@@ -445,9 +437,11 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     @Override
     public boolean isCore() {
-        return this.record.getFields().stream().filter(f -> "655".equals(f.getTag()))
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a').map(Subfield::getData)
-                .anyMatch(s -> "core material".equalsIgnoreCase(s));
+        return getFieldStream(this.record, "655")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
+                .anyMatch("core material"::equalsIgnoreCase);
     }
 
     @Override
@@ -457,9 +451,11 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     @Override
     public boolean isLaneConnex() {
-        return this.record.getFields().stream().filter(f -> "655".equals(f.getTag()))
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a')
-                .anyMatch(s -> "laneconnex".equalsIgnoreCase(s.getData()));
+        return getFieldStream(this.record, "655")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
+                .anyMatch("laneconnex"::equalsIgnoreCase);
     }
 
     protected Version createVersion(final Record record) {
@@ -468,8 +464,9 @@ public class BibMarcEresource extends AbstractMARCRecordObject implements Eresou
 
     private StringBuilder getStringBuilderWith245() {
         StringBuilder sb = new StringBuilder();
-        this.record.getFields().stream().filter(f -> "245".equals(f.getTag())).findFirst()
-                .ifPresent(f -> f.getSubfields().stream().filter(s -> "abnpq".indexOf(s.getCode()) > -1).forEach(s -> {
+        getFieldStream(this.record, "245")
+            .findFirst()
+            .ifPresent(f -> f.getSubfields().stream().filter(s -> "abnpq".indexOf(s.getCode()) > -1).forEach(s -> {
                     String data = s.getData();
                     if ('b' == s.getCode()) {
                         if (sb.indexOf(":") != sb.length() - 1) {

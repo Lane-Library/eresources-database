@@ -14,7 +14,7 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class TypeFactory {
+public class TypeFactory extends MARCRecordSupport {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
@@ -81,9 +81,12 @@ public class TypeFactory {
     }
 
     public String getPrimaryType(final Record record) {
-        String primaryType = record.getFields().stream()
-                .filter(f -> "655".equals(f.getTag()) && '4' == f.getIndicator1() && '7' == f.getIndicator2())
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a').map(Subfield::getData)
+        getFieldStream(record, "655");
+        String primaryType = getFieldStream(record, "655")
+                .filter(f -> '4' == f.getIndicator1() && '7' == f.getIndicator2())
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
                 .findFirst().orElse("");
         primaryType = PRIMARY_TYPES.get(primaryType.toLowerCase(Locale.US));
         String type;
@@ -144,8 +147,10 @@ public class TypeFactory {
     }
 
     private String getPrintOrDigital(final Record record) {
-        boolean isDigital = record.getFields().stream().filter(f -> "245".equals(f.getTag()))
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'h').map(Subfield::getData)
+        boolean isDigital = getFieldStream(record, "245")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'h')
+                .map(Subfield::getData)
                 .anyMatch(s -> s.contains("digital"));
         if (isDigital) {
             return "Digital";
@@ -156,43 +161,58 @@ public class TypeFactory {
 
     private Collection<String> getRawTypes(final Record record) {
         Set<String> rawTypes = new HashSet<>();
-        List<Field> fields655 = record.getFields().stream().filter(f -> "655".equals(f.getTag())).collect(Collectors.toList());
+        List<Field> fields655 = getFieldStream(record, "655").collect(Collectors.toList());
         boolean installedSoftware = fields655.stream()
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a')
-                .anyMatch(s -> "Software, Installed".equalsIgnoreCase(s.getData()));
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
+                .anyMatch("Software, Installed"::equalsIgnoreCase);
         if (installedSoftware) {
             if (fields655.stream()
-                    .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a')
-                    .anyMatch(s -> "Subset, Biotools".equalsIgnoreCase(s.getData()))) {
+                    .flatMap(f -> f.getSubfields().stream())
+                    .filter(s -> s.getCode() == 'a')
+                    .map(Subfield::getData)
+                    .anyMatch("Subset, Biotools"::equalsIgnoreCase)) {
                 rawTypes.add("Biotools Software, Installed");
             }
             if (fields655.stream()
-                    .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a')
-                    .anyMatch(s -> "Statistics".equalsIgnoreCase(s.getData()))) {
+                    .flatMap(f -> f.getSubfields().stream())
+                    .filter(s -> s.getCode() == 'a')
+                    .map(Subfield::getData)
+                    .anyMatch("Statistics"::equalsIgnoreCase)) {
                 rawTypes.add("Statistics Software, Installed");
             }
         }
         rawTypes.addAll(fields655.stream()
-                .flatMap(f -> f.getSubfields().stream()).filter(s -> s.getCode() == 'a').map(Subfield::getData)
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
                 .collect(Collectors.toSet()));
-        if (record.getFields().stream().filter(f -> "245".equals(f.getTag())).flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'h').map(Subfield::getData).anyMatch(s -> s.contains("videorecording"))) {
+        if (getFieldStream(record, "245")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'h')
+                .map(Subfield::getData)
+                .anyMatch(s -> s.contains("videorecording"))) {
             rawTypes.add("Video");
         }
-        if (record.getFields().stream().filter(f -> "035".equals(f.getTag())).flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a').map(Subfield::getData).anyMatch(s -> s.startsWith("(Bassett)"))) {
+        if (getFieldStream(record, "035")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
+                .anyMatch(s -> s.startsWith("(Bassett)"))) {
             rawTypes.add("Bassett");
         }
-        if (record.getFields().stream().filter(f -> "830".equals(f.getTag())).flatMap(f -> f.getSubfields().stream())
-                .filter(s -> s.getCode() == 'a').map(Subfield::getData)
+        if (getFieldStream(record, "830")
+                .flatMap(f -> f.getSubfields().stream())
+                .filter(s -> s.getCode() == 'a')
+                .map(Subfield::getData)
                 .map(String::toLowerCase)
                 .anyMatch(s -> s.contains("stanford") && s.contains("grand rounds"))) {
             rawTypes.add("Grand Rounds");
         }
-        return rawTypes.stream().map(this::getCompositeType).filter(this::isAllowable).collect(Collectors.toSet());
-    }
-
-    private boolean isAllowable(final String type) {
-        return ALLOWED_TYPES.contains(type);
+        return rawTypes.stream()
+                .map(this::getCompositeType)
+                .filter(ALLOWED_TYPES::contains)
+                .collect(Collectors.toSet());
     }
 }

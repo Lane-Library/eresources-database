@@ -193,7 +193,7 @@ public class BibMarcEresourceTest {
     @Test
     public void testGetMeshTerms() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("650");
+        expect(this.field.getTag()).andReturn("650").times(2);
         expect(this.field.getIndicator2()).andReturn('2');
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('a');
@@ -205,7 +205,7 @@ public class BibMarcEresourceTest {
 
     @Test
     public void testGetPublicationAuthorsText() {
-        expect(this.field.getTag()).andReturn("100").times(2);
+        expect(this.field.getTag()).andReturn("100").times(4);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
         expect(this.subfield.getCode()).andReturn('a').times(2);
         expect(this.subfield.getData()).andReturn("author").times(2);
