@@ -1,6 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Collections;
