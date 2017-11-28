@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
@@ -49,9 +50,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     private List<Record> holdings;
 
-    private int[] itemCount;
-
-    private String keywords;
+    private ItemCount itemCount;
 
     private Record record;
 
@@ -62,19 +61,21 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     private Collection<String> types;
 
     private String primaryType;
+    
+    private KeywordsStrategy keywordsStrategy;
 
-    public BibMarcEresource(final List<Record> recordList, final String keywords, final int[] itemCount,
+    public BibMarcEresource(final List<Record> recordList, final KeywordsStrategy keywordsStrategy, final ItemCount itemCount,
             final TypeFactory typeFactory) {
-        this.keywords = keywords;
         this.record = recordList.get(0);
         this.holdings = recordList.subList(1, recordList.size());
+        this.keywordsStrategy = keywordsStrategy;
         this.itemCount = itemCount;
         this.typeFactory = typeFactory;
     }
 
     @Override
     public Collection<String> getAbbreviatedTitles() {
-        return getSubfieldDataStream(getFieldStream(this.record, "246")
+        return getSubfieldData(getFields(this.record, "246")
                 .filter(f -> {
                     Subfield i = f.getSubfields()
                             .stream()
@@ -93,13 +94,13 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public Collection<String> getAlternativeTitles() {
-        return getSubfieldDataStream(this.record, "130|210|246|247", "a")
+        return getSubfieldData(this.record, "130|210|246|247", "a")
                 .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<String> getBroadMeshTerms() {
-        return getSubfieldDataStream(getFieldStream(this.record, "650")
+        return getSubfieldData(getFields(this.record, "650")
                 .filter(f -> f.getIndicator1() == '4' && f.getIndicator2() == '2'), "a")
                 .map(this::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet());
@@ -108,7 +109,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     @Override
     public String getDate() {
         String date = null;
-        List<Field> fields773 = getFieldStream(this.record, "773")
+        List<Field> fields773 = getFields(this.record, "773")
                 .collect(Collectors.toList());
         int subfieldWCount = 0;
         for (int i = 0; i < fields773.size(); i++) {
@@ -128,7 +129,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
             date = DateParser.parseDate(date.replaceAll("(:|;)", " "));
         }
         if (null == date || "0".equals(date) || date.isEmpty()) {
-            String field008 = getFieldStream(this.record, "008")
+            String field008 = getFields(this.record, "008")
                     .map(Field::getData)
                     .findFirst().orElse("");
             String endDate = parseYear(field008.substring(11, 15));
@@ -149,7 +150,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        getSubfieldDataStream(this.record, "520")
+        getSubfieldData(this.record, "520")
             .forEach(s -> {
                 if (sb.length() > 0) {
                     sb.append(' ');
@@ -157,7 +158,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
                 sb.append(s);
             });
         if (sb.length() == 0) {
-            getSubfieldDataStream(this.record, "505")
+            getSubfieldData(this.record, "505")
                 .forEach(s -> {
                     if (sb.length() > 0) {
                         sb.append(' ');
@@ -170,17 +171,20 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public int[] getItemCount() {
-        return this.itemCount;
+        return this.itemCount.itemCount(getRecordId());
     }
 
     @Override
     public String getKeywords() {
-        return this.keywords;
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.keywordsStrategy.getKeywords(this.record));
+        this.holdings.stream().forEach(holding -> sb.append(this.keywordsStrategy.getKeywords(holding)));
+        return sb.toString();
     }
 
     @Override
     public Collection<String> getMeshTerms() {
-        return getSubfieldDataStream(getFieldStream(this.record, "650|651")
+        return getSubfieldData(getFields(this.record, "650|651")
                 .filter(f -> ("650".equals(f.getTag()) && "2356".indexOf(f.getIndicator2()) > -1)
                         || ("651".equals(f.getTag()) && f.getIndicator2() == '7')), "a")
                 .map(this::maybeStripTrailingPeriod)
@@ -197,7 +201,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public Collection<String> getPublicationAuthors() {
-        return Collections.unmodifiableCollection(getSubfieldDataStream(getFieldStream(this.record, "100|700")
+        return Collections.unmodifiableCollection(getSubfieldData(getFields(this.record, "100|700")
                 .filter(f -> "100".equals(f.getTag())
                         || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal")))), "a")
                 .map(s -> s.replaceFirst(",$", ""))
@@ -208,7 +212,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public String getPublicationAuthorsText() {
-        String authorsText =  getSubfieldDataStream(this.record, "245", "c")
+        String authorsText =  getSubfieldData(this.record, "245", "c")
                 // get the last c
                 .reduce((a, b) -> b)
                 .orElse(null);
@@ -231,13 +235,13 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     @Override
     public Collection<String> getPublicationLanguages() {
         Set<String> languages = new HashSet<>();
-        String field008 = getFieldStream(this.record, "008")
+        String field008 = getFields(this.record, "008")
                 .map(Field::getData)
                 .findFirst()
                 .orElse("");
         String lang = field008.substring(35, 38);
         languages.add(LANGUAGE_MAP.getLanguage(lang.toLowerCase(Locale.US)));
-        languages.addAll(getSubfieldDataStream(this.record, "041")
+        languages.addAll(getSubfieldData(this.record, "041")
                 .map(String::toLowerCase)
                 .map(LANGUAGE_MAP::getLanguage)
                 .collect(Collectors.toSet()));
@@ -247,7 +251,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     @Override
     public String getPublicationText() {
         StringBuilder sb = new StringBuilder();
-        List<Field> fields773 = getFieldStream(this.record, "773")
+        List<Field> fields773 = getFields(this.record, "773")
                 .collect(Collectors.toList());
         int subfieldWCount = 0;
         for (int i = 0; i < fields773.size(); i++) {
@@ -279,7 +283,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public String getPublicationTitle() {
-      List<Field> fields773 = getFieldStream(this.record, "773")
+      List<Field> fields773 = getFields(this.record, "773")
               .collect(Collectors.toList());
       int countOf733W = 0;
       String data = null;
@@ -298,7 +302,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public int getRecordId() {
-        return Integer.parseInt(getFieldStream(this.record, "001")
+        return Integer.parseInt(getFields(this.record, "001")
                 .map(f -> f.getData())
                 .findFirst()
                 .orElse("0"));
@@ -311,7 +315,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public String getShortTitle() {
-        return getSubfieldDataStream(this.record, "149", "a")
+        return getSubfieldData(this.record, "149", "a")
                 .findFirst()
                 .orElse(null);
     }
@@ -319,7 +323,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     @Override
     public String getSortTitle() {
         StringBuilder sb = getStringBuilderWith245();
-        int offset = getFieldStream(this.record, "245")
+        int offset = getFields(this.record, "245")
                 .map(f -> Integer.valueOf(f.getIndicator2()) - 48)
                 .findFirst()
                 .orElse(0);
@@ -330,7 +334,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     public String getTitle() {
         StringBuilder sb = getStringBuilderWith245();
         removeTrailingSlashAndSpace(sb);
-        String edition = getSubfieldDataStream(this.record, "250", "a")
+        String edition = getSubfieldData(this.record, "250", "a")
                 .collect(Collectors.joining(". "));
         if (!edition.isEmpty()) {
             sb.append(". ").append(edition);
@@ -356,12 +360,12 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     @Override
     public Date getUpdated() {
         try {
-            Date updated = this.dateFormat.parse(getFieldStream(this.record, "005")
+            Date updated = this.dateFormat.parse(getFields(this.record, "005")
                     .map(Field::getData)
                     .findFirst()
                     .orElse(null));
             for (Record holding : this.holdings) {
-                Date holdingUpdated = this.dateFormat.parse(getFieldStream(holding, "005")
+                Date holdingUpdated = this.dateFormat.parse(getFields(holding, "005")
                         .map(Field::getData)
                         .findFirst()
                         .orElse(null));
@@ -393,7 +397,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     @Override
     public int getYear() {
         int year = 0;
-        String dateField = getFieldStream(this.record, "008")
+        String dateField = getFields(this.record, "008")
                 .map(Field::getData)
                 .findFirst()
                 .orElse("0000000000000000");
@@ -411,7 +415,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public boolean isCore() {
-        return getSubfieldDataStream(this.record, "655", "a")
+        return getSubfieldData(this.record, "655", "a")
                 .anyMatch("core material"::equalsIgnoreCase);
     }
 
@@ -422,7 +426,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public boolean isLaneConnex() {
-        return getSubfieldDataStream(this.record, "655", "a")
+        return getSubfieldData(this.record, "655", "a")
                 .anyMatch("laneconnex"::equalsIgnoreCase);
     }
 
@@ -432,7 +436,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     private StringBuilder getStringBuilderWith245() {
         StringBuilder sb = new StringBuilder();
-        getFieldStream(this.record, "245")
+        getFields(this.record, "245")
             .findFirst()
             .ifPresent(f -> f.getSubfields().stream().filter(s -> "abnpq".indexOf(s.getCode()) > -1).forEach(s -> {
                     String data = s.getData();

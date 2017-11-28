@@ -14,10 +14,15 @@ public class AuthMarcEresource extends BibMarcEresource {
 
     private Record record;
 
-    public AuthMarcEresource(final Record record, final String keywords,
+    public AuthMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
             final TypeFactory typeFactory) {
-        super(Collections.singletonList(record), keywords, NO_ITEMS, typeFactory);
+        super(Collections.singletonList(record), keywordsStrategy, null, typeFactory);
         this.record = record;
+    }
+
+    @Override
+    public int[] getItemCount() {
+        return NO_ITEMS;
     }
 
     @Override
@@ -48,7 +53,7 @@ public class AuthMarcEresource extends BibMarcEresource {
     @Override
     public int getYear() {
         int year;
-        Optional<String> subfield943b = getSubfieldDataStream(this.record, "943", "b")
+        Optional<String> subfield943b = getSubfieldData(this.record, "943", "b")
                 .findFirst();
         if (subfield943b.isPresent()) {
             String value = subfield943b.get();

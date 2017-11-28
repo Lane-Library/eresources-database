@@ -50,21 +50,15 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
         while (hasNext()) {
             List<Record> recordList = next();
             Record record = recordList.get(0);
-            StringBuilder sb = new StringBuilder(this.keywordsStrategy.getKeywords(record));
-            recordList.subList(1, recordList.size()).stream()
-                    .forEach(r -> sb.append(this.keywordsStrategy.getKeywords(r)));
-            String keywords = sb.toString();
-            int[] itemCount = this.itemCount.itemCount(record.getFields().stream().filter(f -> "001".equals(f.getTag()))
-                    .map(f -> f.getData()).map(Integer::parseInt).findFirst().orElse(0));
             if (record.getLeaderByte(6) == 'q') {
-                this.eresourceHandler.handleEresource(new AuthMarcEresource(record, keywords, this.typeFactory));
+                this.eresourceHandler.handleEresource(new AuthMarcEresource(record, this.keywordsStrategy, this.typeFactory));
             } else {
                 this.eresourceHandler
-                        .handleEresource(new BibMarcEresource(recordList, keywords, itemCount, this.typeFactory));
+                        .handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy, this.itemCount, this.typeFactory));
                 int altTitleCount = (int) record.getFields().stream().filter(f -> "249".equals(f.getTag())).count();
                 for (int i = 0; i < altTitleCount; i++) {
                     this.eresourceHandler.handleEresource(
-                            new AltTitleMarcEresource(recordList, keywords, this.typeFactory, itemCount, i + 1));
+                            new AltTitleMarcEresource(recordList, this.keywordsStrategy, this.typeFactory, this.itemCount, i + 1));
                 }
             }
         }

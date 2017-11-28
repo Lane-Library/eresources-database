@@ -34,7 +34,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public String getAdditionalText() {
         String additionalText = null;
-        List<Field> fields = getFieldStream(this.holding, "866")
+        List<Field> fields = getFields(this.holding, "866")
                 .collect(Collectors.toList());
         if (fields.size() > 1) {
             additionalText = "";
@@ -51,7 +51,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public String getDates() {
-        Field field = getFieldStream(this.holding, "866")
+        Field field = getFields(this.holding, "866")
                 .findFirst()
                 .orElse(null);
         String dates = null;
@@ -64,11 +64,11 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                 .orElse(null);
         }
         if (dates == null && needToAddBibDates(this.eresource)) {
-            dates = getSubfieldDataStream(this.bib, "149", "d")
+            dates = getSubfieldData(this.bib, "149", "d")
                     .findFirst()
                     .orElse(null);
             if (dates == null) {
-                dates = getSubfieldDataStream(this.bib, "260", "c")
+                dates = getSubfieldData(this.bib, "260", "c")
                         .findFirst()
                         .orElse("");
             }
@@ -93,16 +93,16 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
-        boolean has856 = getFieldStream(this.holding, "856")
+        boolean has856 = getFields(this.holding, "856")
                 .count() > 0;
         if (!has856) {
-            links.add(new CatalogLink(getFieldStream(this.bib, "001")
+            links.add(new CatalogLink(getFields(this.bib, "001")
                     .map(f -> f.getData())
                     .findFirst()
                     .orElse(null), this));
         }
         Version version = this;
-        getFieldStream(this.holding, "856")
+        getFields(this.holding, "856")
             .filter(f -> !isGetPassword856(f))
             .map(f -> new MarcLink(f, version))
             .forEach(l -> links.add(l));
@@ -120,7 +120,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public String getPublisher() {
         String publisher = null;
-        Field field = getFieldStream(this.holding, "844")
+        Field field = getFields(this.holding, "844")
                 .findFirst()
                 .orElse(null);
         if (field != null) {
@@ -137,7 +137,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public String getSummaryHoldings() {
         String value = null;
-        Field field = getFieldStream(this.holding, "866")
+        Field field = getFields(this.holding, "866")
                 .findFirst()
                 .orElse(null);
         if (field != null) {
@@ -154,7 +154,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public boolean hasGetPasswordLink() {
-        return getSubfieldDataStream(this.holding, "856", "u")
+        return getSubfieldData(this.holding, "856", "u")
                 .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
     }
 

@@ -1,6 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -18,13 +18,30 @@ import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.lane.catalog.impl.xml.UTF8ComposingMarcReader;
 
-
 public class TrailingSlashInTitleTest implements EresourceHandler {
 
     private Eresource eresource;
 
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public void handleEresource(final Eresource eresource) {
+        this.eresource = eresource;
+    }
+
+    @Override
+    public void run() {
+    }
+
     @Before
     public void setUp() {
+    }
+
+    @Override
+    public void stop() {
     }
 
     @Test
@@ -36,18 +53,19 @@ public class TrailingSlashInTitleTest implements EresourceHandler {
             @Override
             public Map<String, String> buildAugmentations() {
                 return Collections.emptyMap();
-            }};
+            }
+        };
         builder.setAuthTextAugmentation(new AuthTextAugmentation(augmentationsService));
         builder.setReservesTextAugmentation(new ReservesTextAugmentation(augmentationsService));
         builder.setItemCount(new ItemCount(new ItemService() {
-            
-            @Override
-            public Map<Integer, Integer> getTotals() {
-                return Collections.emptyMap();
-            }
-            
+
             @Override
             public Map<Integer, Integer> getAvailables() {
+                return Collections.emptyMap();
+            }
+
+            @Override
+            public Map<Integer, Integer> getTotals() {
                 return Collections.emptyMap();
             }
         }));
@@ -55,23 +73,5 @@ public class TrailingSlashInTitleTest implements EresourceHandler {
         builder.setEresourceHandler(this);
         reader.parse(new InputSource(getClass().getResourceAsStream("3317.mrc")));
         assertEquals("Detection and measurement of free Ca 2+ in cells", this.eresource.getTitle());
-    }
-
-    @Override
-    public void run() {
-    }
-
-    @Override
-    public int getCount() {
-        return 0;
-    }
-
-    @Override
-    public void handleEresource(Eresource eresource) {
-        this.eresource = eresource;
-    }
-
-    @Override
-    public void stop() {
     }
 }

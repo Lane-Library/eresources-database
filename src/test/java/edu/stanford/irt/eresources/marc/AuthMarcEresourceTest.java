@@ -17,6 +17,8 @@ public class AuthMarcEresourceTest {
 
     private AuthMarcEresource eresource;
 
+    private KeywordsStrategy keywordsStrategy;
+
     private Record record;
 
     private TypeFactory typeFactory;
@@ -24,8 +26,9 @@ public class AuthMarcEresourceTest {
     @Before
     public void setUp() {
         this.record = mock(Record.class);
+        this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.typeFactory = mock(TypeFactory.class);
-        this.eresource = new AuthMarcEresource(this.record, "", this.typeFactory);
+        this.eresource = new AuthMarcEresource(this.record, this.keywordsStrategy, this.typeFactory);
     }
 
     @Test

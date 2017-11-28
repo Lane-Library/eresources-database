@@ -14,7 +14,7 @@ public class PubMedSearcherTest {
 
     @Before
     public void setUp() throws Exception {
-        this.searchers = new ArrayList<PubmedSearcher>();
+        this.searchers = new ArrayList<>();
         this.searchers.add(new PubmedSearcher("field_foo", "value_foo", "24120354"));
         this.searchers.add(new PubmedSearcher("field_bar", "value_bar", "24120355"));
     }

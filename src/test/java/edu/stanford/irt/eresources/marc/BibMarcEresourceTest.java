@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -28,6 +29,10 @@ public class BibMarcEresourceTest {
 
     private Field field;
 
+    private ItemCount itemCount;
+
+    private KeywordsStrategy keywordsStrategy;
+
     private Record record;
 
     private Subfield subfield;
@@ -37,9 +42,11 @@ public class BibMarcEresourceTest {
     @Before
     public void setUp() {
         this.record = mock(Record.class);
+        this.keywordsStrategy = mock(KeywordsStrategy.class);
+        this.itemCount = mock(ItemCount.class);
         this.typeFactory = mock(TypeFactory.class);
-        this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }), "keywords",
-                new int[] { 1, 1 }, this.typeFactory);
+        this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }),
+                this.keywordsStrategy, this.itemCount, this.typeFactory);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
     }
@@ -184,10 +191,15 @@ public class BibMarcEresourceTest {
 
     @Test
     public void testGetItemCount() {
-        replay(this.record, this.field, this.subfield);
-        assertEquals(1, this.eresource.getItemCount()[0]);
-        assertEquals(1, this.eresource.getItemCount()[1]);
-        verify(this.record, this.field, this.subfield);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("001");
+        expect(this.field.getData()).andReturn("1");
+        expect(this.itemCount.itemCount(1)).andReturn(new int[] { 1, 1 });
+        replay(this.record, this.field, this.subfield, this.itemCount);
+        int[] count = this.eresource.getItemCount();
+        assertEquals(1, count[0]);
+        assertEquals(1, count[1]);
+        verify(this.record, this.field, this.subfield, this.itemCount);
     }
 
     @Test

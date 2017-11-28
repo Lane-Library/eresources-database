@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.marc;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -14,9 +15,9 @@ public class AltTitleMarcEresource extends BibMarcEresource {
 
     private Record record;
 
-    public AltTitleMarcEresource(final List<Record> recordList, final String keywords, final TypeFactory typeFactory,
-            final int[] itemCount, final int item) {
-        super(recordList, keywords, itemCount, typeFactory);
+    public AltTitleMarcEresource(final List<Record> recordList, final KeywordsStrategy keywordsStrategy, final TypeFactory typeFactory,
+            final ItemCount itemCount, final int item) {
+        super(recordList, keywordsStrategy, itemCount, typeFactory);
         this.record = recordList.get(0);
         this.item = item;
     }
@@ -33,7 +34,7 @@ public class AltTitleMarcEresource extends BibMarcEresource {
 
     @Override
     public String getTitle() {
-        Field field = getFieldStream(this.record, "249").collect(Collectors.toList()).get(this.item - 1);
+        Field field = getFields(this.record, "249").collect(Collectors.toList()).get(this.item - 1);
         return field.getSubfields().stream().filter(s -> s.getCode() == 'a').map(Subfield::getData).findFirst().orElse(null);
     }
 
