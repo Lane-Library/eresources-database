@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.sax;
+package edu.stanford.irt.eresources;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.VersionComparator;
+import edu.stanford.irt.eresources.sax.SAXLink;
+import edu.stanford.irt.eresources.sax.SAXVersion;
 
 /**
  * @author ryanmax
