@@ -15,8 +15,8 @@ public class PubMedSearcherTest {
     @Before
     public void setUp() throws Exception {
         this.searchers = new ArrayList<PubmedSearcher>();
-        this.searchers.add(new PubmedSearcher("field_foo", "value_foo", "24120354"));
-        this.searchers.add(new PubmedSearcher("field_bar", "value_bar", "24120355"));
+        this.searchers.add(new PubmedSearcher("field_foo", "value_foo", "24120354", "api_key"));
+        this.searchers.add(new PubmedSearcher("field_bar", "value_bar", "24120355", "api_key"));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class PubMedSearcherTest {
 
     @Test(expected = IllegalStateException.class)
     public final void testNullQuery() throws Exception {
-        PubmedSearcher search = new PubmedSearcher("field", "value", null);
+        PubmedSearcher search = new PubmedSearcher("field", "value", null, "api_key");
         search.getPmids();
     }
 }
