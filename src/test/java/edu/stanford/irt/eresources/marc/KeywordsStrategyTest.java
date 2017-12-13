@@ -11,8 +11,6 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.stanford.irt.eresources.sax.AuthTextAugmentation;
-import edu.stanford.irt.eresources.sax.ReservesTextAugmentation;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;

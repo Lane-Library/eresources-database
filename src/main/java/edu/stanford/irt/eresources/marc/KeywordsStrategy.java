@@ -2,8 +2,6 @@ package edu.stanford.irt.eresources.marc;
 
 import java.util.List;
 
-import edu.stanford.irt.eresources.sax.AuthTextAugmentation;
-import edu.stanford.irt.eresources.sax.ReservesTextAugmentation;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -30,8 +28,7 @@ public class KeywordsStrategy {
         byte leaderByte6 = record.getLeaderByte(6);
         if ("uvxy".indexOf(leaderByte6) > -1) {
             fields.stream().filter(f -> "852".equals(f.getTag()) || "866".equals(f.getTag()))
-                    .flatMap(f -> f.getSubfields().stream())
-                    .map(Subfield::getData)
+                    .flatMap(f -> f.getSubfields().stream()).map(Subfield::getData)
                     .forEach(s -> sb.append(s).append(' '));
         } else if (leaderByte6 == 'q') {
             fields.stream().filter(f -> {
@@ -58,11 +55,7 @@ public class KeywordsStrategy {
                 }
             }
             String reservesText = this.reservesAugmentation.getReservesAugmentations(
-                    fields.stream()
-                        .filter(f -> "001".equals(f.getTag()))
-                        .map(Field::getData)
-                        .findFirst()
-                        .orElse("0"));
+                    fields.stream().filter(f -> "001".equals(f.getTag())).map(Field::getData).findFirst().orElse("0"));
             if (reservesText != null) {
                 sb.append(' ').append(reservesText);
             }

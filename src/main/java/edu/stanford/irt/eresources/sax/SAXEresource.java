@@ -5,92 +5,25 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import edu.stanford.irt.eresources.Eresource;
-import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
 public class SAXEresource implements Cloneable, Eresource {
 
-    private static final Set<String> ALLOWED_TYPES = new HashSet<>();
-
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
-            EresourceConstants.AUDIO, "Bassett", "Biotools Software, Installed", EresourceConstants.BOOK,
-            EresourceConstants.CHAPTER, "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset",
-            "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class",
-            "Lane Web Page", "Mobile", "Print", EresourceConstants.SOFTWARE, "Software, Installed",
-            "Statistics Software, Installed", "Statistics", EresourceConstants.VIDEO, EresourceConstants.WEBSITE };
-
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
-
-    private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
-
-    private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { EresourceConstants.ARTICLE, "Articles" },
-            { EresourceConstants.AUDIO, "Sound Recordings" }, { EresourceConstants.BOOK, "Book Sets", "Books" },
-            { EresourceConstants.CHAPTER, "Chapters" },
-            { "Calculators, Formulas, Algorithms", "Decision Support Techniques", "Calculators, Clinical",
-                    "Algorithms" },
-            { EresourceConstants.DATABASE, "Databases" }, { "Dataset", "Datasets" },
-            { "Exam Prep", "Examination Questions", "Outlines", "Problems", "Study Guides" },
-            { EresourceConstants.IMAGE, "Graphics" }, { EresourceConstants.JOURNAL, "Periodicals", "Newspapers" },
-            { "Mobile", "Subset, Mobile" },
-            { EresourceConstants.SOFTWARE, "Software, Biocomputational", "Software, Educational",
-                    "Software, Statistical" },
-            { EresourceConstants.VIDEO, "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-            { EresourceConstants.WEBSITE, "Websites" } };
 
     private static final String ENG = "English";
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
-    private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
-
     private static final String SEMICOLON_SPACE = "; ";
-    static {
-        for (String type : ALLOWED_TYPES_INITIALIZER) {
-            ALLOWED_TYPES.add(type);
-        }
-        for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
-            for (int j = 1; j < element.length; j++) {
-                COMPOSITE_TYPES.put(element[j], element[0]);
-            }
-        }
-        PRIMARY_TYPES.put("articles", EresourceConstants.ARTICLE);
-        PRIMARY_TYPES.put("books", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("book sets", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("cartographic materials", EresourceConstants.OTHER);
-        PRIMARY_TYPES.put("collections", EresourceConstants.COLLECTION);
-        PRIMARY_TYPES.put("components", EresourceConstants.COMPONENT);
-        PRIMARY_TYPES.put("computer files", EresourceConstants.SOFTWARE);
-        PRIMARY_TYPES.put("databases", EresourceConstants.DATABASE);
-        PRIMARY_TYPES.put("documents", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("laneclass", "Lane Class");
-        PRIMARY_TYPES.put("lanepage", "Lane Web Page");
-        PRIMARY_TYPES.put("leaflets", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("pamphlets", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("periodicals", EresourceConstants.JOURNAL);
-        PRIMARY_TYPES.put("search engines", EresourceConstants.DATABASE);
-        PRIMARY_TYPES.put("serials", EresourceConstants.SERIAL);
-        PRIMARY_TYPES.put("sound recordings", EresourceConstants.AUDIO);
-        PRIMARY_TYPES.put("visual materials", EresourceConstants.VISUAL_MATERIAL);
-        PRIMARY_TYPES.put("websites", EresourceConstants.WEBSITE);
-        // authority types: keep?
-        PRIMARY_TYPES.put("events", "Event");
-        PRIMARY_TYPES.put("persons", EresourceConstants.PERSON);
-        PRIMARY_TYPES.put("persons, female", EresourceConstants.PERSON);
-        PRIMARY_TYPES.put("persons, male", EresourceConstants.PERSON);
-        PRIMARY_TYPES.put("jurisdictions, subdivisions", EresourceConstants.ORGANIZATION);
-        PRIMARY_TYPES.put("organizations", EresourceConstants.ORGANIZATION);
-        PRIMARY_TYPES.put("organizations, subdivisions", EresourceConstants.ORGANIZATION);
-    }
 
     private Collection<String> abbreviatedTitles;
 
@@ -119,8 +52,6 @@ public class SAXEresource implements Cloneable, Eresource {
     private Collection<String> meshTerms;
 
     private String primaryType;
-
-    private String printOrDigital;
 
     private Collection<String> publicationAuthors = new ArrayList<>();
 
@@ -207,10 +138,7 @@ public class SAXEresource implements Cloneable, Eresource {
     }
 
     public void addType(final String type) {
-        String typeToAdd = getCompositeType(type);
-        if (isAllowable(typeToAdd)) {
-            this.types.add(typeToAdd);
-        }
+        this.types.add(type);
     }
 
     public void addVersion(final Version version) {
@@ -265,10 +193,6 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.date;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getDescription()
-     */
     @Override
     public String getDescription() {
         return this.description;
@@ -279,28 +203,16 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.id;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getItemCount()
-     */
     @Override
     public int[] getItemCount() {
         return this.count;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getKeywords()
-     */
     @Override
     public String getKeywords() {
         return this.keywords;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getMeshTerms()
-     */
     @Override
     public Collection<String> getMeshTerms() {
         if (null == this.meshTerms) {
@@ -309,47 +221,9 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.meshTerms;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getPrimaryType()
-     */
     @Override
     public String getPrimaryType() {
-        String type;
-        if (this.primaryType == null) {
-            type = EresourceConstants.OTHER;
-        } else if (EresourceConstants.BOOK.equals(this.primaryType)) {
-            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital();
-        } else if (EresourceConstants.JOURNAL.equals(this.primaryType)) {
-            type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital();
-        } else if (EresourceConstants.SERIAL.equals(this.primaryType)) {
-            if (this.types.contains(EresourceConstants.BOOK)) {
-                type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital();
-            } else if (this.types.contains(EresourceConstants.DATABASE)) {
-                type = EresourceConstants.DATABASE;
-            } else {
-                type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital();
-            }
-        } else if ("Component".equals(this.primaryType)) {
-            if (this.types.contains(EresourceConstants.ARTICLE) && this.types.contains(EresourceConstants.CHAPTER)) {
-                type = "Article/Chapter";
-            } else if (this.types.contains(EresourceConstants.ARTICLE)) {
-                type = EresourceConstants.ARTICLE;
-            } else if (this.types.contains(EresourceConstants.CHAPTER)) {
-                type = EresourceConstants.CHAPTER;
-            } else {
-                type = EresourceConstants.OTHER;
-            }
-        } else if (EresourceConstants.VISUAL_MATERIAL.equals(this.primaryType)) {
-            if (this.types.contains(EresourceConstants.VIDEO)) {
-                type = EresourceConstants.VIDEO;
-            } else {
-                type = EresourceConstants.IMAGE;
-            }
-        } else {
-            type = this.primaryType;
-        }
-        return type;
+        return this.primaryType;
     }
 
     @Override
@@ -417,19 +291,11 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.publicationVolume;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getRecordId()
-     */
     @Override
     public int getRecordId() {
         return this.recordId;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getRecordType()
-     */
     @Override
     public String getRecordType() {
         return this.recordType;
@@ -445,44 +311,21 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.sortTitle;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getTitle()
-     */
     @Override
     public String getTitle() {
         return this.title;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getTypes()
-     */
     @Override
     public Collection<String> getTypes() {
-        String pType = getPrimaryType();
-        if (!EresourceConstants.OTHER.equals(pType) && !"Article/Chapter".equals(pType)) {
-            this.types.add(pType);
-        }
-        if (pType.startsWith(EresourceConstants.BOOK) || pType.startsWith(EresourceConstants.JOURNAL)) {
-            this.types.add(pType.split(" ")[0]);
-        }
         return Collections.unmodifiableCollection(this.types);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getUpdated()
-     */
     @Override
     public Date getUpdated() {
         return new Date(this.updated.getTime());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getVersions()
-     */
     @Override
     public Collection<Version> getVersions() {
         if (this.versions == null) {
@@ -491,10 +334,6 @@ public class SAXEresource implements Cloneable, Eresource {
         return Collections.unmodifiableCollection(this.versions);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#getYear()
-     */
     @Override
     public int getYear() {
         return this.year;
@@ -505,10 +344,6 @@ public class SAXEresource implements Cloneable, Eresource {
         return this.isClone;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Eresource#isCore()
-     */
     @Override
     public boolean isCore() {
         return this.isCore;
@@ -526,6 +361,7 @@ public class SAXEresource implements Cloneable, Eresource {
         return false;
     }
 
+    @Override
     public boolean isLaneConnex() {
         return this.isLaneConnex;
     }
@@ -563,7 +399,7 @@ public class SAXEresource implements Cloneable, Eresource {
     }
 
     public void setPrimaryType(final String type) {
-        this.primaryType = PRIMARY_TYPES.get(type.toLowerCase(Locale.US));
+        this.primaryType = type;
     }
 
     public void setPublicationAuthorsText(final String authorsText) {
@@ -628,17 +464,6 @@ public class SAXEresource implements Cloneable, Eresource {
                 .toString();
     }
 
-    protected String getCompositeType(final String type) {
-        if (COMPOSITE_TYPES.containsKey(type)) {
-            return COMPOSITE_TYPES.get(type);
-        }
-        return type;
-    }
-
-    protected boolean isAllowable(final String type) {
-        return ALLOWED_TYPES.contains(type);
-    }
-
     private String buildPublicationAuthorsText() {
         StringBuilder sb = new StringBuilder();
         for (String auth : this.publicationAuthors) {
@@ -671,16 +496,5 @@ public class SAXEresource implements Cloneable, Eresource {
             }
         }
         return sb.toString();
-    }
-
-    private String getPrintOrDigital() {
-        if (null != this.printOrDigital) {
-            return this.printOrDigital;
-        }
-        this.printOrDigital = "Print";
-        if (this.isDigital) {
-            this.printOrDigital = "Digital";
-        }
-        return this.printOrDigital;
     }
 }
