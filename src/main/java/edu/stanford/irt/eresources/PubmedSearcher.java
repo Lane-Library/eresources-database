@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
  */
 public class PubmedSearcher {
 
-    private static final String BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&email=ryanmax@stanford.edu&term=";
+    private static final String BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed";
 
     private static final RequestConfig HTTP_CONFIG = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES)
             .build();
@@ -44,6 +44,8 @@ public class PubmedSearcher {
     private static final Logger LOG = LoggerFactory.getLogger(PubmedSearcher.class);
 
     private static final int RET_MAX = 500_000;
+
+    private String apiKey;
 
     private DocumentBuilderFactory factory;
 
@@ -57,10 +59,11 @@ public class PubmedSearcher {
 
     private XPath xpath;
 
-    public PubmedSearcher(final String field, final String value, final String query) {
+    public PubmedSearcher(final String field, final String value, final String query, final String apiKey) {
         if (query == null) {
             throw new IllegalStateException("null query");
         }
+        this.apiKey = apiKey;
         this.field = field;
         this.query = query;
         this.value = value;
@@ -91,8 +94,16 @@ public class PubmedSearcher {
         int retStart = 0;
         int retMax = RET_MAX;
         while (retMax >= RET_MAX) {
-            String q = BASE_URL + this.query + "&retmax=" + RET_MAX + "&retstart=" + retStart;
-            String xmlContent = getContent(q);
+            StringBuilder q = new StringBuilder(BASE_URL);
+            q.append("&api_key=");
+            q.append(this.apiKey);
+            q.append("&term=");
+            q.append(this.query);
+            q.append("&retmax=");
+            q.append(RET_MAX);
+            q.append("&retstart=");
+            q.append(retStart);
+            String xmlContent = getContent(q.toString());
             if (null == xmlContent) {
                 LOG.error("null xmlContent for {}", q);
                 return pmidList;
