@@ -21,7 +21,7 @@
 			<title>
 				<xsl:value-of select="$title" />
 			</title>
-			<primaryType>laneclass</primaryType>
+			<primaryType>Lane Class</primaryType>
 			<type>Lane Class</type>
 			<type>Lane Web Page</type>
 			<keywords>

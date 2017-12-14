@@ -20,7 +20,7 @@
             </xsl:variable>
             <xsl:variable name="title" select="normalize-space(h:head/h:title)"/>
             <title><xsl:value-of select="$title"/></title>
-            <primaryType>lanepage</primaryType>
+            <primaryType>Lane Web Page</primaryType>
             <type>Lane Web Page</type>
             <keywords> <xsl:value-of select="$keywords"/> </keywords>
             <xsl:choose>

@@ -59,8 +59,6 @@ public class TypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("computer files", EresourceConstants.SOFTWARE);
         PRIMARY_TYPES.put("databases", EresourceConstants.DATABASE);
         PRIMARY_TYPES.put("documents", EresourceConstants.BOOK);
-        PRIMARY_TYPES.put("laneclass", "Lane Class");
-        PRIMARY_TYPES.put("lanepage", "Lane Web Page");
         PRIMARY_TYPES.put("leaflets", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("pamphlets", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("periodicals", EresourceConstants.JOURNAL);
