@@ -10,7 +10,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.EresourceHandler;
-import edu.stanford.irt.eresources.PubmedSpecialTypesManager;
+import edu.stanford.irt.eresources.pubmed.PubmedSpecialTypesManager;
 
 /**
  *

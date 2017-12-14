@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.pubmed;
 
 import java.io.File;
 import java.util.HashSet;

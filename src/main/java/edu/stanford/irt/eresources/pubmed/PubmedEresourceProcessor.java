@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.pubmed;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
+import edu.stanford.irt.eresources.AbstractEresourceProcessor;
+import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
 

@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.pubmed;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,6 +22,8 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+
+import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 /**
  * abstract class to handle NCBI eutils data fetching and writing data to files

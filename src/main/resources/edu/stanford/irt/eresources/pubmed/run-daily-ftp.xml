@@ -6,7 +6,7 @@
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrPubmedUpdate" parent="abstractSolrLoader">
         <constructor-arg name="dataFetchers">
             <list>
-                <bean class="edu.stanford.irt.eresources.PubmedFtpDataFetcher" >
+                <bean class="edu.stanford.irt.eresources.pubmed.PubmedFtpDataFetcher" >
                     <constructor-arg name="basePathname" value="${eresources.pubmedprocessor.ftpPath}"/>
                     <constructor-arg name="ftpHostname" value="${eresources.pubmedprocessor.ftp.hostname}"/>
                     <constructor-arg name="ftpPathname" value="${eresources.pubmedprocessor.ftp.pathname}"/>
@@ -17,7 +17,7 @@
         </constructor-arg>
     </bean>
     <!--  override pubmedProcessor from pubmed-processor.xml so we can set basePath -->
-    <bean id="pubmedProcessor" class="edu.stanford.irt.eresources.PubmedEresourceProcessor">
+    <bean id="pubmedProcessor" class="edu.stanford.irt.eresources.pubmed.PubmedEresourceProcessor">
         <constructor-arg name="basePath" value="${eresources.pubmedprocessor.ftpPath}"/>
         <constructor-arg name="xmlReader">
             <bean class="edu.stanford.irt.eresources.JaxpXMLReader">

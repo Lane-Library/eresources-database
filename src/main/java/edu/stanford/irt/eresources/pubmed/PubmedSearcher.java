@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.pubmed;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,6 +28,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 /**
  * @author ryanmax

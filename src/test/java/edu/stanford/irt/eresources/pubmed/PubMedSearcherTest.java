@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.pubmed;
 
 import static org.junit.Assert.assertTrue;
 

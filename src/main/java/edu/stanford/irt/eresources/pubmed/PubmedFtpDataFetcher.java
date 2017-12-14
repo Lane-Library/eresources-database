@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.pubmed;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,6 +9,9 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import edu.stanford.irt.eresources.DataFetcher;
+import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class PubmedFtpDataFetcher implements DataFetcher {
 

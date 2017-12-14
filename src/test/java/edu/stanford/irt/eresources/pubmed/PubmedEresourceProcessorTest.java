@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources;
+package edu.stanford.irt.eresources.pubmed;
 
 import static org.easymock.EasyMock.isA;
 
@@ -12,6 +12,8 @@ import org.junit.rules.ExpectedException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
+import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class PubmedEresourceProcessorTest {
 
