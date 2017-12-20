@@ -4,6 +4,7 @@
         class="edu.stanford.irt.eresources.sax.LaneblogEresourceProcessor">
         <constructor-arg name="contentHandler" ref="laneblogTransformer"/>
         <constructor-arg name="rssURL" value="${eresources.laneblog-rss-url}"/>
+        <constructor-arg name="rssUserAgent" value="${eresources.laneblog-rss-userAgent}"/>
     </bean>
     <bean id= "laneblogTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/laneblogRSS2er.xsl"/>
