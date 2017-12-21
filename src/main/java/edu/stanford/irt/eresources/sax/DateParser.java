@@ -79,7 +79,7 @@ public final class DateParser {
             Matcher m = YEAR_SEASON.matcher(cleaned);
             m.matches();
             String year = m.group(1);
-            String season = m.group(2);
+            String season = m.group(m.groupCount());
             formattedDate = year + parseSeason(season);
         } else if (YEAR_FIRST_ANYWHERE.matcher(cleaned).find()) {
             Matcher m = YEAR_FIRST_ANYWHERE.matcher(cleaned);
@@ -90,7 +90,7 @@ public final class DateParser {
         return formattedDate;
     }
 
-    private static final String parseSeason(final String season) {
+    private static String parseSeason(final String season) {
         String mmdd = JAN_01;
         if ("winter".equalsIgnoreCase(season)) {
             mmdd = "0101";
