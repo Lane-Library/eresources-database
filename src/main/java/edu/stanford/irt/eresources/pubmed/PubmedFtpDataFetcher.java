@@ -68,8 +68,8 @@ public class PubmedFtpDataFetcher implements DataFetcher {
     private void fetchFile(final FTPClient client, final FTPFile file) {
         try (FileOutputStream fos = new FileOutputStream(this.basePath + "/" + file.getName())) {
             LOG.info("fetching: {}", file);
-            if (client.retrieveFile(file.getName(), fos)) {
-                fos.close();
+            if (!client.retrieveFile(file.getName(), fos)) {
+                LOG.error("couldn't fetch file: {}", file);
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
