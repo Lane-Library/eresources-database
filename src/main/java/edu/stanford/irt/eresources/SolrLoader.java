@@ -31,11 +31,7 @@ public class SolrLoader {
         try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 "edu/stanford/irt/eresources/" + args[0] + ".xml")) {
             SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
-            try {
-                loader.load();
-            } finally {
-                context.close();
-            }
+            loader.load();
         }
     }
 
