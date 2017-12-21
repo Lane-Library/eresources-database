@@ -19,7 +19,7 @@ public class JDBCAuthTextAugmentationsService implements AugmentationsService {
 
     private static final int JDBC_FETCH_SIZE = 10_000;
 
-    private static final Logger LOG = LoggerFactory.getLogger(JDBCAuthTextAugmentationsService.class);
+    private static final Logger log = LoggerFactory.getLogger(JDBCAuthTextAugmentationsService.class);
 
     // verified by DM: people records won't have 450's and MeSH records won't have 400's
     private static final String SQL = "SELECT concat('Z',auth_id) AS AID, LMLDB.GETALLTAGS(auth_id,'A','400 450',2) AS ADATA FROM LMLDB.AUTH_MASTER";
@@ -32,7 +32,7 @@ public class JDBCAuthTextAugmentationsService implements AugmentationsService {
 
     @Override
     public Map<String, String> buildAugmentations() {
-        LOG.debug("start building authority augmentation object");
+        log.debug("start building authority augmentation object");
         Map<String, String> augmentations = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
@@ -45,7 +45,7 @@ public class JDBCAuthTextAugmentationsService implements AugmentationsService {
                     augmentations.put(authId, parseSubfieldAs(new String(bytes, StandardCharsets.UTF_8)));
                 }
             }
-            LOG.debug("completed building authority augmentation object");
+            log.debug("completed building authority augmentation object");
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }

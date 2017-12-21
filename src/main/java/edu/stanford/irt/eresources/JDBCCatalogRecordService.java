@@ -20,7 +20,7 @@ import edu.stanford.lane.catalog.VoyagerInputStream2;
 
 public class JDBCCatalogRecordService extends PipedInputStream implements Runnable, CatalogRecordService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JDBCCatalogRecordService.class);
+    private static final Logger log = LoggerFactory.getLogger(JDBCCatalogRecordService.class);
 
     private DataSource dataSource;
 
@@ -62,10 +62,10 @@ public class JDBCCatalogRecordService extends PipedInputStream implements Runnab
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
         }
-        LOG.debug("starting VoyagerInputStream2 query");
+        log.debug("starting VoyagerInputStream2 query");
         try (InputStream input = new VoyagerInputStream2(this.dataSource, sql, 1); OutputStream ops = this.output) {
             IOUtils.copy(input, ops);
-            LOG.debug("completed VoyagerInputStream2 query");
+            log.debug("completed VoyagerInputStream2 query");
         } catch (CatalogSQLException | IOException e) {
             throw new EresourceDatabaseException(e);
         }

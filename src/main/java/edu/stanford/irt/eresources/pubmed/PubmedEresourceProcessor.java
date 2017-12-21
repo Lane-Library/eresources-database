@@ -23,7 +23,7 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PubmedEresourceProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(PubmedEresourceProcessor.class);
 
     private String basePath;
 
@@ -86,14 +86,14 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.xmlReader.parse(source);
         } catch (IOException | SAXException e) {
-            LOG.error("problem parsing {}", file);
+            log.error("problem parsing {}", file);
             throw new EresourceDatabaseException(e);
         }
         // touch file so we don't load it next time
         if (file.setLastModified(System.currentTimeMillis())) {
-            LOG.info("processed: {}", file);
+            log.info("processed: {}", file);
         } else {
-            LOG.error("couldn't update file's timestamp; make sure it's not loading on every run");
+            log.error("couldn't update file's timestamp; make sure it's not loading on every run");
         }
     }
 }

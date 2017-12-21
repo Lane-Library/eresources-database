@@ -39,7 +39,7 @@ public abstract class AbstractPubmedDataFetcher {
 
     private static final HttpClient httpClient = HttpClients.createDefault();
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractPubmedDataFetcher.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractPubmedDataFetcher.class);
 
     private static final int PMIDS_PER_REQUEST = 500;
 
@@ -88,9 +88,9 @@ public abstract class AbstractPubmedDataFetcher {
                 content = getContent(url);
             }
             if (null == content) {
-                LOG.error("ncbi not responding; request: {}", url);
+                log.error("ncbi not responding; request: {}", url);
                 // return without throwing an exception so other data fetching can complete
-                LOG.error("exiting eutils fetch");
+                log.error("exiting eutils fetch");
                 return;
             }
             writeContent(content, baseFilename + i + ".xml");
@@ -125,7 +125,7 @@ public abstract class AbstractPubmedDataFetcher {
     private void writeContent(final String content, final String filename) {
         File directory = new File(this.basePath + "/" + TODAY);
         if (!directory.exists() && !directory.mkdir()) {
-            LOG.error("can't make {}", directory.getAbsolutePath());
+            log.error("can't make {}", directory.getAbsolutePath());
         }
         File f = new File(directory.getAbsolutePath() + "/" + filename);
         try (FileOutputStream fos = new FileOutputStream(f)) {

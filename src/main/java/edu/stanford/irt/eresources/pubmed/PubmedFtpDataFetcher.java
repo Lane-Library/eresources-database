@@ -15,7 +15,7 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class PubmedFtpDataFetcher implements DataFetcher {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PubmedFtpDataFetcher.class);
+    private static final Logger log = LoggerFactory.getLogger(PubmedFtpDataFetcher.class);
 
     private String basePath;
 
@@ -45,7 +45,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
         PubmedFtpFileFilter filter = new PubmedFtpFileFilter(this.basePath);
         FTPClient client = new FTPClient();
         try {
-            LOG.info("connecting to ftp host: {}", this.ftpHost);
+            log.info("connecting to ftp host: {}", this.ftpHost);
             client.connect(this.ftpHost);
             client.login(this.ftpUser, this.ftpPass);
             client.setFileType(FTP.BINARY_FILE_TYPE);
@@ -60,16 +60,16 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             try {
                 client.disconnect();
             } catch (IOException e) {
-                LOG.error("couldn't disconnect", e);
+                log.error("couldn't disconnect", e);
             }
         }
     }
 
     private void fetchFile(final FTPClient client, final FTPFile file) {
         try (FileOutputStream fos = new FileOutputStream(this.basePath + "/" + file.getName())) {
-            LOG.info("fetching: {}", file);
+            log.info("fetching: {}", file);
             if (!client.retrieveFile(file.getName(), fos)) {
-                LOG.error("couldn't fetch file: {}", file);
+                log.error("couldn't fetch file: {}", file);
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);

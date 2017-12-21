@@ -30,7 +30,7 @@ public class JDBCItemService implements ItemService {
 
     private static final int FETCH_SIZE = 100000;
 
-    private static final Logger LOG = LoggerFactory.getLogger(JDBCItemService.class);
+    private static final Logger log = LoggerFactory.getLogger(JDBCItemService.class);
 
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) "
             + "FROM lmldb.bib_item, lmldb.item_status " + "WHERE bib_item.item_id = item_status.item_id "
@@ -42,11 +42,21 @@ public class JDBCItemService implements ItemService {
         this.dataSource = dataSource;
     }
 
+    @Override
+    public Map<Integer, Integer> getAvailables() {
+        return createItemCountMap(AVAILABLE_QUERY);
+    }
+
+    @Override
+    public Map<Integer, Integer> getTotals() {
+        return createItemCountMap(TOTAL_QUERY);
+    }
+
     private Map<Integer, Integer> createItemCountMap(final String query) {
-        LOG.debug("start building item count map");
+        log.debug("start building item count map");
         Map<Integer, Integer> map = new HashMap<>();
         // set fetch size here
-        try (Connection conn = dataSource.getConnection();
+        try (Connection conn = this.dataSource.getConnection();
                 Statement statement = conn.createStatement();
                 ResultSet rs = statement.executeQuery(query);) {
             rs.setFetchSize(FETCH_SIZE);
@@ -56,17 +66,7 @@ public class JDBCItemService implements ItemService {
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
-        LOG.debug("completed building item count map");
+        log.debug("completed building item count map");
         return map;
-    }
-
-    @Override
-    public Map<Integer, Integer> getTotals() {
-        return createItemCountMap(TOTAL_QUERY);
-    }
-
-    @Override
-    public Map<Integer, Integer> getAvailables() {
-        return createItemCountMap(AVAILABLE_QUERY);
     }
 }

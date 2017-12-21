@@ -43,7 +43,7 @@ public class PubmedSearcher {
 
     private static final HttpClient httpClient = HttpClients.createDefault();
 
-    private static final Logger LOG = LoggerFactory.getLogger(PubmedSearcher.class);
+    private static final Logger log = LoggerFactory.getLogger(PubmedSearcher.class);
 
     private static final int RET_MAX = 500_000;
 
@@ -107,7 +107,7 @@ public class PubmedSearcher {
             q.append(retStart);
             String xmlContent = getContent(q.toString());
             if (null == xmlContent) {
-                LOG.error("null xmlContent for {}", q);
+                log.error("null xmlContent for {}", q);
                 return pmidList;
             }
             retStart = retStart + RET_MAX;
@@ -122,13 +122,13 @@ public class PubmedSearcher {
                 retmaxNodes = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
                 retmaxNode = retmaxNodes.item(0);
                 if (null == retmaxNode || null == retmaxNode.getTextContent()) {
-                    LOG.error("null eSearchResult/RetMax for {}", q);
+                    log.error("null eSearchResult/RetMax for {}", q);
                 } else {
                     retMax = Integer.parseInt(retmaxNode.getTextContent().trim());
                     pmidNodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
                 }
             } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
-                LOG.error("failed to fetch pmids", e);
+                log.error("failed to fetch pmids", e);
             }
             for (int n = 0; null != pmidNodes && n < pmidNodes.getLength(); n++) {
                 Node node = pmidNodes.item(n);

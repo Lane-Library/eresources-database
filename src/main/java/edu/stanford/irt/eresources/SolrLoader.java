@@ -13,7 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SolrLoader {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SolrLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(SolrLoader.class);
 
     protected SolrClient solrClient;
 
@@ -36,7 +36,7 @@ public class SolrLoader {
     }
 
     public void load() {
-        LOG.info("starting up version {}", this.version);
+        log.info("starting up version {}", this.version);
         Date updated = getUpdatedDate();
         this.executor.execute(this.handler);
         for (AbstractEresourceProcessor processor : this.processors) {
@@ -54,7 +54,7 @@ public class SolrLoader {
                 }
             }
         }
-        LOG.info("handled {} eresources.", this.handler.getCount());
+        log.info("handled {} eresources.", this.handler.getCount());
     }
 
     public void setExecutor(final Executor executor) {
