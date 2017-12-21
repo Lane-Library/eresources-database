@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,10 +45,14 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
     private String rssURL;
 
+    private String rssUserAgent;
+
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    public LaneblogEresourceProcessor(final String rssURL, final ContentHandler contentHandler) {
+    public LaneblogEresourceProcessor(final String rssURL, final String rssUserAgent,
+            final ContentHandler contentHandler) {
         this.rssURL = rssURL;
+        this.rssUserAgent = rssUserAgent;
         this.contentHandler = contentHandler;
     }
 
@@ -55,7 +60,9 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
     public void process() {
         try {
             URL url = new URL(this.rssURL);
-            InputSource source = new InputSource(url.openConnection().getInputStream());
+            URLConnection con = url.openConnection();
+            con.setRequestProperty("User-Agent", this.rssUserAgent);
+            InputSource source = new InputSource(con.getInputStream());
             this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
