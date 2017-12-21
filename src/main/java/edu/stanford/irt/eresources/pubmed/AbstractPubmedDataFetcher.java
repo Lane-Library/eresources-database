@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -46,7 +46,7 @@ public abstract class AbstractPubmedDataFetcher {
 
     private static final int SLEEP_TIME = 500;
 
-    private static final String TODAY = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    private static final String TODAY = LocalDate.now(ZoneId.of("America/Los_Angeles")).toString();
 
     private String basePath;
 
