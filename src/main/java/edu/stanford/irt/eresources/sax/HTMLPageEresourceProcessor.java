@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -83,15 +82,8 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<File> getHTMLPages(final File directory) {
-        File[] files = directory.listFiles(new FileFilter() {
-
-            @Override
-            public boolean accept(final File file) {
-                String name = file.getName();
-                return name.endsWith(".html")
-                        || (file.isDirectory() && !name.matches("(.svn|includes|search|samples|m)"));
-            }
-        });
+        File[] files = directory.listFiles(file -> file.getName().endsWith(".html")
+                || (file.isDirectory() && !file.getName().matches("(includes|search|samples|m)")));
         List<File> result = new LinkedList<>();
         if (null != files) {
             for (File file : files) {
