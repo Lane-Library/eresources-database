@@ -22,7 +22,8 @@ public class JDBCAuthTextAugmentationsService implements AugmentationsService {
     private static final Logger log = LoggerFactory.getLogger(JDBCAuthTextAugmentationsService.class);
 
     // verified by DM: people records won't have 450's and MeSH records won't have 400's
-    private static final String SQL = "SELECT concat('Z',auth_id) AS AID, LMLDB.GETALLTAGS(auth_id,'A','400 450',2) AS ADATA FROM LMLDB.AUTH_MASTER";
+    private static final String SQL = "SELECT concat('Z',auth_id) AS AID,"
+            + " LMLDB.GETALLTAGS(auth_id,'A','400 450',2) AS ADATA FROM LMLDB.AUTH_MASTER";
 
     private DataSource dataSource;
 

@@ -32,7 +32,8 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
  */
 public abstract class AbstractPubmedDataFetcher {
 
-    private static final String BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?email=ryanmax@stanford.edu&db=pubmed&mode=xml&id=";
+    private static final String BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?"
+            + "email=ryanmax@stanford.edu&db=pubmed&mode=xml&id=";
 
     private static final RequestConfig HTTP_CONFIG = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES)
             .build();
