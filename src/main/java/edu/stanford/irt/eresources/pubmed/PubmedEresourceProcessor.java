@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.pubmed;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,14 +52,8 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<File> getXMLFiles(final File directory) {
-        File[] files = directory.listFiles(new FileFilter() {
-
-            @Override
-            public boolean accept(final File file) {
-                String name = file.getName();
-                return file.isDirectory() || name.endsWith(".xml") || name.endsWith(".xml.gz");
-            }
-        });
+        File[] files = directory.listFiles(
+                file -> file.isDirectory() || file.getName().endsWith(".xml") || file.getName().endsWith(".xml.gz"));
         List<File> result = new LinkedList<>();
         if (null != files) {
             for (File file : files) {
