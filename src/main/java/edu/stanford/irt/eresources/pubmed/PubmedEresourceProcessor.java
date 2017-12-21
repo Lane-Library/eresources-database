@@ -52,8 +52,8 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<File> getXMLFiles(final File directory) {
-        File[] files = directory.listFiles(
-                file -> file.isDirectory() || file.getName().endsWith(".xml") || file.getName().endsWith(".xml.gz"));
+        File[] files = directory.listFiles((final File file) -> file.isDirectory() || file.getName().endsWith(".xml")
+                || file.getName().endsWith(".xml.gz"));
         List<File> result = new LinkedList<>();
         if (null != files) {
             for (File file : files) {

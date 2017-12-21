@@ -82,7 +82,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<File> getHTMLPages(final File directory) {
-        File[] files = directory.listFiles(file -> file.getName().endsWith(".html")
+        File[] files = directory.listFiles((final File file) -> file.getName().endsWith(".html")
                 || (file.isDirectory() && !file.getName().matches("(includes|search|samples|m)")));
         List<File> result = new LinkedList<>();
         if (null != files) {
