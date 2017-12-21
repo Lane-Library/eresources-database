@@ -19,8 +19,14 @@ public class PubMedSearcherTest {
         this.searchers.add(new PubmedSearcher("field_bar", "value_bar", "24120355", "api_key"));
     }
 
+    @Test(expected = IllegalStateException.class)
+    public final void testNullQuery() throws Exception {
+        PubmedSearcher search = new PubmedSearcher("field", "value", null, "api_key");
+        search.getPmids();
+    }
+
     @Test
-    public final void test() throws Exception {
+    public final void testSearcher() throws Exception {
         if (EutilsIsReachable.eutilsIsReachable()) {
             PubmedSpecialTypesManager manager = new PubmedSpecialTypesManager(this.searchers);
             assertTrue(manager.getTypes("24120354").iterator().next()[0].equals("field_foo"));
@@ -28,11 +34,5 @@ public class PubMedSearcherTest {
             assertTrue(manager.getTypes("24120355").iterator().next()[0].equals("field_bar"));
             assertTrue(manager.getTypes("24120355").iterator().next()[1].equals("value_bar"));
         }
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public final void testNullQuery() throws Exception {
-        PubmedSearcher search = new PubmedSearcher("field", "value", null, "api_key");
-        search.getPmids();
     }
 }

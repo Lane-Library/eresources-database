@@ -24,16 +24,16 @@ public class AbstractEresourceProcessorTest {
         this.processor = new EresourceProcessorTest();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public final void testNull() {
+        this.processor.setStartDate(null);
+    }
+
     @Test
-    public final void test() {
+    public final void testProcessor() {
         Date d = new Date();
         long time = d.getTime();
         this.processor.setStartDate(d);
         assertEquals(time, this.processor.getStartTime());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public final void testNull() {
-        this.processor.setStartDate(null);
     }
 }
