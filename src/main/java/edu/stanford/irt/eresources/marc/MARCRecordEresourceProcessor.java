@@ -8,6 +8,7 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.lane.catalog.Record;
+import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.RecordCollection;
 
 public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
@@ -56,7 +57,8 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
             } else {
                 this.eresourceHandler.handleEresource(
                         new BibMarcEresource(recordList, this.keywordsStrategy, this.itemCount, this.typeFactory));
-                int altTitleCount = (int) record.getFields().stream().filter(f -> "249".equals(f.getTag())).count();
+                int altTitleCount = (int) record.getFields().stream()
+                        .filter((final Field f) -> "249".equals(f.getTag())).count();
                 for (int i = 0; i < altTitleCount; i++) {
                     this.eresourceHandler.handleEresource(new AltTitleMarcEresource(recordList, this.keywordsStrategy,
                             this.typeFactory, this.itemCount, i + 1));

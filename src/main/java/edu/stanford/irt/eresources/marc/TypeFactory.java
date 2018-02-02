@@ -79,9 +79,8 @@ public class TypeFactory extends MARCRecordSupport {
 
     public String getPrimaryType(final Record record) {
         String primaryType = getSubfieldData(getFields(record, "655")
-                .filter(f -> '4' == f.getIndicator1() && '7' == f.getIndicator2()), "a")
-                .findFirst()
-                .orElse("");
+                .filter((final Field f) -> '4' == f.getIndicator1() && '7' == f.getIndicator2()), "a").findFirst()
+                        .orElse("");
         primaryType = PRIMARY_TYPES.get(primaryType.toLowerCase(Locale.US));
         String type;
         Collection<String> rawTypes = getRawTypes(record);
@@ -141,49 +140,38 @@ public class TypeFactory extends MARCRecordSupport {
     }
 
     private String getPrintOrDigital(final Record record) {
-        boolean isDigital = getSubfieldData(record, "245", "h")
-                .anyMatch(s -> s.contains("digital"));
+        boolean isDigital = getSubfieldData(record, "245", "h").anyMatch((final String s) -> s.contains("digital"));
         if (isDigital) {
             return "Digital";
-        } else {
-            return "Print";
         }
+        return "Print";
     }
 
     private Collection<String> getRawTypes(final Record record) {
         Set<String> rawTypes = new HashSet<>();
-        List<Field> fields655 = getFields(record, "655")
-                .collect(Collectors.toList());
+        List<Field> fields655 = getFields(record, "655").collect(Collectors.toList());
         boolean installedSoftware = getSubfieldData(fields655.stream(), "a")
                 .anyMatch("Software, Installed"::equalsIgnoreCase);
         if (installedSoftware) {
-            if (getSubfieldData(fields655.stream(), "a")
-                    .anyMatch("Subset, Biotools"::equalsIgnoreCase)) {
+            if (getSubfieldData(fields655.stream(), "a").anyMatch("Subset, Biotools"::equalsIgnoreCase)) {
                 rawTypes.add("Biotools Software, Installed");
             }
-            if (getSubfieldData(fields655.stream(), "a")
-                    .anyMatch("Statistics"::equalsIgnoreCase)) {
+            if (getSubfieldData(fields655.stream(), "a").anyMatch("Statistics"::equalsIgnoreCase)) {
                 rawTypes.add("Statistics Software, Installed");
             }
         }
-        rawTypes.addAll(getSubfieldData(fields655.stream(), "a")
-                .collect(Collectors.toSet()));
-        if (getSubfieldData(record, "245", "h")
-                .anyMatch(s -> s.contains("videorecording"))) {
+        rawTypes.addAll(getSubfieldData(fields655.stream(), "a").collect(Collectors.toSet()));
+        if (getSubfieldData(record, "245", "h").anyMatch((final String s) -> s.contains("videorecording"))) {
             rawTypes.add("Video");
         }
-        if (getSubfieldData(record, "035", "a")
-                .anyMatch(s -> s.startsWith("(Bassett)"))) {
+        if (getSubfieldData(record, "035", "a").anyMatch((final String s) -> s.startsWith("(Bassett)"))) {
             rawTypes.add("Bassett");
         }
-        if (getSubfieldData(record, "830", "a")
-                .map(String::toLowerCase)
-                .anyMatch(s -> s.contains("stanford") && s.contains("grand rounds"))) {
+        if (getSubfieldData(record, "830", "a").map(String::toLowerCase)
+                .anyMatch((final String s) -> s.contains("stanford") && s.contains("grand rounds"))) {
             rawTypes.add("Grand Rounds");
         }
-        return rawTypes.stream()
-                .map(this::getCompositeType)
-                .filter(ALLOWED_TYPES::contains)
+        return rawTypes.stream().map(this::getCompositeType).filter(ALLOWED_TYPES::contains)
                 .collect(Collectors.toSet());
     }
 }

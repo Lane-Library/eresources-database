@@ -27,16 +27,16 @@ public class KeywordsStrategy {
         List<Field> fields = record.getFields();
         byte leaderByte6 = record.getLeaderByte(6);
         if ("uvxy".indexOf(leaderByte6) > -1) {
-            fields.stream().filter(f -> "852".equals(f.getTag()) || "866".equals(f.getTag()))
-                    .flatMap(f -> f.getSubfields().stream()).map(Subfield::getData)
-                    .forEach(s -> sb.append(s).append(' '));
+            fields.stream().filter((final Field f) -> "852".equals(f.getTag()) || "866".equals(f.getTag()))
+                    .flatMap((final Field f) -> f.getSubfields().stream()).map(Subfield::getData)
+                    .forEach((final String s) -> sb.append(s).append(' '));
         } else if (leaderByte6 == 'q') {
-            fields.stream().filter(f -> {
+            fields.stream().filter((final Field f) -> {
                 int tagNumber = Integer.parseInt(f.getTag());
                 return tagNumber >= 100 && tagNumber <= 943;// && tagNumber != 245;
-            }).forEach(f -> {
+            }).forEach((final Field f) -> {
                 String tag = f.getTag();
-                f.getSubfields().stream().forEach(s -> {
+                f.getSubfields().stream().forEach((final Subfield s) -> {
                     String data = s.getData();
                     getKeywordsFromSubfield(data, sb);
                     if (isAugmentable(tag, s.getCode())) {
@@ -54,8 +54,8 @@ public class KeywordsStrategy {
                     getKeywordsFromField(tag, field.getSubfields(), sb);
                 }
             }
-            String reservesText = this.reservesAugmentation.getReservesAugmentations(
-                    fields.stream().filter(f -> "001".equals(f.getTag())).map(Field::getData).findFirst().orElse("0"));
+            String reservesText = this.reservesAugmentation.getReservesAugmentations(fields.stream()
+                    .filter((final Field f) -> "001".equals(f.getTag())).map(Field::getData).findFirst().orElse("0"));
             if (reservesText != null) {
                 sb.append(' ').append(reservesText);
             }

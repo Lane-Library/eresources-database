@@ -32,52 +32,35 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     }
 
     private static boolean isGetPassword856(final Field field) {
-        return field.getSubfields()
-                .stream()
-                .filter(s -> s.getCode() == 'u')
-                .map(Subfield::getData)
+        return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'u').map(Subfield::getData)
                 .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
     }
 
     @Override
     public String getAdditionalText() {
         String additionalText = null;
-        List<Field> fields = getFields(this.holding, "866")
-                .collect(Collectors.toList());
+        List<Field> fields = getFields(this.holding, "866").collect(Collectors.toList());
         if (fields.size() > 1) {
             additionalText = "";
         } else if (fields.size() == 1) {
-            additionalText = fields.get(0).getSubfields().stream()
-                    .filter(s -> 'z' == s.getCode())
-                    .map(Subfield::getData)
-                    .findFirst()
-                    .orElse(null);
+            additionalText = fields.get(0).getSubfields().stream().filter((final Subfield s) -> 'z' == s.getCode())
+                    .map(Subfield::getData).findFirst().orElse(null);
         }
         return additionalText;
     }
 
     @Override
     public String getDates() {
-        Field field = getFields(this.holding, "866")
-                .findFirst()
-                .orElse(null);
+        Field field = getFields(this.holding, "866").findFirst().orElse(null);
         String dates = null;
         if (field != null) {
-            dates = field.getSubfields()
-                    .stream()
-                    .filter(s -> s.getCode() == 'y')
-                    .map(Subfield::getData)
-                    .findFirst()
-                    .orElse(null);
+            dates = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'y')
+                    .map(Subfield::getData).findFirst().orElse(null);
         }
         if (dates == null && needToAddBibDates(this.eresource)) {
-            dates = getSubfieldData(this.bib, "149", "d")
-                    .findFirst()
-                    .orElse(null);
+            dates = getSubfieldData(this.bib, "149", "d").findFirst().orElse(null);
             if (dates == null) {
-                dates = getSubfieldData(this.bib, "260", "c")
-                        .findFirst()
-                        .orElse("");
+                dates = getSubfieldData(this.bib, "260", "c").findFirst().orElse("");
             }
         }
         return dates;
@@ -102,32 +85,21 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         List<Link> links = new ArrayList<>();
         boolean has856 = getFields(this.holding, "856").count() > 0;
         if (!has856) {
-            links.add(new CatalogLink(getFields(this.bib, "001")
-                    .map(f -> f.getData())
-                    .findFirst()
-                    .orElse(null), this));
+            links.add(new CatalogLink(getFields(this.bib, "001").map(Field::getData).findFirst().orElse(null), this));
         }
         Version version = this;
-        getFields(this.holding, "856")
-            .filter(f -> !isGetPassword856(f))
-            .map(f -> new MarcLink(f, version))
-            .forEach(l -> links.add(l));
+        getFields(this.holding, "856").filter((final Field f) -> !isGetPassword856(f))
+                .map((final Field f) -> new MarcLink(f, version)).forEach((final Link l) -> links.add(l));
         return links;
     }
 
     @Override
     public String getPublisher() {
         String publisher = null;
-        Field field = getFields(this.holding, "844")
-                .findFirst()
-                .orElse(null);
+        Field field = getFields(this.holding, "844").findFirst().orElse(null);
         if (field != null) {
-            publisher = field.getSubfields()
-                    .stream()
-                    .filter(s -> s.getCode() == 'a')
-                    .map(Subfield::getData)
-                    .findFirst()
-                    .orElse(null);
+            publisher = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a')
+                    .map(Subfield::getData).findFirst().orElse(null);
         }
         return publisher;
     }
@@ -135,16 +107,10 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public String getSummaryHoldings() {
         String value = null;
-        Field field = getFields(this.holding, "866")
-                .findFirst()
-                .orElse(null);
+        Field field = getFields(this.holding, "866").findFirst().orElse(null);
         if (field != null) {
-            value = field.getSubfields()
-                    .stream()
-                    .filter(s -> s.getCode() == 'v')
-                    .map(Subfield::getData)
-                    .map(s -> PATTERN.matcher(s).replaceAll(""))
-                    .findFirst()
+            value = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'v')
+                    .map(Subfield::getData).map((final String s) -> PATTERN.matcher(s).replaceAll("")).findFirst()
                     .orElse(null);
         }
         return value;
@@ -152,8 +118,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public boolean hasGetPasswordLink() {
-        return getSubfieldData(this.holding, "856", "u")
-                .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
+        return getSubfieldData(this.holding, "856", "u").anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
     }
 
     @Override
@@ -173,6 +138,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     private boolean needToAddBibDates(final Eresource eresource) {
         return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
                 && eresource.getPrimaryType().matches("^(Book|Video).*")
-                && !getLinks().stream().anyMatch(l -> "impact factor".equalsIgnoreCase(l.getLabel()));
+                && !getLinks().stream().anyMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
     }
 }

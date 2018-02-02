@@ -9,28 +9,22 @@ import edu.stanford.lane.catalog.Record.Subfield;
 public class MARCRecordSupport {
 
     protected static Stream<Field> getFields(final Record record, final String tagString) {
-        return record.getFields()
-                .stream()
-                .filter(f -> tagString.indexOf(f.getTag()) > -1);
+        return record.getFields().stream().filter((final Field f) -> tagString.indexOf(f.getTag()) > -1);
     }
 
     protected static Stream<String> getSubfieldData(final Record record, final String tagString) {
-        return getFields(record, tagString)
-                .flatMap(f -> f.getSubfields().stream())
+        return getFields(record, tagString).flatMap((final Field f) -> f.getSubfields().stream())
                 .map(Subfield::getData);
     }
 
     protected static Stream<String> getSubfieldData(final Record record, final String tagString,
             final String codeString) {
-        return getFields(record, tagString)
-                .flatMap(f -> f.getSubfields().stream())
-                .filter(s -> codeString.indexOf(s.getCode()) > -1)
-                .map(Subfield::getData);
+        return getFields(record, tagString).flatMap((final Field f) -> f.getSubfields().stream())
+                .filter((final Subfield s) -> codeString.indexOf(s.getCode()) > -1).map(Subfield::getData);
     }
 
     protected static Stream<String> getSubfieldData(final Stream<Field> fieldStream, final String codeString) {
-        return fieldStream.flatMap(f -> f.getSubfields().stream())
-                .filter(s -> codeString.indexOf(s.getCode()) > -1)
-                .map(Subfield::getData);
+        return fieldStream.flatMap((final Field f) -> f.getSubfields().stream())
+                .filter((final Subfield s) -> codeString.indexOf(s.getCode()) > -1).map(Subfield::getData);
     }
 }

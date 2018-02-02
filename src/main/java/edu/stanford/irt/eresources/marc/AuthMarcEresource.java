@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
+import edu.stanford.lane.catalog.Record.Field;
 
 public class AuthMarcEresource extends BibMarcEresource {
 
@@ -41,9 +42,7 @@ public class AuthMarcEresource extends BibMarcEresource {
 
     @Override
     public List<Version> getVersions() {
-        if (this.record.getFields()
-                .stream()
-                .anyMatch(f -> "856".equals(f.getTag()))) {
+        if (this.record.getFields().stream().anyMatch((final Field f) -> "856".equals(f.getTag()))) {
             return Collections.singletonList(new MarcVersion(this.record, this.record, this));
         } else {
             return Collections.emptyList();
