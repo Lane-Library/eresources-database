@@ -88,8 +88,8 @@ public class MarcVersion extends MARCRecordSupport implements Version {
             links.add(new CatalogLink(getFields(this.bib, "001").map(Field::getData).findFirst().orElse(null), this));
         }
         Version version = this;
-        getFields(this.holding, "856").filter((final Field f) -> !isGetPassword856(f))
-                .map((final Field f) -> new MarcLink(f, version)).forEach((final Link l) -> links.add(l));
+        links.addAll(getFields(this.holding, "856").filter((final Field f) -> !isGetPassword856(f))
+                .map((final Field f) -> new MarcLink(f, version)).collect(Collectors.toList()));
         return links;
     }
 
