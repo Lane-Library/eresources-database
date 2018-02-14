@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class ItemCount {
 
+    private static final int MAP_SIZE = 2;
+
     private Map<Integer, Integer> availables;
 
     private Map<Integer, Integer> totals;
@@ -14,7 +16,7 @@ public class ItemCount {
     }
 
     public int[] itemCount(final int bibId) {
-        int[] itemCount = new int[2];
+        int[] itemCount = new int[MAP_SIZE];
         itemCount[0] = getCount(bibId, this.totals);
         if (itemCount[0] > 0) {
             itemCount[1] = getCount(bibId, this.availables);
