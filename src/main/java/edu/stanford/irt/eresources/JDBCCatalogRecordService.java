@@ -12,15 +12,11 @@ import java.util.concurrent.Executor;
 import javax.sql.DataSource;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import edu.stanford.lane.catalog.CatalogSQLException;
 import edu.stanford.lane.catalog.VoyagerInputStream2;
 
 public class JDBCCatalogRecordService extends PipedInputStream implements Runnable, CatalogRecordService {
-
-    private static final Logger log = LoggerFactory.getLogger(JDBCCatalogRecordService.class);
 
     private DataSource dataSource;
 
@@ -40,7 +36,7 @@ public class JDBCCatalogRecordService extends PipedInputStream implements Runnab
     }
 
     @Override
-    public InputStream getRecordStream(long time) {
+    public InputStream getRecordStream(final long time) {
         this.startDate = new Timestamp(time);
         return this;
     }
@@ -62,10 +58,8 @@ public class JDBCCatalogRecordService extends PipedInputStream implements Runnab
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
         }
-        log.debug("starting VoyagerInputStream2 query");
         try (InputStream input = new VoyagerInputStream2(this.dataSource, sql, 1); OutputStream ops = this.output) {
             IOUtils.copy(input, ops);
-            log.debug("completed VoyagerInputStream2 query");
         } catch (CatalogSQLException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
