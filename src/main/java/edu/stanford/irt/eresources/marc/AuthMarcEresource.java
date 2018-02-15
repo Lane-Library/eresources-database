@@ -11,7 +11,9 @@ import edu.stanford.lane.catalog.Record.Field;
 
 public class AuthMarcEresource extends BibMarcEresource {
 
-    private static final int[] NO_ITEMS = new int[2];
+    private static final int EMPTY_ITEM_COUNT_SIZE = 2;
+
+    private static final int[] NO_ITEMS = new int[EMPTY_ITEM_COUNT_SIZE];
 
     private Record record;
 
@@ -44,9 +46,8 @@ public class AuthMarcEresource extends BibMarcEresource {
     public List<Version> getVersions() {
         if (this.record.getFields().stream().anyMatch((final Field f) -> "856".equals(f.getTag()))) {
             return Collections.singletonList(new MarcVersion(this.record, this.record, this));
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     @Override
