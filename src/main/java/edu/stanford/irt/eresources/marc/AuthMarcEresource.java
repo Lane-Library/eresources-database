@@ -13,8 +13,6 @@ public class AuthMarcEresource extends BibMarcEresource {
 
     private static final int EMPTY_ITEM_COUNT_SIZE = 2;
 
-    private static final int[] NO_ITEMS = new int[EMPTY_ITEM_COUNT_SIZE];
-
     private Record record;
 
     public AuthMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
@@ -25,7 +23,7 @@ public class AuthMarcEresource extends BibMarcEresource {
 
     @Override
     public int[] getItemCount() {
-        return NO_ITEMS;
+        return new int[EMPTY_ITEM_COUNT_SIZE];
     }
 
     @Override
