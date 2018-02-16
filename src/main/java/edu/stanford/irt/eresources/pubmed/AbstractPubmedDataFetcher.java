@@ -89,9 +89,8 @@ public abstract class AbstractPubmedDataFetcher {
                 content = getContent(url);
             }
             if (null == content) {
-                log.error("ncbi not responding; request: {}", url);
+                log.error("ncbi not responding; request: {}; exiting eutils fetch", url);
                 // return without throwing an exception so other data fetching can complete
-                log.error("exiting eutils fetch");
                 return;
             }
             writeContent(content, baseFilename + i + ".xml");
