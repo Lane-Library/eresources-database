@@ -9,9 +9,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class JDBCItemService implements ItemService {
 
     /*
@@ -29,8 +26,6 @@ public class JDBCItemService implements ItemService {
             + "GROUP BY bi.bib_id";
 
     private static final int FETCH_SIZE = 100000;
-
-    private static final Logger log = LoggerFactory.getLogger(JDBCItemService.class);
 
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) "
             + "FROM lmldb.bib_item, lmldb.item_status " + "WHERE bib_item.item_id = item_status.item_id "
@@ -53,7 +48,6 @@ public class JDBCItemService implements ItemService {
     }
 
     private Map<Integer, Integer> createItemCountMap(final String query) {
-        log.debug("start building item count map");
         Map<Integer, Integer> map = new HashMap<>();
         // set fetch size here
         try (Connection conn = this.dataSource.getConnection();
@@ -66,7 +60,6 @@ public class JDBCItemService implements ItemService {
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
-        log.debug("completed building item count map");
         return map;
     }
 }
