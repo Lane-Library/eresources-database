@@ -86,7 +86,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
         if (file.setLastModified(System.currentTimeMillis())) {
             log.info("processed: {}", file);
         } else {
-            log.error("couldn't update file's timestamp; make sure it's not loading on every run");
+            log.error("couldn't update file's timestamp: {}; make sure it's not loading on every run", file);
         }
     }
 }
