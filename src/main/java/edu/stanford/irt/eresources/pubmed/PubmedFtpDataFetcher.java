@@ -66,7 +66,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
     }
 
     private void fetchFile(final FTPClient client, final FTPFile file) {
-        try (FileOutputStream fos = new FileOutputStream(this.basePath + "/" + file.getName())) {
+        try (FileOutputStream fos = new FileOutputStream(new File(this.basePath, file.getName()))) {
             log.info("fetching: {}", file);
             if (!client.retrieveFile(file.getName(), fos)) {
                 log.error("couldn't fetch file: {}", file);

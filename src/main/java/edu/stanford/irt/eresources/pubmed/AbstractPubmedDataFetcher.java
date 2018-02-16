@@ -63,7 +63,7 @@ public abstract class AbstractPubmedDataFetcher {
 
     protected void pmidListToFiles(final List<String> pmids, final String baseFilename) {
         List<String> myPmids = (List) ((ArrayList) pmids).clone();
-        new File(this.basePath + "/" + TODAY);
+        new File(this.basePath, TODAY);
         int i = 0;
         int start;
         int end;
@@ -124,11 +124,11 @@ public abstract class AbstractPubmedDataFetcher {
     }
 
     private void writeContent(final String content, final String filename) {
-        File directory = new File(this.basePath + "/" + TODAY);
+        File directory = new File(this.basePath, TODAY);
         if (!directory.exists() && !directory.mkdir()) {
             log.error("can't make {}", directory.getAbsolutePath());
         }
-        File f = new File(directory.getAbsolutePath() + "/" + filename);
+        File f = new File(directory.getAbsolutePath(), filename);
         try (FileOutputStream fos = new FileOutputStream(f)) {
             fos.write(content.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
