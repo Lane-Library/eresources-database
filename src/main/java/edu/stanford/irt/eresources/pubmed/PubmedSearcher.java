@@ -97,8 +97,11 @@ public class PubmedSearcher {
         int retMax = RET_MAX;
         while (retMax >= RET_MAX) {
             StringBuilder q = new StringBuilder(BASE_URL);
-            q.append("&api_key=");
-            q.append(this.apiKey);
+            // for testing, allow null api_key
+            if (null != this.apiKey) {
+                q.append("&api_key=");
+                q.append(this.apiKey);
+            }
             q.append("&term=");
             q.append(this.query);
             q.append("&retmax=");
