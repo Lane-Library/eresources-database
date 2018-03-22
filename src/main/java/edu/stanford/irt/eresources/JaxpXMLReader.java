@@ -17,7 +17,6 @@ public class JaxpXMLReader extends XMLFilterImpl {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             super.setParent(factory.newSAXParser().getXMLReader());
         } catch (ParserConfigurationException | SAXException e) {
             throw new ParserCreationException(e);
