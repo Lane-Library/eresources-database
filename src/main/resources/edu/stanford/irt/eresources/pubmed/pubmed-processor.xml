@@ -24,13 +24,13 @@
     <bean id="specialTypesManager" class="edu.stanford.irt.eresources.pubmed.PubmedSpecialTypesManager">
         <constructor-arg name="searchers">
             <list>
+                <!-- examples: fields don't exist in solr
                 <bean class="edu.stanford.irt.eresources.pubmed.PubmedSearcher">
                     <constructor-arg name="field" value="publicationType"/>
                     <constructor-arg name="value" value="Systematic Review"/>
                     <constructor-arg name="query" value="systematic[sb]"/>
                     <constructor-arg name="apiKey" value="${eresources.pubmedprocessor.ncbi.api_key}"/>
                 </bean>
-                <!-- examples: fields don't exist in solr
                 <bean class="edu.stanford.irt.eresources.pubmed.PubmedSearcher">
                     <constructor-arg name="field" value="questionType"/>
                     <constructor-arg name="value" value="Harm"/>

@@ -36,7 +36,6 @@
 
     <root level="${eresources.log.level:-INFO}">
         <appender-ref ref="${eresources.log.appender:-console}"/>
-        <appender-ref ref="email"/>
     </root>
 
 </configuration> 
