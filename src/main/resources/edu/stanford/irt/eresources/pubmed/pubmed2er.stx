@@ -62,13 +62,13 @@
                     </stx:when>
                     <stx:when test="normalize-space($title) = ''">[No title available]</stx:when>
                     <stx:otherwise>
-                        <stx:value-of select="normalize-space($title)"/>
+                        <stx:value-of select="$title"/>
                     </stx:otherwise>
                 </stx:choose>
             </stx:assign>
-            <title><stx:value-of select="$title"/></title>
+            <title><stx:value-of select="normalize-space($title)"/></title>
             <stx:if test="$description != ''">
-                <er-description><stx:value-of select="$description"/></er-description>
+                <er-description><stx:value-of select="normalize-space($description)"/></er-description>
             </stx:if>
             <version>
                 <link>
