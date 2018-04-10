@@ -148,6 +148,9 @@
         <stx:text>&#10;</stx:text>
     </stx:template>
     
+    <!--  strip unnecessary date fields -->
+    <stx:template match="PubmedArticle/MedlineCitation/DateCompleted|MedlineCitation/DateRevised|PubmedData/History/PubMedPubDate"/>
+
     <stx:template match="*">
         <!-- fields not otherwise indexed get added to keywords here
             fields to skip as per NCBI: http://www.ncbi.nlm.nih.gov/books/NBK3827/#pubmedhelp.All_Fields_ALL
@@ -159,7 +162,10 @@
                 <stx:variable name="id-label" select="concat(@IdType,@EIdType)"/>
                 <stx:assign name="keywords" select="concat($keywords, ' ', replace($id-label,'pubmed','pmid'),':', .)"/>
             </stx:when>
-            <stx:when test="not(contains('Year|Month|Day|Hour|Minute|Country|CopyrightInformation',name(.)))">
+            <stx:when test="name(.) = 'Month'">
+                <stx:assign name="keywords" select="concat($keywords, ' ', tph:explodeMonth(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />
+            </stx:when>
+            <stx:when test="not(contains('Hour|Minute|Country|CopyrightInformation',name(.)))">
                 <stx:assign name="keywords" select="concat($keywords, ' ', .)"/>
             </stx:when>
         </stx:choose>
@@ -170,7 +176,7 @@
         <stx:assign name="pmid" select="."/>
         <stx:process-children/>
     </stx:template>
-    
+
     <stx:template match="MedlineCitation/Article/ArticleTitle//text()">
         <stx:assign name="title" select="concat($title,.)"/>
         <stx:process-children/>
@@ -199,7 +205,7 @@
     <stx:template match="MedlineCitation/Article/Journal/JournalIssue/Volume">
         <stx:assign name="publicationVolume" select="."/>
     </stx:template>
-    
+
     <stx:template match="MedlineCitation/Article/Journal/JournalIssue/PubDate/*">
         <stx:choose>
             <stx:when test="name(.) = 'MedlineDate'">

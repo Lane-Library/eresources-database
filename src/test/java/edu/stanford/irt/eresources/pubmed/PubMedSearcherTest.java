@@ -15,13 +15,19 @@ public class PubMedSearcherTest {
     @Before
     public void setUp() throws Exception {
         this.searchers = new ArrayList<PubmedSearcher>();
-        this.searchers.add(new PubmedSearcher("field_foo", "value_foo", "24120354", "api_key"));
-        this.searchers.add(new PubmedSearcher("field_bar", "value_bar", "24120355", "api_key"));
+        this.searchers.add(new PubmedSearcher("field_foo", "value_foo", "24120354", null));
+        this.searchers.add(new PubmedSearcher("field_bar", "value_bar", "24120355", null));
+    }
+
+    @Test
+    public final void testBadApiKey() throws Exception {
+        PubmedSearcher search = new PubmedSearcher("field", "value", "24120355", "foo");
+        assertTrue(search.getPmids().isEmpty());
     }
 
     @Test(expected = IllegalStateException.class)
     public final void testNullQuery() throws Exception {
-        PubmedSearcher search = new PubmedSearcher("field", "value", null, "api_key");
+        PubmedSearcher search = new PubmedSearcher("field", "value", null, null);
         search.getPmids();
     }
 
