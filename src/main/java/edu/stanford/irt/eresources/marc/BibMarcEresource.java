@@ -45,6 +45,12 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
+    private static final int F008_07 = 7;
+
+    private static final int F008_11 = 11;
+
+    private static final int F008_15 = 15;
+
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
     private static final String SEMICOLON_SPACE = "; ";
@@ -123,8 +129,8 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
         }
         if (null == date || "0".equals(date) || date.isEmpty()) {
             String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse("");
-            String endDate = parseYear(field008.substring(11, 15));
-            String beginDate = parseYear(field008.substring(7, 11));
+            String endDate = parseYear(field008.substring(F008_11, F008_15));
+            String beginDate = parseYear(field008.substring(F008_07, F008_11));
             int year = 0;
             if (null != endDate) {
                 year = Integer.parseInt(endDate);
@@ -218,7 +224,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
                 sb.append(auth).append(SEMICOLON_SPACE);
             }
             if (sb.toString().endsWith(SEMICOLON_SPACE)) {
-                sb.delete(sb.length() - 2, sb.length());
+                sb.delete(sb.length() - SEMICOLON_SPACE.length(), sb.length());
             }
             if (sb.length() > 0 && !sb.toString().endsWith(".")) {
                 sb.append('.');
@@ -390,11 +396,11 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     public int getYear() {
         int year = 0;
         String dateField = getFields(this.record, "008").map(Field::getData).findFirst().orElse("0000000000000000");
-        String endDate = parseYear(dateField.substring(11, 15));
+        String endDate = parseYear(dateField.substring(F008_11, F008_15));
         if (endDate != null) {
             year = Integer.parseInt(endDate);
         } else {
-            String beginDate = parseYear(dateField.substring(7, 11));
+            String beginDate = parseYear(dateField.substring(F008_07, F008_11));
             if (beginDate != null) {
                 year = Integer.parseInt(beginDate);
             }
