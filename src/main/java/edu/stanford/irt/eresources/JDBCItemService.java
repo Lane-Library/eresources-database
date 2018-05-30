@@ -25,7 +25,7 @@ public class JDBCItemService implements ItemService {
             + "    (SELECT item_id FROM lmldb.item_status WHERE item_status >= '12' and item_status <= '17')"
             + "GROUP BY bi.bib_id";
 
-    private static final int FETCH_SIZE = 100000;
+    private static final int FETCH_SIZE = 100_000;
 
     private static final String TOTAL_QUERY = "SELECT bib_id, COUNT(DISTINCT item_status.item_id) count "
             + "FROM lmldb.bib_item, lmldb.item_status " + "WHERE bib_item.item_id = item_status.item_id "
@@ -52,7 +52,7 @@ public class JDBCItemService implements ItemService {
         // set fetch size here
         try (Connection conn = this.dataSource.getConnection();
                 Statement statement = conn.createStatement();
-                ResultSet rs = statement.executeQuery(query);) {
+                ResultSet rs = statement.executeQuery(query)) {
             rs.setFetchSize(FETCH_SIZE);
             while (rs.next()) {
                 map.put(Integer.valueOf(rs.getInt("bib_id")), Integer.valueOf(rs.getInt("count")));
