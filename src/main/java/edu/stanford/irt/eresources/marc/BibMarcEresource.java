@@ -51,6 +51,10 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     private static final int F008_15 = 15;
 
+    private static final int F008_35 = 35;
+
+    private static final int F008_38 = 38;
+
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
     private static final String SEMICOLON_SPACE = "; ";
@@ -248,7 +252,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     public Collection<String> getPublicationLanguages() {
         Set<String> languages = new HashSet<>();
         String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse("");
-        String lang = field008.substring(35, 38);
+        String lang = field008.substring(F008_35, F008_38);
         languages.add(LANGUAGE_MAP.getLanguage(lang.toLowerCase(Locale.US)));
         languages.addAll(getSubfieldData(this.record, "041").map(String::toLowerCase).map(LANGUAGE_MAP::getLanguage)
                 .collect(Collectors.toSet()));
