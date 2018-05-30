@@ -14,6 +14,10 @@ public class PubmedFilenameComparator implements Comparator<File>, Serializable 
 
     private static final Pattern DIGIT = Pattern.compile("\\d");
 
+    private static final Pattern NON_ALPHA = Pattern.compile("(\\W|\\d)");
+
+    private static final Pattern NON_DIGITS = Pattern.compile("[^\\d]");
+
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -29,13 +33,13 @@ public class PubmedFilenameComparator implements Comparator<File>, Serializable 
     }
 
     private String getAlphasFromFile(final File file) {
-        return file.getAbsolutePath().replaceAll("(\\W|\\d)", "");
+        return NON_ALPHA.matcher(file.getAbsolutePath()).replaceAll("");
     }
 
     private long getDigitsFromFile(final File file) {
         String path = file.getAbsolutePath();
         if (DIGIT.matcher(path).find()) {
-            return Long.parseLong(file.getAbsolutePath().replaceAll("[^\\d]", ""));
+            return Long.parseLong(NON_DIGITS.matcher(file.getAbsolutePath()).replaceAll(""));
         }
         return 0;
     }

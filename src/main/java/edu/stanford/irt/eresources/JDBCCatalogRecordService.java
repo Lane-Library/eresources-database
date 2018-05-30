@@ -8,6 +8,7 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.concurrent.Executor;
+import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
@@ -17,6 +18,8 @@ import edu.stanford.lane.catalog.CatalogSQLException;
 import edu.stanford.lane.catalog.VoyagerInputStream2;
 
 public class JDBCCatalogRecordService extends PipedInputStream implements Runnable, CatalogRecordService {
+
+    private static final Pattern TIMESTAMP_PATTERN = Pattern.compile("\\{timestamp\\}");
 
     private DataSource dataSource;
 
@@ -69,12 +72,12 @@ public class JDBCCatalogRecordService extends PipedInputStream implements Runnab
         if (null == startDate) {
             throw new IllegalArgumentException("null startDate");
         }
-        this.startDate = startDate;
+        this.startDate = new Timestamp(startDate.getTime());
     }
 
     private String prepareSql(final InputStream sqlInputStream) throws IOException {
         String sql = IOUtils.toString(sqlInputStream, StandardCharsets.UTF_8);
-        sql = sql.replaceAll("\\{timestamp\\}", this.startDate.toString());
+        sql = TIMESTAMP_PATTERN.matcher(sql).replaceAll(this.startDate.toString());
         return sql;
     }
 }

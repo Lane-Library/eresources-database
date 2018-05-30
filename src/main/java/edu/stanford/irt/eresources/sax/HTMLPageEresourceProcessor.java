@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -30,6 +31,8 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String ERESOURCES = "eresources";
+
+    private static final Pattern EXCLUDED_DIRS = Pattern.compile("(includes|search|samples|m)");
 
     private String basePath;
 
@@ -83,7 +86,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
     private List<File> getHTMLPages(final File directory) {
         File[] files = directory.listFiles((final File file) -> file.getName().endsWith(".html")
-                || (file.isDirectory() && !file.getName().matches("(includes|search|samples|m)")));
+                || (file.isDirectory() && !EXCLUDED_DIRS.matcher(file.getName()).matches()));
         List<File> result = new LinkedList<>();
         if (null != files) {
             for (File file : files) {

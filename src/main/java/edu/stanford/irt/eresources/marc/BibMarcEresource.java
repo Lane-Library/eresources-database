@@ -39,6 +39,10 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
+    private static final Pattern COLON_OR_SEMICOLON = Pattern.compile("(:|;)");
+
+    private static final Pattern COMMA_DOLLAR = Pattern.compile(",$");
+
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
     private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
@@ -46,6 +50,8 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     private static final String SEMICOLON_SPACE = "; ";
 
     private static final Pattern SPACE_SLASH = Pattern.compile(" /");
+
+    private static final Pattern WILD_SPACE_WORD_PERIOD = Pattern.compile(".* \\w\\.");
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -113,7 +119,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
             }
         }
         if (date != null) {
-            date = DateParser.parseDate(date.replaceAll("(:|;)", " "));
+            date = DateParser.parseDate(COLON_OR_SEMICOLON.matcher(date).replaceAll(" "));
         }
         if (null == date || "0".equals(date) || date.isEmpty()) {
             String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse("");
@@ -193,10 +199,11 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
                         getSubfieldData(
                                 getFields(this.record, "100|700").filter((final Field f) -> "100".equals(f.getTag())
                                         || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal")))),
-                                "a").map((final String s) -> s.replaceFirst(",$", ""))
-                                        .map((final String auth) -> auth.endsWith(".") && !auth.matches(".* \\w\\.")
-                                                ? auth.substring(0, auth.length() - 1)
-                                                : auth)
+                                "a").map((final String s) -> COMMA_DOLLAR.matcher(s).replaceFirst(""))
+                                        .map((final String auth) -> auth.endsWith(".")
+                                                && !WILD_SPACE_WORD_PERIOD.matcher(auth).matches()
+                                                        ? auth.substring(0, auth.length() - 1)
+                                                        : auth)
                                         .collect(Collectors.toList()));
     }
 

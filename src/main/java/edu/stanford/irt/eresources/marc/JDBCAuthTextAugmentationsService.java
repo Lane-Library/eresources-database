@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
@@ -19,6 +20,8 @@ public class JDBCAuthTextAugmentationsService implements AugmentationsService {
     // verified by DM: people records won't have 450's and MeSH records won't have 400's
     private static final String SQL = "SELECT concat('Z',auth_id) AS AID,"
             + " LMLDB.GETALLTAGS(auth_id,'A','400 450',2) AS ADATA FROM LMLDB.AUTH_MASTER";
+
+    private static final Pattern SUBFIELD_A = Pattern.compile(".*\\$a([^\\$]+)(\\$.*)?");
 
     private DataSource dataSource;
 
@@ -58,7 +61,7 @@ public class JDBCAuthTextAugmentationsService implements AugmentationsService {
         StringBuilder sb = new StringBuilder();
         String[] fields = marc.split("// ");
         for (String field : fields) {
-            sb.append(field.replaceFirst(".*\\$a([^\\$]+)(\\$.*)?", "$1"));
+            sb.append(SUBFIELD_A.matcher(field).replaceFirst("$1"));
             sb.append(' ');
         }
         return sb.toString().trim();

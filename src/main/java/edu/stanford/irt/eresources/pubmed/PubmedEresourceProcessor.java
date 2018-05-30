@@ -70,7 +70,7 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
     private void parseFile(final File file) {
         InputSource source = new InputSource();
         try (InputStream stream = new FileInputStream(file)) {
-            if (file.getName().matches(".*\\.gz")) {
+            if (file.getName().endsWith(".gz")) {
                 InputStream gzstream = new GZIPInputStream(stream);
                 source.setByteStream(gzstream);
             } else {

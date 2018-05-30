@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 public final class DateParser {
 
+    private static final Pattern DATE_CLEANUP = Pattern.compile("(.*)((?:\\-|/).*)");
+
     private static final Pattern EIGHT_DIGITS = Pattern.compile("\\d{8}");
 
     private static final String JAN_01 = "0101";
@@ -62,7 +64,7 @@ public final class DateParser {
         DateFormat yearNumMonthDayFormat = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
         DateFormat yearNumMonthFormat = new SimpleDateFormat("yyyy MM", Locale.ENGLISH);
         String formattedDate = ZERO;
-        String cleaned = date.replaceFirst("(.*)((?:\\-|/).*)", "$1").trim();
+        String cleaned = DATE_CLEANUP.matcher(date).replaceFirst("$1").trim();
         if (EIGHT_DIGITS.matcher(cleaned).matches()) {
             formattedDate = cleaned;
         } else if (YEAR.matcher(cleaned).matches()) {

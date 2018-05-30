@@ -3,11 +3,14 @@ package edu.stanford.irt.eresources.pubmed;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
 
 public class PubmedFtpFileFilter implements FTPFileFilter {
+
+    private static final Pattern DOT_XML_MAYBE_DOT_GZ = Pattern.compile("\\.xml(\\.gz)?");
 
     private Set<String> processedFiles;
 
@@ -19,7 +22,7 @@ public class PubmedFtpFileFilter implements FTPFileFilter {
     public boolean accept(final FTPFile file) {
         String name = file.getName();
         if (name.endsWith(".xml.gz") || name.endsWith(".xml")) {
-            name = name.replaceFirst("\\.xml(\\.gz)?", "");
+            name = DOT_XML_MAYBE_DOT_GZ.matcher(name).replaceFirst("");
             return !this.processedFiles.contains(name);
         }
         return false;
@@ -31,7 +34,7 @@ public class PubmedFtpFileFilter implements FTPFileFilter {
         if (null != files) {
             for (File file : files) {
                 if (!file.isDirectory()) {
-                    fileList.add(file.getName().replaceFirst("\\.xml(\\.gz)?", ""));
+                    fileList.add(DOT_XML_MAYBE_DOT_GZ.matcher(file.getName()).replaceFirst(""));
                 }
             }
         }

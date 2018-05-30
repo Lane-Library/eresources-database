@@ -17,7 +17,9 @@ import edu.stanford.lane.catalog.Record.Subfield;
  */
 public class MarcVersion extends MARCRecordSupport implements Version {
 
-    private static final Pattern PATTERN = Pattern.compile(" =");
+    private static final Pattern BOOK_OR_VIDEO = Pattern.compile("^(Book|Video).*");
+
+    private static final Pattern SPACE_EQUALS = Pattern.compile(" =");
 
     private Record bib;
 
@@ -110,7 +112,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         Field field = getFields(this.holding, "866").findFirst().orElse(null);
         if (field != null) {
             value = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'v')
-                    .map(Subfield::getData).map((final String s) -> PATTERN.matcher(s).replaceAll("")).findFirst()
+                    .map(Subfield::getData).map((final String s) -> SPACE_EQUALS.matcher(s).replaceAll("")).findFirst()
                     .orElse(null);
         }
         return value;
@@ -137,7 +139,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private boolean needToAddBibDates(final Eresource eresource) {
         return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
-                && eresource.getPrimaryType().matches("^(Book|Video).*")
+                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches()
                 && !getLinks().stream().anyMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
     }
 }
