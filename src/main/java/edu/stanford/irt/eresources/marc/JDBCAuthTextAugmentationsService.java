@@ -10,16 +10,11 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class JDBCAuthTextAugmentationsService implements AugmentationsService {
 
     private static final int JDBC_FETCH_SIZE = 10_000;
-
-    private static final Logger log = LoggerFactory.getLogger(JDBCAuthTextAugmentationsService.class);
 
     // verified by DM: people records won't have 450's and MeSH records won't have 400's
     private static final String SQL = "SELECT concat('Z',auth_id) AS AID,"
@@ -33,7 +28,6 @@ public class JDBCAuthTextAugmentationsService implements AugmentationsService {
 
     @Override
     public Map<String, String> buildAugmentations() {
-        log.debug("start building authority augmentation object");
         Map<String, String> augmentations = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
@@ -46,7 +40,6 @@ public class JDBCAuthTextAugmentationsService implements AugmentationsService {
                     augmentations.put(authId, parseSubfieldAs(new String(bytes, StandardCharsets.UTF_8)));
                 }
             }
-            log.debug("completed building authority augmentation object");
         } catch (SQLException e) {
             throw new EresourceDatabaseException(e);
         }
