@@ -13,7 +13,7 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class JDBCReservesTextAugmentationsService implements AugmentationsService {
 
-    private static final String SQL = "SELECT bib_item.bib_id, department_name, course_number, "
+    private static final String SQL = "SELECT department_name, course_number, "
             + "  last_name, first_name FROM lmldb.reserve_list_items, lmldb.reserve_list, "
             + "  lmldb.reserve_list_courses, lmldb.course,  lmldb.bib_item, lmldb.bib_text, "
             + "  lmldb.instructor, lmldb.department "
@@ -40,12 +40,12 @@ public class JDBCReservesTextAugmentationsService implements AugmentationsServic
         Map<String, String> augmentations = new HashMap<>();
         try (Connection conn = this.dataSource.getConnection();
                 PreparedStatement getListStmt = conn.prepareStatement(SQL);
-                ResultSet rs = getListStmt.executeQuery();) {
+                ResultSet rs = getListStmt.executeQuery()) {
             int columnCount = rs.getMetaData().getColumnCount();
             while (rs.next()) {
                 String bibId = rs.getString(1);
                 StringBuilder sb = new StringBuilder();
-                for (int i = 2; i <= columnCount; i++) {
+                for (int i = 1; i <= columnCount; i++) {
                     // kludge instead of adding reserves-specific fields
                     sb.append("reserves:");
                     sb.append(rs.getString(i));
