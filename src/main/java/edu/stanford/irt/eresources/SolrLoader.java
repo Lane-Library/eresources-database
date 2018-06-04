@@ -1,19 +1,35 @@
 package edu.stanford.irt.eresources;
 
+import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.Executor;
 
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SolrLoader {
 
+    protected static final DateTimeFormatter SOLR_DATE_FIELD_FORMATTER = new DateTimeFormatterBuilder()
+            .appendPattern("yyyy-MM-dd'T'HH:mm:ss.S'Z'").toFormatter();
+
     private static final Logger log = LoggerFactory.getLogger(SolrLoader.class);
+
+    private static final LocalDateTime MIN_DT = LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
 
     protected SolrClient solrClient;
 
@@ -24,6 +40,8 @@ public class SolrLoader {
     private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
 
     private Queue<Eresource> queue;
+
+    private String updatedDateQuery;
 
     private String version;
 
@@ -80,6 +98,10 @@ public class SolrLoader {
         this.solrClient = solrClient;
     }
 
+    public void setUpdatedDateQuery(final String solrUpdatedDateQuery) {
+        this.updatedDateQuery = solrUpdatedDateQuery;
+    }
+
     public void setVersion(final String version) {
         this.version = version;
     }
@@ -89,6 +111,27 @@ public class SolrLoader {
     }
 
     protected LocalDateTime getUpdatedDate() {
-        return LocalDateTime.MIN;
+        if (null == this.updatedDateQuery) {
+            return MIN_DT;
+        }
+        SolrQuery query = new SolrQuery();
+        query.setQuery(this.updatedDateQuery);
+        query.add("sort", "updated desc");
+        QueryResponse rsp = null;
+        try {
+            rsp = this.solrClient.query(query);
+        } catch (SolrServerException | IOException e) {
+            throw new EresourceDatabaseException(e);
+        }
+        SolrDocumentList rdocs = rsp.getResults();
+        LocalDateTime updated;
+        if (rdocs.isEmpty()) {
+            updated = MIN_DT;
+        } else {
+            SolrDocument firstResult = rdocs.get(0);
+            Date solrDate = (Date) firstResult.getFieldValue("updated");
+            updated = LocalDateTime.ofInstant(solrDate.toInstant(), ZoneId.systemDefault());
+        }
+        return updated;
     }
 }
