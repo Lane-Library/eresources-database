@@ -2,7 +2,9 @@ package edu.stanford.irt.eresources;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoField;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,9 +33,9 @@ public class AbstractEresourceProcessorTest {
 
     @Test
     public final void testProcessor() {
-        Date d = new Date();
-        long time = d.getTime();
-        this.processor.setStartDate(d);
+        LocalDateTime ldt = LocalDateTime.now();
+        long time = ldt.atZone(ZoneId.systemDefault()).toInstant().getLong(ChronoField.INSTANT_SECONDS);
+        this.processor.setStartDate(ldt);
         assertEquals(time, this.processor.getStartTime());
     }
 }

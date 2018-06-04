@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -68,10 +67,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
             DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);
-            Date sometimeEarlier = new Date(1);
-            if (sometimeEarlier.getTime() > getStartTime()) {
-                this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
-            }
+            this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
         } catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
             throw new EresourceDatabaseException(e);
         }

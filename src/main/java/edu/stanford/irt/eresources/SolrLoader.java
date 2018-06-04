@@ -1,8 +1,8 @@
 package edu.stanford.irt.eresources;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.Executor;
 
@@ -37,7 +37,7 @@ public class SolrLoader {
 
     public void load() {
         log.info("starting up version {}", this.version);
-        Date updated = getUpdatedDate();
+        LocalDateTime updated = getUpdatedDate();
         this.executor.execute(this.handler);
         for (AbstractEresourceProcessor processor : this.processors) {
             processor.setStartDate(updated);
@@ -88,7 +88,7 @@ public class SolrLoader {
         return this.handler;
     }
 
-    protected Date getUpdatedDate() {
-        return new Date(0);
+    protected LocalDateTime getUpdatedDate() {
+        return LocalDateTime.MIN;
     }
 }

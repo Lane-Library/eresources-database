@@ -1,6 +1,8 @@
 package edu.stanford.irt.eresources;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class SolrPubmedUpdate extends SolrLoader {
     }
 
     @Override
-    protected Date getUpdatedDate() {
+    protected LocalDateTime getUpdatedDate() {
         SolrQuery query = new SolrQuery();
         query.setQuery("recordType:pubmed");
         query.add("sort", "updated desc");
@@ -43,12 +45,13 @@ public class SolrPubmedUpdate extends SolrLoader {
             throw new EresourceDatabaseException(e);
         }
         SolrDocumentList rdocs = rsp.getResults();
-        Date updated;
+        LocalDateTime updated;
         if (rdocs.isEmpty()) {
-            updated = new Date(0);
+            updated = LocalDateTime.MIN;
         } else {
             SolrDocument firstResult = rdocs.get(0);
-            updated = (Date) firstResult.getFieldValue("updated");
+            Date solrDate = (Date) firstResult.getFieldValue("updated");
+            updated = LocalDateTime.ofInstant(solrDate.toInstant(), ZoneId.systemDefault());
         }
         return updated;
     }
