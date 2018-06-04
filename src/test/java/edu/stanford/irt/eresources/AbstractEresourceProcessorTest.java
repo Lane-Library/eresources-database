@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoField;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,7 @@ public class AbstractEresourceProcessorTest {
     @Test
     public final void testProcessor() {
         LocalDateTime ldt = LocalDateTime.now();
-        long time = ldt.atZone(ZoneId.systemDefault()).toInstant().getLong(ChronoField.INSTANT_SECONDS);
+        long time = ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         this.processor.setStartDate(ldt);
         assertEquals(time, this.processor.getStartTime());
     }
