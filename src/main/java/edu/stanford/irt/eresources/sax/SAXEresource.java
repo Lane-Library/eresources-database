@@ -162,7 +162,7 @@ public class SAXEresource implements Cloneable, Eresource {
         if (null == this.abbreviatedTitles) {
             return Collections.emptySet();
         }
-        return this.abbreviatedTitles;
+        return new HashSet<>(this.abbreviatedTitles);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class SAXEresource implements Cloneable, Eresource {
         if (null == this.alternativeTitles) {
             return Collections.emptySet();
         }
-        return this.alternativeTitles;
+        return new HashSet<>(this.alternativeTitles);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class SAXEresource implements Cloneable, Eresource {
         if (null == this.broadMeshTerms) {
             return Collections.emptySet();
         }
-        return this.broadMeshTerms;
+        return new HashSet<>(this.broadMeshTerms);
     }
 
     @Override
@@ -205,7 +205,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     @Override
     public int[] getItemCount() {
-        return this.count;
+        return this.count.clone();
     }
 
     @Override
@@ -218,7 +218,7 @@ public class SAXEresource implements Cloneable, Eresource {
         if (null == this.meshTerms) {
             return Collections.emptySet();
         }
-        return this.meshTerms;
+        return new HashSet<>(this.meshTerms);
     }
 
     @Override
@@ -391,7 +391,7 @@ public class SAXEresource implements Cloneable, Eresource {
     }
 
     public void setItemCount(final int[] count) {
-        this.count = count;
+        this.count = count.clone();
     }
 
     public void setKeywords(final String keywords) {
