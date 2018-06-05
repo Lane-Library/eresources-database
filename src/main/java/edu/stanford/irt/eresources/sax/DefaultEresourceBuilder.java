@@ -1,8 +1,8 @@
 package edu.stanford.irt.eresources.sax;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -13,6 +13,9 @@ import edu.stanford.irt.eresources.EresourceHandler;
 
 public class DefaultEresourceBuilder extends DefaultHandler implements EresourceBuilder {
 
+    protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
+            .toFormatter();
+
     private SAXEresource currentEresource;
 
     private SAXLink currentLink;
@@ -20,8 +23,6 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
     private StringBuilder currentText;
 
     private SAXVersion currentVersion;
-
-    private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private EresourceHandler eresourceHandler;
 
@@ -110,11 +111,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentEresource.setId(atts.getValue("id"));
             this.currentEresource.setRecordId(Integer.parseInt(atts.getValue("recordId")));
             this.currentEresource.setRecordType(atts.getValue("type"));
-            try {
-                this.currentEresource.setUpdated(this.dateFormat.parse(atts.getValue("update")));
-            } catch (ParseException e) {
-                throw new EresourceDatabaseException(e);
-            }
+            this.currentEresource.setUpdated(LocalDateTime.parse(atts.getValue("update"), FORMATTER));
         } else if ("version".equals(name)) {
             this.currentVersion = new SAXVersion();
         } else if ("link".equals(name)) {

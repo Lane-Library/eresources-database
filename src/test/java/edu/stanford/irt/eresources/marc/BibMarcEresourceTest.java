@@ -10,6 +10,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -326,7 +327,8 @@ public class BibMarcEresourceTest {
         Calendar cal = Calendar.getInstance();
         cal.set(1955, 4, 19, 12, 0, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        assertEquals(cal.getTime(), this.eresource.getUpdated());
+        assertEquals(cal.getTimeInMillis(),
+                this.eresource.getUpdated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -340,7 +342,8 @@ public class BibMarcEresourceTest {
         Calendar cal = Calendar.getInstance();
         cal.set(1969, 4, 5, 12, 0, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        assertEquals(cal.getTime(), this.eresource.getUpdated());
+        assertEquals(cal.getTimeInMillis(),
+                this.eresource.getUpdated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         verify(this.record, this.field, this.subfield);
     }
 

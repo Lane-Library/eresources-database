@@ -3,10 +3,10 @@ package edu.stanford.irt.eresources.sax;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -33,11 +33,12 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
+    protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
+            .appendPattern("EEE, d MMM yyyy HH:mm:ss Z").toFormatter();
+
     private static final String ERESOURCES = "eresources";
 
     private ContentHandler contentHandler;
-
-    private DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 
     private ErrorHandler errorHandler = new DefaultHandler();
 
@@ -83,9 +84,9 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
         NodeList nodeList = doc.getElementsByTagName("lastBuildDate");
         Element lastBuildDateEl = (Element) nodeList.item(0);
         try {
-            Date lastBuildDate = this.dateFormat.parse(lastBuildDateEl.getTextContent());
-            return lastBuildDate.getTime();
-        } catch (DOMException | ParseException e) {
+            LocalDateTime ldt = LocalDateTime.parse(lastBuildDateEl.getTextContent(), FORMATTER);
+            return ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        } catch (DOMException e) {
             throw new EresourceDatabaseException(e);
         }
     }

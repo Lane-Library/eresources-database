@@ -1,15 +1,15 @@
 package edu.stanford.irt.eresources.marc;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -37,6 +37,9 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     public static final int THIS_YEAR = LocalDate.now(ZoneId.of("America/Los_Angeles")).getYear();
 
+    protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
+            .toFormatter();
+
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
     private static final Pattern COLON_OR_SEMICOLON = Pattern.compile("(:|;)");
@@ -62,8 +65,6 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     private static final Pattern SPACE_SLASH = Pattern.compile(" /");
 
     private static final Pattern WILD_SPACE_WORD_PERIOD = Pattern.compile(".* \\w\\.");
-
-    private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private List<Record> holdings;
 
@@ -364,19 +365,19 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     }
 
     @Override
-    public Date getUpdated() {
+    public LocalDateTime getUpdated() {
         try {
-            Date updated = this.dateFormat
-                    .parse(getFields(this.record, "005").map(Field::getData).findFirst().orElse(null));
+            LocalDateTime updated = LocalDateTime
+                    .parse(getFields(this.record, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
             for (Record holding : this.holdings) {
-                Date holdingUpdated = this.dateFormat
-                        .parse(getFields(holding, "005").map(Field::getData).findFirst().orElse(null));
+                LocalDateTime holdingUpdated = LocalDateTime
+                        .parse(getFields(holding, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
                 if (holdingUpdated.compareTo(updated) > 0) {
                     updated = holdingUpdated;
                 }
             }
             return updated;
-        } catch (ParseException e) {
+        } catch (DateTimeParseException e) {
             throw new EresourceDatabaseException(e);
         }
     }

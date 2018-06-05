@@ -1,10 +1,10 @@
 package edu.stanford.irt.eresources.sax;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -85,7 +85,7 @@ public class SAXEresource implements Cloneable, Eresource {
 
     private Collection<String> types = new HashSet<>();
 
-    private Date updated;
+    private LocalDateTime updated;
 
     private Set<Version> versions;
 
@@ -322,8 +322,8 @@ public class SAXEresource implements Cloneable, Eresource {
     }
 
     @Override
-    public Date getUpdated() {
-        return new Date(this.updated.getTime());
+    public LocalDateTime getUpdated() {
+        return this.updated;
     }
 
     @Override
@@ -450,8 +450,8 @@ public class SAXEresource implements Cloneable, Eresource {
         this.title = title;
     }
 
-    public void setUpdated(final Date updated) {
-        this.updated = new Date(updated.getTime());
+    public void setUpdated(final LocalDateTime updated) {
+        this.updated = updated;
     }
 
     public void setYear(final int year) {
