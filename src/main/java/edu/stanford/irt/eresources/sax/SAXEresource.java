@@ -15,7 +15,7 @@ import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
-public class SAXEresource implements Cloneable, Eresource {
+public class SAXEresource implements Eresource {
 
     private static final Comparator<Version> COMPARATOR = new VersionComparator();
 
@@ -148,13 +148,6 @@ public class SAXEresource implements Cloneable, Eresource {
         if (!version.getLinks().isEmpty()) {
             this.versions.add(version);
         }
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        SAXEresource clone = (SAXEresource) super.clone();
-        clone.isClone = true;
-        return clone;
     }
 
     @Override
