@@ -361,7 +361,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
         if (this.types == null) {
             this.types = this.typeFactory.getTypes(this.record);
         }
-        return this.types;
+        return new HashSet<>(this.types);
     }
 
     @Override
@@ -394,7 +394,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
             }
             this.versions = Collections.unmodifiableList(new ArrayList<>(versionSet));
         }
-        return this.versions;
+        return new ArrayList<>(this.versions);
     }
 
     @Override
