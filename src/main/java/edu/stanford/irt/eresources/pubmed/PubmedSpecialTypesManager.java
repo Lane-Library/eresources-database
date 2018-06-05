@@ -14,7 +14,7 @@ public class PubmedSpecialTypesManager {
     private Map<String, Collection<String[]>> specialPmids;
 
     public PubmedSpecialTypesManager(final Collection<PubmedSearcher> searchers) {
-        this.searchers = searchers;
+        this.searchers = new ArrayList<>(searchers);
     }
 
     public Collection<String[]> getTypes(final String pmid) {
