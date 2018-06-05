@@ -84,7 +84,7 @@ public class PubmedSearcher {
         if (this.pmids == null) {
             this.pmids = doGet();
         }
-        return this.pmids;
+        return new ArrayList<>(this.pmids);
     }
 
     public String getValue() {
