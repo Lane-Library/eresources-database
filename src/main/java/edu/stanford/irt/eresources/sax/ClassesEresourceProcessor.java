@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -40,7 +41,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
     private TransformerFactory tf = TransformerFactory.newInstance();
 
     public ClassesEresourceProcessor(final List<String> allClassesURL, final ContentHandler contentHandler) {
-        this.allClassesURL = allClassesURL;
+        this.allClassesURL = new ArrayList<>(allClassesURL);
         this.contentHandler = contentHandler;
     }
 
