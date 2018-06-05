@@ -463,7 +463,7 @@ public class SAXEresource implements Eresource {
             sb.append(auth).append(SEMICOLON_SPACE);
         }
         if (sb.toString().endsWith(SEMICOLON_SPACE)) {
-            sb.delete(sb.length() - 2, sb.length());
+            sb.delete(sb.length() - SEMICOLON_SPACE.length(), sb.length());
         }
         if (sb.length() > 0 && !sb.toString().endsWith(".")) {
             sb.append('.');
