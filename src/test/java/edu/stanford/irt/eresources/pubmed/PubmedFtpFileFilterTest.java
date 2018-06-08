@@ -10,7 +10,7 @@ public class PubmedFtpFileFilterTest {
 
     @Test
     public final void testPubmedFtpFileFilter() {
-        PubmedFtpFileFilter filter = new PubmedFtpFileFilter("src/test/resources/edu/stanford/irt/eresources/");
+        PubmedFtpFileFilter filter = new PubmedFtpFileFilter("src/test/resources/edu/stanford/irt/eresources/pubmed/");
         FTPFile file = new FTPFile();
         file.setName("file.xml.gz");
         assertFalse(filter.accept(file));

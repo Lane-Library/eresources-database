@@ -27,7 +27,7 @@ public class PubmedEresourceProcessorTest {
     @Before
     public void setUp() throws Exception {
         this.xmlReader = EasyMock.mock(XMLReader.class);
-        this.processor = new PubmedEresourceProcessor("src/test/resources/edu/stanford/irt/eresources", this.xmlReader);
+        this.processor = new PubmedEresourceProcessor("src/test/resources/edu/stanford/irt/eresources/pubmed", this.xmlReader);
     }
 
     @Test(expected = EresourceDatabaseException.class)
