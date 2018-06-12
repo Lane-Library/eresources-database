@@ -5,13 +5,13 @@ import edu.stanford.irt.eresources.Version;
 
 public class SAXLink implements Link {
 
-    private String instruction;
+    private String instruction = null;
 
-    private String label;
+    private String label = null;
 
-    private String url;
+    private String url = null;
 
-    private Version version;
+    private Version version = null;
 
     @Override
     public String getAdditionalText() {
