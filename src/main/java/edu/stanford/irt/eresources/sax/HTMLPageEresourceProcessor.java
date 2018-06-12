@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.xml.XMLConstants;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -58,6 +59,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         config.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
         List<File> filesToParse = getHTMLPages(new File(this.basePath));
         try {
+            tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (!filesToParse.isEmpty()) {
