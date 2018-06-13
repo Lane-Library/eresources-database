@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,10 @@ public class PubmedFtpDataFetcher implements DataFetcher {
 
     private String basePath;
 
+    private FTPClient ftpClient;
+
+    private FTPFileFilter ftpFileFilter;
+
     private String ftpHost;
 
     private String ftpPass;
@@ -27,9 +32,11 @@ public class PubmedFtpDataFetcher implements DataFetcher {
 
     private String ftpUser;
 
-    public PubmedFtpDataFetcher(final String basePathname, final String ftpHostname, final String ftpPathname,
-            final String ftpUsername, final String ftpPassword) {
+    public PubmedFtpDataFetcher(final String basePathname, final FTPClient ftpClient, final FTPFileFilter ftpFileFilter,
+            final String ftpHostname, final String ftpPathname, final String ftpUsername, final String ftpPassword) {
         this.basePath = basePathname;
+        this.ftpClient = ftpClient;
+        this.ftpFileFilter = ftpFileFilter;
         this.ftpHost = ftpHostname;
         this.ftpPath = ftpPathname;
         this.ftpUser = ftpUsername;
@@ -42,23 +49,21 @@ public class PubmedFtpDataFetcher implements DataFetcher {
 
     @Override
     public void getUpdateFiles() {
-        PubmedFtpFileFilter filter = new PubmedFtpFileFilter(this.basePath);
-        FTPClient client = new FTPClient();
         try {
             log.info("connecting to ftp host: {}", this.ftpHost);
-            client.connect(this.ftpHost);
-            client.login(this.ftpUser, this.ftpPass);
-            client.setFileType(FTP.BINARY_FILE_TYPE);
-            client.enterLocalPassiveMode();
-            client.changeWorkingDirectory(this.ftpPath);
-            for (FTPFile file : client.listFiles(".", filter)) {
-                fetchFile(client, file);
+            this.ftpClient.connect(this.ftpHost);
+            this.ftpClient.login(this.ftpUser, this.ftpPass);
+            this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            this.ftpClient.enterLocalPassiveMode();
+            this.ftpClient.changeWorkingDirectory(this.ftpPath);
+            for (FTPFile file : this.ftpClient.listFiles(".", this.ftpFileFilter)) {
+                fetchFile(this.ftpClient, file);
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
         } finally {
             try {
-                client.disconnect();
+                this.ftpClient.disconnect();
             } catch (IOException e) {
                 log.error("couldn't disconnect", e);
             }
