@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.marc;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -424,5 +425,20 @@ public class BibMarcEresourceTest {
         replay(this.record, this.field, this.subfield);
         assertFalse(this.eresource.isCore());
         verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testIsEnglish() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("008");
+        expect(this.field.getData()).andReturn("860402s1982____ja_______d____00|10_jpn_d");
+        replay(this.record, this.field);
+        assertFalse(this.eresource.isEnglish());
+        reset(this.record, this.field);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("008");
+        expect(this.field.getData()).andReturn("950714s1951____xx____________00|_0_eng_d");
+        replay(this.record, this.field);
+        assertTrue(this.eresource.isEnglish());
     }
 }

@@ -420,7 +420,9 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public boolean isEnglish() {
-        return getPublicationLanguages().contains("English");
+        String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse("");
+        String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
+        return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
     }
 
     @Override
