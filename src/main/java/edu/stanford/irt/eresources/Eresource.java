@@ -63,8 +63,6 @@ public interface Eresource {
 
     int getYear();
 
-    boolean isClone();
-
     boolean isCore();
 
     boolean isEnglish();

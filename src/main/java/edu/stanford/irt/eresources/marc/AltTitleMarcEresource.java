@@ -38,9 +38,4 @@ public class AltTitleMarcEresource extends BibMarcEresource {
         return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').map(Subfield::getData)
                 .findFirst().orElse(null);
     }
-
-    @Override
-    public boolean isClone() {
-        return true;
-    }
 }

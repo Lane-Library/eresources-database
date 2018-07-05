@@ -39,8 +39,6 @@ public class SAXEresource implements Eresource {
 
     private String id;
 
-    private boolean isClone = false;
-
     private boolean isCore = false;
 
     private boolean isDigital = false;
@@ -330,11 +328,6 @@ public class SAXEresource implements Eresource {
     @Override
     public int getYear() {
         return this.year;
-    }
-
-    @Override
-    public boolean isClone() {
-        return this.isClone;
     }
 
     @Override

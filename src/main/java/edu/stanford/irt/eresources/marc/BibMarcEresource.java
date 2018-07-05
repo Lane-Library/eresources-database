@@ -414,11 +414,6 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     }
 
     @Override
-    public boolean isClone() {
-        return false;
-    }
-
-    @Override
     public boolean isCore() {
         return getSubfieldData(this.record, "655", "a").anyMatch("core material"::equalsIgnoreCase);
     }
