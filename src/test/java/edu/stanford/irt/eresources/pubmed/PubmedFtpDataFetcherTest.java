@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
@@ -15,6 +16,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +43,11 @@ public class PubmedFtpDataFetcherTest {
         this.ftpFile = mock(FTPFile.class);
         this.ftpFiles = new FTPFile[1];
         this.ftpFiles[0] = this.ftpFile;
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        new File("/tmp/foo").delete();
     }
 
     @Test
