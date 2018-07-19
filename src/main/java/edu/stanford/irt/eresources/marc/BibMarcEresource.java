@@ -1,8 +1,6 @@
 package edu.stanford.irt.eresources.marc;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
@@ -15,7 +13,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -23,6 +20,7 @@ import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.LanguageMap;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 import edu.stanford.irt.eresources.sax.DateParser;
@@ -35,12 +33,8 @@ import edu.stanford.lane.catalog.Record.Subfield;
  */
 public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
-    public static final int THIS_YEAR = LocalDate.now(ZoneId.of("America/Los_Angeles")).getYear();
-
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
             .toFormatter();
-
-    private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
     private static final Pattern COLON_OR_SEMICOLON = Pattern.compile("(:|;)");
 
@@ -111,7 +105,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     public Collection<String> getBroadMeshTerms() {
         return getSubfieldData(getFields(this.record, "650")
                 .filter((final Field f) -> f.getIndicator1() == '4' && f.getIndicator2() == '2'), "a")
-                        .map(this::maybeStripTrailingPeriod).collect(Collectors.toSet());
+                        .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
     }
 
     @Override
@@ -134,8 +128,8 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
         }
         if (null == date || "0".equals(date) || date.isEmpty()) {
             String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse("");
-            String endDate = parseYear(field008.substring(F008_11, F008_15));
-            String beginDate = parseYear(field008.substring(F008_07, F008_11));
+            String endDate = TextParserHelper.parseYear(field008.substring(F008_11, F008_15));
+            String beginDate = TextParserHelper.parseYear(field008.substring(F008_07, F008_11));
             int year = 0;
             if (null != endDate) {
                 year = Integer.parseInt(endDate);
@@ -192,7 +186,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
         return getSubfieldData(getFields(this.record, "650|651")
                 .filter((final Field f) -> ("650".equals(f.getTag()) && "2356".indexOf(f.getIndicator2()) > -1)
                         || ("651".equals(f.getTag()) && f.getIndicator2() == '7')),
-                "a").map(this::maybeStripTrailingPeriod).collect(Collectors.toSet());
+                "a").map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
     }
 
     @Override
@@ -401,11 +395,11 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
     public int getYear() {
         int year = 0;
         String dateField = getFields(this.record, "008").map(Field::getData).findFirst().orElse("0000000000000000");
-        String endDate = parseYear(dateField.substring(F008_11, F008_15));
+        String endDate = TextParserHelper.parseYear(dateField.substring(F008_11, F008_15));
         if (endDate != null) {
             year = Integer.parseInt(endDate);
         } else {
-            String beginDate = parseYear(dateField.substring(F008_07, F008_11));
+            String beginDate = TextParserHelper.parseYear(dateField.substring(F008_07, F008_11));
             if (beginDate != null) {
                 year = Integer.parseInt(beginDate);
             }
@@ -452,37 +446,6 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
                     removeTrailingSlashAndSpace(sb);
                 }));
         return sb;
-    }
-
-    // remove trailing periods, some probably should have them but
-    // voyager puts them on everything :-(
-    private String maybeStripTrailingPeriod(final String string) {
-        int lastPeriod = string.lastIndexOf('.');
-        if (lastPeriod >= 0) {
-            int lastPosition = string.length() - 1;
-            if (lastPeriod == lastPosition) {
-                return string.substring(0, lastPosition);
-            }
-        }
-        return string;
-    }
-
-    private String parseYear(final String year) {
-        String parsedYear = null;
-        Matcher yearMatcher = ACCEPTED_YEAR_PATTERN.matcher(year);
-        if (yearMatcher.matches()) {
-            parsedYear = year;
-            if ("9999".equals(year)) {
-                parsedYear = Integer.toString(THIS_YEAR);
-            } else if (year.contains("u")) {
-                int estimate = Integer.parseInt(year.replace('u', '5'));
-                if (estimate > THIS_YEAR) {
-                    estimate = THIS_YEAR;
-                }
-                parsedYear = Integer.toString(estimate);
-            }
-        }
-        return parsedYear;
     }
 
     private void removeTrailingSlashAndSpace(final StringBuilder sb) {

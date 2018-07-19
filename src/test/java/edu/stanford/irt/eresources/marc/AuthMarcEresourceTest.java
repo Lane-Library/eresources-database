@@ -11,6 +11,7 @@ import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -90,7 +91,7 @@ public class AuthMarcEresourceTest {
         expect(this.subfield.getCode()).andReturn('b');
         expect(this.subfield.getData()).andReturn("continuing");
         replay(this.record, this.field, this.subfield);
-        assertEquals(BibMarcEresource.THIS_YEAR, this.eresource.getYear());
+        assertEquals(TextParserHelper.THIS_YEAR, this.eresource.getYear());
         verify(this.record, this.field, this.subfield);
     }
 
