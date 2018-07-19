@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class SolrReload extends SolrLoader {
 
     private static final String BASE_QUERY = "(recordType:auth OR recordType:bib OR "
-            + " recordType:class OR recordType:laneblog OR recordType:web)";
+            + " recordType:class OR recordType:laneblog OR recordType:web OR recordType:sul)";
 
     private static final int EXPECTED_MIN_BIBS = 300_000;
 
