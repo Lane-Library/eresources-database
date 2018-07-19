@@ -393,18 +393,7 @@ public class BibMarcEresource extends MARCRecordSupport implements Eresource {
 
     @Override
     public int getYear() {
-        int year = 0;
-        String dateField = getFields(this.record, "008").map(Field::getData).findFirst().orElse("0000000000000000");
-        String endDate = TextParserHelper.parseYear(dateField.substring(F008_11, F008_15));
-        if (endDate != null) {
-            year = Integer.parseInt(endDate);
-        } else {
-            String beginDate = TextParserHelper.parseYear(dateField.substring(F008_07, F008_11));
-            if (beginDate != null) {
-                year = Integer.parseInt(beginDate);
-            }
-        }
-        return year;
+        return MARCRecordSupport.getYear(this.record);
     }
 
     @Override

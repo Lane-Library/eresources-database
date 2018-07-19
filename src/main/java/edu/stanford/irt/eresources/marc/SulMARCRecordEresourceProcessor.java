@@ -6,11 +6,14 @@ import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.RecordCollection;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
+
+    private int acceptableAgeInYears;
 
     private List<String> acceptableDBCallNumbers;
 
@@ -29,13 +32,15 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     public SulMARCRecordEresourceProcessor(final EresourceHandler eresourceHandler,
             final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
             final SulTypeFactory typeFactory, final List<String> acceptableLCCallNumberPrefixes,
-            final List<String> acceptableDBCallNumbers, final LaneDedupAugmentation laneDedupAugmentation) {
+            final List<String> acceptableDBCallNumbers, final int acceptableAgeInYears,
+            final LaneDedupAugmentation laneDedupAugmentation) {
         this.eresourceHandler = eresourceHandler;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
         this.typeFactory = typeFactory;
         this.acceptableLCCallNumberPrefixes = acceptableLCCallNumberPrefixes;
         this.acceptableDBCallNumbers = acceptableDBCallNumbers;
+        this.acceptableAgeInYears = acceptableAgeInYears;
         this.laneDedupAugmentation = laneDedupAugmentation;
     }
 
@@ -44,12 +49,17 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         RecordCollection recordCollection = this.recordCollectionFactory.newRecordCollection(getStartTime());
         while (recordCollection.hasNext()) {
             Record record = recordCollection.next();
-            if ((hasAcceptableLCCallNumberPrefix(record) || hasAcceptableDBCallNumber(record)) && !isLane(record)
+            if (hasAcceptableAgeInYears(record)
+                    && (hasAcceptableLCCallNumberPrefix(record) || hasAcceptableDBCallNumber(record)) && !isLane(record)
                     && !isLaneDuplicate(record)) {
                 this.eresourceHandler
                         .handleEresource(new SulBibMarcEresource(record, this.keywordsStrategy, this.typeFactory));
             }
         }
+    }
+
+    private boolean hasAcceptableAgeInYears(final Record record) {
+        return MARCRecordSupport.getYear(record) + this.acceptableAgeInYears >= TextParserHelper.THIS_YEAR;
     }
 
     private boolean hasAcceptableDBCallNumber(final Record record) {
