@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,18 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class LaneDedupAugmentation {
 
+    public static final String SEPARATOR = "->";
+
+    public static final String KEY_CATKEY = "catkey";
+    
+    public static final String KEY_LC_CONTROL_NUMBER = "lccntrln";
+    
+    public static final String KEY_OCLC_CONTROL_NUMBER = "ocolc";
+    
+    public static final String KEY_URL = "url";
+    
+    public static final String KEY_TITLE_DATE = "title_date";
+    
     private static final String AUGMENTATION_FILE = "dedup-augmentations.obj";
 
     private static final Logger log = LoggerFactory.getLogger(LaneDedupAugmentation.class);
@@ -25,7 +38,10 @@ public class LaneDedupAugmentation {
 
     private Map<String, String> augmentations;
 
-    public LaneDedupAugmentation(final AugmentationsService augmentationsService) {
+    private Set<String> manualSkips;
+
+    public LaneDedupAugmentation(final AugmentationsService augmentationsService, final Set<String> manualSkips) {
+        this.manualSkips = manualSkips;
         File objFile = new File(AUGMENTATION_FILE);
         if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - ONE_DAY) {
             this.augmentations = augmentationsService.buildAugmentations();
@@ -47,6 +63,7 @@ public class LaneDedupAugmentation {
     }
 
     public boolean isDuplicate(final String key, final String value) {
-        return this.augmentations.containsKey(key + "->" + value);
+        return this.manualSkips.contains(key + SEPARATOR + value)
+                || this.augmentations.containsKey(key + SEPARATOR + value);
     }
 }

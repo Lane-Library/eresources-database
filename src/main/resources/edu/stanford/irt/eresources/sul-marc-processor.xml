@@ -108,6 +108,12 @@
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
         <!--  TODO:  <constructor-arg ref="${eresources.remoteServiceProtocol}LaneDedupAugmentationService"/> -->
         <constructor-arg ref="jdbcLaneDedupAugmentationService"/>
+        <constructor-arg name="manualSkips">
+            <set>
+                <!-- example excluding one of SUL's PubMed records that's not excluded otherwise -->
+                <value>catkey->3965020</value>
+            </set>
+        </constructor-arg>
     </bean>
     <bean id="jdbcLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.JDBCLaneDedupAugmentationsService">
         <constructor-arg ref="voyagerDataSource"/>

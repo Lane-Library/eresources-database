@@ -12,8 +12,6 @@ import edu.stanford.lane.catalog.RecordCollection;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
-    private static final String OCOLC = "(OCoLC)";
-
     private List<String> acceptableDBCallNumbers;
 
     private List<String> acceptableLCCallNumberPrefixes;
@@ -78,21 +76,21 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     private boolean isLaneDuplicate(final Record record) {
         String catkey = MARCRecordSupport.getFields(record, "001").map(Field::getData).findFirst().orElse("0")
                 .replaceAll("\\D", "");
-        if (this.laneDedupAugmentation.isDuplicate("catkey", catkey)) {
+        if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_CATKEY, catkey)) {
             return true;
         }
         Set<String> lccns = MARCRecordSupport.getSubfieldData(record, "010", "a").map(String::trim)
                 .collect(Collectors.toSet());
         for (String lccn : lccns) {
-            if (this.laneDedupAugmentation.isDuplicate("lccntrln", lccn)) {
+            if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER, lccn)) {
                 return true;
             }
         }
         Set<String> ocolcs = MARCRecordSupport.getSubfieldData(record, "035", "a")
-                .filter((final String s) -> s.startsWith(OCOLC)).map((final String s) -> s.substring(OCOLC.length()))
-                .collect(Collectors.toSet());
+                .filter((final String s) -> s.startsWith("(OCoLC"))
+                .map((final String s) -> s.substring(s.indexOf(')') + 1, s.length())).collect(Collectors.toSet());
         for (String ocolc : ocolcs) {
-            if (this.laneDedupAugmentation.isDuplicate("ocolc", ocolc)) {
+            if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER, ocolc)) {
                 return true;
             }
         }
@@ -100,7 +98,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                 .map((final String s) -> s.replace("https://stanford.idm.oclc.org/login?url=", "")).map(String::trim)
                 .map((final String s) -> s.replaceAll("(^https?://|/$)", "")).collect(Collectors.toSet());
         for (String url : urls) {
-            if (this.laneDedupAugmentation.isDuplicate("url", url)) {
+            if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_URL, url)) {
                 return true;
             }
         }
@@ -110,6 +108,6 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                 .map((final String s) -> s.substring(7, 15)).orElse("00000000");
         StringBuilder sb = new StringBuilder(title);
         sb.append(dates);
-        return this.laneDedupAugmentation.isDuplicate("title_date", sb.toString());
+        return this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_TITLE_DATE, sb.toString());
     }
 }
