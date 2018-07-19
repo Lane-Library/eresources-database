@@ -9,9 +9,9 @@ import edu.stanford.irt.eresources.Version;
 
 public class SAXVersion implements Version {
 
-    private String dates;
-
     private String additionalText;
+
+    private String dates;
 
     private boolean hasGetPasswordLink = false;
 
@@ -30,14 +30,13 @@ public class SAXVersion implements Version {
         this.links.add(link);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see edu.stanford.irt.eresources.Version#getDescription()
+     */
     @Override
-    public String getHoldingsAndDates() {
-        StringBuilder sb = new StringBuilder();
-        if (this.summaryHoldings != null) {
-            sb.append(this.summaryHoldings);
-        }
-        maybeAppend(sb, this.dates);
-        return sb.length() == 0 ? null : sb.toString();
+    public String getAdditionalText() {
+        return this.additionalText;
     }
 
     /*
@@ -49,13 +48,18 @@ public class SAXVersion implements Version {
         return this.dates;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#getDescription()
-     */
+    public boolean getHasGetPasswordLink() {
+        return hasGetPasswordLink();
+    }
+
     @Override
-    public String getAdditionalText() {
-        return this.additionalText;
+    public String getHoldingsAndDates() {
+        StringBuilder sb = new StringBuilder();
+        if (this.summaryHoldings != null) {
+            sb.append(this.summaryHoldings);
+        }
+        maybeAppend(sb, this.dates);
+        return sb.length() == 0 ? null : sb.toString();
     }
 
     /*
@@ -97,10 +101,6 @@ public class SAXVersion implements Version {
         return this.hasGetPasswordLink;
     }
 
-    public boolean getHasGetPasswordLink() {
-        return hasGetPasswordLink();
-    }
-
     /*
      * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#isProxy()
@@ -110,12 +110,12 @@ public class SAXVersion implements Version {
         return this.isProxy;
     }
 
-    public void setDates(final String dates) {
-        this.dates = dates;
-    }
-
     public void setAdditionalText(final String additionalText) {
         this.additionalText = additionalText;
+    }
+
+    public void setDates(final String dates) {
+        this.dates = dates;
     }
 
     public void setHasGetPasswordLink(final boolean hasGetPasswordLink) {
