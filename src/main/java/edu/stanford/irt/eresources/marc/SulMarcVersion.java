@@ -69,7 +69,7 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
         if (getSummaryHoldings() != null) {
             sb.append(getSummaryHoldings());
         }
-        TextParserHelper.maybeAppendAfterComma(sb, getDates());
+        TextParserHelper.appendMaybeAddComma(sb, getDates());
         return sb.length() == 0 ? null : sb.toString();
     }
 

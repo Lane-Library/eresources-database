@@ -44,6 +44,15 @@ public final class TextParserHelper {
         // empty private constructor
     }
 
+    public static void appendMaybeAddComma(final StringBuilder sb, final String string) {
+        if (string != null && string.length() > 0) {
+            if (sb.length() > 1) {
+                sb.append(", ");
+            }
+            sb.append(string);
+        }
+    }
+
     /**
      * Expand textual variants from a string month. Handles digit, 3 character abbreviations and fully spelled out month
      * strings. Designed to expand from NCBI's PubDate/Month element:
@@ -94,15 +103,6 @@ public final class TextParserHelper {
             months.add(explodeMonth(m.group()));
         }
         return months.stream().collect(Collectors.joining(SPACE));
-    }
-
-    public static void maybeAppendAfterComma(final StringBuilder sb, final String string) {
-        if (string != null && string.length() > 0) {
-            if (sb.length() > 1) {
-                sb.append(", ");
-            }
-            sb.append(string);
-        }
     }
 
     /**

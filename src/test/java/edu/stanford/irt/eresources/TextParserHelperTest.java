@@ -2,9 +2,26 @@ package edu.stanford.irt.eresources;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 import org.junit.Test;
 
 public class TextParserHelperTest {
+
+    public static final String THIS_YEAR = Integer.toString(LocalDate.now(ZoneId.of("America/Los_Angeles")).getYear());
+
+    @Test
+    public final void testAppendMaybeAddComma() {
+        StringBuilder sb = new StringBuilder("append to me");
+        TextParserHelper.appendMaybeAddComma(sb, "string");
+        sb.delete(0, sb.length());
+        TextParserHelper.appendMaybeAddComma(sb, "string");
+        assertEquals("string", sb.toString());
+        sb.delete(0, sb.length());
+        TextParserHelper.appendMaybeAddComma(sb, null);
+        assertEquals("", sb.toString());
+    }
 
     @Test
     public final void testMaybeStripTrailingPeriod() {
@@ -76,6 +93,17 @@ public class TextParserHelperTest {
         assertEquals("", TextParserHelper.parseEndPages(""));
         assertEquals("", TextParserHelper.parseEndPages("2620-2623"));
         assertEquals("", TextParserHelper.parseEndPages(null));
+    }
+
+    @Test
+    public final void testParseYear() {
+        assertEquals(null, TextParserHelper.parseYear("string"));
+        assertEquals(THIS_YEAR, TextParserHelper.parseYear("9999"));
+        assertEquals("1995", TextParserHelper.parseYear("199u"));
+        assertEquals("1955", TextParserHelper.parseYear("19uu"));
+        assertEquals("1555", TextParserHelper.parseYear("1uuu"));
+        assertEquals(THIS_YEAR, TextParserHelper.parseYear("2uuu"));
+        assertEquals(null, TextParserHelper.parseYear("uuuu"));
     }
 
     @Test
