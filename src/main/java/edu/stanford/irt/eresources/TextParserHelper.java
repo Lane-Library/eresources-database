@@ -1,6 +1,8 @@
 package edu.stanford.irt.eresources;
 
+import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
@@ -16,6 +18,13 @@ import java.util.stream.Collectors;
  * @author ryanmax
  */
 public final class TextParserHelper {
+
+    public static final int THIS_YEAR = LocalDate.now(ZoneId.of("America/Los_Angeles")).getYear();
+
+    protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
+            .toFormatter();
+
+    private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
     private static final String EMPTY = "";
 
@@ -87,6 +96,33 @@ public final class TextParserHelper {
         return months.stream().collect(Collectors.joining(SPACE));
     }
 
+    public static void maybeAppendAfterComma(final StringBuilder sb, final String string) {
+        if (string != null && string.length() > 0) {
+            if (sb.length() > 1) {
+                sb.append(", ");
+            }
+            sb.append(string);
+        }
+    }
+
+    /**
+     * remove trailing periods, some probably should have them but voyager puts them on everything :-(
+     *
+     * @param text
+     *            with possible period at end
+     * @return text w/o period at end
+     */
+    public static String maybeStripTrailingPeriod(final String string) {
+        int lastPeriod = string.lastIndexOf('.');
+        if (lastPeriod >= 0) {
+            int lastPosition = string.length() - 1;
+            if (lastPeriod == lastPosition) {
+                return string.substring(0, lastPosition);
+            }
+        }
+        return string;
+    }
+
     /**
      * extract complete page endings from page statements containing hyphens (ranges) to allow users to search by
      * complete page range
@@ -135,6 +171,55 @@ public final class TextParserHelper {
     }
 
     /**
+     * parse a year from string, replacing "u" and 9999 appropriately
+     *
+     * @param year
+     *            incoming year
+     * @return parsed year
+     */
+    public static String parseYear(final String year) {
+        String parsedYear = null;
+        Matcher yearMatcher = ACCEPTED_YEAR_PATTERN.matcher(year);
+        if (yearMatcher.matches()) {
+            parsedYear = year;
+            if ("9999".equals(year)) {
+                parsedYear = Integer.toString(THIS_YEAR);
+            } else if (year.contains("u")) {
+                int estimate = Integer.parseInt(year.replace('u', '5'));
+                if (estimate > THIS_YEAR) {
+                    estimate = THIS_YEAR;
+                }
+                parsedYear = Integer.toString(estimate);
+            }
+        }
+        return parsedYear;
+    }
+
+    /**
+     * Capitalize all the space-separated words in a {@code String}
+     *
+     * @param string
+     *            needing caps
+     * @return capitalized string
+     */
+    public static final String toTitleCase(final String string) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+            boolean needsCap = false;
+            if (i == 0 || (i > 0 && ' ' == string.charAt(i - 1))) {
+                needsCap = true;
+            }
+            if (needsCap) {
+                sb.append(Character.toTitleCase(c));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
      * Find and unpad zero-padded text; returns unpadded text only
      *
      * @param text
@@ -150,5 +235,19 @@ public final class TextParserHelper {
             }
         }
         return sb.toString().trim();
+    }
+
+    /**
+     * strip "/ " from string
+     *
+     * @param string
+     *            with slash and/or space
+     * @return string w/o slash and space
+     */
+    public StringBuilder removeTrailingSlashAndSpace(final StringBuilder sb) {
+        while (sb.lastIndexOf("/") == sb.length() - 1 || sb.lastIndexOf(" ") == sb.length() - 1) {
+            sb.setLength(sb.length() - 1);
+        }
+        return sb;
     }
 }

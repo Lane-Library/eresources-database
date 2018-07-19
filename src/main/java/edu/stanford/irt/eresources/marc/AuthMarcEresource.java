@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -55,7 +56,7 @@ public class AuthMarcEresource extends BibMarcEresource {
         if (subfield943b.isPresent()) {
             String value = subfield943b.get();
             if ("continuing".equalsIgnoreCase(value)) {
-                year = THIS_YEAR;
+                year = TextParserHelper.THIS_YEAR;
             } else {
                 year = Integer.parseInt(value);
             }

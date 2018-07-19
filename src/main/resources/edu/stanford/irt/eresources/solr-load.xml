@@ -3,6 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
     <import resource="properties.xml"/>
+    <import resource="sul-marc-processor.xml"/>
     <import resource="marc-processor.xml"/>
     <import resource="web-processor.xml"/>
     <import resource="classes-processor.xml"/>
@@ -58,6 +59,15 @@
         <constructor-arg value="${eresources.catalog-service.port}"/>
         <constructor-arg value="${eresources.catalog-service.path}"/>
         <constructor-arg value="null"/>
+        <constructor-arg value="null"/>
+    </bean>
+    <bean id="sulCatalogServiceURI" class="java.net.URI">
+        <constructor-arg value="${eresources.sul-catalog-service.scheme}"/>
+        <constructor-arg value="null"/>
+        <constructor-arg value="${eresources.sul-catalog-service.host}"/>
+        <constructor-arg value="${eresources.sul-catalog-service.port}"/>
+        <constructor-arg value="${eresources.sul-catalog-service.path}"/>
+        <constructor-arg value="${eresources.sul-catalog-service.query}"/>
         <constructor-arg value="null"/>
     </bean>
     <bean id="exceptionAdvisor" class="edu.stanford.irt.eresources.logging.ExceptionAdvisor"/>

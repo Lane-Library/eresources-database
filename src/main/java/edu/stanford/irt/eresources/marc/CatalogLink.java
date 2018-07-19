@@ -9,15 +9,16 @@ public class CatalogLink implements Link {
 
     private String additionalText = null;
 
-    private String label = "Lane Catalog Record";
+    private String label;
 
     private String url;
 
     private Version version;
 
-    public CatalogLink(final String recordId, final Version version) {
-        this.url = "http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=" + recordId;
+    public CatalogLink(final String recordId, final Version version, final String baseUrl, final String label) {
+        this.url = baseUrl + recordId;
         this.version = version;
+        this.label = label;
     }
 
     @Override

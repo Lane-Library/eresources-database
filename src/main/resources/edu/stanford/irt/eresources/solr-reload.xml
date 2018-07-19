@@ -6,6 +6,7 @@
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrReload" parent="abstractSolrLoader">
     	<property name="processors">
             <list>
+                <ref bean="sulMARCProcessor"/>
                 <ref bean="bibProcessor"/>
                 <ref bean="webProcessor"/>
                 <ref bean="classesProcessor"/>
@@ -20,5 +21,8 @@
     </bean>
     <bean id="httpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
         <constructor-arg ref="catalogServiceURI"/>
+    </bean>
+    <bean id="sulCatalogRecordService" class="edu.stanford.irt.eresources.SulCatalogRecordService">
+        <constructor-arg ref="sulCatalogServiceURI"/>
     </bean>
 </beans>

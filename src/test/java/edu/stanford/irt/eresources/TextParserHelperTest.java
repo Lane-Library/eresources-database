@@ -7,6 +7,12 @@ import org.junit.Test;
 public class TextParserHelperTest {
 
     @Test
+    public final void testMaybeStripTrailingPeriod() {
+        assertEquals("string ", TextParserHelper.maybeStripTrailingPeriod("string "));
+        assertEquals("string ", TextParserHelper.maybeStripTrailingPeriod("string ."));
+    }
+
+    @Test
     public final void testMonthAlternates() {
         assertEquals("", TextParserHelper.explodeMonth(null));
         assertEquals("", TextParserHelper.explodeMonth(""));
@@ -70,6 +76,12 @@ public class TextParserHelperTest {
         assertEquals("", TextParserHelper.parseEndPages(""));
         assertEquals("", TextParserHelper.parseEndPages("2620-2623"));
         assertEquals("", TextParserHelper.parseEndPages(null));
+    }
+
+    @Test
+    public final void testToTitleCase() {
+        assertEquals("Sound Recording", TextParserHelper.toTitleCase("sound recording"));
+        assertEquals("Foo 123 Bar", TextParserHelper.toTitleCase("foo 123 bar"));
     }
 
     @Test

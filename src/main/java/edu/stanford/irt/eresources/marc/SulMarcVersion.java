@@ -16,7 +16,7 @@ import edu.stanford.lane.catalog.Record.Subfield;
 /**
  * MarcVersion encapsulates a holding record.
  */
-public class MarcVersion extends MARCRecordSupport implements Version {
+public class SulMarcVersion extends MARCRecordSupport implements Version {
 
     private static final Pattern BOOK_OR_VIDEO = Pattern.compile("^(Book|Video).*");
 
@@ -26,23 +26,16 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private Eresource eresource;
 
-    private Record holding;
-
-    public MarcVersion(final Record holding, final Record bib, final Eresource eresource) {
-        this.holding = holding;
+    public SulMarcVersion(final Record bib, final Eresource eresource) {
         this.bib = bib;
         this.eresource = eresource;
-    }
-
-    private static boolean isGetPassword856(final Field field) {
-        return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'u').map(Subfield::getData)
-                .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
     }
 
     @Override
     public String getAdditionalText() {
         String additionalText = null;
-        List<Field> fields = getFields(this.holding, "866").collect(Collectors.toList());
+        // doubt 866 ^z present in sul data
+        List<Field> fields = getFields(this.bib, "866").collect(Collectors.toList());
         if (fields.size() > 1) {
             additionalText = "";
         } else if (fields.size() == 1) {
@@ -54,23 +47,20 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public String getDates() {
-        Field field = getFields(this.holding, "866").findFirst().orElse(null);
+        // doubt 866 ^y present in sul data
+        Field field = getFields(this.bib, "866").findFirst().orElse(null);
         String dates = null;
         if (field != null) {
             dates = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'y')
                     .map(Subfield::getData).findFirst().orElse(null);
         }
         if (dates == null && needToAddBibDates(this.eresource)) {
-            dates = getSubfieldData(this.bib, "149", "d").findFirst().orElse(null);
-            if (dates == null) {
-                dates = getSubfieldData(this.bib, "260", "c").findFirst().orElse("");
-            }
+            // 260c or 008 date1
+            // add 264c?
+            dates = getSubfieldData(this.bib, "260", "c").findFirst()
+                    .orElse(Integer.toString(this.eresource.getYear()));
         }
         return dates;
-    }
-
-    public boolean getHasGetPasswordLink() {
-        return hasGetPasswordLink();
     }
 
     @Override
@@ -86,21 +76,25 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
-        boolean has856 = getFields(this.holding, "856").count() > 0;
-        if (!has856) {
-            links.add(new CatalogLink(getFields(this.bib, "001").map(Field::getData).findFirst().orElse(null), this,
-                    "http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=", "Lane Catalog Record"));
-        }
         Version version = this;
-        links.addAll(getFields(this.holding, "856").filter((final Field f) -> !isGetPassword856(f))
-                .map((final Field f) -> new MarcLink(f, version)).collect(Collectors.toList()));
+        links.addAll(getFields(this.bib, "956").map((final Field f) -> new SulMarcLink(f, version))
+                .collect(Collectors.toList()));
+        if (links.isEmpty()) {
+            links.addAll(getFields(this.bib, "856").map((final Field f) -> new SulMarcLink(f, version))
+                    .collect(Collectors.toList()));
+        }
+        if (links.isEmpty()) {
+            links.add(new CatalogLink(Integer.toString(this.eresource.getRecordId()), this,
+                    "https://searchworks.stanford.edu/view/", "SU Catalog (SearchWorks)"));
+        }
         return links;
     }
 
     @Override
     public String getPublisher() {
+        // doubt 844 is in SUL data
         String publisher = null;
-        Field field = getFields(this.holding, "844").findFirst().orElse(null);
+        Field field = getFields(this.bib, "844").findFirst().orElse(null);
         if (field != null) {
             publisher = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a')
                     .map(Subfield::getData).findFirst().orElse(null);
@@ -111,9 +105,9 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public String getSummaryHoldings() {
         String value = null;
-        Field field = getFields(this.holding, "866").findFirst().orElse(null);
+        Field field = getFields(this.bib, "362").findFirst().orElse(null);
         if (field != null) {
-            value = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'v')
+            value = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a')
                     .map(Subfield::getData).map((final String s) -> SPACE_EQUALS.matcher(s).replaceAll("")).findFirst()
                     .orElse(null);
         }
@@ -122,7 +116,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public boolean hasGetPasswordLink() {
-        return getSubfieldData(this.holding, "856", "u").anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
+        return false;
     }
 
     @Override
@@ -132,7 +126,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private boolean needToAddBibDates(final Eresource eresource) {
         return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
-                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches()
-                && !getLinks().stream().anyMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
+                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches();
     }
 }

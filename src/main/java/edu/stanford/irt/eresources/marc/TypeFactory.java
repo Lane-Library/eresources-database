@@ -15,14 +15,14 @@ import edu.stanford.lane.catalog.Record.Field;
 
 public class TypeFactory extends MARCRecordSupport {
 
-    private static final Set<String> ALLOWED_TYPES = new HashSet<>();
-
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
+    protected static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
             EresourceConstants.AUDIO, "Bassett", "Biotools Software, Installed", EresourceConstants.BOOK,
             EresourceConstants.CHAPTER, "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset",
             "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class",
             "Lane Web Page", "Mobile", "Print", EresourceConstants.SOFTWARE, "Software, Installed",
             "Statistics Software, Installed", "Statistics", EresourceConstants.VIDEO, EresourceConstants.WEBSITE };
+
+    private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 

@@ -54,10 +54,13 @@ public class KeywordsStrategy {
                     getKeywordsFromField(tag, field.getSubfields(), sb);
                 }
             }
-            String reservesText = this.reservesAugmentation.getReservesAugmentations(fields.stream()
-                    .filter((final Field f) -> "001".equals(f.getTag())).map(Field::getData).findFirst().orElse("0"));
-            if (reservesText != null) {
-                sb.append(' ').append(reservesText);
+            if (null != this.reservesAugmentation) {
+                String reservesText = this.reservesAugmentation
+                        .getReservesAugmentations(fields.stream().filter((final Field f) -> "001".equals(f.getTag()))
+                                .map(Field::getData).findFirst().orElse("0"));
+                if (reservesText != null) {
+                    sb.append(' ').append(reservesText);
+                }
             }
         }
         return sb.toString();
