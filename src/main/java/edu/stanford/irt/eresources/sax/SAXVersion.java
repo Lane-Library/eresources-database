@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 
 public class SAXVersion implements Version {
@@ -58,7 +59,7 @@ public class SAXVersion implements Version {
         if (this.summaryHoldings != null) {
             sb.append(this.summaryHoldings);
         }
-        maybeAppend(sb, this.dates);
+        TextParserHelper.appendMaybeAddComma(sb, this.dates);
         return sb.length() == 0 ? null : sb.toString();
     }
 
@@ -132,14 +133,5 @@ public class SAXVersion implements Version {
 
     public void setSummaryHoldings(final String summaryHoldings) {
         this.summaryHoldings = summaryHoldings;
-    }
-
-    private void maybeAppend(final StringBuilder sb, final String string) {
-        if (string != null && string.length() > 0) {
-            if (sb.length() > 1) {
-                sb.append(", ");
-            }
-            sb.append(string);
-        }
     }
 }
