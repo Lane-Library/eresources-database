@@ -107,6 +107,15 @@ public class TextParserHelperTest {
     }
 
     @Test
+    public final void testRemoveTrailingSlashAndSpace() {
+        StringBuilder sb = new StringBuilder("remove from me / ");
+        TextParserHelper.removeTrailingSlashAndSpace(sb);
+        assertEquals("remove from me", sb.toString());
+        TextParserHelper.removeTrailingSlashAndSpace(sb);
+        assertEquals("remove from me", sb.toString());
+    }
+
+    @Test
     public final void testToTitleCase() {
         assertEquals("Sound Recording", TextParserHelper.toTitleCase("sound recording"));
         assertEquals("Foo 123 Bar", TextParserHelper.toTitleCase("foo 123 bar"));
