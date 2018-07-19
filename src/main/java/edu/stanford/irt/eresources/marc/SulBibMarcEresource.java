@@ -351,11 +351,11 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
     @Override
     public String getTitle() {
         StringBuilder sb = getStringBuilderWith245();
-        removeTrailingSlashAndSpace(sb);
+        TextParserHelper.removeTrailingSlashAndSpace(sb);
         String edition = getSubfieldData(this.record, "250", "a").collect(Collectors.joining(". "));
         if (!edition.isEmpty()) {
             sb.append(". ").append(edition);
-            removeTrailingSlashAndSpace(sb);
+            TextParserHelper.removeTrailingSlashAndSpace(sb);
         }
         return sb.toString();
     }
@@ -426,7 +426,7 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
     }
 
     protected Version createVersion(final Record record) {
-        return new SulMarcVersion(this.record, this);
+        return new SulMarcVersion(record, this);
     }
 
     private StringBuilder getStringBuilderWith245() {
@@ -444,14 +444,8 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
                         sb.append(' ');
                     }
                     sb.append(data);
-                    removeTrailingSlashAndSpace(sb);
+                    TextParserHelper.removeTrailingSlashAndSpace(sb);
                 }));
         return sb;
-    }
-
-    private void removeTrailingSlashAndSpace(final StringBuilder sb) {
-        while (sb.lastIndexOf("/") == sb.length() - 1 || sb.lastIndexOf(" ") == sb.length() - 1) {
-            sb.setLength(sb.length() - 1);
-        }
     }
 }

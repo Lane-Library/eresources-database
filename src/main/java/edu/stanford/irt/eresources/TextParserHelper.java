@@ -196,6 +196,20 @@ public final class TextParserHelper {
     }
 
     /**
+     * strip "/ " from string
+     *
+     * @param string
+     *            with slash and/or space
+     * @return string w/o slash and space
+     */
+    public static StringBuilder removeTrailingSlashAndSpace(final StringBuilder sb) {
+        while (sb.lastIndexOf("/") == sb.length() - 1 || sb.lastIndexOf(" ") == sb.length() - 1) {
+            sb.setLength(sb.length() - 1);
+        }
+        return sb;
+    }
+
+    /**
      * Capitalize all the space-separated words in a {@code String}
      *
      * @param string
@@ -235,19 +249,5 @@ public final class TextParserHelper {
             }
         }
         return sb.toString().trim();
-    }
-
-    /**
-     * strip "/ " from string
-     *
-     * @param string
-     *            with slash and/or space
-     * @return string w/o slash and space
-     */
-    public StringBuilder removeTrailingSlashAndSpace(final StringBuilder sb) {
-        while (sb.lastIndexOf("/") == sb.length() - 1 || sb.lastIndexOf(" ") == sb.length() - 1) {
-            sb.setLength(sb.length() - 1);
-        }
-        return sb;
     }
 }
