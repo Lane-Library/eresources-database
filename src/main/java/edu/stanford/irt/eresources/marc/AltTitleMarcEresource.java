@@ -11,14 +11,14 @@ import edu.stanford.lane.catalog.Record.Subfield;
 // TODO: create a TitleStrategy class
 public class AltTitleMarcEresource extends BibMarcEresource {
 
-    private int item;
+    private Record altTitleRecord;
 
-    private Record record;
+    private int item;
 
     public AltTitleMarcEresource(final List<Record> recordList, final KeywordsStrategy keywordsStrategy,
             final TypeFactory typeFactory, final ItemCount itemCount, final int item) {
         super(recordList, keywordsStrategy, itemCount, typeFactory);
-        this.record = recordList.get(0);
+        this.altTitleRecord = recordList.get(0);
         this.item = item;
     }
 
@@ -34,7 +34,7 @@ public class AltTitleMarcEresource extends BibMarcEresource {
 
     @Override
     public String getTitle() {
-        Field field = getFields(this.record, "249").collect(Collectors.toList()).get(this.item - 1);
+        Field field = getFields(this.altTitleRecord, "249").collect(Collectors.toList()).get(this.item - 1);
         return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').map(Subfield::getData)
                 .findFirst().orElse(null);
     }

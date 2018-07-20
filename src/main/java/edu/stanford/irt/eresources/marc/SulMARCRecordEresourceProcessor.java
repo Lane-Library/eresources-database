@@ -53,7 +53,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                     && (hasAcceptableLCCallNumberPrefix(record) || hasAcceptableDBCallNumber(record)) && !isLane(record)
                     && !isLaneDuplicate(record)) {
                 this.eresourceHandler
-                        .handleEresource(new SulBibMarcEresource(record, this.keywordsStrategy, this.typeFactory));
+                        .handleEresource(new SulMarcEresource(record, this.keywordsStrategy, this.typeFactory));
             }
         }
     }

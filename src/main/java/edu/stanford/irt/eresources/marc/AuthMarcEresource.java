@@ -14,12 +14,12 @@ public class AuthMarcEresource extends BibMarcEresource {
 
     private static final int EMPTY_ITEM_COUNT_SIZE = 2;
 
-    private Record record;
+    private Record authRecord;
 
     public AuthMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
             final TypeFactory typeFactory) {
         super(Collections.singletonList(record), keywordsStrategy, null, typeFactory);
-        this.record = record;
+        this.authRecord = record;
     }
 
     @Override
@@ -43,8 +43,8 @@ public class AuthMarcEresource extends BibMarcEresource {
 
     @Override
     public List<Version> getVersions() {
-        if (this.record.getFields().stream().anyMatch((final Field f) -> "856".equals(f.getTag()))) {
-            return Collections.singletonList(new MarcVersion(this.record, this.record, this));
+        if (this.authRecord.getFields().stream().anyMatch((final Field f) -> "856".equals(f.getTag()))) {
+            return Collections.singletonList(new MarcVersion(this.authRecord, this.authRecord, this));
         }
         return Collections.emptyList();
     }
@@ -52,7 +52,7 @@ public class AuthMarcEresource extends BibMarcEresource {
     @Override
     public int getYear() {
         int year;
-        Optional<String> subfield943b = getSubfieldData(this.record, "943", "b").findFirst();
+        Optional<String> subfield943b = getSubfieldData(this.authRecord, "943", "b").findFirst();
         if (subfield943b.isPresent()) {
             String value = subfield943b.get();
             if ("continuing".equalsIgnoreCase(value)) {

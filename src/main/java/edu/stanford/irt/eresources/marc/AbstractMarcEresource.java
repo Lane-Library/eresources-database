@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
@@ -28,55 +29,52 @@ import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
 /**
- * TODO: refactor to remove duplication w/ BibMarcEresource
+ * An Eresource that encapsulates the marc Records from which it is derived.
  */
-public class SulBibMarcEresource extends MARCRecordSupport implements Eresource {
+public abstract class AbstractMarcEresource extends MARCRecordSupport implements Eresource {
+
+    protected static final Pattern COLON_OR_SEMICOLON = Pattern.compile("(:|;)");
+
+    protected static final Pattern COMMA_DOLLAR = Pattern.compile(",$");
+
+    protected static final Comparator<Version> COMPARATOR = new VersionComparator();
+
+    protected static final int F008_07 = 7;
+
+    protected static final int F008_11 = 11;
+
+    protected static final int F008_15 = 15;
+
+    protected static final int F008_35 = 35;
+
+    protected static final int F008_38 = 38;
 
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
             .toFormatter();
 
-    private static final Pattern COLON_OR_SEMICOLON = Pattern.compile("(:|;)");
+    protected static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
-    private static final Pattern COMMA_DOLLAR = Pattern.compile(",$");
+    protected static final String SEMICOLON_SPACE = "; ";
 
-    private static final Comparator<Version> COMPARATOR = new VersionComparator();
+    protected static final Pattern SPACE_SLASH = Pattern.compile(" /");
 
-    private static final int F008_07 = 7;
+    protected static final Pattern WILD_SPACE_WORD_PERIOD = Pattern.compile(".* \\w\\.");
 
-    private static final int F008_11 = 11;
+    protected List<Record> holdings;
 
-    private static final int F008_15 = 15;
+    protected ItemCount itemCount;
 
-    private static final int F008_35 = 35;
+    protected KeywordsStrategy keywordsStrategy;
 
-    private static final int F008_38 = 38;
+    protected String primaryType;
 
-    private static final LanguageMap LANGUAGE_MAP = new LanguageMap();
+    protected Record record;
 
-    private static final String SEMICOLON_SPACE = "; ";
+    protected TypeFactory typeFactory;
 
-    private static final Pattern SPACE_SLASH = Pattern.compile(" /");
+    protected Collection<String> types;
 
-    private static final Pattern WILD_SPACE_WORD_PERIOD = Pattern.compile(".* \\w\\.");
-
-    private KeywordsStrategy keywordsStrategy;
-
-    private String primaryType;
-
-    private Record record;
-
-    private SulTypeFactory typeFactory;
-
-    private List<String> types;
-
-    private List<Version> versions;
-
-    public SulBibMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
-            final SulTypeFactory typeFactory) {
-        this.record = record;
-        this.keywordsStrategy = keywordsStrategy;
-        this.typeFactory = typeFactory;
-    }
+    protected List<Version> versions;
 
     @Override
     public Collection<String> getAbbreviatedTitles() {
@@ -85,7 +83,7 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
                     .orElse(null);
             Subfield a = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').findFirst()
                     .orElse(null);
-            return i != null && a != null && "Also known as:".equalsIgnoreCase(i.getData());
+            return i != null && a != null && "Acronym/initialism:".equalsIgnoreCase(i.getData());
         }), "a").collect(Collectors.toSet());
     }
 
@@ -163,13 +161,14 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
 
     @Override
     public int[] getItemCount() {
-        return new int[2];
+        return this.itemCount.itemCount(getRecordId());
     }
 
     @Override
     public String getKeywords() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.keywordsStrategy.getKeywords(this.record));
+        this.holdings.stream().forEach((final Record holding) -> sb.append(this.keywordsStrategy.getKeywords(holding)));
         return sb.toString();
     }
 
@@ -309,28 +308,17 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
 
     @Override
     public int getRecordId() {
-        int i;
-        String f001 = getFields(this.record, "001").map(Field::getData).findFirst().orElse("0").replaceAll("\\D", "");
-        try {
-            i = Integer.parseInt(f001);
-        } catch (NumberFormatException e) {
-            i = 0;
-        }
-        return i;
+        return Integer.parseInt(getFields(this.record, "001").map(Field::getData).findFirst().orElse("0"));
     }
 
     @Override
     public String getRecordType() {
-        return "sul";
+        return "bib";
     }
 
     @Override
     public String getShortTitle() {
-        String title = getSubfieldData(this.record, "222", "a").findFirst().orElse(null);
-        if (null == title) {
-            title = getSubfieldData(this.record, "245", "a").findFirst().orElse(null);
-        }
-        return title;
+        return getSubfieldData(this.record, "149", "a").findFirst().orElse(null);
     }
 
     @Override
@@ -361,14 +349,22 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
         if (this.types == null) {
             this.types = this.typeFactory.getTypes(this.record);
         }
-        return new ArrayList<>(this.types);
+        return new HashSet<>(this.types);
     }
 
     @Override
     public LocalDateTime getUpdated() {
         try {
-            return LocalDateTime.parse(getFields(this.record, "005").map(Field::getData).findFirst().orElse(null),
-                    FORMATTER);
+            LocalDateTime updated = LocalDateTime
+                    .parse(getFields(this.record, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
+            for (Record holding : this.holdings) {
+                LocalDateTime holdingUpdated = LocalDateTime
+                        .parse(getFields(holding, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
+                if (holdingUpdated.compareTo(updated) > 0) {
+                    updated = holdingUpdated;
+                }
+            }
+            return updated;
         } catch (DateTimeParseException e) {
             throw new EresourceDatabaseException(e);
         }
@@ -378,10 +374,11 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
     public List<Version> getVersions() {
         if (this.versions == null) {
             Collection<Version> versionSet = new TreeSet<>(COMPARATOR);
-            // TODO: iterate over 852s here? something else?
-            Version version = createVersion(this.record);
-            if (!version.getLinks().isEmpty()) {
-                versionSet.add(version);
+            for (Record holding : this.holdings) {
+                Version version = createVersion(holding);
+                if (!version.getLinks().isEmpty()) {
+                    versionSet.add(version);
+                }
             }
             this.versions = Collections.unmodifiableList(new ArrayList<>(versionSet));
         }
@@ -395,7 +392,7 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
 
     @Override
     public boolean isCore() {
-        return false;
+        return getSubfieldData(this.record, "655", "a").anyMatch("core material"::equalsIgnoreCase);
     }
 
     @Override
@@ -407,11 +404,11 @@ public class SulBibMarcEresource extends MARCRecordSupport implements Eresource 
 
     @Override
     public boolean isLaneConnex() {
-        return false;
+        return getSubfieldData(this.record, "655", "a").anyMatch("laneconnex"::equalsIgnoreCase);
     }
 
     protected Version createVersion(final Record record) {
-        return new SulMarcVersion(record, this);
+        return new MarcVersion(record, this.record, this);
     }
 
     private StringBuilder getStringBuilderWith245() {
