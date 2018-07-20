@@ -119,8 +119,8 @@
     <bean id="jdbcLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.JDBCLaneDedupAugmentationsService">
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
-    <!-- 
-    <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPLaneDedupAugmentationService">
+    <!-- TODO: implement /laneDedup endpoint in catalog-service project and change laneDedupAugmentation above
+    <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="augmentations/laneDedup"/>
