@@ -1,8 +1,10 @@
-package edu.stanford.irt.eresources.sax;
+package edu.stanford.irt.eresources;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import edu.stanford.irt.eresources.DateParser;
 
 public class DateParserTest {
 

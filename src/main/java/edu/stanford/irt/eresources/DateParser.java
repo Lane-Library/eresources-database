@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.sax;
+package edu.stanford.irt.eresources;
 
 import java.text.DateFormat;
 import java.text.ParseException;

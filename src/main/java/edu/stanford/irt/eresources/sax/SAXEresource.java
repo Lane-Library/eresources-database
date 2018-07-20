@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
+import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.Version;
