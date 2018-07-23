@@ -1,5 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
+import java.util.regex.Pattern;
+
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -8,6 +10,9 @@ import edu.stanford.lane.catalog.Record.Subfield;
  *
  */
 public class SulMarcLink extends MarcLink {
+
+    private static final Pattern SU_AFFIL_AT = Pattern
+            .compile("(available[ -]?to[ -]?stanford[ -]?affiliated[ -]?users)[ -]?at[:;.]?", Pattern.CASE_INSENSITIVE);
 
     private Field field;
 
@@ -23,12 +28,16 @@ public class SulMarcLink extends MarcLink {
         if (l == null) {
             // SUL generally has 2 subfield z's
             // first is "Available to Stanford-affiliated users at:"
-            // second if more meaningful version, publisher, etc.
+            // last is more meaningful version, publisher, etc.
             l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'z')
                     .map(Subfield::getData).reduce((a, b) -> b).orElse(null);
         }
         if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > 2)) {
             l = l.substring(1, l.length() - 1);
+        }
+        // strip " at:" from "available to Stanford users"
+        if (l != null && SU_AFFIL_AT.matcher(l).matches()) {
+            l = SU_AFFIL_AT.matcher(l).replaceFirst("$1");
         }
         return l;
     }
