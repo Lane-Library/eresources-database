@@ -49,9 +49,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         RecordCollection recordCollection = this.recordCollectionFactory.newRecordCollection(getStartTime());
         while (recordCollection.hasNext()) {
             Record record = recordCollection.next();
-            if (hasAcceptableAgeInYears(record)
-                    && (hasAcceptableLCCallNumberPrefix(record) || hasAcceptableDBCallNumber(record)) && !isLane(record)
-                    && !isLaneDuplicate(record)) {
+            if (isInScope(record) && !isLane(record) && !isLaneDuplicate(record)) {
                 this.eresourceHandler
                         .handleEresource(new SulMarcEresource(record, this.keywordsStrategy, this.typeFactory));
             }
@@ -76,6 +74,15 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             }
         }
         return false;
+    }
+
+    private boolean hasNLMCallNumber(final Record record) {
+        return MARCRecordSupport.getFields(record, "060").findAny().isPresent();
+    }
+
+    private boolean isInScope(final Record record) {
+        return hasAcceptableAgeInYears(record) && (hasNLMCallNumber(record) || hasAcceptableLCCallNumberPrefix(record)
+                || hasAcceptableDBCallNumber(record));
     }
 
     private boolean isLane(final Record record) {
