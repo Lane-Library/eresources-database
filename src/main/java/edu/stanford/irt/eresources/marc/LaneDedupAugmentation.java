@@ -18,18 +18,22 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class LaneDedupAugmentation {
 
+    public static final String KEY_CATKEY = "catkey";
+
+    public static final String KEY_ISBN = "isbn";
+
+    public static final String KEY_ISSN = "issn";
+
+    public static final String KEY_LC_CONTROL_NUMBER = "lccntrln";
+
+    public static final String KEY_OCLC_CONTROL_NUMBER = "ocolc";
+
+    public static final String KEY_TITLE_DATE = "title_date";
+
+    public static final String KEY_URL = "url";
+
     public static final String SEPARATOR = "->";
 
-    public static final String KEY_CATKEY = "catkey";
-    
-    public static final String KEY_LC_CONTROL_NUMBER = "lccntrln";
-    
-    public static final String KEY_OCLC_CONTROL_NUMBER = "ocolc";
-    
-    public static final String KEY_URL = "url";
-    
-    public static final String KEY_TITLE_DATE = "title_date";
-    
     private static final String AUGMENTATION_FILE = "dedup-augmentations.obj";
 
     private static final Logger log = LoggerFactory.getLogger(LaneDedupAugmentation.class);
