@@ -10,7 +10,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
-import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -39,14 +38,6 @@ public class SulMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    public Collection<String> getBroadMeshTerms() {
-        // SUL unlikely to have 650 42 ^a
-        return getSubfieldData(getFields(this.record, "650")
-                .filter((final Field f) -> f.getIndicator1() == '4' && f.getIndicator2() == '2'), "a")
-                        .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
-    }
-
-    @Override
     public int[] getItemCount() {
         return new int[2];
     }
@@ -56,15 +47,6 @@ public class SulMarcEresource extends AbstractMarcEresource {
         StringBuilder sb = new StringBuilder();
         sb.append(this.keywordsStrategy.getKeywords(this.record));
         return sb.toString();
-    }
-
-    @Override
-    public Collection<String> getMeshTerms() {
-        // doubtful SUL will have these
-        return getSubfieldData(getFields(this.record, "650|651")
-                .filter((final Field f) -> ("650".equals(f.getTag()) && "2356".indexOf(f.getIndicator2()) > -1)
-                        || ("651".equals(f.getTag()) && f.getIndicator2() == '7')),
-                "a").map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
     }
 
     @Override
