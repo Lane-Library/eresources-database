@@ -34,8 +34,6 @@ public class LaneDedupAugmentation {
 
     public static final String SEPARATOR = "->";
 
-    private static final String AUGMENTATION_FILE = "dedup-augmentations.obj";
-
     private static final Logger log = LoggerFactory.getLogger(LaneDedupAugmentation.class);
 
     private static final int ONE_DAY = 1000 * 60 * 60 * 24;
@@ -44,12 +42,13 @@ public class LaneDedupAugmentation {
 
     private Set<String> manualSkips;
 
-    public LaneDedupAugmentation(final AugmentationsService augmentationsService, final Set<String> manualSkips) {
+    public LaneDedupAugmentation(final String augmentationsFileName, final AugmentationsService augmentationsService,
+            final Set<String> manualSkips) {
         this.manualSkips = manualSkips;
-        File objFile = new File(AUGMENTATION_FILE);
+        File objFile = new File(augmentationsFileName);
         if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - ONE_DAY) {
             this.augmentations = augmentationsService.buildAugmentations();
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(AUGMENTATION_FILE))) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(augmentationsFileName))) {
                 oos.writeObject(new HashMap<>(this.augmentations));
             } catch (IOException e) {
                 throw new EresourceDatabaseException(e);

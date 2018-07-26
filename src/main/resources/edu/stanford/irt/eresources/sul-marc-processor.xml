@@ -108,6 +108,7 @@
     </bean>
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
         <!--  TODO:  <constructor-arg ref="${eresources.remoteServiceProtocol}LaneDedupAugmentationService"/> -->
+        <constructor-arg name="augmentationsFileName" value="dedup-augmentations.obj"/>
         <constructor-arg ref="jdbcLaneDedupAugmentationService"/>
         <constructor-arg name="manualSkips">
             <set>
