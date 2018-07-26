@@ -23,6 +23,7 @@ public class SolrReload extends SolrLoader {
     @Override
     public void load() {
         // fetch most recently updated eresource date from solr
+        this.setUpdatedDateQuery(BASE_QUERY);
         LocalDateTime updateDate = this.getUpdatedDate();
         super.load();
         maybeDeleteOldRecords(updateDate.format(SOLR_DATE_FIELD_FORMATTER));
