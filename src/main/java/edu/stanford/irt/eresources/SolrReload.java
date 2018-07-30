@@ -25,6 +25,8 @@ public class SolrReload extends SolrLoader {
         // fetch most recently updated eresource date from solr
         this.setUpdatedDateQuery(BASE_QUERY);
         LocalDateTime updateDate = this.getUpdatedDate();
+        // set update date to null so Processors fetch everything
+        this.setUpdatedDateQuery(null);
         super.load();
         maybeDeleteOldRecords(updateDate.format(SOLR_DATE_FIELD_FORMATTER));
     }
