@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.LanguageMap;
@@ -118,7 +119,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
             date = DateParser.parseDate(COLON_OR_SEMICOLON.matcher(date).replaceAll(" "));
         }
         if (null == date || "0".equals(date) || date.isEmpty()) {
-            String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse("");
+            String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse(EresourceConstants.EMPTY_008);
             String endDate = TextParserHelper.parseYear(field008.substring(F008_11, F008_15));
             String beginDate = TextParserHelper.parseYear(field008.substring(F008_07, F008_11));
             int year = 0;
@@ -237,7 +238,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getPublicationLanguages() {
         Set<String> languages = new HashSet<>();
-        String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse("");
+        String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38);
         languages.add(LANGUAGE_MAP.getLanguage(lang.toLowerCase(Locale.US)));
         languages.addAll(getSubfieldData(this.record, "041").map(String::toLowerCase).map(LANGUAGE_MAP::getLanguage)
@@ -326,7 +327,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
         StringBuilder sb = getStringBuilderWith245();
         int offset = getFields(this.record, "245").map((final Field f) -> Integer.valueOf(f.getIndicator2()) - 48)
                 .findFirst().orElse(0);
-        if (offset < 0) {
+        if (offset < 0 || offset > sb.length()) {
             offset = 0;
         }
         return sb.substring(offset);
@@ -397,7 +398,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public boolean isEnglish() {
-        String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse("");
+        String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
     }
