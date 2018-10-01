@@ -104,6 +104,7 @@ public class TextParserHelperTest {
         assertEquals("1555", TextParserHelper.parseYear("1uuu"));
         assertEquals(THIS_YEAR, TextParserHelper.parseYear("2uuu"));
         assertEquals(null, TextParserHelper.parseYear("uuuu"));
+        assertEquals("1985", TextParserHelper.parseYear("198|"));
     }
 
     @Test
@@ -113,6 +114,9 @@ public class TextParserHelperTest {
         assertEquals("remove from me", sb.toString());
         TextParserHelper.removeTrailingSlashAndSpace(sb);
         assertEquals("remove from me", sb.toString());
+        sb = new StringBuilder();
+        TextParserHelper.removeTrailingSlashAndSpace(sb);
+        assertEquals(0, sb.length());
     }
 
     @Test

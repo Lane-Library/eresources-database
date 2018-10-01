@@ -184,8 +184,8 @@ public final class TextParserHelper {
             parsedYear = year;
             if ("9999".equals(year)) {
                 parsedYear = Integer.toString(THIS_YEAR);
-            } else if (year.contains("u")) {
-                int estimate = Integer.parseInt(year.replace('u', '5'));
+            } else if (year.contains("u") || year.contains("|")) {
+                int estimate = Integer.parseInt(year.replace('u', '5').replace('|', '5'));
                 if (estimate > THIS_YEAR) {
                     estimate = THIS_YEAR;
                 }
@@ -203,7 +203,7 @@ public final class TextParserHelper {
      * @return string w/o slash and space
      */
     public static StringBuilder removeTrailingSlashAndSpace(final StringBuilder sb) {
-        while (sb.lastIndexOf("/") == sb.length() - 1 || sb.lastIndexOf(" ") == sb.length() - 1) {
+        while (sb.length() > 0 && (sb.lastIndexOf("/") == sb.length() - 1 || sb.lastIndexOf(" ") == sb.length() - 1)) {
             sb.setLength(sb.length() - 1);
         }
         return sb;
