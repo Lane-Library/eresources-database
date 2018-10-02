@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <import resource="../common.xml"/>
+    <import resource="marc-processor.xml"/>
+    <import resource="web-processor.xml"/>
+    <import resource="classes-processor.xml"/>
+    <import resource="laneblog-processor.xml"/>
+    <bean id="solrLoader" class="edu.stanford.irt.eresources.LaneUpdate" parent="abstractSolrLoader">
+    	<property name="processors">
+            <list>
+                <ref bean="bibProcessor"/>
+                <ref bean="webProcessor"/>
+                <ref bean="laneblogProcessor"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="jdbcCatalogRecordService" class="edu.stanford.irt.eresources.JDBCCatalogRecordService">
+        <constructor-arg name="dataSource" ref="voyagerDataSource"/>
+        <constructor-arg name="executor" ref="executor"/>
+        <constructor-arg value="classpath:/edu/stanford/irt/eresources/lane/sql/update.sql"/>
+    </bean>
+</beans>
