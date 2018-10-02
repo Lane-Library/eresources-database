@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
-    <import resource="../properties.xml"/>
+    <import resource="../common.xml"/>
     <import resource="pubmed-processor.xml"/>
     <bean id="abstractSolrLoader" class="edu.stanford.irt.eresources.SolrLoader" abstract="true">
         <property name="handler" ref="eresourceHandler"/>
@@ -16,31 +16,4 @@
         <property name="queue" ref="queue"/>
         <property name="solrClient" ref="solrClient"/>
     </bean>
-    <bean id="eresourceHandler" class="edu.stanford.irt.eresources.SolrEresourceHandler">
-        <constructor-arg ref="queue"/>
-        <constructor-arg name="solrClient" ref="solrClient"/>
-        <constructor-arg name="solrMaxDocs" value="${eresources.solr-max-docs}"/>
-    </bean>
-    <bean id="solrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient">
-        <constructor-arg value="${eresources.solr-url-laneSearch}"/>
-    </bean>
-    <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue">
-        <constructor-arg value="10000"/>
-    </bean>
-    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" destroy-method="destroy">
-        <property name="corePoolSize" value="4"/>
-        <property name="maxPoolSize" value="4"/>
-        <property name="queueCapacity" value="0"/>
-    </bean>
-    <bean id="autoProxyCreator"
-        class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-        <property name="proxyTargetClass" value="true"/>
-        <property name="beanNames"
-            value="solrIndexer,bibProcessor,webProcessor,authProcessor,classesProcessor,laneblogProcessor"/>
-        <property name="interceptorNames"
-            value="exceptionAdvisor,beforeMethodAdvisor,afterMethodAdvisor"/>
-    </bean>
-    <bean id="exceptionAdvisor" class="edu.stanford.irt.eresources.logging.ExceptionAdvisor"/>
-    <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor"/>
-    <bean id="afterMethodAdvisor" class="edu.stanford.irt.eresources.logging.ReturnMethodAdvisor"/>
 </beans>

@@ -7,7 +7,7 @@
         <constructor-arg name="rssUserAgent" value="${eresources.laneblog-rss-userAgent}"/>
     </bean>
     <bean id= "laneblogTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
-        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/laneblogRSS2er.xsl"/>
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/lane/laneblogRSS2er.xsl"/>
         <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
         <property name="namespace" value=""/>
         <property name="element" value="rss"/>

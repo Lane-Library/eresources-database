@@ -13,7 +13,7 @@ public class SulReload extends SolrLoader {
 
     private static final int EXPECTED_MIN_BIBS = 100_000;
 
-    private static final Logger LOG = LoggerFactory.getLogger(SolrReload.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SulReload.class);
 
     public static void main(final String[] args) {
         SolrLoader.main(new String[] { "sul-reload" });

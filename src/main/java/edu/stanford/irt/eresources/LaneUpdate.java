@@ -1,9 +1,9 @@
 package edu.stanford.irt.eresources;
 
-public class SolrUpdate extends SolrLoader {
+public class LaneUpdate extends SolrLoader {
 
     public static void main(final String[] args) {
-        SolrLoader.main(new String[] { "solr-update" });
+        SolrLoader.main(new String[] { "lane-update" });
     }
 
     @Override

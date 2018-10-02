@@ -52,4 +52,28 @@
     <bean id="jdbcItemService" class="edu.stanford.irt.eresources.JDBCItemService">
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
+    <bean id="catalogServiceURI" class="java.net.URI">
+        <constructor-arg value="${eresources.catalog-service.scheme}"/>
+        <constructor-arg value="${eresources.catalog-service.userInfo}"/>
+        <constructor-arg value="${eresources.catalog-service.host}"/>
+        <constructor-arg value="${eresources.catalog-service.port}"/>
+        <constructor-arg value="${eresources.catalog-service.path}"/>
+        <constructor-arg value="null"/>
+        <constructor-arg value="null"/>
+    </bean>
+    <bean id="httpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
+        <constructor-arg ref="catalogServiceURI"/>
+    </bean>
+    <bean id="voyagerDataSource" class="oracle.ucp.jdbc.PoolDataSourceFactory" factory-method="getPoolDataSource">
+        <property name="URL" value="${eresources.voyagerdb.url}"/>
+        <property name="user" value="${eresources.voyagerdb.username}"/>
+        <property name="password" value="${eresources.voyagerdb.password}"/>
+        <property name="connectionFactoryClassName" value="oracle.jdbc.pool.OracleDataSource" />
+        <property name="minPoolSize" value="2" />
+        <property name="maxPoolSize" value="5" />
+        <property name="initialPoolSize" value="2" />
+        <property name="inactiveConnectionTimeout" value="0" />
+        <property name="validateConnectionOnBorrow" value="true" />
+        <property name="maxStatements" value="10" />
+    </bean>
 </beans>

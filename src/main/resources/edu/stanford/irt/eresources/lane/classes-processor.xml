@@ -11,7 +11,7 @@
         </constructor-arg>
     </bean>
     <bean id= "classesTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
-        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/classes2er.xsl"/>
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/lane/classes2er.xsl"/>
         <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
         <property name="namespace" value="http://lane.stanford.edu/laneclasses"/>
         <property name="element" value="classes"/>

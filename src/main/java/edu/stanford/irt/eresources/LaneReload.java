@@ -7,17 +7,17 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SolrReload extends SolrLoader {
+public class LaneReload extends SolrLoader {
 
     private static final String BASE_QUERY = "(recordType:auth OR recordType:bib OR "
-            + " recordType:class OR recordType:laneblog OR recordType:web OR recordType:sul)";
+            + " recordType:class OR recordType:laneblog OR recordType:web)";
 
     private static final int EXPECTED_MIN_BIBS = 300_000;
 
-    private static final Logger LOG = LoggerFactory.getLogger(SolrReload.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LaneReload.class);
 
     public static void main(final String[] args) {
-        SolrLoader.main(new String[] { "solr-reload" });
+        SolrLoader.main(new String[] { "lane-reload" });
     }
 
     @Override

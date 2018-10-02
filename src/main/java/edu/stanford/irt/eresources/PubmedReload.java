@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
-public class SolrPubmedReload extends SolrLoader {
+public class PubmedReload extends SolrLoader {
 
     @Override
     public void load() {

@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
-public class SolrPubmedUpdate extends SolrLoader {
+public class PubmedUpdate extends SolrLoader {
 
-    public SolrPubmedUpdate(final List<DataFetcher> dataFetchers) {
+    public PubmedUpdate(final List<DataFetcher> dataFetchers) {
         for (DataFetcher fetcher : dataFetchers) {
             fetcher.getUpdateFiles();
         }
