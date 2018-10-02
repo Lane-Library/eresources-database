@@ -16,10 +16,6 @@ public class LaneReload extends SolrLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(LaneReload.class);
 
-    public static void main(final String[] args) {
-        SolrLoader.main(new String[] { "lane-reload" });
-    }
-
     @Override
     public void load() {
         // fetch most recently updated eresource date from solr
