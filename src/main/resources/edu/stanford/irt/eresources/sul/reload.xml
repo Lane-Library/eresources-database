@@ -13,6 +13,13 @@
             </list>
         </property>
     </bean>
+    <bean id="sulSolrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient">
+        <constructor-arg value="${eresources.sul.solr-catalog-service.base-url}"/>
+    </bean>
+    <bean id="sulSolrCatalogRecordService" class="edu.stanford.irt.eresources.SulSolrCatalogRecordService">
+        <constructor-arg ref="sulSolrClient"/>
+        <constructor-arg name="executor" ref="executor"/>
+    </bean>
     <bean id="sulCatalogRecordService" class="edu.stanford.irt.eresources.SulCatalogRecordService">
         <constructor-arg ref="sulCatalogServiceURI"/>
     </bean>

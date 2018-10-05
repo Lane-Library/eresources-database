@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import edu.stanford.irt.eresources.EresourceConstants;
-import edu.stanford.irt.eresources.SulCatalogRecordService;
+import edu.stanford.irt.eresources.SulSolrCatalogRecordService;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -47,9 +47,9 @@ public class SulTypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("periodicals", EresourceConstants.JOURNAL);
     }
 
-    private SulCatalogRecordService catalogRecordService;
+    private SulSolrCatalogRecordService catalogRecordService;
 
-    public SulTypeFactory(final SulCatalogRecordService catalogRecordService) {
+    public SulTypeFactory(final SulSolrCatalogRecordService catalogRecordService) {
         this.catalogRecordService = catalogRecordService;
     }
 

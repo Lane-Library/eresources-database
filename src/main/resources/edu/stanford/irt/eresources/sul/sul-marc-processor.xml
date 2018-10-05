@@ -14,12 +14,12 @@
         </constructor-arg>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.RecordCollectionFactory">
-                <constructor-arg ref="sulFileCatalogRecordService"/>
+                <constructor-arg ref="sulSolrCatalogRecordService"/>
             </bean>
         </constructor-arg>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory">
-                <constructor-arg ref="sulCatalogRecordService"/>
+                <constructor-arg ref="sulSolrCatalogRecordService"/>
             </bean>
         </constructor-arg>
         <constructor-arg name="acceptableAgeInYears" value="20000"/>
