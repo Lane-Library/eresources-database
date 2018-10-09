@@ -125,6 +125,11 @@ public class SulSolrCatalogRecordService extends PipedInputStream implements Run
         }
     }
 
+    // for unit testing
+    public void setPipedOutputStream(final PipedOutputStream outputStream) {
+        this.output = outputStream;
+    }
+
     /**
      * need explicit facet=false param to disable faceting on SUL's default request handler (setFacet just removes all
      * facet params)
