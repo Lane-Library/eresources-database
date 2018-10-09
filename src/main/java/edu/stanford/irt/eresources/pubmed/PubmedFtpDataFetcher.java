@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xbib.io.ftp.client.FTP;
+import org.xbib.io.ftp.client.FTPClient;
+import org.xbib.io.ftp.client.FTPFile;
+import org.xbib.io.ftp.client.FTPFileFilter;
 
 import edu.stanford.irt.eresources.DataFetcher;
 import edu.stanford.irt.eresources.EresourceDatabaseException;

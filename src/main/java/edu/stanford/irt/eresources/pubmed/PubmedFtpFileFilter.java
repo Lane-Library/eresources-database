@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPFileFilter;
+import org.xbib.io.ftp.client.FTPFile;
+import org.xbib.io.ftp.client.FTPFileFilter;
 
 public class PubmedFtpFileFilter implements FTPFileFilter {
 

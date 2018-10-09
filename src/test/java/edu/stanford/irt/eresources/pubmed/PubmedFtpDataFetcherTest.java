@@ -12,13 +12,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
 
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
-import org.apache.commons.net.ftp.FTPFileFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.xbib.io.ftp.client.FTP;
+import org.xbib.io.ftp.client.FTPClient;
+import org.xbib.io.ftp.client.FTPFile;
+import org.xbib.io.ftp.client.FTPFileFilter;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 

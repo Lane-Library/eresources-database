@@ -3,8 +3,8 @@ package edu.stanford.irt.eresources.pubmed;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.commons.net.ftp.FTPFile;
 import org.junit.Test;
+import org.xbib.io.ftp.client.FTPFile;
 
 public class PubmedFtpFileFilterTest {
 
