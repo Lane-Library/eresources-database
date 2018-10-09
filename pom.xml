@@ -104,10 +104,22 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--  override zookeeper dependency for sourceclear ... remove once solrj is updated to latest zk -->
+        <dependency>
+            <artifactId>zookeeper</artifactId>
+            <groupId>org.apache.zookeeper</groupId>
+            <version>3.5.4-beta</version>
+        </dependency>
         <dependency>
             <artifactId>solr-solrj</artifactId>
             <groupId>org.apache.solr</groupId>
             <version>7.5.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>zookeeper</artifactId>
+                    <groupId>org.apache.zookeeper</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
