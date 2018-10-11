@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -17,7 +19,13 @@ import edu.stanford.lane.catalog.Record.Subfield;
 
 public class SulMarcEresource extends AbstractMarcEresource {
 
+    private static final int MAX_YEAR = TextParserHelper.THIS_YEAR + 5;
+
+    private static final int MIN_YEAR = 500;
+
     private SulTypeFactory sulTypeFactory;
+
+    private int year;
 
     public SulMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
             final SulTypeFactory typeFactory) {
@@ -35,6 +43,11 @@ public class SulMarcEresource extends AbstractMarcEresource {
                     .orElse(null);
             return i != null && a != null && "Also known as:".equalsIgnoreCase(i.getData());
         }), "a").collect(Collectors.toSet());
+    }
+
+    @Override
+    public String getDate() {
+        return DateParser.parseDate(Integer.toString(getYear()));
     }
 
     @Override
@@ -112,6 +125,31 @@ public class SulMarcEresource extends AbstractMarcEresource {
             this.versions = Collections.unmodifiableList(new ArrayList<>(versionSet));
         }
         return new ArrayList<>(this.versions);
+    }
+
+    @Override
+    public int getYear() {
+        if (this.year != 0) {
+            return this.year;
+        }
+        int yr = MARCRecordSupport.getYear(this.record);
+        // SUL 008s are sometimes really off; fetch 264c/260c dates as needed
+        if (yr < MIN_YEAR || yr >= MAX_YEAR) {
+            String date = DateParser.parseYear(
+                    getSubfieldData(getFields(this.record, "264").filter((final Field f) -> f.getIndicator2() == '1'),
+                            "c").findFirst().orElse(null));
+            if (null == date) {
+                date = DateParser.parseYear(getSubfieldData(this.record, "264", "c").findFirst().orElse(null));
+            }
+            if (null == date) {
+                date = DateParser.parseYear(getSubfieldData(this.record, "260", "c").findFirst().orElse(null));
+            }
+            if (null != date && date.length() == 4) {
+                yr = Integer.parseInt(date);
+            }
+        }
+        this.year = yr;
+        return this.year;
     }
 
     @Override

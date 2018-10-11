@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import edu.stanford.irt.eresources.DateParser;
-
 public class DateParserTest {
 
     @Test
@@ -36,5 +34,15 @@ public class DateParserTest {
         assertEquals("19530101", DateParser.parseDate("[1953]"));
         assertEquals("20150101", DateParser.parseDate("2015 31/12"));
         assertEquals("20150101", DateParser.parseDate("2015 47 25"));
+    }
+
+    @Test
+    public final void testParseYear() throws Exception {
+        assertEquals("1200", DateParser.parseYear("just one 1200 year"));
+        assertEquals("1938", DateParser.parseYear("1938 oregon"));
+        assertEquals("2012", DateParser.parseYear("02/16/2012"));
+        assertEquals("2014", DateParser.parseYear("Mar. 24th 2014"));
+        assertEquals(null, DateParser.parseYear(""));
+        assertEquals(null, DateParser.parseYear(null));
     }
 }

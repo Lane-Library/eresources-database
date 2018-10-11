@@ -47,6 +47,21 @@ public final class DateParser {
     }
 
     /**
+     * @param string
+     *            containing 4-digit year and other text
+     * @return {@code String} first 4-digit year string or null
+     */
+    public static String parseYear(final String string) {
+        String year = null;
+        if (null != string && YEAR_FIRST_ANYWHERE.matcher(string).find()) {
+            Matcher m = YEAR_FIRST_ANYWHERE.matcher(string);
+            m.find();
+            year = m.group(1);
+        }
+        return year;
+    }
+
+    /**
      * PubDate and MedlineDate field descriptions:
      * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#pubdate PubMed help: "Publication dates without a
      * month are set to January, multiple months (e.g., Oct-Dec) are set to the first month, and dates without a day are
