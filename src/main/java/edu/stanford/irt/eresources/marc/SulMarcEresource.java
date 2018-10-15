@@ -148,7 +148,9 @@ public class SulMarcEresource extends AbstractMarcEresource {
                 yr = Integer.parseInt(date);
             }
         }
-        this.year = yr;
+        if (yr >= MIN_YEAR && yr <= MAX_YEAR) {
+            this.year = yr;
+        }
         return this.year;
     }
 
