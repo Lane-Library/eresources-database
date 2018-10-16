@@ -59,36 +59,7 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     public String getPrimaryType(final Record record) {
         String primaryType = EresourceConstants.OTHER;
-        if (EresourceConstants.OTHER.equals(primaryType)) {
-            primaryType = getSubfieldData(getFields(record, "655").filter((final Field f) -> '7' == f.getIndicator2()),
-                    "a").map(TextParserHelper::maybeStripTrailingPeriod)
-                            .filter((final String s) -> PRIMARY_TYPES.containsKey(s.toLowerCase(Locale.US)))
-                            .map((final String s) -> PRIMARY_TYPES.get(s.toLowerCase(Locale.US))).findFirst()
-                            .orElse(EresourceConstants.OTHER);
-        }
-        if (EresourceConstants.OTHER.equals(primaryType)) {
-            primaryType = getSubfieldData(record, "999", "t").map(TextParserHelper::maybeStripTrailingPeriod)
-                    .filter((final String s) -> PRIMARY_TYPES.containsKey(s.toLowerCase(Locale.US)))
-                    .map((final String s) -> PRIMARY_TYPES.get(s.toLowerCase(Locale.US))).findFirst()
-                    .orElse(EresourceConstants.OTHER);
-        }
-        if (EresourceConstants.OTHER.equals(primaryType)) {
-            primaryType = getSubfieldData(getFieldsWild(record, "6"), "v")
-                    .map(TextParserHelper::maybeStripTrailingPeriod)
-                    .filter((final String s) -> PRIMARY_TYPES.containsKey(s.toLowerCase(Locale.US)))
-                    .map((final String s) -> PRIMARY_TYPES.get(s.toLowerCase(Locale.US))).findFirst()
-                    .orElse(EresourceConstants.OTHER);
-        }
-        if (EresourceConstants.OTHER != primaryType) {
-            return primaryType;
-        }
-        List<String> types = new ArrayList<>();
-        if (types.isEmpty()) {
-            types = new ArrayList<>(getRawTypes(record));
-        }
-        if (types.isEmpty()) {
-            types = getTypes(record);
-        }
+        List<String> types = getTypes(record);
         if (!types.isEmpty()) {
             primaryType = types.get(0);
         }
@@ -108,13 +79,13 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     public List<String> getTypes(final Record record) {
         List<String> types = new ArrayList<>();
-        for (String type : getRawTypes(record)) {
+        String f001 = getFields(record, "001").map(Field::getData).findFirst().orElse("0").replaceAll("\\D", "");
+        for (String type : this.catalogRecordService.getRecordFormats(f001)) {
             types.add(getCompositeType(type));
         }
-        if (types.isEmpty()) {
-            String f001 = getFields(record, "001").map(Field::getData).findFirst().orElse("0").replaceAll("\\D", "");
-            for (String type : this.catalogRecordService.getRecordFormats(f001)) {
-                types.add(getCompositeType(type));
+        for (String type : getRawTypes(record)) {
+            if (!types.contains(type)) {
+                types.add(type);
             }
         }
         return types;
@@ -144,9 +115,11 @@ public class SulTypeFactory extends MARCRecordSupport {
         List<Field> fields6xx = getFieldsWild(record, "6").collect(Collectors.toList());
         rawTypes.addAll(getSubfieldData(fields6xx.stream(), "v").map(TextParserHelper::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet()));
+        rawTypes.addAll(getSubfieldData(record, "245", "h").map(TextParserHelper::maybeStripTrailingPeriod)
+                .map((final String s) -> s.replaceAll("(^\\[|\\]( :)?$)", "")).map(TextParserHelper::toTitleCase)
+                .collect(Collectors.toSet()));
         rawTypes.addAll(
-                getSubfieldData(record, "245", "h").map((final String s) -> s.replaceAll("(^\\[|\\]( :)?$)", ""))
-                        .map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
+                getSubfieldData(record, "999", "t").map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
         return rawTypes.stream().map(this::getCompositeType).filter(ALLOWED_TYPES::contains)
                 .collect(Collectors.toSet());
     }
