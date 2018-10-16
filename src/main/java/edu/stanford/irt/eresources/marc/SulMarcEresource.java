@@ -101,6 +101,9 @@ public class SulMarcEresource extends AbstractMarcEresource {
         if (this.types == null) {
             this.types = this.sulTypeFactory.getTypes(this.record);
         }
+        if (!this.types.contains(getPrimaryType())) {
+            this.types.add(getPrimaryType());
+        }
         return new ArrayList<>(this.types);
     }
 
