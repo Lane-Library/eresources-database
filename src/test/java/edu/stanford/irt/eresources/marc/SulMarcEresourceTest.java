@@ -9,9 +9,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -127,7 +129,9 @@ public class SulMarcEresourceTest {
 
     @Test
     public final void testGetTypes() {
-        expect(this.typeFactory.getTypes(this.record)).andReturn(Collections.emptyList());
+        List<String> types = new ArrayList<>();
+        expect(this.typeFactory.getTypes(this.record)).andReturn(types);
+        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("Other");
         replay(this.typeFactory, this.record);
         assertTrue(this.eresource.getTypes().isEmpty());
     }

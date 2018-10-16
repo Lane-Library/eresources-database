@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.DateParser;
+import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
@@ -101,7 +102,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
         if (this.types == null) {
             this.types = this.sulTypeFactory.getTypes(this.record);
         }
-        if (!this.types.contains(getPrimaryType())) {
+        if (!EresourceConstants.OTHER.equals(getPrimaryType()) && !this.types.contains(getPrimaryType())) {
             this.types.add(getPrimaryType());
         }
         return new ArrayList<>(this.types);
