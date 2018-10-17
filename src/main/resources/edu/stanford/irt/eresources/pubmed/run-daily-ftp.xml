@@ -9,7 +9,7 @@
                 <bean class="edu.stanford.irt.eresources.pubmed.PubmedFtpDataFetcher" >
                     <constructor-arg name="basePathname" value="${eresources.pubmedprocessor.ftpPath}"/>
                     <constructor-arg name="ftpClient">
-                        <bean class="org.apache.commons.net.ftp.FTPClient"/>
+                        <bean class="org.xbib.io.ftp.client.FTPClient"/>
                     </constructor-arg>
                     <constructor-arg name="ftpFileFilter">
                         <bean class="edu.stanford.irt.eresources.pubmed.PubmedFtpFileFilter">
