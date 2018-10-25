@@ -11,7 +11,7 @@ public class SulReload extends SolrLoader {
 
     private static final String BASE_QUERY = "(recordType:sul)";
 
-    private static final int EXPECTED_MIN_BIBS = 100_000;
+    private static final int EXPECTED_MIN_BIBS = 1_000_000;
 
     private static final Logger LOG = LoggerFactory.getLogger(SulReload.class);
 
