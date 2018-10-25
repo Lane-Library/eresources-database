@@ -14,6 +14,9 @@ public class SulMarcLink extends MarcLink {
     private static final Pattern SU_AFFIL_AT = Pattern
             .compile("(available[ -]?to[ -]?stanford[ -]?affiliated[ -]?users)[ -]?at[:;.]?", Pattern.CASE_INSENSITIVE);
 
+    private static final Pattern SUL_PROXY_PREFIX = Pattern
+            .compile("^https?://stanford\\.idm\\.oclc\\.org/login\\?url=", Pattern.CASE_INSENSITIVE);
+
     private Field field;
 
     public SulMarcLink(final Field field, final Version version) {
@@ -40,5 +43,11 @@ public class SulMarcLink extends MarcLink {
             l = SU_AFFIL_AT.matcher(l).replaceFirst("$1");
         }
         return l;
+    }
+
+    @Override
+    public String getUrl() {
+        // strip SUL proxy prefix from links
+        return SUL_PROXY_PREFIX.matcher(super.getUrl()).replaceFirst("");
     }
 }

@@ -104,4 +104,22 @@ public class SulMarcLinkTest {
         replay(this.field, this.subfield);
         assertEquals("Available to Stanford-affiliated users", this.link.getLabel());
     }
+
+    @Test
+    public void testGetUrl() {
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('u');
+        expect(this.subfield.getData()).andReturn("foo");
+        replay(this.field, this.subfield);
+        assertEquals("foo", this.link.getUrl());
+    }
+
+    @Test
+    public void testGetUrlSulProxy() {
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('u');
+        expect(this.subfield.getData()).andReturn("https://stanford.idm.oclc.org/login?url=https://foo.com");
+        replay(this.field, this.subfield);
+        assertEquals("https://foo.com", this.link.getUrl());
+    }
 }
