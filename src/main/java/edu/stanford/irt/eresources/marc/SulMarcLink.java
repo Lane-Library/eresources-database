@@ -48,6 +48,10 @@ public class SulMarcLink extends MarcLink {
     @Override
     public String getUrl() {
         // strip SUL proxy prefix from links
-        return SUL_PROXY_PREFIX.matcher(super.getUrl()).replaceFirst("");
+        String url = super.getUrl();
+        if (null != url) {
+            url = SUL_PROXY_PREFIX.matcher(url).replaceFirst("");
+        }
+        return url;
     }
 }
