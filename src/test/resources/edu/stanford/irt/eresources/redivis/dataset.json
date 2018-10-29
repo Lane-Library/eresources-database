@@ -1,0 +1,687 @@
+{
+  "kind": "dataset",
+  "id": 45,
+  "name": "MarketScan Inpatient Services",
+  "description": "This file contains individual inpatient claim records that were used to create admissions records.",
+  "accessLevel": "overview",
+  "url": "https://redivis.com/StanfordPHS/datasets/45",
+  "createdAt": "2016-09-19T23:17:12.852Z",
+  "updatedAt": "2018-10-22T18:08:44.684Z",
+  "numRows": 663391079,
+  "numBytes": 277850846130,
+  "variableCount": 76,
+  "temporalRange": {
+    "precision": "date",
+    "min": "2007-01-01",
+    "max": "2015-01-01"
+  },
+  "organization": {
+    "kind": "organization",
+    "id": 1,
+    "shortName": "StanfordPHS",
+    "name": "Stanford Center for Population Health Sciences"
+  },
+  "versions": [
+    {
+      "kind": "datasetVersion",
+      "id": 257,
+      "tag": "2.0",
+      "description": "Including the 2016 data, improved variable harmonization between tables and between years",
+      "createdAt": "2018-06-13T21:17:39.657Z",
+      "deltaRows": 42928066,
+      "numRows": 663391079,
+      "numBytes": 277850846130,
+      "variableCount": 76,
+      "variablesAdded": 0,
+      "variablesRemoved": 1
+    },
+    {
+      "kind": "datasetVersion",
+      "id": 146,
+      "tag": "1.2",
+      "description": "This release harmonizes variable types with other Truven Datasets and removes all records without an ENROLID.",
+      "createdAt": "2018-01-31T03:11:09.162Z",
+      "deltaRows": -617222,
+      "numRows": 620463013,
+      "numBytes": 258202881743,
+      "variableCount": 76,
+      "variablesAdded": 0,
+      "variablesRemoved": 0
+    },
+    {
+      "kind": "datasetVersion",
+      "id": 105,
+      "tag": "1.1",
+      "description": null,
+      "createdAt": "2017-11-26T04:04:33.888Z",
+      "deltaRows": 0,
+      "numRows": 621080235,
+      "numBytes": 241515626330,
+      "variableCount": 76,
+      "variablesAdded": 0,
+      "variablesRemoved": 0
+    },
+    {
+      "kind": "datasetVersion",
+      "id": 74,
+      "tag": "1.0",
+      "description": null,
+      "createdAt": "2017-10-26T04:04:33.888Z",
+      "deltaRows": 621080235,
+      "numRows": 621080235,
+      "numBytes": 245542901506,
+      "variableCount": 76,
+      "variablesAdded": 77,
+      "variablesRemoved": 0
+    }
+  ],
+  "permissionGroup": {
+    "kind": "permissionGroup",
+    "id": 33,
+    "name": "Truven",
+    "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=33"
+  },
+  "collections": [
+    {
+      "kind": "collection",
+      "id": 9,
+      "name": "Truven",
+      "url": "https://redivis.com/StanfordPHS?collection=9"
+    }
+  ],
+  "entity": {
+    "kind": "entity",
+    "name": "service"
+  },
+  "tags": [
+    {
+      "kind": "tag",
+      "name": "usa"
+    },
+    {
+      "kind": "tag",
+      "name": "adults"
+    },
+    {
+      "kind": "tag",
+      "name": "claims"
+    },
+    {
+      "kind": "tag",
+      "name": "inpatient"
+    },
+    {
+      "kind": "tag",
+      "name": "children"
+    },
+    {
+      "kind": "tag",
+      "name": "commercial"
+    },
+    {
+      "kind": "tag",
+      "name": "medicare"
+    }
+  ],
+  "documentations": [
+    {
+      "kind": "documentation",
+      "name": null,
+      "requiredAccessLevel": "overview",
+      "text": "# Notes  \nThis file contains individual inpatient claim records that were used to create admissions records. One record identifies one inpatient stay at a given facility.\n\nLinkable to other tables using Enrollee ID\nCommon measures: most expensive procedures in inpatient setting, admission rates, etc.\n\nKey variables of interest:\nDate of Admission  \nAdmission Type  \nData Type \nDate of Discharge\nLength of Stay\nPrincipal Diagnosis for a given admission\nPrincipal diagnosis and 14 secondary diagnoses\nProcedure principal\nPrincipal procedure and 14 secondary procedures\nNet payments to hospital, respectively\nGross payments to hospital, respectively\nNet payments to physician, respectively\nGross payments to physician, respectively\nTotal Coinsurance (for the case)\nTotal copay (for the case)\nTotal deductible (for the case)\nNet total payments (for the case)\nGross total payments (for the case)\n  \n"
+    },
+    {
+      "kind": "documentation",
+      "name": null,
+      "requiredAccessLevel": "data",
+      "text": "# Truven Documentation:\n\nPer the DUA you signed, the Truven MarketScan documentation can NOT be downloaded to your computer or shared in any other way. Failure to comply will result in suspension/termination of access to the data.\n\n[Truven Data Dictionary](/fileUploads/9a8c8ca4-9841-4987-bdd6-9afe6e2b17eb)\n\n[Truven User Guide](/fileUploads/1045b9b4-5c2f-4580-8015-c7ed333c1b11)"
+    }
+  ],
+  "variables": [
+    {
+      "name": "STDPLAC",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301132"
+    },
+    {
+      "name": "EFAMID",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301134"
+    },
+    {
+      "name": "PLANTYP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301136"
+    },
+    {
+      "name": "MSA",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301138"
+    },
+    {
+      "name": "EECLASS",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301141"
+    },
+    {
+      "name": "ADMDATE",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301101"
+    },
+    {
+      "name": "ADMTYP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301129"
+    },
+    {
+      "name": "AGE",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301102"
+    },
+    {
+      "name": "AGEGRP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301140"
+    },
+    {
+      "name": "CAP_SVC",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301103"
+    },
+    {
+      "name": "CASEID",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301097"
+    },
+    {
+      "name": "COB",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301104"
+    },
+    {
+      "name": "COINS",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301105"
+    },
+    {
+      "name": "COPAY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301106"
+    },
+    {
+      "name": "DATATYP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301139"
+    },
+    {
+      "name": "DEDUCT",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301107"
+    },
+    {
+      "name": "DISDATE",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301098"
+    },
+    {
+      "name": "DOBYR",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301099"
+    },
+    {
+      "name": "DRG",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301108"
+    },
+    {
+      "name": "DSTATUS",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301131"
+    },
+    {
+      "name": "DX2",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301094"
+    },
+    {
+      "name": "DX3",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301109"
+    },
+    {
+      "name": "DX4",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301110"
+    },
+    {
+      "name": "DXVER",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301111"
+    },
+    {
+      "name": "EESTATU",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301142"
+    },
+    {
+      "name": "EGEOLOC",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301143"
+    },
+    {
+      "name": "EIDFLAG",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301144"
+    },
+    {
+      "name": "ENROLID",
+      "label": "Unique enrollee identifier",
+      "description": "Unique enrollee identifier",
+      "valueLabels": {},
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301135"
+    },
+    {
+      "name": "FACHDID",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301112"
+    },
+    {
+      "name": "FACPROF",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301113"
+    },
+    {
+      "name": "HLTHPLAN",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301150"
+    },
+    {
+      "name": "MDC",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301130"
+    },
+    {
+      "name": "MHSACOVG",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301114"
+    },
+    {
+      "name": "MSCLMID",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301152"
+    },
+    {
+      "name": "NETPAY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301115"
+    },
+    {
+      "name": "NPI",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301153"
+    },
+    {
+      "name": "NTWKPROV",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301116"
+    },
+    {
+      "name": "PAIDNTWK",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301117"
+    },
+    {
+      "name": "PATFLAG",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301163"
+    },
+    {
+      "name": "PAY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301118"
+    },
+    {
+      "name": "PDDATE",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301119"
+    },
+    {
+      "name": "PDX",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301120"
+    },
+    {
+      "name": "PHYFLAG",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301147"
+    },
+    {
+      "name": "PPROC",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301121"
+    },
+    {
+      "name": "PROC1",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301095"
+    },
+    {
+      "name": "PROCMOD",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301122"
+    },
+    {
+      "name": "PROCTYP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301096"
+    },
+    {
+      "name": "PROVID",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301123"
+    },
+    {
+      "name": "QTY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301124"
+    },
+    {
+      "name": "REGION",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301137"
+    },
+    {
+      "name": "REVCODE",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301125"
+    },
+    {
+      "name": "RX",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301148"
+    },
+    {
+      "name": "SEX",
+      "label": null,
+      "description": null,
+      "valueLabels": {
+        "2": "Female"
+      },
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301149"
+    },
+    {
+      "name": "STDPROV",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301133"
+    },
+    {
+      "name": "SVCDATE",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301126"
+    },
+    {
+      "name": "SVCSCAT",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301127"
+    },
+    {
+      "name": "TSVCDAT",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301128"
+    },
+    {
+      "name": "YEAR",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301100"
+    },
+    {
+      "name": "VERSION",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301092"
+    },
+    {
+      "name": "EMPREL",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301145"
+    },
+    {
+      "name": "INDSTRY",
+      "label": null,
+      "description": null,
+      "valueLabels": {
+        "1": "Oil & Gas Extraction, Mining ",
+        "2": "Manufacturing, Durable Goods",
+        "3": "Manufacturing, Nondurable Goods",
+        "4": "Transportation,  Communications, Utilities",
+        "5": "Retail Trade",
+        "6": "Finance, Insurance, Real Estate",
+        "7": "Services",
+        "A": "Agrigulture, Forestry, Fishing",
+        "C": "Construction",
+        "W": "Wholesale"
+      },
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301151"
+    },
+    {
+      "name": "ENRFLAG",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301146"
+    },
+    {
+      "name": "PLANKEY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301156"
+    },
+    {
+      "name": "SEQNUM",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301091"
+    },
+    {
+      "name": "UNITS",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301154"
+    },
+    {
+      "name": "WGTKEY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301155"
+    },
+    {
+      "name": "EMPCTY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301164"
+    },
+    {
+      "name": "EMPZIP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301161"
+    },
+    {
+      "name": "HOSPCTY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301165"
+    },
+    {
+      "name": "HOSPZIP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301157"
+    },
+    {
+      "name": "PATID",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301162"
+    },
+    {
+      "name": "PROVCTY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301166"
+    },
+    {
+      "name": "PROVZIP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301158"
+    },
+    {
+      "name": "STDSVC",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301160"
+    },
+    {
+      "name": "UNIHOSP",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301159"
+    },
+    {
+      "name": "DX1",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301093"
+    }
+  ]
+}
