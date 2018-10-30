@@ -9,14 +9,11 @@ public class DatasetLink implements Link {
 
     private String label = "Redivis";
 
-    private String url;
-
     private Version version;
 
     public DatasetLink(final Dataset dataset, final DatasetVersion version) {
         this.dataset = dataset;
         this.version = version;
-        this.url = this.dataset.getUrl();
     }
 
     @Override
@@ -36,7 +33,7 @@ public class DatasetLink implements Link {
 
     @Override
     public String getUrl() {
-        return this.url;
+        return this.dataset.getUrl();
     }
 
     @Override

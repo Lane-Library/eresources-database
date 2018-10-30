@@ -4,8 +4,6 @@ public class Organization {
 
     private String id;
 
-    private String kind;
-
     private String name;
 
     private String shortName;
@@ -19,13 +17,6 @@ public class Organization {
      */
     public String getId() {
         return this.id;
-    }
-
-    /**
-     * @return the kind
-     */
-    public String getKind() {
-        return this.kind;
     }
 
     /**
@@ -48,16 +39,6 @@ public class Organization {
      */
     public void setId(final String id) {
         this.id = id;
-    }
-
-    /**
-     * /**
-     *
-     * @param kind
-     *            the kind to set
-     */
-    public void setKind(final String kind) {
-        this.kind = kind;
     }
 
     /**

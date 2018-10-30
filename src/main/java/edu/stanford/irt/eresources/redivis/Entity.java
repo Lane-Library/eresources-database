@@ -2,8 +2,6 @@ package edu.stanford.irt.eresources.redivis;
 
 public class Entity {
 
-    private String kind;
-
     private String name;
 
     public Entity() {
@@ -11,25 +9,10 @@ public class Entity {
     }
 
     /**
-     * @return the kind
-     */
-    public String getKind() {
-        return this.kind;
-    }
-
-    /**
      * @return the name
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * @param kind
-     *            the kind to set
-     */
-    public void setKind(final String kind) {
-        this.kind = kind;
     }
 
     /**

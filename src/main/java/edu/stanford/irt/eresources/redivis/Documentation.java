@@ -2,30 +2,12 @@ package edu.stanford.irt.eresources.redivis;
 
 public class Documentation {
 
-    private String kind;
-
-    private String name;
-
     private String requiredAccessLevel;
 
     private String text;
 
     public Documentation() {
         // empty constructor
-    }
-
-    /**
-     * @return the kind
-     */
-    public String getKind() {
-        return this.kind;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return this.name;
     }
 
     /**
@@ -40,22 +22,6 @@ public class Documentation {
      */
     public String getText() {
         return this.text;
-    }
-
-    /**
-     * @param kind
-     *            the kind to set
-     */
-    public void setKind(final String kind) {
-        this.kind = kind;
-    }
-
-    /**
-     * @param name
-     *            the name to set
-     */
-    public void setName(final String name) {
-        this.name = name;
     }
 
     /**

@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.redivis;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,8 @@ import edu.stanford.irt.eresources.sax.DateParser;
 public class RedivisEresource implements Eresource {
 
     private Dataset dataset;
+
+    private List<String> types = Arrays.asList("Dataset");
 
     public RedivisEresource(final Dataset dataset) {
         this.dataset = dataset;
@@ -66,7 +69,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public String getPrimaryType() {
-        return "Dataset";
+        return this.types.get(0);
     }
 
     @Override
@@ -146,10 +149,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public Collection<String> getTypes() {
-        // TODO: FIXME
-        List<String> types = new ArrayList<>();
-        types.add("Dataset");
-        return types;
+        return this.types;
     }
 
     @Override
