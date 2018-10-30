@@ -23,7 +23,7 @@ public class RedivisEresourceTest {
     public void setUp() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        this.dataset = mapper.readValue(RedivisDataset.class.getResourceAsStream("dataset.json"), Dataset.class);
+        this.dataset = mapper.readValue(RedivisEresourceTest.class.getResourceAsStream("dataset.json"), Dataset.class);
         this.eresource = new RedivisEresource(this.dataset);
     }
 

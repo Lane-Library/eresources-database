@@ -12,17 +12,17 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public final class RedivisDataset {
+public final class RedivisDatasetTest {
 
     @Test
     public void testMap() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        DatasetList datasets = mapper.readValue(RedivisDataset.class.getResourceAsStream("datasets.json"),
+        DatasetList datasets = mapper.readValue(RedivisDatasetTest.class.getResourceAsStream("datasets.json"),
                 DatasetList.class);
         assertFalse(datasets.getDatasets().isEmpty());
         assertNull(datasets.getNextPageToken());
-        Dataset dataset = mapper.readValue(RedivisDataset.class.getResourceAsStream("dataset.json"), Dataset.class);
+        Dataset dataset = mapper.readValue(RedivisDatasetTest.class.getResourceAsStream("dataset.json"), Dataset.class);
         assertEquals("overview", dataset.getAccessLevel());
         assertEquals("9", dataset.getCollections().get(0).getId());
         assertEquals("Truven", dataset.getCollections().get(0).getName());
