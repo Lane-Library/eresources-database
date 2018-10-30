@@ -33,7 +33,7 @@ public class KeywordsStrategy {
         } else if (leaderByte6 == 'q') {
             fields.stream().filter((final Field f) -> {
                 int tagNumber = Integer.parseInt(f.getTag());
-                return tagNumber >= 100 && tagNumber <= 943;// && tagNumber != 245;
+                return tagNumber >= 100 && tagNumber <= 943;
             }).forEach((final Field f) -> {
                 String tag = f.getTag();
                 f.getSubfields().stream().forEach((final Subfield s) -> {
@@ -98,6 +98,8 @@ public class KeywordsStrategy {
 
     private boolean isKeywordTag(final String tag) {
         int tagNumber = Integer.parseInt(tag);
-        return (tagNumber >= 100 && tagNumber < 900) || KEYWORD_TAGS.indexOf(tag) != -1;
+        // 863 is SUL holdings tag and indexing it creates relevance ranking noise with number searching
+        // create separate SulKeywordStrategy if this conflicts with Lane practice
+        return (tagNumber >= 100 && tagNumber < 900 && tagNumber != 863) || KEYWORD_TAGS.indexOf(tag) != -1;
     }
 }
