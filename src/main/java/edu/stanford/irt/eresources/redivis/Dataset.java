@@ -111,7 +111,7 @@ public class Dataset {
      * @return the updatedAt
      */
     public Date getUpdatedAt() {
-        return new Date(this.updatedAt.getTime());
+        return this.updatedAt;
     }
 
     /**
