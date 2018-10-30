@@ -1,0 +1,204 @@
+{
+  "kind": "datasetList",
+  "nextPageToken": null,
+  "datasets": [
+    {
+      "kind": "dataset",
+      "id": 536,
+      "name": "AMC HR-CDM Employment Record",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/536",
+      "createdAt": "2018-10-04T22:35:33.657Z",
+      "updatedAt": "2018-10-04T22:51:14.642Z",
+      "numRows": 3052104,
+      "numBytes": 501054745,
+      "variableCount": 22,
+      "temporalRange": null,
+      "currentVersion": {
+        "kind": "datasetVersion",
+        "id": 453,
+        "tag": "1.0",
+        "tableId": 16381
+      },
+      "permissionGroup": {
+        "kind": "permissionGroup",
+        "id": 1,
+        "name": "American Manufacturing Cohort",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=1"
+      },
+      "collections": [
+        {
+          "kind": "collection",
+          "id": 43,
+          "name": "American Manufacturing Cohort HR-CDM",
+          "url": "https://redivis.com/StanfordPHS?collection=43"
+        }
+      ],
+      "entity": {
+        "kind": "entity",
+        "name": "patient per calendar year"
+      },
+      "tags": []
+    },
+    {
+      "kind": "dataset",
+      "id": 550,
+      "name": "Optum SES Medical Diagnosis",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/550",
+      "createdAt": "2018-10-18T18:21:47.283Z",
+      "updatedAt": "2018-10-22T21:17:58.698Z",
+      "numRows": 5658352001,
+      "numBytes": 443576924273,
+      "variableCount": 10,
+      "temporalRange": null,
+      "currentVersion": {
+        "kind": "datasetVersion",
+        "id": 475,
+        "tag": "1.0",
+        "tableId": 18233
+      },
+      "permissionGroup": {
+        "kind": "permissionGroup",
+        "id": 27,
+        "name": "Optum",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+      },
+      "collections": [
+        {
+          "kind": "collection",
+          "id": 2,
+          "name": "Optum",
+          "url": "https://redivis.com/StanfordPHS?collection=2"
+        }
+      ],
+      "entity": null,
+      "tags": []
+    },
+    {
+      "kind": "dataset",
+      "id": 551,
+      "name": "Optum SES Medical Procedure",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/551",
+      "createdAt": "2018-10-18T18:26:22.536Z",
+      "updatedAt": "2018-10-22T21:17:58.698Z",
+      "numRows": 47315487,
+      "numBytes": 3430083079,
+      "variableCount": 8,
+      "temporalRange": null,
+      "currentVersion": {
+        "kind": "datasetVersion",
+        "id": 476,
+        "tag": "1.0",
+        "tableId": 18234
+      },
+      "permissionGroup": {
+        "kind": "permissionGroup",
+        "id": 27,
+        "name": "Optum",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+      },
+      "collections": [
+        {
+          "kind": "collection",
+          "id": 2,
+          "name": "Optum",
+          "url": "https://redivis.com/StanfordPHS?collection=2"
+        }
+      ],
+      "entity": null,
+      "tags": []
+    },
+    {
+      "kind": "dataset",
+      "id": 552,
+      "name": "Optum ZIP5 Medical Procedure",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/552",
+      "createdAt": "2018-10-18T20:21:02.648Z",
+      "updatedAt": "2018-10-22T21:17:58.698Z",
+      "numRows": 0,
+      "numBytes": null,
+      "variableCount": 0,
+      "temporalRange": null,
+      "currentVersion": null,
+      "permissionGroup": {
+        "kind": "permissionGroup",
+        "id": 27,
+        "name": "Optum",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+      },
+      "collections": [
+        {
+          "kind": "collection",
+          "id": 2,
+          "name": "Optum",
+          "url": "https://redivis.com/StanfordPHS?collection=2"
+        }
+      ],
+      "entity": null,
+      "tags": []
+    },
+    {
+      "kind": "dataset",
+      "id": 553,
+      "name": "Optum ZIP5 Medical Diagnosis",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/553",
+      "createdAt": "2018-10-18T20:22:47.139Z",
+      "updatedAt": "2018-10-22T21:17:58.698Z",
+      "numRows": 0,
+      "numBytes": null,
+      "variableCount": 0,
+      "temporalRange": null,
+      "currentVersion": null,
+      "permissionGroup": {
+        "kind": "permissionGroup",
+        "id": 27,
+        "name": "Optum",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+      },
+      "collections": [
+        {
+          "kind": "collection",
+          "id": 2,
+          "name": "Optum",
+          "url": "https://redivis.com/StanfordPHS?collection=2"
+        }
+      ],
+      "entity": null,
+      "tags": []
+    },
+    {
+      "kind": "dataset",
+      "id": 557,
+      "name": "Optum DOD Medical Diagnosis",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/557",
+      "createdAt": "2018-10-22T15:13:55.821Z",
+      "updatedAt": "2018-10-22T21:17:58.698Z",
+      "numRows": 0,
+      "numBytes": null,
+      "variableCount": null,
+      "temporalRange": null,
+      "currentVersion": null,
+      "permissionGroup": {
+        "kind": "permissionGroup",
+        "id": 27,
+        "name": "Optum",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+      },
+      "collections": [
+        {
+          "kind": "collection",
+          "id": 2,
+          "name": "Optum",
+          "url": "https://redivis.com/StanfordPHS?collection=2"
+        }
+      ],
+      "entity": null,
+      "tags": []
+    }
+  ]
+}
