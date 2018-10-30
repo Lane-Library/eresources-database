@@ -14,6 +14,8 @@ import edu.stanford.irt.eresources.sax.DateParser;
 
 public class RedivisEresource implements Eresource {
 
+    private static final int TWO = 2;
+
     private Dataset dataset;
 
     private List<String> types = Arrays.asList("Dataset");
@@ -54,7 +56,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public int[] getItemCount() {
-        return new int[2];
+        return new int[TWO];
     }
 
     @Override
