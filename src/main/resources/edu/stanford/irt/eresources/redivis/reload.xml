@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <import resource="../properties.xml"/>
+    <bean id="solrLoader" class="edu.stanford.irt.eresources.RedivisReload">
+        <property name="handler" ref="eresourceHandler"/>
+        <property name="version" value="${project.version}"/>
+        <property name="executor" ref="executor"/>
+        <property name="queue" ref="queue"/>
+        <property name="solrClient" ref="solrClient"/>
+        <property name="processors">
+            <list>
+                <ref bean="redivisProcessor"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="redivisProcessor"
+        class="edu.stanford.irt.eresources.redivis.RedivisEresourceProcessor">
+        <constructor-arg name="getEndpoint" value="${eresources.redivis.datasetGetEndpoint}"/>
+        <constructor-arg name="listEndpoint" value="${eresources.redivis.datasetListEndpoint}"/>
+        <constructor-arg name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+    <bean id="eresourceHandler" class="edu.stanford.irt.eresources.SolrEresourceHandler">
+        <constructor-arg ref="queue"/>
+        <constructor-arg name="solrClient" ref="solrClient"/>
+        <constructor-arg name="solrMaxDocs" value="${eresources.solr-max-docs}"/>
+    </bean>
+    <bean id="solrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient">
+        <constructor-arg value="${eresources.solr-url-laneSearch}"/>
+    </bean>
+    <bean id="queue" class="java.util.concurrent.LinkedBlockingQueue">
+        <constructor-arg value="10000"/>
+    </bean>
+    <bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" destroy-method="destroy">
+        <property name="corePoolSize" value="5"/>
+        <property name="maxPoolSize" value="5"/>
+        <property name="queueCapacity" value="0"/>
+    </bean>
+</beans>

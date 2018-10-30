@@ -1,25 +1,21 @@
 package edu.stanford.irt.eresources;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
-import org.apache.solr.client.solrj.SolrServerException;
-
 public class PubmedReload extends SolrLoader {
+
+    private static final String BASE_QUERY = "(recordType:pubmed)";
+
+    private static final int EXPECTED_MIN_RECORDS = 1_000_000;
 
     @Override
     public void load() {
         // fetch most recently updated eresource date from solr
-        this.setUpdatedDateQuery("recordType:pubmed");
+        this.setUpdatedDateQuery(BASE_QUERY);
         LocalDateTime updateDate = this.getUpdatedDate();
-        String lastUpdate = updateDate.format(SOLR_DATE_FIELD_FORMATTER);
+        // set update date to null so Processors fetch everything
+        this.setUpdatedDateQuery(null);
         super.load();
-        try {
-            // delete everything older than lastUpdate
-            this.solrClient.deleteByQuery("recordType:pubmed AND updated:[* TO " + lastUpdate + "]");
-            this.solrClient.commit();
-        } catch (SolrServerException | IOException e) {
-            throw new EresourceDatabaseException(e);
-        }
+        maybeDeleteOldRecords(updateDate.format(SOLR_DATE_FIELD_FORMATTER), BASE_QUERY, EXPECTED_MIN_RECORDS);
     }
 }

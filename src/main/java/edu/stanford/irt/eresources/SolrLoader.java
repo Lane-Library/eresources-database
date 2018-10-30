@@ -134,4 +134,21 @@ public class SolrLoader {
         }
         return updated;
     }
+
+    protected void maybeDeleteOldRecords(final String lastUpdate, final String baseQuery,
+            final int minExpectedRecords) {
+        int updatedRecords = this.getHandler().getCount();
+        if (updatedRecords < minExpectedRecords) {
+            log.error("fewer updated records than expected; won't delete old records;"
+                    + " udpated records: {}; min expected: {}", updatedRecords, minExpectedRecords);
+        } else {
+            try {
+                // delete everything older than lastUpdate
+                this.solrClient.deleteByQuery(baseQuery + " AND updated:[* TO " + lastUpdate + "]");
+                this.solrClient.commit();
+            } catch (SolrServerException | IOException e) {
+                throw new EresourceDatabaseException(e);
+            }
+        }
+    }
 }

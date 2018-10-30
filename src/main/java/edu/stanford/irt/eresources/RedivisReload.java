@@ -2,12 +2,11 @@ package edu.stanford.irt.eresources;
 
 import java.time.LocalDateTime;
 
-public class LaneReload extends SolrLoader {
+public class RedivisReload extends SolrLoader {
 
-    private static final String BASE_QUERY = "(recordType:auth OR recordType:bib OR "
-            + " recordType:class OR recordType:laneblog OR recordType:web)";
+    private static final String BASE_QUERY = "(recordType:redivis)";
 
-    private static final int EXPECTED_MIN_BIBS = 300_000;
+    private static final int EXPECTED_MIN_RECORDS = 100;
 
     @Override
     public void load() {
@@ -17,6 +16,6 @@ public class LaneReload extends SolrLoader {
         // set update date to null so Processors fetch everything
         this.setUpdatedDateQuery(null);
         super.load();
-        maybeDeleteOldRecords(updateDate.format(SOLR_DATE_FIELD_FORMATTER), BASE_QUERY, EXPECTED_MIN_BIBS);
+        maybeDeleteOldRecords(updateDate.format(SOLR_DATE_FIELD_FORMATTER), BASE_QUERY, EXPECTED_MIN_RECORDS);
     }
 }
