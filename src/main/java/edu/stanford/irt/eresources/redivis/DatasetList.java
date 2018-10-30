@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.redivis;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatasetList {
@@ -16,7 +17,7 @@ public class DatasetList {
      * @return the datasets
      */
     public List<Dataset> getDatasets() {
-        return this.datasets;
+        return new ArrayList<>(this.datasets);
     }
 
     /**
