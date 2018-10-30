@@ -2,6 +2,8 @@ package edu.stanford.irt.eresources.redivis;
 
 public class TemporalRange {
 
+    private static final int YEAR_LENGTH = 4;
+
     private String max;
 
     private String min;
@@ -15,11 +17,11 @@ public class TemporalRange {
     public String getDisplayRange() {
         StringBuilder sb = new StringBuilder();
         if (null != this.min) {
-            sb.append(this.min.substring(0, 4));
+            sb.append(this.min.substring(0, YEAR_LENGTH));
         }
         if (null != this.max) {
             sb.append("-");
-            sb.append(this.max.substring(0, 4));
+            sb.append(this.max.substring(0, YEAR_LENGTH));
         }
         return sb.toString();
     }
@@ -43,29 +45,5 @@ public class TemporalRange {
      */
     public String getPrecision() {
         return this.precision;
-    }
-
-    /**
-     * @param max
-     *            the max to set
-     */
-    public void setMax(final String max) {
-        this.max = max;
-    }
-
-    /**
-     * @param min
-     *            the min to set
-     */
-    public void setMin(final String min) {
-        this.min = min;
-    }
-
-    /**
-     * @param precision
-     *            the precision to set
-     */
-    public void setPrecision(final String precision) {
-        this.precision = precision;
     }
 }
