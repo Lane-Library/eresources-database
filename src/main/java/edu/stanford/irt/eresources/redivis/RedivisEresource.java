@@ -151,7 +151,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public Collection<String> getTypes() {
-        return TYPES;
+        return new ArrayList<>(TYPES);
     }
 
     @Override
