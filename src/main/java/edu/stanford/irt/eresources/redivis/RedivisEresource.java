@@ -16,9 +16,9 @@ public class RedivisEresource implements Eresource {
 
     private static final int TWO = 2;
 
-    private Dataset dataset;
+    private static final List<String> TYPES = Arrays.asList("Dataset");
 
-    private List<String> types = Arrays.asList("Dataset");
+    private Dataset dataset;
 
     public RedivisEresource(final Dataset dataset) {
         this.dataset = dataset;
@@ -71,7 +71,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public String getPrimaryType() {
-        return this.types.get(0);
+        return TYPES.get(0);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public Collection<String> getTypes() {
-        return this.types;
+        return TYPES;
     }
 
     @Override
