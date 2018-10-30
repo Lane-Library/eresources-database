@@ -14,6 +14,12 @@ public class TemporalRange {
         // empty constructor
     }
 
+    public TemporalRange(final String max, final String min, final String precision) {
+        this.max = max;
+        this.min = min;
+        this.precision = precision;
+    }
+
     public String getDisplayRange() {
         StringBuilder sb = new StringBuilder();
         if (null != this.min) {
