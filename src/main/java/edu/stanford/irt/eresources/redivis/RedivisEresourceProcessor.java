@@ -52,7 +52,7 @@ public class RedivisEresourceProcessor extends AbstractEresourceProcessor {
                     Dataset detailedDataset = this.mapper.readValue(getUrl, Dataset.class);
                     datasets.add(detailedDataset);
                 }
-                pageToken = datasetList.nextPageToken;
+                pageToken = datasetList.getNextPageToken();
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);

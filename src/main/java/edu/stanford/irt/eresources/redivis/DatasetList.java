@@ -4,9 +4,9 @@ import java.util.List;
 
 public class DatasetList {
 
-    List<Dataset> datasets;
+    private List<Dataset> datasets;
 
-    String nextPageToken;
+    private String nextPageToken;
 
     public DatasetList() {
         // empty constructor
@@ -24,21 +24,5 @@ public class DatasetList {
      */
     public String getNextPageToken() {
         return this.nextPageToken;
-    }
-
-    /**
-     * @param datasets
-     *            the datasets to set
-     */
-    public void setDatasets(final List<Dataset> datasets) {
-        this.datasets = datasets;
-    }
-
-    /**
-     * @param nextPageToken
-     *            the nextPageToken to set
-     */
-    public void setNextPageToken(final String nextPageToken) {
-        this.nextPageToken = nextPageToken;
     }
 }
