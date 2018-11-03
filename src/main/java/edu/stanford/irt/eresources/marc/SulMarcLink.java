@@ -19,9 +19,12 @@ public class SulMarcLink extends MarcLink {
 
     private Field field;
 
+    private SulMarcVersion version;
+
     public SulMarcLink(final Field field, final Version version) {
         super(field, version);
         this.field = field;
+        this.version = (SulMarcVersion) version;
     }
 
     @Override
@@ -49,7 +52,8 @@ public class SulMarcLink extends MarcLink {
     public String getUrl() {
         // strip SUL proxy prefix from links
         String url = super.getUrl();
-        if (null != url) {
+        if (null != url && SUL_PROXY_PREFIX.matcher(url).find()) {
+            this.version.setIsProxy(true);
             url = SUL_PROXY_PREFIX.matcher(url).replaceFirst("");
         }
         return url;

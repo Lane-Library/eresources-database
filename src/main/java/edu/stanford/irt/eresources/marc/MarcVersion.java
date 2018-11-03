@@ -127,7 +127,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public boolean isProxy() {
-        return true;
+        return !getSubfieldData(this.holding, "655", "a").anyMatch("subset, noproxy"::equalsIgnoreCase);
     }
 
     private boolean needToAddBibDates(final Eresource eresource) {
