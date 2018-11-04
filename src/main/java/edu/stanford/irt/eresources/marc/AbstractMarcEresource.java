@@ -119,7 +119,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
             date = DateParser.parseDate(COLON_OR_SEMICOLON.matcher(date).replaceAll(" "));
         }
         if (null == date || "0".equals(date) || date.isEmpty()) {
-            String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse(EresourceConstants.EMPTY_008);
+            String field008 = getFields(this.record, "008").map(Field::getData).findFirst()
+                    .orElse(EresourceConstants.EMPTY_008);
             String endDate = TextParserHelper.parseYear(field008.substring(F008_11, F008_15));
             String beginDate = TextParserHelper.parseYear(field008.substring(F008_07, F008_11));
             int year = 0;
@@ -158,6 +159,16 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getId() {
         return getRecordType() + "-" + getRecordId();
+    }
+
+    public Collection<String> getIsbns() {
+        return MARCRecordSupport.getSubfieldData(this.record, "020", "a").map(String::trim)
+                .map((final String s) -> TextParserHelper.cleanIsxn(s)).collect(Collectors.toSet());
+    }
+
+    public Collection<String> getIssns() {
+        return MARCRecordSupport.getSubfieldData(this.record, "022", "a").map(String::trim)
+                .map((final String s) -> TextParserHelper.cleanIsxn(s)).collect(Collectors.toSet());
     }
 
     @Override
@@ -238,7 +249,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getPublicationLanguages() {
         Set<String> languages = new HashSet<>();
-        String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse(EresourceConstants.EMPTY_008);
+        String field008 = getFields(this.record, "008").map(Field::getData).findFirst()
+                .orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38);
         languages.add(LANGUAGE_MAP.getLanguage(lang.toLowerCase(Locale.US)));
         languages.addAll(getSubfieldData(this.record, "041").map(String::toLowerCase).map(LANGUAGE_MAP::getLanguage)
@@ -398,7 +410,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public boolean isEnglish() {
-        String field008 = getFields(this.record, "008").map(Field::getData).findFirst().orElse(EresourceConstants.EMPTY_008);
+        String field008 = getFields(this.record, "008").map(Field::getData).findFirst()
+                .orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
     }

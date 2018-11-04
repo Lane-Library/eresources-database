@@ -104,14 +104,14 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             }
         }
         Set<String> isbns = MARCRecordSupport.getSubfieldData(record, "020").map(String::trim)
-                .map((final String s) -> s.replaceAll("[^\\dxX]+", "")).collect(Collectors.toSet());
+                .map((final String s) -> TextParserHelper.cleanIsxn(s)).collect(Collectors.toSet());
         for (String isbn : isbns) {
             if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_ISBN, isbn)) {
                 return true;
             }
         }
         Set<String> issns = MARCRecordSupport.getSubfieldData(record, "022").map(String::trim)
-                .map((final String s) -> s.replaceAll("[^\\dxX]+", "")).collect(Collectors.toSet());
+                .map((final String s) -> TextParserHelper.cleanIsxn(s)).collect(Collectors.toSet());
         for (String issn : issns) {
             if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_ISSN, issn)) {
                 return true;

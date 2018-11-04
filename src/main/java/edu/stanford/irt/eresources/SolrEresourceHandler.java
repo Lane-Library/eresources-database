@@ -22,6 +22,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.stanford.irt.eresources.marc.AbstractMarcEresource;
 import edu.stanford.irt.suggest.MeshSuggestionManager;
 import edu.stanford.lane.journals.JournalMapManager;
 import edu.stanford.lane.mesh.MeshCheckTags;
@@ -200,6 +201,15 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         doc.addField("versionsJson", versionsToJson(eresource));
         doc.addField("citationText", buildCitationKeywords(eresource));
+        if (AbstractMarcEresource.class.isAssignableFrom(eresource.getClass())) {
+            AbstractMarcEresource marcEresource = (AbstractMarcEresource) eresource;
+            for (String isbn : marcEresource.getIsbns()) {
+                doc.addField("isbns", isbn);
+            }
+            for (String issn : marcEresource.getIssns()) {
+                doc.addField("issns", issn);
+            }
+        }
         this.solrDocs.add(doc);
     }
 

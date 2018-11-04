@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.TextParserHelper;
 
 public class JDBCLaneDedupAugmentationsService implements AugmentationsService {
 
@@ -29,10 +30,10 @@ public class JDBCLaneDedupAugmentationsService implements AugmentationsService {
             + SPACE_UNION + "    SELECT DISTINCT record_id as BIB_ID, '" + LaneDedupAugmentation.KEY_URL
             + "' as KEY, regexp_replace(link,'(^https?://|/$)') AS VALUE FROM lmldb.elink_index WHERE record_type = 'B'\n"
             + SPACE_UNION + "    SELECT DISTINCT BIB_ID, '" + LaneDedupAugmentation.KEY_ISBN
-            + "' as KEY, regexp_replace(NORMAL_HEADING,'[^[:digit:]xX]+') as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE IN('020A','020N','020R')\n"
+            + "' as KEY, DISPLAY_HEADING as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE IN('020A','020N','020R')\n"
             + SPACE_UNION + "    SELECT DISTINCT BIB_ID, '" + LaneDedupAugmentation.KEY_ISSN
-            + "' as KEY, regexp_replace(NORMAL_HEADING,'[^[:digit:]xX]+') as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE IN('022A','022L')\n"
-            + ")\n" + "SELECT DISTINCT DEDUP.BIB_ID, KEY, VALUE FROM DEDUP, LMLDB.BIB_MASTER\n"
+            + "' as KEY, DISPLAY_HEADING as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE IN('022A','022L')\n" + ")\n"
+            + "SELECT DISTINCT DEDUP.BIB_ID, KEY, VALUE FROM DEDUP, LMLDB.BIB_MASTER\n"
             + "WHERE DEDUP.BIB_ID=BIB_MASTER.BIB_ID\n" + "AND BIB_MASTER.SUPPRESS_IN_OPAC!='Y'\n" + "ORDER BY BIB_ID";
 
     private DataSource dataSource;
@@ -51,6 +52,10 @@ public class JDBCLaneDedupAugmentationsService implements AugmentationsService {
             while (rs.next()) {
                 String key = rs.getString("KEY");
                 String value = rs.getString("VALUE");
+                if (LaneDedupAugmentation.KEY_ISBN.equals(key) || LaneDedupAugmentation.KEY_ISSN.equals(key)) {
+                    // check for validity as well? e.g. bibid 8118 has $35.00 value ...
+                    value = TextParserHelper.cleanIsxn(value);
+                }
                 if (null != key && null != value) {
                     StringBuilder sb = new StringBuilder();
                     sb.append(key);
