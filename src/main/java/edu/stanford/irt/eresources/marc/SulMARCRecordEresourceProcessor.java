@@ -13,8 +13,6 @@ import edu.stanford.lane.catalog.RecordCollection;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
-    private int acceptableAgeInYears;
-
     private List<String> acceptableDBCallNumbers;
 
     private List<String> acceptableLCCallNumberPrefixes;
@@ -32,15 +30,12 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     public SulMARCRecordEresourceProcessor(final EresourceHandler eresourceHandler,
             final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
             final SulTypeFactory typeFactory, final List<String> acceptableLCCallNumberPrefixes,
-            final List<String> acceptableDBCallNumbers, final int acceptableAgeInYears,
-            final LaneDedupAugmentation laneDedupAugmentation) {
+            final List<String> acceptableDBCallNumbers, final LaneDedupAugmentation laneDedupAugmentation) {
         this.eresourceHandler = eresourceHandler;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
         this.typeFactory = typeFactory;
         this.acceptableLCCallNumberPrefixes = acceptableLCCallNumberPrefixes;
-        this.acceptableDBCallNumbers = acceptableDBCallNumbers;
-        this.acceptableAgeInYears = acceptableAgeInYears;
         this.laneDedupAugmentation = laneDedupAugmentation;
     }
 
@@ -54,10 +49,6 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                         .handleEresource(new SulMarcEresource(record, this.keywordsStrategy, this.typeFactory));
             }
         }
-    }
-
-    private boolean hasAcceptableAgeInYears(final Record record) {
-        return MARCRecordSupport.getYear(record) + this.acceptableAgeInYears >= TextParserHelper.THIS_YEAR;
     }
 
     private boolean hasAcceptableDBCallNumber(final Record record) {
@@ -81,7 +72,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean isInScope(final Record record) {
-        return hasAcceptableAgeInYears(record) && (hasNLMCallNumber(record) || hasAcceptableLCCallNumberPrefix(record)
+        return (hasNLMCallNumber(record) || hasAcceptableLCCallNumberPrefix(record)
                 || hasAcceptableDBCallNumber(record));
     }
 
@@ -104,14 +95,14 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             }
         }
         Set<String> isbns = MARCRecordSupport.getSubfieldData(record, "020").map(String::trim)
-                .map((final String s) -> TextParserHelper.cleanIsxn(s)).collect(Collectors.toSet());
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
         for (String isbn : isbns) {
             if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_ISBN, isbn)) {
                 return true;
             }
         }
         Set<String> issns = MARCRecordSupport.getSubfieldData(record, "022").map(String::trim)
-                .map((final String s) -> TextParserHelper.cleanIsxn(s)).collect(Collectors.toSet());
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
         for (String issn : issns) {
             if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_ISSN, issn)) {
                 return true;
