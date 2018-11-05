@@ -165,24 +165,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
         doc.addField("publicationText", eresource.getPublicationText());
         doc.addField("publicationTitle", eresource.getPublicationTitle());
-        Set<String> mesh = new HashSet<>();
-        Set<String> meshParents = new HashSet<>();
-        Set<String> meshVariants = new HashSet<>();
-        for (String heading : eresource.getMeshTerms()) {
-            if (!MeshCheckTags.getCheckTags().contains(heading)) {
-                meshVariants.addAll(this.meshVariantsManager.getVariants(heading));
-            }
-            mesh.add(heading);
-            meshParents.addAll(this.meshManager.getParentHeadings(heading, 1));
-        }
-        doc.addField("mesh", mesh);
-        doc.addField("mesh_parents", meshParents);
-        doc.addField("mesh_variants", meshVariants);
-        Set<String> meshBroad = new HashSet<>();
-        for (String broadHeading : eresource.getBroadMeshTerms()) {
-            meshBroad.add(broadHeading);
-        }
-        doc.addField("mesh_broad", meshBroad);
         doc.addField("type", eresource.getTypes());
         StringBuilder authorSort = new StringBuilder();
         Collection<String> authors = eresource.getPublicationAuthors();
@@ -201,15 +183,8 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         doc.addField("versionsJson", versionsToJson(eresource));
         doc.addField("citationText", buildCitationKeywords(eresource));
-        if (AbstractMarcEresource.class.isAssignableFrom(eresource.getClass())) {
-            AbstractMarcEresource marcEresource = (AbstractMarcEresource) eresource;
-            for (String isbn : marcEresource.getIsbns()) {
-                doc.addField("isbns", isbn);
-            }
-            for (String issn : marcEresource.getIssns()) {
-                doc.addField("issns", issn);
-            }
-        }
+        maybeAddIsxns(eresource, doc);
+        handleMesh(eresource, doc);
         this.solrDocs.add(doc);
     }
 
@@ -284,6 +259,27 @@ public class SolrEresourceHandler implements EresourceHandler {
         return getSortText(st);
     }
 
+    private void handleMesh(final Eresource eresource, final SolrInputDocument doc) {
+        Set<String> mesh = new HashSet<>();
+        Set<String> meshParents = new HashSet<>();
+        Set<String> meshVariants = new HashSet<>();
+        for (String heading : eresource.getMeshTerms()) {
+            if (!MeshCheckTags.getCheckTags().contains(heading)) {
+                meshVariants.addAll(this.meshVariantsManager.getVariants(heading));
+            }
+            mesh.add(heading);
+            meshParents.addAll(this.meshManager.getParentHeadings(heading, 1));
+        }
+        doc.addField("mesh", mesh);
+        doc.addField("mesh_parents", meshParents);
+        doc.addField("mesh_variants", meshVariants);
+        Set<String> meshBroad = new HashSet<>();
+        for (String broadHeading : eresource.getBroadMeshTerms()) {
+            meshBroad.add(broadHeading);
+        }
+        doc.addField("mesh_broad", meshBroad);
+    }
+
     /**
      * Determine if this eresource is about children </br>
      * Could use PubmedSpecialTypesManager instead but would miss Lane Catalog child articles </br>
@@ -305,6 +301,18 @@ public class SolrEresourceHandler implements EresourceHandler {
         tiab.append(' ');
         tiab.append(eresource.getDescription());
         return CHILD.matcher(tiab.toString()).matches();
+    }
+
+    private void maybeAddIsxns(final Eresource eresource, final SolrInputDocument doc) {
+        if (AbstractMarcEresource.class.isAssignableFrom(eresource.getClass())) {
+            AbstractMarcEresource marcEresource = (AbstractMarcEresource) eresource;
+            for (String isbn : marcEresource.getIsbns()) {
+                doc.addField("isbns", isbn);
+            }
+            for (String issn : marcEresource.getIssns()) {
+                doc.addField("issns", issn);
+            }
+        }
     }
 
     private String versionsToJson(final Eresource eresource) {
