@@ -54,7 +54,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             this.ftpClient.connect(this.ftpHost);
             this.ftpClient.login(this.ftpUser, this.ftpPass);
             this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            //this.ftpClient.enterLocalPassiveMode();
+            this.ftpClient.enterLocalPassiveMode();
             this.ftpClient.changeWorkingDirectory(this.ftpPath);
             for (FTPFile file : this.ftpClient.listFiles(".", this.ftpFileFilter)) {
                 fetchFile(this.ftpClient, file);

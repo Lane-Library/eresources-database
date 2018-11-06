@@ -56,8 +56,8 @@ public class PubmedFtpDataFetcherTest {
         expectLastCall();
         expect(this.ftpClient.login("ftpUsername", "ftpPassword")).andReturn(true);
         expect(this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE)).andReturn(true);
-        //this.ftpClient.enterLocalPassiveMode();
-        //expectLastCall();
+        this.ftpClient.enterLocalPassiveMode();
+        expectLastCall();
         expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true);
         expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles);
         expect(this.ftpFile.getName()).andReturn("foo").times(2);
@@ -86,8 +86,8 @@ public class PubmedFtpDataFetcherTest {
         expectLastCall();
         expect(this.ftpClient.login("ftpUsername", "ftpPassword")).andReturn(true);
         expect(this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE)).andReturn(true);
-        //this.ftpClient.enterLocalPassiveMode();
-        //expectLastCall();
+        this.ftpClient.enterLocalPassiveMode();
+        expectLastCall();
         expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true);
         expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles);
         expect(this.ftpFile.getName()).andReturn("foo").times(2);
@@ -106,8 +106,8 @@ public class PubmedFtpDataFetcherTest {
         expectLastCall();
         expect(this.ftpClient.login("ftpUsername", "ftpPassword")).andReturn(true);
         expect(this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE)).andReturn(true);
-        //this.ftpClient.enterLocalPassiveMode();
-        //expectLastCall();
+        this.ftpClient.enterLocalPassiveMode();
+        expectLastCall();
         expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true);
         expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles);
         expect(this.ftpFile.getName()).andReturn("foo").times(2);
