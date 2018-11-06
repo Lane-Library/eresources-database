@@ -21,9 +21,6 @@ public final class TextParserHelper {
 
     public static final int THIS_YEAR = LocalDate.now(ZoneId.of("America/Los_Angeles")).getYear();
 
-    protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
-            .toFormatter();
-
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
     private static final Pattern DIGIT_OR_X_PATTERN = Pattern.compile("[^\\dxX]+");
@@ -232,7 +229,7 @@ public final class TextParserHelper {
      *            needing caps
      * @return capitalized string
      */
-    public static final String toTitleCase(final String string) {
+    public static String toTitleCase(final String string) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
