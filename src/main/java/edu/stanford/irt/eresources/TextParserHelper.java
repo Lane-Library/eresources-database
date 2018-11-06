@@ -55,8 +55,8 @@ public final class TextParserHelper {
     /**
      * ISBNs and ISSNs should only have digits or Xs. Ignore all but the first space-separated component of string.
      *
-     * @param isbn
-     *            or isbn
+     * @param isxn
+     *            isbn or isbn
      * @return cleaned string
      */
     public static String cleanIsxn(final String isxn) {
@@ -72,6 +72,7 @@ public final class TextParserHelper {
      * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#pubdate
      *
      * @param month
+     *            string month
      * @return Between 3 and 4 representations of month (eg. "5 05 May", "12 Dec December", "7 07 Jul July")
      */
     public static String explodeMonth(final String month) {
@@ -104,7 +105,8 @@ public final class TextParserHelper {
      * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#medlinedate
      *
      * @param text
-     * @return
+     *            string with months
+     * @return all month variants
      */
     public static String explodeMonthAbbreviations(final String text) {
         if (null == text || text.isEmpty()) {
@@ -121,8 +123,8 @@ public final class TextParserHelper {
     /**
      * remove trailing periods, some probably should have them but voyager puts them on everything :-(
      *
-     * @param text
-     *            with possible period at end
+     * @param string
+     *            text with possible period at end
      * @return text w/o period at end
      */
     public static String maybeStripTrailingPeriod(final String string) {
@@ -161,6 +163,7 @@ public final class TextParserHelper {
      * </pre>
      *
      * @param pages
+     *            string containing pages
      * @return full page range
      */
     public static String parseEndPages(final String pages) {
@@ -209,10 +212,10 @@ public final class TextParserHelper {
     }
 
     /**
-     * strip "/ " from string
+     * strip "/ " from {@code StringBuilder}
      *
-     * @param string
-     *            with slash and/or space
+     * @param sb
+     *            {@code StringBuilder} with slash and/or space
      * @return string w/o slash and space
      */
     public static StringBuilder removeTrailingSlashAndSpace(final StringBuilder sb) {
