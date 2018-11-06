@@ -24,9 +24,11 @@ public class JDBCLaneDedupAugmentationsService implements AugmentationsService {
             + SPACE_UNION + "    SELECT bib_id, '" + LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER
             + "' as KEY, DISPLAY_HEADING as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE = '010A'\n" + SPACE_UNION
             + "    SELECT DISTINCT record_id as BIB_ID, '" + LaneDedupAugmentation.KEY_CATKEY
-            + "' as KEY, regexp_replace(link,'.*/view/') AS VALUE FROM lmldb.elink_index WHERE record_type = 'B' AND LINK LIKE '%searchworks.stanford.edu/view/%' AND regexp_replace(link,'.*/view/') IS NOT NULL\n"
+            + "' as KEY, regexp_replace(link,'.*/view/') AS VALUE FROM lmldb.elink_index WHERE record_type = 'B' "
+            + "AND LINK LIKE '%searchworks.stanford.edu/view/%' AND regexp_replace(link,'.*/view/') IS NOT NULL\n"
             + SPACE_UNION + "    SELECT BIB_MASTER.BIB_ID, '" + LaneDedupAugmentation.KEY_TITLE_DATE
-            + "' as KEY, TRIM(BIB_TEXT.TITLE_BRIEF) || SUBSTR(FIELD_008,8,8) as VALUE FROM LMLDB.BIB_TEXT, LMLDB.BIB_MASTER WHERE BIB_MASTER.BIB_ID = BIB_TEXT.BIB_ID AND SUPPRESS_IN_OPAC !='Y'"
+            + "' as KEY, TRIM(BIB_TEXT.TITLE_BRIEF) || SUBSTR(FIELD_008,8,8) as VALUE "
+            + "FROM LMLDB.BIB_TEXT, LMLDB.BIB_MASTER WHERE BIB_MASTER.BIB_ID = BIB_TEXT.BIB_ID AND SUPPRESS_IN_OPAC !='Y'"
             + SPACE_UNION + "    SELECT DISTINCT record_id as BIB_ID, '" + LaneDedupAugmentation.KEY_URL
             + "' as KEY, regexp_replace(link,'(^https?://|/$)') AS VALUE FROM lmldb.elink_index WHERE record_type = 'B'\n"
             + SPACE_UNION + "    SELECT DISTINCT BIB_ID, '" + LaneDedupAugmentation.KEY_ISBN
