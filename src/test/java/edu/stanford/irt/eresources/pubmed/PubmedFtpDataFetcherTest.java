@@ -72,9 +72,12 @@ public class PubmedFtpDataFetcherTest {
     @Test(expected = EresourceDatabaseException.class)
     public final void testGetUpdateFilesConnectionExpection() throws Exception {
         this.ftpClient.connect("ftpHostname");
-        expectLastCall().andThrow(new SocketException("oops"));
+        expectLastCall().andThrow(new SocketException("oops")).atLeastOnce();
+        expect(this.ftpClient.getLocalPort()).andReturn(0).atLeastOnce();
+        expect(this.ftpClient.getPassivePort()).andReturn(0).atLeastOnce();
+        expect(this.ftpClient.getRemotePort()).andReturn(0).atLeastOnce();
         this.ftpClient.disconnect();
-        expectLastCall();
+        expectLastCall().atLeastOnce();
         replay(this.ftpClient);
         this.fetcher.getUpdateFiles();
         verify(this.ftpClient);

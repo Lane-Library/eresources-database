@@ -18,6 +18,8 @@ public class PubmedFtpDataFetcher implements DataFetcher {
 
     private static final Logger log = LoggerFactory.getLogger(PubmedFtpDataFetcher.class);
 
+    private static final int MAX_ATTEMPTS = 10;
+
     private String basePath;
 
     private FTPClient ftpClient;
@@ -31,6 +33,8 @@ public class PubmedFtpDataFetcher implements DataFetcher {
     private String ftpPath;
 
     private String ftpUser;
+
+    private int tries = 0;
 
     public PubmedFtpDataFetcher(final String basePathname, final FTPClient ftpClient, final FTPFileFilter ftpFileFilter,
             final String ftpHostname, final String ftpPathname, final String ftpUsername, final String ftpPassword) {
@@ -60,7 +64,15 @@ public class PubmedFtpDataFetcher implements DataFetcher {
                 fetchFile(this.ftpClient, file);
             }
         } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
+            log.info("FTP problem; passsive port: {}; local port: {}; remote port: {}", this.ftpClient.getPassivePort(),
+                    this.ftpClient.getLocalPort(), this.ftpClient.getRemotePort(), e);
+            if (this.tries < MAX_ATTEMPTS) {
+                this.tries++;
+                getUpdateFiles();
+            } else {
+                log.info("max FTP attempts reached ... giving up");
+                throw new EresourceDatabaseException(e);
+            }
         } finally {
             try {
                 this.ftpClient.disconnect();
