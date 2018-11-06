@@ -55,11 +55,11 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
+    protected static final Pattern NAME_INITIAL_PERIOD = Pattern.compile(".* \\w\\.");
+
     protected static final String SEMICOLON_SPACE = "; ";
 
     protected static final Pattern SPACE_SLASH = Pattern.compile(" /");
-
-    protected static final Pattern WILD_SPACE_WORD_PERIOD = Pattern.compile(".* \\w\\.");
 
     private static final int SORT_TITLE_MAX_LENGTH = 48;
 
@@ -78,6 +78,12 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     protected Collection<String> types;
 
     protected List<Version> versions;
+
+    private static String maybeStripFinialPeriodFromAuthor(final String author) {
+        return author.endsWith(".") && !NAME_INITIAL_PERIOD.matcher(author).matches()
+                ? author.substring(0, author.length() - 1)
+                : author;
+    }
 
     @Override
     public Collection<String> getAbbreviatedTitles() {
@@ -210,10 +216,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
                                 getFields(this.record, "100|700").filter((final Field f) -> "100".equals(f.getTag())
                                         || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal")))),
                                 "a").map((final String s) -> COMMA_DOLLAR.matcher(s).replaceFirst(""))
-                                        .map((final String auth) -> auth.endsWith(".")
-                                                && !WILD_SPACE_WORD_PERIOD.matcher(auth).matches()
-                                                        ? auth.substring(0, auth.length() - 1)
-                                                        : auth)
+                                        .map(AbstractMarcEresource::maybeStripFinialPeriodFromAuthor)
                                         .collect(Collectors.toList()));
     }
 
