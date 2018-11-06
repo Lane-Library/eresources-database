@@ -91,11 +91,13 @@ public class PubmedFtpDataFetcher implements DataFetcher {
             }
         } catch (IOException e) {
             log.info("status of attempt to delete {}: {}", localFile.getAbsolutePath(), localFile.delete());
+            // reset file filter so we don't fetch successfully downloaded files again
+            this.ftpFileFilter = new PubmedFtpFileFilter(this.basePath);
             if (this.tries < MAX_ATTEMPTS) {
                 this.tries++;
                 getUpdateFiles();
             } else {
-                log.error("max attempts to fetch file {} reached ... giving up", file);
+                log.error("max attempts to fetch file {} reached ... giving up", file.getName());
                 throw new EresourceDatabaseException(e);
             }
         }
