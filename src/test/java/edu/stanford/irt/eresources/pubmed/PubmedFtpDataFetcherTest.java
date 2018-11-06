@@ -86,19 +86,19 @@ public class PubmedFtpDataFetcherTest {
     @Test(expected = EresourceDatabaseException.class)
     public final void testGetUpdateFilesFtpFileException() throws Exception {
         this.ftpClient.connect("ftpHostname");
-        expectLastCall();
-        expect(this.ftpClient.login("ftpUsername", "ftpPassword")).andReturn(true);
-        expect(this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE)).andReturn(true);
+        expectLastCall().atLeastOnce();
+        expect(this.ftpClient.login("ftpUsername", "ftpPassword")).andReturn(true).atLeastOnce();
+        expect(this.ftpClient.setFileType(FTP.BINARY_FILE_TYPE)).andReturn(true).atLeastOnce();
         this.ftpClient.enterLocalPassiveMode();
-        expectLastCall();
-        expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true);
+        expectLastCall().atLeastOnce();
+        expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true).atLeastOnce();
         expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles)
                 .atLeastOnce();
         expect(this.ftpFile.getName()).andReturn("foo").atLeastOnce();
         expect(this.ftpClient.retrieveFile(isA(String.class), isA(FileOutputStream.class)))
                 .andThrow(new IOException("oops")).atLeastOnce();
         this.ftpClient.disconnect();
-        expectLastCall();
+        expectLastCall().atLeastOnce();
         replay(this.ftpClient, this.ftpFileFilter, this.ftpFile);
         this.fetcher.getUpdateFiles();
         verify(this.ftpClient, this.ftpFileFilter, this.ftpFile);

@@ -90,11 +90,11 @@ public class PubmedFtpDataFetcher implements DataFetcher {
                 log.info("failed to fetch file: {}", file);
             }
         } catch (IOException e) {
+            log.info("status of attempt to delete {}: {}", localFile.getAbsolutePath(), localFile.delete());
             if (this.tries < MAX_ATTEMPTS) {
                 this.tries++;
-                fetchFile(client, file);
+                getUpdateFiles();
             } else {
-                log.info("status of attempt to delete {}:{}", localFile.getAbsolutePath(), localFile.delete());
                 log.error("max attempts to fetch file {} reached ... giving up", file);
                 throw new EresourceDatabaseException(e);
             }
