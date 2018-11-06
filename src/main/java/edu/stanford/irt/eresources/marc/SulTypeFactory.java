@@ -32,8 +32,6 @@ public class SulTypeFactory extends MARCRecordSupport {
             { EresourceConstants.JOURNAL, "Journal/Periodical", "Newspaper" },
             { EresourceConstants.SOFTWARE, "Software/Multimedia" } };
 
-    private static final Pattern NOT_DIGIT = Pattern.compile("\\D");
-
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
     static {
         for (String type : TypeFactory.ALLOWED_TYPES_INITIALIZER) {
@@ -84,9 +82,8 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     public List<String> getTypes(final Record record) {
         List<String> types = new ArrayList<>();
-        String f001 = NOT_DIGIT.matcher(getFields(record, "001").map(Field::getData).findFirst().orElse("0"))
-                .replaceAll("");
-        for (String type : this.catalogRecordService.getRecordFormats(f001)) {
+        for (String type : this.catalogRecordService
+                .getRecordFormats(Integer.toString(MARCRecordSupport.getRecordId(record)))) {
             types.add(getCompositeType(type));
         }
         for (String type : getRawTypes(record)) {

@@ -23,8 +23,6 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
 
     private static final Pattern NOT_ALPHANUM_OR_SPACE = Pattern.compile("[^a-zA-Z_0-9 ]");
 
-    private static final Pattern NOT_DIGIT = Pattern.compile("\\D");
-
     private List<String> acceptableDBCallNumbers;
 
     private List<String> acceptableLCCallNumberPrefixes;
@@ -95,9 +93,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean isLaneDuplicate(final Record record) {
-        String catkey = NOT_DIGIT
-                .matcher(MARCRecordSupport.getFields(record, "001").map(Field::getData).findFirst().orElse("0"))
-                .replaceAll("");
+        String catkey = Integer.toString(MARCRecordSupport.getRecordId(record));
         if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_CATKEY, catkey)) {
             return true;
         }

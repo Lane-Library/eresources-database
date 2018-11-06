@@ -24,6 +24,8 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     private static final int MIN_YEAR = 500;
 
+    private static final int YEAR_LENGTH = 4;
+
     private SulTypeFactory sulTypeFactory;
 
     private int year;
@@ -73,14 +75,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     @Override
     public int getRecordId() {
-        int i;
-        String f001 = getFields(this.record, "001").map(Field::getData).findFirst().orElse("0").replaceAll("\\D", "");
-        try {
-            i = Integer.parseInt(f001);
-        } catch (NumberFormatException e) {
-            i = 0;
-        }
-        return i;
+        return MARCRecordSupport.getRecordId(this.record);
     }
 
     @Override
@@ -148,7 +143,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
             if (null == date) {
                 date = DateParser.parseYear(getSubfieldData(this.record, "260", "c").findFirst().orElse(null));
             }
-            if (null != date && date.length() == 4) {
+            if (null != date && date.length() == YEAR_LENGTH) {
                 yr = Integer.parseInt(date);
             }
         }
