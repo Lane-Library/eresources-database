@@ -61,6 +61,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected static final Pattern WILD_SPACE_WORD_PERIOD = Pattern.compile(".* \\w\\.");
 
+    private static final int SORT_TITLE_MAX_LENGTH = 48;
+
     protected List<Record> holdings;
 
     protected ItemCount itemCount;
@@ -163,12 +165,12 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     public Collection<String> getIsbns() {
         return MARCRecordSupport.getSubfieldData(this.record, "020", "a").map(String::trim)
-                .map((final String s) -> TextParserHelper.cleanIsxn(s)).collect(Collectors.toSet());
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
     }
 
     public Collection<String> getIssns() {
         return MARCRecordSupport.getSubfieldData(this.record, "022", "a").map(String::trim)
-                .map((final String s) -> TextParserHelper.cleanIsxn(s)).collect(Collectors.toSet());
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
     }
 
     @Override
@@ -337,8 +339,9 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getSortTitle() {
         StringBuilder sb = getStringBuilderWith245();
-        int offset = getFields(this.record, "245").map((final Field f) -> Integer.valueOf(f.getIndicator2()) - 48)
-                .findFirst().orElse(0);
+        int offset = getFields(this.record, "245")
+                .map((final Field f) -> Integer.valueOf(f.getIndicator2()) - SORT_TITLE_MAX_LENGTH).findFirst()
+                .orElse(0);
         if (offset < 0 || offset > sb.length()) {
             offset = 0;
         }
