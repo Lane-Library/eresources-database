@@ -17,6 +17,8 @@ public class SulMarcLink extends MarcLink {
     private static final Pattern SUL_PROXY_PREFIX = Pattern
             .compile("^https?://stanford\\.idm\\.oclc\\.org/login\\?url=", Pattern.CASE_INSENSITIVE);
 
+    private static final int TWO = 2;
+
     private Field field;
 
     public SulMarcLink(final Field field, final Version version) {
@@ -35,7 +37,7 @@ public class SulMarcLink extends MarcLink {
             l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'z')
                     .map(Subfield::getData).reduce((a, b) -> b).orElse(null);
         }
-        if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > 2)) {
+        if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > TWO)) {
             l = l.substring(1, l.length() - 1);
         }
         // strip " at:" from "available to Stanford users"
