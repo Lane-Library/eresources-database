@@ -16,27 +16,29 @@ public class JDBCLaneDedupAugmentationsService implements AugmentationsService {
 
     private static final int JDBC_FETCH_SIZE = 10_000;
 
-    private static final String SPACE_UNION = "    UNION\n";
+    private static final String SPACE_UNION = "    UNION";
 
-    private static final String SQL = "WITH DEDUP AS (\n" + "    SELECT bib_id, '"
-            + LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER
-            + "' as KEY, NORMAL_HEADING as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE = '035A' AND DISPLAY_HEADING LIKE '(OCoLC)%'\n"
-            + SPACE_UNION + "    SELECT bib_id, '" + LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER
+    private static final String SQL = "WITH DEDUP AS (    SELECT bib_id, '"
+            + LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER + "' as KEY, NORMAL_HEADING as VALUE FROM LMLDB.BIB_INDEX"
+            + " WHERE INDEX_CODE = '035A' AND DISPLAY_HEADING LIKE '(OCoLC)%' " + SPACE_UNION + "    SELECT bib_id, '"
+            + LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER
             + "' as KEY, DISPLAY_HEADING as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE = '010A'\n" + SPACE_UNION
             + "    SELECT DISTINCT record_id as BIB_ID, '" + LaneDedupAugmentation.KEY_CATKEY
             + "' as KEY, regexp_replace(link,'.*/view/') AS VALUE FROM lmldb.elink_index WHERE record_type = 'B' "
             + "AND LINK LIKE '%searchworks.stanford.edu/view/%' AND regexp_replace(link,'.*/view/') IS NOT NULL\n"
             + SPACE_UNION + "    SELECT BIB_MASTER.BIB_ID, '" + LaneDedupAugmentation.KEY_TITLE_DATE
-            + "' as KEY, TRIM(BIB_TEXT.TITLE_BRIEF) || SUBSTR(FIELD_008,8,8) as VALUE "
-            + "FROM LMLDB.BIB_TEXT, LMLDB.BIB_MASTER WHERE BIB_MASTER.BIB_ID = BIB_TEXT.BIB_ID AND SUPPRESS_IN_OPAC !='Y'"
-            + SPACE_UNION + "    SELECT DISTINCT record_id as BIB_ID, '" + LaneDedupAugmentation.KEY_URL
-            + "' as KEY, regexp_replace(link,'(^https?://|/$)') AS VALUE FROM lmldb.elink_index WHERE record_type = 'B'\n"
-            + SPACE_UNION + "    SELECT DISTINCT BIB_ID, '" + LaneDedupAugmentation.KEY_ISBN
+            + "' as KEY, TRIM(BIB_TEXT.TITLE_BRIEF) || SUBSTR(FIELD_008,8,8) as VALUE"
+            + " FROM LMLDB.BIB_TEXT, LMLDB.BIB_MASTER"
+            + " WHERE BIB_MASTER.BIB_ID = BIB_TEXT.BIB_ID AND SUPPRESS_IN_OPAC !='Y'" + SPACE_UNION
+            + "    SELECT DISTINCT record_id as BIB_ID, '" + LaneDedupAugmentation.KEY_URL
+            + "' as KEY, regexp_replace(link,'(^https?://|/$)') AS VALUE FROM lmldb.elink_index"
+            + " WHERE record_type = 'B'\n" + SPACE_UNION + "    SELECT DISTINCT BIB_ID, '"
+            + LaneDedupAugmentation.KEY_ISBN
             + "' as KEY, DISPLAY_HEADING as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE IN('020A','020N','020R')\n"
             + SPACE_UNION + "    SELECT DISTINCT BIB_ID, '" + LaneDedupAugmentation.KEY_ISSN
             + "' as KEY, DISPLAY_HEADING as VALUE FROM LMLDB.BIB_INDEX WHERE INDEX_CODE IN('022A','022L')\n" + ")\n"
             + "SELECT DISTINCT DEDUP.BIB_ID, KEY, VALUE FROM DEDUP, LMLDB.BIB_MASTER\n"
-            + "WHERE DEDUP.BIB_ID=BIB_MASTER.BIB_ID\n" + "AND BIB_MASTER.SUPPRESS_IN_OPAC!='Y'\n" + "ORDER BY BIB_ID";
+            + "WHERE DEDUP.BIB_ID=BIB_MASTER.BIB_ID\n" + "AND BIB_MASTER.SUPPRESS_IN_OPAC!='Y' ORDER BY BIB_ID";
 
     private DataSource dataSource;
 
