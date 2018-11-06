@@ -92,10 +92,11 @@ public class PubmedFtpDataFetcherTest {
         this.ftpClient.enterLocalPassiveMode();
         expectLastCall();
         expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true);
-        expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles);
-        expect(this.ftpFile.getName()).andReturn("foo").times(2);
+        expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles)
+                .atLeastOnce();
+        expect(this.ftpFile.getName()).andReturn("foo").atLeastOnce();
         expect(this.ftpClient.retrieveFile(isA(String.class), isA(FileOutputStream.class)))
-                .andThrow(new IOException("oops"));
+                .andThrow(new IOException("oops")).atLeastOnce();
         this.ftpClient.disconnect();
         expectLastCall();
         replay(this.ftpClient, this.ftpFileFilter, this.ftpFile);
