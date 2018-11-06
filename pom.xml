@@ -6,11 +6,11 @@
         <version>36</version>
     </parent>
     <artifactId>eresources-database</artifactId>
-    <version>2.1.8-SNAPSHOT</version>
+    <version>ftp-active-mode</version>
     <name>eresources-database</name>
     <scm>
         <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>eresources-database-ftp-active-mode</tag>
     </scm>
     <distributionManagement>
         <site>
