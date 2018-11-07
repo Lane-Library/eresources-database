@@ -50,6 +50,9 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private static final Logger log = LoggerFactory.getLogger(SolrEresourceHandler.class);
 
+    private static final Pattern NOPROXY_HOSTS = Pattern
+            .compile(".*\\.(stanford.edu|stanfordchildrens.org|stanfordhealthcare.org)", Pattern.CASE_INSENSITIVE);
+
     private static final int SORT_TEXT_MAX = 100;
 
     private int count;
@@ -333,7 +336,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String link : links) {
             try {
                 URI uri = new URI(link);
-                hosts.add(uri.getHost());
+                if (!NOPROXY_HOSTS.matcher(uri.getHost()).matches()) {
+                    hosts.add(uri.getHost());
+                }
             } catch (URISyntaxException e) {
                 log.debug("uri problem: {}", e.getMessage(), e);
                 // ok
