@@ -26,6 +26,8 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
 
     private Eresource eresource;
 
+    private boolean isProxy;
+
     public SulMarcVersion(final Record bib, final Eresource eresource) {
         this.bib = bib;
         this.eresource = eresource;
@@ -121,7 +123,11 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public boolean isProxy() {
-        return true;
+        return this.isProxy;
+    }
+
+    public void setIsProxy(final boolean proxy) {
+        this.isProxy = proxy;
     }
 
     private boolean needToAddBibDates(final Eresource eresource) {

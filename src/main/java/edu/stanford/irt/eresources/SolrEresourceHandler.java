@@ -1,6 +1,8 @@
 package edu.stanford.irt.eresources;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -185,6 +187,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("citationText", buildCitationKeywords(eresource));
         maybeAddIsxns(eresource, doc);
         handleMesh(eresource, doc);
+        for (String host : versionsToHosts(eresource)) {
+            doc.addField("proxyHosts", host);
+        }
         this.solrDocs.add(doc);
     }
 
@@ -313,6 +318,24 @@ public class SolrEresourceHandler implements EresourceHandler {
                 doc.addField("issns", issn);
             }
         }
+    }
+
+    private List<String> versionsToHosts(final Eresource eresource) {
+        List<String> links = new ArrayList<>();
+        eresource.getVersions().stream().filter(Version::isProxy).flatMap((final Version v) -> v.getLinks().stream())
+                .collect(Collectors.toSet()).stream().filter((final Link l) -> l.getUrl() != null)
+                .collect(Collectors.toSet()).forEach((final Link l) -> links.add(l.getUrl()));
+        List<String> hosts = new ArrayList<>();
+        for (String link : links) {
+            try {
+                URI uri = new URI(link);
+                hosts.add(uri.getHost());
+            } catch (URISyntaxException e) {
+                // ok
+                // maybe report these to Dick's group?
+            }
+        }
+        return hosts;
     }
 
     private String versionsToJson(final Eresource eresource) {

@@ -29,7 +29,7 @@ public class SulMarcLinkTest {
 
     @Before
     public void setUp() {
-        this.version = mock(Version.class);
+        this.version = mock(SulMarcVersion.class);
         this.field = mock(Field.class);
         this.link = new SulMarcLink(this.field, this.version);
         this.subfield = mock(Subfield.class);
