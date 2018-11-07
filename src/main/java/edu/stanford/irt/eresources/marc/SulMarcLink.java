@@ -47,7 +47,12 @@ public class SulMarcLink extends MarcLink {
             }
             sb.append(string).append(' ');
         }
-        return sb.toString().trim();
+        String l = sb.toString().trim();
+        // empty returns null for consistency with MarcLink
+        if (l.isEmpty()) {
+            return null;
+        }
+        return l;
     }
 
     @Override
