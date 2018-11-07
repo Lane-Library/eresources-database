@@ -17,6 +17,7 @@ import edu.stanford.irt.eresources.SulSolrCatalogRecordService;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
+import edu.stanford.lane.catalog.Record.Subfield;
 
 public class SulTypeFactory extends MARCRecordSupport {
 
@@ -33,6 +34,9 @@ public class SulTypeFactory extends MARCRecordSupport {
             { EresourceConstants.SOFTWARE, "Software/Multimedia" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
+
+    private static final Pattern SUPPLEMENTAL_LINK = Pattern
+            .compile("(table of contents|abstract|description|sample text)", Pattern.CASE_INSENSITIVE);
     static {
         for (String type : TypeFactory.ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -103,7 +107,14 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     private String getPrintOrDigital(final Record record) {
         // may need to extend to exclude loc.gov or include google books?
-        boolean isDigital = getSubfieldData(record, "856", "u").count() > 0;
+        // include 956s?
+        List<Field> linkFields = getFields(record, "856").filter(
+                (final Field f) -> f.getSubfields().stream().anyMatch((final Subfield sf) -> sf.getCode() == 'u'))
+                .collect(Collectors.toList());
+        int allLinks = linkFields.size();
+        int supplementalLinks = (int) getSubfieldData(linkFields.stream(), "3|z")
+                .filter((final String s) -> SUPPLEMENTAL_LINK.matcher(s).matches()).count();
+        boolean isDigital = allLinks > supplementalLinks;
         if (isDigital) {
             return "Digital";
         }
