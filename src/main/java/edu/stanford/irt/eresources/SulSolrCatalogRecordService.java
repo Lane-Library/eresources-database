@@ -201,7 +201,7 @@ public class SulSolrCatalogRecordService extends PipedInputStream implements Run
             msw.close();
         } catch (MarcException e) {
             log.warn("Can't parse record: {}; {}", recordId, e.getMessage());
-            if (MARCXML_FIELD == fieldName) {
+            if (MARCXML_FIELD.equals(fieldName)) {
                 log.info("second attempt to fetch marc data, this time using {}", MARCBIBXML_FIELD);
                 QueryResponse qr = queryForFields("id:" + recordId, MARCBIBXML_FIELD);
                 String bibXml = (String) qr.getResults().get(0).getFieldValue(MARCBIBXML_FIELD);
@@ -217,14 +217,14 @@ public class SulSolrCatalogRecordService extends PipedInputStream implements Run
     /**
      * @param queryString
      *            Solr query {@code String}
-     * @param fields
-     *            varargs of {@code String} fields to pass to {@code SolrQuery.setFields}
+     * @param field
+     *            {@code String} field to pass to {@code SolrQuery.setFields}
      * @return
      */
-    private QueryResponse queryForFields(final String queryString, final String... fields) {
+    private QueryResponse queryForFields(final String queryString, final String field) {
         SolrQuery q = (new SolrQuery(queryString));
         disableFaceting(q);
-        q.setFields(fields);
+        q.setFields(field);
         return doSolrQuery(q);
     }
 }

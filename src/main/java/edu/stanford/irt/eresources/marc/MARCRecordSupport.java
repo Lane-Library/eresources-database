@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.marc;
 
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import edu.stanford.irt.eresources.TextParserHelper;
@@ -15,8 +16,22 @@ public class MARCRecordSupport {
 
     private static final int F008_15 = 15;
 
+    private static final Pattern NOT_DIGIT = Pattern.compile("\\D");
+
     protected static Stream<Field> getFields(final Record record, final String tagString) {
         return record.getFields().stream().filter((final Field f) -> tagString.indexOf(f.getTag()) > -1);
+    }
+
+    protected static int getRecordId(final Record record) {
+        int i;
+        String f001 = NOT_DIGIT.matcher(getFields(record, "001").map(Field::getData).findFirst().orElse("0"))
+                .replaceAll("");
+        try {
+            i = Integer.parseInt(f001);
+        } catch (NumberFormatException e) {
+            i = 0;
+        }
+        return i;
     }
 
     protected static Stream<String> getSubfieldData(final Record record, final String tagString) {

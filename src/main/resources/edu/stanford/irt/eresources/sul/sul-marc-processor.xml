@@ -22,7 +22,6 @@
                 <constructor-arg ref="sulSolrCatalogRecordService"/>
             </bean>
         </constructor-arg>
-        <constructor-arg name="acceptableAgeInYears" value="20000"/>
         <constructor-arg name="acceptableLCCallNumberPrefixes">
             <list>
                 <value>GE</value>

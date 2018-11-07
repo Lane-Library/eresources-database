@@ -1,7 +1,12 @@
 package edu.stanford.irt.eresources.marc;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
@@ -13,7 +18,13 @@ import edu.stanford.lane.catalog.RecordCollection;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
-    private int acceptableAgeInYears;
+    private static final Pattern BEGINS_HTTPS_OR_ENDS_SLASH = Pattern.compile("(^https?://|/$)");
+
+    private static final int F008_DATES_BEGIN = 7;
+
+    private static final int F008_DATES_END = 15;
+
+    private static final Pattern NOT_ALPHANUM_OR_SPACE = Pattern.compile("[^a-zA-Z_0-9 ]");
 
     private List<String> acceptableDBCallNumbers;
 
@@ -32,15 +43,13 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     public SulMARCRecordEresourceProcessor(final EresourceHandler eresourceHandler,
             final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
             final SulTypeFactory typeFactory, final List<String> acceptableLCCallNumberPrefixes,
-            final List<String> acceptableDBCallNumbers, final int acceptableAgeInYears,
-            final LaneDedupAugmentation laneDedupAugmentation) {
+            final List<String> acceptableDBCallNumbers, final LaneDedupAugmentation laneDedupAugmentation) {
         this.eresourceHandler = eresourceHandler;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
         this.typeFactory = typeFactory;
-        this.acceptableLCCallNumberPrefixes = acceptableLCCallNumberPrefixes;
-        this.acceptableDBCallNumbers = acceptableDBCallNumbers;
-        this.acceptableAgeInYears = acceptableAgeInYears;
+        this.acceptableLCCallNumberPrefixes = new ArrayList<>(acceptableLCCallNumberPrefixes);
+        this.acceptableDBCallNumbers = new ArrayList<>(acceptableDBCallNumbers);
         this.laneDedupAugmentation = laneDedupAugmentation;
     }
 
@@ -54,10 +63,6 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                         .handleEresource(new SulMarcEresource(record, this.keywordsStrategy, this.typeFactory));
             }
         }
-    }
-
-    private boolean hasAcceptableAgeInYears(final Record record) {
-        return MARCRecordSupport.getYear(record) + this.acceptableAgeInYears >= TextParserHelper.THIS_YEAR;
     }
 
     private boolean hasAcceptableDBCallNumber(final Record record) {
@@ -81,7 +86,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean isInScope(final Record record) {
-        return hasAcceptableAgeInYears(record) && (hasNLMCallNumber(record) || hasAcceptableLCCallNumberPrefix(record)
+        return (hasNLMCallNumber(record) || hasAcceptableLCCallNumberPrefix(record)
                 || hasAcceptableDBCallNumber(record));
     }
 
@@ -91,54 +96,46 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean isLaneDuplicate(final Record record) {
-        String catkey = MARCRecordSupport.getFields(record, "001").map(Field::getData).findFirst().orElse("0")
-                .replaceAll("\\D", "");
-        if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_CATKEY, catkey)) {
-            return true;
+        Map<String, String> keys = new HashMap<>();
+        keys.put(LaneDedupAugmentation.KEY_CATKEY, Integer.toString(MARCRecordSupport.getRecordId(record)));
+        for (String lccn : MARCRecordSupport.getSubfieldData(record, "010", "a").map(String::trim)
+                .collect(Collectors.toSet())) {
+            keys.put(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER, lccn);
         }
-        Set<String> lccns = MARCRecordSupport.getSubfieldData(record, "010", "a").map(String::trim)
-                .collect(Collectors.toSet());
-        for (String lccn : lccns) {
-            if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER, lccn)) {
-                return true;
-            }
+        for (String isbn : MARCRecordSupport.getSubfieldData(record, "020").map(String::trim)
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet())) {
+            keys.put(LaneDedupAugmentation.KEY_ISBN, isbn);
         }
-        Set<String> isbns = MARCRecordSupport.getSubfieldData(record, "020").map(String::trim)
-                .map((final String s) -> s.replaceAll("[^\\dxX]+", "")).collect(Collectors.toSet());
-        for (String isbn : isbns) {
-            if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_ISBN, isbn)) {
-                return true;
-            }
-        }
-        Set<String> issns = MARCRecordSupport.getSubfieldData(record, "022").map(String::trim)
-                .map((final String s) -> s.replaceAll("[^\\dxX]+", "")).collect(Collectors.toSet());
-        for (String issn : issns) {
-            if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_ISSN, issn)) {
-                return true;
-            }
+        for (String issn : MARCRecordSupport.getSubfieldData(record, "022").map(String::trim)
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet())) {
+            keys.put(LaneDedupAugmentation.KEY_ISSN, issn);
         }
         Set<String> ocolcs = MARCRecordSupport.getSubfieldData(record, "035", "a")
                 .filter((final String s) -> s.startsWith("(OCoLC"))
                 .map((final String s) -> s.substring(s.indexOf(')') + 1, s.length())).collect(Collectors.toSet());
         for (String ocolc : ocolcs) {
-            if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER, ocolc)) {
-                return true;
-            }
+            keys.put(LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER, ocolc);
         }
         Set<String> urls = MARCRecordSupport.getSubfieldData(record, "856", "u")
                 .map((final String s) -> s.replace("https://stanford.idm.oclc.org/login?url=", "")).map(String::trim)
-                .map((final String s) -> s.replaceAll("(^https?://|/$)", "")).collect(Collectors.toSet());
+                .map((final String s) -> BEGINS_HTTPS_OR_ENDS_SLASH.matcher(s).replaceAll(""))
+                .collect(Collectors.toSet());
         for (String url : urls) {
-            if (this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_URL, url)) {
+            keys.put(LaneDedupAugmentation.KEY_URL, url);
+        }
+        String title = NOT_ALPHANUM_OR_SPACE
+                .matcher(MARCRecordSupport.getSubfieldData(record, "245", "a").findFirst().map(String::trim).orElse(""))
+                .replaceAll("");
+        String dates = MARCRecordSupport.getFields(record, "008").map(Field::getData).findFirst()
+                .map((final String s) -> s.substring(F008_DATES_BEGIN, F008_DATES_END)).orElse("00000000");
+        StringBuilder sb = new StringBuilder(title);
+        sb.append(dates);
+        keys.put(LaneDedupAugmentation.KEY_TITLE_DATE, sb.toString());
+        for (Entry<String, String> entry : keys.entrySet()) {
+            if (this.laneDedupAugmentation.isDuplicate(entry.getKey(), entry.getValue())) {
                 return true;
             }
         }
-        String title = MARCRecordSupport.getSubfieldData(record, "245", "a").findFirst().map(String::trim).orElse("")
-                .replaceAll("[^a-zA-Z_0-9 ]", "");
-        String dates = MARCRecordSupport.getFields(record, "008").map(Field::getData).findFirst()
-                .map((final String s) -> s.substring(7, 15)).orElse("00000000");
-        StringBuilder sb = new StringBuilder(title);
-        sb.append(dates);
-        return this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_TITLE_DATE, sb.toString());
+        return false;
     }
 }

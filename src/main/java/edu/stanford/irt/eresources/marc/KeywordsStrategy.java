@@ -12,6 +12,14 @@ public class KeywordsStrategy {
 
     private static final String KEYWORD_TAGS = "020|022|030|035|901|902|903|907|941|942|943";
 
+    private static final int TAG_100 = 100;
+
+    private static final int TAG_863 = 863;
+
+    private static final int TAG_900 = 900;
+
+    private static final int TAG_943 = 943;
+
     private AuthTextAugmentation authTextAugmentation;
 
     private ReservesTextAugmentation reservesAugmentation;
@@ -33,7 +41,7 @@ public class KeywordsStrategy {
         } else if (leaderByte6 == 'q') {
             fields.stream().filter((final Field f) -> {
                 int tagNumber = Integer.parseInt(f.getTag());
-                return tagNumber >= 100 && tagNumber <= 943;
+                return tagNumber >= TAG_100 && tagNumber <= TAG_943;
             }).forEach((final Field f) -> {
                 String tag = f.getTag();
                 f.getSubfields().stream().forEach((final Subfield s) -> {
@@ -100,6 +108,6 @@ public class KeywordsStrategy {
         int tagNumber = Integer.parseInt(tag);
         // 863 is SUL holdings tag and indexing it creates relevance ranking noise with number searching
         // create separate SulKeywordStrategy if this conflicts with Lane practice
-        return (tagNumber >= 100 && tagNumber < 900 && tagNumber != 863) || KEYWORD_TAGS.indexOf(tag) != -1;
+        return (tagNumber >= TAG_100 && tagNumber < TAG_900 && tagNumber != TAG_863) || KEYWORD_TAGS.indexOf(tag) != -1;
     }
 }

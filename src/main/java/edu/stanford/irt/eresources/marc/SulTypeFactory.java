@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,6 +21,8 @@ import edu.stanford.lane.catalog.Record.Field;
 public class SulTypeFactory extends MARCRecordSupport {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
+
+    private static final Pattern BEGIN_OR_END_BRACKET_MAYBE_SPACE_COLON = Pattern.compile("(^\\[|\\]( :)?$)");
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 
@@ -79,8 +82,8 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     public List<String> getTypes(final Record record) {
         List<String> types = new ArrayList<>();
-        String f001 = getFields(record, "001").map(Field::getData).findFirst().orElse("0").replaceAll("\\D", "");
-        for (String type : this.catalogRecordService.getRecordFormats(f001)) {
+        for (String type : this.catalogRecordService
+                .getRecordFormats(Integer.toString(MARCRecordSupport.getRecordId(record)))) {
             types.add(getCompositeType(type));
         }
         for (String type : getRawTypes(record)) {
@@ -116,8 +119,8 @@ public class SulTypeFactory extends MARCRecordSupport {
         rawTypes.addAll(getSubfieldData(fields6xx.stream(), "v").map(TextParserHelper::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet()));
         rawTypes.addAll(getSubfieldData(record, "245", "h").map(TextParserHelper::maybeStripTrailingPeriod)
-                .map((final String s) -> s.replaceAll("(^\\[|\\]( :)?$)", "")).map(TextParserHelper::toTitleCase)
-                .collect(Collectors.toSet()));
+                .map((final String s) -> BEGIN_OR_END_BRACKET_MAYBE_SPACE_COLON.matcher(s).replaceAll(""))
+                .map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
         rawTypes.addAll(
                 getSubfieldData(record, "999", "t").map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
         return rawTypes.stream().map(this::getCompositeType).filter(ALLOWED_TYPES::contains)

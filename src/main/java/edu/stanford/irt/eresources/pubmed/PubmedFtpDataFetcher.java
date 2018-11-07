@@ -18,6 +18,8 @@ public class PubmedFtpDataFetcher implements DataFetcher {
 
     private static final Logger log = LoggerFactory.getLogger(PubmedFtpDataFetcher.class);
 
+    private static final int MAX_ATTEMPTS = 10;
+
     private String basePath;
 
     private FTPClient ftpClient;
@@ -31,6 +33,8 @@ public class PubmedFtpDataFetcher implements DataFetcher {
     private String ftpPath;
 
     private String ftpUser;
+
+    private int tries;
 
     public PubmedFtpDataFetcher(final String basePathname, final FTPClient ftpClient, final FTPFileFilter ftpFileFilter,
             final String ftpHostname, final String ftpPathname, final String ftpUsername, final String ftpPassword) {
@@ -60,7 +64,15 @@ public class PubmedFtpDataFetcher implements DataFetcher {
                 fetchFile(this.ftpClient, file);
             }
         } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
+            log.info("FTP problem; passsive port: {}; local port: {}; remote port: {}", this.ftpClient.getPassivePort(),
+                    this.ftpClient.getLocalPort(), this.ftpClient.getRemotePort(), e);
+            if (this.tries < MAX_ATTEMPTS) {
+                this.tries++;
+                getUpdateFiles();
+            } else {
+                log.error("max FTP connection attempts reached ... giving up");
+                throw new EresourceDatabaseException(e);
+            }
         } finally {
             try {
                 this.ftpClient.disconnect();
@@ -71,13 +83,23 @@ public class PubmedFtpDataFetcher implements DataFetcher {
     }
 
     private void fetchFile(final FTPClient client, final FTPFile file) {
-        try (FileOutputStream fos = new FileOutputStream(new File(this.basePath, file.getName()))) {
+        File localFile = new File(this.basePath, file.getName());
+        try (FileOutputStream fos = new FileOutputStream(localFile)) {
             log.info("fetching: {}", file);
             if (!client.retrieveFile(file.getName(), fos)) {
-                log.error("couldn't fetch file: {}", file);
+                log.info("failed to fetch file: {}", file);
             }
         } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
+            log.info("status of attempt to delete {}: {}", localFile.getAbsolutePath(), localFile.delete());
+            // reset file filter so we don't fetch successfully downloaded files again
+            this.ftpFileFilter = new PubmedFtpFileFilter(this.basePath);
+            if (this.tries < MAX_ATTEMPTS) {
+                this.tries++;
+                getUpdateFiles();
+            } else {
+                log.error("max attempts to fetch file {} reached ... giving up", file.getName());
+                throw new EresourceDatabaseException(e);
+            }
         }
     }
 }

@@ -21,10 +21,9 @@ public final class TextParserHelper {
 
     public static final int THIS_YEAR = LocalDate.now(ZoneId.of("America/Los_Angeles")).getYear();
 
-    protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
-            .toFormatter();
-
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
+
+    private static final Pattern DIGIT_OR_X_PATTERN = Pattern.compile("[^\\dxX]+");
 
     private static final String EMPTY = "";
 
@@ -54,11 +53,26 @@ public final class TextParserHelper {
     }
 
     /**
+     * ISBNs and ISSNs should only have digits or Xs. Ignore all but the first space-separated component of string.
+     *
+     * @param isxn
+     *            isbn or isbn
+     * @return cleaned string
+     */
+    public static String cleanIsxn(final String isxn) {
+        if (!isxn.isEmpty()) {
+            return DIGIT_OR_X_PATTERN.matcher(isxn.split(" ")[0]).replaceAll("");
+        }
+        return isxn;
+    }
+
+    /**
      * Expand textual variants from a string month. Handles digit, 3 character abbreviations and fully spelled out month
      * strings. Designed to expand from NCBI's PubDate/Month element:
      * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#pubdate
      *
      * @param month
+     *            string month
      * @return Between 3 and 4 representations of month (eg. "5 05 May", "12 Dec December", "7 07 Jul July")
      */
     public static String explodeMonth(final String month) {
@@ -91,7 +105,8 @@ public final class TextParserHelper {
      * https://www.nlm.nih.gov/bsd/licensee/elements_descriptions.html#medlinedate
      *
      * @param text
-     * @return
+     *            string with months
+     * @return all month variants
      */
     public static String explodeMonthAbbreviations(final String text) {
         if (null == text || text.isEmpty()) {
@@ -108,8 +123,8 @@ public final class TextParserHelper {
     /**
      * remove trailing periods, some probably should have them but voyager puts them on everything :-(
      *
-     * @param text
-     *            with possible period at end
+     * @param string
+     *            text with possible period at end
      * @return text w/o period at end
      */
     public static String maybeStripTrailingPeriod(final String string) {
@@ -148,6 +163,7 @@ public final class TextParserHelper {
      * </pre>
      *
      * @param pages
+     *            string containing pages
      * @return full page range
      */
     public static String parseEndPages(final String pages) {
@@ -196,10 +212,10 @@ public final class TextParserHelper {
     }
 
     /**
-     * strip "/ " from string
+     * strip "/ " from {@code StringBuilder}
      *
-     * @param string
-     *            with slash and/or space
+     * @param sb
+     *            {@code StringBuilder} with slash and/or space
      * @return string w/o slash and space
      */
     public static StringBuilder removeTrailingSlashAndSpace(final StringBuilder sb) {
@@ -216,7 +232,7 @@ public final class TextParserHelper {
      *            needing caps
      * @return capitalized string
      */
-    public static final String toTitleCase(final String string) {
+    public static String toTitleCase(final String string) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
