@@ -95,7 +95,7 @@ public class PubmedFtpDataFetcher implements DataFetcher {
                 log.info("status of attempt to delete {}: {}", localFile.getAbsolutePath(),
                         Files.deleteIfExists(localFile.toPath()));
             } catch (IOException e1) {
-                log.error("problem deleting {}", localFile.getAbsolutePath(), e1);
+                log.error("problem deleting {}", localFile.getAbsolutePath(), e);
             }
             // reset file filter so we don't fetch successfully downloaded files again
             this.ftpFileFilter = new PubmedFtpFileFilter(this.basePath);
