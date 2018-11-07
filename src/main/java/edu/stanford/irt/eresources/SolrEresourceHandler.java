@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,6 +47,8 @@ public class SolrEresourceHandler implements EresourceHandler {
             Pattern.CASE_INSENSITIVE);
 
     private static final String EMPTY = "";
+
+    private static final Logger log = LoggerFactory.getLogger(SolrEresourceHandler.class);
 
     private static final int SORT_TEXT_MAX = 100;
 
@@ -331,6 +335,7 @@ public class SolrEresourceHandler implements EresourceHandler {
                 URI uri = new URI(link);
                 hosts.add(uri.getHost());
             } catch (URISyntaxException e) {
+                log.debug("uri problem: {}", e.getMessage(), e);
                 // ok
                 // maybe report these to Dick's group?
             }
