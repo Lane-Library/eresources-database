@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.pubmed;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +91,12 @@ public class PubmedFtpDataFetcher implements DataFetcher {
                 log.info("failed to fetch file: {}", file);
             }
         } catch (IOException e) {
-            log.info("status of attempt to delete {}: {}", localFile.getAbsolutePath(), localFile.delete());
+            try {
+                log.info("status of attempt to delete {}: {}", localFile.getAbsolutePath(),
+                        Files.deleteIfExists(localFile.toPath()));
+            } catch (IOException e1) {
+                log.error("problem deleting {}", localFile.getAbsolutePath(), e1);
+            }
             // reset file filter so we don't fetch successfully downloaded files again
             this.ftpFileFilter = new PubmedFtpFileFilter(this.basePath);
             if (this.tries < MAX_ATTEMPTS) {
