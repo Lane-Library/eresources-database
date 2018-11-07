@@ -1,6 +1,8 @@
 package edu.stanford.irt.eresources.marc;
 
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record.Field;
@@ -11,13 +13,11 @@ import edu.stanford.lane.catalog.Record.Subfield;
  */
 public class SulMarcLink extends MarcLink {
 
-    private static final Pattern SU_AFFIL_AT = Pattern
-            .compile("(available[ -]?to[ -]?stanford[ -]?affiliated[ -]?users)[ -]?at[:;.]?", Pattern.CASE_INSENSITIVE);
+    private static final Pattern SU_AFFIL_AT = Pattern.compile(
+            "(available[ -]?to[ -]?stanford[ -]?affiliated[ -]?users)([ -]?at)?[:;.]?", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern SUL_PROXY_PREFIX = Pattern
             .compile("^https?://stanford\\.idm\\.oclc\\.org/login\\?url=", Pattern.CASE_INSENSITIVE);
-
-    private static final int TWO = 2;
 
     private Field field;
 
@@ -28,23 +28,23 @@ public class SulMarcLink extends MarcLink {
 
     @Override
     public String getLabel() {
-        String l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'q')
-                .map(Subfield::getData).findFirst().orElse(null);
-        if (l == null) {
-            // SUL generally has 2 subfield z's
-            // first is "Available to Stanford-affiliated users at:"
-            // last is more meaningful version, publisher, etc.
-            l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'z')
-                    .map(Subfield::getData).reduce((a, b) -> b).orElse(null);
+        StringBuilder sb = new StringBuilder();
+        List<String> strings = this.field.getSubfields().stream()
+                .filter((final Subfield s) -> (s.getCode() == '3' || s.getCode() == 'z' || s.getCode() == 'y'))
+                .map(Subfield::getData).collect(Collectors.toList());
+        for (String string : strings) {
+            if (SU_AFFIL_AT.matcher(string).matches()) {
+                if (strings.size() > 1) {
+                    // don't add "available to Stanford users" if there are more strings
+                    string = "";
+                } else {
+                    // strip " at:" from "available to Stanford users"
+                    string = SU_AFFIL_AT.matcher(string).replaceFirst("$1");
+                }
+            }
+            sb.append(string).append(' ');
         }
-        if (l != null && (l.indexOf('(') == 0) && (l.indexOf(')') == l.length() - 1) && (l.length() > TWO)) {
-            l = l.substring(1, l.length() - 1);
-        }
-        // strip " at:" from "available to Stanford users"
-        if (l != null && SU_AFFIL_AT.matcher(l).matches()) {
-            l = SU_AFFIL_AT.matcher(l).replaceFirst("$1");
-        }
-        return l;
+        return sb.toString().trim();
     }
 
     @Override
