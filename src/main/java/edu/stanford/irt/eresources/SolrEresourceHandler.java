@@ -343,8 +343,9 @@ public class SolrEresourceHandler implements EresourceHandler {
         for (String link : links) {
             try {
                 URI uri = new URI(link);
-                if (!NOPROXY_HOSTS.matcher(uri.getHost()).matches()) {
-                    hosts.add(uri.getHost());
+                String host = uri.getHost();
+                if (null != host && !NOPROXY_HOSTS.matcher(host).matches()) {
+                    hosts.add(host);
                 }
             } catch (URISyntaxException e) {
                 log.debug("uri problem: {}", e.getMessage(), e);
