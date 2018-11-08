@@ -193,10 +193,8 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("versionsJson", versionsToJson(eresource));
         doc.addField("citationText", buildCitationKeywords(eresource));
         maybeAddIsxns(eresource, doc);
+        maybeAddProxyHosts(eresource, doc);
         handleMesh(eresource, doc);
-        for (String host : versionsToHosts(eresource)) {
-            doc.addField("proxyHosts", host);
-        }
         this.solrDocs.add(doc);
     }
 
@@ -315,8 +313,12 @@ public class SolrEresourceHandler implements EresourceHandler {
         return CHILD.matcher(tiab.toString()).matches();
     }
 
+    private boolean isMarc(final Eresource eresource) {
+        return AbstractMarcEresource.class.isAssignableFrom(eresource.getClass());
+    }
+
     private void maybeAddIsxns(final Eresource eresource, final SolrInputDocument doc) {
-        if (AbstractMarcEresource.class.isAssignableFrom(eresource.getClass())) {
+        if (isMarc(eresource)) {
             AbstractMarcEresource marcEresource = (AbstractMarcEresource) eresource;
             for (String isbn : marcEresource.getIsbns()) {
                 doc.addField("isbns", isbn);
@@ -327,12 +329,17 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
     }
 
-    private List<String> versionsToHosts(final Eresource eresource) {
+    private void maybeAddProxyHosts(final Eresource eresource, final SolrInputDocument doc) {
+        // limit to SUL and Lane records
+        // likely fine unlimited but seems silly to check millions of PubMed links w/o adding anything
+        if (!isMarc(eresource)) {
+            return;
+        }
+        Set<String> hosts = new HashSet<>();
         List<String> links = new ArrayList<>();
         eresource.getVersions().stream().filter(Version::isProxy).flatMap((final Version v) -> v.getLinks().stream())
                 .collect(Collectors.toSet()).stream().filter((final Link l) -> l.getUrl() != null)
                 .collect(Collectors.toSet()).forEach((final Link l) -> links.add(l.getUrl()));
-        List<String> hosts = new ArrayList<>();
         for (String link : links) {
             try {
                 URI uri = new URI(link);
@@ -345,7 +352,7 @@ public class SolrEresourceHandler implements EresourceHandler {
                 // maybe report these to Dick's group?
             }
         }
-        return hosts;
+        doc.addField("proxyHosts", hosts);
     }
 
     private String versionsToJson(final Eresource eresource) {
