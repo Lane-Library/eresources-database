@@ -131,7 +131,6 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
     }
 
     private boolean needToAddBibDates(final Eresource eresource) {
-        return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
-                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches();
+        return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty();
     }
 }

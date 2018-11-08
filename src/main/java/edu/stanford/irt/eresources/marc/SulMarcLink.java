@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -12,6 +13,8 @@ import edu.stanford.lane.catalog.Record.Subfield;
  *
  */
 public class SulMarcLink extends MarcLink {
+
+    private static final Pattern FOUR_DIGITS = Pattern.compile(".*\\b\\d{4}\\b.*");
 
     private static final Pattern SU_AFFIL_AT = Pattern.compile(
             "(available[ -]?to[ -]?stanford[ -]?affiliated[ -]?users)([ -]?at)?[:;.]?", Pattern.CASE_INSENSITIVE);
@@ -47,12 +50,22 @@ public class SulMarcLink extends MarcLink {
             }
             sb.append(string).append(' ');
         }
-        String l = sb.toString().trim();
-        // empty returns null for consistency with MarcLink
-        if (l.isEmpty()) {
-            return null;
+        return sb.toString().trim();
+    }
+
+    @Override
+    public String getLinkText() {
+        StringBuilder sb = new StringBuilder();
+        String l = getLabel();
+        if (null != l) {
+            sb.append(l);
         }
-        return l;
+        String holdingsAndDates = this.version.getHoldingsAndDates();
+        // since dates appear on links instead of the main record in laneweb, add dates when not already present
+        if (holdingsAndDates != null && !FOUR_DIGITS.matcher(sb.toString()).matches()) {
+            TextParserHelper.appendMaybeAddComma(sb, holdingsAndDates);
+        }
+        return sb.toString();
     }
 
     @Override

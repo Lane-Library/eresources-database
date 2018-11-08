@@ -4,7 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +39,7 @@ public class SulMarcLinkTest {
     public void testGetLabelNull() {
         expect(this.field.getSubfields()).andReturn(Collections.emptyList()).times(2);
         replay(this.field, this.subfield);
-        assertNull(this.link.getLabel());
+        assertTrue(this.link.getLabel().isEmpty());
     }
 
     @Test
