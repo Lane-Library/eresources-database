@@ -64,4 +64,24 @@ public class MARCRecordSupport {
         }
         return year;
     }
+
+    protected static String getYears(final Record record) {
+        int end = 0;
+        StringBuilder sb = new StringBuilder();
+        String dateField = getFields(record, "008").map(Field::getData).findFirst().orElse("0000000000000000");
+        String endDate = TextParserHelper.parseYear(dateField.substring(F008_11, F008_15));
+        String beginDate = TextParserHelper.parseYear(dateField.substring(F008_07, F008_11));
+        if (beginDate != null) {
+            sb.append(beginDate);
+        }
+        if (endDate != null) {
+            end = Integer.parseInt(endDate);
+            if (TextParserHelper.THIS_YEAR == end) {
+                sb.append('-');
+            } else if (!sb.toString().equals(endDate)) {
+                sb.append(endDate);
+            }
+        }
+        return sb.toString();
+    }
 }

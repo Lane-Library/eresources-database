@@ -18,8 +18,6 @@ import edu.stanford.lane.catalog.Record.Subfield;
  */
 public class SulMarcVersion extends MARCRecordSupport implements Version {
 
-    private static final Pattern BOOK_OR_VIDEO = Pattern.compile("^(Book|Video).*");
-
     private static final Pattern SPACE_EQUALS = Pattern.compile(" =");
 
     private Record bib;
@@ -49,18 +47,16 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public String getDates() {
-        // doubt 866 ^y present in sul data
-        Field field = getFields(this.bib, "866").findFirst().orElse(null);
         String dates = null;
-        if (field != null) {
-            dates = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'y')
-                    .map(Subfield::getData).findFirst().orElse(null);
-        }
-        if (dates == null && needToAddBibDates(this.eresource)) {
-            // 260c or 008 date1
-            // add 264c?
-            dates = getSubfieldData(this.bib, "260", "c").findFirst()
-                    .orElse(Integer.toString(this.eresource.getYear()));
+        if (needToAddBibDates(this.eresource)) {
+            if (this.eresource.getPrimaryType().startsWith("Journal")) {
+                dates = getYears(this.bib);
+            } else {
+                // 260c or 008 date1
+                // add 264c?
+                dates = getSubfieldData(this.bib, "260", "c").findFirst()
+                        .orElse(Integer.toString(this.eresource.getYear()));
+            }
         }
         return dates;
     }
@@ -106,14 +102,14 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public String getSummaryHoldings() {
-        String value = null;
-        Field field = getFields(this.bib, "362").findFirst().orElse(null);
-        if (field != null) {
-            value = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a')
-                    .map(Subfield::getData).map((final String s) -> SPACE_EQUALS.matcher(s).replaceAll("")).findFirst()
-                    .orElse(null);
-        }
-        return value;
+        return getSubfieldData(this.bib, "362", "a").map((final String s) -> SPACE_EQUALS.matcher(s).replaceAll(""))
+                .findFirst().orElse(null);
+        // maybe second check of 866 ^a s here ... if journal?
+        // is 362 just a better version of 866s?
+//        if (null == value) {
+//            value = getSubfieldData(this.bib, "866", "a").collect(Collectors.joining(" "));
+//        }
+//        return value.isEmpty() ? null : value;
     }
 
     @Override
