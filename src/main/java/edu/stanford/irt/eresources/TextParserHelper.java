@@ -201,7 +201,7 @@ public final class TextParserHelper {
             if ("9999".equals(year)) {
                 parsedYear = Integer.toString(THIS_YEAR);
             } else if (year.contains("u") || year.contains("|")) {
-                int estimate = Integer.parseInt(year.replace('u', '5').replace('|', '5'));
+                int estimate = Integer.parseInt(year.replace('u', '0').replace('|', '0'));
                 if (estimate > THIS_YEAR) {
                     estimate = THIS_YEAR;
                 }

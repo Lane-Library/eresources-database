@@ -107,12 +107,12 @@ public class TextParserHelperTest {
     public final void testParseYear() {
         assertEquals(null, TextParserHelper.parseYear("string"));
         assertEquals(THIS_YEAR, TextParserHelper.parseYear("9999"));
-        assertEquals("1995", TextParserHelper.parseYear("199u"));
-        assertEquals("1955", TextParserHelper.parseYear("19uu"));
-        assertEquals("1555", TextParserHelper.parseYear("1uuu"));
-        assertEquals(THIS_YEAR, TextParserHelper.parseYear("2uuu"));
+        assertEquals("1990", TextParserHelper.parseYear("199u"));
+        assertEquals("1900", TextParserHelper.parseYear("19uu"));
+        assertEquals("1000", TextParserHelper.parseYear("1uuu"));
+        assertEquals("2000", TextParserHelper.parseYear("2uuu"));
         assertEquals(null, TextParserHelper.parseYear("uuuu"));
-        assertEquals("1985", TextParserHelper.parseYear("198|"));
+        assertEquals("1980", TextParserHelper.parseYear("198|"));
     }
 
     @Test
