@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>36</version>
+        <version>37</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.1.9-SNAPSHOT</version>
@@ -75,7 +75,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>9.9.0-1</version>
+            <version>9.9.0-2</version>
         </dependency>
         <dependency>
             <groupId>net.sf.joost</groupId>
@@ -165,7 +165,7 @@
         <dependency>
             <groupId>edu.stanford.irt.suggest</groupId>
             <artifactId>suggest-query</artifactId>
-            <version>1.1.1</version>
+            <version>1.1.2</version>
         </dependency>
         <dependency>
             <groupId>jdepend</groupId>
