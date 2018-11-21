@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,8 @@ public class AuthTextAugmentation {
                 throw new EresourceDatabaseException(e);
             }
         } else {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(objFile))) {
+            try (ValidatingObjectInputStream ois = new ValidatingObjectInputStream(new FileInputStream(objFile))) {
+                ois.accept(HashMap.class);
                 this.augmentations = (HashMap<String, String>) ois.readObject();
             } catch (IOException e) {
                 log.error("can't open augmentations file", e);
