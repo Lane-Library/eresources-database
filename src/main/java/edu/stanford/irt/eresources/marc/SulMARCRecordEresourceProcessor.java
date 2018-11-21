@@ -14,7 +14,9 @@ import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
+import edu.stanford.lane.catalog.Record.Subfield;
 import edu.stanford.lane.catalog.RecordCollection;
+import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
@@ -35,6 +37,8 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     private KeywordsStrategy keywordsStrategy;
 
     private LaneDedupAugmentation laneDedupAugmentation;
+
+    private LcshMapManager lcshMapManager = new LcshMapManager();
 
     private RecordCollectionFactory recordCollectionFactory;
 
@@ -70,8 +74,33 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean hasAcceptableLCCallNumberPrefix(final Record record) {
-        List<String> cns = MARCRecordSupport.getSubfieldData(record, "050", "a").collect(Collectors.toList());
-        for (String cn : cns) {
+        Set<String> cns = MARCRecordSupport.getSubfieldData(record, "050", "a").collect(Collectors.toSet());
+        if (includedInAcceptableLCCallNumberPrefixes(cns)) {
+            return true;
+        }
+        // augment callnumber list with mapped LCSH->callnumber values
+        cns.clear();
+        MARCRecordSupport.getFields(record, "650").filter((final Field f) -> ("07".indexOf(f.getIndicator2()) > -1))
+                .forEach((final Field f) -> {
+                    StringBuilder sb = new StringBuilder();
+                    f.getSubfields().stream().filter((final Subfield sf) -> "ax".indexOf(sf.getCode()) > -1)
+                            .forEach((final Subfield sf) -> {
+                                if ('x' == sf.getCode()) {
+                                    sb.append("--");
+                                }
+                                sb.append(TextParserHelper.maybeStripTrailingPeriod(sf.getData()));
+                            });
+                    cns.addAll(this.lcshMapManager.getCallnumbersForHeading(sb.toString()));
+                });
+        return includedInAcceptableLCCallNumberPrefixes(cns);
+    }
+
+    private boolean hasNLMCallNumber(final Record record) {
+        return MARCRecordSupport.getFields(record, "060").findAny().isPresent();
+    }
+
+    private boolean includedInAcceptableLCCallNumberPrefixes(final Set<String> callnumbers) {
+        for (String cn : callnumbers) {
             for (String lccn : this.acceptableLCCallNumberPrefixes) {
                 if (cn.startsWith(lccn)) {
                     return true;
@@ -79,10 +108,6 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             }
         }
         return false;
-    }
-
-    private boolean hasNLMCallNumber(final Record record) {
-        return MARCRecordSupport.getFields(record, "060").findAny().isPresent();
     }
 
     private boolean isInScope(final Record record) {
