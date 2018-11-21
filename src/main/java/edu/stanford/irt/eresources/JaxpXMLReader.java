@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -17,6 +18,7 @@ public class JaxpXMLReader extends XMLFilterImpl {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, Boolean.TRUE);
             super.setParent(factory.newSAXParser().getXMLReader());
         } catch (ParserConfigurationException | SAXException e) {
             throw new ParserCreationException(e);
