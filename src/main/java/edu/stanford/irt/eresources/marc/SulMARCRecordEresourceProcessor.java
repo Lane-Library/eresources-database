@@ -74,7 +74,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean hasAcceptableLCCallNumberPrefix(final Record record) {
-        Set<String> cns = MARCRecordSupport.getSubfieldData(record, "050", "a").collect(Collectors.toSet());
+        Set<String> cns = MARCRecordSupport.getSubfieldData(record, "050|090", "a").collect(Collectors.toSet());
         if (includedInAcceptableLCCallNumberPrefixes(cns)) {
             return true;
         }
