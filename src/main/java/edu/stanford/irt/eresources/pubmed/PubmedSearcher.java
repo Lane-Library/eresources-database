@@ -69,8 +69,13 @@ public class PubmedSearcher {
         this.field = field;
         this.query = query;
         this.value = value;
-        this.factory = DocumentBuilderFactory.newInstance();
         this.xpath = XPathFactory.newInstance().newXPath();
+        this.factory = DocumentBuilderFactory.newInstance();
+        try {
+            this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, Boolean.TRUE);
+        } catch (ParserConfigurationException e) {
+            log.error("can't set {}", XMLConstants.FEATURE_SECURE_PROCESSING, e);
+        }
     }
 
     public String getField() {
@@ -119,7 +124,6 @@ public class PubmedSearcher {
             NodeList retmaxNodes = null;
             NodeList pmidNodes = null;
             try {
-                this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
                 doc = this.factory.newDocumentBuilder()
                         .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
                 retmaxNodes = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
