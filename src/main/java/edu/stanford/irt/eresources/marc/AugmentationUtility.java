@@ -15,13 +15,17 @@ import org.slf4j.LoggerFactory;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public abstract class AbstractAugmentation {
+public final class AugmentationUtility {
 
     public static final int ONE_DAY = 1000 * 60 * 60 * 24;
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractAugmentation.class);
+    private static final Logger log = LoggerFactory.getLogger(AugmentationUtility.class);
 
-    public Map<String, String> fetchAugmentations(final String augmentationsFileName,
+    private AugmentationUtility() {
+        // empty private constructor
+    }
+
+    public static Map<String, String> fetchAugmentations(final String augmentationsFileName,
             final AugmentationsService augmentationsService, final int timePeriod) {
         Map<String, String> augmentations;
         File objFile = new File(augmentationsFileName);

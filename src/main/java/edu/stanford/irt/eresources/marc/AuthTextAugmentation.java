@@ -2,12 +2,13 @@ package edu.stanford.irt.eresources.marc;
 
 import java.util.Map;
 
-public class AuthTextAugmentation extends AbstractAugmentation {
+public class AuthTextAugmentation {
 
     private Map<String, String> augmentations;
 
     public AuthTextAugmentation(final AugmentationsService augmentationsService) {
-        this.augmentations = fetchAugmentations("auth-augmentations.obj", augmentationsService, ONE_DAY);
+        this.augmentations = AugmentationUtility.fetchAugmentations("auth-augmentations.obj", augmentationsService,
+                AugmentationUtility.ONE_DAY);
     }
 
     public String getAuthAugmentations(final String controlNumber) {

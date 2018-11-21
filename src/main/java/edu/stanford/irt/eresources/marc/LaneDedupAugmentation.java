@@ -3,7 +3,7 @@ package edu.stanford.irt.eresources.marc;
 import java.util.Map;
 import java.util.Set;
 
-public class LaneDedupAugmentation extends AbstractAugmentation {
+public class LaneDedupAugmentation {
 
     public static final String KEY_CATKEY = "catkey";
 
@@ -28,7 +28,8 @@ public class LaneDedupAugmentation extends AbstractAugmentation {
     public LaneDedupAugmentation(final String augmentationsFileName, final AugmentationsService augmentationsService,
             final Set<String> manualSkips) {
         this.manualSkips = manualSkips;
-        this.augmentations = fetchAugmentations(augmentationsFileName, augmentationsService, ONE_DAY);
+        this.augmentations = AugmentationUtility.fetchAugmentations(augmentationsFileName, augmentationsService,
+                AugmentationUtility.ONE_DAY);
     }
 
     public boolean isDuplicate(final String key, final String value) {
