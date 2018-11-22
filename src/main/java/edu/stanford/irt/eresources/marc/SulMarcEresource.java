@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -71,9 +70,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     @Override
     public Collection<String> getMeshTerms() {
-        Set<String> mesh = getSubfieldData(
-                getFields(this.record, "650").filter((final Field f) -> ("2356".indexOf(f.getIndicator2()) > -1)), "a")
-                        .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
+        Collection<String> mesh = super.getMeshTerms();
         MARCRecordSupport.getFields(this.record, "650")
                 .filter((final Field f) -> ("07".indexOf(f.getIndicator2()) > -1)).forEach((final Field f) -> {
                     StringBuilder sb = new StringBuilder();
