@@ -42,7 +42,7 @@ public class SulMarcEresourceTest {
         this.record = mock(Record.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.typeFactory = mock(SulTypeFactory.class);
-        this.eresource = new SulMarcEresource(this.record, this.keywordsStrategy, this.typeFactory);
+        this.eresource = new SulMarcEresource(this.record, this.keywordsStrategy, this.typeFactory, null);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
     }
@@ -162,7 +162,7 @@ public class SulMarcEresourceTest {
 
     @Test
     public final void testGetVersions() {
-        SulMarcEresource e = new SulMarcEresource(this.record, null, this.typeFactory);
+        SulMarcEresource e = new SulMarcEresource(this.record, null, this.typeFactory, null);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("956").atLeastOnce();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).atLeastOnce();

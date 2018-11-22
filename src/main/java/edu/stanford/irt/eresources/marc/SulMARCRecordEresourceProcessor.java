@@ -63,8 +63,8 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         while (recordCollection.hasNext()) {
             Record record = recordCollection.next();
             if (isInScope(record) && !isLane(record) && !isLaneDuplicate(record)) {
-                this.eresourceHandler
-                        .handleEresource(new SulMarcEresource(record, this.keywordsStrategy, this.typeFactory));
+                this.eresourceHandler.handleEresource(
+                        new SulMarcEresource(record, this.keywordsStrategy, this.typeFactory, this.lcshMapManager));
             }
         }
     }

@@ -27,17 +27,18 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     private static final int YEAR_LENGTH = 4;
 
-    private LcshMapManager lcshMapManager = new LcshMapManager();
+    private LcshMapManager lcshMapManager;
 
     private SulTypeFactory sulTypeFactory;
 
     private int year;
 
     public SulMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
-            final SulTypeFactory typeFactory) {
+            final SulTypeFactory typeFactory, final LcshMapManager lcshMapManager) {
         this.record = record;
         this.keywordsStrategy = keywordsStrategy;
         this.sulTypeFactory = typeFactory;
+        this.lcshMapManager = lcshMapManager;
     }
 
     @Override
