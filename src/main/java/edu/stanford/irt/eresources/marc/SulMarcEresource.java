@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
+import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMarcEresource extends AbstractMarcEresource {
 
@@ -25,6 +27,8 @@ public class SulMarcEresource extends AbstractMarcEresource {
     private static final int MIN_YEAR = 500;
 
     private static final int YEAR_LENGTH = 4;
+
+    private LcshMapManager lcshMapManager = new LcshMapManager();
 
     private SulTypeFactory sulTypeFactory;
 
@@ -63,6 +67,26 @@ public class SulMarcEresource extends AbstractMarcEresource {
         StringBuilder sb = new StringBuilder();
         sb.append(this.keywordsStrategy.getKeywords(this.record));
         return sb.toString();
+    }
+
+    @Override
+    public Collection<String> getMeshTerms() {
+        Set<String> mesh = getSubfieldData(
+                getFields(this.record, "650").filter((final Field f) -> ("2356".indexOf(f.getIndicator2()) > -1)), "a")
+                        .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
+        MARCRecordSupport.getFields(this.record, "650")
+                .filter((final Field f) -> ("07".indexOf(f.getIndicator2()) > -1)).forEach((final Field f) -> {
+                    StringBuilder sb = new StringBuilder();
+                    f.getSubfields().stream().filter((final Subfield sf) -> "ax".indexOf(sf.getCode()) > -1)
+                            .forEach((final Subfield sf) -> {
+                                if ('x' == sf.getCode()) {
+                                    sb.append("--");
+                                }
+                                sb.append(TextParserHelper.maybeStripTrailingPeriod(sf.getData()));
+                            });
+                    mesh.addAll(this.lcshMapManager.getMeshForHeading(sb.toString()));
+                });
+        return mesh;
     }
 
     @Override
