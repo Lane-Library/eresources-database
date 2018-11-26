@@ -71,9 +71,11 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     @Override
     public Collection<String> getMeshTerms() {
-        Collection<String> mesh = super.getMeshTerms();
-        MARCRecordSupport.getFields(this.record, "650")
-                .filter((final Field f) -> ("07".indexOf(f.getIndicator2()) > -1)).forEach((final Field f) -> {
+        Collection<String> mesh = getSubfieldData(
+                getFields(this.record, "650").filter((final Field f) -> ("2".indexOf(f.getIndicator2()) > -1)), "a")
+                        .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
+        MARCRecordSupport.getFields(this.record, "650").filter((final Field f) -> ("0".indexOf(f.getIndicator2()) > -1))
+                .forEach((final Field f) -> {
                     StringBuilder sb = new StringBuilder();
                     f.getSubfields().stream().filter((final Subfield sf) -> "ax".indexOf(sf.getCode()) > -1)
                             .forEach((final Subfield sf) -> {
