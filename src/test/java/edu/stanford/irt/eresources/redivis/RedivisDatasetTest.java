@@ -39,14 +39,14 @@ public final class RedivisDatasetTest {
         assertEquals("StanfordPHS", dataset.getOrganization().getShortName());
         assertEquals("1", dataset.getOrganization().getId());
         assertEquals("usa", dataset.getTags().get(0).getName());
-        assertEquals("2007-2015", dataset.getTemporalRange().getDisplayRange());
-        assertEquals("2007-01-01", dataset.getTemporalRange().getMin());
-        assertEquals("2015-01-01", dataset.getTemporalRange().getMax());
-        assertEquals("date", dataset.getTemporalRange().getPrecision());
+        assertEquals("2007-2016", dataset.getCurrentVersion().getTemporalRange().getDisplayRange());
+        assertEquals("2007-01-01T00:00:00.000Z", dataset.getCurrentVersion().getTemporalRange().getMin());
+        assertEquals("2016-12-31T23:59:59.999Z", dataset.getCurrentVersion().getTemporalRange().getMax());
+        assertEquals("year", dataset.getCurrentVersion().getTemporalRange().getPrecision());
         assertTrue(dataset.getUpdatedAt().before(new Date()));
         assertEquals("https://redivis.com/StanfordPHS/datasets/45", dataset.getUrl());
         assertEquals("STDPLAC", dataset.getVariables().get(0).getName());
-        assertTrue(dataset.getVariables().get(52).getValueLabels().containsValue("Female"));
+//        assertTrue(dataset.getVariables().get(52).getValueLabels().containsValue("Female"));
         assertEquals("https://redivis.com/StanfordPHS/datasets/45/data?variable=301135",
                 dataset.getVariables().get(27).getUrl());
         assertEquals("Unique enrollee identifier", dataset.getVariables().get(27).getLabel());

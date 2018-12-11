@@ -133,6 +133,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     private boolean needToAddBibDates(final Eresource eresource) {
         return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
                 && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches()
-                && !getLinks().stream().anyMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
+                && getLinks().stream().noneMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
     }
 }

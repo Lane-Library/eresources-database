@@ -6,75 +6,55 @@
   "accessLevel": "overview",
   "url": "https://redivis.com/StanfordPHS/datasets/45",
   "createdAt": "2016-09-19T23:17:12.852Z",
-  "updatedAt": "2018-10-22T18:08:44.684Z",
-  "numRows": 663391079,
-  "numBytes": 277850846130,
-  "variableCount": 76,
-  "temporalRange": {
-    "precision": "date",
-    "min": "2007-01-01",
-    "max": "2015-01-01"
-  },
+  "updatedAt": "2018-12-08T04:33:10.477Z",
+  "totalBytesStored": 243071700305,
   "organization": {
     "kind": "organization",
     "id": 1,
     "shortName": "StanfordPHS",
-    "name": "Stanford Center for Population Health Sciences"
+    "name": "Stanford Center for Population Health Sciences",
+    "url": "https://redivis.com/StanfordPHS"
   },
-  "versions": [
-    {
-      "kind": "datasetVersion",
-      "id": 257,
-      "tag": "2.0",
-      "description": "Including the 2016 data, improved variable harmonization between tables and between years",
-      "createdAt": "2018-06-13T21:17:39.657Z",
-      "deltaRows": 42928066,
+  "currentVersion": {
+    "kind": "datasetVersion",
+    "id": 257,
+    "tag": "1.0",
+    "releasedAt": "2018-06-13T21:17:39.657Z",
+    "description": "Including the 2016 data, improved variable harmonization between tables and between years",
+    "url": "https://redivis.com/StanfordPHS/datasets/45?version=257",
+    "temporalRange": {
+      "precision": "year",
+      "min": "2007-01-01T00:00:00.000Z",
+      "max": "2016-12-31T23:59:59.999Z"
+    },
+    "temporalVariable": null,
+    "rowsAdded": 663391079,
+    "rowsUpdated": 0,
+    "rowsRemoved": 0,
+    "variablesAdded": 76,
+    "variablesRemoved": 0,
+    "variablesUpdated": 0,
+    "table": {
+      "kind": "table",
+      "id": 7742,
       "numRows": 663391079,
       "numBytes": 277850846130,
       "variableCount": 76,
-      "variablesAdded": 0,
-      "variablesRemoved": 1
+      "isArchived": false
     },
-    {
-      "kind": "datasetVersion",
-      "id": 146,
-      "tag": "1.2",
-      "description": "This release harmonizes variable types with other Truven Datasets and removes all records without an ENROLID.",
-      "createdAt": "2018-01-31T03:11:09.162Z",
-      "deltaRows": -617222,
-      "numRows": 620463013,
-      "numBytes": 258202881743,
+    "sampleTable": {
+      "kind": "table",
+      "id": 8753,
+      "numRows": 6584181,
+      "numBytes": 2757641938,
       "variableCount": 76,
-      "variablesAdded": 0,
-      "variablesRemoved": 0
+      "isArchived": false
     },
-    {
-      "kind": "datasetVersion",
-      "id": 105,
-      "tag": "1.1",
-      "description": null,
-      "createdAt": "2017-11-26T04:04:33.888Z",
-      "deltaRows": 0,
-      "numRows": 621080235,
-      "numBytes": 241515626330,
-      "variableCount": 76,
-      "variablesAdded": 0,
-      "variablesRemoved": 0
-    },
-    {
-      "kind": "datasetVersion",
-      "id": 74,
-      "tag": "1.0",
-      "description": null,
-      "createdAt": "2017-10-26T04:04:33.888Z",
-      "deltaRows": 621080235,
-      "numRows": 621080235,
-      "numBytes": 245542901506,
-      "variableCount": 76,
-      "variablesAdded": 77,
-      "variablesRemoved": 0
+    "sampleVariable": {
+      "kind": "variable",
+      "name": "ENROLID"
     }
-  ],
+  },
   "permissionGroup": {
     "kind": "permissionGroup",
     "id": 33,
@@ -128,13 +108,13 @@
       "kind": "documentation",
       "name": null,
       "requiredAccessLevel": "overview",
-      "text": "# Notes  \nThis file contains individual inpatient claim records that were used to create admissions records. One record identifies one inpatient stay at a given facility.\n\nLinkable to other tables using Enrollee ID\nCommon measures: most expensive procedures in inpatient setting, admission rates, etc.\n\nKey variables of interest:\nDate of Admission  \nAdmission Type  \nData Type \nDate of Discharge\nLength of Stay\nPrincipal Diagnosis for a given admission\nPrincipal diagnosis and 14 secondary diagnoses\nProcedure principal\nPrincipal procedure and 14 secondary procedures\nNet payments to hospital, respectively\nGross payments to hospital, respectively\nNet payments to physician, respectively\nGross payments to physician, respectively\nTotal Coinsurance (for the case)\nTotal copay (for the case)\nTotal deductible (for the case)\nNet total payments (for the case)\nGross total payments (for the case)\n  \n"
+      "text": "# Notes  \n\nThis file contains individual inpatient claim records that were used to create admissions records. One record identifies one inpatient stay at a given facility.\n\nLinkable to other tables using Enrollee ID\nCommon measures: most expensive procedures in inpatient setting, admission rates, etc.\n\nKey variables of interest:\nDate of Admission  \nAdmission Type  \nData Type \nDate of Discharge\nLength of Stay\nPrincipal Diagnosis for a given admission\nPrincipal diagnosis and 14 secondary diagnoses\nProcedure principal\nPrincipal procedure and 14 secondary procedures\nNet payments to hospital, respectively\nGross payments to hospital, respectively\nNet payments to physician, respectively\nGross payments to physician, respectively\nTotal Coinsurance (for the case)\nTotal copay (for the case)\nTotal deductible (for the case)\nNet total payments (for the case)\nGross total payments (for the case)\n  \n"
     },
     {
       "kind": "documentation",
       "name": null,
       "requiredAccessLevel": "data",
-      "text": "# Truven Documentation:\n\nPer the DUA you signed, the Truven MarketScan documentation can NOT be downloaded to your computer or shared in any other way. Failure to comply will result in suspension/termination of access to the data.\n\n[Truven Data Dictionary](/fileUploads/9a8c8ca4-9841-4987-bdd6-9afe6e2b17eb)\n\n[Truven User Guide](/fileUploads/1045b9b4-5c2f-4580-8015-c7ed333c1b11)"
+      "text": "# MarketScan (previously called Truven) Documentation:\n\nPer the DUA you signed, the MarketScan documentation can NOT be downloaded to your computer or shared in any other way. Failure to comply will result in suspension/termination of access to the data.\n\n[MarketScan Data Dictionary](/fileUploads/9a8c8ca4-9841-4987-bdd6-9afe6e2b17eb)\n\n[MarketScan User Guide](/fileUploads/1045b9b4-5c2f-4580-8015-c7ed333c1b11)"
     }
   ],
   "variables": [
@@ -506,9 +486,7 @@
       "name": "SEX",
       "label": null,
       "description": null,
-      "valueLabels": {
-        "2": "Female"
-      },
+      "valueLabels": null,
       "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301149"
     },
     {
@@ -561,29 +539,18 @@
       "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301145"
     },
     {
-      "name": "INDSTRY",
-      "label": null,
-      "description": null,
-      "valueLabels": {
-        "1": "Oil & Gas Extraction, Mining ",
-        "2": "Manufacturing, Durable Goods",
-        "3": "Manufacturing, Nondurable Goods",
-        "4": "Transportation,  Communications, Utilities",
-        "5": "Retail Trade",
-        "6": "Finance, Insurance, Real Estate",
-        "7": "Services",
-        "A": "Agrigulture, Forestry, Fishing",
-        "C": "Construction",
-        "W": "Wholesale"
-      },
-      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301151"
-    },
-    {
       "name": "ENRFLAG",
       "label": null,
       "description": null,
       "valueLabels": null,
       "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301146"
+    },
+    {
+      "name": "INDSTRY",
+      "label": null,
+      "description": null,
+      "valueLabels": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/45/data?variable=301151"
     },
     {
       "name": "PLANKEY",

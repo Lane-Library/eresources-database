@@ -7,9 +7,27 @@ import java.util.List;
 
 public class Dataset {
 
+    public class CurrentVersion {
+
+        private TemporalRange temporalRange;
+
+        public CurrentVersion() {
+            // empty constructor
+        }
+
+        /**
+         * @return the temporalRange
+         */
+        public TemporalRange getTemporalRange() {
+            return this.temporalRange;
+        }
+    }
+
     private String accessLevel;
 
     private List<DatasetCollection> collections = Collections.emptyList();
+
+    private CurrentVersion currentVersion;
 
     private String description;
 
@@ -24,8 +42,6 @@ public class Dataset {
     private Organization organization;
 
     private List<Tag> tags = Collections.emptyList();
-
-    private TemporalRange temporalRange;
 
     private Date updatedAt;
 
@@ -49,6 +65,13 @@ public class Dataset {
      */
     public List<DatasetCollection> getCollections() {
         return new ArrayList<>(this.collections);
+    }
+
+    /**
+     * @return the currentVersion
+     */
+    public CurrentVersion getCurrentVersion() {
+        return this.currentVersion;
     }
 
     /**
@@ -98,13 +121,6 @@ public class Dataset {
      */
     public List<Tag> getTags() {
         return new ArrayList<>(this.tags);
-    }
-
-    /**
-     * @return the temporalRange
-     */
-    public TemporalRange getTemporalRange() {
-        return this.temporalRange;
     }
 
     /**

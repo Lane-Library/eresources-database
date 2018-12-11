@@ -13,6 +13,8 @@ import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.stanford.irt.eresources.redivis.Dataset.CurrentVersion;
+
 public class DatasetVersionTest {
 
     Dataset dataset;
@@ -42,11 +44,21 @@ public class DatasetVersionTest {
     @Test
     public final void testGetDates() {
         TemporalRange tr = mock(TemporalRange.class);
-        expect(this.dataset.getTemporalRange()).andReturn(tr);
+        CurrentVersion cv = mock(CurrentVersion.class);
+        expect(this.dataset.getCurrentVersion()).andReturn(cv);
+        expect(cv.getTemporalRange()).andReturn(tr);
         expect(tr.getDisplayRange()).andReturn("display range");
-        replay(this.dataset, tr);
+        replay(this.dataset, cv, tr);
         assertEquals("display range", this.datasetVersion.getDates());
-        verify(this.dataset, tr);
+        verify(this.dataset, cv, tr);
+    }
+
+    @Test
+    public final void testGetDatesNullCurrentVersion() {
+        expect(this.dataset.getCurrentVersion()).andReturn(null);
+        replay(this.dataset);
+        assertNull(this.datasetVersion.getDates());
+        verify(this.dataset);
     }
 
     @Test
