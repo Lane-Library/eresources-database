@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Dataset {
 
-    public class CurrentVersion {
+    public static class CurrentVersion {
 
         private TemporalRange temporalRange;
 
