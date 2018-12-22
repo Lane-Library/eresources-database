@@ -37,7 +37,7 @@ public class SolrLoader {
 
     private EresourceHandler handler;
 
-    private Collection<AbstractEresourceProcessor> processors = Collections.<AbstractEresourceProcessor> emptyList();
+    private Collection<AbstractEresourceProcessor> processors = Collections.emptyList();
 
     private Queue<Eresource> queue;
 
