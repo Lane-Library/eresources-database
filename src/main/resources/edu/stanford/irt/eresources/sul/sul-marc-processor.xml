@@ -117,9 +117,8 @@
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
-        <!--  TODO:  <constructor-arg ref="${eresources.remoteServiceProtocol}LaneDedupAugmentationService"/> -->
         <constructor-arg name="augmentationsFileName" value="dedup-augmentations.obj"/>
-        <constructor-arg ref="jdbcLaneDedupAugmentationService"/>
+        <constructor-arg ref="${eresources.remoteServiceProtocol}LaneDedupAugmentationService"/>
         <constructor-arg name="manualSkips">
             <set>
                 <!-- example excluding one of SUL's PubMed records that's not excluded otherwise -->
@@ -130,11 +129,9 @@
     <bean id="jdbcLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.JDBCLaneDedupAugmentationsService">
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
-    <!-- TODO: implement /laneDedup endpoint in catalog-service project and change laneDedupAugmentation above
     <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
         <constructor-arg ref="catalogServiceURI"/>
-        <constructor-arg value="augmentations/laneDedup"/>
+        <constructor-arg value="augmentations/dedup"/>
     </bean>
-     -->
 </beans>
