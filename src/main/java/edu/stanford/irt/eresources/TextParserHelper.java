@@ -61,7 +61,7 @@ public final class TextParserHelper {
      */
     public static String cleanIsxn(final String isxn) {
         if (!isxn.isEmpty()) {
-            return DIGIT_OR_X_PATTERN.matcher(isxn.split(" ")[0]).replaceAll("");
+            return DIGIT_OR_X_PATTERN.matcher(isxn.split(" ")[0]).replaceAll("").toLowerCase(Locale.US);
         }
         return isxn;
     }
