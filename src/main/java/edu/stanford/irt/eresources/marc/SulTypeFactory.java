@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import edu.stanford.irt.eresources.EresourceConstants;
-import edu.stanford.irt.eresources.SulSolrCatalogRecordService;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -54,12 +53,6 @@ public class SulTypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("periodicals", EresourceConstants.JOURNAL);
     }
 
-    private SulSolrCatalogRecordService catalogRecordService;
-
-    public SulTypeFactory(final SulSolrCatalogRecordService catalogRecordService) {
-        this.catalogRecordService = catalogRecordService;
-    }
-
     private static Stream<Field> getFieldsWild(final Record record, final String tagString) {
         return record.getFields().stream().filter((final Field f) -> f.getTag().startsWith(tagString));
     }
@@ -86,8 +79,7 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     public List<String> getTypes(final Record record) {
         List<String> types = new ArrayList<>();
-        for (String type : this.catalogRecordService
-                .getRecordFormats(Integer.toString(MARCRecordSupport.getRecordId(record)))) {
+        for (String type : SulTypeFactoryHelper.getTypes(record)) {
             types.add(getCompositeType(type));
         }
         for (String type : getRawTypes(record)) {

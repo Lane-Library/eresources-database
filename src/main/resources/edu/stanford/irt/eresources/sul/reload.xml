@@ -16,11 +16,8 @@
             </list>
         </property>
     </bean>
-    <bean id="sulSolrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient">
-        <constructor-arg value="${eresources.sul.solr-catalog-service.base-url}"/>
-    </bean>
-    <bean id="sulSolrCatalogRecordService" class="edu.stanford.irt.eresources.SulSolrCatalogRecordService">
-        <constructor-arg ref="sulSolrClient"/>
+    <bean id="sulFileCatalogRecordService" class="edu.stanford.irt.eresources.SulFileCatalogRecordService">
+        <constructor-arg name="basePath" value="${eresources.sul.file-record-service.basePath}"/>
         <constructor-arg name="executor" ref="executor"/>
     </bean>
 </beans>

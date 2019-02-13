@@ -14,13 +14,11 @@
         </constructor-arg>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.RecordCollectionFactory">
-                <constructor-arg ref="sulSolrCatalogRecordService"/>
+                <constructor-arg ref="sulFileCatalogRecordService"/>
             </bean>
         </constructor-arg>
         <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory">
-                <constructor-arg ref="sulSolrCatalogRecordService"/>
-            </bean>
+            <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory"/>
         </constructor-arg>
         <constructor-arg name="acceptableLCCallNumberPrefixes">
             <list>
