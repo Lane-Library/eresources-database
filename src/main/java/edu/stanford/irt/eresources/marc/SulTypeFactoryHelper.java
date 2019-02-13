@@ -104,7 +104,6 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
      * @return set of types
      */
     private static Set<String> pass2(final Record record, final Set<String> currentTypes) {
-        Set<String> mytypes = new HashSet<>();
         if (!currentTypes.isEmpty()) {
             return currentTypes;
         }
@@ -112,6 +111,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
         String f006 = getFields(record, "006").map(Field::getData).findFirst().orElse(FORTY_ZEROES);
         String f008 = getFields(record, "008").map(Field::getData).findFirst().orElse(FORTY_ZEROES);
         char f008Byte21 = f008.charAt(21);
+        Set<String> mytypes = new HashSet<>();
         if ('s' == leaderByte7) {
             if ('m' == f008Byte21) {
                 mytypes.add("Book");
