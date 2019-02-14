@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.marc;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class LaneDedupAugmentation {
 
     public LaneDedupAugmentation(final String augmentationsFileName, final AugmentationsService augmentationsService,
             final Set<String> manualSkips) {
-        this.manualSkips = manualSkips;
+        this.manualSkips = new HashSet<>(manualSkips);
         this.augmentations = AugmentationUtility.fetchAugmentations(augmentationsFileName, augmentationsService,
                 AugmentationUtility.ONE_DAY);
     }
