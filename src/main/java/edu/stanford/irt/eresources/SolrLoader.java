@@ -130,6 +130,7 @@ public class SolrLoader {
         } else {
             SolrDocument firstResult = rdocs.get(0);
             Date solrDate = (Date) firstResult.getFieldValue("updated");
+            // NOTE: the ZoneId must match Solr's timezone for deletes to work properly
             updated = LocalDateTime.ofInstant(solrDate.toInstant(), ZoneId.systemDefault());
         }
         return updated;
