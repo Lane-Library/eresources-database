@@ -54,7 +54,7 @@ public class SulTypeFactory extends MARCRecordSupport {
     }
 
     private static Stream<Field> getFieldsWild(final Record record, final String tagString) {
-        return record.getFields().stream().filter((final Field f) -> f.getTag().startsWith(tagString));
+        return record.getFields().stream().filter((final Field f) -> f.getTag().matches(tagString));
     }
 
     public String getPrimaryType(final Record record) {
@@ -99,8 +99,7 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     private String getPrintOrDigital(final Record record) {
         // may need to extend to exclude loc.gov or include google books?
-        // include 956s?
-        List<Field> linkFields = getFields(record, "856").filter(
+        List<Field> linkFields = getFieldsWild(record, "[8|9]56").filter(
                 (final Field f) -> f.getSubfields().stream().anyMatch((final Subfield sf) -> sf.getCode() == 'u'))
                 .collect(Collectors.toList());
         int allLinks = linkFields.size();
@@ -118,7 +117,7 @@ public class SulTypeFactory extends MARCRecordSupport {
         List<Field> fields655 = getFields(record, "655").collect(Collectors.toList());
         rawTypes.addAll(getSubfieldData(fields655.stream(), "a").map(TextParserHelper::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet()));
-        List<Field> fields6xx = getFieldsWild(record, "6").collect(Collectors.toList());
+        List<Field> fields6xx = getFieldsWild(record, "6..").collect(Collectors.toList());
         rawTypes.addAll(getSubfieldData(fields6xx.stream(), "v").map(TextParserHelper::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet()));
         rawTypes.addAll(getSubfieldData(record, "245", "h").map(TextParserHelper::maybeStripTrailingPeriod)
