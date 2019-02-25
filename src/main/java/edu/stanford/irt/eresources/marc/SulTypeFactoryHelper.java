@@ -14,10 +14,10 @@ import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
 /**
- * Parse SUL record type from MARC. This class was written to mimic SUL's indexing code
- * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb} and
- * intentionally follows their structure in order to minimize maintenance pain over time. Optimizing this class is not
- * recommended.
+ * Parse SUL record type from MARC. This class was written to mimic <a href=
+ * "https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb">SUL's
+ * indexing code</a> and intentionally follows their structure in order to minimize maintenance pain over time.
+ * Optimizing this class is not recommended.
  */
 public final class SulTypeFactoryHelper extends MARCRecordSupport {
 
@@ -41,7 +41,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1401}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1401
      *
      * @param record
      * @return set of types
@@ -96,7 +96,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1452}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1452
      *
      * @param record
      * @param currentTypes
@@ -145,7 +145,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1488}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1488
      *
      * @param record
      * @param currentTypes
@@ -175,7 +175,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1508}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1508
      *
      * @param record
      * @return set of types
@@ -189,7 +189,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1514}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1514
      * skipping this method as it depends on access_facet and does not seem worth replicating here
      *
      * @param record
@@ -200,7 +200,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1522}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1522
      *
      * @param record
      * @return set of types
@@ -224,7 +224,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1537}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1537
      *
      * @param record
      * @return set of types
@@ -239,7 +239,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1550}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1550
      *
      * @param record
      * @param currentTypes
@@ -258,7 +258,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1561}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1561
      *
      * @param record
      * @return set of types
@@ -271,7 +271,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1570}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1570
      *
      * @param record
      * @param currentTypes
@@ -286,7 +286,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1581}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1581
      *
      * @param record
      * @param currentTypes
@@ -334,7 +334,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * {@link https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1622}
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1622
      *
      * @param record
      * @param currentTypes

@@ -68,6 +68,7 @@ public class SulSolrCatalogRecordService extends PipedInputStream implements Run
      * fetch record formats from solr if not already present in recordFormats {@code Map}
      *
      * @param recordId
+     *            id of the record to lookup
      * @return String array of formats
      */
     public List<String> getRecordFormats(final String recordId) {
