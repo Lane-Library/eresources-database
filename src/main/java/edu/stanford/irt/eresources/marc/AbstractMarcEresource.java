@@ -104,7 +104,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getBroadMeshTerms() {
         return getSubfieldData(getFields(this.record, "650")
-                .filter((final Field f) -> f.getIndicator1() == '4' && f.getIndicator2() == '2'), "a")
+                .filter((final Field f) -> f.getIndicator1() == '4' && "23".indexOf(f.getIndicator2()) > -1), "a")
                         .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
     }
 
