@@ -84,7 +84,7 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
         NodeList nodeList = doc.getElementsByTagName("lastBuildDate");
         Element lastBuildDateEl = (Element) nodeList.item(0);
         try {
-            LocalDateTime ldt = LocalDateTime.parse(lastBuildDateEl.getTextContent(), FORMATTER);
+            LocalDateTime ldt = LocalDateTime.parse(lastBuildDateEl.getTextContent().trim(), FORMATTER);
             return ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         } catch (DOMException e) {
             throw new EresourceDatabaseException(e);
