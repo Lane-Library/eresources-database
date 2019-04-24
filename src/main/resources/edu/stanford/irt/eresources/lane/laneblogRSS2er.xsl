@@ -19,7 +19,7 @@
                 <xsl:value-of select="title" />
             </title>
             <primaryType>Lane Web Page</primaryType>
-            <type>lanesite</type>
+            <type>Lane Web Page</type>
             <keywords>
                 <xsl:value-of select="concat(title, ' ', description)" />
             </keywords>
