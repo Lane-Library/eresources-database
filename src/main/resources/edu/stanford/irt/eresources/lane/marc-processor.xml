@@ -21,6 +21,7 @@
         </constructor-arg>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
+        <constructor-arg ref="${eresources.data.basepath}/auth-augmentations.obj"/>
         <constructor-arg ref="${eresources.remoteServiceProtocol}AuthTextAugmentationsService"/>
     </bean>
     <bean id="reservesTextAugmentation" class="edu.stanford.irt.eresources.marc.ReservesTextAugmentation">

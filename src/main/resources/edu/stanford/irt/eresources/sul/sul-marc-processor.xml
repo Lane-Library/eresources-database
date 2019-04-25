@@ -115,7 +115,7 @@
         <constructor-arg ref="voyagerDataSource"/>
     </bean>
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
-        <constructor-arg name="augmentationsFileName" value="dedup-augmentations.obj"/>
+        <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/dedup-augmentations.obj"/>
         <constructor-arg ref="${eresources.remoteServiceProtocol}LaneDedupAugmentationService"/>
         <constructor-arg name="manualSkips">
             <set>

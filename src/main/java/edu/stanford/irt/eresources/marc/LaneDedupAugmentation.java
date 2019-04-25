@@ -26,10 +26,10 @@ public class LaneDedupAugmentation {
 
     private Set<String> manualSkips;
 
-    public LaneDedupAugmentation(final String augmentationsFileName, final AugmentationsService augmentationsService,
+    public LaneDedupAugmentation(final String augmentationsFile, final AugmentationsService augmentationsService,
             final Set<String> manualSkips) {
         this.manualSkips = new HashSet<>(manualSkips);
-        this.augmentations = AugmentationUtility.fetchAugmentations(augmentationsFileName, augmentationsService,
+        this.augmentations = AugmentationUtility.fetchAugmentations(augmentationsFile, augmentationsService,
                 AugmentationUtility.ONE_DAY);
     }
 

@@ -6,8 +6,8 @@ public class AuthTextAugmentation {
 
     private Map<String, String> augmentations;
 
-    public AuthTextAugmentation(final AugmentationsService augmentationsService) {
-        this.augmentations = AugmentationUtility.fetchAugmentations("auth-augmentations.obj", augmentationsService,
+    public AuthTextAugmentation(final String augmentationsFile, final AugmentationsService augmentationsService) {
+        this.augmentations = AugmentationUtility.fetchAugmentations(augmentationsFile, augmentationsService,
                 AugmentationUtility.ONE_DAY);
     }
 
