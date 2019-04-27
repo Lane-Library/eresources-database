@@ -25,6 +25,8 @@ public class SulFileCatalogRecordService extends PipedInputStream implements Run
 
     private PipedOutputStream output;
 
+    private long time;
+
     public SulFileCatalogRecordService(final String basePath, final Executor executor) {
         this.basePath = basePath;
         this.executor = executor;
@@ -32,6 +34,7 @@ public class SulFileCatalogRecordService extends PipedInputStream implements Run
 
     @Override
     public InputStream getRecordStream(final long time) {
+        this.time = time;
         if (null == this.basePath) {
             throw new IllegalStateException("null basePath");
         }
@@ -80,7 +83,7 @@ public class SulFileCatalogRecordService extends PipedInputStream implements Run
             for (File file : files) {
                 if (file.isDirectory()) {
                     result.addAll(getFiles(file));
-                } else {
+                } else if (file.lastModified() >= this.time) {
                     result.add(file);
                 }
             }
