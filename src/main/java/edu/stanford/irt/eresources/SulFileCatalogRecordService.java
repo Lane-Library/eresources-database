@@ -51,7 +51,8 @@ public class SulFileCatalogRecordService extends PipedInputStream implements Run
 
     @Override
     public void run() {
-        List<File> files = edu.stanford.irt.eresources.IOUtils.getUpdatedFiles(new File(this.basePath), ".marc", this.time);
+        List<File> files = edu.stanford.irt.eresources.IOUtils.getUpdatedFiles(new File(this.basePath), ".marc",
+                this.time);
         Collections.sort(files);
         while (!files.isEmpty()) {
             File file = files.remove(0);
