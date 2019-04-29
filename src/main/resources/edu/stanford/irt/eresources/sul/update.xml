@@ -10,12 +10,12 @@
     <bean id="bibProcessor" class="java.lang.Object"/>
     <bean id="itemCount" class="java.lang.Object"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SulUpdate" parent="abstractSolrLoader">
+        <constructor-arg name="basePath" value="${eresources.sul.file-record-service.basePath}/incr"/>
     	<property name="processors">
             <list>
                 <ref bean="sulMARCProcessor"/>
             </list>
         </property>
-        <property name="basePath" value="${eresources.sul.file-record-service.basePath}/incr"/>
     </bean>
     <bean id="sulFileCatalogRecordService" class="edu.stanford.irt.eresources.SulFileCatalogRecordService">
         <constructor-arg name="basePath" value="${eresources.sul.file-record-service.basePath}/incr"/>

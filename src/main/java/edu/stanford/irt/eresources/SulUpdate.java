@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,19 +17,21 @@ import org.slf4j.LoggerFactory;
 
 public class SulUpdate extends SolrLoader {
 
+    private static final Pattern DIGIT = Pattern.compile("\\\\d+");
+
     private static final Logger log = LoggerFactory.getLogger(SulUpdate.class);
 
     private String basePath;
+
+    public SulUpdate(final String basePath) {
+        this.basePath = basePath;
+    }
 
     @Override
     public void load() {
         this.setUpdatedDateQuery("recordType:sul");
         super.load();
         processDeletes(getDeletes());
-    }
-
-    public void setBasePath(final String basePath) {
-        this.basePath = basePath;
     }
 
     private List<String> getDeletes() {
@@ -38,7 +41,7 @@ public class SulUpdate extends SolrLoader {
         while (!files.isEmpty()) {
             File file = files.remove(0);
             try (Stream<String> stream = Files.lines(Paths.get(file.getAbsolutePath()))) {
-                dels = stream.filter(line -> line.matches("\\d+")).collect(Collectors.toList());
+                dels = stream.filter(line -> DIGIT.matcher(line).matches()).collect(Collectors.toList());
             } catch (IOException e) {
                 log.error("problem with file {}", file);
                 throw new EresourceDatabaseException(e);
