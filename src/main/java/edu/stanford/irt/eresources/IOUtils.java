@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -9,6 +10,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 public final class IOUtils {
@@ -53,5 +56,21 @@ public final class IOUtils {
             inputStream = connection.getInputStream();
         }
         return inputStream;
+    }
+
+    public static List<File> getUpdatedFiles(final File directory, final String extension, final long time) {
+        File[] files = directory
+                .listFiles((final File file) -> file.isDirectory() || file.getName().endsWith(extension));
+        List<File> result = new LinkedList<>();
+        if (null != files) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    result.addAll(getUpdatedFiles(file, extension, time));
+                } else if (file.lastModified() >= time) {
+                    result.add(file);
+                }
+            }
+        }
+        return result;
     }
 }

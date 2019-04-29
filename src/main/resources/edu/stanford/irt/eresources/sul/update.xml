@@ -15,6 +15,7 @@
                 <ref bean="sulMARCProcessor"/>
             </list>
         </property>
+        <property name="basePath" value="${eresources.sul.file-record-service.basePath}/incr"/>
     </bean>
     <bean id="sulFileCatalogRecordService" class="edu.stanford.irt.eresources.SulFileCatalogRecordService">
         <constructor-arg name="basePath" value="${eresources.sul.file-record-service.basePath}/incr"/>

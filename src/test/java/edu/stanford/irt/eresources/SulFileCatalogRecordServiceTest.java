@@ -1,29 +1,16 @@
 package edu.stanford.irt.eresources;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PipedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.concurrent.Executor;
-import java.util.zip.GZIPInputStream;
 
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -31,7 +18,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
-
 
 public class SulFileCatalogRecordServiceTest extends MARCRecordSupport {
 
@@ -43,7 +29,8 @@ public class SulFileCatalogRecordServiceTest extends MARCRecordSupport {
     public void setUp() throws Exception {
         this.executor = new ThreadPoolTaskExecutor();
         this.executor.initialize();
-        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/sul-marc", this.executor);
+        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/sul-marc",
+                this.executor);
     }
 
     @Test
@@ -56,16 +43,17 @@ public class SulFileCatalogRecordServiceTest extends MARCRecordSupport {
         }
     }
 
-    @Test (expected = IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public final void testGetRecordStreamNullBasePath() {
         this.recordService = new SulFileCatalogRecordService(null, this.executor);
         new RecordCollection(this.recordService.getRecordStream(0));
     }
-    
+
     @Test
     public final void testRun() throws Exception {
         byte[] data1 = new byte[4096];
-        byte[] file1data = Files.readAllBytes(Paths.get("src/test/resources/edu/stanford/irt/eresources/sul-marc/data/8208799.marc"));
+        byte[] file1data = Files
+                .readAllBytes(Paths.get("src/test/resources/edu/stanford/irt/eresources/sul-marc/data/8208799.marc"));
         for (int i = 0; i < file1data.length; i++) {
             data1[i] = file1data[i];
         }

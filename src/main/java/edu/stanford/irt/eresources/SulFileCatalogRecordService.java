@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -52,7 +51,7 @@ public class SulFileCatalogRecordService extends PipedInputStream implements Run
 
     @Override
     public void run() {
-        List<File> files = getFiles(new File(this.basePath));
+        List<File> files = edu.stanford.irt.eresources.IOUtils.getUpdatedFiles(new File(this.basePath), ".marc", this.time);
         Collections.sort(files);
         while (!files.isEmpty()) {
             File file = files.remove(0);
@@ -74,20 +73,5 @@ public class SulFileCatalogRecordService extends PipedInputStream implements Run
     // for unit testing
     public void setPipedOutputStream(final PipedOutputStream outputStream) {
         this.output = outputStream;
-    }
-
-    private List<File> getFiles(final File directory) {
-        File[] files = directory.listFiles((final File file) -> file.isDirectory() || file.getName().endsWith(".marc"));
-        List<File> result = new LinkedList<>();
-        if (null != files) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    result.addAll(getFiles(file));
-                } else if (file.lastModified() >= this.time) {
-                    result.add(file);
-                }
-            }
-        }
-        return result;
     }
 }
