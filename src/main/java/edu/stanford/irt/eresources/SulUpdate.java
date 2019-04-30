@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 public class SulUpdate extends SolrLoader {
 
-    private static final Pattern DIGIT = Pattern.compile("\\\\d+");
+    private static final Pattern DIGIT = Pattern.compile("\\d+");
 
     private static final Logger log = LoggerFactory.getLogger(SulUpdate.class);
 
