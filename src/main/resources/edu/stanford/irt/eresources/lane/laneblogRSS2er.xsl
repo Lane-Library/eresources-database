@@ -13,7 +13,7 @@
                 <xsl:otherwise>0</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <eresource  id="laneblog-{$blog-id}" recordId="{$blog-id}" type="laneblog"
+        <eresource  id="laneblog-{$blog-id}" recordId="{$blog-id}" type="web"
             update="19690101000000">
             <title>
                 <xsl:value-of select="title" />

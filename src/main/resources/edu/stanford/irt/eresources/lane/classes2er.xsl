@@ -17,7 +17,7 @@
 		<xsl:variable name="description" select="normalize-space(lc:event_description)" />
 		<xsl:variable name="firstName" select="lc:event_instructors/lc:instructor/lc:fname"/>
 		<xsl:variable name="lastName" select="lc:event_instructors/lc:instructor/lc:lname"/>
-		<eresource id="class-{$id}" recordId="{$id}" type="class" update="19690101000000">
+		<eresource id="class-{$id}" recordId="{$id}" type="web" update="19690101000000">
 			<title>
 				<xsl:value-of select="$title" />
 			</title>
