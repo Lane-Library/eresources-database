@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
+    <properties>
+        <title>eresources-database releases</title>
+    </properties>
+    <body>
+        <release date="2019-05-02" version="2.2.2" description="maintenance release">
+            <action date="2019-05-02" dev="ryanmax" issue="150952" type="update">
+                collapse Lane Blog and Lane Classes into lane Web Site recordType facet
+            </action>
+        </release>
+        <release date="2019-04-29" version="2.2.0" description="SUL data release">
+            <action date="2019-04-29" dev="ryanmax" type="add">
+                SUL deletes
+            </action>
+        </release>
+        <release date="2019-04-24" version="2.1.13" description="bug fix release">
+            <action date="2019-04-24" dev="ryanmax" issue="150780" type="fix">
+                'lanesite' showing up in facets
+            </action>
+        </release>
+        <release date="2019-04-04" version="2.1.12" description="bug fix release">
+            <action date="2019-04-04" dev="ryanmax" issue="150429" type="fix">
+                redivis indexing is broken
+            </action>
+        </release>
+        <release date="2019-03-11" version="2.1.11" description="emergency bug fix release">
+            <action date="2019-03-11" dev="ryanmax" type="fix">
+                laneblog/feed lastBuildDate suddenly includes whitespace
+            </action>
+        </release>
+    </body>
+</document>
