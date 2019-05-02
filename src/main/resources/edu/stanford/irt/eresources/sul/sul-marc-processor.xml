@@ -22,21 +22,64 @@
         </constructor-arg>
         <constructor-arg name="acceptableLCCallNumberPrefixes">
             <list>
+                <value>A</value>
+                <value>BF</value>
+                <value>BJ</value>
                 <value>GE</value>
+                <value>H</value>
+                <value>LB</value>
+                <value>LC</value>
                 <value>Q</value>
                 <value>R</value>
                 <value>Z</value>
-                <value>H</value>
-                <value>BF</value>
-                <value>BJ</value>
-                <value>LB</value>
-                <value>LC</value>
-                <value>A</value>
             </list>
         </constructor-arg>
         <!-- DB call number maps from https://github.com/sul-dlss/solrmarc-sw/blob/master/stanford-sw/translation_maps/db_subjects_map.properties -->
         <constructor-arg name="acceptableDBCallNumbers">
             <list>
+                <value>A</value>
+                <value>AC</value>
+                <value>AE</value>
+                <value>AG</value>
+                <value>AI</value>
+                <value>AM</value>
+                <value>AN</value>
+                <value>AP</value>
+                <value>AS</value>
+                <value>AY</value>
+                <value>AZ</value>
+                <value>BF</value>
+                <value>BJ</value>
+                <value>H</value>
+                <value>HA</value>
+                <value>HB</value>
+                <value>HC</value>
+                <value>HD</value>
+                <value>HE</value>
+                <value>HF</value>
+                <value>HG</value>
+                <value>HJ</value>
+                <value>HM</value>
+                <value>HN</value>
+                <value>HQ</value>
+                <value>HS</value>
+                <value>HT</value>
+                <value>HV</value>
+                <value>HX</value>
+                <value>LB</value>
+                <value>LC</value>
+                <value>Q</value>
+                <value>QA</value>
+                <value>QB</value>
+                <value>QC</value>
+                <value>QD</value>
+                <value>QE</value>
+                <value>QH</value>
+                <value>QK</value>
+                <value>QL</value>
+                <value>QM</value>
+                <value>QP</value>
+                <value>QR</value>
                 <value>R</value>
                 <value>RA</value>
                 <value>RB</value>
@@ -54,51 +97,8 @@
                 <value>RV</value>
                 <value>RX</value>
                 <value>RZ</value>
-                <value>Q</value>
-                <value>QA</value>
-                <value>QB</value>
-                <value>QC</value>
-                <value>QD</value>
-                <value>QE</value>
-                <value>QH</value>
-                <value>QK</value>
-                <value>QL</value>
-                <value>QM</value>
-                <value>QP</value>
-                <value>QR</value>
                 <value>Z</value>
                 <value>ZA</value>
-                <value>H</value>
-                <value>HA</value>
-                <value>HB</value>
-                <value>HC</value>
-                <value>HD</value>
-                <value>HE</value>
-                <value>HF</value>
-                <value>HG</value>
-                <value>HJ</value>
-                <value>HM</value>
-                <value>HN</value>
-                <value>HQ</value>
-                <value>HS</value>
-                <value>HT</value>
-                <value>HV</value>
-                <value>HX</value>
-                <value>BF</value>
-                <value>BJ</value>
-                <value>LB</value>
-                <value>LC</value>
-                <value>A</value>
-                <value>AC</value>
-                <value>AE</value>
-                <value>AG</value>
-                <value>AI</value>
-                <value>AM</value>
-                <value>AN</value>
-                <value>AP</value>
-                <value>AS</value>
-                <value>AY</value>
-                <value>AZ</value>
             </list>
         </constructor-arg>
         <constructor-arg ref="laneDedupAugmentation"/>
