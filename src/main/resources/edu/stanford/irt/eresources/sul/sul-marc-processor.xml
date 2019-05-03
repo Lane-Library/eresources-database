@@ -104,28 +104,22 @@
         <constructor-arg ref="laneDedupAugmentation"/>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
-        <constructor-arg ref="${eresources.remoteServiceProtocol}AuthTextAugmentationsService"/>
+        <constructor-arg ref="httpAuthTextAugmentationsService"/>
     </bean>
     <bean id="httpAuthTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="augmentations/auth"/>
     </bean>
-    <bean id="jdbcAuthTextAugmentationsService" class="edu.stanford.irt.eresources.marc.JDBCAuthTextAugmentationsService">
-        <constructor-arg ref="voyagerDataSource"/>
-    </bean>
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
         <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/dedup-augmentations.obj"/>
-        <constructor-arg ref="${eresources.remoteServiceProtocol}LaneDedupAugmentationService"/>
+        <constructor-arg ref="httpLaneDedupAugmentationService"/>
         <constructor-arg name="manualSkips">
             <set>
                 <!-- example excluding one of SUL's PubMed records that's not excluded otherwise -->
                 <value>catkey->3965020</value>
             </set>
         </constructor-arg>
-    </bean>
-    <bean id="jdbcLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.JDBCLaneDedupAugmentationsService">
-        <constructor-arg ref="voyagerDataSource"/>
     </bean>
     <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
