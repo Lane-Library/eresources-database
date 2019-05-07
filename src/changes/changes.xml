@@ -6,9 +6,12 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
-        <release date="2019-05-02" version="2.2.2" description="maintenance release">
+        <release date="2019-05-07" version="2.2.2" description="maintenance release">
             <action date="2019-05-02" dev="ryanmax" issue="150952" type="update">
                 collapse Lane Blog and Lane Classes into lane Web Site recordType facet
+            </action>
+            <action date="2019-05-02" dev="ryanmax" type="remove">
+                rely solely on lane-catalog API instead of JDBC
             </action>
         </release>
         <release date="2019-04-29" version="2.2.0" description="SUL data release">
