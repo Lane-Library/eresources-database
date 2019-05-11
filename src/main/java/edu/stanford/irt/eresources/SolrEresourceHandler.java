@@ -120,10 +120,10 @@ public class SolrEresourceHandler implements EresourceHandler {
                     if (eresource != null) {
                         insertEresource(eresource);
                     }
-                } catch (InterruptedException e) {
+                } catch (InterruptedException | EresourceDatabaseException e) {
                     Thread.currentThread().interrupt();
-                    throw new EresourceDatabaseException("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(),
-                            e);
+                    log.error("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
+                    this.queue.clear();
                 }
                 if (this.solrDocs.size() >= this.solrMaxDocs) {
                     addSolrDocs();
