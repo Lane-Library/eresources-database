@@ -24,6 +24,8 @@
         </encoder>
     </appender>
 
+    <turboFilter class="ch.qos.logback.classic.turbo.DuplicateMessageFilter"/>
+
     <appender name="email" class="ch.qos.logback.classic.net.SMTPAppender">
         <asynchronousSending>false</asynchronousSending>
         <smtpHost>${eresources.log.email.smtpHost:-medmail.stanford.edu}</smtpHost>
