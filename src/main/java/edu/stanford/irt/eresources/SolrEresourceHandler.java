@@ -124,6 +124,7 @@ public class SolrEresourceHandler implements EresourceHandler {
                     Thread.currentThread().interrupt();
                     log.error("\nstop=" + this.keepGoing + "\nempty=" + this.queue.isEmpty(), e);
                     this.queue.clear();
+                    this.keepGoing = false;
                 }
                 if (this.solrDocs.size() >= this.solrMaxDocs) {
                     addSolrDocs();
