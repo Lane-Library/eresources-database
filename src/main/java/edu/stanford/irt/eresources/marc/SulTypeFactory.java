@@ -35,7 +35,7 @@ public class SulTypeFactory extends MARCRecordSupport {
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
 
     private static final Pattern SUPPLEMENTAL_LINK = Pattern
-            .compile("(table of contents|abstract|description|sample text)", Pattern.CASE_INSENSITIVE);
+            .compile(".*(table of contents|abstract|description|sample text).*", Pattern.CASE_INSENSITIVE);
     static {
         for (String type : TypeFactory.ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
