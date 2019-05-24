@@ -55,6 +55,12 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
             if (8223791 == getRecordId(rec)) {
                 assertEquals("Book Print", this.typefactory.getPrimaryType(rec));
             }
+            if (13117763 == getRecordId(rec)) {
+                assertEquals("Book Print", this.typefactory.getPrimaryType(rec));
+            }
+            if (11514068 == getRecordId(rec)) {
+                assertEquals("Book Print", this.typefactory.getPrimaryType(rec));
+            }
         }
     }
 

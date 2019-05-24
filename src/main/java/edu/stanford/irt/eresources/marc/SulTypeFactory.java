@@ -34,8 +34,11 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
 
+    private static final Pattern SFX_LINK = Pattern.compile("^https?://library.stanford.edu/sfx.*",
+            Pattern.CASE_INSENSITIVE);
+
     private static final Pattern SUPPLEMENTAL_LINK = Pattern
-            .compile(".*(table of contents|abstract|description|sample text).*", Pattern.CASE_INSENSITIVE);
+            .compile(".*(table of contents|abstract|description|sample text|finding aid).*", Pattern.CASE_INSENSITIVE);
     static {
         for (String type : TypeFactory.ALLOWED_TYPES_INITIALIZER) {
             ALLOWED_TYPES.add(type);
@@ -98,15 +101,11 @@ public class SulTypeFactory extends MARCRecordSupport {
     }
 
     private String getPrintOrDigital(final Record record) {
-        // may need to extend to exclude loc.gov or include google books?
         List<Field> linkFields = getFieldsWild(record, "[8|9]56").filter(
                 (final Field f) -> f.getSubfields().stream().anyMatch((final Subfield sf) -> sf.getCode() == 'u'))
                 .collect(Collectors.toList());
-        int allLinks = linkFields.size();
-        int supplementalLinks = (int) getSubfieldData(linkFields.stream(), "3|z")
-                .filter((final String s) -> SUPPLEMENTAL_LINK.matcher(s).matches()).count();
-        boolean isDigital = allLinks > supplementalLinks;
-        if (isDigital) {
+        int digitalLinks = (int) linkFields.stream().filter(this::isDigitalLink).count();
+        if (digitalLinks > 0) {
             return "Digital";
         }
         return "Print";
@@ -127,5 +126,24 @@ public class SulTypeFactory extends MARCRecordSupport {
                 getSubfieldData(record, "999", "t").map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
         return rawTypes.stream().map(this::getCompositeType).filter(ALLOWED_TYPES::contains)
                 .collect(Collectors.toSet());
+    }
+
+    // logic from:
+    // https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/marc_links.rb#L122
+    private boolean isDigitalLink(final Field field) {
+        char ind2 = field.getIndicator2();
+        if (" 2".indexOf(ind2) > -1) {
+            return false;
+        }
+        for (Subfield sf : field.getSubfields()) {
+            if ('u' == sf.getCode() && SFX_LINK.matcher(sf.getData()).matches()) {
+                return true;
+            }
+            if ("01".indexOf(ind2) > -1 && "3z".indexOf(sf.getCode()) > -1
+                    && SUPPLEMENTAL_LINK.matcher(sf.getData()).matches()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
