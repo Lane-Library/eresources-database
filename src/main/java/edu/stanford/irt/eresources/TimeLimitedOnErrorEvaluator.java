@@ -10,6 +10,10 @@ import ch.qos.logback.core.boolex.EventEvaluatorBase;
 
 public class TimeLimitedOnErrorEvaluator extends EventEvaluatorBase<ILoggingEvent> {
 
+    private static final int DEFAULT_MESSAGE_LIMIT = 5;
+
+    private static final int DEFAULT_TIME_LIMIT = 60;
+
     private int messageLimit;
 
     private LocalDateTime startTime;
@@ -17,6 +21,11 @@ public class TimeLimitedOnErrorEvaluator extends EventEvaluatorBase<ILoggingEven
     private int timeLimitMinutes;
 
     private int visitCounter;
+
+    public TimeLimitedOnErrorEvaluator() {
+        this.messageLimit = DEFAULT_MESSAGE_LIMIT;
+        this.timeLimitMinutes = DEFAULT_TIME_LIMIT;
+    }
 
     @Override
     public boolean evaluate(final ILoggingEvent event) throws EvaluationException {
