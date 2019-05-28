@@ -6,6 +6,17 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2019-05-28" version="2.2.3" description="bug fix release">
+            <action date="2019-05-24" dev="ryanmax" type="add">
+                rate limit sending error email
+            </action>
+            <action date="2019-05-23" dev="ryanmax" type="fix">
+                SUL records miscategorized as digital; examples: 8223791, 13117763
+            </action>
+            <action date="2019-05-10" dev="ryanmax" issue="151331" type="fix">
+                ConnectException causes application to hang
+            </action>
+        </release>
         <release date="2019-05-07" version="2.2.2" description="maintenance release">
             <action date="2019-05-02" dev="ryanmax" issue="150952" type="update">
                 collapse Lane Blog and Lane Classes into lane Web Site recordType facet
