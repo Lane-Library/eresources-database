@@ -103,6 +103,7 @@
             </stx:for-each-item>
             <stx:for-each-item name="author" select="tokenize($authors, ':::')">
                 <publicationAuthor><stx:value-of select="$author"/></publicationAuthor>
+                <publicationAuthorFacetable><stx:value-of select="$author"/></publicationAuthorFacetable>
             </stx:for-each-item>
             <stx:for-each-item name="author" select="tokenize($authorsFull, ':::')">
                 <publicationAuthor><stx:value-of select="$author"/></publicationAuthor>

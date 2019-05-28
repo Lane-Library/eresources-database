@@ -76,6 +76,8 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             this.currentVersion.setAdditionalText(this.currentText.toString());
         } else if ("publicationAuthor".equals(name)) {
             this.currentEresource.addPublicationAuthor(this.currentText.toString());
+        } else if ("publicationAuthorFacetable".equals(name)) {
+            this.currentEresource.addPublicationAuthorFacetable(this.currentText.toString());
         } else if ("publicationAuthorsText".equals(name)) {
             this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
         } else if ("publicationDate".equals(name)) {

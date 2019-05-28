@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.stanford.irt.eresources.marc.AbstractMarcEresource;
+import edu.stanford.irt.eresources.sax.SAXEresource;
 import edu.stanford.irt.suggest.MeshSuggestionManager;
 import edu.stanford.lane.journals.JournalMapManager;
 import edu.stanford.lane.mesh.MeshCheckTags;
@@ -178,11 +179,11 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("type", eresource.getTypes());
         StringBuilder authorSort = new StringBuilder();
         Collection<String> authors = eresource.getPublicationAuthors();
-        doc.addField("publicationAuthor", authors);
         doc.addField("author", authors);
         for (String author : authors) {
             authorSort.append(author);
         }
+        addPublicationAuthors(eresource, doc);
         doc.addField("authors_sort", getSortText(authorSort.toString()));
         doc.addField("publicationLanguage", eresource.getPublicationLanguages());
         for (String pubType : eresource.getPublicationTypes()) {
@@ -197,6 +198,17 @@ public class SolrEresourceHandler implements EresourceHandler {
         maybeAddProxyHosts(eresource, doc);
         handleMesh(eresource, doc);
         this.solrDocs.add(doc);
+    }
+
+    private void addPublicationAuthors(final Eresource eresource, final SolrInputDocument doc) {
+        Collection<String> authors;
+        if (SAXEresource.class.isAssignableFrom(eresource.getClass())) {
+            SAXEresource saxEresource = (SAXEresource) eresource;
+            authors = saxEresource.getPublicationAuthorsFacetable();
+        } else {
+            authors = eresource.getPublicationAuthors();
+        }
+        doc.addField("publicationAuthor", authors);
     }
 
     private void addSolrDocs() {

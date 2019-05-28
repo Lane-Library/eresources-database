@@ -54,6 +54,8 @@ public class SAXEresource implements Eresource {
 
     private Collection<String> publicationAuthors = new ArrayList<>();
 
+    private Collection<String> publicationAuthorsFacetable = new ArrayList<>();
+
     private String publicationAuthorsText;
 
     private String publicationDate;
@@ -120,6 +122,10 @@ public class SAXEresource implements Eresource {
 
     public void addPublicationAuthor(final String author) {
         this.publicationAuthors.add(author);
+    }
+
+    public void addPublicationAuthorFacetable(final String author) {
+        this.publicationAuthorsFacetable.add(author);
     }
 
     public void addPublicationLanguage(final String publicationLanguage) {
@@ -224,6 +230,13 @@ public class SAXEresource implements Eresource {
             return Collections.emptySet();
         }
         return Collections.unmodifiableCollection(this.publicationAuthors);
+    }
+
+    public Collection<String> getPublicationAuthorsFacetable() {
+        if (null == this.publicationAuthorsFacetable) {
+            return Collections.emptySet();
+        }
+        return Collections.unmodifiableCollection(this.publicationAuthorsFacetable);
     }
 
     @Override
