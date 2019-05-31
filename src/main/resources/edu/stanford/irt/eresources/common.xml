@@ -5,14 +5,17 @@
         <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
         <property name="locations">
             <list>
+                <value>classpath:/application.properties</value>
+                <value>classpath:/config/application.properties</value>
                 <value>file:application.properties</value>
+                <value>file:./config/application.properties</value>
                 <value>file:${spring.config.location}/application.properties</value>
             </list>
         </property>
     </bean>
     <bean id="abstractSolrLoader" class="edu.stanford.irt.eresources.SolrLoader" abstract="true">
         <property name="handler" ref="eresourceHandler"/>
-        <property name="version" value="${project.version}"/>
+        <property name="version" value="${eresources.version}"/>
         <property name="executor" ref="executor"/>
         <property name="queue" ref="queue"/>
         <property name="solrClient" ref="solrClient"/>
