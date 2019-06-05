@@ -5,7 +5,7 @@
     <import resource="../common.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.RedivisReload">
         <property name="handler" ref="eresourceHandler"/>
-        <property name="version" value="${project.version}"/>
+        <property name="version" value="${eresources.version}"/>
         <property name="executor" ref="executor"/>
         <property name="queue" ref="queue"/>
         <property name="solrClient" ref="solrClient"/>

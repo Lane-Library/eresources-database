@@ -11,7 +11,7 @@
                 <ref bean="pubmedProcessor"/>
             </list>
         </property>
-        <property name="version" value="${project.version}"/>
+        <property name="version" value="${eresources.version}"/>
         <property name="executor" ref="executor"/>
         <property name="queue" ref="queue"/>
         <property name="solrClient" ref="solrClient"/>
