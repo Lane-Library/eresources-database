@@ -10,20 +10,14 @@
 
 ## Build eresources image
 
-### Clone the eresources repo and build app jar
+### Clone the eresources repo and build the docker image
     
 ```
 $ cd $HOME/projects/lane
 $ git clone git@gitlab.med.stanford.edu:lane/eresources-database.git
 $ cd eresources
 
-$ make app
-```
-
-### Build docker image
-    
-```
-$ make docker
+$ make build
 ```
 
 ## Push to repo
