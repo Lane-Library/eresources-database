@@ -35,6 +35,8 @@ public class EresourcesWebApplication {
 
     private static final Logger log = LoggerFactory.getLogger(EresourcesWebApplication.class);
 
+    private static final int THIRD = 3;
+
     protected boolean running;
 
     private String runningJob = "none";
@@ -92,7 +94,7 @@ public class EresourcesWebApplication {
         // cron scheduling doesn't support this directly, so enforce "day-of-week-in-month" check here
         // by making sure yesterday was 3rd Saturday in the month
         LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
-        LocalDate thirdSaturdayOfMonth = yesterday.with(TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.SATURDAY));
+        LocalDate thirdSaturdayOfMonth = yesterday.with(TemporalAdjusters.dayOfWeekInMonth(THIRD, DayOfWeek.SATURDAY));
         if (yesterday.isEqual(thirdSaturdayOfMonth)) {
             return solrLoader("sul/reload");
         }
