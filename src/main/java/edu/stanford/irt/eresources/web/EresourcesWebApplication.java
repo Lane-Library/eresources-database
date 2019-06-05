@@ -1,6 +1,9 @@
 package edu.stanford.irt.eresources.web;
 
-import java.util.Calendar;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +35,7 @@ public class EresourcesWebApplication {
 
     private static final Logger log = LoggerFactory.getLogger(EresourcesWebApplication.class);
 
-    protected boolean running = false;
+    protected boolean running;
 
     private String runningJob = "none";
 
@@ -88,9 +91,9 @@ public class EresourcesWebApplication {
         // SUL full export occurs every third Saturday of the month (and completes Sunday)
         // cron scheduling doesn't support this directly, so enforce "day-of-week-in-month" check here
         // by making sure yesterday was 3rd Saturday in the month
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        if (3 == cal.get(Calendar.DAY_OF_WEEK_IN_MONTH) && 7 == cal.get(Calendar.DAY_OF_WEEK)) {
+        LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
+        LocalDate thirdSaturdayOfMonth = yesterday.with(TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.SATURDAY));
+        if (yesterday.isEqual(thirdSaturdayOfMonth)) {
             return solrLoader("sul/reload");
         }
         return "didn't run";
