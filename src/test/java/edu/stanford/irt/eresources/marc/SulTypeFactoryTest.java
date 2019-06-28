@@ -64,6 +64,12 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
             if (9952520 == getRecordId(rec)) {
                 assertEquals("Video", this.typefactory.getPrimaryType(rec));
             }
+            if (10931045 == getRecordId(rec)) {
+                assertEquals("Audio", this.typefactory.getPrimaryType(rec));
+            }
+            if (13112673 == getRecordId(rec)) {
+                assertEquals("Audio", this.typefactory.getPrimaryType(rec));
+            }
         }
     }
 

@@ -51,9 +51,11 @@ public class SulTypeFactory extends MARCRecordSupport {
         // plurals tend to come from 6xx ^v
         PRIMARY_TYPES.put("book", EresourceConstants.BOOK);
         PRIMARY_TYPES.put("database", EresourceConstants.DATABASE);
-        PRIMARY_TYPES.put("journal", EresourceConstants.JOURNAL);
         PRIMARY_TYPES.put("databases", EresourceConstants.DATABASE);
+        PRIMARY_TYPES.put("journal", EresourceConstants.JOURNAL);
         PRIMARY_TYPES.put("periodicals", EresourceConstants.JOURNAL);
+        PRIMARY_TYPES.put("sound recording", EresourceConstants.AUDIO);
+        PRIMARY_TYPES.put("music recording", EresourceConstants.AUDIO);
         PRIMARY_TYPES.put("video", EresourceConstants.VIDEO);
     }
 
