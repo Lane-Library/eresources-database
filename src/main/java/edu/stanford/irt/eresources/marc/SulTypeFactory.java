@@ -54,6 +54,7 @@ public class SulTypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("journal", EresourceConstants.JOURNAL);
         PRIMARY_TYPES.put("databases", EresourceConstants.DATABASE);
         PRIMARY_TYPES.put("periodicals", EresourceConstants.JOURNAL);
+        PRIMARY_TYPES.put("video", EresourceConstants.VIDEO);
     }
 
     private static Stream<Field> getFieldsWild(final Record record, final String tagString) {
