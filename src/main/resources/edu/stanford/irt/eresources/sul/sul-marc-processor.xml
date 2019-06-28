@@ -118,6 +118,7 @@
             <set>
                 <!-- example excluding one of SUL's PubMed records that's not excluded otherwise -->
                 <value>catkey->3965020</value>
+                <value>catkey->5371405</value>
             </set>
         </constructor-arg>
     </bean>
