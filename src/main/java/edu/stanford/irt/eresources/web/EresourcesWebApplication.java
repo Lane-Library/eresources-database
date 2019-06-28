@@ -24,13 +24,9 @@ import edu.stanford.irt.eresources.SolrLoader;
 
 @RestController
 @EnableScheduling
-@Import({ 
-    HttpEncodingAutoConfiguration.class,
-    WebMvcAutoConfiguration.class,
-    HttpMessageConvertersAutoConfiguration.class,
-    ServletWebServerFactoryAutoConfiguration.class,
-    DispatcherServletAutoConfiguration.class
-    })
+@Import({ HttpEncodingAutoConfiguration.class, WebMvcAutoConfiguration.class,
+        HttpMessageConvertersAutoConfiguration.class, ServletWebServerFactoryAutoConfiguration.class,
+        DispatcherServletAutoConfiguration.class })
 public class EresourcesWebApplication {
 
     private static final Logger log = LoggerFactory.getLogger(EresourcesWebApplication.class);
@@ -108,6 +104,7 @@ public class EresourcesWebApplication {
 
     @GetMapping("*")
     public String usage() {
-        return "/solrLoader?job=&lt;lane/update|lane/reload|pubmed/run-daily-ftp|redivis/reload|sul/update|sul/reload&gt;";
+        return "/solrLoader?job="
+                + "&lt;lane/update|lane/reload|pubmed/run-daily-ftp|redivis/reload|sul/update|sul/reload&gt;";
     }
 }
