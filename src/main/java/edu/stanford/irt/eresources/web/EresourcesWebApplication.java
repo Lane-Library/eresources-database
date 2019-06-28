@@ -108,6 +108,6 @@ public class EresourcesWebApplication {
 
     @GetMapping("*")
     public String usage() {
-        return "/solrLoader?job=&lt;lane/update|lane/reload|pubmed/run-daily-ftp|redivis/reload&gt;";
+        return "/solrLoader?job=&lt;lane/update|lane/reload|pubmed/run-daily-ftp|redivis/reload|sul/update|sul/reload&gt;";
     }
 }
