@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2019-07-01" version="2.3.1" description="bug fix release">
+            <action date="2019-06-28" dev="ryanmax" issue="152683" type="fix">
+                SearchWorks videos appearing as "Other" 
+            </action>
+        </release>
         <release date="2019-06-26" version="2.3.0" description="spring boot release">
             <action date="2019-05-30" dev="ryanmax" type="add">
                 merge docker and spring-boot wrapper from docker-eresources repo
