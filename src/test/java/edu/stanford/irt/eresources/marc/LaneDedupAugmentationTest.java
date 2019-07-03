@@ -49,6 +49,7 @@ public class LaneDedupAugmentationTest {
         assertTrue(dedupAugmentation.isDuplicate("foo", "bar"));
         assertTrue(dedupAugmentation.isDuplicate("key", "12345"));
         assertTrue(dedupAugmentation.isDuplicate("key->12345"));
+        assertFalse(dedupAugmentation.isDuplicate("nope->12345"));
         assertFalse(dedupAugmentation.isDuplicate("missing", "missing"));
         reset(this.augmentationService);
         dedupAugmentation = new LaneDedupAugmentation(this.objectFile, this.augmentationService, skips);
