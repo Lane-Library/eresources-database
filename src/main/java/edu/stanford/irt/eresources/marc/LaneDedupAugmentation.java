@@ -33,6 +33,10 @@ public class LaneDedupAugmentation {
                 AugmentationUtility.ONE_DAY);
     }
 
+    public boolean isDuplicate(final String keySeparatorValue) {
+        return this.manualSkips.contains(keySeparatorValue) || this.augmentations.containsKey(keySeparatorValue);
+    }
+
     public boolean isDuplicate(final String key, final String value) {
         return this.manualSkips.contains(key + SEPARATOR + value)
                 || this.augmentations.containsKey(key + SEPARATOR + value);

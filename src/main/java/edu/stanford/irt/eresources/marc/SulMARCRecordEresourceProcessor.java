@@ -1,10 +1,8 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -121,32 +119,35 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean isLaneDuplicate(final Record record) {
-        Map<String, String> keys = new HashMap<>();
-        keys.put(LaneDedupAugmentation.KEY_CATKEY, Integer.toString(MARCRecordSupport.getRecordId(record)));
+        Set<String> keys = new HashSet<>();
+        keys.add(LaneDedupAugmentation.KEY_CATKEY + LaneDedupAugmentation.SEPARATOR
+                + Integer.toString(MARCRecordSupport.getRecordId(record)));
         for (String lccn : MARCRecordSupport.getSubfieldData(record, "010", "a").map(String::trim)
                 .collect(Collectors.toSet())) {
-            keys.put(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER, lccn);
+            keys.add(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + lccn);
         }
         for (String isbn : MARCRecordSupport.getSubfieldData(record, "020").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet())) {
-            keys.put(LaneDedupAugmentation.KEY_ISBN, isbn);
+                .map(TextParserHelper::cleanIsxn).filter((final String s) -> !s.isEmpty())
+                .collect(Collectors.toSet())) {
+            keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR + isbn);
         }
         for (String issn : MARCRecordSupport.getSubfieldData(record, "022").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet())) {
-            keys.put(LaneDedupAugmentation.KEY_ISSN, issn);
+                .map(TextParserHelper::cleanIsxn).filter((final String s) -> !s.isEmpty())
+                .collect(Collectors.toSet())) {
+            keys.add(LaneDedupAugmentation.KEY_ISSN + LaneDedupAugmentation.SEPARATOR + issn);
         }
         Set<String> ocolcs = MARCRecordSupport.getSubfieldData(record, "035", "a")
                 .filter((final String s) -> s.startsWith("(OCoLC"))
                 .map((final String s) -> s.substring(s.indexOf(')') + 1, s.length())).collect(Collectors.toSet());
         for (String ocolc : ocolcs) {
-            keys.put(LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER, ocolc);
+            keys.add(LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + ocolc);
         }
         Set<String> urls = MARCRecordSupport.getSubfieldData(record, "856", "u")
                 .map((final String s) -> s.replace("https://stanford.idm.oclc.org/login?url=", "")).map(String::trim)
                 .map((final String s) -> BEGINS_HTTPS_OR_ENDS_SLASH.matcher(s).replaceAll(""))
                 .collect(Collectors.toSet());
         for (String url : urls) {
-            keys.put(LaneDedupAugmentation.KEY_URL, url);
+            keys.add(LaneDedupAugmentation.KEY_URL + LaneDedupAugmentation.SEPARATOR + url);
         }
         String title = NOT_ALPHANUM_OR_SPACE
                 .matcher(MARCRecordSupport.getSubfieldData(record, "245", "a").findFirst().map(String::trim).orElse(""))
@@ -155,9 +156,9 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                 .map((final String s) -> s.substring(F008_DATES_BEGIN, F008_DATES_END)).orElse("00000000");
         StringBuilder sb = new StringBuilder(title);
         sb.append(dates);
-        keys.put(LaneDedupAugmentation.KEY_TITLE_DATE, sb.toString());
-        for (Entry<String, String> entry : keys.entrySet()) {
-            if (this.laneDedupAugmentation.isDuplicate(entry.getKey(), entry.getValue())) {
+        keys.add(LaneDedupAugmentation.KEY_TITLE_DATE + LaneDedupAugmentation.SEPARATOR + sb.toString());
+        for (String entry : keys) {
+            if (this.laneDedupAugmentation.isDuplicate(entry)) {
                 return true;
             }
         }
