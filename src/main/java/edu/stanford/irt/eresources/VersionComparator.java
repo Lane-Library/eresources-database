@@ -111,7 +111,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     private int calculateInstalledSoftwareScore(final String linkLabel, final int score) {
         int calculatedScore = score;
-        if (score == 0 && "Product Description".equals(linkLabel)) {
+        if (score == 0 && "Product Description".equalsIgnoreCase(linkLabel)) {
             calculatedScore = 1;
         }
         return calculatedScore;
