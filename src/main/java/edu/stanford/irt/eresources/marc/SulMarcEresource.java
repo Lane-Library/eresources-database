@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,8 @@ public class SulMarcEresource extends AbstractMarcEresource {
         this.lcshMapManager = lcshMapManager;
     }
 
+    // "Also known as" includes abbreviations as well as alternate titles
+    // only include 246 a when all caps
     @Override
     public Collection<String> getAbbreviatedTitles() {
         return getSubfieldData(getFields(this.record, "246").filter((final Field f) -> {
@@ -49,7 +52,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
             Subfield a = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').findFirst()
                     .orElse(null);
             return i != null && a != null && "Also known as:".equalsIgnoreCase(i.getData());
-        }), "a").collect(Collectors.toSet());
+        }), "a").filter(this::isAllCaps).collect(Collectors.toSet());
     }
 
     @Override
@@ -190,5 +193,10 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     protected Version createVersion(final Record record) {
         return new SulMarcVersion(record, this);
+    }
+
+    private boolean isAllCaps(final String string) {
+        String caps = string.toUpperCase(Locale.US);
+        return string.equals(caps);
     }
 }

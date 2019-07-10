@@ -58,9 +58,26 @@ public class SulMarcEresourceTest {
         expect(this.subfield.getData()).andReturn("Also known as:");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("ABBRV.");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("ABBRV.", this.eresource.getAbbreviatedTitles().stream().findFirst().get());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public final void testGetAbbreviatedTitlesMissing() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("246");
+        expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield }))
+                .times(2);
+        expect(this.subfield.getCode()).andReturn('i');
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("Also known as:");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("abbrv.");
         replay(this.record, this.field, this.subfield);
-        assertEquals("abbrv.", this.eresource.getAbbreviatedTitles().stream().findFirst().get());
+        assertTrue(this.eresource.getAbbreviatedTitles().isEmpty());
         verify(this.record, this.field, this.subfield);
     }
 
