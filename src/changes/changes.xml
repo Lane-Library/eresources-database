@@ -6,6 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2019-07-10" version="2.3.3" description="bug fix release">
+            <action date="2019-07-09" dev="ryanmax" issue="153103" type="fix">
+                "Product Description" software links should be case insensitive  
+            </action>
+            <action date="2019-07-09" dev="ryanmax" issue="153103" type="fix">
+                "science" search not returning Lane's "Science" record first; adjust SUL abbreviated title indexing
+            </action>
+        </release>
         <release date="2019-07-03" version="2.3.2" description="bug fix release">
             <action date="2019-07-02" dev="ryanmax" type="fix">
                 improve SUL deduplication 
