@@ -7,8 +7,6 @@ import edu.stanford.irt.eresources.Version;
 
 public class CatalogLink implements Link {
 
-    private String additionalText = null;
-
     private String label;
 
     private String url;
@@ -23,7 +21,7 @@ public class CatalogLink implements Link {
 
     @Override
     public String getAdditionalText() {
-        return this.additionalText;
+        return null;
     }
 
     @Override
