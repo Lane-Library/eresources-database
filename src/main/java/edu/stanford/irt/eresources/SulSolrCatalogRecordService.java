@@ -50,7 +50,7 @@ public class SulSolrCatalogRecordService extends PipedInputStream implements Run
     private static final Pattern VALID_CODE_POINTS = Pattern
             .compile("[^\\u0009\\u000A\\u000D\u0020-\\uD7FF\\uE000-\\uFFFD\\u10000-\\u10FFF]+");
 
-    PipedOutputStream output;
+    private PipedOutputStream output;
 
     private Executor executor;
 
