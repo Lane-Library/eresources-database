@@ -114,8 +114,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean isLane(final Record record) {
-        return MARCRecordSupport.getSubfieldData(record, "999", "m")
-                .anyMatch((final String s) -> s.equalsIgnoreCase("LANE-MED"));
+        return MARCRecordSupport.getSubfieldData(record, "999", "m").anyMatch("LANE-MED"::equalsIgnoreCase);
     }
 
     private boolean isLaneDuplicate(final Record record) {
