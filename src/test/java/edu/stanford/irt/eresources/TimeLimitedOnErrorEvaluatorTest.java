@@ -28,7 +28,7 @@ public class TimeLimitedOnErrorEvaluatorTest {
     }
 
     @Test
-    public final void test() throws Exception {
+    public final void testEvaluate() throws Exception {
         this.evaluator.setMessageLimit(2);
         this.evaluator.setTimeLimitMinutes(10);
         expect(this.event.getLevel()).andReturn(Level.ERROR).anyTimes();
