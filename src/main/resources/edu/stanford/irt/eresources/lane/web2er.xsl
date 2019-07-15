@@ -45,7 +45,7 @@
         </eresource>
     </xsl:template>
     
-    <xsl:template match="@alt | @title | @href | text()" priority="1">
+    <xsl:template match="@alt | @title | @href | @content | text()" priority="1">
         <xsl:variable name="text" select="normalize-space()"/>
         <xsl:if test="string-length($text) &gt; 0">
             <xsl:value-of select="$text"/>
