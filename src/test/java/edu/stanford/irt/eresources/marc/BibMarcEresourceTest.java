@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 
 import org.junit.Before;
@@ -188,6 +189,45 @@ public class BibMarcEresourceTest {
         expect(this.record.getFields()).andReturn(Collections.emptyList()).times(2);
         replay(this.record, this.field, this.subfield);
         assertNull(this.eresource.getDescription());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testGetIsbns() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("020");
+        expect(this.field.getSubfields())
+                .andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield, this.subfield }));
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("123456789");
+        expect(this.subfield.getCode()).andReturn('z');
+        expect(this.subfield.getData()).andReturn("987654321");
+        expect(this.subfield.getCode()).andReturn('l');
+        replay(this.record, this.field, this.subfield);
+        Collection<String> isbns = this.eresource.getIsbns();
+        assertTrue(isbns.contains("123456789"));
+        assertTrue(isbns.contains("987654321"));
+        assertFalse(isbns.contains("X987654321"));
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testGetIssns() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("022");
+        expect(this.field.getSubfields())
+                .andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield, this.subfield }));
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("123456789");
+        expect(this.subfield.getCode()).andReturn('z');
+        expect(this.subfield.getData()).andReturn("987654321");
+        expect(this.subfield.getCode()).andReturn('l');
+        expect(this.subfield.getData()).andReturn("X987654321");
+        replay(this.record, this.field, this.subfield);
+        Collection<String> issns = this.eresource.getIssns();
+        assertTrue(issns.contains("123456789"));
+        assertTrue(issns.contains("987654321"));
+        assertTrue(issns.contains("x987654321"));
         verify(this.record, this.field, this.subfield);
     }
 
