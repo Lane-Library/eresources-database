@@ -11,7 +11,7 @@
                 extract more ISBN/ISSN data to improve bookcover lookup in docker-bookcovers project
             </action>
             <action date="2019-07-15" dev="ryanmax" issue="153358" type="update">
-                support &gtlmeta&lt; tags in laneweb HTML content
+                support &lt;meta&gt; tags in laneweb HTML content
             </action>
         </release>
         <release date="2019-07-10" version="2.3.3" description="bug fix release">
