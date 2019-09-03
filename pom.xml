@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>43</version>
+        <version>44</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.3.5-SNAPSHOT</version>
@@ -112,12 +112,12 @@
         <dependency>
             <artifactId>solr-solrj</artifactId>
             <groupId>org.apache.solr</groupId>
-            <version>8.1.1</version>
+            <version>8.2.0</version>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
             <groupId>com.fasterxml.jackson.core</groupId>
-            <version>2.9.9.1</version>
+            <version>2.9.9.3</version>
         </dependency>
         <dependency>
             <groupId>org.xbib</groupId>
@@ -179,7 +179,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>2.1.6.RELEASE</version>
+            <version>2.1.7.RELEASE</version>
             <exclusions>
                 <exclusion>
                     <groupId>ch.qos.logback</groupId>
@@ -190,12 +190,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>2.1.6.RELEASE</version>
+            <version>2.1.7.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>2.1.6.RELEASE</version>
+            <version>2.1.7.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -221,7 +221,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.1.6.RELEASE</version>
+                <version>2.1.7.RELEASE</version>
                 <configuration>
                     <executable>true</executable>
                 </configuration>
