@@ -128,12 +128,12 @@ public class SolrEresourceHandler implements EresourceHandler {
                     this.keepGoing = false;
                 }
                 if (this.solrDocs.size() >= this.solrMaxDocs) {
-                    addSolrDocs();
+                    addSolrDocs(false);
                 }
             }
             this.queue.notifyAll();
             if (!this.solrDocs.isEmpty()) {
-                addSolrDocs();
+                addSolrDocs(true);
             }
         }
     }
@@ -211,10 +211,13 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("publicationAuthor", authors);
     }
 
-    private void addSolrDocs() {
+    private void addSolrDocs(final boolean commit) {
         try {
             this.solrClient.add(this.solrDocs);
             this.solrDocs.clear();
+            if (commit) {
+                this.solrClient.commit();
+            }
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException("solr add failed", e);
         }
