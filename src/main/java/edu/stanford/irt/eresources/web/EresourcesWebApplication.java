@@ -14,6 +14,8 @@ import org.springframework.boot.autoconfigure.web.servlet.HttpEncodingAutoConfig
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +35,11 @@ public class EresourcesWebApplication {
 
     private static final int THIRD = 3;
 
-    protected boolean running;
+    protected boolean jobRunning;
 
-    private String runningJob = "none";
+    private String jobRunningName = "none";
+
+    private long jobStart;
 
     public static void main(final String[] args) {
         SpringApplication.run(EresourcesWebApplication.class, args);
@@ -63,25 +67,35 @@ public class EresourcesWebApplication {
 
     @GetMapping("/solrLoader")
     public String solrLoader(@RequestParam final String job) {
-        final long now = System.currentTimeMillis();
-        if (this.running) {
-            log.warn("solrLoader: {} failed to start; previous {} job sill running", job, this.runningJob);
+        if (this.jobRunning) {
+            log.warn("solrLoader: {} failed to jobStart; previous {} job sill jobRunning", job, this.jobRunningName);
             return "WARN";
         }
-        this.running = true;
-        this.runningJob = job;
+        this.jobStart = System.currentTimeMillis();
+        this.jobRunning = true;
+        this.jobRunningName = job;
         String[] args = { job };
         try {
             SolrLoader.main(args);
         } catch (Exception e) {
             log.error("solrLoader exception ", e);
-            this.running = false;
+            this.jobRunning = false;
             return "ERROR";
         }
-        final long later = System.currentTimeMillis() - now;
+        final long later = System.currentTimeMillis() - this.jobStart;
         log.info("solrLoader: {}; executed in {}ms", job, later);
-        this.running = false;
+        this.jobRunning = false;
         return "OK";
+    }
+
+    @GetMapping("/status.txt")
+    public ResponseEntity<String> status() {
+        if (this.jobRunning) {
+            return new ResponseEntity<>(
+                    String.format("job jobRunning for %sms", System.currentTimeMillis() - this.jobStart),
+                    HttpStatus.GATEWAY_TIMEOUT);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")

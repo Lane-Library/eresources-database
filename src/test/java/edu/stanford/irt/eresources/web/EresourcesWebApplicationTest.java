@@ -1,10 +1,13 @@
 package edu.stanford.irt.eresources.web;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 public class EresourcesWebApplicationTest {
 
@@ -18,7 +21,7 @@ public class EresourcesWebApplicationTest {
     @Test
     public final void testBasic() {
         assertEquals("ERROR", this.application.solrLoader("foo"));
-        this.application.running = true;
+        this.application.jobRunning = true;
         assertEquals("WARN", this.application.solrLoader("foo"));
     }
 
@@ -36,6 +39,15 @@ public class EresourcesWebApplicationTest {
     @Test
     public final void testRedivis() {
         assertEquals("ERROR", this.application.redivisReload());
+    }
+
+    @Test
+    public final void testStatus() {
+        ResponseEntity<?> re = this.application.status();
+        assertEquals(HttpStatus.OK, re.getStatusCode());
+        this.application.jobRunning = true;
+        re = this.application.status();
+        assertNotEquals(HttpStatus.OK, re.getStatusCode());
     }
 
     @Test
