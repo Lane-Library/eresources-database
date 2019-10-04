@@ -39,7 +39,7 @@ public class EresourcesWebApplication {
 
     private String jobRunningName = "none";
 
-    private long jobStart;
+    private long jobStart = 0;
 
     public static void main(final String[] args) {
         SpringApplication.run(EresourcesWebApplication.class, args);
