@@ -1,12 +1,15 @@
 package edu.stanford.irt.eresources.web;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
@@ -35,11 +38,14 @@ public class EresourcesWebApplication {
 
     private static final int THIRD = 3;
 
-    protected boolean jobRunning;
+    protected boolean jobIsRunning;
+
+    @Value("${eresources.maxJobDurationInHours}")
+    protected int maxJobDurationInHours;
 
     private String jobRunningName = "none";
 
-    private long jobStart = 1;
+    private LocalDateTime jobStart = LocalDateTime.now();
 
     public static void main(final String[] args) {
         SpringApplication.run(EresourcesWebApplication.class, args);
@@ -67,33 +73,35 @@ public class EresourcesWebApplication {
 
     @GetMapping("/solrLoader")
     public String solrLoader(@RequestParam final String job) {
-        if (this.jobRunning) {
-            log.warn("solrLoader: {} failed to jobStart; previous {} job sill jobRunning", job, this.jobRunningName);
+        if (this.jobIsRunning) {
+            log.warn("solrLoader: {} failed to jobStart; previous {} job sill jobIsRunning", job, this.jobRunningName);
             return "WARN";
         }
-        this.jobStart = System.currentTimeMillis();
-        this.jobRunning = true;
+        this.jobStart = LocalDateTime.now();
+        this.jobIsRunning = true;
         this.jobRunningName = job;
         String[] args = { job };
         try {
             SolrLoader.main(args);
         } catch (Exception e) {
             log.error("solrLoader exception ", e);
-            this.jobRunning = false;
+            this.jobIsRunning = false;
             return "ERROR";
         }
-        final long later = System.currentTimeMillis() - this.jobStart;
+        final long later = ChronoUnit.MILLIS.between(this.jobStart, LocalDateTime.now());
         log.info("solrLoader: {}; executed in {}ms", job, later);
-        this.jobRunning = false;
+        this.jobIsRunning = false;
         return "OK";
     }
 
     @GetMapping("/status.txt")
     public ResponseEntity<String> status() {
-        if (this.jobRunning) {
-            return new ResponseEntity<>(
-                    String.format("job jobRunning for %sms", System.currentTimeMillis() - this.jobStart),
-                    HttpStatus.GATEWAY_TIMEOUT);
+        if (this.jobIsRunning
+                && LocalDateTime.now().isAfter(this.jobStart.plus(Duration.ofHours(this.maxJobDurationInHours)))) {
+            String msg = String.format("long-running job (%s) running for %s hours", this.jobRunningName,
+                    ChronoUnit.HOURS.between(this.jobStart, LocalDateTime.now()));
+            log.error(msg);
+            return new ResponseEntity<>(msg, HttpStatus.GATEWAY_TIMEOUT);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

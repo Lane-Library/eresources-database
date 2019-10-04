@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.Duration;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,7 @@ public class EresourcesWebApplicationTest {
     @Test
     public final void testBasic() {
         assertEquals("ERROR", this.application.solrLoader("foo"));
-        this.application.jobRunning = true;
+        this.application.jobIsRunning = true;
         assertEquals("WARN", this.application.solrLoader("foo"));
     }
 
@@ -45,7 +47,8 @@ public class EresourcesWebApplicationTest {
     public final void testStatus() {
         ResponseEntity<?> re = this.application.status();
         assertEquals(HttpStatus.OK, re.getStatusCode());
-        this.application.jobRunning = true;
+        this.application.jobIsRunning = true;
+        this.application.maxJobDurationInHours = 0;
         re = this.application.status();
         assertNotEquals(HttpStatus.OK, re.getStatusCode());
     }
