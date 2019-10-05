@@ -103,6 +103,18 @@ public class MarcVersionTest {
     }
 
     @Test
+    public void testGetHoldingsAndDates() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("866").times(2);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
+        expect(this.subfield.getCode()).andReturn('y').times(2);
+        expect(this.subfield.getData()).andReturn("dates");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("dates", this.version.getHoldingsAndDates());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
     public void testGetLinks() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("856").times(2);
