@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Link;
-import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -59,16 +58,6 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
             }
         }
         return dates;
-    }
-
-    @Override
-    public String getHoldingsAndDates() {
-        StringBuilder sb = new StringBuilder();
-        if (getSummaryHoldings() != null) {
-            sb.append(getSummaryHoldings());
-        }
-        TextParserHelper.appendMaybeAddComma(sb, getDates());
-        return sb.length() == 0 ? null : sb.toString();
     }
 
     @Override
