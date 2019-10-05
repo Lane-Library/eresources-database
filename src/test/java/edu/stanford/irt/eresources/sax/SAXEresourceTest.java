@@ -25,15 +25,6 @@ public class SAXEresourceTest {
         eresource.addPublicationType("publicationType");
         eresource.addType("type");
         eresource.addVersion(version);
-        eresource.addAbbreviatedTitle("abtitle");
-        eresource.addAlternativeTitle("altitle");
-        eresource.addBroadMeshTerm("broadMeshTerm");
-        eresource.addMeshTerm("meshTerm");
-        eresource.addPublicationAuthor("author");
-        eresource.addPublicationAuthorFacetable("author");
-        eresource.addPublicationLanguage("publicationLanguage");
-        eresource.addPublicationType("publicationType");
-        eresource.addType("type");
         version.addLink(new SAXLink());
         eresource.addVersion(version);
         eresource.setDate("");
@@ -99,14 +90,7 @@ public class SAXEresourceTest {
     @Test
     public final void testSaxEresourceNulls() {
         SAXEresource eresource = new SAXEresource();
-        assertTrue(eresource.getAbbreviatedTitles().isEmpty());
-        assertTrue(eresource.getAlternativeTitles().isEmpty());
-        assertTrue(eresource.getBroadMeshTerms().isEmpty());
+        eresource.setYear(2000);
         assertNull(eresource.getDate());
-        assertTrue(eresource.getMeshTerms().isEmpty());
-        assertTrue(eresource.getPublicationAuthors().isEmpty());
-        assertTrue(eresource.getPublicationAuthorsFacetable().isEmpty());
-        assertTrue(eresource.getPublicationLanguages().isEmpty());
-        assertTrue(eresource.getPublicationTypes().isEmpty());
     }
 }

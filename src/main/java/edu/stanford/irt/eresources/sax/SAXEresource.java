@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,11 +25,11 @@ public class SAXEresource implements Eresource {
 
     private static final String SEMICOLON_SPACE = "; ";
 
-    private Collection<String> abbreviatedTitles;
+    private Collection<String> abbreviatedTitles = new HashSet<>();
 
-    private Collection<String> alternativeTitles;
+    private Collection<String> alternativeTitles = new HashSet<>();
 
-    private Collection<String> broadMeshTerms;
+    private Collection<String> broadMeshTerms = new HashSet<>();
 
     private int[] count = new int[] { 0, 0 };
 
@@ -48,13 +47,13 @@ public class SAXEresource implements Eresource {
 
     private String keywords;
 
-    private Collection<String> meshTerms;
+    private Collection<String> meshTerms = new HashSet<>();
 
     private String primaryType;
 
-    private Collection<String> publicationAuthors = new ArrayList<>();
+    private Collection<String> publicationAuthors = new HashSet<>();
 
-    private Collection<String> publicationAuthorsFacetable = new ArrayList<>();
+    private Collection<String> publicationAuthorsFacetable = new HashSet<>();
 
     private String publicationAuthorsText;
 
@@ -62,7 +61,7 @@ public class SAXEresource implements Eresource {
 
     private String publicationIssue;
 
-    private Collection<String> publicationLanguages;
+    private Collection<String> publicationLanguages = new HashSet<>();
 
     private String publicationPages;
 
@@ -70,7 +69,7 @@ public class SAXEresource implements Eresource {
 
     private String publicationTitle;
 
-    private Collection<String> publicationTypes;
+    private Collection<String> publicationTypes = new HashSet<>();
 
     private String publicationVolume;
 
@@ -88,35 +87,23 @@ public class SAXEresource implements Eresource {
 
     private LocalDateTime updated;
 
-    private Set<Version> versions;
+    private Set<Version> versions = new TreeSet<>(COMPARATOR);
 
     private int year;
 
     public void addAbbreviatedTitle(final String title) {
-        if (null == this.abbreviatedTitles) {
-            this.abbreviatedTitles = new HashSet<>();
-        }
         this.abbreviatedTitles.add(title);
     }
 
     public void addAlternativeTitle(final String title) {
-        if (null == this.alternativeTitles) {
-            this.alternativeTitles = new HashSet<>();
-        }
         this.alternativeTitles.add(title);
     }
 
     public void addBroadMeshTerm(final String meshTerm) {
-        if (null == this.broadMeshTerms) {
-            this.broadMeshTerms = new HashSet<>();
-        }
         this.broadMeshTerms.add(meshTerm);
     }
 
     public void addMeshTerm(final String meshTerm) {
-        if (null == this.meshTerms) {
-            this.meshTerms = new HashSet<>();
-        }
         this.meshTerms.add(meshTerm);
     }
 
@@ -129,16 +116,10 @@ public class SAXEresource implements Eresource {
     }
 
     public void addPublicationLanguage(final String publicationLanguage) {
-        if (this.publicationLanguages == null) {
-            this.publicationLanguages = new HashSet<>();
-        }
         this.publicationLanguages.add(LANGUAGE_MAP.getLanguage(publicationLanguage.toLowerCase(Locale.US)));
     }
 
     public void addPublicationType(final String publicationType) {
-        if (this.publicationTypes == null) {
-            this.publicationTypes = new HashSet<>();
-        }
         this.publicationTypes.add(publicationType);
     }
 
@@ -147,9 +128,6 @@ public class SAXEresource implements Eresource {
     }
 
     public void addVersion(final Version version) {
-        if (this.versions == null) {
-            this.versions = new TreeSet<>(COMPARATOR);
-        }
         if (!version.getLinks().isEmpty()) {
             this.versions.add(version);
         }
@@ -157,25 +135,16 @@ public class SAXEresource implements Eresource {
 
     @Override
     public Collection<String> getAbbreviatedTitles() {
-        if (null == this.abbreviatedTitles) {
-            return Collections.emptySet();
-        }
         return new HashSet<>(this.abbreviatedTitles);
     }
 
     @Override
     public Collection<String> getAlternativeTitles() {
-        if (null == this.alternativeTitles) {
-            return Collections.emptySet();
-        }
         return new HashSet<>(this.alternativeTitles);
     }
 
     @Override
     public Collection<String> getBroadMeshTerms() {
-        if (null == this.broadMeshTerms) {
-            return Collections.emptySet();
-        }
         return new HashSet<>(this.broadMeshTerms);
     }
 
@@ -213,9 +182,6 @@ public class SAXEresource implements Eresource {
 
     @Override
     public Collection<String> getMeshTerms() {
-        if (null == this.meshTerms) {
-            return Collections.emptySet();
-        }
         return new HashSet<>(this.meshTerms);
     }
 
@@ -253,9 +219,6 @@ public class SAXEresource implements Eresource {
 
     @Override
     public Collection<String> getPublicationLanguages() {
-        if (null == this.publicationLanguages) {
-            return Collections.emptySet();
-        }
         return Collections.unmodifiableCollection(this.publicationLanguages);
     }
 
@@ -279,9 +242,6 @@ public class SAXEresource implements Eresource {
 
     @Override
     public Collection<String> getPublicationTypes() {
-        if (null == this.publicationTypes) {
-            return Collections.emptySet();
-        }
         return Collections.unmodifiableCollection(this.publicationTypes);
     }
 
@@ -327,9 +287,6 @@ public class SAXEresource implements Eresource {
 
     @Override
     public Collection<Version> getVersions() {
-        if (this.versions == null) {
-            return Collections.emptySet();
-        }
         return Collections.unmodifiableCollection(this.versions);
     }
 
@@ -349,10 +306,7 @@ public class SAXEresource implements Eresource {
 
     @Override
     public boolean isEnglish() {
-        if (null != this.publicationLanguages) {
-            return this.publicationLanguages.contains(ENG);
-        }
-        return false;
+        return this.publicationLanguages.contains(ENG);
     }
 
     @Override
