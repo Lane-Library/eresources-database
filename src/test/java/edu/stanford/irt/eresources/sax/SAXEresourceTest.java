@@ -64,10 +64,12 @@ public class SAXEresourceTest {
         assertNotNull(eresource.getPublicationAuthors());
         assertNotNull(eresource.getPublicationAuthorsFacetable());
         assertNotNull(eresource.getPublicationAuthorsText());
+        assertNotNull(eresource.getPublicationAuthorsText());
         assertNotNull(eresource.getPublicationDate());
         assertNotNull(eresource.getPublicationIssue());
         assertNotNull(eresource.getPublicationLanguages());
         assertNotNull(eresource.getPublicationPages());
+        assertNotNull(eresource.getPublicationText());
         assertNotNull(eresource.getPublicationText());
         assertNotNull(eresource.getPublicationTitle());
         assertNotNull(eresource.getPublicationTypes());
