@@ -90,7 +90,8 @@ public class SAXEresourceTest {
     @Test
     public final void testSaxEresourceNulls() {
         SAXEresource eresource = new SAXEresource();
-        eresource.setYear(2000);
         assertNull(eresource.getDate());
+        eresource.setYear(2000);
+        assertNotNull(eresource.getDate());
     }
 }
