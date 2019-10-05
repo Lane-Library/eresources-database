@@ -226,16 +226,10 @@ public class SAXEresource implements Eresource {
 
     @Override
     public Collection<String> getPublicationAuthors() {
-        if (null == this.publicationAuthors) {
-            return Collections.emptySet();
-        }
         return Collections.unmodifiableCollection(this.publicationAuthors);
     }
 
     public Collection<String> getPublicationAuthorsFacetable() {
-        if (null == this.publicationAuthorsFacetable) {
-            return Collections.emptySet();
-        }
         return Collections.unmodifiableCollection(this.publicationAuthorsFacetable);
     }
 
