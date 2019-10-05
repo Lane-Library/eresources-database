@@ -128,13 +128,14 @@ public class MarcVersionTest {
 
     @Test
     public void testGetSummaryHoldings() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("866");
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('v');
-        expect(this.subfield.getData()).andReturn("summaryHoldings");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(4);
+        expect(this.field.getTag()).andReturn("866").times(4);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(4);
+        expect(this.subfield.getCode()).andReturn('v').times(4);
+        expect(this.subfield.getData()).andReturn("summaryHoldings").times(3);
         replay(this.record, this.field, this.subfield);
         assertEquals("summaryHoldings", this.version.getSummaryHoldings());
+        assertEquals("summaryHoldings", this.version.getHoldingsAndDates());
         verify(this.record, this.field, this.subfield);
     }
 
