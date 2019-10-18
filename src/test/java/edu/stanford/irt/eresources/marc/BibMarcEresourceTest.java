@@ -19,14 +19,21 @@ import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import edu.stanford.irt.eresources.CatalogRecordService;
+import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.SulFileCatalogRecordService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
+import edu.stanford.lane.catalog.RecordCollection;
 
-public class BibMarcEresourceTest {
+public class BibMarcEresourceTest extends MARCRecordSupport {
+
+    CatalogRecordService recordService;
 
     private BibMarcEresource eresource;
 
@@ -296,6 +303,58 @@ public class BibMarcEresourceTest {
         replay(this.record, this.field, this.subfield);
         assertArrayEquals(new String[] { "English", "Japanese" },
                 this.eresource.getPublicationLanguages().toArray(new String[2]));
+    }
+
+    @Test
+    public void testGetPublicationTextTitleEtc() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.initialize();
+        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/lane",
+                executor);
+        RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
+        while (rc.hasNext()) {
+            Record rec = rc.next();
+            if (168269 == getRecordId(rec)) {
+                Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
+                        this.keywordsStrategy, this.itemCount, this.typeFactory);
+                assertEquals("bib-168269", er.getId());
+                assertEquals(null, er.getPublicationDate());
+                assertEquals(null, er.getPublicationIssue());
+                assertEquals(null, er.getPublicationPages());
+                assertTrue(er.getPublicationTypes().isEmpty());
+                assertEquals(null, er.getPublicationVolume());
+                assertFalse(er.isLaneConnex());
+                expect(this.typeFactory.getTypes(rec)).andReturn(Collections.singletonList("a type"));
+                replay(this.typeFactory);
+                assertTrue(er.getTypes().contains("a type"));
+                verify(this.typeFactory);
+                assertEquals("Petrosilinum vel persil, materia medica].", er.getShortTitle());
+                assertEquals("[Opera chirurgica]..  [ca. 1400] fol. 66 [i.e. 26]", er.getPublicationText());
+                assertEquals("[Opera chirurgica].", er.getPublicationTitle());
+            }
+            if (67043 == getRecordId(rec)) {
+                Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
+                        this.keywordsStrategy, this.itemCount, this.typeFactory);
+                assertEquals("[Collection of reprints by John Uri Lloyd from the Western Druggist]. ",
+                        er.getPublicationText());
+                assertEquals("[Collection of reprints by John Uri Lloyd from the Western Druggist]",
+                        er.getPublicationTitle());
+            }
+            if (77614 == getRecordId(rec)) {
+                Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
+                        this.keywordsStrategy, this.itemCount, this.typeFactory);
+                assertEquals("Stanford University Medical Center Records. ", er.getPublicationText());
+                assertEquals("Stanford University Medical Center Records", er.getPublicationTitle());
+            }
+            if (21171 == getRecordId(rec)) {
+                Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
+                        this.keywordsStrategy, this.itemCount, this.typeFactory);
+                assertEquals(
+                        "Clinical pharmacology and therapeutics.  1981 Sep-; 30(3)-; Journal of the American Medical Association 1972 Nov 27-1981 Feb 27; 222(9)-245(8)",
+                        er.getPublicationText());
+                assertEquals("Clinical pharmacology and therapeutics", er.getPublicationTitle());
+            }
+        }
     }
 
     @Test

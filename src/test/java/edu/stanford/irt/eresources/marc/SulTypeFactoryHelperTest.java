@@ -20,7 +20,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     public void setUp() throws Exception {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
-        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc",
+        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/sul",
                 executor);
     }
 
