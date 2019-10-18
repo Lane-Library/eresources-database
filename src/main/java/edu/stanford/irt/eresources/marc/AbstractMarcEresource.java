@@ -289,9 +289,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
                     sb.append("; ").append(subfield.getData());
                 }
             }
-            if (field733.getSubfields().stream().anyMatch((final Subfield s) -> s.getCode() == 'w')) {
-                subfieldWCount++;
-            }
+            subfieldWCount = subfieldWCount
+                    + (int) field733.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'w').count();
         }
         return sb.toString();
     }
