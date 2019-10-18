@@ -89,8 +89,6 @@ public class TypeFactory extends MARCRecordSupport {
             type = EresourceConstants.OTHER;
         } else if (EresourceConstants.BOOK.equals(primaryType)) {
             type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(record);
-        } else if (EresourceConstants.JOURNAL.equals(primaryType)) {
-            type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(record);
         } else if (EresourceConstants.SERIAL.equals(primaryType)) {
             if (rawTypes.contains(EresourceConstants.BOOK)) {
                 type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(record);
