@@ -39,7 +39,7 @@ public class MarcLink implements Link {
         if (l == null) {
             l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'z')
                     .map(Subfield::getData).findFirst().orElse(null);
-        } else if (l.startsWith("(") && l.endsWith(")") && !l.equals("()")) {
+        } else if (l.startsWith("(") && l.endsWith(")") && !"()".equals(l)) {
             l = l.substring(1, l.length() - 1);
         }
         return l;
