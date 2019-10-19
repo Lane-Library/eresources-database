@@ -42,7 +42,7 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private static boolean isHolding(final Record record) {
-        return HOLDINGS_CHARS.indexOf(record.getLeaderByte(6)) > -1;
+        return HOLDINGS_CHARS.indexOf(record.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06)) > -1;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
         while (hasNext()) {
             List<Record> recordList = next();
             Record record = recordList.get(0);
-            if (record.getLeaderByte(6) == 'q') {
+            if (record.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06) == 'q') {
                 this.eresourceHandler
                         .handleEresource(new AuthMarcEresource(record, this.keywordsStrategy, this.typeFactory));
             } else {

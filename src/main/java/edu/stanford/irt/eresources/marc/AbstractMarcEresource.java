@@ -55,6 +55,10 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected static final LanguageMap LANGUAGE_MAP = new LanguageMap();
 
+    protected static final int LEADER_BYTE_06 = 6;
+
+    protected static final int LEADER_BYTE_07 = 7;
+
     protected static final Pattern NAME_INITIAL_PERIOD = Pattern.compile(".* \\w\\.");
 
     protected static final String SEMICOLON_SPACE = "; ";

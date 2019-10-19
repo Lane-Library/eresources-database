@@ -10,8 +10,6 @@ public class KeywordsStrategy {
 
     private static final String AGUMENTABLE_TAGS = "100|600|650|700";
 
-    private static final int BYTE_6 = 6;
-
     private static final String KEYWORD_TAGS = "020|022|030|035|901|902|903|907|941|942|943";
 
     private static final int TAG_100 = 100;
@@ -35,7 +33,7 @@ public class KeywordsStrategy {
     public String getKeywords(final Record record) {
         StringBuilder sb = new StringBuilder();
         List<Field> fields = record.getFields();
-        byte leaderByte6 = record.getLeaderByte(BYTE_6);
+        byte leaderByte6 = record.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06);
         if ("uvxy".indexOf(leaderByte6) > -1) {
             getKeywordsFromHoldingsRec(fields, sb);
         } else if (leaderByte6 == 'q') {
