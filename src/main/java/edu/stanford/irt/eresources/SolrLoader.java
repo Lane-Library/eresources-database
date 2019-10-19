@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -33,17 +34,17 @@ public class SolrLoader {
 
     protected SolrClient solrClient;
 
-    private Executor executor;
+    private Executor executor = null;
 
-    private EresourceHandler handler;
+    private EresourceHandler handler = null;
 
     private Collection<AbstractEresourceProcessor> processors = Collections.emptyList();
 
-    private Queue<Eresource> queue;
+    private Queue<Eresource> queue = null;
 
-    private String updatedDateQuery;
+    private String updatedDateQuery = null;
 
-    private String version;
+    private String version = null;
 
     public static void main(final String[] args) {
         try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
@@ -87,7 +88,7 @@ public class SolrLoader {
         if (null == processors) {
             throw new IllegalArgumentException("null processors");
         }
-        this.processors = processors;
+        this.processors = new ArrayList<>(processors);
     }
 
     public void setQueue(final Queue<Eresource> queue) {
