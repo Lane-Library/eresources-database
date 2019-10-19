@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,9 +44,7 @@ public class TypeFactory extends MARCRecordSupport {
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
     static {
-        for (String type : ALLOWED_TYPES_INITIALIZER) {
-            ALLOWED_TYPES.add(type);
-        }
+        Collections.addAll(ALLOWED_TYPES, ALLOWED_TYPES_INITIALIZER);
         for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
             for (int j = 1; j < element.length; j++) {
                 COMPOSITE_TYPES.put(element[j], element[0]);
@@ -90,29 +89,11 @@ public class TypeFactory extends MARCRecordSupport {
         } else if (EresourceConstants.BOOK.equals(primaryType)) {
             type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(record);
         } else if (EresourceConstants.SERIAL.equals(primaryType)) {
-            if (rawTypes.contains(EresourceConstants.BOOK)) {
-                type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(record);
-            } else if (rawTypes.contains(EresourceConstants.DATABASE)) {
-                type = EresourceConstants.DATABASE;
-            } else {
-                type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(record);
-            }
-        } else if ("Component".equals(primaryType)) {
-            if (rawTypes.contains(EresourceConstants.ARTICLE) && rawTypes.contains(EresourceConstants.CHAPTER)) {
-                type = "Article/Chapter";
-            } else if (rawTypes.contains(EresourceConstants.ARTICLE)) {
-                type = EresourceConstants.ARTICLE;
-            } else if (rawTypes.contains(EresourceConstants.CHAPTER)) {
-                type = EresourceConstants.CHAPTER;
-            } else {
-                type = EresourceConstants.OTHER;
-            }
+            type = getTypeFromSerial(rawTypes, record);
+        } else if (EresourceConstants.COMPONENT.equals(primaryType)) {
+            type = getTypeFromComponent(rawTypes);
         } else if (EresourceConstants.VISUAL_MATERIAL.equals(primaryType)) {
-            if (rawTypes.contains(EresourceConstants.VIDEO)) {
-                type = EresourceConstants.VIDEO;
-            } else {
-                type = EresourceConstants.IMAGE;
-            }
+            type = getTypeFromVisualMaterial(rawTypes);
         } else {
             type = primaryType;
         }
@@ -181,5 +162,35 @@ public class TypeFactory extends MARCRecordSupport {
         }
         return rawTypes.stream().map(this::getCompositeType).filter(ALLOWED_TYPES::contains)
                 .collect(Collectors.toSet());
+    }
+
+    private String getTypeFromComponent(final Collection<String> rawTypes) {
+        String type = EresourceConstants.OTHER;
+        if (rawTypes.contains(EresourceConstants.ARTICLE) && rawTypes.contains(EresourceConstants.CHAPTER)) {
+            type = "Article/Chapter";
+        } else if (rawTypes.contains(EresourceConstants.ARTICLE)) {
+            type = EresourceConstants.ARTICLE;
+        } else if (rawTypes.contains(EresourceConstants.CHAPTER)) {
+            type = EresourceConstants.CHAPTER;
+        }
+        return type;
+    }
+
+    private String getTypeFromSerial(final Collection<String> rawTypes, final Record record) {
+        String type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(record);
+        if (rawTypes.contains(EresourceConstants.BOOK)) {
+            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(record);
+        } else if (rawTypes.contains(EresourceConstants.DATABASE)) {
+            type = EresourceConstants.DATABASE;
+        }
+        return type;
+    }
+
+    private String getTypeFromVisualMaterial(final Collection<String> rawTypes) {
+        String type = EresourceConstants.IMAGE;
+        if (rawTypes.contains(EresourceConstants.VIDEO)) {
+            type = EresourceConstants.VIDEO;
+        }
+        return type;
     }
 }
