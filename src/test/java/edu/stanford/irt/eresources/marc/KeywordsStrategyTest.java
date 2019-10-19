@@ -6,7 +6,9 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +31,8 @@ public class KeywordsStrategyTest {
 
     private Subfield subfield;
 
+    private List<Field> twoFields;
+
     @Before
     public void setUp() {
         this.augmentation = mock(AuthTextAugmentation.class);
@@ -37,10 +41,42 @@ public class KeywordsStrategyTest {
         this.record = mock(Record.class);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
+        this.twoFields = new ArrayList<>();
+        this.twoFields.add(this.field);
+        this.twoFields.add(this.field);
     }
 
     @Test
-    public void testGetKeywords() {
+    public void testGetKeywordsAuth() {
+        expect(this.record.getFields()).andReturn(this.twoFields);
+        expect(this.record.getLeaderByte(6)).andReturn((byte) 'q');
+        expect(this.field.getTag()).andReturn("020");
+        expect(this.field.getTag()).andReturn("999");
+        replay(this.record, this.field);
+        assertEquals("", this.strategy.getKeywords(this.record));
+        verify(this.record, this.field);
+    }
+
+    @Test
+    public void testGetKeywordsAuthAugmentable() {
+        expect(this.record.getFields()).andReturn(this.twoFields);
+        expect(this.record.getLeaderByte(6)).andReturn((byte) 'q');
+        expect(this.field.getTag()).andReturn("100").times(2);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
+        expect(this.subfield.getCode()).andReturn('0');
+        expect(this.subfield.getData()).andReturn("1000");
+        expect(this.augmentation.getAuthAugmentations("1000")).andReturn("augmentation");
+        expect(this.field.getTag()).andReturn("700").times(2);
+        expect(this.subfield.getCode()).andReturn('0');
+        expect(this.subfield.getData()).andReturn("7000");
+        expect(this.augmentation.getAuthAugmentations("7000")).andReturn(null);
+        replay(this.record, this.field, this.subfield, this.augmentation);
+        assertEquals("1000  augmentation 7000 ", this.strategy.getKeywords(this.record));
+        verify(this.record, this.field, this.subfield, this.augmentation);
+    }
+
+    @Test
+    public void testGetKeywordsBib() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.record.getLeaderByte(6)).andReturn((byte) 'a');
         expect(this.field.getTag()).andReturn("020").times(2);
@@ -49,6 +85,35 @@ public class KeywordsStrategyTest {
         expect(this.subfield.getData()).andReturn("020a");
         replay(this.record, this.field, this.subfield);
         assertEquals("020a ", this.strategy.getKeywords(this.record));
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testGetKeywordsBibAugmentable() {
+        expect(this.record.getFields()).andReturn(this.twoFields);
+        expect(this.record.getLeaderByte(6)).andReturn((byte) 'a');
+        expect(this.field.getTag()).andReturn("100").times(2);
+        expect(this.field.getTag()).andReturn("001");
+        expect(this.field.getData()).andReturn("cn");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
+        expect(this.subfield.getCode()).andReturn('0').times(2);
+        expect(this.subfield.getData()).andReturn("1000").times(4);
+        expect(this.augmentation.getAuthAugmentations("1000")).andReturn("augmentation").times(2);
+        expect(this.reservesAugmentation.getReservesAugmentations("cn")).andReturn("reservesAug");
+        replay(this.record, this.field, this.subfield, this.augmentation, this.reservesAugmentation);
+        assertEquals("1000  augmentation 1000  augmentation reservesAug", this.strategy.getKeywords(this.record));
+        verify(this.record, this.field, this.subfield, this.augmentation, this.reservesAugmentation);
+    }
+
+    @Test
+    public void testGetKeywordsHolding() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.record.getLeaderByte(6)).andReturn((byte) 'u');
+        expect(this.field.getTag()).andReturn("852");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getData()).andReturn("852");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("852 ", this.strategy.getKeywords(this.record));
         verify(this.record, this.field, this.subfield);
     }
 }
