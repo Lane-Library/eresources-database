@@ -10,6 +10,8 @@ public class KeywordsStrategy {
 
     private static final String AGUMENTABLE_TAGS = "100|600|650|700";
 
+    private static final int BYTE_6 = 6;
+
     private static final String KEYWORD_TAGS = "020|022|030|035|901|902|903|907|941|942|943";
 
     private static final int TAG_100 = 100;
@@ -33,45 +35,50 @@ public class KeywordsStrategy {
     public String getKeywords(final Record record) {
         StringBuilder sb = new StringBuilder();
         List<Field> fields = record.getFields();
-        byte leaderByte6 = record.getLeaderByte(6);
+        byte leaderByte6 = record.getLeaderByte(BYTE_6);
         if ("uvxy".indexOf(leaderByte6) > -1) {
-            fields.stream().filter((final Field f) -> "852".equals(f.getTag()) || "866".equals(f.getTag()))
-                    .flatMap((final Field f) -> f.getSubfields().stream()).map(Subfield::getData)
-                    .forEach((final String s) -> sb.append(s).append(' '));
+            getKeywordsFromHoldingsRec(fields, sb);
         } else if (leaderByte6 == 'q') {
-            fields.stream().filter((final Field f) -> {
-                int tagNumber = Integer.parseInt(f.getTag());
-                return tagNumber >= TAG_100 && tagNumber <= TAG_943;
-            }).forEach((final Field f) -> {
-                String tag = f.getTag();
-                f.getSubfields().stream().forEach((final Subfield s) -> {
-                    String data = s.getData();
-                    getKeywordsFromSubfield(data, sb);
-                    if (isAugmentable(tag, s.getCode())) {
-                        String authText = this.authTextAugmentation.getAuthAugmentations(data);
-                        if (authText != null) {
-                            sb.append(' ').append(authText);
-                        }
-                    }
-                });
-            });
+            getKeywordsFromAuthRec(fields, sb);
         } else {
-            for (Field field : fields) {
-                String tag = field.getTag();
-                if (isKeywordTag(tag)) {
-                    getKeywordsFromField(tag, field.getSubfields(), sb);
-                }
-            }
-            if (null != this.reservesAugmentation) {
-                String reservesText = this.reservesAugmentation
-                        .getReservesAugmentations(fields.stream().filter((final Field f) -> "001".equals(f.getTag()))
-                                .map(Field::getData).findFirst().orElse("0"));
-                if (reservesText != null) {
-                    sb.append(' ').append(reservesText);
-                }
-            }
+            getKeywordsFromBibRec(fields, sb);
         }
         return sb.toString();
+    }
+
+    private void getKeywordsFromAuthRec(final List<Field> fields, final StringBuilder sb) {
+        fields.stream().filter((final Field f) -> {
+            int tagNumber = Integer.parseInt(f.getTag());
+            return tagNumber >= TAG_100 && tagNumber <= TAG_943;
+        }).forEach((final Field f) -> {
+            String tag = f.getTag();
+            f.getSubfields().stream().forEach((final Subfield s) -> {
+                String data = s.getData();
+                getKeywordsFromSubfield(data, sb);
+                if (isAugmentable(tag, s.getCode())) {
+                    String authText = this.authTextAugmentation.getAuthAugmentations(data);
+                    if (authText != null) {
+                        sb.append(' ').append(authText);
+                    }
+                }
+            });
+        });
+    }
+
+    private void getKeywordsFromBibRec(final List<Field> fields, final StringBuilder sb) {
+        for (Field field : fields) {
+            String tag = field.getTag();
+            if (isKeywordTag(tag)) {
+                getKeywordsFromField(tag, field.getSubfields(), sb);
+            }
+        }
+        if (null != this.reservesAugmentation) {
+            String reservesText = this.reservesAugmentation.getReservesAugmentations(fields.stream()
+                    .filter((final Field f) -> "001".equals(f.getTag())).map(Field::getData).findFirst().orElse("0"));
+            if (reservesText != null) {
+                sb.append(' ').append(reservesText);
+            }
+        }
     }
 
     private void getKeywordsFromField(final String tag, final List<Subfield> subfields, final StringBuilder sb) {
@@ -87,6 +94,12 @@ public class KeywordsStrategy {
                 }
             }
         }
+    }
+
+    private void getKeywordsFromHoldingsRec(final List<Field> fields, final StringBuilder sb) {
+        fields.stream().filter((final Field f) -> "852".equals(f.getTag()) || "866".equals(f.getTag()))
+                .flatMap((final Field f) -> f.getSubfields().stream()).map(Subfield::getData)
+                .forEach((final String s) -> sb.append(s).append(' '));
     }
 
     private void getKeywordsFromSubfield(final String data, final StringBuilder sb) {
