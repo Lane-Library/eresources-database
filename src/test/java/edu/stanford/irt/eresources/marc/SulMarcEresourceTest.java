@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -13,17 +14,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.SulFileCatalogRecordService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
+import edu.stanford.lane.catalog.RecordCollection;
+import edu.stanford.lane.lcsh.LcshMapManager;
 
-public class SulMarcEresourceTest {
+public class SulMarcEresourceTest extends MARCRecordSupport {
+
+    RecordCollection recordCollection;
+
+    HashMap<String, Record> records = new HashMap<>();
+
+    CatalogRecordService recordService;
+
+    TypeFactory typefactory;
 
     private SulMarcEresource eresource;
 
@@ -45,6 +60,16 @@ public class SulMarcEresourceTest {
         this.eresource = new SulMarcEresource(this.record, this.keywordsStrategy, this.typeFactory, null);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
+        // real marc to simplify testing for getYear, mesh, etc.
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.initialize();
+        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/sul/",
+                executor);
+        this.recordCollection = new RecordCollection(this.recordService.getRecordStream(0));
+        while (this.recordCollection.hasNext()) {
+            Record rec = this.recordCollection.next();
+            this.records.put(Integer.toString(getRecordId(rec)), rec);
+        }
     }
 
     @Test
@@ -93,6 +118,19 @@ public class SulMarcEresourceTest {
         replay(this.keywordsStrategy);
         assertEquals("keywords", this.eresource.getKeywords());
         verify(this.keywordsStrategy);
+    }
+
+    @Test
+    public final void testGetMesh() {
+        LcshMapManager lcshMapManager = mock(LcshMapManager.class);
+        SulMarcEresource mesh = new SulMarcEresource(this.records.get("7811516"), this.keywordsStrategy,
+                this.typeFactory, lcshMapManager);
+        expect(lcshMapManager.getMeshForHeading(isA(String.class))).andReturn(Collections.singleton("mappedMesh"))
+                .atLeastOnce();
+        replay(lcshMapManager);
+        assertTrue(mesh.getMeshTerms().contains("mappedMesh"));
+        assertTrue(mesh.getMeshTerms().contains("Surgical Procedures, Operative"));
+        verify(lcshMapManager);
     }
 
     @Test
@@ -191,6 +229,46 @@ public class SulMarcEresourceTest {
         verify(this.record, this.field, this.subfield, this.typeFactory);
     }
 
+    @Test
+    public final void testGetYear() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("008");
+        expect(this.field.getData()).andReturn("000000000001999");
+        replay(this.record, this.field);
+        assertEquals(1999, this.eresource.getYear());
+        assertEquals(1999, this.eresource.getYear());
+        verify(this.record, this.field);
+    }
+
+    @Test
+    public final void testGetYearRealMarc() {
+        SulMarcEresource badDate = new SulMarcEresource(this.records.get("90009616"), this.keywordsStrategy,
+                this.typeFactory, null);
+        assertEquals(2005, badDate.getYear());
+        assertEquals("20050101", badDate.getDate());
+    }
+
+//    @Test
+//    public final void testGetYearNo() {
+//        List<Field> fields = new ArrayList<>();
+//        fields.add(this.field);
+//        fields.add(this.field);
+//        fields.add(this.field);
+//        expect(this.record.getFields()).andReturn(fields).times(3);
+//        expect(this.field.getTag()).andReturn("008");
+//        expect(this.field.getData()).andReturn("000000000007999");
+//        expect(this.field.getTag()).andReturn("264");
+//        expect(this.field.getIndicator2()).andReturn('z').atLeastOnce();
+//        expect(this.field.getTag()).andReturn("264");
+//        expect(this.subfield.getCode()).andReturn('x');
+//        expect(this.field.getTag()).andReturn("260");
+//        expect(this.subfield.getCode()).andReturn('c');
+//        expect(this.subfield.getData()).andReturn("1999");
+//        replay(this.record, this.field, this.subfield);
+//        assertEquals(1999, this.eresource.getYear());
+//        assertEquals(1999, this.eresource.getYear());
+//        verify(this.record, this.field, this.subfield);
+//    }
     @Test
     public final void testIsCore() {
         assertFalse(this.eresource.isCore());
