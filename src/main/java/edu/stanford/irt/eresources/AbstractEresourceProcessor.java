@@ -3,11 +3,11 @@ package edu.stanford.irt.eresources;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import edu.stanford.lane.catalog.RecordProcessor;
-
-public abstract class AbstractEresourceProcessor implements RecordProcessor {
+public abstract class AbstractEresourceProcessor {
 
     private long startTime;
+
+    public abstract void process();
 
     public void setStartDate(final LocalDateTime startDate) {
         if (null == startDate) {
