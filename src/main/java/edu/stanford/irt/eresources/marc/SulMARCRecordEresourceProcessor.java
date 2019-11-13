@@ -24,6 +24,8 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
 
     private static final int F008_DATES_END = 15;
 
+    private static final Pattern FICTION = Pattern.compile("(^|\\b[^non-])fiction(\\S|\\b)", Pattern.CASE_INSENSITIVE);
+
     private static final Pattern NOT_ALPHANUM_OR_SPACE = Pattern.compile("[^a-zA-Z_0-9 ]");
 
     private List<String> acceptableDBCallNumbers;
@@ -77,6 +79,10 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             return true;
         }
         // augment callnumber list with mapped LCSH->callnumber values
+        // but skip cn mapping for fiction records
+        if (isFiction(record)) {
+            return false;
+        }
         cns.clear();
         MARCRecordSupport.getFields(record, "650").filter((final Field f) -> ("07".indexOf(f.getIndicator2()) > -1))
                 .forEach((final Field f) -> {
@@ -106,6 +112,15 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             }
         }
         return false;
+    }
+
+    private boolean isFiction(final Record record) {
+        return MARCRecordSupport.getSubfieldData(record, "650", "av")
+                .anyMatch((final String s) -> FICTION.matcher(s).find())
+                || MARCRecordSupport.getSubfieldData(record, "651", "av")
+                        .anyMatch((final String s) -> FICTION.matcher(s).find())
+                || MARCRecordSupport.getSubfieldData(record, "655", "av")
+                        .anyMatch((final String s) -> FICTION.matcher(s).find());
     }
 
     private boolean isInScope(final Record record) {
