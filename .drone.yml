@@ -2,9 +2,6 @@ pipeline:
 
   build:
     image: maven:3-jdk-8-alpine
-    volumes:
-    - name: maven-cache
-      path: /root/.m2/repository
     commands:
       - mvn -B -s settings.xml package
     when:
@@ -45,8 +42,3 @@ pipeline:
     when:
       status: [ success, failure ]
       branch: master
-
-volumes:
-- name: maven-cache
-  host:
-    path: /tmp/maven-cache
