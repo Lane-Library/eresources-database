@@ -1,9 +1,10 @@
 pipeline:
 
   build:
-    image: maven:3-jdk-8-alpine
+    image: gcr.io/clever-circlet-125504/gcloud
+    pull: true
     commands:
-      - mvn -B -s settings.xml package
+      - make build-app
     when:
       branch: master
 
