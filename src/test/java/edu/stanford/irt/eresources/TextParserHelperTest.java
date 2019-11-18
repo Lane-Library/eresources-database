@@ -32,6 +32,18 @@ public class TextParserHelperTest {
     }
 
     @Test
+    public final void testCleanOrcid() {
+        assertEquals("0000-0001-5769-0004", TextParserHelper.cleanOrcid("0000-0001-5769-0004"));
+        assertEquals("0000-0001-5321-983X", TextParserHelper.cleanOrcid("0000-0001-5321-983x"));
+        assertEquals("0000-0000-0001-5769-0004", TextParserHelper.cleanOrcid("0000-0000-0001-5769-0004"));
+        assertEquals("0000-0003-2819-2553", TextParserHelper.cleanOrcid("'http://orcid.org/0000-0003-2819-2553"));
+        assertEquals("http://orcid.org/http://orcid.org/0000-0002-5430-3205-0002-5430-3205",
+                TextParserHelper.cleanOrcid("http://orcid.org/http://orcid.org/0000-0002-5430-3205-0002-5430-3205"));
+        assertEquals("0000-0002-5430-3205", TextParserHelper.cleanOrcid("http://orcid.org/0000-0002-5430-3205"));
+        assertEquals("0000-0001-9070-3962", TextParserHelper.cleanOrcid("0000 0001 9070 3962"));
+    }
+
+    @Test
     public final void testMaybeStripTrailingPeriod() {
         assertEquals("string ", TextParserHelper.maybeStripTrailingPeriod("string "));
         assertEquals("string ", TextParserHelper.maybeStripTrailingPeriod("string ."));

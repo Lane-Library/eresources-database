@@ -165,7 +165,7 @@
             </stx:when>
             <stx:when test="contains('Identifier',name(.)) and @Source = 'ORCID'">
                 <!--  prepend id-type to data for better search support: e.g. ORCID:0000-0003-0101-4490, etc. -->
-                <stx:assign name="keywords" select="concat($keywords, ' ', @Source,':', replace(.,'https?://orcid\.org/',''))"/>
+                <stx:assign name="keywords" select="concat($keywords, ' ', @Source,':', tph:cleanOrcid(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper"/>
             </stx:when>
             <stx:when test="name(.) = 'Month'">            
                 <stx:assign name="keywords" select="concat($keywords, ' ', tph:explodeMonth(.))" xmlns:tph="java:edu.stanford.irt.eresources.TextParserHelper" />

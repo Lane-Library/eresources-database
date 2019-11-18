@@ -31,6 +31,10 @@ public final class TextParserHelper {
 
     private static final int MONTH_PATTERN_MAX = 4;
 
+    private static final int ORCID_MAX_LENGTH = 19;
+
+    private static final Pattern ORCID_PATTERN = Pattern.compile("(\\b(?:\\d{4}[\\- ]){3,}\\d{3}[\\dXx]\\b)");
+
     private static final Pattern PAGES_START_END_PATTERN = Pattern.compile(".*\\b(\\w+)\\- ?(\\w+)\\b.*");
 
     private static final String SPACE = " ";
@@ -64,6 +68,20 @@ public final class TextParserHelper {
             return DIGIT_OR_X_PATTERN.matcher(isxn.split(" ")[0]).replaceAll("").toLowerCase(Locale.US);
         }
         return isxn;
+    }
+
+    /**
+     * ORCID data from PubMed is dirty. Extract a valid ORCID if possible, otherwise just return entire string.
+     *
+     * @param orcidString
+     * @return cleaned ORCID where possible
+     */
+    public static String cleanOrcid(final String orcidString) {
+        Matcher m = ORCID_PATTERN.matcher(orcidString);
+        if (m.find() && ORCID_MAX_LENGTH == m.group(1).length()) {
+            return m.group(1).replace(' ', '-').toUpperCase(Locale.US);
+        }
+        return orcidString;
     }
 
     /**
