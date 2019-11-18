@@ -32,8 +32,6 @@ build: build-app build-docker ## build app and docker image
 build-app: ## build app
 	docker pull maven:3
 	docker run -v ${HOME}/.m2/repository:/root/.m2/repository -v ${PWD}:/build \
-		maven:3 bash -c "ls -al /root/.m2/repository"
-	docker run -v ${HOME}/.m2/repository:/root/.m2/repository -v ${PWD}:/build \
 		maven:3 bash -c "cd /build; mvn -B -s settings.xml clean package"
 
 .PHONY: push
