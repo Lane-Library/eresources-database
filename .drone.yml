@@ -6,7 +6,7 @@ pipeline:
     - name: maven-cache
       path: /root/.m2/repository
     commands:
-        - mvn -B -s settings.xml package
+      - mvn -B -s settings.xml package
     when:
       branch: master
 
