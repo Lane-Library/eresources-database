@@ -27,7 +27,7 @@ include ${FRAMEWORK_DIR}/makefile_parts/deps.mk
 # END COMMON MAKEFILE PARTS INCLUDES
 
 .PHONY: build
-build: build-docker ## build app and docker image
+build: build-docker ## build docker image
 
 .PHONY: push
 push: push-version push-latest ## push both latest and versioned image to docker registry
