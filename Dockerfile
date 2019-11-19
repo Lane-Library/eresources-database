@@ -1,4 +1,5 @@
 # copy .m2 directory from previous image in order to speed-up build-times
+# warning! will bloat image over time
 FROM gcr.io/som-laneweb/eresources:latest AS PREVIOUS_IMAGE
 RUN mkdir -p /root/.m2
 
