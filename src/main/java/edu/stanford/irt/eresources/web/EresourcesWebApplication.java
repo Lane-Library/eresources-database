@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.stanford.irt.eresources.SolrLoader;
+import edu.stanford.irt.status.DefaultStatusService;
+import edu.stanford.irt.status.RuntimeMXBeanStatusProvider;
 
 @RestController
 @EnableScheduling
@@ -94,16 +97,19 @@ public class EresourcesWebApplication {
         return "OK";
     }
 
-    @GetMapping("/status.txt")
-    public ResponseEntity<String> status() {
+    @GetMapping(value = "/status.txt", produces = "text/plain; charset=utf-8")
+    public ResponseEntity<String> status(@Value("${eresources.version}") final String version) {
+        StringBuilder statusMessage = new StringBuilder(new DefaultStatusService("eresources", version,
+                Collections.singletonList(new RuntimeMXBeanStatusProvider())).getStatus().toString());
         if (this.jobIsRunning
                 && LocalDateTime.now().isAfter(this.jobStart.plus(Duration.ofHours(this.maxJobDurationInHours)))) {
             String msg = String.format("long-running job (%s) running for %s hours", this.jobRunningName,
                     ChronoUnit.HOURS.between(this.jobStart, LocalDateTime.now()));
             log.error(msg);
-            return new ResponseEntity<>(msg, HttpStatus.GATEWAY_TIMEOUT);
+            statusMessage.append("\n").append(msg);
+            return new ResponseEntity<>(statusMessage.toString(), HttpStatus.GATEWAY_TIMEOUT);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(statusMessage.toString(), HttpStatus.OK);
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")

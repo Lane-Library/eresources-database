@@ -43,11 +43,11 @@ public class EresourcesWebApplicationTest {
 
     @Test
     public final void testStatus() {
-        ResponseEntity<?> re = this.application.status();
+        ResponseEntity<?> re = this.application.status("version");
         assertEquals(HttpStatus.OK, re.getStatusCode());
         this.application.jobIsRunning = true;
         this.application.maxJobDurationInHours = 0;
-        re = this.application.status();
+        re = this.application.status("version");
         assertNotEquals(HttpStatus.OK, re.getStatusCode());
     }
 
