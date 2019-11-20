@@ -1,8 +1,9 @@
 #
 # maven maintenance
-# make .m2 directory from previous image available to speed-up build-times
 #
 FROM gcr.io/som-laneweb/eresources:latest AS PREVIOUS_IMAGE
+# use .m2 directory from previous image to speed-up build-times
+# .m2 should already exist, but create just in case
 RUN mkdir -p /root/.m2
 
 #
