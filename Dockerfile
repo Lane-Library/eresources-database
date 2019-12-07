@@ -22,7 +22,7 @@ RUN find /root/.m2/repository -atime +30 -iname '*.pom' \
 #
 # run phase
 #
-FROM openjdk:jre-alpine
+FROM openjdk:14-alpine
 RUN apk add --no-cache tcpdump sysstat tini
 COPY --from=MAVEN_TOOL_CHAIN /tmp/target/eresources.jar /eresources/eresources.jar
 COPY --from=MAVEN_TOOL_CHAIN /root/.m2 /root/.m2
