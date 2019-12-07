@@ -75,7 +75,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>9.9.1-5</version>
+            <version>9.9.1-6</version>
         </dependency>
         <dependency>
             <groupId>net.sf.joost</groupId>
@@ -112,7 +112,7 @@
         <dependency>
             <artifactId>solr-solrj</artifactId>
             <groupId>org.apache.solr</groupId>
-            <version>8.3.0</version>
+            <version>8.3.1</version>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
