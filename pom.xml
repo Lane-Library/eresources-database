@@ -153,12 +153,12 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>journal-titles</artifactId>
-            <version>1.0.12</version>
+            <version>1.0.13</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.irt.suggest</groupId>
             <artifactId>suggest-query</artifactId>
-            <version>1.1.7</version>
+            <version>1.1.8</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.irt</groupId>
