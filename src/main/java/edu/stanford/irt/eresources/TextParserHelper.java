@@ -74,6 +74,7 @@ public final class TextParserHelper {
      * ORCID data from PubMed is dirty. Extract a valid ORCID if possible, otherwise just return entire string.
      *
      * @param orcidString
+     *            incoming ORCID
      * @return cleaned ORCID where possible
      */
     public static String cleanOrcid(final String orcidString) {
