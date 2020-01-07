@@ -6,6 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-01-07" version="2.3.9" description="maintenance release">
+            <action date="2020-01-07" dev="ryanmax" type="update">
+                Java 11
+            </action>
+            <action date="2019-11-19" dev="ryanmax" type="update">
+                more detailed /status.txt information
+            </action>
+        </release>
         <release date="2019-11-18" version="2.3.8" description="maintenance release">
             <action date="2019-11-18" dev="ryanmax" issue="LANEWEB-10513" type="update">
                 provide basic cleaning for ORCIDs 
