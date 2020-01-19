@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDate;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -54,7 +56,9 @@ public class EresourcesWebApplicationTest {
     @Test
     public final void testSul() {
         assertEquals("ERROR", this.application.sulUpdate());
-        assertEquals("didn't run", this.application.sulReload());
+        assertEquals("didn't run", this.application.sulReload(LocalDate.MAX));
+        LocalDate knownThirdSundayOfMonth = LocalDate.of(2020, 01, 19);
+        assertEquals("ERROR", this.application.sulReload(knownThirdSundayOfMonth));
     }
 
     @Test

@@ -112,12 +112,21 @@ public class EresourcesWebApplication {
         return new ResponseEntity<>(statusMessage.toString(), HttpStatus.OK);
     }
 
+    /**
+     * @param date
+     *            parameter for unit testing only
+     * @return status of job
+     */
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
-    public String sulReload() {
+    public String sulReload(final LocalDate date) {
+        LocalDate today = LocalDate.now();
+        if (null != date) {
+            today = date;
+        }
         // SUL full export occurs every third Saturday of the month (and completes Sunday)
         // cron scheduling doesn't support this directly, so enforce "day-of-week-in-month" check here
         // by making sure yesterday was 3rd Saturday in the month
-        LocalDate yesterday = LocalDate.now().minus(1, ChronoUnit.DAYS);
+        LocalDate yesterday = today.minus(1, ChronoUnit.DAYS);
         LocalDate thirdSaturdayOfMonth = yesterday.with(TemporalAdjusters.dayOfWeekInMonth(THIRD, DayOfWeek.SATURDAY));
         if (yesterday.isEqual(thirdSaturdayOfMonth)) {
             return solrLoader("sul/reload");
