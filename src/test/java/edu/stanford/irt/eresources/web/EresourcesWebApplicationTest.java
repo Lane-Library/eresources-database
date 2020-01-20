@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources.web;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
@@ -54,11 +55,16 @@ public class EresourcesWebApplicationTest {
     }
 
     @Test
-    public final void testSul() {
-        assertEquals("ERROR", this.application.sulUpdate());
+    public final void testSulReload() {
+        assertNotNull(this.application.sulReload());
         assertEquals("didn't run", this.application.sulReload(LocalDate.MAX));
         LocalDate knownThirdSundayOfMonth = LocalDate.of(2020, 01, 19);
         assertEquals("ERROR", this.application.sulReload(knownThirdSundayOfMonth));
+    }
+
+    @Test
+    public final void testSulUpdate() {
+        assertEquals("ERROR", this.application.sulUpdate());
     }
 
     @Test

@@ -112,13 +112,28 @@ public class EresourcesWebApplication {
         return new ResponseEntity<>(statusMessage.toString(), HttpStatus.OK);
     }
 
+    @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
+    public String sulReload() {
+        return sulReload(LocalDate.now());
+    }
+
+    @Scheduled(cron = "${eresources.schedule.cron.sulUpdate}")
+    public String sulUpdate() {
+        return solrLoader("sul/update");
+    }
+
+    @GetMapping("*")
+    public String usage() {
+        return "/solrLoader?job="
+                + "&lt;lane/update|lane/reload|pubmed/run-daily-ftp|redivis/reload|sul/update|sul/reload&gt;";
+    }
+
     /**
      * @param date
      *            parameter for unit testing only
      * @return status of job
      */
-    @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
-    public String sulReload(final LocalDate date) {
+    protected String sulReload(final LocalDate date) {
         LocalDate today = LocalDate.now();
         if (null != date) {
             today = date;
@@ -132,16 +147,5 @@ public class EresourcesWebApplication {
             return solrLoader("sul/reload");
         }
         return "didn't run";
-    }
-
-    @Scheduled(cron = "${eresources.schedule.cron.sulUpdate}")
-    public String sulUpdate() {
-        return solrLoader("sul/update");
-    }
-
-    @GetMapping("*")
-    public String usage() {
-        return "/solrLoader?job="
-                + "&lt;lane/update|lane/reload|pubmed/run-daily-ftp|redivis/reload|sul/update|sul/reload&gt;";
     }
 }
