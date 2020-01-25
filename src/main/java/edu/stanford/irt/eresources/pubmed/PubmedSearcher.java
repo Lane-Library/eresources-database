@@ -20,7 +20,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,8 @@ public class PubmedSearcher {
     private static final RequestConfig HTTP_CONFIG = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES)
             .build();
 
-    private static final HttpClient httpClient = HttpClients.createDefault();
+    private static final HttpClient httpClient = HttpClientBuilder.create().setUserAgent(PubmedSearcher.class.getName())
+            .setDefaultRequestConfig(HTTP_CONFIG).build();
 
     private static final Logger log = LoggerFactory.getLogger(PubmedSearcher.class);
 
@@ -149,7 +150,6 @@ public class PubmedSearcher {
         String htmlContent = null;
         HttpResponse res = null;
         HttpGet get = new HttpGet(url);
-        get.setConfig(HTTP_CONFIG);
         try {
             res = PubmedSearcher.httpClient.execute(get);
             if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
