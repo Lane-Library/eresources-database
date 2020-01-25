@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-01-24" version="2.3.10" description="emergency release">
+            <action date="2020-01-24" dev="ryanmax" issue="LANEWEB-10532"  type="fix">
+                NCBI blocking all eutil requests with user agent string "Apache-HttpClient"
+            </action>
+        </release>
         <release date="2020-01-07" version="2.3.9" description="maintenance release">
             <action date="2020-01-07" dev="ryanmax" type="update">
                 Java 11
