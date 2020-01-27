@@ -29,6 +29,7 @@
                     <constructor-arg name="value" value="Systematic Review"/>
                     <constructor-arg name="query" value="systematic[sb]"/>
                     <constructor-arg name="apiKey" value="${eresources.pubmedprocessor.ncbi.api_key}"/>
+                    <constructor-arg name="appVersion" value="${eresources.version}"/>
                 </bean>
                 <!-- examples: fields don't exist in solr
                 <bean class="edu.stanford.irt.eresources.pubmed.PubmedSearcher">

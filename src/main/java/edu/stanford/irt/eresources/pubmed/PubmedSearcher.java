@@ -41,14 +41,16 @@ public class PubmedSearcher {
     private static final RequestConfig HTTP_CONFIG = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES)
             .build();
 
-    private static final HttpClient httpClient = HttpClientBuilder.create().setUserAgent(PubmedSearcher.class.getName())
-            .setDefaultRequestConfig(HTTP_CONFIG).build();
+    private static final HttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(HTTP_CONFIG)
+            .build();
 
     private static final Logger log = LoggerFactory.getLogger(PubmedSearcher.class);
 
     private static final int RET_MAX = 500_000;
 
     private String apiKey;
+
+    private String appVersion;
 
     private DocumentBuilderFactory factory;
 
@@ -62,11 +64,13 @@ public class PubmedSearcher {
 
     private XPath xpath;
 
-    public PubmedSearcher(final String field, final String value, final String query, final String apiKey) {
+    public PubmedSearcher(final String field, final String value, final String query, final String apiKey,
+            final String appVersion) {
         if (query == null) {
             throw new IllegalStateException("null query");
         }
         this.apiKey = apiKey;
+        this.appVersion = "eresources-" + appVersion;
         this.field = field;
         this.query = query;
         this.value = value;
@@ -150,6 +154,7 @@ public class PubmedSearcher {
         String htmlContent = null;
         HttpResponse res = null;
         HttpGet get = new HttpGet(url);
+        get.setHeader("User-Agent", this.appVersion);
         try {
             res = PubmedSearcher.httpClient.execute(get);
             if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
