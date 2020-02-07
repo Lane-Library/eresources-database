@@ -6,7 +6,7 @@ public class RedivisReload extends SolrLoader {
 
     private static final String BASE_QUERY = "(recordType:redivis)";
 
-    private static final int EXPECTED_MIN_RECORDS = 100;
+    private static final int EXPECTED_MIN_RECORDS = 20;
 
     @Override
     public void load() {
