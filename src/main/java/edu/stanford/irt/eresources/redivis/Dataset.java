@@ -7,47 +7,19 @@ import java.util.List;
 
 public class Dataset {
 
-    public static class CurrentVersion {
-
-        private TemporalRange temporalRange;
-
-        public CurrentVersion() {
-            // empty constructor
-        }
-
-        /**
-         * @return the temporalRange
-         */
-        public TemporalRange getTemporalRange() {
-            return this.temporalRange;
-        }
-    }
-
     private String accessLevel;
 
-    private List<DatasetCollection> collections = Collections.emptyList();
-
-    private CurrentVersion currentVersion;
-
     private String description;
-
-    private List<Documentation> documentations = Collections.emptyList();
-
-    private Entity entity;
 
     private String id;
 
     private String name;
-
-    private Organization organization;
 
     private List<Tag> tags = Collections.emptyList();
 
     private Date updatedAt;
 
     private String url;
-
-    private List<Variable> variables = Collections.emptyList();
 
     public Dataset() {
         // empty constructor
@@ -61,38 +33,10 @@ public class Dataset {
     }
 
     /**
-     * @return the collections
-     */
-    public List<DatasetCollection> getCollections() {
-        return new ArrayList<>(this.collections);
-    }
-
-    /**
-     * @return the currentVersion
-     */
-    public CurrentVersion getCurrentVersion() {
-        return this.currentVersion;
-    }
-
-    /**
      * @return the description
      */
     public String getDescription() {
         return this.description;
-    }
-
-    /**
-     * @return the documentations
-     */
-    public List<Documentation> getDocumentations() {
-        return new ArrayList<>(this.documentations);
-    }
-
-    /**
-     * @return the entity
-     */
-    public Entity getEntity() {
-        return this.entity;
     }
 
     /**
@@ -107,13 +51,6 @@ public class Dataset {
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * @return the organization
-     */
-    public Organization getOrganization() {
-        return this.organization;
     }
 
     /**
@@ -135,12 +72,5 @@ public class Dataset {
      */
     public String getUrl() {
         return this.url;
-    }
-
-    /**
-     * @return the variables
-     */
-    public List<Variable> getVariables() {
-        return new ArrayList<>(this.variables);
     }
 }

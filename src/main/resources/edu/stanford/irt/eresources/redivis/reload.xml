@@ -17,7 +17,7 @@
     </bean>
     <bean id="redivisProcessor"
         class="edu.stanford.irt.eresources.redivis.RedivisEresourceProcessor">
-        <constructor-arg name="getEndpoint" value="${eresources.redivis.datasetGetEndpoint}"/>
+        <constructor-arg name="token" value="${eresources.redivis.token}"/>
         <constructor-arg name="listEndpoint" value="${eresources.redivis.datasetListEndpoint}"/>
         <constructor-arg name="eresourceHandler" ref="eresourceHandler"/>
     </bean>

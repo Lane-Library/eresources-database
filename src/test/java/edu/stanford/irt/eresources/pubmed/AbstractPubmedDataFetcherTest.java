@@ -57,6 +57,7 @@ public class AbstractPubmedDataFetcherTest {
             this.thrown.expect(EresourceDatabaseException.class);
         }
         this.fetcher.pmidListToFiles(pmids, "baseFilename");
+        // fails on drone ... not sure why since succeeded 6/5
         //assertTrue(new File(BP + "/" + TODAY + "/baseFilename1.xml").exists());
     }
 

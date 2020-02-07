@@ -5,7 +5,6 @@ import java.util.List;
 
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
-import edu.stanford.irt.eresources.redivis.Dataset.CurrentVersion;
 
 public class DatasetVersion implements Version {
 
@@ -25,14 +24,6 @@ public class DatasetVersion implements Version {
 
     @Override
     public String getDates() {
-        CurrentVersion cv = this.dataset.getCurrentVersion();
-        TemporalRange tr = null;
-        if (null != cv) {
-            tr = cv.getTemporalRange();
-        }
-        if (null != tr) {
-            return tr.getDisplayRange();
-        }
         return null;
     }
 

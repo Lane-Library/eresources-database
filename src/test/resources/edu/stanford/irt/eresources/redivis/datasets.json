@@ -3,202 +3,601 @@
   "nextPageToken": null,
   "datasets": [
     {
-      "kind": "dataset",
-      "id": 536,
-      "name": "AMC HR-CDM Employment Record",
-      "accessLevel": "overview",
-      "url": "https://redivis.com/StanfordPHS/536",
-      "createdAt": "2018-10-04T22:35:33.657Z",
-      "updatedAt": "2018-10-04T22:51:14.642Z",
-      "numRows": 3052104,
-      "numBytes": 501054745,
-      "variableCount": 22,
-      "temporalRange": null,
-      "currentVersion": {
-        "kind": "datasetVersion",
-        "id": 453,
-        "tag": "1.0",
-        "tableId": 16381
-      },
+      "id": 2,
+      "name": "Born in Bradford",
+      "description": "The Born in Bradford study is tracking the health and wellbeing of over 13,500 children, and their parents born at Bradford Royal Infirmary between March 2007 and December 2010. ",
+      "publicAccessLevel": "metadata",
+      "accessLevel": "metadata",
+      "url": "https://redivis.com/StanfordPHS/datasets/2",
+      "createdAt": "2016-09-16T01:50:30.778Z",
+      "updatedAt": "2019-04-24T21:09:53.706Z",
       "permissionGroup": {
-        "kind": "permissionGroup",
-        "id": 1,
-        "name": "American Manufacturing Cohort",
-        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=1"
+        "id": 69,
+        "name": "Born in Bradford",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=69"
       },
-      "collections": [
+      "tags": [
         {
-          "kind": "collection",
-          "id": 43,
-          "name": "American Manufacturing Cohort HR-CDM",
-          "url": "https://redivis.com/StanfordPHS?collection=43"
+          "kind": "tag",
+          "name": "claims"
+        },
+        {
+          "kind": "tag",
+          "name": "poverty"
+        },
+        {
+          "kind": "tag",
+          "name": "adults"
+        },
+        {
+          "kind": "tag",
+          "name": "asian"
+        },
+        {
+          "kind": "tag",
+          "name": "biobank"
+        },
+        {
+          "kind": "tag",
+          "name": "globalhealth"
+        },
+        {
+          "kind": "tag",
+          "name": "children"
         }
-      ],
-      "entity": {
-        "kind": "entity",
-        "name": "patient per calendar year"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "CPIC California Cancer Registry",
+      "description": "The Greater Bay Area Cancer Registry (GBACR), in compliance with California state law, gathers information about all cancers diagnosed or treated in a nine-county area (Alameda, Contra Costa, Marin, Monterey, San Benito, San Francisco, San Mateo, Santa...",
+      "publicAccessLevel": "metadata",
+      "accessLevel": "metadata",
+      "url": "https://redivis.com/StanfordPHS/datasets/4",
+      "createdAt": "2016-09-19T00:58:50.994Z",
+      "updatedAt": "2017-09-24T09:34:07.070Z",
+      "permissionGroup": {
+        "id": 6,
+        "name": "Partner",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=6"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "adults"
+        },
+        {
+          "kind": "tag",
+          "name": "cancer"
+        },
+        {
+          "kind": "tag",
+          "name": "emr"
+        },
+        {
+          "kind": "tag",
+          "name": "children"
+        },
+        {
+          "kind": "tag",
+          "name": "claims"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Clalit Research Institute",
+      "description": "Clalit, the largest healthcare payer/provider system in Israel, is a well-integrated system that owns and operates 14 hospitals and over 1,500 clinics.",
+      "publicAccessLevel": "metadata",
+      "accessLevel": "metadata",
+      "url": "https://redivis.com/StanfordPHS/datasets/22",
+      "createdAt": "2016-09-19T04:37:59.524Z",
+      "updatedAt": "2019-04-24T21:10:44.380Z",
+      "permissionGroup": {
+        "id": 6,
+        "name": "Partner",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=6"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "children"
+        },
+        {
+          "kind": "tag",
+          "name": "claims"
+        },
+        {
+          "kind": "tag",
+          "name": "adults"
+        },
+        {
+          "kind": "tag",
+          "name": "emr"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Taiwan National Health Insurance Research Database",
+      "description": "Taiwan launched a single-payer National Health Insurance program on March 1, 1995.",
+      "publicAccessLevel": "metadata",
+      "accessLevel": "metadata",
+      "url": "https://redivis.com/StanfordPHS/datasets/25",
+      "createdAt": "2016-09-19T05:43:04.462Z",
+      "updatedAt": "2018-02-23T04:25:45.627Z",
+      "permissionGroup": {
+        "id": 6,
+        "name": "Partner",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=6"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "emr"
+        },
+        {
+          "kind": "tag",
+          "name": "asia"
+        },
+        {
+          "kind": "tag",
+          "name": "children"
+        },
+        {
+          "kind": "tag",
+          "name": "claims"
+        },
+        {
+          "kind": "tag",
+          "name": "adults"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "name": "CMS MDPPAS Permissions",
+      "description": "This dataset is currently hosted on the PHS servers. This Permissions dataset was constructed in order to collect the required documents and trainings to use the dataset. Once you have completed these, you will be added to the appropriate work group.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/65",
+      "createdAt": "2016-09-28T23:23:21.918Z",
+      "updatedAt": "2019-04-13T00:24:43.681Z",
+      "permissionGroup": {
+        "id": 109,
+        "name": "CMS LDS",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=109"
       },
       "tags": []
     },
     {
-      "kind": "dataset",
-      "id": 550,
-      "name": "Optum SES Medical Diagnosis",
-      "accessLevel": "overview",
-      "url": "https://redivis.com/StanfordPHS/550",
-      "createdAt": "2018-10-18T18:21:47.283Z",
-      "updatedAt": "2018-10-22T21:17:58.698Z",
-      "numRows": 5658352001,
-      "numBytes": 443576924273,
-      "variableCount": 10,
-      "temporalRange": null,
-      "currentVersion": {
-        "kind": "datasetVersion",
-        "id": 475,
-        "tag": "1.0",
-        "tableId": 18233
-      },
+      "id": 95,
+      "name": "Aarhus university",
+      "description": "Available registries",
+      "publicAccessLevel": "metadata",
+      "accessLevel": "metadata",
+      "url": "https://redivis.com/StanfordPHS/datasets/95",
+      "createdAt": "2017-02-06T23:44:52.775Z",
+      "updatedAt": "2019-04-25T00:13:23.215Z",
       "permissionGroup": {
-        "kind": "permissionGroup",
-        "id": 27,
-        "name": "Optum",
-        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+        "id": 6,
+        "name": "Partner",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=6"
       },
-      "collections": [
-        {
-          "kind": "collection",
-          "id": 2,
-          "name": "Optum",
-          "url": "https://redivis.com/StanfordPHS?collection=2"
-        }
-      ],
-      "entity": null,
       "tags": []
     },
     {
-      "kind": "dataset",
-      "id": 551,
-      "name": "Optum SES Medical Procedure",
+      "id": 106,
+      "name": "HCUP National Inpatient Database",
+      "description": "HCUP's Nationwide databases can be used to identify, track, and analyze national trends in health care utilization, access, charges, quality, and outcomes. ",
+      "publicAccessLevel": "overview",
       "accessLevel": "overview",
-      "url": "https://redivis.com/StanfordPHS/551",
-      "createdAt": "2018-10-18T18:26:22.536Z",
-      "updatedAt": "2018-10-22T21:17:58.698Z",
-      "numRows": 47315487,
-      "numBytes": 3430083079,
-      "variableCount": 8,
-      "temporalRange": null,
-      "currentVersion": {
-        "kind": "datasetVersion",
-        "id": 476,
-        "tag": "1.0",
-        "tableId": 18234
-      },
+      "url": "https://redivis.com/StanfordPHS/datasets/106",
+      "createdAt": "2017-06-09T04:26:54.093Z",
+      "updatedAt": "2020-02-04T19:38:49.743Z",
       "permissionGroup": {
-        "kind": "permissionGroup",
-        "id": 27,
-        "name": "Optum",
-        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+        "id": 67,
+        "name": "HCUP National",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=67"
       },
-      "collections": [
-        {
-          "kind": "collection",
-          "id": 2,
-          "name": "Optum",
-          "url": "https://redivis.com/StanfordPHS?collection=2"
-        }
-      ],
-      "entity": null,
       "tags": []
     },
     {
-      "kind": "dataset",
-      "id": 552,
-      "name": "Optum ZIP5 Medical Procedure",
+      "id": 124,
+      "name": "Optum Diagnosis Lookup",
+      "description": "Diagnosis Lookup Table – Descriptions and Categories for Diagnosis Codes",
+      "publicAccessLevel": "overview",
       "accessLevel": "overview",
-      "url": "https://redivis.com/StanfordPHS/552",
-      "createdAt": "2018-10-18T20:21:02.648Z",
-      "updatedAt": "2018-10-22T21:17:58.698Z",
-      "numRows": 0,
-      "numBytes": null,
-      "variableCount": 0,
-      "temporalRange": null,
-      "currentVersion": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/124",
+      "createdAt": "2017-06-14T23:04:36.641Z",
+      "updatedAt": "2018-12-19T03:31:14.015Z",
       "permissionGroup": {
-        "kind": "permissionGroup",
         "id": 27,
         "name": "Optum",
         "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
       },
-      "collections": [
+      "tags": [
         {
-          "kind": "collection",
-          "id": 2,
-          "name": "Optum",
-          "url": "https://redivis.com/StanfordPHS?collection=2"
+          "kind": "tag",
+          "name": "claims"
+        },
+        {
+          "kind": "tag",
+          "name": "lookup"
         }
-      ],
-      "entity": null,
+      ]
+    },
+    {
+      "id": 125,
+      "name": "Optum NDC Lookup",
+      "description": "years: 2003-2016, N=67 million",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/125",
+      "createdAt": "2017-06-14T23:07:36.197Z",
+      "updatedAt": "2018-12-19T03:31:14.015Z",
+      "permissionGroup": {
+        "id": 27,
+        "name": "Optum",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "claims"
+        }
+      ]
+    },
+    {
+      "id": 126,
+      "name": "Optum Procedure Lookup",
+      "description": "Procedure Lookup Table – Descriptions and Categories for Procedure Codes",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/126",
+      "createdAt": "2017-06-14T23:08:42.996Z",
+      "updatedAt": "2018-12-19T03:31:14.015Z",
+      "permissionGroup": {
+        "id": 27,
+        "name": "Optum",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "claims"
+        },
+        {
+          "kind": "tag",
+          "name": "lookup"
+        }
+      ]
+    },
+    {
+      "id": 261,
+      "name": "MarketScan Redbook",
+      "description": "Lookup table for MarketScan ",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/261",
+      "createdAt": "2018-02-16T21:05:44.832Z",
+      "updatedAt": "2020-01-31T21:28:39.199Z",
+      "permissionGroup": {
+        "id": 33,
+        "name": "MarketScan",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=33"
+      },
       "tags": []
     },
     {
-      "kind": "dataset",
-      "id": 553,
-      "name": "Optum ZIP5 Medical Diagnosis",
+      "id": 275,
+      "name": "CMS RIF",
+      "description": "Stanford has a 20% sample of CMS data. These data are hosted on our secure servers and can only be accessed after completing a reuse application with CMS. You can explore these data using our CMS Public files which have no restrictions.\n\nThe files av",
+      "publicAccessLevel": "overview",
       "accessLevel": "overview",
-      "url": "https://redivis.com/StanfordPHS/553",
-      "createdAt": "2018-10-18T20:22:47.139Z",
-      "updatedAt": "2018-10-22T21:17:58.698Z",
-      "numRows": 0,
-      "numBytes": null,
-      "variableCount": 0,
-      "temporalRange": null,
-      "currentVersion": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/275",
+      "createdAt": "2018-04-09T19:06:42.329Z",
+      "updatedAt": "2020-02-04T20:48:39.511Z",
       "permissionGroup": {
-        "kind": "permissionGroup",
-        "id": 27,
-        "name": "Optum",
-        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
+        "id": 29,
+        "name": "CMS RIF",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=29"
       },
-      "collections": [
+      "tags": [
         {
-          "kind": "collection",
-          "id": 2,
-          "name": "Optum",
-          "url": "https://redivis.com/StanfordPHS?collection=2"
+          "kind": "tag",
+          "name": "claims"
+        },
+        {
+          "kind": "tag",
+          "name": "cms"
+        },
+        {
+          "kind": "tag",
+          "name": "medicare"
         }
-      ],
-      "entity": null,
+      ]
+    },
+    {
+      "id": 303,
+      "name": "HCUP California",
+      "description": "HCUP's State-specific databases can be used to investigate State-specific and multi-State trends in health care utilization, access, charges, quality, and outcomes.  PHS has all available years and datasets for HCUP California on our secure server.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/303",
+      "createdAt": "2018-04-24T20:30:30.689Z",
+      "updatedAt": "2020-02-04T20:48:53.590Z",
+      "permissionGroup": {
+        "id": 127,
+        "name": "HCUP California",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=127"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "claims"
+        }
+      ]
+    },
+    {
+      "id": 351,
+      "name": "Gender Data",
+      "description": "Gender data including SHG, WEC, etc.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/351",
+      "createdAt": "2018-05-29T22:25:02.892Z",
+      "updatedAt": "2019-06-14T22:36:27.785Z",
+      "permissionGroup": {
+        "id": 73,
+        "name": "Gates RIF",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=73"
+      },
       "tags": []
     },
     {
-      "kind": "dataset",
-      "id": 557,
-      "name": "Optum DOD Medical Diagnosis",
+      "id": 354,
+      "name": "FPM EMR Data",
+      "description": "Stanford has established a data partnership with the Foundation for Precision Medicine. You can learn more about the foundation and these data here: http://foundationforprecisionmedicine.org/",
+      "publicAccessLevel": "overview",
       "accessLevel": "overview",
-      "url": "https://redivis.com/StanfordPHS/557",
-      "createdAt": "2018-10-22T15:13:55.821Z",
-      "updatedAt": "2018-10-22T21:17:58.698Z",
-      "numRows": 0,
-      "numBytes": null,
-      "variableCount": null,
-      "temporalRange": null,
-      "currentVersion": null,
+      "url": "https://redivis.com/StanfordPHS/datasets/354",
+      "createdAt": "2018-06-05T14:49:58.130Z",
+      "updatedAt": "2018-06-05T15:21:06.882Z",
       "permissionGroup": {
-        "kind": "permissionGroup",
+        "id": 72,
+        "name": "FPM EMR Data",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=72"
+      },
+      "tags": []
+    },
+    {
+      "id": 356,
+      "name": "MarketScan Benefit Plan Design",
+      "description": "The MarketScan® Benefit Plan Design Database represents the benefit plans for large employers whose claims data comprise portions of the MarketScan Commercial Claims and Encounters Database. ",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/356",
+      "createdAt": "2018-06-08T21:48:01.918Z",
+      "updatedAt": "2020-01-31T21:29:26.113Z",
+      "permissionGroup": {
+        "id": 33,
+        "name": "MarketScan",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=33"
+      },
+      "tags": []
+    },
+    {
+      "id": 385,
+      "name": "CMS MCBS Permissions",
+      "description": "This is a blank dataset created to manage permissions for the CMS MCBS data. Please complete all permissions and you will be added to this dataset on the server.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/385",
+      "createdAt": "2018-06-19T22:28:39.020Z",
+      "updatedAt": "2019-04-13T00:25:03.507Z",
+      "permissionGroup": {
+        "id": 109,
+        "name": "CMS LDS",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=109"
+      },
+      "tags": []
+    },
+    {
+      "id": 391,
+      "name": "Medication Order SmartSets",
+      "description": "Medication order smart-set data from SHC only. This table can be linked to Encounter using the pat_enc_csn_id_coded join key and to medication orders in the Pharmacy table using the order_med_id_coded join key.",
+      "publicAccessLevel": "metadata",
+      "accessLevel": "metadata",
+      "url": "https://redivis.com/StanfordPHS/datasets/391",
+      "createdAt": "2018-07-18T04:00:49.164Z",
+      "updatedAt": "2018-12-08T04:08:49.163Z",
+      "permissionGroup": {
+        "id": 22,
+        "name": "STARR Tahoe",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=22"
+      },
+      "tags": []
+    },
+    {
+      "id": 600,
+      "name": "Optum - Cost factor table",
+      "description": "Standard cost is always normalized to the most current cost information. If you are conducting a financial analysis with more than 39 months of data, it is necessary to adjust the older quarters’ prices to the current year in order to get a consistent price.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/600",
+      "createdAt": "2018-11-19T17:46:14.446Z",
+      "updatedAt": "2018-12-19T03:31:14.015Z",
+      "permissionGroup": {
         "id": 27,
         "name": "Optum",
         "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=27"
       },
-      "collections": [
-        {
-          "kind": "collection",
-          "id": 2,
-          "name": "Optum",
-          "url": "https://redivis.com/StanfordPHS?collection=2"
-        }
-      ],
-      "entity": null,
       "tags": []
+    },
+    {
+      "id": 616,
+      "name": "CMS RIF - SURG",
+      "description": "These data are 100% of the surgeries for certain procedures from 2011 - 2014.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/616",
+      "createdAt": "2018-11-20T23:45:27.364Z",
+      "updatedAt": "2019-01-10T22:13:49.080Z",
+      "permissionGroup": {
+        "id": 97,
+        "name": "CMS-SURG",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=97"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "claims"
+        }
+      ]
+    },
+    {
+      "id": 676,
+      "name": "HCUP National Kid Inpatient Database",
+      "description": "HCUP National Kid's Inpatient Database KID.  Only years 2003, 2006, 2009, 2012 are available. ",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/676",
+      "createdAt": "2019-01-23T17:43:18.122Z",
+      "updatedAt": "2019-01-23T17:50:36.821Z",
+      "permissionGroup": {
+        "id": 67,
+        "name": "HCUP National",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=67"
+      },
+      "tags": []
+    },
+    {
+      "id": 709,
+      "name": "Medi-Span",
+      "description": "This is an empty dataset for the purposes of managing permissions and access to the Medi-Span data on the PHS servers.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/709",
+      "createdAt": "2019-01-29T16:57:54.723Z",
+      "updatedAt": "2019-01-29T16:57:59.761Z",
+      "permissionGroup": {
+        "id": 100,
+        "name": "Medi-Span",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=100"
+      },
+      "tags": []
+    },
+    {
+      "id": 714,
+      "name": "Historic US Census - 1870",
+      "description": "This dataset includes all individuals from the 1870 US census.\n",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/714",
+      "createdAt": "2019-02-01T18:46:23.166Z",
+      "updatedAt": "2020-01-31T21:21:07.347Z",
+      "permissionGroup": {
+        "id": 7,
+        "name": "IPUMS",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=7"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "social"
+        },
+        {
+          "kind": "tag",
+          "name": "economic"
+        },
+        {
+          "kind": "tag",
+          "name": "migration"
+        },
+        {
+          "kind": "tag",
+          "name": "race"
+        },
+        {
+          "kind": "tag",
+          "name": "census"
+        },
+        {
+          "kind": "tag",
+          "name": "adults"
+        },
+        {
+          "kind": "tag",
+          "name": "children"
+        }
+      ]
+    },
+    {
+      "id": 715,
+      "name": "Historic US Census - 1860",
+      "description": "This dataset includes all individuals from the 1860 US census.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/715",
+      "createdAt": "2019-02-01T22:49:23.354Z",
+      "updatedAt": "2020-01-31T21:21:33.291Z",
+      "permissionGroup": {
+        "id": 7,
+        "name": "IPUMS",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=7"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "census"
+        },
+        {
+          "kind": "tag",
+          "name": "race"
+        },
+        {
+          "kind": "tag",
+          "name": "economic"
+        },
+        {
+          "kind": "tag",
+          "name": "social"
+        },
+        {
+          "kind": "tag",
+          "name": "migration"
+        },
+        {
+          "kind": "tag",
+          "name": "adults"
+        },
+        {
+          "kind": "tag",
+          "name": "children"
+        }
+      ]
+    },
+    {
+      "id": 857,
+      "name": "PI Requirements (SU)",
+      "description": "This is not a dataset. These are the PHS requirements for being a PI using PHS high risk data.",
+      "publicAccessLevel": "overview",
+      "accessLevel": "overview",
+      "url": "https://redivis.com/StanfordPHS/datasets/857",
+      "createdAt": "2019-04-02T23:19:00.775Z",
+      "updatedAt": "2019-04-02T23:28:39.180Z",
+      "permissionGroup": {
+        "id": 106,
+        "name": "PI Requirements (SU)",
+        "url": "https://redivis.com/StanfordPHS/datasets?permissionGroup=106"
+      },
+      "tags": [
+        {
+          "kind": "tag",
+          "name": "claims"
+        }
+      ]
     }
   ]
 }

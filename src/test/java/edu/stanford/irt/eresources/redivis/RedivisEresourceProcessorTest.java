@@ -15,8 +15,6 @@ public class RedivisEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
-    private String getEndpoint;
-
     private String listEndpoint;
 
     private RedivisEresourceProcessor processor;
@@ -25,14 +23,13 @@ public class RedivisEresourceProcessorTest {
     public void setUp() throws Exception {
         this.eresourceHandler = mock(EresourceHandler.class);
         this.listEndpoint = RedivisEresourceProcessorTest.class.getResource("datasets.json").toExternalForm();
-        this.getEndpoint = RedivisEresourceProcessorTest.class.getResource("dataset.json").toExternalForm() + "?";
-        this.processor = new RedivisEresourceProcessor(this.listEndpoint, this.getEndpoint, this.eresourceHandler);
+        this.processor = new RedivisEresourceProcessor(this.listEndpoint, "token", this.eresourceHandler);
     }
 
     @Test
     public final void testProcess() {
         this.eresourceHandler.handleEresource(isA(RedivisEresource.class));
-        expectLastCall().times(6);
+        expectLastCall().times(25);
         replay(this.eresourceHandler);
         this.processor.process();
         verify(this.eresourceHandler);

@@ -23,7 +23,9 @@ public class RedivisEresourceTest {
     public void setUp() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        this.dataset = mapper.readValue(RedivisEresourceTest.class.getResourceAsStream("dataset.json"), Dataset.class);
+        DatasetList datasets = mapper.readValue(RedivisDatasetTest.class.getResourceAsStream("datasets.json"),
+                DatasetList.class);
+        this.dataset = datasets.getDatasets().get(0);
         this.eresource = new RedivisEresource(this.dataset);
     }
 
@@ -44,17 +46,17 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetDate() {
-        assertEquals("20180101", this.eresource.getDate());
+        assertEquals("20190101", this.eresource.getDate());
     }
 
     @Test
     public final void testGetDescription() {
-        assertTrue(this.eresource.getDescription().contains("individual inpatient claim"));
+        assertTrue(this.eresource.getDescription().contains("Born in Bradford study"));
     }
 
     @Test
     public final void testGetId() {
-        assertEquals("45", this.eresource.getId());
+        assertEquals("redivis-2", this.eresource.getId());
     }
 
     @Test
@@ -64,9 +66,9 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetKeywords() {
-        assertTrue(this.eresource.getKeywords().contains("STDPLAC"));
-        assertTrue(this.eresource.getKeywords().contains("medicare"));
-        assertTrue(this.eresource.getKeywords().contains("StanfordPHS"));
+        assertTrue(this.eresource.getKeywords().contains("poverty"));
+        assertTrue(this.eresource.getKeywords().contains("adults"));
+        assertTrue(this.eresource.getKeywords().contains("SPHS"));
     }
 
     @Test
@@ -131,7 +133,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetRecordId() {
-        assertEquals(45, this.eresource.getRecordId());
+        assertEquals(2, this.eresource.getRecordId());
     }
 
     @Test
@@ -151,7 +153,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetTitle() {
-        assertEquals("MarketScan Inpatient Services", this.eresource.getTitle());
+        assertEquals("Born in Bradford", this.eresource.getTitle());
     }
 
     @Test
@@ -171,7 +173,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetYear() {
-        assertEquals(2018, this.eresource.getYear());
+        assertEquals(2019, this.eresource.getYear());
     }
 
     @Test

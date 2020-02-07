@@ -51,7 +51,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public String getId() {
-        return this.dataset.getId();
+        return getRecordType() + "-" + this.dataset.getId();
     }
 
     @Override
@@ -193,10 +193,6 @@ public class RedivisEresource implements Eresource {
             sb.append(this.dataset.getDescription());
             sb.append("<br/>");
         }
-        for (DatasetCollection col : this.dataset.getCollections()) {
-            sb.append("Collection: ").append('[').append(col.getName()).append("](").append(col.getUrl()).append(')');
-            sb.append("<br/>");
-        }
         if (null != this.dataset.getUpdatedAt()) {
             sb.append("Updated: ").append(this.dataset.getUpdatedAt());
         }
@@ -206,25 +202,8 @@ public class RedivisEresource implements Eresource {
     private String buildKeywords() {
         StringBuilder sb = new StringBuilder("Redivis - Stanford Center for Population Health Sciences SPHS PHS ");
         sb.append(this.dataset.getName()).append(" ");
-        sb.append(this.dataset.getOrganization().getName()).append(" ");
-        sb.append(this.dataset.getOrganization().getShortName()).append(" ");
-        for (DatasetCollection col : this.dataset.getCollections()) {
-            sb.append(col.getName()).append(" ");
-        }
         for (Tag obj : this.dataset.getTags()) {
             sb.append(obj.getName()).append(" ");
-        }
-        for (Documentation obj : this.dataset.getDocumentations()) {
-            sb.append(obj.getText()).append(" ");
-        }
-        if (null != this.dataset.getEntity()) {
-            sb.append(this.dataset.getEntity().getName()).append(" ");
-        }
-        for (Variable obj : this.dataset.getVariables()) {
-            sb.append(obj.getName()).append(" ");
-            sb.append(obj.getDescription()).append(" ");
-            sb.append(obj.getLabel()).append(" ");
-            sb.append(obj.getValueLabels()).append(" ");
         }
         return sb.toString();
     }
