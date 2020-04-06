@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-04-06" version="2.3.12" description="maintenance release">
+            <action date="2020-04-06" dev="ryanmax" issue="LANEWEB-10560"  type="fix">
+                redivis dataset indexing is broken (once again)
+            </action>
+        </release>
         <release date="2020-02-10" version="2.3.11" description="maintenance release">
             <action date="2020-02-07" dev="ryanmax" issue="LANEWEB-10504"  type="fix">
                 redivis dataset indexing is broken
