@@ -8,9 +8,9 @@ import edu.stanford.irt.eresources.Version;
 
 public class DatasetVersion implements Version {
 
-    private Dataset dataset;
+    private Result dataset;
 
-    public DatasetVersion(final Dataset dataset) {
+    public DatasetVersion(final Result dataset) {
         this.dataset = dataset;
     }
 

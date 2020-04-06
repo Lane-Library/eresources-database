@@ -15,13 +15,13 @@ import org.junit.Test;
 
 public class DatasetVersionTest {
 
-    Dataset dataset;
+    Result dataset;
 
     DatasetVersion datasetVersion;
 
     @Before
     public void setUp() throws Exception {
-        this.dataset = mock(Dataset.class);
+        this.dataset = mock(Result.class);
         this.datasetVersion = new DatasetVersion(this.dataset);
     }
 

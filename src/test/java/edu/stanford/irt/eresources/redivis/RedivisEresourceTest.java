@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RedivisEresourceTest {
 
-    private Dataset dataset;
+    private Result dataset;
 
     private RedivisEresource eresource;
 
@@ -25,7 +25,7 @@ public class RedivisEresourceTest {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         DatasetList datasets = mapper.readValue(RedivisDatasetTest.class.getResourceAsStream("datasets.json"),
                 DatasetList.class);
-        this.dataset = datasets.getDatasets().get(0);
+        this.dataset = datasets.getResults().get(0);
         this.eresource = new RedivisEresource(this.dataset);
     }
 
@@ -46,7 +46,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetDate() {
-        assertEquals("20190101", this.eresource.getDate());
+        assertEquals("20200101", this.eresource.getDate());
     }
 
     @Test
@@ -56,7 +56,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetId() {
-        assertEquals("redivis-2", this.eresource.getId());
+        assertEquals("redivis-1", this.eresource.getId());
     }
 
     @Test
@@ -66,8 +66,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetKeywords() {
-        assertTrue(this.eresource.getKeywords().contains("poverty"));
-        assertTrue(this.eresource.getKeywords().contains("adults"));
+        assertTrue(this.eresource.getKeywords().contains("wellbeing"));
         assertTrue(this.eresource.getKeywords().contains("SPHS"));
     }
 
@@ -133,7 +132,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetRecordId() {
-        assertEquals(2, this.eresource.getRecordId());
+        assertEquals(1, this.eresource.getRecordId());
     }
 
     @Test
@@ -173,7 +172,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetYear() {
-        assertEquals(2019, this.eresource.getYear());
+        assertEquals(2020, this.eresource.getYear());
     }
 
     @Test

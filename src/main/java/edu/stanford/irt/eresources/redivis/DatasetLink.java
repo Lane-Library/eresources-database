@@ -5,13 +5,13 @@ import edu.stanford.irt.eresources.Version;
 
 public class DatasetLink implements Link {
 
-    private Dataset dataset;
+    private Result dataset;
 
     private String label = "Redivis";
 
     private Version version;
 
-    public DatasetLink(final Dataset dataset, final DatasetVersion version) {
+    public DatasetLink(final Result dataset, final DatasetVersion version) {
         this.dataset = dataset;
         this.version = version;
     }

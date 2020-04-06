@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class DatasetLinkTest {
 
-    private Dataset dataset;
+    private Result dataset;
 
     private DatasetLink datasetLink;
 
@@ -21,7 +21,7 @@ public class DatasetLinkTest {
     @Before
     public void setUp() throws Exception {
         this.version = mock(DatasetVersion.class);
-        this.dataset = mock(Dataset.class);
+        this.dataset = mock(Result.class);
         this.datasetLink = new DatasetLink(this.dataset, this.version);
     }
 

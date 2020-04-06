@@ -1,0 +1,28 @@
+{
+	"kind": "bad json,
+	"nextPageToken": null,
+	"foo": [
+		{
+			"kind": "dataset",
+			"referenceId": 10,
+			"name": "Optum Procedure Lookup",
+			"url": "https://redivis.com/stanfordphs/datasets/126",
+			"uri": "/datasets/stanfordphs.optum_procedure_lookup:10:v1_1",
+			"owner": {
+				"kind": "organization",
+				"name": "StanfordPHS"
+			},
+			"description": "Procedure Lookup Table – Descriptions and Categories for Procedure Codes",
+			"createdAt": 1497481722996,
+			"updatedAt": 1584743486283,
+			"tableCount": 1,
+			"numBytes": "35488537",
+			"totalNumBytes": "91111231",
+			"temporalPrecision": null,
+			"temporalRange": null,
+			"publicAccessLevel": "overview",
+			"scopedAccessLevel": "overview",
+			"accessLevel": "overview"
+		}
+	]
+}

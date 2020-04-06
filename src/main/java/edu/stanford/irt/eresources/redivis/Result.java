@@ -1,27 +1,22 @@
 package edu.stanford.irt.eresources.redivis;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
-public class Dataset {
+public class Result {
 
     private String accessLevel;
 
     private String description;
 
-    private String id;
-
     private String name;
 
-    private List<Tag> tags = Collections.emptyList();
+    private String referenceId;
 
     private Date updatedAt;
 
     private String url;
 
-    public Dataset() {
+    public Result() {
         // empty constructor
     }
 
@@ -40,13 +35,6 @@ public class Dataset {
     }
 
     /**
-     * @return the id
-     */
-    public String getId() {
-        return this.id;
-    }
-
-    /**
      * @return the name
      */
     public String getName() {
@@ -54,10 +42,10 @@ public class Dataset {
     }
 
     /**
-     * @return the tags
+     * @return the id
      */
-    public List<Tag> getTags() {
-        return new ArrayList<>(this.tags);
+    public String getReferenceId() {
+        return this.referenceId;
     }
 
     /**

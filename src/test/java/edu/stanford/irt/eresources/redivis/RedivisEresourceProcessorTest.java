@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.verify;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.EresourceHandler;
 
 public class RedivisEresourceProcessorTest {
@@ -29,7 +30,16 @@ public class RedivisEresourceProcessorTest {
     @Test
     public final void testProcess() {
         this.eresourceHandler.handleEresource(isA(RedivisEresource.class));
-        expectLastCall().times(25);
+        expectLastCall().times(10);
+        replay(this.eresourceHandler);
+        this.processor.process();
+        verify(this.eresourceHandler);
+    }
+
+    @Test(expected = EresourceDatabaseException.class)
+    public final void testProcessBadJson() {
+        this.listEndpoint = RedivisEresourceProcessorTest.class.getResource("datasets-exception.json").toExternalForm();
+        this.processor = new RedivisEresourceProcessor(this.listEndpoint, "token", this.eresourceHandler);
         replay(this.eresourceHandler);
         this.processor.process();
         verify(this.eresourceHandler);

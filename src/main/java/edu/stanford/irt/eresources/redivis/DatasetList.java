@@ -5,8 +5,8 @@ import java.util.List;
 
 public class DatasetList {
 
-    private List<Dataset> datasets;
-
+    private List<Result> results;
+    
     private String nextPageToken;
 
     public DatasetList() {
@@ -14,12 +14,15 @@ public class DatasetList {
     }
 
     /**
-     * @return the datasets
+     * @return the results (datasets)
      */
-    public List<Dataset> getDatasets() {
-        return new ArrayList<>(this.datasets);
+    public List<Result> getResults() {
+        if (null != this.results) {
+            return new ArrayList<>(this.results);
+        }
+        return new ArrayList<>();
     }
-
+    
     /**
      * @return the nextPageToken
      */

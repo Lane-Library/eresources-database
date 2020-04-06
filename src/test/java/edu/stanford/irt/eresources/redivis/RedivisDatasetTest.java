@@ -20,17 +20,16 @@ public final class RedivisDatasetTest {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         DatasetList datasets = mapper.readValue(RedivisDatasetTest.class.getResourceAsStream("datasets.json"),
                 DatasetList.class);
-        assertFalse(datasets.getDatasets().isEmpty());
+        assertFalse(datasets.getResults().isEmpty());
         assertNull(datasets.getNextPageToken());
-        Dataset dataset = datasets.getDatasets().get(0);
-        assertEquals("metadata", dataset.getAccessLevel());
+        Result dataset = datasets.getResults().get(0);
+        assertEquals("overview", dataset.getAccessLevel());
         assertEquals(
                 "The Born in Bradford study is tracking the health and wellbeing of over 13,500 children, and their parents born at Bradford Royal Infirmary between March 2007 and December 2010. ",
                 dataset.getDescription());
-        assertEquals("2", dataset.getId());
+        assertEquals("1", dataset.getReferenceId());
         assertEquals("Born in Bradford", dataset.getName());
-        assertEquals("claims", dataset.getTags().get(0).getName());
         assertTrue(dataset.getUpdatedAt().before(new Date()));
-        assertEquals("https://redivis.com/StanfordPHS/datasets/2", dataset.getUrl());
+        assertEquals("https://redivis.com/stanfordphs/datasets/2", dataset.getUrl());
     }
 }

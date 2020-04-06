@@ -39,31 +39,38 @@ public class RedivisEresourceProcessor extends AbstractEresourceProcessor {
 
     @Override
     public void process() {
-        for (Dataset dataset : getDatasets()) {
+        for (Result dataset : getDatasetListResults()) {
             RedivisEresource eresource = new RedivisEresource(dataset);
             this.eresourceHandler.handleEresource(eresource);
         }
     }
 
-    private List<Dataset> getDatasets() {
+    private String buildRequestString(final String pageToken) {
+        if (!pageToken.isEmpty()) {
+            return this.datasetsListEndpoint + "?pageToken=" + pageToken;
+        }
+        return this.datasetsListEndpoint;
+    }
+
+    private List<Result> getDatasetListResults() {
         String pageToken = "";
-        List<Dataset> datasets = new ArrayList<>();
+        List<Result> results = new ArrayList<>();
         try {
             while (null != pageToken) {
-                InputStream input = throttledFetch(this.datasetsListEndpoint + "?pageToken=" + pageToken);
+                InputStream input = throttledFetch(buildRequestString(pageToken));
                 DatasetList datasetList = this.mapper.readValue(input, DatasetList.class);
                 input.close();
-                for (Dataset dataset : datasetList.getDatasets()) {
-                    datasets.add(dataset);
+                for (Result dataset : datasetList.getResults()) {
+                    results.add(dataset);
                 }
                 pageToken = datasetList.getNextPageToken();
             }
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);
         }
-        return datasets;
+        return results;
     }
-
+    
     private InputStream throttledFetch(final String url) {
         try {
             URL urlObject = new URL(url);

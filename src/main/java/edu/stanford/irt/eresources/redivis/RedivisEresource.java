@@ -18,9 +18,9 @@ public class RedivisEresource implements Eresource {
 
     private static final List<String> TYPES = Arrays.asList("Dataset");
 
-    private Dataset dataset;
+    private Result dataset;
 
-    public RedivisEresource(final Dataset dataset) {
+    public RedivisEresource(final Result dataset) {
         this.dataset = dataset;
     }
 
@@ -51,7 +51,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public String getId() {
-        return getRecordType() + "-" + this.dataset.getId();
+        return getRecordType() + "-" + this.dataset.getReferenceId();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public int getRecordId() {
-        return Integer.parseInt(this.dataset.getId());
+        return Integer.parseInt(this.dataset.getReferenceId());
     }
 
     @Override
@@ -202,9 +202,7 @@ public class RedivisEresource implements Eresource {
     private String buildKeywords() {
         StringBuilder sb = new StringBuilder("Redivis - Stanford Center for Population Health Sciences SPHS PHS ");
         sb.append(this.dataset.getName()).append(" ");
-        for (Tag obj : this.dataset.getTags()) {
-            sb.append(obj.getName()).append(" ");
-        }
+        sb.append(this.dataset.getDescription()).append(" ");
         return sb.toString();
     }
 }
