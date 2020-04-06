@@ -36,7 +36,7 @@ public class HTMLPageEresourceProcessorTest {
         this.contentHandler.setDocumentLocator(isA(Locator.class));
         EasyMock.expectLastCall();
         this.contentHandler.startPrefixMapping(isA(String.class), isA(String.class));
-        EasyMock.expectLastCall();
+        EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
                 isA(AttributeCollectionImpl.class));
         EasyMock.expectLastCall().atLeastOnce();
