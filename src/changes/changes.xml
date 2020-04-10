@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-04-10" version="2.3.13" description="emergency release">
+            <action date="2020-04-10" dev="ryanmax" issue="LANEWEB-10563"  type="fix">
+                classes not being indexed in search since upgrade to Saxon-HE-10.0
+            </action>
+        </release>
         <release date="2020-04-06" version="2.3.12" description="maintenance release">
             <action date="2020-04-06" dev="ryanmax" issue="LANEWEB-10560"  type="fix">
                 redivis dataset indexing is broken (once again)
