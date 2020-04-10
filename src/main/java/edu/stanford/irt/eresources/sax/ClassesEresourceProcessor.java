@@ -65,6 +65,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
     public void process(final InputSource source) {
         try {
             this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            this.factory.setNamespaceAware(true);
             DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);
