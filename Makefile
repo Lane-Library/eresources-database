@@ -45,3 +45,4 @@ gcloud-image-add-git-tag: config-gcloud ## add last tag from git to latest gclou
     gcloud --quiet container images add-tag \
 	$${IMAGE_PATH}:latest \
 	$${IMAGE_PATH}:$${IMAGE_TAG}
+
