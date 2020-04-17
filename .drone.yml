@@ -11,8 +11,8 @@ pipeline:
     when:
       status: success
       branch: master
-
-  tag-test:
+      
+  gcloud-tag:
     image: gcr.io/clever-circlet-125504/gcloud
     pull: true
     commands:
