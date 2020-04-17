@@ -38,8 +38,10 @@ pull: pull-latest ## pull latest image from project's docker registry
 
 .PHONY: gcloud-image-add-git-tag 
 gcloud-image-add-git-tag: config-gcloud ## add last tag from git to latest gcloud registry image
-	@IMAGE_TAG=$(git describe --abbrev=0) \
-    IMAGE_PATH="$${DOCKER_REGISTRY}/$${GCP_PROJECT_ID}/$${DOCKER_IMAGE}" \
+	@IMAGE_TAG=$(git describe --abbrev=0) ;\
+    IMAGE_PATH="$${DOCKER_REGISTRY}/$${GCP_PROJECT_ID}/$${DOCKER_IMAGE}" ;\
+	echo "$${IMAGE_PATH}:latest $${IMAGE_PATH}:$${IMAGE_TAG}"; \
+	gcloud -v ;\
     gcloud --quiet container images add-tag \
 	$${IMAGE_PATH}:latest \
 	$${IMAGE_PATH}:$${IMAGE_TAG}
