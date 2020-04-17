@@ -16,11 +16,7 @@ pipeline:
     image: gcr.io/clever-circlet-125504/gcloud
     pull: true
     commands:
-      - source gcp-env.sh
-      - source env.sh
-      - export IMAGE_TAG=$(git describe --abbrev=0)
-      - export IMAGE_PATH="${DOCKER_REGISTRY}/${GCP_PROJECT_ID}/${DOCKER_IMAGE}"
-      - gcloud --quiet container images add-tag ${IMAGE_PATH}:latest ${IMAGE_PATH}:${IMAGE_TAG}
+      - make gcloud-image-add-git-tag
     secrets: [ gcp_key ]
     when:
       event: tag
