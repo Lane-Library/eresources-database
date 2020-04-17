@@ -19,6 +19,7 @@ endif
 # END FRAMEWORK SYNC
 
 # COMMON MAKEFILE PARTS INCLUDES
+include ${FRAMEWORK_DIR}/makefile_parts/config.mk
 include ${FRAMEWORK_DIR}/makefile_parts/shared.mk
 include ${FRAMEWORK_DIR}/makefile_parts/vault.mk
 include ${FRAMEWORK_DIR}/makefile_parts/docker-compose.mk
@@ -35,8 +36,10 @@ push: push-version push-latest ## push both latest and versioned image to docker
 .PHONY: pull
 pull: pull-latest ## pull latest image from project's docker registry
 
-.PHONY: gcloud-image-add-git-tag ## add last tag from git to latest gcloud registry image
-gcloud-image-add-git-tag:
+.PHONY: gcloud-image-add-git-tag 
+gcloud-image-add-git-tag: config-gcloud ## add last tag from git to latest gcloud registry image
 	@IMAGE_TAG=$(git describe --abbrev=0) \
     IMAGE_PATH="$${DOCKER_REGISTRY}/$${GCP_PROJECT_ID}/$${DOCKER_IMAGE}" \
-    gcloud --quiet container images add-tag $${IMAGE_PATH}:latest $${IMAGE_PATH}:$${IMAGE_TAG}
+    gcloud --quiet container images add-tag \
+	$${IMAGE_PATH}:latest \
+	$${IMAGE_PATH}:$${IMAGE_TAG}
