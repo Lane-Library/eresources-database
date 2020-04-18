@@ -1,4 +1,4 @@
-[![Build Status](https://ci.med.stanford.edu/api/badges/irt-lane/docker-eresources/status.svg)](https://ci.med.stanford.edu/irt-lane/docker-eresources)
+[![Build Status](https://ci.med.stanford.edu/api/badges/lane/eresources-database/status.svg)](https://ci.med.stanford.edu/lane/eresources-database)
 
 # eresources in Docker
 
