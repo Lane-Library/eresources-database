@@ -41,8 +41,6 @@ gcloud-image-add-git-tag: config-gcloud ## add last tag from git to latest gclou
 	@git fetch --tags; \
     export IMAGE_TAG=$$(git describe --abbrev=0); \
     export IMAGE_PATH="$${DOCKER_REGISTRY}/$${GCP_PROJECT_ID}/$${DOCKER_IMAGE}" ; \
-    echo "$${IMAGE_PATH}:latest $${IMAGE_PATH}:$${IMAGE_TAG}"; \
-	gcloud -v; \
 	gcloud --quiet container images add-tag \
 	$${IMAGE_PATH}:latest \
 	$${IMAGE_PATH}:$${IMAGE_TAG}
