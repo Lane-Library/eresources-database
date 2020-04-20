@@ -21,6 +21,7 @@ pipeline:
       - "${DRONE_COMMIT_SHA}"
     secrets: [ docker_username, docker_password ]
     when:
+      event: tag
       tag: eresources*
           
   add-last-git-tag:
@@ -30,6 +31,7 @@ pipeline:
       - make add-last-git-tag
     secrets: [ gcp_key ]
     when:
+      event: tag
       tag: eresources*
 
   downstream:
