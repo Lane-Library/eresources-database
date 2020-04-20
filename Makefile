@@ -36,11 +36,24 @@ push: push-version push-latest ## push both latest and versioned image to docker
 .PHONY: pull
 pull: pull-latest ## pull latest image from project's docker registry
 
-.PHONY: gcloud-image-add-git-tag 
-gcloud-image-add-git-tag: config-gcloud ## add last tag from git to latest gcloud registry image
-	@git fetch --tags; \
-    export IMAGE_TAG=$$(git describe --abbrev=0); \
-    export IMAGE_PATH="$${DOCKER_REGISTRY}/$${GCP_PROJECT_ID}/$${DOCKER_IMAGE}" ; \
+.PHONY: add-last-git-tag
+add-last-git-tag: config-gcloud ## add last git tag to latest gcloud registry image
+	@git fetch --tags
+	@export IMAGE_TAG=$$(git describe --abbrev=0); \
+	export IMAGE_PATH="$${DOCKER_REGISTRY}/$${GCP_PROJECT_ID}/$${DOCKER_IMAGE}" ; \
 	gcloud --quiet container images add-tag \
 	$${IMAGE_PATH}:latest \
 	$${IMAGE_PATH}:$${IMAGE_TAG}
+
+.PHONY: promote-last-git-tag
+promote-last-git-tag: config-gcloud ## promote last git tag to prod-latest
+	@git fetch --tags
+	@export IMAGE_TAG=$$(git describe --abbrev=0); \
+	export IMAGE_PATH="$${DOCKER_REGISTRY}/$${GCP_PROJECT_ID}/$${DOCKER_IMAGE}" ; \
+	export DOCKER_IMAGE_VERSION=$${IMAGE_TAG} ;\
+	echo "pulling $${DOCKER_IMAGE_VERSION}" ;\
+	make pull-version ;\
+	gcloud --quiet container images add-tag \
+	$${IMAGE_PATH}:$${IMAGE_TAG} \
+	$${IMAGE_PATH}:prod-latest ;\
+	echo "promoted $${IMAGE_TAG} to prod-latest"

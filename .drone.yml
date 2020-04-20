@@ -23,11 +23,11 @@ pipeline:
     when:
       tag: eresources*
           
-  gcloud-add-tag:
+  add-last-git-tag:
     image: gcr.io/clever-circlet-125504/gcloud
     pull: true
     commands:
-      - make gcloud-image-add-git-tag
+      - make add-last-git-tag
     secrets: [ gcp_key ]
     when:
       tag: eresources*
