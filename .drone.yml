@@ -10,16 +10,27 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     when:
       status: success
-      branch: master
-      
-  gcloud-tag:
+      event: [push, pull_request]
+    
+  publish-tag:
+    image: plugins/docker
+    registry: gcr.io
+    repo: gcr.io/som-laneweb/eresources
+    tag:
+      - latest
+      - "${DRONE_COMMIT_SHA}"
+    secrets: [ docker_username, docker_password ]
+    when:
+      tag: eresources*
+          
+  gcloud-add-tag:
     image: gcr.io/clever-circlet-125504/gcloud
     pull: true
     commands:
       - make gcloud-image-add-git-tag
     secrets: [ gcp_key ]
     when:
-      event: tag
+      tag: eresources*
 
   downstream:
     image: plugins/downstream
