@@ -6,6 +6,7 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-04-22" version="2.3.14" description="no changes: drone test"/>
         <release date="2020-04-10" version="2.3.13" description="emergency release">
             <action date="2020-04-10" dev="ryanmax" issue="LANEWEB-10563"  type="fix">
                 classes not being indexed in search since upgrade to Saxon-HE-10.0
