@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="libguideProcessor"
+        class="edu.stanford.irt.eresources.sax.LibGuideEresourceProcessor">
+        <constructor-arg name="contentHandler" ref="libguideTransformer"/>
+        <constructor-arg name="allGuidesURL" value="${eresources.libguides.allGuidesURL}"/>
+    </bean>
+    <bean id= "libguideTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/lane/libguides/libguide2er.xsl"/>
+        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+        <property name="namespace" value=""/>
+        <property name="element" value="eresources"/>
+        <property name="contentHandler" ref="libguideBuilder"/>
+    </bean>
+    <bean id="libguideBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+</beans>

@@ -7,6 +7,7 @@
     <import resource="web-processor.xml"/>
     <import resource="classes-processor.xml"/>
     <import resource="laneblog-processor.xml"/>
+    <import resource="libguides/libguide-processor.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.LaneReload" parent="abstractSolrLoader">
     	<property name="processors">
             <list>
@@ -14,6 +15,7 @@
                 <ref bean="webProcessor"/>
                 <ref bean="classesProcessor"/>
                 <ref bean="laneblogProcessor"/>
+                <ref bean="libguideProcessor"/>
             </list>
         </property>
     </bean>
