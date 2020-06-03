@@ -132,11 +132,11 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             NodeList recordList = doc.getElementsByTagName("record");
             for (int i = 0; i < recordList.getLength(); i++) {
                 Element recordElm = (Element) recordList.item(i);
-                String modifiedDate = recordElm.getElementsByTagName("datestamp").item(0).getTextContent();
-                String link = recordElm.getElementsByTagName("dc:identifier").item(0).getTextContent();
+                String modifiedDate = maybeFetchTextContent(recordElm, "datestamp");
+                String link = maybeFetchTextContent(recordElm, "dc:identifier");
                 String id = Integer.toString(link.hashCode());
-                String description = recordElm.getElementsByTagName("dc:description").item(0).getTextContent();
-                String title = recordElm.getElementsByTagName("dc:title").item(0).getTextContent();
+                String description = maybeFetchTextContent(recordElm, "dc:description");
+                String title = maybeFetchTextContent(recordElm, "dc:title");
                 guides.add(new Guide(id, link, title, description, modifiedDate));
             }
         } catch (SAXException | ParserConfigurationException | IOException e) {
@@ -148,5 +148,14 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
     private long getUpdateDate(final String date) {
         LocalDateTime ldt = LocalDateTime.parse(date.trim(), FORMATTER);
         return ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    private String maybeFetchTextContent(final Element elm, final String tagName) {
+        String value = "";
+        NodeList nodeList = elm.getElementsByTagName(tagName);
+        if (nodeList.getLength() > 0) {
+            value = nodeList.item(0).getTextContent();
+        }
+        return value;
     }
 }
