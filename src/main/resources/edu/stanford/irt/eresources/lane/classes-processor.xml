@@ -5,7 +5,6 @@
         <constructor-arg name="contentHandler" ref="classesTransformer"/>
         <constructor-arg name="allClassesURL">
             <list>
-                <value>${eresources.lane-host}/classes/archives.xml</value>
                 <value>${eresources.lane-host}/classes/open-classes.xml</value>
             </list>
         </constructor-arg>
