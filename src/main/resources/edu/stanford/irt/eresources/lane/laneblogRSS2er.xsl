@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     version="2.0">
 
     <xsl:template match="channel/item">
@@ -12,6 +13,9 @@
                 </xsl:when>
                 <xsl:otherwise>0</xsl:otherwise>
             </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="creator">
+            <xsl:value-of select="normalize-space(dc:creator)"/>
         </xsl:variable>
         <eresource  id="laneblog-{$blog-id}" recordId="{$blog-id}" type="web"
             update="19690101000000">
@@ -25,6 +29,10 @@
             </keywords>
             <year><xsl:value-of select="replace(pubDate,'.* (\d{4}).*','$1')"/></year>
             <er-date><xsl:value-of select="replace(pubDate,'.*, (\d{2}) ([A-Z][a-z]{2}) (\d{4}).*','$3 $2 $1')"/></er-date>
+            <xsl:if test="contains($creator,' ')">
+                <publicationAuthor><xsl:value-of select="concat(substring-after($creator, ' ') , ', ' , substring-before($creator, ' '))"/></publicationAuthor>
+                <publicationAuthorFacetable><xsl:value-of select="concat(substring-after($creator, ' ') , ', ' , substring-before($creator, ' '))"/></publicationAuthorFacetable>
+            </xsl:if>
             <version>
                 <link>
                     <label>
