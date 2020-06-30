@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-06-30" version="2.3.16" description="maintenance release">
+            <action date="2020-06-30" dev="ryanmax" issue="LANEWEB-10580"  type="fix">
+                class and laneblog authors not appearing in facets 
+            </action>
+        </release>
         <release date="2020-06-23" version="2.3.15" description="maintenance release">
             <action date="2020-06-11" dev="ryanmax" issue="LANEWC-10"  type="update">
                 Sunset Past Classes Webpages 
