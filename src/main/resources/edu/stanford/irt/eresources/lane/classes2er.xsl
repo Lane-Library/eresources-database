@@ -38,10 +38,11 @@
 			</description>
 			<xsl:for-each select="./lc:event_instructors/lc:instructor" >
 				 <xsl:if test="not(contains(./lc:lname, ','))">
-				 	<publicationAuthor><xsl:value-of select="concat(./lc:lname , ', ' , ./lc:fname)"/></publicationAuthor>
+				 	<publicationAuthorFacetable><xsl:value-of select="concat(./lc:lname , ', ' , ./lc:fname)"/></publicationAuthorFacetable>
 				 </xsl:if>
 				 <xsl:if test="contains(./lc:lname, ',')">
 				 	<publicationAuthor><xsl:value-of select="concat(substring-before(./lc:lname, ',') , ', ' , ./lc:fname)"/></publicationAuthor>
+				 	<publicationAuthorFacetable><xsl:value-of select="concat(substring-before(./lc:lname, ',') , ', ' , ./lc:fname)"/></publicationAuthorFacetable>
 				 </xsl:if>
 			</xsl:for-each>
 			<version>
