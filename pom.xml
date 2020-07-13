@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>64-java11</version>
+        <version>65</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.3.17-SNAPSHOT</version>
@@ -153,7 +153,7 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>journal-titles</artifactId>
-            <version>1.0.13</version>
+            <version>1.0.14</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.irt.suggest</groupId>
