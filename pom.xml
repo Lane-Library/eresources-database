@@ -12,12 +12,6 @@
         <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-    <distributionManagement>
-        <site>
-            <id>lane-preprod</id>
-            <url>scp://lane-preprod.stanford.edu/var/www/maven/projects/eresources-database</url>
-        </site>
-    </distributionManagement>
     <dependencies>
         <dependency>
             <artifactId>aopalliance</artifactId>
