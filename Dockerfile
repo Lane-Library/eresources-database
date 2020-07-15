@@ -14,7 +14,7 @@ COPY pom.xml settings.xml /tmp/
 COPY src /tmp/src/
 WORKDIR /tmp/
 COPY --from=PREVIOUS_IMAGE /root/.m2 /root/.m2
-RUN mvn -B -s settings.xml -DskipTests clean package
+RUN mvn -B -s settings.xml clean package
 # purge maven dependencies that haven't been accessed recently
 RUN find /root/.m2/repository -atime +30 -iname '*.pom' \
     | while read pom; do parent=`dirname "$pom"`; rm -Rf "$parent"; done
