@@ -6,11 +6,11 @@
         <version>68</version>
     </parent>
     <artifactId>eresources-database</artifactId>
-    <version>2.3.19-SNAPSHOT</version>
+    <version>2.3.19</version>
     <name>eresources-database</name>
     <scm>
         <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>eresources-database-2.3.19</tag>
     </scm>
     <dependencies>
         <dependency>
