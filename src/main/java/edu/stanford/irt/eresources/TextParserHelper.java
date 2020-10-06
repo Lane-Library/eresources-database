@@ -7,7 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -24,6 +26,8 @@ public final class TextParserHelper {
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
     private static final Pattern DIGIT_OR_X_PATTERN = Pattern.compile("[^\\dxX]+");
+
+    private static final Pattern DOI_PATTERN = Pattern.compile("\\bdoi:(10\\.[^ ]+)\\b");
 
     private static final String EMPTY = "";
 
@@ -137,6 +141,22 @@ public final class TextParserHelper {
             months.add(explodeMonth(m.group()));
         }
         return months.stream().collect(Collectors.joining(SPACE));
+    }
+
+    /**
+     * Extract DOIs from a string of text
+     *
+     * @param text
+     *            incoming string with possible DOIs
+     * @return cleaned ORCID where possible
+     */
+    public static List<String> extractDois(final String text) {
+        List<String> dois = new ArrayList<>();
+        Matcher m = DOI_PATTERN.matcher(text);
+        while (m.find()) {
+            dois.add(m.group(1));
+        }
+        return dois;
     }
 
     /**

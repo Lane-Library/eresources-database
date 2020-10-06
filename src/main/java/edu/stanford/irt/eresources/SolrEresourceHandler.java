@@ -146,12 +146,13 @@ public class SolrEresourceHandler implements EresourceHandler {
     protected void insertEresource(final Eresource eresource) {
         SolrInputDocument doc = new SolrInputDocument();
         String sortTitle = getSortTitle(eresource);
+        String kws = getKeywords(eresource);
         int[] itemCount = eresource.getItemCount();
         doc.addField("id", eresource.getId());
         doc.addField("recordId", Integer.toString(eresource.getRecordId()));
         doc.addField("recordType", eresource.getRecordType());
         doc.addField("description", eresource.getDescription());
-        doc.addField("text", getKeywords(eresource));
+        doc.addField("text", kws);
         doc.addField("title", eresource.getTitle());
         for (String altTitle : eresource.getAbbreviatedTitles()) {
             doc.addField("title_abbr", altTitle);
@@ -194,6 +195,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
         doc.addField("versionsJson", versionsToJson(eresource));
         doc.addField("citationText", buildCitationKeywords(eresource));
+        maybeAddDoi(kws, doc);
         maybeAddIsxns(eresource, doc);
         maybeAddProxyHosts(eresource, doc);
         handleMesh(eresource, doc);
@@ -331,6 +333,14 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private boolean isMarc(final Eresource eresource) {
         return AbstractMarcEresource.class.isAssignableFrom(eresource.getClass());
+    }
+
+    private void maybeAddDoi(final String keywords, final SolrInputDocument doc) {
+        // for PubMed data, the first DOI returned by extractDois should be most authoritative
+        List<String> dois = TextParserHelper.extractDois(keywords);
+        if (!dois.isEmpty()) {
+            doc.addField("dois", dois.get(0));
+        }
     }
 
     private void maybeAddIsxns(final Eresource eresource, final SolrInputDocument doc) {
