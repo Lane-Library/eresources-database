@@ -148,7 +148,7 @@ public final class TextParserHelper {
      *
      * @param text
      *            incoming string with possible DOIs
-     * @return cleaned ORCID where possible
+     * @return list of DOIs (first will be most authoritative for PubMed)
      */
     public static List<String> extractDois(final String text) {
         List<String> dois = new ArrayList<>();
