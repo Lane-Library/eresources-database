@@ -40,7 +40,7 @@ public class LibGuideEresourceProcessorTest {
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.characters("\n".toCharArray(), 0, 1);
         EasyMock.expectLastCall().atLeastOnce();
-        this.contentHandler.characters("Test Guide".toCharArray(), 0, 10);
+        this.contentHandler.characters("Subject Guide".toCharArray(), 0, 13);
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.characters("\n\n".toCharArray(), 0, 2);
         EasyMock.expectLastCall().atLeastOnce();

@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -59,10 +60,13 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
         }
     }
 
+    private static final String ERESOURCES = "eresources";
+
+    private static final Pattern NO_INDEX_KEYWORDS = Pattern
+            .compile("libguides best practices|test guide|internal guide", Pattern.CASE_INSENSITIVE);
+
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
             .appendPattern("yyyy-MM-dd'T'HH:mm:ssz").toFormatter();
-
-    private static final String ERESOURCES = "eresources";
 
     private String allGuidesURL;
 
@@ -137,7 +141,10 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                 String id = Integer.toString(link.hashCode());
                 String description = maybeFetchTextContent(recordElm, "dc:description");
                 String title = maybeFetchTextContent(recordElm, "dc:title");
-                guides.add(new Guide(id, link, title, description, modifiedDate));
+                Guide guide = new Guide(id, link, title, description, modifiedDate);
+                if (!noIndex(guide)) {
+                    guides.add(guide);
+                }
             }
         } catch (SAXException | ParserConfigurationException | IOException e) {
             throw new EresourceDatabaseException(e);
@@ -157,5 +164,13 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             value = nodeList.item(0).getTextContent();
         }
         return value;
+    }
+
+    private boolean noIndex(final Guide guide) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(guide.title);
+        sb.append(' ');
+        sb.append(guide.description);
+        return NO_INDEX_KEYWORDS.matcher(sb.toString()).find();
     }
 }
