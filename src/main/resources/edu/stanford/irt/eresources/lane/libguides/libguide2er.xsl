@@ -4,7 +4,7 @@
         version="2.0">
 
     <xsl:template match="html">
-        <eresource  id="web-{@id}" recordId="{@id}" type="web" update="{@update}">
+        <eresource id="libguide-{@id}" recordId="{@id}" type="web" update="{@update}">
             <xsl:variable name="keywords">
                 <xsl:apply-templates/>
             </xsl:variable>
