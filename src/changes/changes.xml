@@ -6,6 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-10-24" version="2.4.0" description="libguides release">
+            <action date="2020-10-07" dev="ryanmax" issue="LANEWEB-10575"  type="add">
+                LibGuides should be indexed and searchable in Lane Search
+            </action>
+            <action date="2020-09-23" dev="ryanmax" issue="LANEWEB-10624"  type="update">
+                extract DOIs from PubMed articles
+            </action>
+        </release>
         <release date="2020-09-24" version="2.3.19" description="maintenance release">
             <action date="2020-09-23" dev="ryanmax" issue="LANEWEB-10611"  type="update">
                 versions sort order for "current edition"
