@@ -142,7 +142,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                 String description = maybeFetchTextContent(recordElm, "dc:description");
                 String title = maybeFetchTextContent(recordElm, "dc:title");
                 Guide guide = new Guide(id, link, title, description, modifiedDate);
-                if (!noIndex(guide)) {
+                if (isIndexable(guide)) {
                     guides.add(guide);
                 }
             }
@@ -157,6 +157,14 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
         return ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
+    private boolean isIndexable(final Guide guide) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(guide.title);
+        sb.append(' ');
+        sb.append(guide.description);
+        return !NO_INDEX_KEYWORDS.matcher(sb.toString()).find();
+    }
+
     private String maybeFetchTextContent(final Element elm, final String tagName) {
         String value = "";
         NodeList nodeList = elm.getElementsByTagName(tagName);
@@ -164,13 +172,5 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             value = nodeList.item(0).getTextContent();
         }
         return value;
-    }
-
-    private boolean noIndex(final Guide guide) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(guide.title);
-        sb.append(' ');
-        sb.append(guide.description);
-        return NO_INDEX_KEYWORDS.matcher(sb.toString()).find();
     }
 }
