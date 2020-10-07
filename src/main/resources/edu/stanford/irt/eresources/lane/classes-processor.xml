@@ -2,26 +2,26 @@
 <beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="classesProcessor"
         class="edu.stanford.irt.eresources.sax.ClassesEresourceProcessor">
-        <constructor-arg name="contentHandler" ref="classesTransformer"/>
-        <constructor-arg name="allClassesURL">
-            <list>
-                <value>${eresources.lane-host}/classes/open-classes.xml</value>
-            </list>
-        </constructor-arg>
+        <constructor-arg index="1" name="contentHandler" ref="classesTransformer"/>
+        <constructor-arg index="0" name="classesServiceURI" ref="classesURI"/>
     </bean>
     <bean id= "classesTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/lane/classes2er.xsl"/>
         <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
-        <property name="namespace" value="http://lane.stanford.edu/laneclasses"/>
+        <property name="namespace" value=""/>
         <property name="element" value="classes"/>
         <property name="contentHandler" ref="classesBuilder"/>
-        <property name="parameters">
-            <map>
-                <entry key="lane-host" value="${eresources.lane-host}"/>
-            </map>
-        </property>
     </bean>
     <bean id="classesBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
         <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+    <bean id="classesURI" class="java.net.URI">
+        <constructor-arg value="${eresources.libcal-classes.scheme}"/>
+        <constructor-arg value=""/>
+        <constructor-arg value="${eresources.libcal-classes.host}"/>
+        <constructor-arg value="${eresources.libcal-classes.port}"/>
+        <constructor-arg value="${eresources.libcal-classes.path}"/>
+        <constructor-arg value=""/>
+        <constructor-arg value=""/>
     </bean>
 </beans>

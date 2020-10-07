@@ -57,8 +57,13 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     private int calculateAdditionalTextScore(final String additionalText, final int score) {
         int calculatedScore = score;
-        if (additionalText != null && additionalText.contains("delayed")) {
-            calculatedScore--;
+        if (additionalText != null) {
+            if (additionalText.contains("delayed")) {
+                calculatedScore--;
+            }
+            if (additionalText.equalsIgnoreCase("current edition")) {
+                calculatedScore++;
+            }
         }
         return calculatedScore;
     }
@@ -79,8 +84,9 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      * Calculate sorting score for version based on:
      *
      * <pre>
-     * ++ dates or summaryHoldings end in "-"
-     * -- additionalText has "delayed" in it
+     * ++ dates or summaryHoldings (866 ^v) end in "-"
+     * ++ additionalText (866 ^z) is "current edition"
+     * -- additionalText (866 ^z) has "delayed" in it
      * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
      * -- catalog links (print)

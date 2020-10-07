@@ -1,9 +1,8 @@
 package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -29,7 +28,7 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String ERESOURCES = "eresources";
 
-    private List<String> allClassesURL;
+    private URI classesServiceURI;
 
     private ContentHandler contentHandler;
 
@@ -40,8 +39,8 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    public ClassesEresourceProcessor(final List<String> allClassesURL, final ContentHandler contentHandler) {
-        this.allClassesURL = new ArrayList<>(allClassesURL);
+    public ClassesEresourceProcessor(final URI classesServiceURI, final ContentHandler contentHandler) {
+        this.classesServiceURI = classesServiceURI;
         this.contentHandler = contentHandler;
     }
 
@@ -50,11 +49,9 @@ public class ClassesEresourceProcessor extends AbstractEresourceProcessor {
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
-            for (String urlString : this.allClassesURL) {
-                URL url = new URL(urlString);
-                InputSource source = new InputSource(url.openConnection().getInputStream());
-                process(source);
-            }
+            URL url = this.classesServiceURI.toURL();
+            InputSource source = new InputSource(url.openConnection().getInputStream());
+            process(source);
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
         } catch (SAXException | IOException e) {

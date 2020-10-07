@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.pubmed;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ public class PubMedSearcherTest {
     public void setUp() throws Exception {
         this.searchers = new ArrayList<PubmedSearcher>();
         this.searchers.add(new PubmedSearcher("field_foo", "value_foo", "24120354", null, "version"));
-        this.searchers.add(new PubmedSearcher("field_bar", "value_bar", "24120355", null, "version"));
     }
 
     @Test
@@ -35,10 +35,8 @@ public class PubMedSearcherTest {
     public final void testSearcher() throws Exception {
         if (EutilsIsReachable.eutilsIsReachable()) {
             PubmedSpecialTypesManager manager = new PubmedSpecialTypesManager(this.searchers);
-            assertTrue(manager.getTypes("24120354").iterator().next()[0].equals("field_foo"));
-            assertTrue(manager.getTypes("24120354").iterator().next()[1].equals("value_foo"));
-            assertTrue(manager.getTypes("24120355").iterator().next()[0].equals("field_bar"));
-            assertTrue(manager.getTypes("24120355").iterator().next()[1].equals("value_bar"));
+            assertEquals("field_foo", manager.getTypes("24120354").iterator().next()[0]);
+            assertEquals("value_foo", manager.getTypes("24120354").iterator().next()[1]);
         }
     }
 }

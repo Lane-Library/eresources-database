@@ -44,6 +44,14 @@ public class TextParserHelperTest {
     }
 
     @Test
+    public final void testExtractDois() {
+        String input = "this is a doi:10.1016/j.lfs.2015.10.025 and this is another doi:10.109/zas and this is not doi:100.foo/ard";
+        assertEquals(2, TextParserHelper.extractDois(input).size());
+        assertEquals("10.1016/j.lfs.2015.10.025", TextParserHelper.extractDois(input).get(0));
+        assertEquals("10.109/zas", TextParserHelper.extractDois(input).get(1));
+    }
+
+    @Test
     public final void testMaybeStripTrailingPeriod() {
         assertEquals("string ", TextParserHelper.maybeStripTrailingPeriod("string "));
         assertEquals("string ", TextParserHelper.maybeStripTrailingPeriod("string ."));

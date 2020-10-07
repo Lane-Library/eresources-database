@@ -6,6 +6,26 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-09-24" version="2.3.19" description="maintenance release">
+            <action date="2020-09-23" dev="ryanmax" issue="LANEWEB-10611"  type="update">
+                versions sort order for "current edition"
+            </action>
+        </release>
+        <release date="2020-08-20" version="2.3.18" description="emergency release">
+            <action date="2020-08-20" dev="ryanmax" issue="LANEWEB-10589"  type="fix">
+                libcal classes service name changed
+            </action>
+        </release>
+        <release date="2020-07-17" version="2.3.17" description="maintenance release">
+            <action date="2020-06-30" dev="ryanmax" issue="LANEWEB-10581"  type="update">
+                index LibCal classes 
+            </action>
+        </release>
+        <release date="2020-06-30" version="2.3.16" description="maintenance release">
+            <action date="2020-06-30" dev="ryanmax" issue="LANEWEB-10580"  type="fix">
+                class and laneblog authors not appearing in facets 
+            </action>
+        </release>
         <release date="2020-06-23" version="2.3.15" description="maintenance release">
             <action date="2020-06-11" dev="ryanmax" issue="LANEWC-10"  type="update">
                 Sunset Past Classes Webpages 

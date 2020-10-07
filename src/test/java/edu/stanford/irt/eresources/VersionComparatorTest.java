@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.stanford.irt.eresources.VersionComparator;
 import edu.stanford.irt.eresources.sax.SAXLink;
 import edu.stanford.irt.eresources.sax.SAXVersion;
 
@@ -68,6 +67,16 @@ public class VersionComparatorTest {
         this.v1.addLink(this.link);
         this.v2.addLink(this.link);
         assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
+    }
+
+    @Test
+    public void testCompareCurrentHoldings() {
+        this.v1.setSummaryHoldings("v. 1-");
+        this.v1.addLink(this.link);
+        this.v2.addLink(this.link);
+        this.v2.setSummaryHoldings("v. 1-");
+        this.v2.setAdditionalText("current edition");
+        assertTrue(this.comparator.compare(this.v2, this.v1) < 0);
     }
 
     @Test

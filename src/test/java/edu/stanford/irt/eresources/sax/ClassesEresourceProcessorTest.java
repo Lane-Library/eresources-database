@@ -2,8 +2,7 @@ package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.isA;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -18,7 +17,7 @@ import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
 public class ClassesEresourceProcessorTest {
 
-    List<String> allClassesURL;
+    URI classesURI;
 
     ContentHandler contentHandler;
 
@@ -26,10 +25,9 @@ public class ClassesEresourceProcessorTest {
 
     @Before
     public void setUp() throws Exception {
-        this.allClassesURL = new ArrayList<>();
-        this.allClassesURL.add("file:src/test/resources/edu/stanford/irt/eresources/sax/class.xml");
+        this.classesURI = new URI("file:src/test/resources/edu/stanford/irt/eresources/sax/class.xml");
         this.contentHandler = EasyMock.mock(ContentHandler.class);
-        this.processor = new ClassesEresourceProcessor(this.allClassesURL, this.contentHandler);
+        this.processor = new ClassesEresourceProcessor(this.classesURI, this.contentHandler);
     }
 
     @Test
@@ -41,10 +39,6 @@ public class ClassesEresourceProcessorTest {
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.setDocumentLocator(isA(Locator.class));
         EasyMock.expectLastCall();
-        this.contentHandler.startPrefixMapping(isA(String.class), isA(String.class));
-        EasyMock.expectLastCall().atLeastOnce();
-        this.contentHandler.endPrefixMapping("");
-        EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
                 isA(AttributeCollectionImpl.class));
         EasyMock.expectLastCall().atLeastOnce();
