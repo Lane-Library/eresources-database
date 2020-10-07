@@ -154,7 +154,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
 
     private long getUpdateDate(final String date) {
         LocalDateTime ldt = LocalDateTime.parse(date.trim(), FORMATTER);
-        return ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return ldt.atZone(ZoneId.of("America/Los_Angeles")).toInstant().toEpochMilli();
     }
 
     private boolean isIndexable(final Guide guide) {
