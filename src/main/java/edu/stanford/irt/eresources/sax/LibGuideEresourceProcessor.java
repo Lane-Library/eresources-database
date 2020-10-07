@@ -35,6 +35,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.TextParserHelper;
 
 public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
 
@@ -138,7 +139,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                 Element recordElm = (Element) recordList.item(i);
                 String modifiedDate = maybeFetchTextContent(recordElm, "datestamp");
                 String link = maybeFetchTextContent(recordElm, "dc:identifier");
-                String id = Integer.toString(link.hashCode());
+                String id = TextParserHelper.cleanId(link.hashCode());
                 String description = maybeFetchTextContent(recordElm, "dc:description");
                 String title = maybeFetchTextContent(recordElm, "dc:title");
                 Guide guide = new Guide(id, link, title, description, modifiedDate);

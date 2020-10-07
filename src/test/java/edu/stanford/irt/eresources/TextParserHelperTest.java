@@ -24,6 +24,12 @@ public class TextParserHelperTest {
     }
 
     @Test
+    public final void testCleanId() {
+        assertEquals("981102488", TextParserHelper.cleanId(981102488));
+        assertEquals("981102488", TextParserHelper.cleanId(-981102488));
+    }
+
+    @Test
     public final void testCleanIsxn() {
         assertEquals("981102488x", TextParserHelper.cleanIsxn("981102488X"));
         assertEquals("0721619673", TextParserHelper.cleanIsxn("0721619673 (v. 1)"));

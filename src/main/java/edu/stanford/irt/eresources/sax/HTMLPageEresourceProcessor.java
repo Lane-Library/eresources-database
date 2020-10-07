@@ -28,6 +28,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.TextParserHelper;
 
 public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
@@ -73,7 +74,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
                 Document doc = parser.getDocument();
                 if (file.lastModified() > getStartTime() && isSearchable(doc)) {
                     Element root = doc.getDocumentElement();
-                    root.setAttribute("id", Integer.toString(fileName.hashCode()));
+                    root.setAttribute("id", TextParserHelper.cleanId(fileName.hashCode()));
                     root.setAttribute("update", this.dateFormat.format(Long.valueOf(file.lastModified())));
                     root.setAttribute("file", fileName.substring(this.basePath.length()));
                     tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));

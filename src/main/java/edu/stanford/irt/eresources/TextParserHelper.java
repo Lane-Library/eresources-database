@@ -61,6 +61,17 @@ public final class TextParserHelper {
     }
 
     /**
+     * strip negatives from IDs created from hashCode
+     *
+     * @param int
+     *            hashCode
+     * @return cleaned ID
+     */
+    public static String cleanId(final int hashCode) {
+        return Integer.toString(hashCode).replace("-", "");
+    }
+
+    /**
      * ISBNs and ISSNs should only have digits or Xs. Ignore all but the first space-separated component of string.
      *
      * @param isxn
@@ -73,7 +84,7 @@ public final class TextParserHelper {
         }
         return isxn;
     }
-
+    
     /**
      * ORCID data from PubMed is dirty. Extract a valid ORCID if possible, otherwise just return entire string.
      *
