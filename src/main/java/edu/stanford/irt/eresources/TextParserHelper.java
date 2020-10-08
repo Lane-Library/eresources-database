@@ -63,8 +63,8 @@ public final class TextParserHelper {
     /**
      * strip negatives from IDs created from hashCode
      *
-     * @param int
-     *            hashCode
+     * @param hashCode
+     *            int used as an ID
      * @return cleaned ID
      */
     public static String cleanId(final int hashCode) {
