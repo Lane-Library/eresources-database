@@ -6,7 +6,10 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
-        <release date="2020-10-07" version="2.4.0" description="libguides release">
+        <release date="2020-10-08" version="2.4.0" description="libguides release">
+            <action date="2020-10-07" dev="ryanmax" issue="LANEWEB-10625"  type="fix">
+                permalinks broken for Lane Web Page records
+            </action>
             <action date="2020-10-07" dev="ryanmax" issue="LANEWEB-10575"  type="add">
                 LibGuides should be indexed and searchable in Lane Search
             </action>
