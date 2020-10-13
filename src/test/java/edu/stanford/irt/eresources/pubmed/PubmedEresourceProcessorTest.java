@@ -2,8 +2,6 @@ package edu.stanford.irt.eresources.pubmed;
 
 import static org.easymock.EasyMock.isA;
 
-import java.net.UnknownHostException;
-
 import javax.xml.XMLConstants;
 
 import org.easymock.EasyMock;
@@ -42,19 +40,6 @@ public class PubmedEresourceProcessorTest {
         EasyMock.verify(this.xmlReader);
     }
 
-    @Test
-    public final void testUnknownHostException() throws Exception {
-        this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        EasyMock.expectLastCall().times(2);
-        this.xmlReader.parse(isA(InputSource.class));
-        EasyMock.expectLastCall().andThrow(new UnknownHostException("unknown host")).times(2);
-        this.xmlReader.parse(isA(InputSource.class));
-        EasyMock.expectLastCall().anyTimes();
-        EasyMock.replay(this.xmlReader);
-        this.processor.process();
-        EasyMock.verify(this.xmlReader);
-    }
-    
     @Test
     public final void testNullBasePath() throws Exception {
         this.processor = new PubmedEresourceProcessor(null, this.xmlReader);

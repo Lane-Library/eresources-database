@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,10 +23,6 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(PubmedEresourceProcessor.class);
-
-    private static final int MAX_PARSES = 5;
-
-    private static final long SLEEP_TIME = 5_000L;
 
     private String basePath;
 
@@ -83,9 +78,6 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.xmlReader.parse(source);
-        } catch (UnknownHostException euh) {
-            log.warn("couldn't reach host: {}", euh.getMessage());
-            retryParse(source, file, 1);
         } catch (IOException | SAXException e) {
             log.error("problem parsing {}", file);
             throw new EresourceDatabaseException(e);
@@ -95,30 +87,6 @@ public class PubmedEresourceProcessor extends AbstractEresourceProcessor {
             log.info("processed: {}", file);
         } else {
             log.error("couldn't update file's timestamp: {}; make sure it's not loading on every run", file);
-        }
-    }
-
-    private void retryParse(final InputSource source, final File file, final int attempt) {
-        if (attempt <= MAX_PARSES) {
-            try {
-                this.xmlReader.parse(source);
-            } catch (UnknownHostException e) {
-                try {
-                    long wait = SLEEP_TIME * attempt;
-                    log.warn("still can't reach host: {}", e.getMessage());
-                    log.warn("waiting {}ms before trying parse #: {}", wait, attempt + 1);
-                    Thread.sleep(wait);
-                    retryParse(source, file, attempt + 1);
-                } catch (InterruptedException e1) {
-                    Thread.currentThread().interrupt();
-                    log.warn("interrupted thread: ", e1);
-                }
-            } catch (IOException | SAXException e) {
-                log.error("problem parsing {}", file);
-                throw new EresourceDatabaseException(e);
-            }
-        } else {
-            throw new EresourceDatabaseException("too many attempts to parse: " + file);
         }
     }
 }
