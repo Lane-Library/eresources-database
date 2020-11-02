@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-11-01" version="2.4.1" description="maintenance release">
+            <action date="2020-11-01" dev="ryanmax" type="update">
+                catalog-service API endpoint change
+            </action>
+        </release>
         <release date="2020-10-08" version="2.4.0" description="libguides release">
             <action date="2020-10-07" dev="ryanmax" issue="LANEWEB-10625"  type="fix">
                 permalinks broken for Lane Web Page records
