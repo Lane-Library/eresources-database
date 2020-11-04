@@ -437,7 +437,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     private StringBuilder getStringBuilderWith245() {
         StringBuilder sb = new StringBuilder();
         getFields(this.record, "245").findFirst().ifPresent((final Field f) -> f.getSubfields().stream()
-                .filter((final Subfield s) -> "abnpq".indexOf(s.getCode()) > -1).forEach((final Subfield s) -> {
+                .filter((final Subfield s) -> "abfknpq".indexOf(s.getCode()) > -1).forEach((final Subfield s) -> {
                     String data = s.getData();
                     if ('b' == s.getCode()) {
                         if (sb.indexOf(":") != sb.length() - 1) {
