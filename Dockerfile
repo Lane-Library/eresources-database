@@ -9,7 +9,7 @@ RUN mkdir -p /root/.m2
 #
 # build phase
 #
-FROM maven:3 AS MAVEN_TOOL_CHAIN
+FROM maven:3-openjdk-14 AS MAVEN_TOOL_CHAIN
 COPY pom.xml settings.xml /tmp/
 COPY src /tmp/src/
 WORKDIR /tmp/
@@ -19,7 +19,7 @@ RUN mvn -B -s settings.xml clean package
 RUN find /root/.m2/repository -atime +30 -iname '*.pom' \
     | while read pom; do parent=`dirname "$pom"`; rm -Rf "$parent"; done
 
-#
+#   
 # run phase
 #
 FROM openjdk:14-alpine
