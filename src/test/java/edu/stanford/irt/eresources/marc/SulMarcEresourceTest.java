@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -168,13 +169,6 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetTitleLinked() {
-        SulMarcEresource linkedTitleEr = new SulMarcEresource(this.records.get("10494697"), this.keywordsStrategy,
-                this.typeFactory, null);
-        assertEquals("Рост Кристаллоь / Rost Kristallov / Growth of Crystals : Volume 12", linkedTitleEr.getTitle());
-    }
-    
-    @Test
     public final void testGetShortTitle() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("222");
@@ -188,7 +182,14 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         replay(this.record, this.field, this.subfield);
         assertEquals("title", this.eresource.getShortTitle());
     }
-    
+
+    @Test
+    public final void testGetTitleLinked() {
+        SulMarcEresource linkedTitleEr = new SulMarcEresource(this.records.get("10494697"), this.keywordsStrategy,
+                this.typeFactory, null);
+        assertNotEquals(linkedTitleEr.getShortTitle(), linkedTitleEr.getTitle());
+    }
+
     @Test
     public final void testGetTypes() {
         List<String> types = new ArrayList<>();
