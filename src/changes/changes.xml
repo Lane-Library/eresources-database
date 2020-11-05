@@ -6,6 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-11-05" version="2.4.2" description="maintenance release">
+            <action date="2020-11-04" dev="ryanmax" issue="LANEWEB-10639" type="fix">
+                    some SearchWorks records missing titles
+            </action>
+            <action date="2020-11-04" dev="ryanmax" issue="LANEWEB-10640" type="fix">
+                    missing information in Lane Catalog archival records
+            </action>
+        </release>
         <release date="2020-11-01" version="2.4.1" description="maintenance release">
             <action date="2020-11-01" dev="ryanmax" type="update">
                 catalog-service API endpoint change
