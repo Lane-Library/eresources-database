@@ -344,7 +344,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getSortTitle() {
-        StringBuilder sb = getStringBuilderWith245();
+        StringBuilder sb = getTitleStringBuilder(getFields(this.record, "245").findFirst().orElse(null));
         int offset = getFields(this.record, "245")
                 .map((final Field f) -> Integer.valueOf(f.getIndicator2()) - SORT_TITLE_MAX_LENGTH).findFirst()
                 .orElse(0);
@@ -356,7 +356,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getTitle() {
-        StringBuilder sb = getStringBuilderWith245();
+        StringBuilder sb = getTitleStringBuilder(getFields(this.record, "245").findFirst().orElse(null));
         TextParserHelper.removeTrailingSlashAndSpace(sb);
         String edition = getSubfieldData(this.record, "250", "a").collect(Collectors.joining(". "));
         if (!edition.isEmpty()) {
@@ -434,23 +434,25 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
         return new MarcVersion(record, this.record, this);
     }
 
-    private StringBuilder getStringBuilderWith245() {
+    protected StringBuilder getTitleStringBuilder(final Field titleField) {
         StringBuilder sb = new StringBuilder();
-        getFields(this.record, "245").findFirst().ifPresent((final Field f) -> f.getSubfields().stream()
-                .filter((final Subfield s) -> "abfknpq".indexOf(s.getCode()) > -1).forEach((final Subfield s) -> {
-                    String data = s.getData();
-                    if ('b' == s.getCode()) {
-                        if (sb.indexOf(":") != sb.length() - 1) {
-                            sb.append(" :");
+        if (null != titleField) {
+            titleField.getSubfields().stream().filter((final Subfield s) -> "abfknpq".indexOf(s.getCode()) > -1)
+                    .forEach((final Subfield s) -> {
+                        String data = s.getData();
+                        if ('b' == s.getCode()) {
+                            if (sb.indexOf(":") != sb.length() - 1) {
+                                sb.append(" :");
+                            }
+                            data = SPACE_SLASH.matcher(data).replaceFirst("");
                         }
-                        data = SPACE_SLASH.matcher(data).replaceFirst("");
-                    }
-                    if (sb.length() > 0) {
-                        sb.append(' ');
-                    }
-                    sb.append(data);
-                    TextParserHelper.removeTrailingSlashAndSpace(sb);
-                }));
+                        if (sb.length() > 0) {
+                            sb.append(' ');
+                        }
+                        sb.append(data);
+                        TextParserHelper.removeTrailingSlashAndSpace(sb);
+                    });
+        }
         return sb;
     }
 }

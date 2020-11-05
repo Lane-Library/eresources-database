@@ -122,6 +122,23 @@ public class SulMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
+    public String getTitle() {
+        StringBuilder sb = new StringBuilder(super.getTitle());
+        // LANEWEB-10639: a few sul records have "<>" to indicate linked 880 title fields
+        String titleLinkage = getSubfieldData(this.record, "245", "6").findFirst().orElse(null);
+        if (sb.toString().startsWith("<>") && null != titleLinkage && titleLinkage.startsWith("880-")) {
+            getFields(this.record, "880").findAny()
+                    .ifPresent((final Field f) -> f.getSubfields().stream()
+                            .filter((final Subfield s) -> '6' == s.getCode() && s.getData().startsWith("245"))
+                            .forEach((final Subfield s) -> {
+                                sb.setLength(0);
+                                sb.append(getTitleStringBuilder(f));
+                            }));
+        }
+        return sb.toString();
+    }
+
+    @Override
     public Collection<String> getTypes() {
         if (this.types == null) {
             this.types = this.sulTypeFactory.getTypes(this.record);

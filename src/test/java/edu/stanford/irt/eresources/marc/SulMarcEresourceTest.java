@@ -168,6 +168,13 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
+    public final void testGetTitleLinked() {
+        SulMarcEresource linkedTitleEr = new SulMarcEresource(this.records.get("10494697"), this.keywordsStrategy,
+                this.typeFactory, null);
+        assertEquals("Рост Кристаллоь / Rost Kristallov / Growth of Crystals : Volume 12", linkedTitleEr.getTitle());
+    }
+    
+    @Test
     public final void testGetShortTitle() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("222");
@@ -181,7 +188,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         replay(this.record, this.field, this.subfield);
         assertEquals("title", this.eresource.getShortTitle());
     }
-
+    
     @Test
     public final void testGetTypes() {
         List<String> types = new ArrayList<>();
