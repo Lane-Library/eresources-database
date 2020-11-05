@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -187,7 +186,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     public final void testGetTitleLinked() {
         SulMarcEresource linkedTitleEr = new SulMarcEresource(this.records.get("10494697"), this.keywordsStrategy,
                 this.typeFactory, null);
-        assertNotEquals(linkedTitleEr.getShortTitle(), linkedTitleEr.getTitle());
+        assertEquals("Рост Кристаллоь / Rost Kristallov / Growth of Crystals : Volume 12", linkedTitleEr.getTitle());
     }
 
     @Test
