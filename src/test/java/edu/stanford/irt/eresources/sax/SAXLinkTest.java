@@ -40,11 +40,4 @@ public class SAXLinkTest {
         assertEquals("url", link.getUrl());
     }
 
-    @Test
-    public final void testSAXLinkImpactfactor() {
-        SAXLink link = new SAXLink();
-        link.setLabel("impact factor");
-        assertEquals("impact factor", link.getLabel());
-        assertEquals("Impact Factor", link.getLinkText());
-    }
 }

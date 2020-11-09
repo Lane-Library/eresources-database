@@ -10,6 +10,9 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.stanford.irt.eresources.marc.MarcLink;
+import edu.stanford.irt.eresources.marc.MarcVersion;
+
 /**
  * @author ryanmax
  */
@@ -106,6 +109,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         } else if ("Impact Factor".equals(links.get(0).getLabel())) {
             score = MIN_SCORE;
         } else {
+            score = calculateLinkScore(version, links.get(0), score);
             score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
             score = calculateDatesScore(version.getDates(), score);
             score = calculateAdditionalTextScore(version.getAdditionalText(), score);
@@ -119,6 +123,30 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         int calculatedScore = score;
         if (score == 0 && "Product Description".equalsIgnoreCase(linkLabel)) {
             calculatedScore = 1;
+        }
+        return calculatedScore;
+    }
+
+    /**
+     * Examine and score a {@code Link}. Related resource links (856 42) should be down-sorted. Related resource links
+     * (856 40) should be up-sorted. See case LANEWEB-10642
+     * 
+     * @param link
+     *            link to exam and score
+     * @param score
+     *            pre-examination score
+     * @return calculated score
+     */
+    private int calculateLinkScore(final Version version, final Link link, final int score) {
+        int calculatedScore = score;
+        MarcLink mLink = null;
+        if (MarcVersion.class.isAssignableFrom(version.getClass())
+                && MarcLink.class.isAssignableFrom(link.getClass())) {
+            mLink = (MarcLink) link;
+            if (mLink.isResourceLink()) {
+                calculatedScore++;
+            } else if (mLink.isRelatedResourceLink())
+                calculatedScore--;
         }
         return calculatedScore;
     }

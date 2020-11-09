@@ -28,20 +28,16 @@ public class SAXLink implements Link {
     @Override
     public String getLinkText() {
         StringBuilder sb = new StringBuilder();
-        if ("impact factor".equalsIgnoreCase(this.label)) {
-            sb.append("Impact Factor");
+        String holdingsAndDates = this.version.getHoldingsAndDates();
+        if (holdingsAndDates != null && this.version.getLinks().size() == 1) {
+            sb.append(holdingsAndDates);
         } else {
-            String holdingsAndDates = this.version.getHoldingsAndDates();
-            if (holdingsAndDates != null && this.version.getLinks().size() == 1) {
-                sb.append(holdingsAndDates);
-            } else {
-                if (this.label != null) {
-                    sb.append(this.label);
-                }
-            }
-            if (sb.length() == 0) {
+            if (this.label != null) {
                 sb.append(this.label);
             }
+        }
+        if (sb.length() == 0) {
+            sb.append(this.label);
         }
         return sb.toString();
     }

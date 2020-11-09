@@ -3,9 +3,15 @@ package edu.stanford.irt.eresources;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.easymock.EasyMock.*;
+
+import edu.stanford.irt.eresources.marc.MarcLink;
+import edu.stanford.irt.eresources.marc.MarcVersion;
 import edu.stanford.irt.eresources.sax.SAXLink;
 import edu.stanford.irt.eresources.sax.SAXVersion;
 
@@ -16,139 +22,157 @@ public class VersionComparatorTest {
 
     private VersionComparator comparator;
 
-    private SAXLink link;
+    private SAXLink saxLink;
 
-    private SAXVersion v1;
+    private MarcLink marcLink1;
+    
+    private MarcLink marcLink2;
+    
+    private SAXVersion saxVersion1;
 
-    private SAXVersion v2;
+    private SAXVersion saxVersion2;
 
+    private MarcVersion marcVersion1;
+    
+    private MarcVersion marcVersion2;
+    
     @Before
     public void setUp() {
-        this.v1 = new SAXVersion();
-        this.v2 = new SAXVersion();
-        this.link = new SAXLink();
+        this.saxVersion1 = new SAXVersion();
+        this.saxVersion2 = new SAXVersion();
+        this.saxLink = new SAXLink();
+        this.marcLink1 = mock(MarcLink.class);
+        this.marcLink2 = mock(MarcLink.class);
+        this.marcVersion1 = mock(MarcVersion.class);
+        this.marcVersion2 = mock(MarcVersion.class);
         this.comparator = new VersionComparator();
     }
 
     @Test
     public void testCompare() {
-        this.v1.setDates("1999.");
-        this.v2.setDates("1999.");
-        assertEquals(1, this.comparator.compare(this.v1, this.v2));
+        this.saxVersion1.setDates("1999.");
+        this.saxVersion2.setDates("1999.");
+        assertEquals(1, this.comparator.compare(this.saxVersion1, this.saxVersion2));
     }
 
     @Test
     public void testCompareCatalogBeforeImpactFactor() {
-        this.v1.setSummaryHoldings("v. 1.");
-        this.v2.setSummaryHoldings("v. 1.");
-        this.v1.setDates("1999-2000.");
-        this.v2.setDates("1999-2000.");
-        SAXLink l1 = new SAXLink();
-        l1.setLabel("Impact Factor");
-        l1.setUrl("foo");
-        SAXLink l2 = new SAXLink();
-        l2.setLabel("Catalog Link");
-        l2.setUrl("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=foo");
-        this.v1.addLink(l1);
-        this.v2.addLink(l2);
-        assertTrue(this.comparator.compare(this.v1, this.v2) > 0);
+//        expect(this.marcVersion1.getSummaryHoldings()).andReturn("v. 1.");
+        expect(this.marcVersion1.getDates()).andReturn("1999-2000.");
+//        expect(this.marcVersion1.getAdditionalText()).andReturn("additional text");
+//        expect(this.marcVersion2.getSummaryHoldings()).andReturn("v. 1.");
+        expect(this.marcVersion2.getDates()).andReturn("1999-2000.");
+//        expect(this.marcVersion2.getAdditionalText()).andReturn("additional text");
+        expect(this.marcLink1.getLabel()).andReturn("Impact Factor");
+        expect(this.marcLink1.getUrl()).andReturn("foo");
+//        expect(this.marcLink1.isRelatedResourceLink()).andReturn(true);
+//        expect(this.marcLink1.isResourceLink()).andReturn(false);
+//        expect(this.marcLink2.getLabel()).andReturn("Catalog Link");
+        expect(this.marcLink2.getUrl()).andReturn("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=foo");
+//        expect(this.marcLink2.isResourceLink()).andReturn(false);
+//        expect(this.marcLink2.isRelatedResourceLink()).andReturn(false);
+        expect(this.marcVersion1.getLinks()).andReturn(Collections.singletonList(this.marcLink1)).anyTimes();
+        expect(this.marcVersion2.getLinks()).andReturn(Collections.singletonList(this.marcLink2)).anyTimes();
+        replay(this.marcVersion1, this.marcVersion2, this.marcLink1,this.marcLink2);
+        assertTrue(this.comparator.compare(this.marcVersion1, this.marcVersion2) > 0);
+        verify(this.marcVersion1, this.marcVersion2, this.marcLink1,this.marcLink2);
     }
 
     @Test
     public void testCompareClosedDates() {
-        this.v1.setDates("1999-2000.");
-        this.v2.setDates("1999-2000.");
-        assertTrue(this.comparator.compare(this.v1, this.v2) == 1);
-        this.v1.setDates("1999-2010.");
-        this.v2.setDates("1999-2000.");
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
-        this.v1.setDates("2020-");
-        this.v2.setDates("2020.");
-        this.v1.addLink(this.link);
-        this.v2.addLink(this.link);
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
+        this.saxVersion1.setDates("1999-2000.");
+        this.saxVersion2.setDates("1999-2000.");
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) == 1);
+        this.saxVersion1.setDates("1999-2010.");
+        this.saxVersion2.setDates("1999-2000.");
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
+        this.saxVersion1.setDates("2020-");
+        this.saxVersion2.setDates("2020.");
+        this.saxVersion1.addLink(this.saxLink);
+        this.saxVersion2.addLink(this.saxLink);
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
     }
 
     @Test
     public void testCompareCurrentHoldings() {
-        this.v1.setSummaryHoldings("v. 1-");
-        this.v1.addLink(this.link);
-        this.v2.addLink(this.link);
-        this.v2.setSummaryHoldings("v. 1-");
-        this.v2.setAdditionalText("current edition");
-        assertTrue(this.comparator.compare(this.v2, this.v1) < 0);
+        this.saxVersion1.setSummaryHoldings("v. 1-");
+        this.saxVersion1.addLink(this.saxLink);
+        this.saxVersion2.addLink(this.saxLink);
+        this.saxVersion2.setSummaryHoldings("v. 1-");
+        this.saxVersion2.setAdditionalText("current edition");
+        assertTrue(this.comparator.compare(this.saxVersion2, this.saxVersion1) < 0);
     }
 
     @Test
     public void testCompareDelayedHoldings() {
-        this.v1.setSummaryHoldings("v. 1-");
-        this.v1.addLink(this.link);
-        this.v2.addLink(this.link);
-        this.v2.setSummaryHoldings("v. 1-");
-        this.v2.setAdditionalText("foo delayed bar");
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
+        this.saxVersion1.setSummaryHoldings("v. 1-");
+        this.saxVersion1.addLink(this.saxLink);
+        this.saxVersion2.addLink(this.saxLink);
+        this.saxVersion2.setSummaryHoldings("v. 1-");
+        this.saxVersion2.setAdditionalText("foo delayed bar");
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
     }
 
     @Test
     public void testCompareHoldings() {
-        this.v1.setSummaryHoldings("v. 1-");
-        this.v2.setSummaryHoldings("v. 1.");
-        this.v1.addLink(this.link);
-        this.v2.addLink(this.link);
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
-        this.v1.setSummaryHoldings("v. 10-20.");
-        this.v2.setSummaryHoldings("v. 10-");
-        assertTrue(this.comparator.compare(this.v1, this.v2) > 0);
+        this.saxVersion1.setSummaryHoldings("v. 1-");
+        this.saxVersion2.setSummaryHoldings("v. 1.");
+        this.saxVersion1.addLink(this.saxLink);
+        this.saxVersion2.addLink(this.saxLink);
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
+        this.saxVersion1.setSummaryHoldings("v. 10-20.");
+        this.saxVersion2.setSummaryHoldings("v. 10-");
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) > 0);
     }
 
     @Test
     public void testCompareImpactFactorHoldings() {
-        this.v1.setSummaryHoldings("v. 1.");
-        this.v2.setSummaryHoldings("v. 1.");
-        this.v1.setDates("1999-2000.");
-        this.v2.setDates("1999-2000.");
-        this.v1.addLink(new SAXLink());
-        this.link.setLabel("Impact Factor");
-        this.v2.addLink(this.link);
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
+        this.saxVersion1.setSummaryHoldings("v. 1.");
+        this.saxVersion2.setSummaryHoldings("v. 1.");
+        this.saxVersion1.setDates("1999-2000.");
+        this.saxVersion2.setDates("1999-2000.");
+        this.saxVersion1.addLink(new SAXLink());
+        this.saxLink.setLabel("Impact Factor");
+        this.saxVersion2.addLink(this.saxLink);
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
     }
 
     @Test
     public void testCompareInstalledSoftware() {
-        this.link.setLabel("pRoduct Description");
-        this.v1.addLink(this.link);
-        this.v2.addLink(new SAXLink());
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
+        this.saxLink.setLabel("pRoduct Description");
+        this.saxVersion1.addLink(this.saxLink);
+        this.saxVersion2.addLink(new SAXLink());
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
     }
 
     @Test
     public void testCompareOpenDates() {
-        this.v1.setDates("1999-");
-        this.v2.setDates("1999-2000.");
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
-        this.v1.setDates("1999.");
-        this.v2.setDates("1999-");
-        this.v1.addLink(this.link);
-        this.v2.addLink(this.link);
-        assertTrue(this.comparator.compare(this.v1, this.v2) > 0);
+        this.saxVersion1.setDates("1999-");
+        this.saxVersion2.setDates("1999-2000.");
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
+        this.saxVersion1.setDates("1999.");
+        this.saxVersion2.setDates("1999-");
+        this.saxVersion1.addLink(this.saxLink);
+        this.saxVersion2.addLink(this.saxLink);
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) > 0);
     }
 
     @Test
     public void testComparePublishers() {
-        this.v1.setDates("1999.");
-        this.v1.setPublisher("ScienceDirect");
-        this.v2.setDates("1999.");
-        this.v2.setPublisher("Karger");
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
-        this.v1.setDates("1999.");
-        this.v1.setPublisher("Karger");
-        this.v2.setDates("1999.");
-        this.v2.setPublisher("ScienceDirect");
-        assertTrue(this.comparator.compare(this.v1, this.v2) > 0);
-        this.v1.setDates("1999.");
-        this.v1.setPublisher("PubMed Central");
-        this.v2.setDates("1999.");
-        this.v2.setPublisher("");
-        assertTrue(this.comparator.compare(this.v1, this.v2) < 0);
+        this.saxVersion1.setDates("1999.");
+        this.saxVersion1.setPublisher("ScienceDirect");
+        this.saxVersion2.setDates("1999.");
+        this.saxVersion2.setPublisher("Karger");
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
+        this.saxVersion1.setDates("1999.");
+        this.saxVersion1.setPublisher("Karger");
+        this.saxVersion2.setDates("1999.");
+        this.saxVersion2.setPublisher("ScienceDirect");
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) > 0);
+        this.saxVersion1.setDates("1999.");
+        this.saxVersion1.setPublisher("PubMed Central");
+        this.saxVersion2.setDates("1999.");
+        this.saxVersion2.setPublisher("");
+        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
     }
 }
