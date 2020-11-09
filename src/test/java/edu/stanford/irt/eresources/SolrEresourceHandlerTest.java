@@ -103,6 +103,8 @@ public class SolrEresourceHandlerTest {
         expect(l.getAdditionalText()).andReturn("");
         expect(l.getLabel()).andReturn("linkLabel");
         expect(l.getLinkText()).andReturn("linkText");
+        expect(l.isRelatedResourceLink()).andReturn(false);
+        expect(l.isResourceLink()).andReturn(false);
         expect(l.getUrl()).andReturn("linkUrl").times(3);
         expect(this.eresource.getIsbns()).andReturn(Collections.singletonList("isbn"));
         expect(this.eresource.getIssns()).andReturn(Collections.singletonList("issn"));

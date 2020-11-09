@@ -227,6 +227,8 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         SulMarcEresource e = new SulMarcEresource(this.record, null, this.typeFactory, null);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("956").atLeastOnce();
+        expect(this.field.getIndicator1()).andReturn('4').atLeastOnce();
+        expect(this.field.getIndicator2()).andReturn('0').atLeastOnce();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).atLeastOnce();
         expect(this.subfield.getCode()).andReturn('u').atLeastOnce();
         expect(this.subfield.getData()).andReturn("url").atLeastOnce();

@@ -109,7 +109,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         } else if ("Impact Factor".equals(links.get(0).getLabel())) {
             score = MIN_SCORE;
         } else {
-            score = calculateLinkScore(version, links.get(0), score);
+            score = calculateLinkScore(links.get(0), score);
             score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
             score = calculateDatesScore(version.getDates(), score);
             score = calculateAdditionalTextScore(version.getAdditionalText(), score);
@@ -137,17 +137,12 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      *            pre-examination score
      * @return calculated score
      */
-    private int calculateLinkScore(final Version version, final Link link, final int score) {
+    private int calculateLinkScore(final Link link, final int score) {
         int calculatedScore = score;
-        MarcLink mLink = null;
-        if (MarcVersion.class.isAssignableFrom(version.getClass())
-                && MarcLink.class.isAssignableFrom(link.getClass())) {
-            mLink = (MarcLink) link;
-            if (mLink.isResourceLink()) {
-                calculatedScore++;
-            } else if (mLink.isRelatedResourceLink())
-                calculatedScore--;
-        }
+        if (link.isResourceLink()) {
+            calculatedScore++;
+        } else if (link.isRelatedResourceLink())
+            calculatedScore--;
         return calculatedScore;
     }
 

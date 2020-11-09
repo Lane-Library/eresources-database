@@ -78,6 +78,7 @@ public class MarcLink implements Link {
      * A related resource link (856 42) will be down-sorted by version comparator. See case LANEWEB-10642
      * @return has 856 42
      */
+    @Override
     public boolean isRelatedResourceLink() {
         return '4' == this.field.getIndicator1() && '2' == this.field.getIndicator2();
     }
@@ -86,6 +87,7 @@ public class MarcLink implements Link {
      * A related resource link (856 40) will be up-sorted by version comparator. See case LANEWEB-10642
      * @return has 856 40
      */
+    @Override
     public boolean isResourceLink() {
         return '4' == this.field.getIndicator1() && '0' == this.field.getIndicator2();
     }
