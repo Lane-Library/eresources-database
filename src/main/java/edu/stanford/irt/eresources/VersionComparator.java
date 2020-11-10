@@ -10,9 +10,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.stanford.irt.eresources.marc.MarcLink;
-import edu.stanford.irt.eresources.marc.MarcVersion;
-
 /**
  * @author ryanmax
  */
@@ -130,7 +127,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
     /**
      * Examine and score a {@code Link}. Related resource links (856 42) should be down-sorted. Related resource links
      * (856 40) should be up-sorted. See case LANEWEB-10642
-     * 
+     *
      * @param link
      *            link to exam and score
      * @param score
@@ -141,8 +138,9 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         int calculatedScore = score;
         if (link.isResourceLink()) {
             calculatedScore++;
-        } else if (link.isRelatedResourceLink())
+        } else if (link.isRelatedResourceLink()) {
             calculatedScore--;
+        }
         return calculatedScore;
     }
 
