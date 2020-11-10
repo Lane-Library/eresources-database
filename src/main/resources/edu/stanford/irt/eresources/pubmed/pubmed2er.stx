@@ -14,6 +14,7 @@
     <stx:variable name="publicationPages"/>
     <stx:variable name="publicationNlmId"/>
     <stx:variable name="publicationTitle"/>
+    <stx:variable name="publicationTitleLong"/>
     <stx:variable name="publicationType"/>
     <stx:variable name="publicationVolume"/>
     <stx:variable name="publicationYear"/>
@@ -37,6 +38,7 @@
         <stx:assign name="publicationPages" select="''"/>
         <stx:assign name="publicationNlmId" select="''"/>
         <stx:assign name="publicationTitle" select="''"/>
+        <stx:assign name="publicationTitleLong" select="''"/>
         <stx:assign name="publicationType" select="''"/>
         <stx:assign name="publicationVolume" select="''"/>
         <stx:assign name="publicationYear" select="''"/>
@@ -93,6 +95,9 @@
             </stx:if>
             <stx:if test="$publicationTitle != ''">
                 <publicationTitle><stx:value-of select="$publicationTitle"/></publicationTitle>
+            </stx:if>
+            <stx:if test="$publicationTitle = '' and $publicationTitleLong != ''">
+                <publicationTitle><stx:value-of select="$publicationTitleLong"/></publicationTitle>
             </stx:if>
             <stx:if test="$publicationVolume != ''">
                 <publicationVolume><stx:value-of select="$publicationVolume"/></publicationVolume>
@@ -206,7 +211,11 @@
     <stx:template match="MedlineCitation/Article/Journal/ISOAbbreviation">
         <stx:assign name="publicationTitle" select="replace(.,'\.','')"/>
     </stx:template>
-    
+
+    <stx:template match="MedlineCitation/Article/Journal/Title">
+        <stx:assign name="publicationTitleLong" select="."/>
+    </stx:template>
+
     <stx:template match="MedlineCitation/Article/Journal/JournalIssue/Volume">
         <stx:assign name="publicationVolume" select="."/>
     </stx:template>
