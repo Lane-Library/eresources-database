@@ -57,20 +57,11 @@ public class VersionComparatorTest {
 
     @Test
     public void testCompareCatalogBeforeImpactFactor() {
-//        expect(this.marcVersion1.getSummaryHoldings()).andReturn("v. 1.");
         expect(this.marcVersion1.getDates()).andReturn("1999-2000.");
-//        expect(this.marcVersion1.getAdditionalText()).andReturn("additional text");
-//        expect(this.marcVersion2.getSummaryHoldings()).andReturn("v. 1.");
         expect(this.marcVersion2.getDates()).andReturn("1999-2000.");
-//        expect(this.marcVersion2.getAdditionalText()).andReturn("additional text");
         expect(this.marcLink1.getLabel()).andReturn("Impact Factor");
         expect(this.marcLink1.getUrl()).andReturn("foo");
-//        expect(this.marcLink1.isRelatedResourceLink()).andReturn(true);
-//        expect(this.marcLink1.isResourceLink()).andReturn(false);
-//        expect(this.marcLink2.getLabel()).andReturn("Catalog Link");
         expect(this.marcLink2.getUrl()).andReturn("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=foo");
-//        expect(this.marcLink2.isResourceLink()).andReturn(false);
-//        expect(this.marcLink2.isRelatedResourceLink()).andReturn(false);
         expect(this.marcVersion1.getLinks()).andReturn(Collections.singletonList(this.marcLink1)).anyTimes();
         expect(this.marcVersion2.getLinks()).andReturn(Collections.singletonList(this.marcLink2)).anyTimes();
         replay(this.marcVersion1, this.marcVersion2, this.marcLink1,this.marcLink2);
