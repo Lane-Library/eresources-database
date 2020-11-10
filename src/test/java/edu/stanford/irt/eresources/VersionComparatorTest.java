@@ -73,7 +73,7 @@ public class VersionComparatorTest {
     public void testCompareClosedDates() {
         this.saxVersion1.setDates("1999-2000.");
         this.saxVersion2.setDates("1999-2000.");
-        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) == 1);
+        assertEquals(1, this.comparator.compare(this.saxVersion1, this.saxVersion2));
         this.saxVersion1.setDates("1999-2010.");
         this.saxVersion2.setDates("1999-2000.");
         assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
