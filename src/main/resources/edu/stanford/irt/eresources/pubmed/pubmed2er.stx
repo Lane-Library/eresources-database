@@ -97,7 +97,15 @@
                 <publicationTitle><stx:value-of select="$publicationTitle"/></publicationTitle>
             </stx:if>
             <stx:if test="$publicationTitle = '' and $publicationTitleLong != ''">
-                <publicationTitle><stx:value-of select="$publicationTitleLong"/></publicationTitle>
+                <stx:assign name="publicationTitle" select="jmm:getJournalTitleAbbreviation($publicationTitleLong)" xmlns:jmm="java:edu.stanford.lane.journals.JournalMapManager"/>
+                <stx:choose>
+                    <stx:when test="$publicationTitle != ''">
+                        <publicationTitle><stx:value-of select="$publicationTitle"/></publicationTitle>
+                    </stx:when>
+                    <stx:otherwise>
+                        <publicationTitle><stx:value-of select="$publicationTitleLong"/></publicationTitle>
+                    </stx:otherwise>
+                </stx:choose>
             </stx:if>
             <stx:if test="$publicationVolume != ''">
                 <publicationVolume><stx:value-of select="$publicationVolume"/></publicationVolume>
