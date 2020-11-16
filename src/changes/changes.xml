@@ -6,12 +6,17 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2020-11-16" version="2.4.3" description="maintenance release">
+            <action date="2020-11-10" dev="ryanmax" issue="LANEWEB-10644" type="fix">
+                1.3M PubMed articles missing journal title information
+            </action>
+        </release>
         <release date="2020-11-05" version="2.4.2" description="maintenance release">
             <action date="2020-11-04" dev="ryanmax" issue="LANEWEB-10639" type="fix">
-                    some SearchWorks records missing titles
+                some SearchWorks records missing titles
             </action>
             <action date="2020-11-04" dev="ryanmax" issue="LANEWEB-10640" type="fix">
-                    missing information in Lane Catalog archival records
+                missing information in Lane Catalog archival records
             </action>
         </release>
         <release date="2020-11-01" version="2.4.1" description="maintenance release">

@@ -232,7 +232,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         String pubTitle = eresource.getPublicationTitle();
         strings.add(eresource.getPublicationText());
         strings.add(pubTitle);
-        strings.add(JournalMapManager.getVariantsJournalTitles(pubTitle));
+        strings.add(JournalMapManager.getVariantJournalTitles(pubTitle));
         strings.add(pubDate);
         strings.add(TextParserHelper.explodeMonthAbbreviations(pubDate));
         strings.add(eresource.getPublicationVolume());
