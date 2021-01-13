@@ -62,6 +62,9 @@ public class VersionComparator implements Comparator<Version>, Serializable {
                 calculatedScore--;
             }
             if (additionalText.equalsIgnoreCase("current edition")) {
+                // double boost for "current edition"
+                // LANEWEB-10642 and LANEWEB-10611
+                calculatedScore++;
                 calculatedScore++;
             }
         }
