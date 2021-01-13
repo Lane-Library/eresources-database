@@ -51,7 +51,7 @@ public class SulFileCatalogRecordServiceTest extends MARCRecordSupport {
 
     @Test
     public final void testRun() throws Exception {
-        byte[] data1 = new byte[4096];
+        byte[] data1 = new byte[8192];
         byte[] file1data = Files
                 .readAllBytes(Paths.get("src/test/resources/edu/stanford/irt/eresources/sul-marc/data/8208799.marc"));
         for (int i = 0; i < file1data.length; i++) {

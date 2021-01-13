@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2021-01-04" version="2.4.4" description="maintenance release">
+            <action date="2020-12-11" dev="ryanmax" issue="LANEWEB-10650" type="fix">
+                lane blog authors not searchable
+            </action>
+        </release>
         <release date="2020-11-16" version="2.4.3" description="maintenance release">
             <action date="2020-11-10" dev="ryanmax" issue="LANEWEB-10644" type="fix">
                 1.3M PubMed articles missing journal title information

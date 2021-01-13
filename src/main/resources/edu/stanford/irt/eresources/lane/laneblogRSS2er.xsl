@@ -25,7 +25,7 @@
             <primaryType>Lane Web Page</primaryType>
             <type>Lane Web Page</type>
             <keywords>
-                <xsl:value-of select="concat(title, ' ', description)" />
+                <xsl:value-of select="concat(title, ' ', description, ' ', $creator)" />
             </keywords>
             <year><xsl:value-of select="replace(pubDate,'.* (\d{4}).*','$1')"/></year>
             <er-date><xsl:value-of select="replace(pubDate,'.*, (\d{2}) ([A-Z][a-z]{2}) (\d{4}).*','$3 $2 $1')"/></er-date>
