@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2021-01-14" version="2.4.5" description="maintenance release">
+            <action date="2021-01-13" dev="ryanmax" issue="LANEWEB-10642" type="update">
+                use 856 indicator 2 for version sort order
+            </action>
+        </release>
         <release date="2021-01-04" version="2.4.4" description="maintenance release">
             <action date="2020-12-11" dev="ryanmax" issue="LANEWEB-10650" type="fix">
                 lane blog authors not searchable
