@@ -6,11 +6,11 @@
         <version>75</version>
     </parent>
     <artifactId>eresources-database</artifactId>
-    <version>2.4.6-SNAPSHOT</version>
+    <version>skip-drone-test-1</version>
     <name>eresources-database</name>
     <scm>
         <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>skip-drone-test-1</tag>
     </scm>
     <dependencies>
         <dependency>
