@@ -25,7 +25,7 @@
             <primaryType>Lane Web Page</primaryType>
             <type>Lane Web Page</type>
             <keywords>
-                <xsl:value-of select="concat(title, ' ', description, ' ', $creator)" />
+                <xsl:value-of select="concat(title, ' ', description, ' ', $creator, ' ', link)" />
             </keywords>
             <year><xsl:value-of select="replace(pubDate,'.* (\d{4}).*','$1')"/></year>
             <er-date><xsl:value-of select="replace(pubDate,'.*, (\d{2}) ([A-Z][a-z]{2}) (\d{4}).*','$3 $2 $1')"/></er-date>
@@ -35,8 +35,12 @@
             </xsl:if>
             <version>
                 <link>
+                    <!-- LANEWEB-10684: image elements appearing in search results; may need to strip other tags -->
+                    <xsl:variable name="desc">
+                        <xsl:value-of select="replace(description,'&lt;img .*/&gt;','')"/>
+                    </xsl:variable>
                     <label>
-                        <xsl:value-of select="concat(substring(description, 1, 36),' . . .')" />
+                        <xsl:value-of select="concat(substring($desc, 1, 46),' . . .')" />
                     </label>
                     <url>
                         <xsl:value-of select="link" />
