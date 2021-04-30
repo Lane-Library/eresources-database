@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources.marc;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,9 +41,7 @@ public class SulTypeFactory extends MARCRecordSupport {
     private static final Pattern SUPPLEMENTAL_LINK = Pattern
             .compile(".*(table of contents|abstract|description|sample text|finding aid).*", Pattern.CASE_INSENSITIVE);
     static {
-        for (String type : TypeFactory.ALLOWED_TYPES_INITIALIZER) {
-            ALLOWED_TYPES.add(type);
-        }
+        Collections.addAll(ALLOWED_TYPES, TypeFactory.ALLOWED_TYPES_INITIALIZER);
         for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
             for (int j = 1; j < element.length; j++) {
                 COMPOSITE_TYPES.put(element[j], element[0]);
