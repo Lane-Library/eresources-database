@@ -7,7 +7,7 @@ import org.junit.Test;
 public class DateParserTest {
 
     @Test
-    public final void testParseDate() throws Exception {
+    public final void testParseDate1() throws Exception {
         assertEquals("12000101", DateParser.parseDate("1200"));
         assertEquals("19770404", DateParser.parseDate("1977 Apr 4"));
         assertEquals("20120216", DateParser.parseDate("2012 Feb 16"));
@@ -22,6 +22,10 @@ public class DateParserTest {
         assertEquals("20160101", DateParser.parseDate("2016 Winter"));
         assertEquals("20160701", DateParser.parseDate("2016 Summer"));
         assertEquals("20161001", DateParser.parseDate("2016 fall"));
+    }
+
+    @Test
+    public final void testParseDate2() throws Exception {
         assertEquals("20160401", DateParser.parseDate("2016 spring-summer"));
         assertEquals("20160401", DateParser.parseDate("2016 spring/summer"));
         assertEquals("20160101", DateParser.parseDate("2016 foo"));
@@ -35,7 +39,7 @@ public class DateParserTest {
         assertEquals("20150101", DateParser.parseDate("2015 31/12"));
         assertEquals("20150101", DateParser.parseDate("2015 47 25"));
     }
-
+    
     @Test
     public final void testParseYear() throws Exception {
         assertEquals("1200", DateParser.parseYear("just one 1200 year"));
