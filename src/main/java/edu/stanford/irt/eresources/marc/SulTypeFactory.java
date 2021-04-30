@@ -22,7 +22,7 @@ public class SulTypeFactory extends MARCRecordSupport {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
-    private static final Pattern BEGIN_OR_END_BRACKET_MAYBE_SPACE_COLON = Pattern.compile("(^\\[|\\]( :)?$)");
+    private static final Pattern BEGIN_OR_END_BRACKET_MAYBE_SPACE_COLON = Pattern.compile("(^\\[)|(\\]( :)?$)");
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 
