@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources.sax;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -74,7 +75,7 @@ public class SAXEresourceTest {
         assertNotNull(eresource.getPublicationTitle());
         assertNotNull(eresource.getPublicationTypes());
         assertNotNull(eresource.getPublicationVolume());
-        assertNotNull(eresource.getRecordId());
+        assertEquals(123,eresource.getRecordId());
         assertNotNull(eresource.getRecordType());
         assertNotNull(eresource.getShortTitle());
         assertNotNull(eresource.getSortTitle());
@@ -82,7 +83,7 @@ public class SAXEresourceTest {
         assertNotNull(eresource.getTypes());
         assertNotNull(eresource.getUpdated());
         assertNotNull(eresource.getVersions());
-        assertNotNull(eresource.getYear());
+        assertEquals(2000,eresource.getYear());
         assertTrue(eresource.isCore());
         assertTrue(eresource.isDigital());
         assertFalse(eresource.isEnglish());
