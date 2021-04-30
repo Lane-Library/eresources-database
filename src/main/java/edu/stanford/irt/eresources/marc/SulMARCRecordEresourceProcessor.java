@@ -18,13 +18,13 @@ import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
-    private static final Pattern BEGINS_HTTPS_OR_ENDS_SLASH = Pattern.compile("(^https?://|/$)");
+    private static final Pattern BEGINS_HTTPS_OR_ENDS_SLASH = Pattern.compile("(^https?://)|(/$)");
 
     private static final int F008_DATES_BEGIN = 7;
 
     private static final int F008_DATES_END = 15;
 
-    private static final Pattern FICTION = Pattern.compile("(^|\\b[^non-])fiction(\\S|\\b)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern FICTION = Pattern.compile("(^|\\b)(?<!non\\-)fiction(\\S|\\b)", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern NOT_ALPHANUM_OR_SPACE = Pattern.compile("[^a-zA-Z_0-9 ]");
 
