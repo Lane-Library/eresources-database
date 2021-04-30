@@ -1,5 +1,6 @@
 package edu.stanford.irt.eresources;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -27,6 +28,6 @@ public class IOUtilsTest {
         List<File> files = IOUtils.getUpdatedFiles(new File("src/main/resources"), ".xml", 0);
         assertTrue(files.size() >= 10);
         files = IOUtils.getUpdatedFiles(new File("src/main/resources"), ".xml", Long.MAX_VALUE);
-        assertTrue(files.size() == 0);
+        assertEquals(0,files.size());
     }
 }
