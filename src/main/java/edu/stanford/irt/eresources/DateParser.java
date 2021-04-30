@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public final class DateParser {
 
-    private static final Pattern DATE_CLEANUP = Pattern.compile("(.*)((?:\\-|/).*)");
+    private static final Pattern DATE_CLEANUP = Pattern.compile("(.*)([\\-/].*)");
 
     private static final Pattern EIGHT_DIGITS = Pattern.compile("\\d{8}");
 

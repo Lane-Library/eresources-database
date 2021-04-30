@@ -34,7 +34,7 @@ import edu.stanford.lane.catalog.Record.Subfield;
  */
 public abstract class AbstractMarcEresource extends MARCRecordSupport implements Eresource {
 
-    protected static final Pattern COLON_OR_SEMICOLON = Pattern.compile("(:|;)");
+    protected static final Pattern COLON_OR_SEMICOLON = Pattern.compile("[:;]");
 
     protected static final Pattern COMMA_DOLLAR = Pattern.compile(",$");
 

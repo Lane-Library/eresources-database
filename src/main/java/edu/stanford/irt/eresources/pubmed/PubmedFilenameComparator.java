@@ -14,7 +14,7 @@ public class PubmedFilenameComparator implements Comparator<File>, Serializable 
 
     private static final Pattern DIGIT = Pattern.compile("\\d");
 
-    private static final Pattern NON_ALPHA = Pattern.compile("(\\W|\\d)");
+    private static final Pattern NON_ALPHA = Pattern.compile("[\\W\\d]");
 
     private static final Pattern NON_DIGITS = Pattern.compile("[^\\d]");
 
