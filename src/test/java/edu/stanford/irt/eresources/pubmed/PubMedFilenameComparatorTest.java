@@ -22,7 +22,7 @@ public class PubMedFilenameComparatorTest {
 
     @Test
     public void testCompare() {
-        File f1 = new File("foo/bar");
+        File f1 = new File("foo/b  ar");
         File f2 = new File("foo/bar");
         assertEquals(0, this.comparator.compare(f1, f2));
         File f3 = new File("1/2");
