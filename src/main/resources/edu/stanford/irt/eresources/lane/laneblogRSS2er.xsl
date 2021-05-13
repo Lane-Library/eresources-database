@@ -40,8 +40,25 @@
             <version>
                 <link>
                     <!-- LANEWEB-10684: image elements appearing in search results; may need to strip other tags -->
+                    <xsl:variable name="apostrophe">'</xsl:variable>
+                    <xsl:variable name="quote">"</xsl:variable>
                     <xsl:variable name="desc">
                         <xsl:value-of select="replace(description,'&lt;img .*/&gt;','')"/>
+                    </xsl:variable>
+                    <xsl:variable name="desc">
+                        <xsl:value-of select="replace($desc,'&amp;#160;',' ')"/>
+                    </xsl:variable>
+                    <xsl:variable name="desc">
+                        <xsl:value-of select="replace($desc,'&amp;#8217;',$apostrophe)"/>
+                    </xsl:variable>
+                    <xsl:variable name="desc">
+                        <xsl:value-of select="replace($desc,'&amp;#038;','&amp;')"/>
+                    </xsl:variable>
+                    <xsl:variable name="desc">
+                        <xsl:value-of select="replace($desc,'&amp;#8230;','...')"/>
+                    </xsl:variable>
+                    <xsl:variable name="desc">
+                        <xsl:value-of select="replace($desc,'&amp;#822[01];',$quote)"/>
                     </xsl:variable>
                     <label>
                         <xsl:value-of select="concat(substring($desc, 1, 46),' . . .')" />
