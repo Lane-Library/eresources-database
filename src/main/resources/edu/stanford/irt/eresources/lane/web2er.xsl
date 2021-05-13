@@ -3,8 +3,10 @@
         xmlns:h="http://www.w3.org/1999/xhtml"
         xmlns:xi="http://www.w3.org/2001/XInclude"
         version="2.0">
-    
+
     <xsl:param name="lane-host"/>
+
+    <xsl:include href="classpath:/edu/stanford/irt/eresources/lane/dc-creator.xsl"/>
 
     <!--  http://stackoverflow.com/questions/33256226/warning-messages-appeared-after-upgrade-saxon-to-9-5-1-8 -->    
     <xsl:template match="dummy-template-to-suppress-namespace-check-message-when-no-html-files-are-processed"/>
@@ -42,6 +44,17 @@
                     <url><xsl:value-of select="$url"/></url>
                 </link>
             </version>
+            <xsl:for-each select="//h:meta[@name='DC.Creator']">
+                <xsl:variable name="creator">
+                    <xsl:call-template name="dc-creator">
+                        <xsl:with-param name="creator" select="@content"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:if test="contains($creator,', ')">
+                    <publicationAuthor><xsl:value-of select="$creator"/></publicationAuthor>
+                    <publicationAuthorFacetable><xsl:value-of select="$creator"/></publicationAuthorFacetable>
+                </xsl:if>
+            </xsl:for-each>
         </eresource>
     </xsl:template>
     
