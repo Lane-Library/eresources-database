@@ -3,8 +3,13 @@
         xmlns="http://www.w3.org/1999/xhtml"
         version="2.0">
 
+    <xsl:include href="classpath:/edu/stanford/irt/eresources/lane/dc-creator.xsl"/>
+
     <xsl:template match="html">
         <eresource id="libguide-{@id}" recordId="{@id}" type="web" update="{@update}">
+            <xsl:variable name="creator">
+                <xsl:value-of select="normalize-space(@creator)"/>
+            </xsl:variable>
             <xsl:variable name="keywords">
                 <xsl:apply-templates/>
             </xsl:variable>
@@ -22,6 +27,15 @@
                     <url><xsl:value-of select="@link"/></url>
                 </link>
             </version>
+            <xsl:variable name="creator">
+                <xsl:call-template name="dc-creator">
+                    <xsl:with-param name="creator" select="normalize-space(@creator)"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:if test="contains($creator,', ')">
+                <publicationAuthor><xsl:value-of select="$creator"/></publicationAuthor>
+                <publicationAuthorFacetable><xsl:value-of select="$creator"/></publicationAuthorFacetable>
+            </xsl:if>
         </eresource>
     </xsl:template>
     

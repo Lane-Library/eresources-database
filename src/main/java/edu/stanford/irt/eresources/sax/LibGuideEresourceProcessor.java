@@ -16,11 +16,17 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
 import org.w3c.dom.Document;
@@ -41,6 +47,8 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
 
     private class Guide {
 
+        protected String creator;
+
         protected String description;
 
         protected String id;
@@ -51,15 +59,18 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
 
         protected String title;
 
-        public Guide(final String id, final String link, final String title, final String description,
-                final String modifiedDate) {
+        public Guide(final String id, final String link, final String title, final String creator,
+                final String description, final String modifiedDate) {
             this.id = id;
             this.link = link;
             this.title = title;
+            this.creator = creator;
             this.description = description;
             this.modifiedDate = modifiedDate;
         }
     }
+
+    private XPath xpath;
 
     private static final String ERESOURCES = "eresources";
 
@@ -79,9 +90,13 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
 
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
+    private HTMLConfiguration nekoConfig = new HTMLConfiguration();
+
     public LibGuideEresourceProcessor(final String allGuidesURL, final ContentHandler contentHandler) {
         this.allGuidesURL = allGuidesURL;
         this.contentHandler = contentHandler;
+        this.nekoConfig.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
+        this.xpath = XPathFactory.newInstance().newXPath();
     }
 
     @Override
@@ -93,8 +108,6 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             throw new IllegalArgumentException("null contentHandler");
         }
         TransformerFactory tf = TransformerFactory.newInstance();
-        HTMLConfiguration config = new HTMLConfiguration();
-        config.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
         List<Guide> guides = getGuides();
         try {
             tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -105,11 +118,12 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                 Long updated = getUpdateDate(guide.modifiedDate);
                 if (updated > getStartTime()) {
                     InputSource source = new InputSource(new URL(guide.link).openConnection().getInputStream());
-                    DOMParser parser = new DOMParser(config);
+                    DOMParser parser = new DOMParser(this.nekoConfig);
                     parser.parse(source);
                     Document doc = parser.getDocument();
                     Element root = doc.getDocumentElement();
                     root.setAttribute("id", guide.id);
+                    root.setAttribute("creator", guide.creator);
                     root.setAttribute("description", guide.description);
                     root.setAttribute("title", guide.title);
                     root.setAttribute("link", guide.link);
@@ -142,15 +156,44 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                 String id = TextParserHelper.cleanId(link.hashCode());
                 String description = maybeFetchTextContent(recordElm, "dc:description");
                 String title = maybeFetchTextContent(recordElm, "dc:title");
-                Guide guide = new Guide(id, link, title, description, modifiedDate);
+                String creator = maybeFetchTextContent(recordElm, "dc:creator");
+                Guide guide = new Guide(id, link, title, creator, description, modifiedDate);
                 if (isIndexable(guide)) {
-                    guides.add(guide);
+                    guides.addAll(getSubGuides(guide));
                 }
             }
         } catch (SAXException | ParserConfigurationException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
         return guides;
+    }
+
+    private List<Guide> getSubGuides(Guide guide) {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        List<Guide> subGuides = new LinkedList<>();
+        try {
+            tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            URL url = new URL(guide.link);
+            InputSource source = new InputSource(url.openConnection().getInputStream());
+            DOMParser parser = new DOMParser(this.nekoConfig);
+            parser.parse(source);
+            parser.setErrorHandler(this.errorHandler);
+            Document doc = parser.getDocument();
+            NodeList guideAnchors = (NodeList) this.xpath.evaluate("//div[@id='s-lg-guide-tabs']/ul/li/a", doc,
+                    XPathConstants.NODESET);
+            for (int i = 0; i < guideAnchors.getLength(); i++) {
+                Element guideAnchor = (Element) guideAnchors.item(i);
+                String link = guideAnchor.getAttribute("href");
+                String id = TextParserHelper.cleanId(link.hashCode());
+                String name = guide.title + " -- "
+                        + StringEscapeUtils.unescapeHtml(guideAnchor.getAttribute("aria-label"));
+                Guide subGuide = new Guide(id, link, name, guide.creator, guide.description, guide.modifiedDate);
+                subGuides.add(subGuide);
+            }
+        } catch (SAXException | IOException | TransformerConfigurationException | XPathExpressionException e) {
+            throw new EresourceDatabaseException(e);
+        }
+        return subGuides;
     }
 
     private long getUpdateDate(final String date) {
