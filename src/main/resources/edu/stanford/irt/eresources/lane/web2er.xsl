@@ -44,7 +44,7 @@
                     <url><xsl:value-of select="$url"/></url>
                 </link>
             </version>
-            <xsl:for-each select="//h:meta[@name='DC.Creator']">
+            <xsl:for-each select=".//h:meta[@name='DC.Creator']">
                 <xsl:variable name="creator">
                     <xsl:call-template name="dc-creator">
                         <xsl:with-param name="creator" select="@content"/>
