@@ -16,6 +16,9 @@
             <action date="2021-05-13" dev="ryanmax" issue="LANEWEB-10712" type="add">
                 more markup appearing in laneblog search results
             </action>
+            <action date="2021-05-03" dev="ryanmax" type="update">
+                update LCSH mappings
+            </action>
         </release>
         <release date="2021-03-04" version="2.4.6" description="maintenance release">
             <action date="2021-03-03" dev="ryanmax" issue="LANEWEB-10684" type="fix">
