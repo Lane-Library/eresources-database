@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
@@ -51,7 +52,7 @@ public class SAXEresource implements Eresource {
 
     private String primaryType;
 
-    private Collection<String> publicationAuthors = new HashSet<>();
+    private Collection<String> publicationAuthors = new LinkedList<>();
 
     private Collection<String> publicationAuthorsFacetable = new HashSet<>();
 
