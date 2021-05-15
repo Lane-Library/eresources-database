@@ -54,8 +54,10 @@ public class SolrEresourceHandler implements EresourceHandler {
     private static final Pattern NOPROXY_HOSTS = Pattern
             .compile(".*\\.(stanford.edu|stanfordchildrens.org|stanfordhealthcare.org)", Pattern.CASE_INSENSITIVE);
 
-    private static final int SORT_TEXT_MAX = 100;
+    private static final int SORT_AUTHOR_MAX = 50;
 
+    private static final int SORT_TITLE_MAX = 100;
+    
     private int count;
 
     private volatile boolean keepGoing = true;
@@ -81,12 +83,12 @@ public class SolrEresourceHandler implements EresourceHandler {
         this.solrMaxDocs = solrMaxDocs;
     }
 
-    private static String getSortText(final String text) {
+    private static String getSortText(final String text, int max) {
         if (null == text) {
             return EMPTY;
         }
-        if (text.length() > SORT_TEXT_MAX) {
-            return text.substring(0, SORT_TEXT_MAX);
+        if (text.length() > max) {
+            return text.substring(0, max);
         }
         return text;
     }
@@ -185,7 +187,7 @@ public class SolrEresourceHandler implements EresourceHandler {
             authorSort.append(author);
         }
         addPublicationAuthors(eresource, doc);
-        doc.addField("authors_sort", getSortText(authorSort.toString()));
+        doc.addField("authors_sort", getSortText(authorSort.toString(), SORT_AUTHOR_MAX));
         doc.addField("publicationLanguage", eresource.getPublicationLanguages());
         for (String pubType : eresource.getPublicationTypes()) {
             doc.addField("publicationType", pubType);
@@ -284,7 +286,7 @@ public class SolrEresourceHandler implements EresourceHandler {
             st = eresource.getTitle();
             st = BASIC_NONFILING.matcher(st).replaceFirst(EMPTY);
         }
-        return getSortText(st);
+        return getSortText(st, SORT_TITLE_MAX);
     }
 
     private void handleMesh(final Eresource eresource, final SolrInputDocument doc) {
