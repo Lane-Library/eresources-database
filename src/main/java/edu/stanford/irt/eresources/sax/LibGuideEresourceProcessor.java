@@ -70,8 +70,6 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
         }
     }
 
-    private XPath xpath;
-
     private static final String ERESOURCES = "eresources";
 
     private static final Pattern NO_INDEX_KEYWORDS = Pattern
@@ -91,6 +89,8 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
     private HTMLConfiguration nekoConfig = new HTMLConfiguration();
+
+    private XPath xpath;
 
     public LibGuideEresourceProcessor(final String allGuidesURL, final ContentHandler contentHandler) {
         this.allGuidesURL = allGuidesURL;
@@ -168,7 +168,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
         return guides;
     }
 
-    private List<Guide> getSubGuides(Guide guide) {
+    private List<Guide> getSubGuides(final Guide guide) {
         TransformerFactory tf = TransformerFactory.newInstance();
         List<Guide> subGuides = new LinkedList<>();
         try {
