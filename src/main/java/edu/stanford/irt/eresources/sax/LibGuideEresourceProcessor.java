@@ -90,6 +90,8 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
 
     private HTMLConfiguration nekoConfig = new HTMLConfiguration();
 
+    private TransformerFactory tf = TransformerFactory.newInstance();
+
     private XPath xpath;
 
     public LibGuideEresourceProcessor(final String allGuidesURL, final ContentHandler contentHandler) {
@@ -107,10 +109,9 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
         if (null == this.contentHandler) {
             throw new IllegalArgumentException("null contentHandler");
         }
-        TransformerFactory tf = TransformerFactory.newInstance();
         List<Guide> guides = getGuides();
         try {
-            tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (!guides.isEmpty()) {
@@ -128,12 +129,12 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                     root.setAttribute("title", guide.title);
                     root.setAttribute("link", guide.link);
                     root.setAttribute("update", this.dateFormat.format(updated));
-                    tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+                    this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
                 }
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (IOException | SAXException | TransformerException e) {
+        } catch (IOException | SAXException | TransformerException | ParserConfigurationException e) {
             throw new EresourceDatabaseException(e);
         }
     }
