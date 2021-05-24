@@ -60,7 +60,8 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
         config.setProperty("http://cyberneko.org/html/properties/names/elems", "lower");
         List<File> filesToParse = getHTMLPages(new File(this.basePath));
         try {
-            tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (!filesToParse.isEmpty()) {
