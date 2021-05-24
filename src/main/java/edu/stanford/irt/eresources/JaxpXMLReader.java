@@ -15,10 +15,13 @@ import edu.stanford.lane.catalog.ParserCreationException;
 public class JaxpXMLReader extends XMLFilterImpl {
 
     public JaxpXMLReader() {
+        // network requests to NCBI intermittently fail, so cache DTDs
+        // http://xerces.apache.org/xerces2-j/faq-grammars.html#faq-4
+        System.setProperty("org.apache.xerces.xni.parser.XMLParserConfiguration",
+                "org.apache.xerces.parsers.XMLGrammarCachingConfiguration");
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
-            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, Boolean.TRUE);
             super.setParent(factory.newSAXParser().getXMLReader());
         } catch (ParserConfigurationException | SAXException e) {
