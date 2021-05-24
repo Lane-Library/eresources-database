@@ -16,7 +16,6 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -109,9 +108,9 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
         if (null == this.contentHandler) {
             throw new IllegalArgumentException("null contentHandler");
         }
-        List<Guide> guides = getGuides();
         try {
             this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            List<Guide> guides = getGuides();
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (!guides.isEmpty()) {
@@ -144,8 +143,6 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
         try {
             URL url = new URL(this.allGuidesURL);
             InputSource source = new InputSource(url.openConnection().getInputStream());
-            this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            this.factory.setNamespaceAware(true);
             DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.parse(source);
@@ -170,10 +167,8 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private List<Guide> getSubGuides(final Guide guide) {
-        TransformerFactory tf = TransformerFactory.newInstance();
         List<Guide> subGuides = new LinkedList<>();
         try {
-            tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             URL url = new URL(guide.link);
             InputSource source = new InputSource(url.openConnection().getInputStream());
             DOMParser parser = new DOMParser(this.nekoConfig);
@@ -191,7 +186,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                 Guide subGuide = new Guide(id, link, name, guide.creator, guide.description, guide.modifiedDate);
                 subGuides.add(subGuide);
             }
-        } catch (SAXException | IOException | TransformerConfigurationException | XPathExpressionException e) {
+        } catch (SAXException | IOException | XPathExpressionException e) {
             throw new EresourceDatabaseException(e);
         }
         return subGuides;
