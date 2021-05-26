@@ -5,7 +5,7 @@
     <import resource="../common.xml"/>
     <!-- unit testing load job ... does nothing -->
     <!-- should move me to test/resources -->
-    <bean id="solrLoader" class="edu.stanford.irt.eresources.LaneUpdate" parent="abstractSolrLoader">
+    <bean id="solrLoader" class="edu.stanford.irt.eresources.SolrLoader" parent="abstractSolrLoader">
     	<property name="processors">
             <list>
             </list>
