@@ -71,6 +71,8 @@ public class EresourcesController {
     @ResponseBody
     public String usage() {
         StringBuilder sb = new StringBuilder();
+        sb.append("<li>status: <a href=\"/status.txt\">txt</a> ");
+        sb.append("<a href=\"/status.json\">json</a></li>");
         for (Job.Type t : Job.Type.values()) {
             if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
                 sb.append("<li><a href=\"/solrLoader?job=");
