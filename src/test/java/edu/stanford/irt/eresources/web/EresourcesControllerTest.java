@@ -69,7 +69,7 @@ public class EresourcesControllerTest {
     public final void testSolrLoaderCancelRunningJob() {
         expect(this.manager.cancelRunningJob()).andReturn(JobStatus.INTERRUPTED);
         replay(this.manager);
-        this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOB.toString());
+        this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOB.getName());
         verify(this.manager);
     }
 
