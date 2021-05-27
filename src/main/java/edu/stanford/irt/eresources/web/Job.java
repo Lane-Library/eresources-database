@@ -50,6 +50,15 @@ public class Job {
          */
         UNIT_TESTING("lane/unit-test");
 
+        public static Type fromString(final String name) {
+            for (Job.Type type : Job.Type.values()) {
+                if (type.getName().equals(name)) {
+                    return type;
+                }
+            }
+            return Job.Type.UNDEFINED;
+        }
+
         private String name;
 
         Type(final String name) {

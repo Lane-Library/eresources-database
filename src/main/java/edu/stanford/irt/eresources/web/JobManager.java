@@ -56,8 +56,10 @@ public class JobManager {
     }
 
     public JobStatus run(final Job job) {
+        String jobName = job.getType().getName();
         if (null != this.runningJob) {
-            log.warn("{} failed to start job; previous {} job sill running", job.getType(), this.runningJob.getType());
+            log.warn("{} failed to start job; previous {} job sill running", jobName,
+                    this.runningJob.getType().getName());
             return JobStatus.RUNNING;
         }
         this.runningJob = job;
@@ -66,10 +68,10 @@ public class JobManager {
             return this.runningFuture.get(this.maxJobDurationInHours, TimeUnit.HOURS);
         } catch (TimeoutException e) {
             long duration = ChronoUnit.HOURS.between(job.getStart(), LocalDateTime.now());
-            log.error("job {} running for {} hours", job, duration, e);
+            log.error("job {} running for {} hours", jobName, duration, e);
             return JobStatus.INTERRUPTED;
         } catch (InterruptedException | ExecutionException e) {
-            log.error("job {} interrupted ", job, e);
+            log.error("job {} interrupted ", jobName, e);
             return JobStatus.INTERRUPTED;
         } finally {
             this.runningFuture = null;
@@ -79,7 +81,8 @@ public class JobManager {
 
     private Future<JobStatus> doRun(final Job job) {
         return this.executor.submit(() -> {
-            String[] args = { job.getType().getName() };
+            String jobName = job.getType().getName();
+            String[] args = { jobName };
             try {
                 SolrLoader.main(args);
             } catch (Exception e) {
@@ -88,7 +91,7 @@ public class JobManager {
                 return JobStatus.ERROR;
             }
             final long later = ChronoUnit.MILLIS.between(job.getStart(), LocalDateTime.now());
-            log.info("solrLoader: {}; executed in {}ms", job, later);
+            log.info("solrLoader: {}; executed in {}ms", jobName, later);
             this.runningJob = null;
             return JobStatus.COMPLETE;
         });

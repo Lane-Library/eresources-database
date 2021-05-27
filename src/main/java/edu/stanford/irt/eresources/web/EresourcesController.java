@@ -51,10 +51,10 @@ public class EresourcesController {
     @GetMapping(value = { "/solrLoader" }, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JobStatus solrLoader(@RequestParam final String job) {
-        if (Job.Type.CANCEL_RUNNING_JOB.toString().equals(job)) {
+        if (Job.Type.CANCEL_RUNNING_JOB.getName().equals(job)) {
             return this.jobManager.cancelRunningJob();
         }
-        return this.jobManager.run(new Job(Job.Type.CANCEL_RUNNING_JOB, LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.fromString(job), LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
@@ -67,15 +67,19 @@ public class EresourcesController {
         return this.jobManager.run(new Job(Job.Type.SUL_UPDATE, LocalDateTime.now()));
     }
 
-    @GetMapping(value = { "*" }, produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = { "*" }, produces = MediaType.TEXT_HTML_VALUE)
     @ResponseBody
     public String usage() {
-        StringBuilder sb = new StringBuilder("/solrLoader?job=<");
+        StringBuilder sb = new StringBuilder();
         for (Job.Type t : Job.Type.values()) {
-            sb.append(t.getName());
+            if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
+                sb.append("<li><a href=\"/solrLoader?job=");
+                sb.append(t.getName());
+                sb.append("\">");
+                sb.append(t.getName());
+                sb.append("</a></li>");
+            }
         }
-        sb.deleteCharAt(sb.length() - 1);
-        sb.append('>');
         return sb.toString();
     }
 
