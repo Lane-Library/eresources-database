@@ -1,6 +1,8 @@
 package edu.stanford.irt.eresources.web;
 
 import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -17,31 +19,31 @@ import edu.stanford.irt.status.DefaultStatusService;
 import edu.stanford.irt.status.StatusProvider;
 import edu.stanford.irt.status.StatusService;
 
-@Import({ 
-    HttpEncodingAutoConfiguration.class, 
-    WebMvcAutoConfiguration.class,
-    HttpMessageConvertersAutoConfiguration.class, 
-    ServletWebServerFactoryAutoConfiguration.class,
-    DispatcherServletAutoConfiguration.class, 
-    EresourcesController.class,
-    StatusController.class})
+@Import({ HttpEncodingAutoConfiguration.class, WebMvcAutoConfiguration.class,
+        HttpMessageConvertersAutoConfiguration.class, ServletWebServerFactoryAutoConfiguration.class,
+        DispatcherServletAutoConfiguration.class, EresourcesController.class, StatusController.class })
 public class EresourcesWebApplication {
 
     public static void main(final String[] args) {
         SpringApplication.run(EresourcesWebApplication.class, args);
     }
 
-    @Value("${eresources.maxJobDurationInHours}")
-    protected int maxJobDurationInHours;
-
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
+    @Value("${eresources.maxJobDurationInHours}")
+    protected int maxJobDurationInHours;
+
     @Bean
     public JobManager jobManager(@Value("${eresources.maxJobDurationInHours}") final int maxJobDurationInHours) {
-        return new JobManager(maxJobDurationInHours);
+        return new JobManager(jobManagerExecutor(), maxJobDurationInHours);
+    }
+
+    @Bean
+    public ExecutorService jobManagerExecutor() {
+        return Executors.newSingleThreadExecutor();
     }
 
     @Bean

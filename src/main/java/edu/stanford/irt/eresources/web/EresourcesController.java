@@ -30,31 +30,31 @@ public class EresourcesController {
 
     @Scheduled(cron = "${eresources.schedule.cron.laneReload}")
     public JobStatus laneReload() {
-        return this.jobManager.run(new Job("lane/reload", LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.LANE_RELOAD, LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.laneUpdate}")
     public JobStatus laneUpdate() {
-        return this.jobManager.run(new Job("lane/update", LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.LANE_UPDATE, LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.pubmedDailyFtp}")
     public JobStatus pubmedDailyFtp() {
-        return this.jobManager.run(new Job("pubmed/run-daily-ftp", LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.PUBMED_UPDATE, LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.redivisReload}")
     public JobStatus redivisReload() {
-        return this.jobManager.run(new Job("redivis/reload", LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.REDIVIS_RELOAD, LocalDateTime.now()));
     }
 
     @GetMapping(value = { "/solrLoader" }, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JobStatus solrLoader(@RequestParam final String job) {
-        if (JobManager.CLEAR_RUNNING_JOB.equals(job)) {
-            return this.jobManager.clearRunningJob();
+        if (Job.Type.CANCEL_RUNNING_JOB.toString().equals(job)) {
+            return this.jobManager.cancelRunningJob();
         }
-        return this.jobManager.run(new Job(job, LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.CANCEL_RUNNING_JOB, LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
@@ -64,14 +64,19 @@ public class EresourcesController {
 
     @Scheduled(cron = "${eresources.schedule.cron.sulUpdate}")
     public JobStatus sulUpdate() {
-        return this.jobManager.run(new Job("sul/update", LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.SUL_UPDATE, LocalDateTime.now()));
     }
 
     @GetMapping(value = { "*" }, produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
     public String usage() {
-        return "/solrLoader?job="
-                + "<lane/update|lane/reload|pubmed/run-daily-ftp|redivis/reload|sul/update|sul/reload|clear-running-job>";
+        StringBuilder sb = new StringBuilder("/solrLoader?job=<");
+        for (Job.Type t : Job.Type.values()) {
+            sb.append(t.getName());
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append('>');
+        return sb.toString();
     }
 
     /**
@@ -90,7 +95,7 @@ public class EresourcesController {
         LocalDate yesterday = today.minus(1, ChronoUnit.DAYS);
         LocalDate thirdSaturdayOfMonth = yesterday.with(TemporalAdjusters.dayOfWeekInMonth(THIRD, DayOfWeek.SATURDAY));
         if (yesterday.isEqual(thirdSaturdayOfMonth)) {
-            return this.jobManager.run(new Job("sul/reload", LocalDateTime.now()));
+            return this.jobManager.run(new Job(Job.Type.SUL_RELOAD, LocalDateTime.now()));
         }
         return JobStatus.SKIPPED;
     }

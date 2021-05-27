@@ -17,6 +17,10 @@ public enum JobStatus {
      */
     RUNNING,
     /**
+     * job was stopped prematurely
+     */
+    INTERRUPTED,
+    /**
      * job did not run
      */
     SKIPPED;

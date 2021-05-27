@@ -24,12 +24,12 @@ public class EresourceStatusProvider extends RuntimeMXBeanStatusProvider {
     protected void addStatusItems(final List<StatusItem> items, final RuntimeMXBean mxBean) {
         var runningJob = this.jobManager.getRunningJob();
         if (null != runningJob) {
-            var msg = String.format(MESSAGE, runningJob.getName(),
+            var msg = String.format(MESSAGE, runningJob.getType(),
                     ChronoUnit.MINUTES.between(runningJob.getStart(), LocalDateTime.now()), ChronoUnit.MINUTES);
             items.add(new StatusItem(Status.INFO, msg));
             if (LocalDateTime.now().isAfter(
                     runningJob.getStart().plus(Duration.ofHours(this.jobManager.getMaxJobDurationInHours())))) {
-                msg = String.format(MESSAGE, "long-running job " + runningJob.getName(),
+                msg = String.format(MESSAGE, "long-running job " + runningJob.getType(),
                         ChronoUnit.HOURS.between(runningJob.getStart(), LocalDateTime.now()), ChronoUnit.HOURS);
                 items.add(new StatusItem(Status.ERROR, msg));
             }

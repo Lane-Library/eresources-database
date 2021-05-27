@@ -7,27 +7,81 @@ import java.time.LocalDateTime;
  */
 public class Job {
 
-    private String name;
+    public enum Type {
+
+        /**
+         * job type to cancel whatever job is currently running
+         */
+        CANCEL_RUNNING_JOB("cancel-running-job"),
+        /**
+         * daily lane reload
+         */
+        LANE_RELOAD("lane/reload"),
+        /**
+         * routine lane updates
+         */
+        LANE_UPDATE("lane/update"),
+        /**
+         * reload pubmed from baseline files
+         */
+        PUBMED_RELOAD("pubmed/run-annual-reload"),
+        /**
+         * a few times a day pubmed updates
+         */
+        PUBMED_UPDATE("pubmed/run-daily-ftp"),
+        /**
+         * monthly redivis reload
+         */
+        REDIVIS_RELOAD("redivid/reload"),
+        /**
+         * monthly sul reloads
+         */
+        SUL_RELOAD("sul/reload"),
+        /**
+         * daily sul updates
+         */
+        SUL_UPDATE("sul/update"),
+        /**
+         * unknown ... also for unit testing
+         */
+        UNDEFINED("undefined"),
+        /**
+         * for unit testing
+         */
+        UNIT_TESTING("lane/unit-test");
+
+        private String name;
+
+        Type(final String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+    }
 
     private LocalDateTime start;
 
-    public Job(final String name, final LocalDateTime start) {
-        this.name = name;
-        this.start = start;
-    }
+    private Type type;
 
-    public String getName() {
-        return this.name;
+    public Job(final Type jobType, final LocalDateTime start) {
+        this.type = jobType;
+        this.start = start;
     }
 
     public LocalDateTime getStart() {
         return this.start;
     }
 
+    public Type getType() {
+        return this.type;
+    }
+
     @Override
     public String toString() {
         var sb = new StringBuilder();
-        sb.append("name: ").append(this.name);
+        sb.append("type: ").append(this.type);
         sb.append("; start: ").append(this.start);
         return sb.toString();
     }

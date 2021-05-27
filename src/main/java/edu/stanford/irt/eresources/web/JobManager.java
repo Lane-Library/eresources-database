@@ -2,7 +2,11 @@ package edu.stanford.irt.eresources.web;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,28 +14,36 @@ import org.slf4j.LoggerFactory;
 import edu.stanford.irt.eresources.SolrLoader;
 
 /**
- * Manager to run one indexing {@link Job} at a time consider using {@link CompletableFuture}
+ * Manager to run one indexing {@link Job} at a time
  */
 public class JobManager {
 
-    public static final String CLEAR_RUNNING_JOB = "clear-running-job";
-
     private static final Logger log = LoggerFactory.getLogger(JobManager.class);
+
+    private ExecutorService executor;
 
     private int maxJobDurationInHours;
 
     // protected for unit testing
+    protected Future<JobStatus> runningFuture;
+
+    // protected for unit testing
     protected Job runningJob;
 
-    public JobManager(final int maxJobDurationInHours) {
+    public JobManager(final ExecutorService executor, final int maxJobDurationInHours) {
         this.maxJobDurationInHours = maxJobDurationInHours;
+        this.executor = executor;
     }
 
     /**
-     * clear the running job so another can be submitted. Note: makes no attempt to halt the running job!
+     * terminate the running job so another can be submitted.
      */
-    public JobStatus clearRunningJob() {
+    public JobStatus cancelRunningJob() {
         this.runningJob = null;
+        if (null != this.runningFuture && !this.runningFuture.isDone()) {
+            this.runningFuture.cancel(true);
+            return JobStatus.INTERRUPTED;
+        }
         return JobStatus.COMPLETE;
     }
 
@@ -44,9 +56,30 @@ public class JobManager {
     }
 
     public JobStatus run(final Job job) {
-        if (null == this.runningJob) {
-            this.runningJob = job;
-            String[] args = { job.getName() };
+        if (null != this.runningJob) {
+            log.warn("{} failed to start job; previous {} job sill running", job.getType(), this.runningJob.getType());
+            return JobStatus.RUNNING;
+        }
+        this.runningJob = job;
+        this.runningFuture = doRun(job);
+        try {
+            return this.runningFuture.get(this.maxJobDurationInHours, TimeUnit.HOURS);
+        } catch (TimeoutException e) {
+            long duration = ChronoUnit.HOURS.between(job.getStart(), LocalDateTime.now());
+            log.error("job {} running for {} hours", job, duration, e);
+            return JobStatus.INTERRUPTED;
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("job {} interrupted ", job, e);
+            return JobStatus.INTERRUPTED;
+        } finally {
+            this.runningFuture = null;
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private Future<JobStatus> doRun(final Job job) {
+        return this.executor.submit(() -> {
+            String[] args = { job.getType().getName() };
             try {
                 SolrLoader.main(args);
             } catch (Exception e) {
@@ -58,8 +91,6 @@ public class JobManager {
             log.info("solrLoader: {}; executed in {}ms", job, later);
             this.runningJob = null;
             return JobStatus.COMPLETE;
-        }
-        log.warn("{} failed to start job; previous {} job sill running", job.getName(), this.runningJob.getName());
-        return JobStatus.RUNNING;
+        });
     }
 }

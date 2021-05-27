@@ -29,7 +29,7 @@ public class EresourceStatusProviderTest {
 
     @Test
     public final void testAddStatusItemsLongRunningJob() {
-        Job job = new Job("name", LocalDateTime.MIN);
+        Job job = new Job(Job.Type.UNDEFINED, LocalDateTime.MIN);
         expect(this.manager.getRunningJob()).andReturn(job);
         expect(this.manager.getMaxJobDurationInHours()).andReturn(10);
         replay(this.manager);
@@ -49,7 +49,7 @@ public class EresourceStatusProviderTest {
 
     @Test
     public final void testAddStatusItemsRunningJob() {
-        Job job = new Job("name", LocalDateTime.now());
+        Job job = new Job(Job.Type.UNDEFINED, LocalDateTime.now());
         expect(this.manager.getRunningJob()).andReturn(job);
         expect(this.manager.getMaxJobDurationInHours()).andReturn(10);
         replay(this.manager);

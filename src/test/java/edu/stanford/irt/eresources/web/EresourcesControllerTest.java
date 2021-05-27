@@ -66,17 +66,32 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testSulReload() {
-        LocalDate knownThirdSundayOfMonth = LocalDate.of(2020, 01, 19);
-        expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
+    public final void testSolrLoaderCancelRunningJob() {
+        expect(this.manager.cancelRunningJob()).andReturn(JobStatus.INTERRUPTED);
         replay(this.manager);
-        this.controller.sulReload(knownThirdSundayOfMonth);
+        this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOB.toString());
         verify(this.manager);
+    }
+
+    @Test
+    public final void testSulReload() {
+        // this will fail on third Sunday of the month
+        JobStatus status = this.controller.sulReload();
+        assertEquals(JobStatus.SKIPPED, status);
     }
 
     @Test
     public final void testSulReloadSkipped() {
         assertEquals(JobStatus.SKIPPED, this.controller.sulReload(LocalDate.MAX));
+    }
+
+    @Test
+    public final void testSulReloadThirdSunday() {
+        LocalDate knownThirdSundayOfMonth = LocalDate.of(2020, 01, 19);
+        expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
+        replay(this.manager);
+        this.controller.sulReload(knownThirdSundayOfMonth);
+        verify(this.manager);
     }
 
     @Test
