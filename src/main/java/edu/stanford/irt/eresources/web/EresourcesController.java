@@ -71,12 +71,12 @@ public class EresourcesController {
     @ResponseBody
     public String usage() {
         StringBuilder sb = new StringBuilder();
-        sb.append("status: <a href=\"/status.txt\">txt</a> ");
-        sb.append("<a href=\"/status.json\">json</a>");
+        sb.append("status: <a href=\"status.txt\">txt</a> ");
+        sb.append("<a href=\"status.json\">json</a>");
         sb.append("<ol>jobs");
         for (Job.Type t : Job.Type.values()) {
             if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
-                sb.append("<li><a href=\"/solrLoader?job=");
+                sb.append("<li><a href=\"solrLoader?job=");
                 sb.append(t.getName());
                 sb.append("\">");
                 sb.append(t.getName());
