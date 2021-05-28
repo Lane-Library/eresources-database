@@ -71,8 +71,9 @@ public class EresourcesController {
     @ResponseBody
     public String usage() {
         StringBuilder sb = new StringBuilder();
-        sb.append("<li>status: <a href=\"/status.txt\">txt</a> ");
-        sb.append("<a href=\"/status.json\">json</a></li>");
+        sb.append("status: <a href=\"/status.txt\">txt</a> ");
+        sb.append("<a href=\"/status.json\">json</a>");
+        sb.append("<ol>jobs");
         for (Job.Type t : Job.Type.values()) {
             if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
                 sb.append("<li><a href=\"/solrLoader?job=");
@@ -82,6 +83,7 @@ public class EresourcesController {
                 sb.append("</a></li>");
             }
         }
+        sb.append("</ol>");
         return sb.toString();
     }
 
