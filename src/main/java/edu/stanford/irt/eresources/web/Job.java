@@ -32,9 +32,9 @@ public class Job {
         /**
          * monthly redivis reload
          */
-        REDIVIS_RELOAD("redivid/reload"),
+        REDIVIS_RELOAD("redivis/reload"),
         /**
-         * monthly sul reloads
+         * monthly sul reload
          */
         SUL_RELOAD("sul/reload"),
         /**
