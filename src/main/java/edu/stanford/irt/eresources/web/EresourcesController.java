@@ -71,11 +71,19 @@ public class EresourcesController {
     @ResponseBody
     public String usage() {
         StringBuilder sb = new StringBuilder();
+        sb.append("<h1>eresources indexing</h1>");
         sb.append("status: <a href=\"status.txt\">txt</a> ");
         sb.append("<a href=\"status.json\">json</a>");
-        sb.append("<ol>jobs");
+        sb.append("<h2>jobs</h2>");
+        sb.append("<pre>* unlinked jobs run longer than an hour \n");
+        sb.append("** pubmed reload takes 8+ hours and requires baseline data from NCBI</pre>");
+        sb.append("<ul>");
         for (Job.Type t : Job.Type.values()) {
-            if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
+            if (Job.Type.PUBMED_RELOAD.equals(t) || Job.Type.SUL_RELOAD.equals(t)) {
+                sb.append("<li>");
+                sb.append(t.getName());
+                sb.append("</li>");
+            } else if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
                 sb.append("<li><a href=\"solrLoader?job=");
                 sb.append(t.getName());
                 sb.append("\">");
@@ -83,7 +91,7 @@ public class EresourcesController {
                 sb.append("</a></li>");
             }
         }
-        sb.append("</ol>");
+        sb.append("</ul>");
         return sb.toString();
     }
 
