@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
-import javax.servlet.ServletContext;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -23,14 +21,11 @@ public class EresourcesController {
 
     private static final int THIRD = 3;
 
-    private ServletContext context;
-
     private JobManager jobManager;
 
     @Autowired
-    public EresourcesController(final JobManager jobManager, final ServletContext context) {
+    public EresourcesController(final JobManager jobManager) {
         this.jobManager = jobManager;
-        this.context = context;
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.laneReload}")
@@ -75,11 +70,10 @@ public class EresourcesController {
     @GetMapping(value = { "*" }, produces = MediaType.TEXT_HTML_VALUE)
     @ResponseBody
     public String usage() {
-        String path = this.context.getContextPath();
         StringBuilder sb = new StringBuilder();
         sb.append("<h1>eresources indexing</h1>");
-        sb.append("status: <a href=\"" + path + "status.txt\">txt</a> ");
-        sb.append("<a href=\"" + path + "status.json\">json</a>");
+        sb.append("status: <a href=\"status.txt\">txt</a> ");
+        sb.append("<a href=\"status.json\">json</a>");
         sb.append("<h2>jobs</h2>");
         sb.append("<pre>* unlinked jobs run longer than an hour \n");
         sb.append("** pubmed reload takes 8+ hours and requires baseline data from NCBI</pre>");
@@ -90,7 +84,7 @@ public class EresourcesController {
                 sb.append(t.getName());
                 sb.append("</li>");
             } else if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
-                sb.append("<li><a href=\"" + path + "solrLoader?job=");
+                sb.append("<li><a href=\"solrLoader?job=");
                 sb.append(t.getName());
                 sb.append("\">");
                 sb.append(t.getName());

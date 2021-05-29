@@ -10,14 +10,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 
-import javax.servlet.ServletContext;
-
 import org.junit.Before;
 import org.junit.Test;
 
 public class EresourcesControllerTest {
-
-    private ServletContext context;
 
     private EresourcesController controller;
 
@@ -26,8 +22,7 @@ public class EresourcesControllerTest {
     @Before
     public void setUp() throws Exception {
         this.manager = mock(JobManager.class);
-        this.context = mock(ServletContext.class);
-        this.controller = new EresourcesController(this.manager, this.context);
+        this.controller = new EresourcesController(this.manager);
     }
 
     @Test
