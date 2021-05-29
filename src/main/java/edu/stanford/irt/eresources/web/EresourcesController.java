@@ -72,8 +72,8 @@ public class EresourcesController {
     public String usage() {
         StringBuilder sb = new StringBuilder();
         sb.append("<h1>eresources indexing</h1>");
-        sb.append("status: <a href=\"status.txt\">txt</a> ");
-        sb.append("<a href=\"status.json\">json</a>");
+        sb.append("status: <a href=\"./status.txt\">txt</a> ");
+        sb.append("<a href=\"./status.json\">json</a>");
         sb.append("<h2>jobs</h2>");
         sb.append("<pre>* unlinked jobs run longer than an hour \n");
         sb.append("** pubmed reload takes 8+ hours and requires baseline data from NCBI</pre>");
@@ -84,7 +84,7 @@ public class EresourcesController {
                 sb.append(t.getName());
                 sb.append("</li>");
             } else if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
-                sb.append("<li><a href=\"solrLoader?job=");
+                sb.append("<li><a href=\"./solrLoader?job=");
                 sb.append(t.getName());
                 sb.append("\">");
                 sb.append(t.getName());
