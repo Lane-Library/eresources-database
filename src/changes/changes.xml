@@ -6,6 +6,12 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2021-06-02" version="2.5.0" description="admin interface release">
+            <action date="2021-05-26" dev="ryanmax" type="add">
+                "admin" lite interface to start/stop indexing jobs;
+                includes JobManager, Futures and a separate status controller
+            </action>
+        </release>
         <release date="2021-05-24" version="2.4.8" description="maintenance release">
             <action date="2021-05-14" dev="ryanmax" issue="LANEWEB-10713" type="fix">
                 random order for PubMed author-sorted results
