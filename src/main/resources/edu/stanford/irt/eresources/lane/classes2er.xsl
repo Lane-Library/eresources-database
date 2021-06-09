@@ -2,6 +2,8 @@
 <xsl:stylesheet xmlns="http://lane.stanford.edu/eresources#" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     version="2.0">
 
+    <xsl:variable name="apostrophe">'</xsl:variable>
+
     <xsl:template match="/classes">
         <xsl:apply-templates select="class"/>
     </xsl:template>
@@ -10,6 +12,10 @@
         <xsl:variable name="id" select="id" />
         <xsl:variable name="title" select="title" />
         <xsl:variable name="description" select="normalize-space(text_description)" />
+        <xsl:variable name="description" select="replace($description,'&amp;nbsp;',' ')"/>
+        <xsl:variable name="description" select="replace($description,'&amp;rsquo;',$apostrophe)"/>
+        <xsl:variable name="description" select="replace($description,'&amp;#39;',$apostrophe)"/>
+        <xsl:variable name="description" select="replace($description,'&amp;trade;',' ')"/>
         <xsl:variable name="presenters" select="presenter" />
         <xsl:variable name="keywords">
                 <xsl:value-of select="concat($description, ' ', $title, ' ', $presenters)" />
