@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2021-06-30" version="2.5.2" description="emergency release">
+            <action date="2021-06-30" dev="ryanmax" issue="LANEWEB-10755" type="fix">
+                libguides indexing is failing because of javascript protocol links
+            </action>
+        </release>
         <release date="2021-06-14" version="2.5.1" description="maintenance release">
             <action date="2021-06-09" dev="ryanmax" issue="LANEWEB-10733" type="fix">
                 markup appearing in Lane class search results
