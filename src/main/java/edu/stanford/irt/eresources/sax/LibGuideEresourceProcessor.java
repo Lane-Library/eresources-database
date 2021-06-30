@@ -175,7 +175,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             parser.parse(source);
             parser.setErrorHandler(this.errorHandler);
             Document doc = parser.getDocument();
-            NodeList guideAnchors = (NodeList) this.xpath.evaluate("//div[@id='s-lg-guide-tabs']/ul/li/a[starts-with(@href,'http')]", doc,
+            NodeList guideAnchors = (NodeList) this.xpath.evaluate("//div[@id='s-lg-guide-tabs']/ul/li/a[starts-with(@href,'http') or starts-with(@href,'file')]", doc,
                     XPathConstants.NODESET);
             for (int i = 0; i < guideAnchors.getLength(); i++) {
                 Element guideAnchor = (Element) guideAnchors.item(i);
