@@ -31,6 +31,13 @@
                     <constructor-arg name="apiKey" value="${eresources.pubmedprocessor.ncbi.api_key}"/>
                     <constructor-arg name="appVersion" value="${eresources.version}"/>
                 </bean>
+                <bean class="edu.stanford.irt.eresources.pubmed.PubmedSearcher">
+                    <constructor-arg name="field" value="type"/>
+                    <constructor-arg name="value" value="Article Digital"/>
+                    <constructor-arg name="query" value="fft[Filter]"/>
+                    <constructor-arg name="apiKey" value="${eresources.pubmedprocessor.ncbi.api_key}"/>
+                    <constructor-arg name="appVersion" value="${eresources.version}"/>
+                </bean>
                 <!-- examples: fields don't exist in solr
                 <bean class="edu.stanford.irt.eresources.pubmed.PubmedSearcher">
                     <constructor-arg name="field" value="questionType"/>

@@ -146,6 +146,8 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             String value = fieldAndValue[1];
             if ("publicationType".equals(field)) {
                 this.currentEresource.addPublicationType(value);
+            } else if ("type".equals(field)) {
+                this.currentEresource.addType(value);
             } else {
                 throw new EresourceDatabaseException("unknown field: " + field + " pmid " + pmid + " value " + value);
             }
