@@ -27,7 +27,7 @@ public final class TextParserHelper {
 
     private static final Pattern DIGIT_OR_X_PATTERN = Pattern.compile("[^\\dxX]+");
 
-    private static final Pattern DOI_PATTERN = Pattern.compile("\\bdoi:(10\\.[^ ]+)\\b");
+    private static final Pattern DOI_PATTERN = Pattern.compile("\\b(?:(?:doi:)?(10\\.[^ ]+)(?: +doi)?)\\b");
 
     private static final String EMPTY = "";
 
@@ -165,7 +165,9 @@ public final class TextParserHelper {
         List<String> dois = new ArrayList<>();
         Matcher m = DOI_PATTERN.matcher(text);
         while (m.find()) {
-            dois.add(m.group(1));
+            if (m.group(0).contains("doi")) {
+                dois.add(m.group(1));
+            }
         }
         return dois;
     }

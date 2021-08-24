@@ -10,7 +10,7 @@ public class KeywordsStrategy {
 
     private static final String AGUMENTABLE_TAGS = "100|600|650|700";
 
-    private static final String KEYWORD_TAGS = "020|022|030|035|901|902|903|907|941|942|943";
+    private static final String KEYWORD_TAGS = "020|022|024|030|035|901|902|903|907|941|942|943";
 
     private static final int TAG_100 = 100;
 
