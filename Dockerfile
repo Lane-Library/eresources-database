@@ -9,7 +9,7 @@ RUN mkdir -p /root/.m2
 #
 # build phase
 #
-FROM maven:3-openjdk-17 AS MAVEN_TOOL_CHAIN
+FROM maven:3-openjdk-14 AS MAVEN_TOOL_CHAIN
 COPY pom.xml settings.xml /tmp/
 COPY src /tmp/src/
 WORKDIR /tmp/
@@ -22,7 +22,7 @@ RUN find /root/.m2/repository -atime +30 -iname '*.pom' \
 #   
 # run phase
 #
-FROM openjdk:17-alpine
+FROM openjdk:14-alpine
 RUN apk add --no-cache tcpdump sysstat tini curl
 COPY --from=MAVEN_TOOL_CHAIN /tmp/target/eresources.jar /eresources/eresources.jar
 COPY --from=MAVEN_TOOL_CHAIN /root/.m2 /root/.m2
