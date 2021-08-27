@@ -52,7 +52,8 @@ public class TextParserHelperTest {
     @Test
     public final void testExtractDois() {
         String input = "this is a doi:10.1016/j.lfs.2015.10.025 and this is another doi:10.109/zas and "
-                + "this is not a doi:100.foo/ard but this one is 10.5694/j.1326-5377.1916.tb117256.x  doi ";
+                + "this is not a doi:100.foo/ard but this one is 10.5694/j.1326-5377.1916.tb117256.x  doi "
+                + "and this one should not match 10.5694/j.1326-5377.1916.tb117256.x because missing label";
         assertEquals(3, TextParserHelper.extractDois(input).size());
         assertEquals("10.1016/j.lfs.2015.10.025", TextParserHelper.extractDois(input).get(0));
         assertEquals("10.109/zas", TextParserHelper.extractDois(input).get(1));
