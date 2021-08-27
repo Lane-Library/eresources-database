@@ -8,6 +8,8 @@ public class LaneDedupAugmentation {
 
     public static final String KEY_CATKEY = "catkey";
 
+    public static final String KEY_DNLM_CONTROL_NUMBER = "dnlm";
+
     public static final String KEY_ISBN = "isbn";
 
     public static final String KEY_ISSN = "issn";
