@@ -180,18 +180,11 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                             .orElse(null);
                     return s2 != null && sa != null && "DNLM".equalsIgnoreCase(s2.getData());
                 }), "a").collect(Collectors.toSet());
-//        for (String dnlm : dnlms) {
-//            keys.add(LaneDedupAugmentation.KEY_DNLM_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + dnlm);
-//        }
+        for (String dnlm : dnlms) {
+            keys.add(LaneDedupAugmentation.KEY_DNLM_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + dnlm);
+        }
         for (String entry : keys) {
             if (this.laneDedupAugmentation.isDuplicate(entry)) {
-                return true;
-            }
-        }
-        for (String dnlm : dnlms) {
-            String k = LaneDedupAugmentation.KEY_DNLM_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + dnlm;
-            if (this.laneDedupAugmentation.isDuplicate(k)) {
-                System.out.println(k);
                 return true;
             }
         }
