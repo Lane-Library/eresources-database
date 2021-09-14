@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -77,14 +78,19 @@ public class KeywordsStrategyTest {
 
     @Test
     public void testGetKeywordsBib() {
+        List<Subfield> subs = new ArrayList<Record.Subfield>();
+        subs.add(this.subfield);
+        subs.add(this.subfield);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.record.getLeaderByte(6)).andReturn((byte) 'a');
-        expect(this.field.getTag()).andReturn("020").times(2);
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.field.getTag()).andReturn("024").times(2);
+        expect(this.field.getSubfields()).andReturn(subs);
         expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("020a");
+        expect(this.subfield.getData()).andReturn("10.5694/j.1326-5377.1916.tb117256.x");
+        expect(this.subfield.getCode()).andReturn('2');
+        expect(this.subfield.getData()).andReturn("doi");
         replay(this.record, this.field, this.subfield);
-        assertEquals("020a ", this.strategy.getKeywords(this.record));
+        assertEquals("10.5694/j.1326-5377.1916.tb117256.x  doi ", this.strategy.getKeywords(this.record));
         verify(this.record, this.field, this.subfield);
     }
 

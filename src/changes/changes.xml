@@ -6,6 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2021-08-27" version="2.5.3" description="maintenance release">
+            <action date="2021-08-27" dev="ryanmax" issue="LANEWEB-10794" type="update">
+                record duplication: use DNLM control numbers
+            </action>
+            <action date="2021-08-24" dev="ryanmax" issue="LANEWEB-10788" type="update">
+                utilize DOI data from Lane Catalog records for fulltext and cover lookups
+            </action>
+        </release>
         <release date="2021-06-30" version="2.5.2" description="emergency release">
             <action date="2021-06-30" dev="ryanmax" issue="LANEWEB-10755" type="fix">
                 libguides indexing is failing because of javascript protocol links
