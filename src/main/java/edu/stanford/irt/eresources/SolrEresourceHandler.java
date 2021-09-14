@@ -173,6 +173,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("title_starts", "ertlsw" + getFirstCharacter(sortTitle));
         doc.addField("isChild", Boolean.toString(isChild(eresource)));
         doc.addField("isCore", Boolean.toString(eresource.isCore()));
+        doc.addField("isDigital", Boolean.toString(eresource.isDigital()));
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
         doc.addField("isLaneConnex", Boolean.toString(eresource.isLaneConnex()));
         doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));

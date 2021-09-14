@@ -65,6 +65,15 @@ public interface Eresource {
 
     boolean isCore();
 
+    default boolean isDigital() {
+        for (String type : this.getTypes()) {
+            if (type.endsWith(" Digital")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     boolean isEnglish();
 
     boolean isLaneConnex();

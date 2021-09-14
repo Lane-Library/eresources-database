@@ -79,6 +79,7 @@ public class SolrEresourceHandlerTest {
         expect(this.eresource.getYear()).andReturn(1990).anyTimes();
         expect(this.eresource.getDate()).andReturn("date");
         expect(this.eresource.isCore()).andReturn(true);
+        expect(this.eresource.isDigital()).andReturn(false);
         expect(this.eresource.isEnglish()).andReturn(true);
         expect(this.eresource.isLaneConnex()).andReturn(true);
         expect(this.eresource.getPublicationAuthorsText()).andReturn("PublicationAuthorsText");
