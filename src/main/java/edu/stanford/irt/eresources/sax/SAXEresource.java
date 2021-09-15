@@ -42,8 +42,6 @@ public class SAXEresource implements Eresource {
 
     private boolean isCore = false;
 
-    private boolean isDigital = false;
-
     private boolean isLaneConnex = false;
 
     private String keywords;
@@ -301,10 +299,6 @@ public class SAXEresource implements Eresource {
         return this.isCore;
     }
 
-    public boolean isDigital() {
-        return this.isDigital;
-    }
-
     @Override
     public boolean isEnglish() {
         return this.publicationLanguages.contains(ENG);
@@ -329,10 +323,6 @@ public class SAXEresource implements Eresource {
 
     public void setIsCore(final boolean isCore) {
         this.isCore = isCore;
-    }
-
-    public void setIsDigital(final boolean isDigital) {
-        this.isDigital = isDigital;
     }
 
     public void setIsLaneConnex(final boolean isLaneConnex) {

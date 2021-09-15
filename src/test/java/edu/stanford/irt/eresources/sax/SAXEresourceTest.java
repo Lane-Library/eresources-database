@@ -32,7 +32,6 @@ public class SAXEresourceTest {
         eresource.setDescription("description");
         eresource.setId("id");
         eresource.setIsCore(true);
-        eresource.setIsDigital(true);
         eresource.setIsLaneConnex(true);
         eresource.setItemCount(new int[2]);
         eresource.setKeywords("keywords");
@@ -85,7 +84,6 @@ public class SAXEresourceTest {
         assertNotNull(eresource.getVersions());
         assertEquals(2000,eresource.getYear());
         assertTrue(eresource.isCore());
-        assertTrue(eresource.isDigital());
         assertFalse(eresource.isEnglish());
         assertTrue(eresource.isLaneConnex());
     }
