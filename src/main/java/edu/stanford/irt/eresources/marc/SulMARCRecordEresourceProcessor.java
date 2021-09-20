@@ -24,7 +24,8 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
 
     private static final int F008_DATES_END = 15;
 
-    private static final Pattern FICTION = Pattern.compile("(^|\\b)(?<!non\\-)fiction(\\S|\\b)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern FICTION = Pattern.compile("(^|\\b)(?<!non\\-)fiction(\\S|\\b)",
+            Pattern.CASE_INSENSITIVE);
 
     private static final Pattern NOT_ALPHANUM_OR_SPACE = Pattern.compile("[^a-zA-Z_0-9 ]");
 
@@ -171,6 +172,17 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         StringBuilder sb = new StringBuilder(title);
         sb.append(dates);
         keys.add(LaneDedupAugmentation.KEY_TITLE_DATE + LaneDedupAugmentation.SEPARATOR + sb.toString());
+        Set<String> dnlms = MARCRecordSupport.getSubfieldData(MARCRecordSupport.getFields(record, "016")
+                .filter((final Field f) -> f.getIndicator1() == '7').filter((final Field f) -> {
+                    Subfield s2 = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == '2').findFirst()
+                            .orElse(null);
+                    Subfield sa = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').findFirst()
+                            .orElse(null);
+                    return s2 != null && sa != null && "DNLM".equalsIgnoreCase(s2.getData());
+                }), "a").collect(Collectors.toSet());
+        for (String dnlm : dnlms) {
+            keys.add(LaneDedupAugmentation.KEY_DNLM_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + dnlm);
+        }
         for (String entry : keys) {
             if (this.laneDedupAugmentation.isDuplicate(entry)) {
                 return true;

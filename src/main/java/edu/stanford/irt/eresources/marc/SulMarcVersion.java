@@ -95,10 +95,6 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
                 .findFirst().orElse(null);
         // maybe second check of 866 ^a s here ... if journal?
         // is 362 just a better version of 866s?
-//        if (null == value) {
-//            value = getSubfieldData(this.bib, "866", "a").collect(Collectors.joining(" "));
-//        }
-//        return value.isEmpty() ? null : value;
     }
 
     @Override
