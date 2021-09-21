@@ -35,8 +35,10 @@ COPY --from=MAVEN_TOOL_CHAIN /tmp/target/eresources.jar /eresources/eresources.j
 COPY --from=MAVEN_TOOL_CHAIN /root/.m2 /root/.m2
 EXPOSE 8080
 WORKDIR /eresources
+RUN chgrp nogroup .
+RUN chmod 775 .
 RUN ln -s /eresources-config/application.properties application.properties
 
 USER nobody
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD "java" "-Duser.timezone=America/Los_Angeles" "-jar" "/eresources/eresources.jar"
+CMD  ["java", "-Duser.timezone=America/Los_Angeles", "-jar", "/eresources/eresources.jar"]
