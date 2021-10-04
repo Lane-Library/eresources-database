@@ -4,6 +4,7 @@
 FROM gcr.io/som-laneweb/eresources:latest AS PREVIOUS_IMAGE
 # use .m2 directory from previous image to speed-up build-times
 # .m2 should already exist, but create just in case
+
 RUN mkdir -p /root/.m2
 
 #
@@ -22,12 +23,14 @@ RUN find /root/.m2/repository -atime +30 -iname '*.pom' \
 #   
 # run phase
 #
-FROM openjdk:14-alpine
-RUN apk add --no-cache tcpdump sysstat tini curl
+FROM gcr.io/som-laneweb/jre-parent:prod-latest
+
 COPY --from=MAVEN_TOOL_CHAIN /tmp/target/eresources.jar /eresources/eresources.jar
 COPY --from=MAVEN_TOOL_CHAIN /root/.m2 /root/.m2
 EXPOSE 8080
 WORKDIR /eresources
-RUN ln -s /eresources-config/application.properties application.properties
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD "java" "-Duser.timezone=America/Los_Angeles" "-jar" "/eresources/eresources.jar"
+
+RUN ln -s /config/application.properties application.properties
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD  ["java", "-Duser.timezone=America/Los_Angeles", "-jar", "/eresources/eresources.jar"]

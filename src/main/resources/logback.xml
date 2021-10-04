@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
 
+	<property name="LOG_PATH" value="${LOG_PATH:-${catalina.base:-${java.io.tmpdir:-/tmp}}/logs/}"/>
+ 	<property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}er.log}"/>
+			
     <property file="${eresources.log.properties:-application.properties}" />
 
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>er.log</File>
+        <File>${LOG_FILE}</File>
         <encoder>
             <pattern>%d %p [%t][%c] - %m%n</pattern>
         </encoder>
