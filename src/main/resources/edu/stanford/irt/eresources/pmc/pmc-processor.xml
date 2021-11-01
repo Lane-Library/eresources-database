@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="pmcProcessor" class="edu.stanford.irt.eresources.pmc.PmcEresourceProcessor">
+        <constructor-arg name="allJournalsCsvUrl" value="${eresources.pmc.allJournalsCsvUrl}"/>
+        <constructor-arg name="contentHandler" ref="pmcTransformer"/>
+        <constructor-arg name="laneDedupAugmentation" ref="laneDedupAugmentation"/>
+        <constructor-arg name="apiKey" value="${eresources.pubmedprocessor.ncbi.api_key}"/>
+    </bean>
+
+    <bean id="pmcTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/pmc/nlmcatalog2er.xsl"/>
+        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+        <property name="namespace" value=""/>
+        <property name="element" value="eresources"/>
+        <property name="contentHandler" ref="pmcBuilder"/>
+    </bean>
+    <bean id="pmcBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+
+    <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
+        <constructor-arg ref="httpAuthTextAugmentationsService"/>
+    </bean>
+
+    <bean id="httpAuthTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
+        <constructor-arg ref="objectMapper"/>
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="augmentations/auth"/>
+    </bean>
+
+    <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
+        <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/dedup-augmentations.obj"/>
+        <constructor-arg ref="httpLaneDedupAugmentationService"/>
+        <constructor-arg name="manualSkips">
+            <set>
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
+        <constructor-arg ref="objectMapper"/>
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="augmentations/dedup"/>
+    </bean>
+</beans>
