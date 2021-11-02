@@ -36,7 +36,11 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
  */
 public class PubmedSearcher {
 
-    private static final String BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed";
+    private static final String BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+
+    private static final String EFETCH_URL = BASE_URL + "efetch.fcgi?db=pubmed&retmode=xml&rettype=uilist";
+
+    private static final String ESEARCH_URL = BASE_URL + "esearch.fcgi?db=pubmed&usehistory=y";
 
     private static final RequestConfig HTTP_CONFIG = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES)
             .build();
@@ -60,7 +64,13 @@ public class PubmedSearcher {
 
     private String query;
 
+    private String queryKey;
+
+    private int returnCount;
+
     private String value;
+
+    private String webEnv;
 
     private XPath xpath;
 
@@ -92,7 +102,7 @@ public class PubmedSearcher {
      */
     public List<String> getPmids() {
         if (this.pmids == null) {
-            this.pmids = doGet();
+            doGet();
         }
         return new ArrayList<>(this.pmids);
     }
@@ -101,19 +111,27 @@ public class PubmedSearcher {
         return this.value;
     }
 
-    private List<String> doGet() {
-        List<String> pmidList = new ArrayList<>();
-        int retStart = 0;
-        int retMax = RET_MAX;
-        while (retMax >= RET_MAX) {
-            StringBuilder q = new StringBuilder(BASE_URL);
-            // for testing, allow null api_key
-            if (null != this.apiKey) {
-                q.append("&api_key=");
-                q.append(this.apiKey);
-            }
-            q.append("&term=");
-            q.append(this.query);
+    private void appendApiKey(final StringBuilder query) {
+        // for testing, allow null api_key
+        if (null != this.apiKey) {
+            query.append("&api_key=");
+            query.append(this.apiKey);
+        }
+    }
+
+    private void doGet() {
+        doSearch();
+        this.pmids = new ArrayList<>();
+        int retStart;
+        int i = 0;
+        while (this.pmids.size() < this.returnCount) {
+            retStart = i++ * RET_MAX;
+            StringBuilder q = new StringBuilder(EFETCH_URL);
+            appendApiKey(q);
+            q.append("&query_key=");
+            q.append(this.queryKey);
+            q.append("&WebEnv=");
+            q.append(this.webEnv);
             q.append("&retmax=");
             q.append(RET_MAX);
             q.append("&retstart=");
@@ -121,33 +139,42 @@ public class PubmedSearcher {
             String xmlContent = getContent(q.toString());
             if (null == xmlContent) {
                 log.error("null xmlContent for {}", q);
-                return pmidList;
-            }
-            retStart = retStart + RET_MAX;
-            Document doc;
-            Node retmaxNode = null;
-            NodeList retmaxNodes = null;
-            NodeList pmidNodes = null;
-            try {
-                doc = this.factory.newDocumentBuilder()
-                        .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
-                retmaxNodes = (NodeList) this.xpath.evaluate("/eSearchResult/RetMax", doc, XPathConstants.NODESET);
-                retmaxNode = retmaxNodes.item(0);
-                if (null == retmaxNode || null == retmaxNode.getTextContent()) {
-                    log.error("null eSearchResult/RetMax for {}", q);
-                } else {
-                    retMax = Integer.parseInt(retmaxNode.getTextContent().trim());
-                    pmidNodes = (NodeList) this.xpath.evaluate("/eSearchResult/IdList/Id", doc, XPathConstants.NODESET);
+            } else {
+                NodeList pmidNodes = null;
+                try {
+                    Document doc = this.factory.newDocumentBuilder()
+                            .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
+                    pmidNodes = (NodeList) this.xpath.evaluate("/IdList/Id", doc, XPathConstants.NODESET);
+                } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
+                    log.error("failed to fetch pmids", e);
                 }
-            } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
-                log.error("failed to fetch pmids", e);
-            }
-            for (int n = 0; null != pmidNodes && n < pmidNodes.getLength(); n++) {
-                Node node = pmidNodes.item(n);
-                pmidList.add(node.getTextContent().trim());
+                for (int n = 0; null != pmidNodes && n < pmidNodes.getLength(); n++) {
+                    Node node = pmidNodes.item(n);
+                    this.pmids.add(node.getTextContent().trim());
+                }
             }
         }
-        return pmidList;
+    }
+
+    private void doSearch() {
+        StringBuilder q = new StringBuilder(ESEARCH_URL);
+        appendApiKey(q);
+        q.append("&term=");
+        q.append(this.query);
+        String xmlContent = getContent(q.toString());
+        if (null == xmlContent) {
+            log.error("null xmlContent for {}", q);
+        } else {
+            try {
+                Document doc = this.factory.newDocumentBuilder()
+                        .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
+                this.queryKey = getNodeContent("/eSearchResult/QueryKey", doc);
+                this.webEnv = getNodeContent("/eSearchResult/WebEnv", doc);
+                this.returnCount = Integer.parseInt(getNodeContent("/eSearchResult/Count", doc));
+            } catch (SAXException | IOException | ParserConfigurationException e) {
+                log.error("failed to fetch pmids", e);
+            }
+        }
     }
 
     private String getContent(final String url) {
@@ -167,5 +194,15 @@ public class PubmedSearcher {
             get.reset();
         }
         return htmlContent;
+    }
+
+    private String getNodeContent(final String xpath, final Document doc) {
+        try {
+            Node node = ((NodeList) this.xpath.evaluate(xpath, doc, XPathConstants.NODESET)).item(0);
+            return node.getTextContent().trim();
+        } catch (XPathExpressionException e) {
+            log.error("failed to fetch content", e);
+        }
+        return null;
     }
 }
