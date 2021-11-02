@@ -51,6 +51,7 @@ public class SAXEresourceTest {
         eresource.setTitle("title");
         eresource.setUpdated(LocalDateTime.now());
         eresource.setYear(2000);
+        eresource.addIssn("1550-7416");
         assertNotNull(eresource.toString());
         assertNotNull(eresource.getAbbreviatedTitles());
         assertNotNull(eresource.getAlternativeTitles());
@@ -88,6 +89,8 @@ public class SAXEresourceTest {
         assertTrue(eresource.isDigital());
         assertFalse(eresource.isEnglish());
         assertTrue(eresource.isLaneConnex());
+        assertNotNull(eresource.getIssns());
+        assertTrue(eresource.getIsbns().isEmpty());
     }
 
     @Test

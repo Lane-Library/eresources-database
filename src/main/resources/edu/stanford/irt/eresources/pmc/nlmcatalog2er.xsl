@@ -76,6 +76,11 @@
                 <xsl:apply-templates/>
             </xsl:variable>
             <keywords> <xsl:value-of select="$keywords"/> </keywords>
+            <xsl:for-each select="ISSN[@ValidYN='Y']">
+                <issn>
+                    <xsl:value-of select="."/>
+                </issn>
+            </xsl:for-each>
         </eresource>
     </xsl:template>
 

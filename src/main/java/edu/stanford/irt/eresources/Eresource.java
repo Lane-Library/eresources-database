@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 
 public interface Eresource {
 
@@ -16,6 +17,14 @@ public interface Eresource {
     String getDescription();
 
     String getId();
+
+    default Collection<String> getIsbns() {
+        return Collections.emptyList();
+    }
+
+    default Collection<String> getIssns() {
+        return Collections.emptyList();
+    }
 
     int[] getItemCount();
 

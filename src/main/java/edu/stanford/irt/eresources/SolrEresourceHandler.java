@@ -198,7 +198,8 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("versionsJson", versionsToJson(eresource));
         doc.addField("citationText", buildCitationKeywords(eresource));
         maybeAddDoi(kws, doc);
-        maybeAddIsxns(eresource, doc);
+        doc.addField("isbns", eresource.getIsbns());
+        doc.addField("issns", eresource.getIssns());
         maybeAddProxyHosts(eresource, doc);
         handleMesh(eresource, doc);
         this.solrDocs.add(doc);
