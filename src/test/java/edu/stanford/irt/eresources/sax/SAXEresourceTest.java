@@ -90,7 +90,6 @@ public class SAXEresourceTest {
         assertFalse(eresource.isEnglish());
         assertTrue(eresource.isLaneConnex());
         assertNotNull(eresource.getIssns());
-        assertTrue(eresource.getIsbns().isEmpty());
     }
 
     @Test
@@ -99,5 +98,7 @@ public class SAXEresourceTest {
         assertNull(eresource.getDate());
         eresource.setYear(2000);
         assertNotNull(eresource.getDate());
+        assertTrue(eresource.getIssns().isEmpty());
+        assertTrue(eresource.getIsbns().isEmpty());
     }
 }
