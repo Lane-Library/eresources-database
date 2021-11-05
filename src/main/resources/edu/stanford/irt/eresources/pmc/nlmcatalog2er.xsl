@@ -36,7 +36,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <eresource id="pmcj-{NlmUniqueID}" recordId="{NlmUniqueID}" type="pmcj" update="19690101000000">
+        <eresource id="dnlm-{NlmUniqueID}" recordId="{NlmUniqueID}" type="dnlm" update="19690101000000">
             <title>
                 <xsl:value-of select="TitleMain/Title" />
             </title>

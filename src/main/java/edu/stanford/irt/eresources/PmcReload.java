@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class PmcReload extends SolrLoader {
 
-    private static final String BASE_QUERY = "(recordType:pmcj)";
+    private static final String BASE_QUERY = "(recordType:dnlm)";
 
     private static final int EXPECTED_MIN_RECORDS = 20;
 
