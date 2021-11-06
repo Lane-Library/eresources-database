@@ -1,5 +1,7 @@
 package edu.stanford.irt.eresources.pmc;
 
+import edu.stanford.irt.eresources.TextParserHelper;
+
 public class PmcJournal {
 
     private String depositStatus;
@@ -46,7 +48,7 @@ public class PmcJournal {
      * @return the eIssn
      */
     public String geteIssn() {
-        return this.eIssn;
+        return TextParserHelper.cleanIsxn(this.eIssn);
     }
 
     /**
@@ -98,7 +100,7 @@ public class PmcJournal {
      * @return the pIssn
      */
     public String getpIssn() {
-        return this.pIssn;
+        return TextParserHelper.cleanIsxn(this.pIssn);
     }
 
     /**
