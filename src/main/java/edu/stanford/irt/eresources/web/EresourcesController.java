@@ -38,6 +38,11 @@ public class EresourcesController {
         return this.jobManager.run(new Job(Job.Type.LANE_UPDATE, LocalDateTime.now()));
     }
 
+    @Scheduled(cron = "${eresources.schedule.cron.pmcReload}")
+    public JobStatus pmcReload() {
+        return this.jobManager.run(new Job(Job.Type.PMC_RELOAD, LocalDateTime.now()));
+    }
+
     @Scheduled(cron = "${eresources.schedule.cron.pubmedDailyFtp}")
     public JobStatus pubmedDailyFtp() {
         return this.jobManager.run(new Job(Job.Type.PUBMED_UPDATE, LocalDateTime.now()));

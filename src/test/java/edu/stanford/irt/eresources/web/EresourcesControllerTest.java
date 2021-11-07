@@ -42,6 +42,14 @@ public class EresourcesControllerTest {
     }
 
     @Test
+    public final void testPmcReload() {
+        expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
+        replay(this.manager);
+        this.controller.pmcReload();
+        verify(this.manager);
+    }
+
+    @Test
     public final void testPubmedDailyFtp() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
