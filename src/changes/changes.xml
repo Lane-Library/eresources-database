@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2021-11-16" version="2.5.5" description="maintenance release">
+            <action date="2021-11-01" dev="ryanmax" issue="LANEWEB-10826" type="update">
+                esearch to have 10K result limit in April 2022
+            </action>
+        </release>
         <release date="2021-08-27" version="2.5.3" description="maintenance release">
             <action date="2021-08-27" dev="ryanmax" issue="LANEWEB-10794" type="update">
                 record duplication: use DNLM control numbers
