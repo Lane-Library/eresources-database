@@ -37,6 +37,8 @@ public class JobManager {
 
     /**
      * terminate the running job so another can be submitted.
+     *
+     * @return {@link JobStatus} INTERRUPTED if job can be canceled, otherwise COMPLETE
      */
     public JobStatus cancelRunningJob() {
         this.runningJob = null;
