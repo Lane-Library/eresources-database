@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2021-11-19" version="2.5.6" description="maintenance release">
+            <action date="2021-11-19" dev="ryanmax" issue="LANEWEB-10834" type="update">
+                libguide titles end in "--" in search results
+            </action>
+        </release>
         <release date="2021-11-16" version="2.5.5" description="maintenance release">
             <action date="2021-11-01" dev="ryanmax" issue="LANEWEB-10826" type="update">
                 esearch to have 10K result limit in April 2022
