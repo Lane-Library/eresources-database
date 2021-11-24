@@ -34,7 +34,6 @@ public class SAXEresourceTest {
         eresource.setIsCore(true);
         eresource.setIsDigital(true);
         eresource.setIsLaneConnex(true);
-        eresource.setItemCount(new int[2]);
         eresource.setKeywords("keywords");
         eresource.setPrimaryType("type");
         eresource.setPublicationAuthorsText(null);

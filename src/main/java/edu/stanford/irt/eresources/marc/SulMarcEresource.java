@@ -22,8 +22,6 @@ import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMarcEresource extends AbstractMarcEresource {
 
-    private static final int ITEM_COUNT_MAP_SIZE = 2;
-
     private static final int MAX_YEAR = TextParserHelper.THIS_YEAR + 5;
 
     private static final int MIN_YEAR = 500;
@@ -60,11 +58,6 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public String getDate() {
         return DateParser.parseDate(Integer.toString(getYear()));
-    }
-
-    @Override
-    public int[] getItemCount() {
-        return new int[ITEM_COUNT_MAP_SIZE];
     }
 
     @Override

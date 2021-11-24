@@ -41,11 +41,6 @@ public class AuthMarcEresourceTest {
     }
 
     @Test
-    public void testGetItemCount() {
-        assertEquals(0, this.eresource.getItemCount()[0]);
-    }
-
-    @Test
     public void testGetMeshTerms() {
         expect(this.record.getFields()).andReturn(Collections.emptyList());
         replay(this.record);

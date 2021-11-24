@@ -12,19 +12,12 @@ import edu.stanford.lane.catalog.Record.Field;
 
 public class AuthMarcEresource extends BibMarcEresource {
 
-    private static final int EMPTY_ITEM_COUNT_SIZE = 2;
-
     private Record authRecord;
 
     public AuthMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
             final TypeFactory typeFactory) {
         super(Collections.singletonList(record), keywordsStrategy, null, typeFactory);
         this.authRecord = record;
-    }
-
-    @Override
-    public int[] getItemCount() {
-        return new int[EMPTY_ITEM_COUNT_SIZE];
     }
 
     @Override
