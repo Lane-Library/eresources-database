@@ -19,7 +19,7 @@ public class HTTPLaneLocationsServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        this.mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        this.mapper = new ObjectMapper();
         this.locationsService = new HTTPLaneLocationsService(
                 HTTPLaneLocationsServiceTest.class.getResource("locations").toURI(), this.mapper);
     }
