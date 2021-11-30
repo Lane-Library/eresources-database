@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
@@ -333,9 +334,11 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
                 assertEquals(null, er.getPublicationVolume());
                 assertFalse(er.isLaneConnex());
                 expect(this.typeFactory.getTypes(rec)).andReturn(Collections.singletonList("a type"));
-                replay(this.typeFactory);
+                expect(this.keywordsStrategy.getKeywords(isA(Record.class))).andReturn("keywords").times(2);
+                replay(this.typeFactory, this.keywordsStrategy);
+                assertTrue(er.getKeywords().contains("keywords"));
                 assertTrue(er.getTypes().contains("a type"));
-                verify(this.typeFactory);
+                verify(this.typeFactory, this.keywordsStrategy);
                 assertEquals("Petrosilinum vel persil, materia medica].", er.getShortTitle());
                 assertEquals("[Opera chirurgica]..  [ca. 1400] fol. 66 [i.e. 26]", er.getPublicationText());
                 assertEquals("[Opera chirurgica].", er.getPublicationTitle());
