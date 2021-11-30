@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -140,6 +141,18 @@ public class MarcVersionTest {
     }
 
     @Test
+    public void testGetHasGetPasswordLink() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.field.getTag()).andReturn("856");
+        expect(this.subfield.getCode()).andReturn('u');
+        expect(this.subfield.getData()).andReturn("http://lane.stanford.edu/secure/ejpw.html");
+        replay(this.record, this.field, this.subfield);
+        assertTrue(this.version.getHasGetPasswordLink());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
     public void testGetHoldingsAndDates() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("866").times(2);
@@ -253,6 +266,18 @@ public class MarcVersionTest {
         expect(this.subfield.getData()).andReturn("http://lane.stanford.edu/secure/ejpw.html");
         replay(this.record, this.field, this.subfield);
         assertTrue(this.version.hasGetPasswordLink());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testIsProxy() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.field.getTag()).andReturn("655");
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("subSet, Noproxy");
+        replay(this.record, this.field, this.subfield);
+        assertFalse(this.version.isProxy());
         verify(this.record, this.field, this.subfield);
     }
 }
