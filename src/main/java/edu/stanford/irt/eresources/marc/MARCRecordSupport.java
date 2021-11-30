@@ -18,13 +18,13 @@ public class MARCRecordSupport {
 
     private static final Pattern NOT_DIGIT = Pattern.compile("\\D");
 
-    protected static Stream<Field> getFields(final Record record, final String tagString) {
-        return record.getFields().stream().filter((final Field f) -> tagString.indexOf(f.getTag()) > -1);
+    protected static Stream<Field> getFields(final Record marcRecord, final String tagString) {
+        return marcRecord.getFields().stream().filter((final Field f) -> tagString.indexOf(f.getTag()) > -1);
     }
 
-    protected static int getRecordId(final Record record) {
+    protected static int getRecordId(final Record marcRecord) {
         int i;
-        String f001 = NOT_DIGIT.matcher(getFields(record, "001").map(Field::getData).findFirst().orElse("0"))
+        String f001 = NOT_DIGIT.matcher(getFields(marcRecord, "001").map(Field::getData).findFirst().orElse("0"))
                 .replaceAll("");
         try {
             i = Integer.parseInt(f001);
@@ -34,14 +34,14 @@ public class MARCRecordSupport {
         return i;
     }
 
-    protected static Stream<String> getSubfieldData(final Record record, final String tagString) {
-        return getFields(record, tagString).flatMap((final Field f) -> f.getSubfields().stream())
+    protected static Stream<String> getSubfieldData(final Record marcRecord, final String tagString) {
+        return getFields(marcRecord, tagString).flatMap((final Field f) -> f.getSubfields().stream())
                 .map(Subfield::getData);
     }
 
-    protected static Stream<String> getSubfieldData(final Record record, final String tagString,
+    protected static Stream<String> getSubfieldData(final Record marcRecord, final String tagString,
             final String codeString) {
-        return getFields(record, tagString).flatMap((final Field f) -> f.getSubfields().stream())
+        return getFields(marcRecord, tagString).flatMap((final Field f) -> f.getSubfields().stream())
                 .filter((final Subfield s) -> codeString.indexOf(s.getCode()) > -1).map(Subfield::getData);
     }
 
@@ -50,9 +50,9 @@ public class MARCRecordSupport {
                 .filter((final Subfield s) -> codeString.indexOf(s.getCode()) > -1).map(Subfield::getData);
     }
 
-    protected static int getYear(final Record record) {
+    protected static int getYear(final Record marcRecord) {
         int year = 0;
-        String dateField = getFields(record, "008").map(Field::getData).findFirst().orElse("0000000000000000");
+        String dateField = getFields(marcRecord, "008").map(Field::getData).findFirst().orElse("0000000000000000");
         String endDate = TextParserHelper.parseYear(dateField.substring(F008_11, F008_15));
         if (endDate != null) {
             year = Integer.parseInt(endDate);
@@ -65,10 +65,10 @@ public class MARCRecordSupport {
         return year;
     }
 
-    protected static String getYears(final Record record) {
+    protected static String getYears(final Record marcRecord) {
         int end = 0;
         StringBuilder sb = new StringBuilder();
-        String dateField = getFields(record, "008").map(Field::getData).findFirst().orElse("0000000000000000");
+        String dateField = getFields(marcRecord, "008").map(Field::getData).findFirst().orElse("0000000000000000");
         String endDate = TextParserHelper.parseYear(dateField.substring(F008_11, F008_15));
         String beginDate = TextParserHelper.parseYear(dateField.substring(F008_07, F008_11));
         if (beginDate != null) {
