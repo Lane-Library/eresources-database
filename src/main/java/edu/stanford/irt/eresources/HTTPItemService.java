@@ -11,27 +11,44 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HTTPItemService implements ItemService {
 
-    private static final String AVAILABLES_PATH = "items/availables";
+    public enum Type {
+        BIB, HOLDING
+    }
 
-    private static final String TOTALS_PATH = "items/totals";
+    private static final String BIBS_AVAILABLES_PATH = "items/availables";
+
+    private static final String BIBS_TOTALS_PATH = "items/totals";
+
+    private static final String HOLDINGS_AVAILABLES_PATH = "item-holdings/availables";
+
+    private static final String HOLDINGS_TOTALS_PATH = "item-holdings/totals";
 
     private URI catalogServiceURI;
 
     private ObjectMapper objectMapper;
 
-    public HTTPItemService(final URI catalogServiceURI, final ObjectMapper objectMapper) {
+    private Type type;
+
+    public HTTPItemService(final Type type, final URI catalogServiceURI, final ObjectMapper objectMapper) {
+        this.type = type;
         this.catalogServiceURI = catalogServiceURI;
         this.objectMapper = objectMapper;
     }
 
     @Override
     public Map<Integer, Integer> getAvailables() {
-        return getMap(AVAILABLES_PATH);
+        if (this.type.equals(Type.HOLDING)) {
+            return getMap(HOLDINGS_AVAILABLES_PATH);
+        }
+        return getMap(BIBS_AVAILABLES_PATH);
     }
 
     @Override
     public Map<Integer, Integer> getTotals() {
-        return getMap(TOTALS_PATH);
+        if (this.type.equals(Type.HOLDING)) {
+            return getMap(HOLDINGS_TOTALS_PATH);
+        }
+        return getMap(BIBS_TOTALS_PATH);
     }
 
     private Map<Integer, Integer> getMap(final String enpointPath) {

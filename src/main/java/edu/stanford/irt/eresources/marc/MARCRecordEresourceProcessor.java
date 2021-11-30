@@ -15,10 +15,18 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String HOLDINGS_CHARS = "uvxy";
 
+    private static boolean isHolding(final Record marcRecord) {
+        return HOLDINGS_CHARS.indexOf(marcRecord.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06)) > -1;
+    }
+
     private EresourceHandler eresourceHandler;
 
-    private ItemCount itemCount;
+    private ItemCount itemCountBibs;
 
+    private ItemCount itemCountHoldings;
+
+    private HTTPLaneLocationsService locationsService;
+    
     private KeywordsStrategy keywordsStrategy;
 
     private Record lastRecord;
@@ -31,18 +39,17 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
     private TypeFactory typeFactory;
 
-    public MARCRecordEresourceProcessor(final EresourceHandler eresourceHandler, final ItemCount itemCount,
-            final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
-            final TypeFactory typeFactory) {
+    public MARCRecordEresourceProcessor(final EresourceHandler eresourceHandler, final ItemCount itemCountBibs,
+            final ItemCount itemCountHoldings, final KeywordsStrategy keywordsStrategy,
+            final RecordCollectionFactory recordCollectionFactory, final TypeFactory typeFactory,
+            final HTTPLaneLocationsService locationsService) {
         this.eresourceHandler = eresourceHandler;
-        this.itemCount = itemCount;
+        this.itemCountBibs = itemCountBibs;
+        this.itemCountHoldings = itemCountHoldings;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
         this.typeFactory = typeFactory;
-    }
-
-    private static boolean isHolding(final Record record) {
-        return HOLDINGS_CHARS.indexOf(record.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06)) > -1;
+        this.locationsService = locationsService;
     }
 
     @Override
@@ -50,18 +57,18 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
         this.recordCollection = this.recordCollectionFactory.newRecordCollection(getStartTime());
         while (hasNext()) {
             List<Record> recordList = next();
-            Record record = recordList.get(0);
-            if (record.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06) == 'q') {
+            Record marcRecord = recordList.get(0);
+            if (marcRecord.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06) == 'q') {
                 this.eresourceHandler
-                        .handleEresource(new AuthMarcEresource(record, this.keywordsStrategy, this.typeFactory));
+                        .handleEresource(new AuthMarcEresource(marcRecord, this.keywordsStrategy, this.typeFactory));
             } else {
-                this.eresourceHandler.handleEresource(
-                        new BibMarcEresource(recordList, this.keywordsStrategy, this.itemCount, this.typeFactory));
-                int altTitleCount = (int) record.getFields().stream()
+                this.eresourceHandler.handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy,
+                        this.itemCountBibs, this.itemCountHoldings, this.typeFactory, this.locationsService));
+                int altTitleCount = (int) marcRecord.getFields().stream()
                         .filter((final Field f) -> "249".equals(f.getTag())).count();
                 for (int i = 0; i < altTitleCount; i++) {
                     this.eresourceHandler.handleEresource(new AltTitleMarcEresource(recordList, this.keywordsStrategy,
-                            this.typeFactory, this.itemCount, i + 1));
+                            this.typeFactory, this.itemCountBibs, this.itemCountHoldings, i + 1, this.locationsService));
                 }
             }
         }

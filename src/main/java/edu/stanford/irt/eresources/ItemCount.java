@@ -15,17 +15,17 @@ public class ItemCount {
         this.totals = itemService.getTotals();
     }
 
-    public int[] itemCount(final int bibId) {
+    public int[] itemCount(final int recordId) {
         int[] itemCount = new int[MAP_SIZE];
-        itemCount[0] = getCount(bibId, this.totals);
+        itemCount[0] = getCount(recordId, this.totals);
         if (itemCount[0] > 0) {
-            itemCount[1] = getCount(bibId, this.availables);
+            itemCount[1] = getCount(recordId, this.availables);
         }
         return itemCount;
     }
 
-    private int getCount(final int bibId, final Map<Integer, Integer> map) {
-        Integer count = map.get(Integer.valueOf(bibId));
+    private int getCount(final int recordId, final Map<Integer, Integer> map) {
+        Integer count = map.get(Integer.valueOf(recordId));
         return count != null ? count.intValue() : 0;
     }
 }

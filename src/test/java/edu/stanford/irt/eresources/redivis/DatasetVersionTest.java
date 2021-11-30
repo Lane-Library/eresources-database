@@ -73,4 +73,11 @@ public class DatasetVersionTest {
     public final void testIsProxy() {
         assertFalse(this.datasetVersion.isProxy());
     }
+
+    @Test
+    public final void testVersionInterface() {
+        assertNull(this.datasetVersion.getCallnumber());
+        assertNull(this.datasetVersion.getLocationName());
+        assertNull(this.datasetVersion.getLocationUrl());
+    }
 }

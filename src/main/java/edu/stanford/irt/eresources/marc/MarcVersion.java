@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
@@ -21,21 +22,28 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private static final Pattern SPACE_EQUALS = Pattern.compile(" =");
 
+    private static boolean isGetPassword856(final Field field) {
+        return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'u').map(Subfield::getData)
+                .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
+    }
+
     private Record bib;
 
     private Eresource eresource;
 
     private Record holding;
 
-    public MarcVersion(final Record holding, final Record bib, final Eresource eresource) {
+    private ItemCount itemCount;
+
+    private HTTPLaneLocationsService locationsService;
+
+    public MarcVersion(final Record holding, final Record bib, final Eresource eresource, final ItemCount itemCount,
+            final HTTPLaneLocationsService locationsService) {
         this.holding = holding;
         this.bib = bib;
         this.eresource = eresource;
-    }
-
-    private static boolean isGetPassword856(final Field field) {
-        return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'u').map(Subfield::getData)
-                .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
+        this.itemCount = itemCount;
+        this.locationsService = locationsService;
     }
 
     @Override
@@ -49,6 +57,20 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                     .map(Subfield::getData).findFirst().orElse(null);
         }
         return additionalText;
+    }
+
+    @Override
+    public String getCallnumber() {
+        String cn = null;
+        Field field = getFields(this.holding, "852").findFirst().orElse(null);
+        if (field != null && !hasLinks()) {
+            cn = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'h' || s.getCode() == 'i')
+                    .map(Subfield::getData).collect(Collectors.joining());
+            if (!cn.trim().isEmpty()) {
+                return cn;
+            }
+        }
+        return cn;
     }
 
     @Override
@@ -73,10 +95,21 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     }
 
     @Override
+    public int[] getItemCount() {
+        int[] counts = null;
+        if (null != this.itemCount) {
+            counts = this.itemCount.itemCount(MARCRecordSupport.getRecordId(this.holding));
+            if (counts[0] > 0) {
+                return counts;
+            }
+        }
+        return Version.super.getItemCount();
+    }
+
+    @Override
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
-        boolean has856 = getFields(this.holding, "856").count() > 0;
-        if (!has856) {
+        if (!hasLinks()) {
             links.add(new CatalogLink(getFields(this.bib, "001").map(Field::getData).findFirst().orElse(null), this,
                     "http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=", "Lane Catalog Record"));
         }
@@ -84,6 +117,22 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         links.addAll(getFields(this.holding, "856").filter((final Field f) -> !isGetPassword856(f))
                 .map((final Field f) -> new MarcLink(f, version)).collect(Collectors.toList()));
         return links;
+    }
+
+    @Override
+    public String getLocationName() {
+        if (null != this.locationsService && !hasLinks()) {
+            return this.locationsService.getLocationName(getLocationCode());
+        }
+        return null;
+    }
+
+    @Override
+    public String getLocationUrl() {
+        if (null != this.locationsService && !hasLinks()) {
+            return this.locationsService.getLocationUrl(getLocationCode());
+        }
+        return null;
     }
 
     @Override
@@ -117,6 +166,14 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public boolean isProxy() {
         return getSubfieldData(this.holding, "655", "a").noneMatch("subset, noproxy"::equalsIgnoreCase);
+    }
+
+    private String getLocationCode() {
+        return getSubfieldData(this.holding, "852", "b").findFirst().orElse("");
+    }
+
+    private boolean hasLinks() {
+        return getFields(this.holding, "856").count() > 0;
     }
 
     private boolean needToAddBibDates(final Eresource eresource) {

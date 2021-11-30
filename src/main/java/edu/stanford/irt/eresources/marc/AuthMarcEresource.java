@@ -14,10 +14,10 @@ public class AuthMarcEresource extends BibMarcEresource {
 
     private Record authRecord;
 
-    public AuthMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
+    public AuthMarcEresource(final Record authRecord, final KeywordsStrategy keywordsStrategy,
             final TypeFactory typeFactory) {
-        super(Collections.singletonList(record), keywordsStrategy, null, typeFactory);
-        this.authRecord = record;
+        super(Collections.singletonList(authRecord), keywordsStrategy, null, null, typeFactory, null);
+        this.authRecord = authRecord;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class AuthMarcEresource extends BibMarcEresource {
     @Override
     public List<Version> getVersions() {
         if (this.authRecord.getFields().stream().anyMatch((final Field f) -> "856".equals(f.getTag()))) {
-            return Collections.singletonList(new MarcVersion(this.authRecord, this.authRecord, this));
+            return Collections.singletonList(new MarcVersion(this.authRecord, this.authRecord, this, null, null));
         }
         return Collections.emptyList();
     }
