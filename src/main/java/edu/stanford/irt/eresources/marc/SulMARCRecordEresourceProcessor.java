@@ -70,22 +70,23 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         }
     }
 
-    private boolean hasAcceptableDBCallNumber(final Record record) {
-        return MARCRecordSupport.getSubfieldData(record, "099", "a").anyMatch(this.acceptableDBCallNumbers::contains);
+    private boolean hasAcceptableDBCallNumber(final Record marcRecord) {
+        return MARCRecordSupport.getSubfieldData(marcRecord, "099", "a")
+                .anyMatch(this.acceptableDBCallNumbers::contains);
     }
 
-    private boolean hasAcceptableLCCallNumberPrefix(final Record record) {
-        Set<String> cns = MARCRecordSupport.getSubfieldData(record, "050|090", "a").collect(Collectors.toSet());
+    private boolean hasAcceptableLCCallNumberPrefix(final Record marcRecord) {
+        Set<String> cns = MARCRecordSupport.getSubfieldData(marcRecord, "050|090", "a").collect(Collectors.toSet());
         if (includedInAcceptableLCCallNumberPrefixes(cns)) {
             return true;
         }
         // augment callnumber list with mapped LCSH->callnumber values
         // but skip cn mapping for fiction records
-        if (isFiction(record)) {
+        if (isFiction(marcRecord)) {
             return false;
         }
         cns.clear();
-        MARCRecordSupport.getFields(record, "650").filter((final Field f) -> ("07".indexOf(f.getIndicator2()) > -1))
+        MARCRecordSupport.getFields(marcRecord, "650").filter((final Field f) -> ("07".indexOf(f.getIndicator2()) > -1))
                 .forEach((final Field f) -> {
                     StringBuilder sb = new StringBuilder();
                     f.getSubfields().stream().filter((final Subfield sf) -> "ax".indexOf(sf.getCode()) > -1)
@@ -100,8 +101,8 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         return includedInAcceptableLCCallNumberPrefixes(cns);
     }
 
-    private boolean hasNLMCallNumber(final Record record) {
-        return MARCRecordSupport.getFields(record, "060").findAny().isPresent();
+    private boolean hasNLMCallNumber(final Record marcRecord) {
+        return MARCRecordSupport.getFields(marcRecord, "060").findAny().isPresent();
     }
 
     private boolean includedInAcceptableLCCallNumberPrefixes(final Set<String> callnumbers) {
@@ -115,12 +116,12 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         return false;
     }
 
-    private boolean isFiction(final Record record) {
-        return MARCRecordSupport.getSubfieldData(record, "650", "av")
+    private boolean isFiction(final Record marcRecord) {
+        return MARCRecordSupport.getSubfieldData(marcRecord, "650", "av")
                 .anyMatch((final String s) -> FICTION.matcher(s).find())
-                || MARCRecordSupport.getSubfieldData(record, "651", "av")
+                || MARCRecordSupport.getSubfieldData(marcRecord, "651", "av")
                         .anyMatch((final String s) -> FICTION.matcher(s).find())
-                || MARCRecordSupport.getSubfieldData(record, "655", "av")
+                || MARCRecordSupport.getSubfieldData(marcRecord, "655", "av")
                         .anyMatch((final String s) -> FICTION.matcher(s).find());
     }
 
