@@ -77,19 +77,19 @@ public class TypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("organizations, subdivisions", EresourceConstants.ORGANIZATION);
     }
 
-    public String getPrimaryType(final Record record) {
-        String primaryType = getSubfieldData(getFields(record, "655")
+    public String getPrimaryType(final Record marcRecord) {
+        String primaryType = getSubfieldData(getFields(marcRecord, "655")
                 .filter((final Field f) -> '4' == f.getIndicator1() && '7' == f.getIndicator2()), "a").findFirst()
                         .orElse("");
         primaryType = PRIMARY_TYPES.get(primaryType.toLowerCase(Locale.US));
         String type;
-        Collection<String> rawTypes = getRawTypes(record);
+        Collection<String> rawTypes = getRawTypes(marcRecord);
         if (primaryType == null) {
             type = EresourceConstants.OTHER;
         } else if (EresourceConstants.BOOK.equals(primaryType)) {
-            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(record);
+            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
         } else if (EresourceConstants.SERIAL.equals(primaryType)) {
-            type = getTypeFromSerial(rawTypes, record);
+            type = getTypeFromSerial(rawTypes, marcRecord);
         } else if (EresourceConstants.COMPONENT.equals(primaryType)) {
             type = getTypeFromComponent(rawTypes);
         } else if (EresourceConstants.VISUAL_MATERIAL.equals(primaryType)) {
@@ -100,9 +100,9 @@ public class TypeFactory extends MARCRecordSupport {
         return type;
     }
 
-    public Collection<String> getTypes(final Record record) {
-        String pType = getPrimaryType(record);
-        Collection<String> rawTypes = getRawTypes(record);
+    public Collection<String> getTypes(final Record marcRecord) {
+        String pType = getPrimaryType(marcRecord);
+        Collection<String> rawTypes = getRawTypes(marcRecord);
         if (!EresourceConstants.OTHER.equals(pType) && !"Article/Chapter".equals(pType)) {
             rawTypes.add(pType);
         }
@@ -119,17 +119,17 @@ public class TypeFactory extends MARCRecordSupport {
         return type;
     }
 
-    private String getPrintOrDigital(final Record record) {
-        boolean isDigital = getSubfieldData(record, "245", "h").anyMatch((final String s) -> s.contains("digital"));
+    private String getPrintOrDigital(final Record marcRecord) {
+        boolean isDigital = getSubfieldData(marcRecord, "245", "h").anyMatch((final String s) -> s.contains("digital"));
         if (isDigital) {
             return "Digital";
         }
         return "Print";
     }
 
-    private Collection<String> getRawTypes(final Record record) {
+    private Collection<String> getRawTypes(final Record marcRecord) {
         Set<String> rawTypes = new HashSet<>();
-        List<Field> fields655 = getFields(record, "655").collect(Collectors.toList());
+        List<Field> fields655 = getFields(marcRecord, "655").collect(Collectors.toList());
         boolean installedSoftware = getSubfieldData(fields655.stream(), "a")
                 .anyMatch("Software, Installed"::equalsIgnoreCase);
         if (installedSoftware) {
@@ -150,13 +150,13 @@ public class TypeFactory extends MARCRecordSupport {
             }
         }
         rawTypes.addAll(getSubfieldData(fields655.stream(), "a").collect(Collectors.toSet()));
-        if (getSubfieldData(record, "245", "h").anyMatch((final String s) -> s.contains("videorecording"))) {
+        if (getSubfieldData(marcRecord, "245", "h").anyMatch((final String s) -> s.contains("videorecording"))) {
             rawTypes.add("Video");
         }
-        if (getSubfieldData(record, "035", "a").anyMatch((final String s) -> s.startsWith("(Bassett)"))) {
+        if (getSubfieldData(marcRecord, "035", "a").anyMatch((final String s) -> s.startsWith("(Bassett)"))) {
             rawTypes.add("Bassett");
         }
-        if (getSubfieldData(record, "830", "a").map(String::toLowerCase)
+        if (getSubfieldData(marcRecord, "830", "a").map(String::toLowerCase)
                 .anyMatch((final String s) -> s.contains("stanford") && s.contains("grand rounds"))) {
             rawTypes.add("Grand Rounds");
         }
@@ -176,10 +176,10 @@ public class TypeFactory extends MARCRecordSupport {
         return type;
     }
 
-    private String getTypeFromSerial(final Collection<String> rawTypes, final Record record) {
-        String type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(record);
+    private String getTypeFromSerial(final Collection<String> rawTypes, final Record marcRecord) {
+        String type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
         if (rawTypes.contains(EresourceConstants.BOOK)) {
-            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(record);
+            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
         } else if (rawTypes.contains(EresourceConstants.DATABASE)) {
             type = EresourceConstants.DATABASE;
         }
