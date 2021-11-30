@@ -8,8 +8,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -90,14 +92,20 @@ public class MarcVersionTest {
 
     @Test
     public void testGetCallNumber() {
+        Subfield sf2 = mock(Subfield.class);
+        List<Subfield> subs = new ArrayList<>();
+        subs.add(this.subfield);
+        subs.add(sf2);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("852").times(2);
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('h');
-        expect(this.subfield.getData()).andReturn("cn1234");
-        replay(this.record, this.field, this.subfield);
-        assertEquals("cn1234", this.version.getCallnumber());
-        verify(this.record, this.field, this.subfield);
+        expect(this.field.getSubfields()).andReturn(subs);
+        expect(this.subfield.getCode()).andReturn('h').anyTimes();
+        expect(this.subfield.getData()).andReturn("cn1234").anyTimes();
+        expect(sf2.getCode()).andReturn('i').anyTimes();
+        expect(sf2.getData()).andReturn("end").anyTimes();
+        replay(this.record, this.field, this.subfield, sf2);
+        assertEquals("cn1234 end", this.version.getCallnumber());
+        verify(this.record, this.field, this.subfield, sf2);
     }
 
     @Test

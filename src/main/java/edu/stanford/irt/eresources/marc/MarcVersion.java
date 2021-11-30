@@ -65,7 +65,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         Field field = getFields(this.holding, "852").findFirst().orElse(null);
         if (field != null && !hasLinks()) {
             cn = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'h' || s.getCode() == 'i')
-                    .map(Subfield::getData).collect(Collectors.joining());
+                    .map(Subfield::getData).collect(Collectors.joining(" "));
             if (!cn.trim().isEmpty()) {
                 return cn;
             }
