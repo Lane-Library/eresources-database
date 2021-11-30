@@ -260,6 +260,15 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
+    public void testGetItemCountNullItemCount() {
+        this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }),
+                this.keywordsStrategy, null, this.itemCountHoldings, this.typeFactory, this.locationsService);
+        assertEquals(2, this.eresource.getItemCount().length);
+        assertEquals(0, this.eresource.getItemCount()[0]);
+        assertEquals(0, this.eresource.getItemCount()[1]);
+    }
+
+    @Test
     public void testGetMeshTerms() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("650").times(2);
