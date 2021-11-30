@@ -90,6 +90,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         return dates;
     }
 
+    // required for ObjectMapper to write field
     public boolean getHasGetPasswordLink() {
         return hasGetPasswordLink();
     }
