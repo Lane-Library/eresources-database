@@ -29,14 +29,14 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
         types = pass2(marcRecord, new HashSet<>(types));
         types = pass3(marcRecord, new HashSet<>(types));
         types.addAll(pass4(marcRecord));
-        types.addAll(pass5(marcRecord));
+        types.addAll(pass5());
         types.addAll(pass6(marcRecord));
         types.addAll(pass7(marcRecord));
         types = pass8(marcRecord, new HashSet<>(types));
         types.addAll(pass9(marcRecord));
         types = passs10(marcRecord, new HashSet<>(types));
         types = passs11(marcRecord, new HashSet<>(types));
-        types = passs12(marcRecord, new HashSet<>(types));
+        types = passs12(new HashSet<>(types));
         return types;
     }
 
@@ -195,7 +195,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
      * @param marcRecord
      * @return set of types
      */
-    private static Set<String> pass5(final Record marcRecord) {
+    private static Set<String> pass5() {
         return Collections.emptySet();
     }
 
@@ -336,12 +336,11 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     /**
      * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1622
      *
-     * @param marcRecord
      * @param currentTypes
      *            set of assigned types
      * @return set of types
      */
-    private static Set<String> passs12(final Record marcRecord, final Set<String> currentTypes) {
+    private static Set<String> passs12(final Set<String> currentTypes) {
         if (currentTypes.isEmpty()) {
             return Collections.emptySet();
         }
