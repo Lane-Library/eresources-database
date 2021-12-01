@@ -483,7 +483,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     @Test
     public void testGetVersions() {
         BibMarcEresource e = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }), null, null,
-                null, this.typeFactory, this.locationsService);
+                null, this.typeFactory, null);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("856").atLeastOnce();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).atLeastOnce();

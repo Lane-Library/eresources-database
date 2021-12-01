@@ -122,7 +122,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public String getLocationName() {
-        if (null != this.locationsService && !hasLinks()) {
+        if (null != this.locationsService) {
             return this.locationsService.getLocationName(getLocationCode());
         }
         return null;
@@ -130,7 +130,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public String getLocationUrl() {
-        if (null != this.locationsService && !hasLinks()) {
+        if (null != this.locationsService) {
             return this.locationsService.getLocationUrl(getLocationCode());
         }
         return null;
@@ -170,6 +170,11 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     }
 
     private String getLocationCode() {
+        int holdingsId = MARCRecordSupport.getRecordId(this.holding);
+        if (null != this.locationsService
+                && this.locationsService.getTemporaryHoldingLocations().containsKey(holdingsId)) {
+            return this.locationsService.getTemporaryHoldingLocations().get(holdingsId);
+        }
         return getSubfieldData(this.holding, "852", "b").findFirst().orElse("");
     }
 

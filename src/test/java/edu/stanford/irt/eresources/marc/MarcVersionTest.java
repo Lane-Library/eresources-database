@@ -12,7 +12,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,13 +44,13 @@ public class MarcVersionTest {
     @Before
     public void setUp() {
         this.record = mock(Record.class);
+        this.field = mock(Field.class);
+        this.subfield = mock(Subfield.class);
         this.eresource = mock(Eresource.class);
         this.itemCountHoldings = mock(ItemCount.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
         this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemCountHoldings,
                 this.locationsService);
-        this.field = mock(Field.class);
-        this.subfield = mock(Subfield.class);
     }
 
     @Test
@@ -201,6 +203,7 @@ public class MarcVersionTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('b');
         expect(this.subfield.getData()).andReturn("code");
+        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.emptyMap());
         expect(this.locationsService.getLocationName("code")).andReturn("name");
         replay(this.record, this.field, this.subfield, this.locationsService);
         assertEquals("name", this.version.getLocationName());
@@ -215,15 +218,14 @@ public class MarcVersionTest {
 
     @Test
     public void testGetLocationUrl() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
-        expect(this.field.getTag()).andReturn("852").times(2);
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('b');
-        expect(this.subfield.getData()).andReturn("code");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("001");
+        expect(this.field.getData()).andReturn("001");
+        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code")).times(2);
         expect(this.locationsService.getLocationUrl("code")).andReturn("url");
-        replay(this.record, this.field, this.subfield, this.locationsService);
+        replay(this.record, this.field,this.locationsService);
         assertEquals("url", this.version.getLocationUrl());
-        verify(this.record, this.field, this.subfield, this.locationsService);
+        verify(this.record, this.field,this.locationsService);
     }
 
     @Test
