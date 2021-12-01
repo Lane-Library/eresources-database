@@ -1,10 +1,8 @@
 package edu.stanford.irt.eresources;
 
-import java.util.Map;
-
 public interface ItemService {
 
-    Map<Integer, Integer> getTotals();
+    ItemCount getBibsItemCount();
 
-    Map<Integer, Integer> getAvailables();
+    ItemCount getHoldingsItemCount();
 }

@@ -11,44 +11,41 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HTTPItemService implements ItemService {
 
-    public enum Type {
-        BIB, HOLDING
-    }
+    private static final String BIBS_AVAILABLES_PATH = "item-bibs/availables";
 
-    private static final String BIBS_AVAILABLES_PATH = "items/availables";
-
-    private static final String BIBS_TOTALS_PATH = "items/totals";
+    private static final String BIBS_TOTALS_PATH = "item-bibs/totals";
 
     private static final String HOLDINGS_AVAILABLES_PATH = "item-holdings/availables";
 
     private static final String HOLDINGS_TOTALS_PATH = "item-holdings/totals";
 
+    private ItemCount bibsItemCount;
+
     private URI catalogServiceURI;
+
+    private ItemCount holdingsItemCount;
 
     private ObjectMapper objectMapper;
 
-    private Type type;
-
-    public HTTPItemService(final Type type, final URI catalogServiceURI, final ObjectMapper objectMapper) {
-        this.type = type;
+    public HTTPItemService(final URI catalogServiceURI, final ObjectMapper objectMapper) {
         this.catalogServiceURI = catalogServiceURI;
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public Map<Integer, Integer> getAvailables() {
-        if (this.type.equals(Type.HOLDING)) {
-            return getMap(HOLDINGS_AVAILABLES_PATH);
+    public ItemCount getBibsItemCount() {
+        if (null == this.bibsItemCount) {
+            this.bibsItemCount = new ItemCount(getMap(BIBS_AVAILABLES_PATH), getMap(BIBS_TOTALS_PATH));
         }
-        return getMap(BIBS_AVAILABLES_PATH);
+        return this.bibsItemCount;
     }
 
     @Override
-    public Map<Integer, Integer> getTotals() {
-        if (this.type.equals(Type.HOLDING)) {
-            return getMap(HOLDINGS_TOTALS_PATH);
+    public ItemCount getHoldingsItemCount() {
+        if (null == this.holdingsItemCount) {
+            this.holdingsItemCount = new ItemCount(getMap(HOLDINGS_AVAILABLES_PATH), getMap(HOLDINGS_TOTALS_PATH));
         }
-        return getMap(BIBS_TOTALS_PATH);
+        return this.holdingsItemCount;
     }
 
     private Map<Integer, Integer> getMap(final String enpointPath) {

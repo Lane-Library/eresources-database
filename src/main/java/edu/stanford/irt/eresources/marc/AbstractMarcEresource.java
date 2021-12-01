@@ -21,6 +21,7 @@ import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
@@ -75,9 +76,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected List<Record> holdings;
 
-    protected ItemCount itemCountBibs;
-
-    protected ItemCount itemCountHoldings;
+    protected ItemService itemService;
 
     protected KeywordsStrategy keywordsStrategy;
 
@@ -189,8 +188,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public int[] getItemCount() {
-        if (null != this.itemCountBibs) {
-            return this.itemCountBibs.itemCount(getRecordId());
+        if (null != this.itemService) {
+            return this.itemService.getBibsItemCount().itemCount(getRecordId());
         }
         return Eresource.super.getItemCount();
     }
@@ -437,7 +436,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     }
 
     protected Version createVersion(final Record record) {
-        return new MarcVersion(record, this.record, this, this.itemCountHoldings, this.locationsService);
+        return new MarcVersion(record, this.record, this, this.itemService, this.locationsService);
     }
 
     protected StringBuilder getTitleStringBuilder(final Field titleField) {

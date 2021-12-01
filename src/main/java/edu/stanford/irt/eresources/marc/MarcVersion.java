@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.Eresource;
-import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
@@ -33,16 +33,16 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private Record holding;
 
-    private ItemCount itemCount;
+    private ItemService itemService;
 
     private HTTPLaneLocationsService locationsService;
 
-    public MarcVersion(final Record holding, final Record bib, final Eresource eresource, final ItemCount itemCount,
+    public MarcVersion(final Record holding, final Record bib, final Eresource eresource, final ItemService itemService,
             final HTTPLaneLocationsService locationsService) {
         this.holding = holding;
         this.bib = bib;
         this.eresource = eresource;
-        this.itemCount = itemCount;
+        this.itemService = itemService;
         this.locationsService = locationsService;
     }
 
@@ -98,8 +98,8 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public int[] getItemCount() {
         int[] counts = null;
-        if (null != this.itemCount) {
-            counts = this.itemCount.itemCount(MARCRecordSupport.getRecordId(this.holding));
+        if (null != this.itemService) {
+            counts = this.itemService.getHoldingsItemCount().itemCount(MARCRecordSupport.getRecordId(this.holding));
             if (counts[0] > 0) {
                 return counts;
             }

@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
-import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.RecordCollection;
@@ -21,15 +21,13 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
     private EresourceHandler eresourceHandler;
 
-    private ItemCount itemCountBibs;
+    private ItemService itemService;
 
-    private ItemCount itemCountHoldings;
-
-    private HTTPLaneLocationsService locationsService;
-    
     private KeywordsStrategy keywordsStrategy;
 
     private Record lastRecord;
+
+    private HTTPLaneLocationsService locationsService;
 
     private List<Record> nextList;
 
@@ -39,13 +37,11 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
     private TypeFactory typeFactory;
 
-    public MARCRecordEresourceProcessor(final EresourceHandler eresourceHandler, final ItemCount itemCountBibs,
-            final ItemCount itemCountHoldings, final KeywordsStrategy keywordsStrategy,
-            final RecordCollectionFactory recordCollectionFactory, final TypeFactory typeFactory,
-            final HTTPLaneLocationsService locationsService) {
+    public MARCRecordEresourceProcessor(final EresourceHandler eresourceHandler, final ItemService itemService,
+            final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
+            final TypeFactory typeFactory, final HTTPLaneLocationsService locationsService) {
         this.eresourceHandler = eresourceHandler;
-        this.itemCountBibs = itemCountBibs;
-        this.itemCountHoldings = itemCountHoldings;
+        this.itemService = itemService;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
         this.typeFactory = typeFactory;
@@ -63,12 +59,12 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
                         .handleEresource(new AuthMarcEresource(marcRecord, this.keywordsStrategy, this.typeFactory));
             } else {
                 this.eresourceHandler.handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy,
-                        this.itemCountBibs, this.itemCountHoldings, this.typeFactory, this.locationsService));
+                        this.itemService, this.typeFactory, this.locationsService));
                 int altTitleCount = (int) marcRecord.getFields().stream()
                         .filter((final Field f) -> "249".equals(f.getTag())).count();
                 for (int i = 0; i < altTitleCount; i++) {
                     this.eresourceHandler.handleEresource(new AltTitleMarcEresource(recordList, this.keywordsStrategy,
-                            this.typeFactory, this.itemCountBibs, this.itemCountHoldings, i + 1, this.locationsService));
+                            this.typeFactory, this.itemService, i + 1, this.locationsService));
                 }
             }
         }

@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.irt.eresources.SulFileCatalogRecordService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -38,9 +40,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
 
     private Field field;
 
-    private ItemCount itemCountBibs;
-
-    private ItemCount itemCountHoldings;
+    private ItemService itemService;
 
     private KeywordsStrategy keywordsStrategy;
 
@@ -58,13 +58,11 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     public void setUp() {
         this.record = mock(Record.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
-        this.itemCountBibs = mock(ItemCount.class);
-        this.itemCountHoldings = mock(ItemCount.class);
+        this.itemService = mock(ItemService.class);
         this.typeFactory = mock(TypeFactory.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
         this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }),
-                this.keywordsStrategy, this.itemCountBibs, this.itemCountHoldings, this.typeFactory,
-                this.locationsService);
+                this.keywordsStrategy, this.itemService, this.typeFactory, this.locationsService);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
     }
@@ -251,18 +249,19 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("1");
-        expect(this.itemCountBibs.itemCount(1)).andReturn(new int[] { 1, 1 });
-        replay(this.record, this.field, this.subfield, this.itemCountBibs);
+        Map<Integer, Integer> map = Collections.singletonMap(1, 1);
+        expect(this.itemService.getBibsItemCount()).andReturn(new ItemCount(map, map));
+        replay(this.record, this.field, this.subfield, this.itemService);
         int[] count = this.eresource.getItemCount();
         assertEquals(1, count[0]);
         assertEquals(1, count[1]);
-        verify(this.record, this.field, this.subfield, this.itemCountBibs);
+        verify(this.record, this.field, this.subfield, this.itemService);
     }
 
     @Test
     public void testGetItemCountNullItemCount() {
         this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }),
-                this.keywordsStrategy, null, this.itemCountHoldings, this.typeFactory, this.locationsService);
+                this.keywordsStrategy, null, this.typeFactory, this.locationsService);
         assertEquals(2, this.eresource.getItemCount().length);
         assertEquals(0, this.eresource.getItemCount()[0]);
         assertEquals(0, this.eresource.getItemCount()[1]);
@@ -333,8 +332,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
             Record rec = rc.next();
             if (168269 == getRecordId(rec)) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
-                        this.keywordsStrategy, this.itemCountBibs, this.itemCountHoldings, this.typeFactory,
-                        this.locationsService);
+                        this.keywordsStrategy, this.itemService, this.typeFactory, this.locationsService);
                 assertEquals("bib-168269", er.getId());
                 assertEquals(null, er.getPublicationDate());
                 assertEquals(null, er.getPublicationIssue());
@@ -354,8 +352,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
             }
             if (67043 == getRecordId(rec)) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
-                        this.keywordsStrategy, this.itemCountBibs, this.itemCountHoldings, this.typeFactory,
-                        this.locationsService);
+                        this.keywordsStrategy, this.itemService, this.typeFactory, this.locationsService);
                 assertEquals("[Collection of reprints by John Uri Lloyd from the Western Druggist]. ",
                         er.getPublicationText());
                 assertEquals("[Collection of reprints by John Uri Lloyd from the Western Druggist]",
@@ -363,15 +360,13 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
             }
             if (77614 == getRecordId(rec)) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
-                        this.keywordsStrategy, this.itemCountBibs, this.itemCountHoldings, this.typeFactory,
-                        this.locationsService);
+                        this.keywordsStrategy, this.itemService, this.typeFactory, this.locationsService);
                 assertEquals("Stanford University Medical Center Records. ", er.getPublicationText());
                 assertEquals("Stanford University Medical Center Records", er.getPublicationTitle());
             }
             if (21171 == getRecordId(rec)) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
-                        this.keywordsStrategy, this.itemCountBibs, this.itemCountHoldings, this.typeFactory,
-                        this.locationsService);
+                        this.keywordsStrategy, this.itemService, this.typeFactory, this.locationsService);
                 assertEquals(
                         "Clinical pharmacology and therapeutics.  1981 Sep-; 30(3)-; Journal of the American Medical Association 1972 Nov 27-1981 Feb 27; 222(9)-245(8)",
                         er.getPublicationText());
@@ -483,7 +478,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     @Test
     public void testGetVersions() {
         BibMarcEresource e = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }), null, null,
-                null, this.typeFactory, null);
+                this.typeFactory, null);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("856").atLeastOnce();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).atLeastOnce();

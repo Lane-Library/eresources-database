@@ -10,9 +10,9 @@ public class ItemCount {
 
     private Map<Integer, Integer> totals;
 
-    public ItemCount(final ItemService itemService) {
-        this.availables = itemService.getAvailables();
-        this.totals = itemService.getTotals();
+    public ItemCount(final Map<Integer, Integer> availables, final Map<Integer, Integer> totals) {
+        this.availables = availables;
+        this.totals = totals;
     }
 
     public int[] itemCount(final int recordId) {

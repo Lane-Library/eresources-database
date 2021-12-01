@@ -16,7 +16,7 @@ public class AuthMarcEresource extends BibMarcEresource {
 
     public AuthMarcEresource(final Record authRecord, final KeywordsStrategy keywordsStrategy,
             final TypeFactory typeFactory) {
-        super(Collections.singletonList(authRecord), keywordsStrategy, null, null, typeFactory, null);
+        super(Collections.singletonList(authRecord), keywordsStrategy, null, typeFactory, null);
         this.authRecord = authRecord;
     }
 

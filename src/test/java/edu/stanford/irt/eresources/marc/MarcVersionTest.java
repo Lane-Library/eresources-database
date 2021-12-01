@@ -12,15 +12,14 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -31,7 +30,7 @@ public class MarcVersionTest {
 
     private Field field;
 
-    private ItemCount itemCountHoldings;
+    private ItemService itemService;
 
     private HTTPLaneLocationsService locationsService;
 
@@ -47,9 +46,9 @@ public class MarcVersionTest {
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
         this.eresource = mock(Eresource.class);
-        this.itemCountHoldings = mock(ItemCount.class);
+        this.itemService = mock(ItemService.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
-        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemCountHoldings,
+        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService,
                 this.locationsService);
     }
 
@@ -171,11 +170,13 @@ public class MarcVersionTest {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("123");
-        int[] itemCount = { 2, 1 };
-        expect(this.itemCountHoldings.itemCount(123)).andReturn(itemCount);
-        replay(this.record, this.field, this.subfield, this.itemCountHoldings);
-        assertEquals(itemCount, this.version.getItemCount());
-        verify(this.record, this.field, this.subfield, this.itemCountHoldings);
+        ItemCount itemCount = mock(ItemCount.class);
+        expect(this.itemService.getHoldingsItemCount()).andReturn(itemCount);
+        int[] intArray = { 2, 1 };
+        expect(itemCount.itemCount(123)).andReturn(intArray);
+        replay(this.record, this.field, this.subfield, this.itemService, itemCount);
+        assertEquals(intArray, this.version.getItemCount());
+        verify(this.record, this.field, this.subfield, this.itemService, itemCount);
     }
 
     @Test
@@ -212,7 +213,7 @@ public class MarcVersionTest {
 
     @Test
     public void testGetLocationNameNull() {
-        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemCountHoldings, null);
+        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService, null);
         assertEquals(null, this.version.getLocationName());
     }
 
@@ -221,16 +222,17 @@ public class MarcVersionTest {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("001");
-        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code")).times(2);
+        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code"))
+                .times(2);
         expect(this.locationsService.getLocationUrl("code")).andReturn("url");
-        replay(this.record, this.field,this.locationsService);
+        replay(this.record, this.field, this.locationsService);
         assertEquals("url", this.version.getLocationUrl());
-        verify(this.record, this.field,this.locationsService);
+        verify(this.record, this.field, this.locationsService);
     }
 
     @Test
     public void testGetLocationUrlNull() {
-        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemCountHoldings, null);
+        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService, null);
         assertEquals(null, this.version.getLocationUrl());
     }
 
