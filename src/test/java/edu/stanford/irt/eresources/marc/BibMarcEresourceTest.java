@@ -87,6 +87,18 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
+    public void testGetAbbreviatedTitlesNull() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("246");
+        expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield }))
+                .times(2);
+        expect(this.subfield.getCode()).andReturn('z').times(4);
+        replay(this.record, this.field, this.subfield);
+        assertTrue(this.eresource.getAbbreviatedTitles().isEmpty());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
     public void testGetAlternativeTitles() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("130");
@@ -285,7 +297,8 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getTag()).andReturn("100").times(4);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
         expect(this.subfield.getCode()).andReturn('a').times(2);
-        expect(this.subfield.getData()).andReturn("author").times(2);
+        expect(this.subfield.getData()).andReturn("author");
+        expect(this.subfield.getData()).andReturn("author.");
         expect(this.record.getFields()).andReturn(Collections.emptyList());
         expect(this.record.getFields()).andReturn(Arrays.asList(new Field[] { this.field, this.field }));
         replay(this.record, this.field, this.subfield);
@@ -488,6 +501,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getIndicator2()).andReturn('1').atLeastOnce();
         expect(this.typeFactory.getPrimaryType(this.record)).andReturn("primary type").atLeastOnce();
         replay(this.record, this.field, this.subfield, this.typeFactory);
+        assertEquals(1, e.getVersions().size());
         assertEquals(1, e.getVersions().size());
         verify(this.record, this.field, this.subfield, this.typeFactory);
     }
