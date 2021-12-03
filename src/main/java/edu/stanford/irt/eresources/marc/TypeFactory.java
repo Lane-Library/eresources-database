@@ -17,12 +17,10 @@ import edu.stanford.lane.catalog.Record.Field;
 public class TypeFactory extends MARCRecordSupport {
 
     protected static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
-            EresourceConstants.AUDIO, "Bassett", "Biotools Software, Installed", EresourceConstants.BOOK,
-            EresourceConstants.CHAPTER, "Calculators, Formulas, Algorithms", "Data Analysis Software, Installed",
-            EresourceConstants.DATABASE, "Dataset", "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE,
-            "Imaging Software, Installed", EresourceConstants.JOURNAL, "Lane Class", "Lane Web Page", "Mobile",
-            "Office Software, Installed", "Print", EresourceConstants.SOFTWARE, "Software, Installed",
-            "Statistics Software, Installed", "Statistics", EresourceConstants.VIDEO, EresourceConstants.WEBSITE };
+            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, EresourceConstants.CHAPTER,
+            "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset", "Exam Prep", "Grand Rounds",
+            EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Web Page", "Mobile", "Print",
+            EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO, EresourceConstants.WEBSITE };
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
@@ -130,25 +128,6 @@ public class TypeFactory extends MARCRecordSupport {
     private Collection<String> getRawTypes(final Record record) {
         Set<String> rawTypes = new HashSet<>();
         List<Field> fields655 = getFields(record, "655").collect(Collectors.toList());
-        boolean installedSoftware = getSubfieldData(fields655.stream(), "a")
-                .anyMatch("Software, Installed"::equalsIgnoreCase);
-        if (installedSoftware) {
-            if (getSubfieldData(fields655.stream(), "a").anyMatch("Subset, Biotools"::equalsIgnoreCase)) {
-                rawTypes.add("Biotools Software, Installed");
-            }
-            if (getSubfieldData(fields655.stream(), "a").anyMatch("Statistics"::equalsIgnoreCase)) {
-                rawTypes.add("Statistics Software, Installed");
-            }
-            if (getSubfieldData(fields655.stream(), "a").anyMatch("Software, Imaging"::equalsIgnoreCase)) {
-                rawTypes.add("Imaging Software, Installed");
-            }
-            if (getSubfieldData(fields655.stream(), "a").anyMatch("Software, Data Analysis"::equalsIgnoreCase)) {
-                rawTypes.add("Data Analysis Software, Installed");
-            }
-            if (getSubfieldData(fields655.stream(), "a").anyMatch("Software, Office"::equalsIgnoreCase)) {
-                rawTypes.add("Office Software, Installed");
-            }
-        }
         rawTypes.addAll(getSubfieldData(fields655.stream(), "a").collect(Collectors.toSet()));
         if (getSubfieldData(record, "245", "h").anyMatch((final String s) -> s.contains("videorecording"))) {
             rawTypes.add("Video");

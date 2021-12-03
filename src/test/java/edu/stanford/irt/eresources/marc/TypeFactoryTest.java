@@ -64,10 +64,10 @@ public class TypeFactoryTest extends MARCRecordSupport {
         assertTrue(this.typefactory.getTypes(this.records.get("347355")).contains("Article"));
         assertTrue(this.typefactory.getTypes(this.records.get("88090")).contains("Video"));
         assertTrue(this.typefactory.getTypes(this.records.get("62326")).contains("Journal"));
-        assertTrue(this.typefactory.getTypes(this.records.get("229725")).contains("Biotools Software, Installed"));
-        assertTrue(this.typefactory.getTypes(this.records.get("143701")).contains("Statistics Software, Installed"));
-        assertTrue(this.typefactory.getTypes(this.records.get("143701")).contains("Data Analysis Software, Installed"));
-        assertTrue(this.typefactory.getTypes(this.records.get("219562")).contains("Imaging Software, Installed"));
+        assertTrue(this.typefactory.getTypes(this.records.get("229725")).contains("Software"));
+        assertTrue(this.typefactory.getTypes(this.records.get("143701")).contains("Software"));
+        assertTrue(this.typefactory.getTypes(this.records.get("143701")).contains("Software"));
+        assertTrue(this.typefactory.getTypes(this.records.get("219562")).contains("Software"));
         assertTrue(this.typefactory.getTypes(this.records.get("292351")).contains("Grand Rounds"));
         assertTrue(this.typefactory.getTypes(this.records.get("257445")).contains("Bassett"));
         assertTrue(this.typefactory.getTypes(this.records.get("234974")).isEmpty());
