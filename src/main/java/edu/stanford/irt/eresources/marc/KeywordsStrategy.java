@@ -30,10 +30,10 @@ public class KeywordsStrategy {
         this.reservesAugmentation = reservesAugmentation;
     }
 
-    public String getKeywords(final Record record) {
+    public String getKeywords(final Record marcRecord) {
         StringBuilder sb = new StringBuilder();
-        List<Field> fields = record.getFields();
-        byte leaderByte6 = record.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06);
+        List<Field> fields = marcRecord.getFields();
+        byte leaderByte6 = marcRecord.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06);
         if ("uvxy".indexOf(leaderByte6) > -1) {
             getKeywordsFromHoldingsRec(fields, sb);
         } else if (leaderByte6 == 'q') {

@@ -129,14 +129,6 @@ public class VersionComparatorTest {
     }
 
     @Test
-    public void testCompareInstalledSoftware() {
-        this.saxLink.setLabel("pRoduct Description");
-        this.saxVersion1.addLink(this.saxLink);
-        this.saxVersion2.addLink(new SAXLink());
-        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
-    }
-
-    @Test
     public void testCompareOpenDates() {
         this.saxVersion1.setDates("1999-");
         this.saxVersion2.setDates("1999-2000.");

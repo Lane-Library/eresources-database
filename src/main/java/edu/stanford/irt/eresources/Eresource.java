@@ -6,6 +6,8 @@ import java.util.Collections;
 
 public interface Eresource {
 
+    static final int EMPTY_ITEM_COUNT_SIZE = 2;
+
     Collection<String> getAbbreviatedTitles();
 
     Collection<String> getAlternativeTitles();
@@ -26,7 +28,9 @@ public interface Eresource {
         return Collections.emptyList();
     }
 
-    int[] getItemCount();
+    default int[] getItemCount() {
+        return new int[EMPTY_ITEM_COUNT_SIZE];
+    }
 
     String getKeywords();
 

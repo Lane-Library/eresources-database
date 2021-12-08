@@ -93,6 +93,11 @@ public class SolrEresourceHandlerTest {
         expect(this.eresource.getVersions()).andReturn(Collections.singletonList(v)).times(2);
         expect(this.eresource.getMeshTerms()).andReturn(Collections.singletonList("mesh")).anyTimes();
         expect(this.eresource.getBroadMeshTerms()).andReturn(Collections.singletonList("broad mesh"));
+        int[] itemCount = { 10, 5 };
+        expect(v.getItemCount()).andReturn(itemCount);
+        expect(v.getCallnumber()).andReturn("cn");
+        expect(v.getLocationName()).andReturn("loc name");
+        expect(v.getLocationUrl()).andReturn("loc url");
         expect(v.getLinks()).andReturn(Collections.singletonList(l)).times(2);
         expect(v.isProxy()).andReturn(true).times(2);
         expect(v.getHoldingsAndDates()).andReturn("");

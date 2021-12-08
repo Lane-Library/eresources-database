@@ -20,7 +20,7 @@ import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
-import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
@@ -33,6 +33,8 @@ import edu.stanford.lane.catalog.Record.Subfield;
  * An Eresource that encapsulates the marc Records from which it is derived.
  */
 public abstract class AbstractMarcEresource extends MARCRecordSupport implements Eresource {
+
+    private static final int SORT_TITLE_MAX_LENGTH = 48;
 
     protected static final Pattern COLON_OR_SEMICOLON = Pattern.compile("[:;]");
 
@@ -65,13 +67,19 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected static final Pattern SPACE_SLASH = Pattern.compile(" /");
 
-    private static final int SORT_TITLE_MAX_LENGTH = 48;
+    private static String maybeStripFinialPeriodFromAuthor(final String author) {
+        return author.endsWith(".") && !NAME_INITIAL_PERIOD.matcher(author).matches()
+                ? author.substring(0, author.length() - 1)
+                : author;
+    }
 
     protected List<Record> holdings;
 
-    protected ItemCount itemCount;
+    protected ItemService itemService;
 
     protected KeywordsStrategy keywordsStrategy;
+
+    protected HTTPLaneLocationsService locationsService;
 
     protected String primaryType;
 
@@ -82,12 +90,6 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     protected Collection<String> types;
 
     protected List<Version> versions;
-
-    private static String maybeStripFinialPeriodFromAuthor(final String author) {
-        return author.endsWith(".") && !NAME_INITIAL_PERIOD.matcher(author).matches()
-                ? author.substring(0, author.length() - 1)
-                : author;
-    }
 
     @Override
     public Collection<String> getAbbreviatedTitles() {
@@ -117,8 +119,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
         String date = null;
         List<Field> fields773 = getFields(this.record, "773").collect(Collectors.toList());
         int subfieldWCount = 0;
-        for (int i = 0; i < fields773.size(); i++) {
-            List<Subfield> subfields = fields773.get(i).getSubfields();
+        for (Field element : fields773) {
+            List<Subfield> subfields = element.getSubfields();
             if (subfieldWCount == 0) {
                 date = subfields.stream().filter((final Subfield s) -> s.getCode() == 'd').map(Subfield::getData)
                         .reduce((final String a, final String b) -> b).orElse(date);
@@ -187,7 +189,10 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public int[] getItemCount() {
-        return this.itemCount.itemCount(getRecordId());
+        if (null != this.itemService) {
+            return this.itemService.getBibsItemCount().itemCount(getRecordId());
+        }
+        return Eresource.super.getItemCount();
     }
 
     @Override
@@ -279,8 +284,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
         StringBuilder sb = new StringBuilder();
         List<Field> fields773 = getFields(this.record, "773").collect(Collectors.toList());
         int subfieldWCount = 0;
-        for (int i = 0; i < fields773.size(); i++) {
-            Field field733 = fields773.get(i);
+        for (Field field733 : fields773) {
             if (subfieldWCount == 0 && sb.length() == 0) {
                 sb.append(field733.getSubfields().stream().filter((final Subfield s) -> "tp".indexOf(s.getCode()) > -1)
                         .map(Subfield::getData).reduce((final String a, final String b) -> b).orElse(""));
@@ -433,7 +437,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     }
 
     protected Version createVersion(final Record record) {
-        return new MarcVersion(record, this.record, this);
+        return new MarcVersion(record, this.record, this, this.itemService, this.locationsService);
     }
 
     protected StringBuilder getTitleStringBuilder(final Field titleField) {

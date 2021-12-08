@@ -107,12 +107,6 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetItemCount() {
-        assertEquals(0, this.eresource.getItemCount()[0]);
-        assertEquals(0, this.eresource.getItemCount()[1]);
-    }
-
-    @Test
     public final void testGetKeywords() {
         expect(this.keywordsStrategy.getKeywords(this.record)).andReturn("keywords");
         replay(this.keywordsStrategy);

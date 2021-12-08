@@ -6,6 +6,24 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2021-12-08" version="2.6.0" description="maintenance release">
+            <action date="2021-12-03" dev="ryanmax" issue="LANEWEB-10841" type="remove">
+                Delete code associated with old Software at Lane page
+            </action>
+            <action date="2021-11-30" dev="ryanmax" issue="LANEWEB-10723" type="add">
+                add holdings information to Lane Search
+            </action>
+        </release>
+        <release date="2021-11-19" version="2.5.6" description="maintenance release">
+            <action date="2021-11-19" dev="ryanmax" issue="LANEWEB-10834" type="update">
+                libguide titles end in "--" in search results
+            </action>
+        </release>
+        <release date="2021-11-16" version="2.5.5" description="maintenance release">
+            <action date="2021-11-01" dev="ryanmax" issue="LANEWEB-10826" type="update">
+                esearch to have 10K result limit in April 2022
+            </action>
+        </release>
         <release date="2021-08-27" version="2.5.3" description="maintenance release">
             <action date="2021-08-27" dev="ryanmax" issue="LANEWEB-10794" type="update">
                 record duplication: use DNLM control numbers

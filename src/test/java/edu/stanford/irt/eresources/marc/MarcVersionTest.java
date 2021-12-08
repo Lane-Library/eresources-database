@@ -5,16 +5,21 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.ItemCount;
+import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -25,6 +30,10 @@ public class MarcVersionTest {
 
     private Field field;
 
+    private ItemService itemService;
+
+    private HTTPLaneLocationsService locationsService;
+
     private Record record;
 
     private Subfield subfield;
@@ -34,10 +43,13 @@ public class MarcVersionTest {
     @Before
     public void setUp() {
         this.record = mock(Record.class);
-        this.eresource = mock(Eresource.class);
-        this.version = new MarcVersion(this.record, this.record, this.eresource);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
+        this.eresource = mock(Eresource.class);
+        this.itemService = mock(ItemService.class);
+        this.locationsService = mock(HTTPLaneLocationsService.class);
+        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService,
+                this.locationsService);
     }
 
     @Test
@@ -81,6 +93,33 @@ public class MarcVersionTest {
     }
 
     @Test
+    public void testGetCallNumber() {
+        Subfield sf2 = mock(Subfield.class);
+        List<Subfield> subs = new ArrayList<>();
+        subs.add(this.subfield);
+        subs.add(sf2);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("852").times(2);
+        expect(this.field.getSubfields()).andReturn(subs);
+        expect(this.subfield.getCode()).andReturn('h').anyTimes();
+        expect(this.subfield.getData()).andReturn("cn1234").anyTimes();
+        expect(sf2.getCode()).andReturn('i').anyTimes();
+        expect(sf2.getData()).andReturn("end").anyTimes();
+        replay(this.record, this.field, this.subfield, sf2);
+        assertEquals("cn1234 end", this.version.getCallnumber());
+        verify(this.record, this.field, this.subfield, sf2);
+    }
+
+    @Test
+    public void testGetCallNumberNull() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("856");
+        replay(this.record, this.field);
+        assertEquals(null, this.version.getCallnumber());
+        verify(this.record, this.field);
+    }
+
+    @Test
     public void testGetDates() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("866");
@@ -103,6 +142,18 @@ public class MarcVersionTest {
     }
 
     @Test
+    public void testGetHasGetPasswordLink() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.field.getTag()).andReturn("856");
+        expect(this.subfield.getCode()).andReturn('u');
+        expect(this.subfield.getData()).andReturn("http://lane.stanford.edu/secure/ejpw.html");
+        replay(this.record, this.field, this.subfield);
+        assertTrue(this.version.getHasGetPasswordLink());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
     public void testGetHoldingsAndDates() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("866").times(2);
@@ -115,6 +166,26 @@ public class MarcVersionTest {
     }
 
     @Test
+    public void testGetItemCount() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("001");
+        expect(this.field.getData()).andReturn("123");
+        ItemCount itemCount = mock(ItemCount.class);
+        expect(this.itemService.getHoldingsItemCount()).andReturn(itemCount);
+        int[] intArray = { 2, 1 };
+        expect(itemCount.itemCount(123)).andReturn(intArray);
+        replay(this.record, this.field, this.subfield, this.itemService, itemCount);
+        assertEquals(intArray, this.version.getItemCount());
+        verify(this.record, this.field, this.subfield, this.itemService, itemCount);
+    }
+
+    @Test
+    public void testGetItemCountNull() {
+        this.version = new MarcVersion(this.record, this.record, this.eresource, null, null);
+        assertEquals(0, this.version.getItemCount().length);
+    }
+
+    @Test
     public void testGetLinks() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("856").times(2);
@@ -124,6 +195,45 @@ public class MarcVersionTest {
         replay(this.record, this.field, this.subfield);
         assertEquals(1, this.version.getLinks().size());
         verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testGetLocationName() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("852").times(2);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('b');
+        expect(this.subfield.getData()).andReturn("code");
+        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.emptyMap());
+        expect(this.locationsService.getLocationName("code")).andReturn("name");
+        replay(this.record, this.field, this.subfield, this.locationsService);
+        assertEquals("name", this.version.getLocationName());
+        verify(this.record, this.field, this.subfield, this.locationsService);
+    }
+
+    @Test
+    public void testGetLocationNameNull() {
+        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService, null);
+        assertEquals(null, this.version.getLocationName());
+    }
+
+    @Test
+    public void testGetLocationUrl() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("001");
+        expect(this.field.getData()).andReturn("001");
+        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code"))
+                .times(2);
+        expect(this.locationsService.getLocationUrl("code")).andReturn("url");
+        replay(this.record, this.field, this.locationsService);
+        assertEquals("url", this.version.getLocationUrl());
+        verify(this.record, this.field, this.locationsService);
+    }
+
+    @Test
+    public void testGetLocationUrlNull() {
+        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService, null);
+        assertEquals(null, this.version.getLocationUrl());
     }
 
     @Test
@@ -160,6 +270,18 @@ public class MarcVersionTest {
         expect(this.subfield.getData()).andReturn("http://lane.stanford.edu/secure/ejpw.html");
         replay(this.record, this.field, this.subfield);
         assertTrue(this.version.hasGetPasswordLink());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testIsProxy() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.field.getTag()).andReturn("655");
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("subSet, Noproxy");
+        replay(this.record, this.field, this.subfield);
+        assertFalse(this.version.isProxy());
         verify(this.record, this.field, this.subfield);
     }
 }

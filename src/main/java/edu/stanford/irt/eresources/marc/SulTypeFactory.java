@@ -58,13 +58,13 @@ public class SulTypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("video", EresourceConstants.VIDEO);
     }
 
-    private static Stream<Field> getFieldsWild(final Record record, final String tagString) {
-        return record.getFields().stream().filter((final Field f) -> f.getTag().matches(tagString));
+    private static Stream<Field> getFieldsWild(final Record marcRecord, final String tagString) {
+        return marcRecord.getFields().stream().filter((final Field f) -> f.getTag().matches(tagString));
     }
 
-    public String getPrimaryType(final Record record) {
+    public String getPrimaryType(final Record marcRecord) {
         String primaryType = EresourceConstants.OTHER;
-        List<String> types = getTypes(record);
+        List<String> types = getTypes(marcRecord);
         if (!types.isEmpty()) {
             primaryType = types.get(0);
         }
@@ -73,21 +73,21 @@ public class SulTypeFactory extends MARCRecordSupport {
         if (primaryType == null) {
             type = EresourceConstants.OTHER;
         } else if (EresourceConstants.BOOK.equals(primaryType)) {
-            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(record);
+            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
         } else if (EresourceConstants.JOURNAL.equals(primaryType)) {
-            type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(record);
+            type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
         } else {
             type = primaryType;
         }
         return type;
     }
 
-    public List<String> getTypes(final Record record) {
+    public List<String> getTypes(final Record marcRecord) {
         List<String> types = new ArrayList<>();
-        for (String type : SulTypeFactoryHelper.getTypes(record)) {
+        for (String type : SulTypeFactoryHelper.getTypes(marcRecord)) {
             types.add(getCompositeType(type));
         }
-        for (String type : getRawTypes(record)) {
+        for (String type : getRawTypes(marcRecord)) {
             if (!types.contains(type)) {
                 types.add(type);
             }
@@ -102,8 +102,8 @@ public class SulTypeFactory extends MARCRecordSupport {
         return type;
     }
 
-    private String getPrintOrDigital(final Record record) {
-        List<Field> linkFields = getFieldsWild(record, "[8|9]56").filter(
+    private String getPrintOrDigital(final Record marcRecord) {
+        List<Field> linkFields = getFieldsWild(marcRecord, "[8|9]56").filter(
                 (final Field f) -> f.getSubfields().stream().anyMatch((final Subfield sf) -> sf.getCode() == 'u'))
                 .collect(Collectors.toList());
         int digitalLinks = (int) linkFields.stream().filter(this::isDigitalLink).count();
@@ -113,19 +113,19 @@ public class SulTypeFactory extends MARCRecordSupport {
         return "Print";
     }
 
-    private Collection<String> getRawTypes(final Record record) {
+    private Collection<String> getRawTypes(final Record marcRecord) {
         Set<String> rawTypes = new HashSet<>();
-        List<Field> fields655 = getFields(record, "655").collect(Collectors.toList());
+        List<Field> fields655 = getFields(marcRecord, "655").collect(Collectors.toList());
         rawTypes.addAll(getSubfieldData(fields655.stream(), "a").map(TextParserHelper::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet()));
-        List<Field> fields6xx = getFieldsWild(record, "6..").collect(Collectors.toList());
+        List<Field> fields6xx = getFieldsWild(marcRecord, "6..").collect(Collectors.toList());
         rawTypes.addAll(getSubfieldData(fields6xx.stream(), "v").map(TextParserHelper::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet()));
-        rawTypes.addAll(getSubfieldData(record, "245", "h").map(TextParserHelper::maybeStripTrailingPeriod)
+        rawTypes.addAll(getSubfieldData(marcRecord, "245", "h").map(TextParserHelper::maybeStripTrailingPeriod)
                 .map((final String s) -> BEGIN_OR_END_BRACKET_MAYBE_SPACE_COLON.matcher(s).replaceAll(""))
                 .map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
         rawTypes.addAll(
-                getSubfieldData(record, "999", "t").map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
+                getSubfieldData(marcRecord, "999", "t").map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
         return rawTypes.stream().map(this::getCompositeType).filter(ALLOWED_TYPES::contains)
                 .collect(Collectors.toSet());
     }

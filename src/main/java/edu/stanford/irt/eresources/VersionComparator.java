@@ -113,18 +113,8 @@ public class VersionComparator implements Comparator<Version>, Serializable {
             score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
             score = calculateDatesScore(version.getDates(), score);
             score = calculateAdditionalTextScore(version.getAdditionalText(), score);
-            // make sure installed software product description is first:
-            score = calculateInstalledSoftwareScore(links.get(0).getLabel(), score);
         }
         return score;
-    }
-
-    private int calculateInstalledSoftwareScore(final String linkLabel, final int score) {
-        int calculatedScore = score;
-        if (score == 0 && "Product Description".equalsIgnoreCase(linkLabel)) {
-            calculatedScore = 1;
-        }
-        return calculatedScore;
     }
 
     /**
