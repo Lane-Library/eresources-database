@@ -22,8 +22,6 @@ import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMarcEresource extends AbstractMarcEresource {
 
-    private static final int ITEM_COUNT_MAP_SIZE = 2;
-
     private static final int MAX_YEAR = TextParserHelper.THIS_YEAR + 5;
 
     private static final int MIN_YEAR = 500;
@@ -36,9 +34,9 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     private int year;
 
-    public SulMarcEresource(final Record record, final KeywordsStrategy keywordsStrategy,
+    public SulMarcEresource(final Record marcRecord, final KeywordsStrategy keywordsStrategy,
             final SulTypeFactory typeFactory, final LcshMapManager lcshMapManager) {
-        this.record = record;
+        this.record = marcRecord;
         this.keywordsStrategy = keywordsStrategy;
         this.sulTypeFactory = typeFactory;
         this.lcshMapManager = lcshMapManager;
@@ -60,11 +58,6 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public String getDate() {
         return DateParser.parseDate(Integer.toString(getYear()));
-    }
-
-    @Override
-    public int[] getItemCount() {
-        return new int[ITEM_COUNT_MAP_SIZE];
     }
 
     @Override
@@ -209,13 +202,13 @@ public class SulMarcEresource extends AbstractMarcEresource {
         return false;
     }
 
-    @Override
-    protected Version createVersion(final Record record) {
-        return new SulMarcVersion(record, this);
-    }
-
     private boolean isAllCaps(final String string) {
         String caps = string.toUpperCase(Locale.US);
         return string.equals(caps);
+    }
+
+    @Override
+    protected Version createVersion(final Record holdingsRecord) {
+        return new SulMarcVersion(holdingsRecord, this);
     }
 }

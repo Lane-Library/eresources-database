@@ -14,8 +14,6 @@ import edu.stanford.irt.eresources.Version;
 
 public class RedivisEresource implements Eresource {
 
-    private static final int TWO = 2;
-
     private static final List<String> TYPES = Arrays.asList("Dataset");
 
     private Result dataset;
@@ -52,11 +50,6 @@ public class RedivisEresource implements Eresource {
     @Override
     public String getId() {
         return getRecordType() + "-" + this.dataset.getReferenceId();
-    }
-
-    @Override
-    public int[] getItemCount() {
-        return new int[TWO];
     }
 
     @Override

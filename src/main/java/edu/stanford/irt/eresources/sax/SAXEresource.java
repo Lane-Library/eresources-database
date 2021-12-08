@@ -32,8 +32,6 @@ public class SAXEresource implements Eresource {
 
     private Collection<String> broadMeshTerms = new HashSet<>();
 
-    private int[] count = new int[] { 0, 0 };
-
     private String date;
 
     private String description;
@@ -169,11 +167,6 @@ public class SAXEresource implements Eresource {
     @Override
     public String getId() {
         return this.id;
-    }
-
-    @Override
-    public int[] getItemCount() {
-        return this.count.clone();
     }
 
     @Override
@@ -337,10 +330,6 @@ public class SAXEresource implements Eresource {
 
     public void setIsLaneConnex(final boolean isLaneConnex) {
         this.isLaneConnex = isLaneConnex;
-    }
-
-    public void setItemCount(final int[] count) {
-        this.count = count.clone();
     }
 
     public void setKeywords(final String keywords) {

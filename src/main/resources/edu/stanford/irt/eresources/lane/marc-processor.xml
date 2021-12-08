@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="bibProcessor" class="edu.stanford.irt.eresources.marc.MARCRecordEresourceProcessor">
         <constructor-arg ref="eresourceHandler"/>
-        <constructor-arg ref="itemCount"/>
+        <constructor-arg ref="httpItemService"/>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
                 <constructor-arg ref="authTextAugmentation"/>
@@ -19,6 +19,7 @@
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.TypeFactory"/>
         </constructor-arg>
+        <constructor-arg ref="httpLaneLocationsService"/>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
         <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/auth-augmentations.obj"/>
@@ -26,9 +27,6 @@
     </bean>
     <bean id="reservesTextAugmentation" class="edu.stanford.irt.eresources.marc.ReservesTextAugmentation">
         <constructor-arg ref="httpReservesTextAugmentationsService"/>
-    </bean>
-    <bean id="itemCount" class="edu.stanford.irt.eresources.ItemCount">
-        <constructor-arg ref="httpItemService"/>
     </bean>
     <bean id="httpAuthTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
@@ -41,6 +39,10 @@
         <constructor-arg value="augmentations/reserves"/>
     </bean>
     <bean id="httpItemService" class="edu.stanford.irt.eresources.HTTPItemService">
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg ref="objectMapper"/>
+    </bean>
+    <bean id="httpLaneLocationsService" class="edu.stanford.irt.eresources.marc.HTTPLaneLocationsService">
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg ref="objectMapper"/>
     </bean>
