@@ -6,7 +6,7 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
-        <release date="2021-12-08" version="2.6.0" description="maintenance release">
+        <release date="2021-12-08" version="2.6.0" description="print holdings release">
             <action date="2021-12-03" dev="ryanmax" issue="LANEWEB-10841" type="remove">
                 Delete code associated with old Software at Lane page
             </action>
