@@ -22,6 +22,15 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private static final Pattern SPACE_EQUALS = Pattern.compile(" =");
 
+    private static final String createLocationUrlFromControlNumber(final String cn) {
+        StringBuilder sb = new StringBuilder("/view/bib/");
+        if (null != cn && cn.startsWith("L")) {
+            sb.append(cn.substring(1));
+            return sb.toString();
+        }
+        return null;
+    }
+
     private static boolean isGetPassword856(final Field field) {
         return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'u').map(Subfield::getData)
                 .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
@@ -35,7 +44,11 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private ItemService itemService;
 
+    private String locationName;
+
     private HTTPLaneLocationsService locationsService;
+
+    private String locationUrl;
 
     public MarcVersion(final Record holding, final Record bib, final Eresource eresource, final ItemService itemService,
             final HTTPLaneLocationsService locationsService) {
@@ -122,18 +135,38 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public String getLocationName() {
-        if (null != this.locationsService) {
-            return this.locationsService.getLocationName(getLocationCode());
+        if (null != this.locationName) {
+            return this.locationName;
         }
-        return null;
+        String name = null;
+        if (null != this.locationsService) {
+            String locCode = getLocationCode();
+            if (isNoItemsPrintBibAndHasParentRelationship()) {
+                setLocationDataForRelatedRecord();
+                name = this.locationName;
+            } else {
+                name = this.locationsService.getLocationName(locCode);
+            }
+        }
+        return name;
     }
 
     @Override
     public String getLocationUrl() {
-        if (null != this.locationsService) {
-            return this.locationsService.getLocationUrl(getLocationCode());
+        if (null != this.locationUrl) {
+            return this.locationUrl;
         }
-        return null;
+        String url = null;
+        if (null != this.locationsService) {
+            String locCode = getLocationCode();
+            if (isNoItemsPrintBibAndHasParentRelationship()) {
+                setLocationDataForRelatedRecord();
+                url = this.locationUrl;
+            } else {
+                url = this.locationsService.getLocationUrl(locCode);
+            }
+        }
+        return url;
     }
 
     @Override
@@ -182,9 +215,33 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         return getFields(this.holding, "856").count() > 0;
     }
 
+    private boolean isNoItemsPrintBibAndHasParentRelationship() {
+        return this.eresource.getItemCount()[0] == 0
+                && !getSubfieldData(getFields(this.bib, "856"), "u").findAny().isPresent()
+                && getSubfieldData(getFields(this.bib, "773|787|830"), "w").findAny().isPresent();
+    }
+
     private boolean needToAddBibDates(final Eresource eresource) {
         return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
                 && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches()
                 && getLinks().stream().noneMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
+    }
+
+    private void setLocationDataForRelatedRecord() {
+        String parentRecordId = getSubfieldData(this.bib, "773", "w").findFirst().orElse(null);
+        if (null != parentRecordId) {
+            this.locationName = this.eresource.getPublicationText();
+            this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
+        }
+        parentRecordId = getSubfieldData(this.bib, "787", "w").findFirst().orElse(null);
+        if (null != parentRecordId) {
+            this.locationName = getSubfieldData(this.bib, "787", "etdn").collect(Collectors.joining(" "));
+            this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
+        }
+        parentRecordId = getSubfieldData(this.bib, "830", "w").findFirst().orElse(null);
+        if (null != parentRecordId) {
+            this.locationName = getSubfieldData(this.bib, "830", "adv").collect(Collectors.joining(" "));
+            this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
+        }
     }
 }
