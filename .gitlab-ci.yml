@@ -3,7 +3,7 @@ include:
     file: "/cicd/build-image.yml"
 
 variables:
-  IMAGE_NAME: "docker-bookmarks"
+  IMAGE_NAME: "eresources"
   KANIKO_CACHE: "true"
 
 deploy-to-stage:
