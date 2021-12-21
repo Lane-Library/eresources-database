@@ -1,5 +1,3 @@
-[![Build Status](https://drone.med.stanford.edu/api/badges/lane/eresources-database/status.svg)](https://drone.med.stanford.edu/lane/eresources-database)
-
 # eresources in Docker
 
 ## Prerequisites
@@ -34,25 +32,16 @@ $ make pull
 
 ## CI/CD Support
 
-This repo supports [DroneCI](https://drone.med.stanford.edu/lane/eresources-database).
+#### Get and setup personal gitlab access token
+Gitlab API requires access token to talk to gitlab server.
 
-#### Get and setup personal drone token
-Drone CLI requires access token to talk to drone server.
+Please get your personal token from https://ci.med.stanford.edu/account/token,
+and save the the token to ${HOME}/.drone-token file.
 
-Please get your personal token from https://drone.med.stanford.edu/account/token, 
-and save the the token to ${HOME}/.drone-token file. 
+_NOTE_: Do not add newline at the end of the token.
 
-_NOTE_: Do not add newline at the end of the token. Use:
-
-```
-echo -n <token> > ${HOME}/.drone-token
-```
-
-
-#### To turn on the ci job defined in .drone.yml
+#### Setup gitlab pipeline and slack notifcations
 
 ```
-$ make drone-setup
+$ make gl-setup
 ```
-
-
