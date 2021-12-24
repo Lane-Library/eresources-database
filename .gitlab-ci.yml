@@ -1,15 +1,12 @@
 include:
   - project: "irt-lane/som-laneweb"
     file: "/cicd/build-image.yml"
+  - project: "irt-lane/som-laneweb"
+    file: "/cicd/trigger-downstream.yml"
 
 variables:
   IMAGE_NAME: "eresources"
   KANIKO_CACHE: "true"
 
-deploy-to-stage:
-  stage: deploy
-  variables:
-    ENVIRONMENT: stage
-  trigger: 
-    project: irt-lane/kube-eresources
-    branch: main
+downstream:
+  trigger: irt-lane/kube-eresources
