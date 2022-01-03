@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>96</version>
+        <version>97</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.6.1-SNAPSHOT</version>
@@ -113,7 +113,7 @@
         <dependency>
             <artifactId>solr-solrj</artifactId>
             <groupId>org.apache.solr</groupId>
-            <version>8.11.0</version>
+            <version>8.11.1</version>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
