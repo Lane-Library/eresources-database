@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-01-04" version="2.6.1" description="maintenance release">
+            <action date="2021-12-16" dev="ryanmax" issue="LANEWEB-10855" type="update">
+                records with parent relationships (components, articles, chapters, etc.) are confusing to locate
+            </action>
+        </release>
         <release date="2021-12-08" version="2.6.0" description="print holdings release">
             <action date="2021-12-03" dev="ryanmax" issue="LANEWEB-10841" type="remove">
                 Delete code associated with old Software at Lane page
