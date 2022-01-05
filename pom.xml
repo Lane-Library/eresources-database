@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>97</version>
+        <version>98</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.6.2-SNAPSHOT</version>
@@ -219,15 +219,6 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <!-- test: override lane-parent config to see if image is tagged/built -->
-                    <scmCommentPrefix>[maven-release-plugin]</scmCommentPrefix>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
