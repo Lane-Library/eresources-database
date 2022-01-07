@@ -34,3 +34,4 @@ RUN ln -s /config/application.properties application.properties
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD  ["java", "-Duser.timezone=America/Los_Angeles", "-jar", "/eresources/eresources.jar"]
+

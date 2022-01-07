@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>97</version>
+        <version>98</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.6.2-SNAPSHOT</version>
@@ -244,3 +244,4 @@
         </plugins>
     </build>
 </project>
+
