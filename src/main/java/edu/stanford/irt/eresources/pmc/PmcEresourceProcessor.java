@@ -126,6 +126,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 root.setAttribute("pIssn", journal.getpIssn());
                 root.setAttribute("freeAccess", journal.getFreeAccess());
                 root.setAttribute("earliestVolume", journal.getEarliestVolume());
+                root.setAttribute("lastIssue", journal.getLastIssue());
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
                 this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
                 this.contentHandler.endDocument();
@@ -156,6 +157,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 journal.setNlmId(row.get(HEADER_LOCATOR_ID));
                 journal.setTitleTA(row.get(HEADER_NLM_TA));
                 journal.setTitle(row.get(HEADER_JOURNAL_TITLE));
+                journal.setLastIssue(row.get(HEADER_LATEST_ISSUE));
                 if (isIndexable(journal) && !isDuplicate(journal)) {
                     journals.add(journal);
                 }
@@ -173,7 +175,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private boolean isIndexable(final PmcJournal journal) {
-        // this is likely too restrictive but removes records with term="" URLs
+        // limit to "full" participation as per Thea and Sonam
         return journal.getParticipation().equalsIgnoreCase("Full");
     }
 }

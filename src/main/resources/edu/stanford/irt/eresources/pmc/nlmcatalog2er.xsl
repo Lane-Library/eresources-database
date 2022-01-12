@@ -31,6 +31,9 @@
                     <xsl:value-of select="replace(//@earliestVolume,';','-, ')"/>
                     <xsl:text>- </xsl:text>
                 </xsl:when>
+                <xsl:when test="//@earliestVolume and //@lastIssue and //@earliestVolume != //@lastIssue">
+                    <xsl:value-of select="concat(//@earliestVolume,' - ',//@lastIssue)"/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="//@earliestVolume"/>
                 </xsl:otherwise>
