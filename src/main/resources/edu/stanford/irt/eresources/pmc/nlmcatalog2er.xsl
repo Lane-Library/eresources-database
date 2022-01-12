@@ -3,16 +3,6 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     version="2.0">
     
-    <!--
-    TODO: 
-     - issns for covers (maybe re-architect bookcovers to use native solr data instead of sul-1234, bib-1234 lookups from bookcovers?) 
-     - broad mesh? available in NLM interface but not API
-       https://www-ncbi-nlm-nih-gov.laneproxy.stanford.edu/nlmcatalog/?term=101609037
-       https://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nlmcatalog&retmode=xml&id=101609037
-     - dedup with searchworks (unnecessary?)
-     - ?term="" links like 101609037 (maybe unnecessary if limited to "full" participation?)
-     -->
-
     <xsl:template match="NLMCatalogRecord">
         <xsl:variable name="year">
             <xsl:choose>
@@ -55,6 +45,7 @@
             </xsl:for-each>
             <!-- broad mesh missing from efetch; seems to be present in nlmcatalog view
                  https://www.ncbi.nlm.nih.gov/nlmcatalog/?term=101549567
+                 Thea/Sonam OK without broad MeSH
             <xsl:for-each select="BroadJournalHeadingList/BroadJournalHeading">
                 <mesh_broad>
                     <xsl:value-of select="."/>
