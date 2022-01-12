@@ -64,6 +64,9 @@
                     <url><xsl:value-of select="//@journalUrl"/></url>
                     <publisher>PubMed Central</publisher>
                     <summary-holdings><xsl:value-of select="$summary-holdings"/></summary-holdings>
+                    <xsl:if test="//@depositStatus = 'No New Content' and PublicationInfo/PublicationEndYear = '9999'">
+                        <instruction>Holdings vary, current years not included</instruction>
+                    </xsl:if>
                 </link>
             </version>
             <xsl:variable name="keywords">

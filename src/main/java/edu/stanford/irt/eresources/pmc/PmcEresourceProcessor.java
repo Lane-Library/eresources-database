@@ -73,6 +73,8 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private String allJournalsCsvUrl;
 
+    private String apiKey;
+
     private ContentHandler contentHandler;
 
     private ErrorHandler errorHandler = new DefaultHandler();
@@ -82,8 +84,6 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
     private LaneDedupAugmentation laneDedupAugmentation;
 
     private TransformerFactory tf = TransformerFactory.newInstance();
-    
-    private String apiKey; 
 
     public PmcEresourceProcessor(final String allJournalsCsvUrl, final ContentHandler contentHandler,
             final LaneDedupAugmentation laneDedupAugmentation, final String apiKey) {
@@ -112,8 +112,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 sb.append(journal.getNlmId());
                 sb.append("&api_key=");
                 sb.append(this.apiKey);
-                InputSource source = new InputSource(
-                        new URL(sb.toString()).openConnection().getInputStream());
+                InputSource source = new InputSource(new URL(sb.toString()).openConnection().getInputStream());
                 this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
                 DocumentBuilder parser = this.factory.newDocumentBuilder();
                 parser.setErrorHandler(this.errorHandler);
@@ -127,6 +126,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 root.setAttribute("freeAccess", journal.getFreeAccess());
                 root.setAttribute("earliestVolume", journal.getEarliestVolume());
                 root.setAttribute("lastIssue", journal.getLastIssue());
+                root.setAttribute("depositStatus", journal.getDepositStatus());
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
                 this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
                 this.contentHandler.endDocument();
