@@ -72,6 +72,8 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentEresource.addAlternativeTitle(this.currentText.toString());
         } else if ("title_short".equals(name)) {
             this.currentEresource.setShortTitle(this.currentText.toString());
+        } else if ("version-additionalText".equals(name)) {
+            this.currentVersion.setAdditionalText(this.currentText.toString());
         } else if ("instruction".equals(name)) {
             this.currentLink.setInstruction(this.currentText.toString());
         } else if ("description".equals(name)) {

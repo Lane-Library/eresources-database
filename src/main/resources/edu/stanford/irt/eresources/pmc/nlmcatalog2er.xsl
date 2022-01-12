@@ -59,10 +59,10 @@
             <type>Journal</type>
             <year><xsl:value-of select="$year"/></year>
             <version>
+                <version-additionalText><xsl:value-of select="//@freeAccess"/></version-additionalText>
                 <link>
                     <url><xsl:value-of select="//@journalUrl"/></url>
                     <publisher>PubMed Central</publisher>
-                    <label><xsl:value-of select="//@freeAccess"/></label>
                     <summary-holdings><xsl:value-of select="$summary-holdings"/></summary-holdings>
                 </link>
             </version>
