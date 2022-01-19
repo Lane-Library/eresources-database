@@ -25,10 +25,8 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     private static final Pattern SPACE_EQUALS = Pattern.compile(" =");
 
     private static final String createLocationUrlFromRecordId(final String recordId) {
-        StringBuilder sb = new StringBuilder("/view/bib/");
         if (recordId != null) {
-            sb.append(recordId);
-            return sb.toString();
+            return "/view/bib/" + recordId;
         }
         return null;
     }
