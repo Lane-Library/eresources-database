@@ -246,7 +246,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         }
         if (!recordIds.isEmpty()) {
             Collections.sort(recordIds);
-            return recordIds.get(0).toString();
+            return recordIds.get(recordIds.size() - 1).toString();
         }
         return null;
     }
