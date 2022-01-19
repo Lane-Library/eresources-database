@@ -307,6 +307,46 @@ public class MarcVersionTest {
     }
 
     @Test
+    public void testGetLocationUrlForRelated() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("001");
+        expect(this.field.getData()).andReturn("001");
+        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code"))
+                .times(2);
+        int[] intArray = { 0, 0 };
+        expect(this.eresource.getItemCount()).andReturn(intArray);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("999");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(5);
+        expect(this.field.getTag()).andReturn("787").times(5);
+        Subfield sf = mock(Subfield.class);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
+        expect(sf.getCode()).andReturn('w');
+        expect(sf.getData()).andReturn("L123");
+        Subfield sf2 = mock(Subfield.class);
+        List<Subfield> subs = new ArrayList<>();
+        subs.add(sf);
+        subs.add(sf2);
+        expect(this.field.getSubfields()).andReturn(subs);
+        expect(sf2.getCode()).andReturn('w');
+        expect(sf2.getData()).andReturn("L999");
+        expect(sf.getCode()).andReturn('w');
+        expect(sf.getData()).andReturn("L123");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
+        expect(sf.getCode()).andReturn('e');
+        expect(sf.getData()).andReturn("label from 787 ^e");
+        ItemCount itemCount = mock(ItemCount.class);
+        expect(this.itemService.getBibsItemCount()).andReturn(itemCount).times(2);
+        int[] parentBibItemCount = { 0, 0 };
+        expect(itemCount.itemCount(123)).andReturn(parentBibItemCount);
+        expect(itemCount.itemCount(999)).andReturn(parentBibItemCount);
+        replay(this.record, this.field, this.locationsService, this.eresource, sf, sf2, this.itemService, itemCount);
+        assertEquals("/view/bib/999", this.version.getLocationUrl());
+        assertEquals("label from 787 ^e", this.version.getLocationName());
+        verify(this.record, this.field, this.locationsService, this.eresource, sf, sf2, this.itemService, itemCount);
+    }
+
+    @Test
     public void testGetLocationUrlNull() {
         this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService, null);
         assertEquals(null, this.version.getLocationUrl());
