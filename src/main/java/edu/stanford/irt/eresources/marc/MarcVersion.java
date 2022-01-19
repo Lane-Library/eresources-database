@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -22,10 +24,10 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private static final Pattern SPACE_EQUALS = Pattern.compile(" =");
 
-    private static final String createLocationUrlFromControlNumber(final String cn) {
+    private static final String createLocationUrlFromRecordId(final String recordId) {
         StringBuilder sb = new StringBuilder("/view/bib/");
-        if (null != cn && cn.startsWith("L")) {
-            sb.append(cn.substring(1));
+        if (recordId != null) {
+            sb.append(recordId);
             return sb.toString();
         }
         return null;
@@ -227,21 +229,50 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                 && getLinks().stream().noneMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
     }
 
+    // LANEWEB-10855
+    // given a list of control numbers, find the best parent linking record
+    // delpriore gave priority as: 
+    // - parent with items (doesn't work for digital parents)
+    // - highest parent control number (not sure why)
+    // default to first
+    private String orderParentLinkingRecords(final List<String> cns) {
+        List<Integer> recordIds = new ArrayList<>();
+        for (String cn : cns) {
+            Integer recordId = TextParserHelper.recordIdFromLaneControlNumber(cn);
+            if (null != recordId) {
+                if (parentHasBibItems(recordId)) {
+                    return recordId.toString();
+                }
+                recordIds.add(recordId);
+            }
+        }
+        if (!recordIds.isEmpty()) {
+            Collections.sort(recordIds);
+            return recordIds.get(0).toString();
+        }
+        return null;
+    }
+
+    private boolean parentHasBibItems(final Integer recordId) {
+        return recordId != null && this.itemService.getBibsItemCount().itemCount(recordId)[0] > 0;
+    }
+
     private void setLocationDataForRelatedRecord() {
-        String parentRecordId = getSubfieldData(this.bib, "773", "w").findFirst().orElse(null);
+        String parentRecordId = orderParentLinkingRecords(
+                getSubfieldData(this.bib, "773", "w").collect(Collectors.toList()));
         if (null != parentRecordId) {
             this.locationName = this.eresource.getPublicationText();
-            this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
+            this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
         }
-        parentRecordId = getSubfieldData(this.bib, "787", "w").findFirst().orElse(null);
+        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "787", "w").collect(Collectors.toList()));
         if (null != parentRecordId) {
             this.locationName = getSubfieldData(this.bib, "787", "etdn").collect(Collectors.joining(" "));
-            this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
+            this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
         }
-        parentRecordId = getSubfieldData(this.bib, "830", "w").findFirst().orElse(null);
+        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "830", "w").collect(Collectors.toList()));
         if (null != parentRecordId) {
             this.locationName = getSubfieldData(this.bib, "830", "adv").collect(Collectors.joining(" "));
-            this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
+            this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
         }
     }
 }
