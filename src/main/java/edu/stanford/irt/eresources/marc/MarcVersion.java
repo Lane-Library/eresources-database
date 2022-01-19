@@ -25,7 +25,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     private static final Pattern SPACE_EQUALS = Pattern.compile(" =");
 
     private static final String createLocationUrlFromRecordId(final String recordId) {
-        if (recordId != null) {
+        if (recordId != null && recordId.matches("^\\d+$")) {
             return "/view/bib/" + recordId;
         }
         return null;
@@ -229,7 +229,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     // LANEWEB-10855
     // given a list of control numbers, find the best parent linking record
-    // delpriore gave priority as: 
+    // delpriore gave priority as:
     // - parent with items (doesn't work for digital parents)
     // - highest parent control number (not sure why)
     // default to first
