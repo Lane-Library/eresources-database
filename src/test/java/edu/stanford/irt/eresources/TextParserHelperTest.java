@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -142,6 +143,16 @@ public class TextParserHelperTest {
         assertEquals("2000", TextParserHelper.parseYear("2uuu"));
         assertEquals(null, TextParserHelper.parseYear("uuuu"));
         assertEquals("1980", TextParserHelper.parseYear("198|"));
+    }
+
+    @Test
+    public final void testRecordIdFromLaneControlNumber() {
+        assertEquals(1234, TextParserHelper.recordIdFromLaneControlNumber("L1234").intValue());
+        assertEquals(1234, TextParserHelper.recordIdFromLaneControlNumber("Q1234").intValue());
+        assertEquals(1234, TextParserHelper.recordIdFromLaneControlNumber("Z1234").intValue());
+        assertNull(TextParserHelper.recordIdFromLaneControlNumber("foo"));
+        assertNull(TextParserHelper.recordIdFromLaneControlNumber(null));
+        assertNull(TextParserHelper.recordIdFromLaneControlNumber("L1234q"));
     }
 
     @Test

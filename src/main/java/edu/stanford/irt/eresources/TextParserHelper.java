@@ -31,6 +31,8 @@ public final class TextParserHelper {
 
     private static final String EMPTY = "";
 
+    private static final Pattern LANE_CONTROL_NUMBER = Pattern.compile("^[LQZ]\\d+$");
+
     private static final Pattern MONTH_ABR_PATTERN = Pattern.compile("\\b[A-Za-z]{3}\\b");
 
     private static final int MONTH_PATTERN_MAX = 4;
@@ -46,10 +48,6 @@ public final class TextParserHelper {
     private static final Pattern WORD_BOUNDARY_PATTERN = Pattern.compile("\\b");
 
     private static final Pattern ZERO_PAD_PATTERN = Pattern.compile("^0+");
-
-    private TextParserHelper() {
-        // empty private constructor
-    }
 
     public static void appendMaybeAddComma(final StringBuilder sb, final String string) {
         if (string != null && string.length() > 0) {
@@ -84,7 +82,7 @@ public final class TextParserHelper {
         }
         return isxn;
     }
-    
+
     /**
      * ORCID data from PubMed is dirty. Extract a valid ORCID if possible, otherwise just return entire string.
      *
@@ -263,6 +261,13 @@ public final class TextParserHelper {
         return parsedYear;
     }
 
+    public static final Integer recordIdFromLaneControlNumber(final String cn) {
+        if (null != cn && LANE_CONTROL_NUMBER.matcher(cn).matches()) {
+            return Integer.valueOf(cn.substring(1));
+        }
+        return null;
+    }
+
     /**
      * strip "/ " from {@code StringBuilder}
      *
@@ -317,5 +322,9 @@ public final class TextParserHelper {
             }
         }
         return sb.toString().trim();
+    }
+
+    private TextParserHelper() {
+        // empty private constructor
     }
 }

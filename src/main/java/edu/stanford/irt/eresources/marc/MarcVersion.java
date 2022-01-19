@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -24,8 +25,9 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private static final String createLocationUrlFromControlNumber(final String cn) {
         StringBuilder sb = new StringBuilder("/view/bib/");
-        if (null != cn && cn.startsWith("L")) {
-            sb.append(cn.substring(1));
+        Integer recordId = TextParserHelper.recordIdFromLaneControlNumber(cn);
+        if (recordId != null) {
+            sb.append(recordId);
             return sb.toString();
         }
         return null;
@@ -227,18 +229,27 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                 && getLinks().stream().noneMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
     }
 
+    private boolean parentHasBibItems(final String controlNumber) {
+        Integer recordId = TextParserHelper.recordIdFromLaneControlNumber(controlNumber);
+        if (null == recordId) {
+            System.out.println("linking error: rec = " + this.eresource.getRecordId() + "; ^w = " + controlNumber);
+        }
+        return recordId != null && this.itemService.getBibsItemCount().itemCount(recordId)[0] > 0;
+    }
+
     private void setLocationDataForRelatedRecord() {
-        String parentRecordId = getSubfieldData(this.bib, "773", "w").findFirst().orElse(null);
+        String parentRecordId = getSubfieldData(this.bib, "773", "w").filter(this::parentHasBibItems).findFirst()
+                .orElse(null);
         if (null != parentRecordId) {
             this.locationName = this.eresource.getPublicationText();
             this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
         }
-        parentRecordId = getSubfieldData(this.bib, "787", "w").findFirst().orElse(null);
+        parentRecordId = getSubfieldData(this.bib, "787", "w").filter(this::parentHasBibItems).findFirst().orElse(null);
         if (null != parentRecordId) {
             this.locationName = getSubfieldData(this.bib, "787", "etdn").collect(Collectors.joining(" "));
             this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
         }
-        parentRecordId = getSubfieldData(this.bib, "830", "w").findFirst().orElse(null);
+        parentRecordId = getSubfieldData(this.bib, "830", "w").filter(this::parentHasBibItems).findFirst().orElse(null);
         if (null != parentRecordId) {
             this.locationName = getSubfieldData(this.bib, "830", "adv").collect(Collectors.joining(" "));
             this.locationUrl = createLocationUrlFromControlNumber(parentRecordId);
