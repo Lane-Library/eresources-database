@@ -281,20 +281,23 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     public String getPublicationText() {
         StringBuilder sb = new StringBuilder();
         List<Field> fields773 = getFields(this.record, "773").collect(Collectors.toList());
-        int countOf733W = 0;
-        for (int i = 0; i < fields773.size() && countOf733W == 0; i++) {
-            Field field733 = fields773.get(i);
-            sb.append(field733.getSubfields().stream().filter((final Subfield s) -> "tp".indexOf(s.getCode()) > -1)
-                    .map(Subfield::getData).reduce((final String a, final String b) -> b).orElse(""));
-            if (sb.length() > 0) {
-                sb.append(". ");
+        int subfieldWCount = 0;
+        for (Field field733 : fields773) {
+            if (subfieldWCount == 0 && sb.length() == 0) {
+                sb.append(field733.getSubfields().stream().filter((final Subfield s) -> "tp".indexOf(s.getCode()) > -1)
+                        .map(Subfield::getData).reduce((final String a, final String b) -> b).orElse(""));
+                if (sb.length() > 0) {
+                    sb.append(". ");
+                }
             }
             for (Subfield subfield : field733.getSubfields()) {
                 if ("dg".indexOf(subfield.getCode()) > -1) {
                     sb.append(' ').append(subfield.getData());
+                } else if (subfieldWCount > 0 && subfield.getCode() == 't') {
+                    sb.append("; ").append(subfield.getData());
                 }
             }
-            countOf733W = countOf733W
+            subfieldWCount = subfieldWCount
                     + (int) field733.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'w').count();
         }
         return sb.toString();

@@ -381,7 +381,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
                         this.keywordsStrategy, this.itemService, this.typeFactory, this.locationsService);
                 assertEquals(
-                        "Clinical pharmacology and therapeutics.  1981 Sep-; 30(3)-",
+                        "Clinical pharmacology and therapeutics.  1981 Sep-; 30(3)-; Journal of the American Medical Association 1972 Nov 27-1981 Feb 27; 222(9)-245(8)",
                         er.getPublicationText());
                 assertEquals("Clinical pharmacology and therapeutics", er.getPublicationTitle());
             }
