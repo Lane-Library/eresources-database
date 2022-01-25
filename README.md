@@ -29,25 +29,61 @@ $ make push
 ```
 $ make pull
 ```
+# images-spider in Docker
+
+## Prerequisites
+
+1. **[Install Docker](https://www.docker.com/products/docker)**
+
+1. **[Install Drone command line tools](http://readme.drone.io/devs/cli/)**
+
+## Build images-spider image
+
+### Clone the images-spider repo and build app jar
+    
+```
+$ cd $HOME/projects/lane
+$ git clone git@gitlab.med.stanford.edu:irt-lane/docker-images-spider.git
+$ cd images-spider
+
+$ make app
+```
+
+### Build docker image
+    
+```
+$ make docker
+```
+
+## Push to repo
+
+```
+$ make push
+```
+
+## Pull the latest image from repo
+
+```
+$ make pull
+```
+
 ## CI/CD Support
 
-This repo supports [DroneCI](https://drone.med.stanford.edu/irt-lane/docker-images-spider).
+#### Get and setup personal gitlab access token
+Gitlab API requires access token to talk to gitlab server.
 
-#### Get and setup personal drone token
-Drone CLI requires access token to talk to drone server.
-
-Please get your personal token from https://drone.med.stanford.edu/account/token, 
-and save the the token to ${HOME}/.drone-token file. 
-
-_NOTE_: Do not add newline at the end of the token. Use:
+Please get your personal token from https://gitlab.med.stanford.edu/-/profile/personal_access_tokens
+and save the the token to ${HOME}/.gitlab-token file.
 
 ```
-echo -n <token> > ${HOME}/.drone-token
+echo -n <token> > ${HOME}/.gitlab-token
 ```
 
+_NOTE_: Do not add newline at the end of the token.
 
-#### To turn on the ci job defined in .drone.yml
+
+#### Setup gitlab pipeline and slack notification
 
 ```
-$ make drone-setup
+$ make gl-setup
 ```
