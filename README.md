@@ -29,43 +29,6 @@ $ make push
 ```
 $ make pull
 ```
-# images-spider in Docker
-
-## Prerequisites
-
-1. **[Install Docker](https://www.docker.com/products/docker)**
-
-1. **[Install Drone command line tools](http://readme.drone.io/devs/cli/)**
-
-## Build images-spider image
-
-### Clone the images-spider repo and build app jar
-    
-```
-$ cd $HOME/projects/lane
-$ git clone git@gitlab.med.stanford.edu:irt-lane/docker-images-spider.git
-$ cd images-spider
-
-$ make app
-```
-
-### Build docker image
-    
-```
-$ make docker
-```
-
-## Push to repo
-
-```
-$ make push
-```
-
-## Pull the latest image from repo
-
-```
-$ make pull
-```
 
 ## CI/CD Support
 
