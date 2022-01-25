@@ -1,4 +1,4 @@
-# eresources in Docker
+ eresources in Docker
 
 ## Prerequisites
 
@@ -29,19 +29,25 @@ $ make push
 ```
 $ make pull
 ```
-
 ## CI/CD Support
 
-#### Get and setup personal gitlab access token
-Gitlab API requires access token to talk to gitlab server.
+This repo supports [DroneCI](https://drone.med.stanford.edu/irt-lane/docker-images-spider).
 
-Please get your personal token from https://ci.med.stanford.edu/account/token,
-and save the the token to ${HOME}/.drone-token file.
+#### Get and setup personal drone token
+Drone CLI requires access token to talk to drone server.
 
-_NOTE_: Do not add newline at the end of the token.
+Please get your personal token from https://drone.med.stanford.edu/account/token, 
+and save the the token to ${HOME}/.drone-token file. 
 
-#### Setup gitlab pipeline and slack notifcations
+_NOTE_: Do not add newline at the end of the token. Use:
 
 ```
-$ make gl-setup
+echo -n <token> > ${HOME}/.drone-token
+```
+
+
+#### To turn on the ci job defined in .drone.yml
+
+```
+$ make drone-setup
 ```
