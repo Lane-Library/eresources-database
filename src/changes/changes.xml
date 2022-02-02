@@ -6,6 +6,12 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-02-02" version="2.6.2" description="maintenance release">
+            <action date="2022-01-19" dev="ryanmax" issue="LANEWEB-10855" type="update">
+                If a parent has items, it gets linked. If parents lack items (digital), 
+                then order the list and use the largest/latest control number.
+            </action>
+        </release>
         <release date="2022-01-04" version="2.6.1" description="maintenance release">
             <action date="2021-12-16" dev="ryanmax" issue="LANEWEB-10855" type="update">
                 records with parent relationships (components, articles, chapters, etc.) are confusing to locate
