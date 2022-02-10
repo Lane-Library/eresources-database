@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-02-09" version="2.7.0" description="PMC release">
+            <action date="2022-01-12" dev="ryanmax" issue="LANEWEB-10829" type="add">
+                automated indexing of PMC journals in Lane Search
+            </action>
+        </release>
         <release date="2022-02-02" version="2.6.2" description="maintenance release">
             <action date="2022-01-19" dev="ryanmax" issue="LANEWEB-10855" type="update">
                 If a parent has items, it gets linked. If parents lack items (digital), 
