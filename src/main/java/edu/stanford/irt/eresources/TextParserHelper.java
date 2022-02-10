@@ -77,7 +77,7 @@ public final class TextParserHelper {
      * @return cleaned string
      */
     public static String cleanIsxn(final String isxn) {
-        if (!isxn.isEmpty()) {
+        if (null!= isxn && !isxn.isEmpty()) {
             return DIGIT_OR_X_PATTERN.matcher(isxn.split(" ")[0]).replaceAll("").toLowerCase(Locale.US);
         }
         return isxn;

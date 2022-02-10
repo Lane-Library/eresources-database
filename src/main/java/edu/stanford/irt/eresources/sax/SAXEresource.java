@@ -9,10 +9,12 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 
@@ -43,6 +45,8 @@ public class SAXEresource implements Eresource {
     private boolean isDigital = false;
 
     private boolean isLaneConnex = false;
+
+    private Collection<String> issns = new HashSet<>();
 
     private String keywords;
 
@@ -100,6 +104,10 @@ public class SAXEresource implements Eresource {
 
     public void addBroadMeshTerm(final String meshTerm) {
         this.broadMeshTerms.add(meshTerm);
+    }
+
+    public void addIssn(final String issn) {
+        this.issns.add(issn);
     }
 
     public void addMeshTerm(final String meshTerm) {
@@ -167,6 +175,12 @@ public class SAXEresource implements Eresource {
     @Override
     public String getId() {
         return this.id;
+    }
+
+    @Override
+    public Collection<String> getIssns() {
+        return new HashSet<>(
+                this.issns.stream().map(String::trim).map(TextParserHelper::cleanIsxn).collect(Collectors.toSet()));
     }
 
     @Override

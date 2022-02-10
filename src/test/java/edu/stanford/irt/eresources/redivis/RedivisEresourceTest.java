@@ -60,6 +60,11 @@ public class RedivisEresourceTest {
     }
 
     @Test
+    public final void testGetIssns() {
+        assertTrue(this.eresource.getIssns().isEmpty());
+    }
+
+    @Test
     public final void testGetItemCount() {
         assertEquals(0, this.eresource.getItemCount()[0]);
     }

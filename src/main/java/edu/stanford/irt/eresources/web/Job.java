@@ -22,7 +22,11 @@ public class Job {
          */
         LANE_UPDATE("lane/update"),
         /**
-         * reload pubmed from baseline files
+         * reload PMC journal
+         */
+        PMC_RELOAD("pmc/reload"),
+        /**
+         * a few times a day pubmed updates
          */
         PUBMED_RELOAD("pubmed/run-annual-reload"),
         /**
