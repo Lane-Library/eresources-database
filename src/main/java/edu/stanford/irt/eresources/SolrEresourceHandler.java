@@ -346,18 +346,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
     }
 
-    private void maybeAddIsxns(final Eresource eresource, final SolrInputDocument doc) {
-        if (isMarc(eresource)) {
-            AbstractMarcEresource marcEresource = (AbstractMarcEresource) eresource;
-            for (String isbn : marcEresource.getIsbns()) {
-                doc.addField("isbns", isbn);
-            }
-            for (String issn : marcEresource.getIssns()) {
-                doc.addField("issns", issn);
-            }
-        }
-    }
-
     private void maybeAddProxyHosts(final Eresource eresource, final SolrInputDocument doc) {
         // limit to SUL and Lane records
         // likely fine unlimited but seems silly to check millions of PubMed links w/o adding anything
