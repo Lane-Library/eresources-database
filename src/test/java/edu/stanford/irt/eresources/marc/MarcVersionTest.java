@@ -226,8 +226,8 @@ public class MarcVersionTest {
         expect(this.eresource.getItemCount()).andReturn(childBibItemCount);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("999");
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(4);
-        expect(this.field.getTag()).andReturn("773").times(4);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(5);
+        expect(this.field.getTag()).andReturn("773").times(5);
         expect(this.eresource.getPublicationText()).andReturn("eresource publicationText");
         Subfield sf = mock(Subfield.class);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
@@ -284,8 +284,8 @@ public class MarcVersionTest {
         expect(this.eresource.getItemCount()).andReturn(intArray);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("999");
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(5);
-        expect(this.field.getTag()).andReturn("830").times(5);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(6);
+        expect(this.field.getTag()).andReturn("830").times(6);
         Subfield sf = mock(Subfield.class);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
         expect(sf.getCode()).andReturn('w');
@@ -317,8 +317,8 @@ public class MarcVersionTest {
         expect(this.eresource.getItemCount()).andReturn(intArray);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("999");
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(5);
-        expect(this.field.getTag()).andReturn("787").times(5);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(6);
+        expect(this.field.getTag()).andReturn("787").times(6);
         Subfield sf = mock(Subfield.class);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
         expect(sf.getCode()).andReturn('w');

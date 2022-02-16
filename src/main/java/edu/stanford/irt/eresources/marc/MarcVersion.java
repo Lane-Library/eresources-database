@@ -218,7 +218,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     private boolean isNoItemsPrintBibAndHasParentRelationship() {
         return this.eresource.getItemCount()[0] == 0
                 && !getSubfieldData(getFields(this.bib, "856"), "u").findAny().isPresent()
-                && getSubfieldData(getFields(this.bib, "773|787|830"), "w").findAny().isPresent();
+                && getSubfieldData(getFields(this.bib, "772|773|787|830"), "w").findAny().isPresent();
     }
 
     private boolean needToAddBibDates(final Eresource eresource) {
@@ -257,7 +257,12 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private void setLocationDataForRelatedRecord() {
         String parentRecordId = orderParentLinkingRecords(
-                getSubfieldData(this.bib, "773", "w").collect(Collectors.toList()));
+                getSubfieldData(this.bib, "772", "w").collect(Collectors.toList()));
+        if (null != parentRecordId) {
+            this.locationName = getSubfieldData(this.bib, "772", "abtdg").collect(Collectors.joining(" "));
+            this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
+        }
+        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "773", "w").collect(Collectors.toList()));
         if (null != parentRecordId) {
             this.locationName = this.eresource.getPublicationText();
             this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
