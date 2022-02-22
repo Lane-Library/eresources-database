@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-02-22" version="2.7.1" description="maintenance release">
+            <action date="2022-02-15" dev="ryanmax" issue="LANEWEB-10885" type="update">
+                add 772 fields as "Access via" source for BSP records
+            </action>
+        </release>
         <release date="2022-02-09" version="2.7.0" description="PMC release">
             <action date="2022-01-12" dev="ryanmax" issue="LANEWEB-10829" type="add">
                 automated indexing of PMC journals in Lane Search
