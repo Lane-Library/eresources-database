@@ -27,9 +27,9 @@ public final class RedivisDatasetTest {
         assertEquals(
                 "The Born in Bradford study is tracking the health and wellbeing of over 13,500 children, and their parents born at Bradford Royal Infirmary between March 2007 and December 2010. ",
                 dataset.getDescription());
-        assertEquals("1", dataset.getReferenceId());
+        assertEquals("3tgx", dataset.getReferenceId());
         assertEquals("Born in Bradford", dataset.getName());
         assertTrue(dataset.getUpdatedAt().before(new Date()));
-        assertEquals("https://redivis.com/stanfordphs/datasets/2", dataset.getUrl());
+        assertEquals("https://redivis.com/datasets/3tgx-1cx7awrs3?v=0.1", dataset.getUrl());
     }
 }

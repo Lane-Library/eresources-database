@@ -30,7 +30,7 @@ public class RedivisEresourceProcessorTest {
     @Test
     public final void testProcess() {
         this.eresourceHandler.handleEresource(isA(RedivisEresource.class));
-        expectLastCall().times(10);
+        expectLastCall().times(85);
         replay(this.eresourceHandler);
         this.processor.process();
         verify(this.eresourceHandler);
