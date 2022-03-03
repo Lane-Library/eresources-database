@@ -10,6 +10,7 @@ import java.util.List;
 
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 
 public class RedivisEresource implements Eresource {
@@ -49,7 +50,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public String getId() {
-        return getRecordType() + "-" + this.dataset.getReferenceId();
+        return getRecordType() + "-" + getRecordId();
     }
 
     @Override
@@ -119,7 +120,7 @@ public class RedivisEresource implements Eresource {
 
     @Override
     public int getRecordId() {
-        return Integer.parseInt(this.dataset.getReferenceId());
+        return Integer.parseInt(TextParserHelper.cleanId(this.dataset.getReferenceId().hashCode()));
     }
 
     @Override

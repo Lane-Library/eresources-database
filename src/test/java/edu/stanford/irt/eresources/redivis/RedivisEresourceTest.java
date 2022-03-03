@@ -56,7 +56,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetId() {
-        assertEquals("redivis-1", this.eresource.getId());
+        assertEquals("redivis-1634130", this.eresource.getId());
     }
 
     @Test
@@ -137,7 +137,7 @@ public class RedivisEresourceTest {
 
     @Test
     public final void testGetRecordId() {
-        assertEquals(1, this.eresource.getRecordId());
+        assertEquals(1634130, this.eresource.getRecordId());
     }
 
     @Test
