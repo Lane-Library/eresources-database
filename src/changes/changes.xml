@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-03-03" version="2.7.2" description="maintenance release">
+            <action date="2022-03-03" dev="ryanmax" issue="LANEWEB-10897" type="fix">
+                Redivis indexing is failing because of API and data model changes
+            </action>
+        </release>
         <release date="2022-02-22" version="2.7.1" description="maintenance release">
             <action date="2022-02-15" dev="ryanmax" issue="LANEWEB-10885" type="update">
                 add 772 fields as "Access via" source for BSP records
