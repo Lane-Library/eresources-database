@@ -10,6 +10,9 @@ import java.util.Locale;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -21,6 +24,8 @@ import edu.stanford.lane.catalog.Record.Subfield;
 import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMarcEresource extends AbstractMarcEresource {
+
+    private static final Logger log = LoggerFactory.getLogger(SulMarcEresource.class);
 
     private static final int MAX_YEAR = TextParserHelper.THIS_YEAR + 5;
 
@@ -63,7 +68,12 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public String getKeywords() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.keywordsStrategy.getKeywords(this.record));
+        try {
+            sb.append(this.keywordsStrategy.getKeywords(this.record));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // errors expected on a handful of SUL records
+            log.info("problem extracting keywords from {}, {}", this.record, e.getMessage());
+        }
         return sb.toString();
     }
 
