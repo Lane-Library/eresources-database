@@ -54,18 +54,13 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
         while (hasNext()) {
             List<Record> recordList = next();
             Record marcRecord = recordList.get(0);
-            if (marcRecord.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06) == 'q') {
-                this.eresourceHandler
-                        .handleEresource(new AuthMarcEresource(marcRecord, this.keywordsStrategy, this.typeFactory));
-            } else {
-                this.eresourceHandler.handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy,
-                        this.itemService, this.typeFactory, this.locationsService));
-                int altTitleCount = (int) marcRecord.getFields().stream()
-                        .filter((final Field f) -> "249".equals(f.getTag())).count();
-                for (int i = 0; i < altTitleCount; i++) {
-                    this.eresourceHandler.handleEresource(new AltTitleMarcEresource(recordList, this.keywordsStrategy,
-                            this.typeFactory, this.itemService, i + 1, this.locationsService));
-                }
+            this.eresourceHandler.handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy,
+                    this.itemService, this.typeFactory, this.locationsService));
+            int altTitleCount = (int) marcRecord.getFields().stream()
+                    .filter((final Field f) -> "249".equals(f.getTag())).count();
+            for (int i = 0; i < altTitleCount; i++) {
+                this.eresourceHandler.handleEresource(new AltTitleMarcEresource(recordList, this.keywordsStrategy,
+                        this.typeFactory, this.itemService, i + 1, this.locationsService));
             }
         }
     }

@@ -65,14 +65,6 @@ public class TypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("sound recordings", EresourceConstants.AUDIO);
         PRIMARY_TYPES.put("visual materials", EresourceConstants.VISUAL_MATERIAL);
         PRIMARY_TYPES.put("websites", EresourceConstants.WEBSITE);
-        // authority types
-        PRIMARY_TYPES.put("events", "Event");
-        PRIMARY_TYPES.put("persons", EresourceConstants.PERSON);
-        PRIMARY_TYPES.put("persons, female", EresourceConstants.PERSON);
-        PRIMARY_TYPES.put("persons, male", EresourceConstants.PERSON);
-        PRIMARY_TYPES.put("jurisdictions, subdivisions", EresourceConstants.ORGANIZATION);
-        PRIMARY_TYPES.put("organizations", EresourceConstants.ORGANIZATION);
-        PRIMARY_TYPES.put("organizations, subdivisions", EresourceConstants.ORGANIZATION);
     }
 
     public String getPrimaryType(final Record marcRecord) {
