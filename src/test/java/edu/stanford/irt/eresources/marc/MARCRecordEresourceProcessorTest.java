@@ -56,25 +56,6 @@ public class MARCRecordEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessAuth() {
-        LocalDateTime ldt = LocalDateTime.now();
-        this.processor.setStartDate(ldt);
-        expect(this.recordCollectionFactory
-                .newRecordCollection(ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
-                        .andReturn(this.recordCollection);
-        expect(this.recordCollection.hasNext()).andReturn(true);
-        expect(this.recordCollection.next()).andReturn(this.marcRecord);
-        expect(this.marcRecord.getLeaderByte(6)).andReturn((byte) 'q');
-        expect(this.recordCollection.hasNext()).andReturn(false);
-        expect(this.recordCollection.hasNext()).andReturn(false);
-        this.eresourceHandler.handleEresource(isA(Eresource.class));
-        expectLastCall();
-        replay(this.recordCollectionFactory, this.recordCollection, this.marcRecord, this.eresourceHandler);
-        this.processor.process();
-        verify(this.recordCollectionFactory, this.recordCollection, this.marcRecord, this.eresourceHandler);
-    }
-
-    @Test
     public final void testProcessBib() {
         Field field = mock(Field.class);
         LocalDateTime ldt = LocalDateTime.now();
@@ -83,17 +64,13 @@ public class MARCRecordEresourceProcessorTest {
                 .newRecordCollection(ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
                         .andReturn(this.recordCollection);
         expect(this.recordCollection.hasNext()).andReturn(true);
-        expect(this.recordCollection.next()).andReturn(this.marcRecord).times(2);
-        expect(this.marcRecord.getLeaderByte(6)).andReturn((byte) 'p').times(2);
-        expect(this.recordCollection.hasNext()).andReturn(true);
-        expect(this.marcRecord.getLeaderByte(6)).andReturn((byte) 'u');
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(field)).times(2);
-        expect(field.getTag()).andReturn("249");
-        expect(field.getTag()).andReturn("852");
+        expect(this.recordCollection.next()).andReturn(this.marcRecord);
         expect(this.recordCollection.hasNext()).andReturn(false);
+        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(field));
+        expect(field.getTag()).andReturn("249");
         expect(this.recordCollection.hasNext()).andReturn(false);
         this.eresourceHandler.handleEresource(isA(Eresource.class));
-        expectLastCall().times(3);
+        expectLastCall().times(2);
         replay(this.recordCollectionFactory, this.recordCollection, this.marcRecord, field, this.eresourceHandler);
         this.processor.process();
         verify(this.recordCollectionFactory, this.recordCollection, this.marcRecord, field, this.eresourceHandler);

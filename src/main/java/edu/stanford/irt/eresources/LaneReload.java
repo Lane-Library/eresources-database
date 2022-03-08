@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class LaneReload extends SolrLoader {
 
-    private static final String BASE_QUERY = "(recordType:auth OR recordType:bib OR "
+    private static final String BASE_QUERY = "(recordType:bib OR "
             + " recordType:class OR recordType:laneblog OR recordType:web)";
 
     private static final int EXPECTED_MIN_BIBS = 300_000;

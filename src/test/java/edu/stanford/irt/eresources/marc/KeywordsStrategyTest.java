@@ -13,7 +13,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -48,37 +47,8 @@ public class KeywordsStrategyTest {
     }
 
     @Test
-    public void testGetKeywordsAuth() {
-        expect(this.record.getFields()).andReturn(this.twoFields);
-        expect(this.record.getLeaderByte(6)).andReturn((byte) 'q');
-        expect(this.field.getTag()).andReturn("020");
-        expect(this.field.getTag()).andReturn("999");
-        replay(this.record, this.field);
-        assertEquals("", this.strategy.getKeywords(this.record));
-        verify(this.record, this.field);
-    }
-
-    @Test
-    public void testGetKeywordsAuthAugmentable() {
-        expect(this.record.getFields()).andReturn(this.twoFields);
-        expect(this.record.getLeaderByte(6)).andReturn((byte) 'q');
-        expect(this.field.getTag()).andReturn("100").times(2);
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
-        expect(this.subfield.getCode()).andReturn('0');
-        expect(this.subfield.getData()).andReturn("1000");
-        expect(this.augmentation.getAuthAugmentations("1000")).andReturn("augmentation");
-        expect(this.field.getTag()).andReturn("700").times(2);
-        expect(this.subfield.getCode()).andReturn('0');
-        expect(this.subfield.getData()).andReturn("7000");
-        expect(this.augmentation.getAuthAugmentations("7000")).andReturn(null);
-        replay(this.record, this.field, this.subfield, this.augmentation);
-        assertEquals("1000  augmentation 7000 ", this.strategy.getKeywords(this.record));
-        verify(this.record, this.field, this.subfield, this.augmentation);
-    }
-
-    @Test
     public void testGetKeywordsBib() {
-        List<Subfield> subs = new ArrayList<Record.Subfield>();
+        List<Subfield> subs = new ArrayList<>();
         subs.add(this.subfield);
         subs.add(this.subfield);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));

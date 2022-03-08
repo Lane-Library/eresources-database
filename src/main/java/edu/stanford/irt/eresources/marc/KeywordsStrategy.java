@@ -18,8 +18,6 @@ public class KeywordsStrategy {
 
     private static final int TAG_900 = 900;
 
-    private static final int TAG_943 = 943;
-
     private AuthTextAugmentation authTextAugmentation;
 
     private ReservesTextAugmentation reservesAugmentation;
@@ -36,31 +34,10 @@ public class KeywordsStrategy {
         byte leaderByte6 = marcRecord.getLeaderByte(AbstractMarcEresource.LEADER_BYTE_06);
         if ("uvxy".indexOf(leaderByte6) > -1) {
             getKeywordsFromHoldingsRec(fields, sb);
-        } else if (leaderByte6 == 'q') {
-            getKeywordsFromAuthRec(fields, sb);
         } else {
             getKeywordsFromBibRec(fields, sb);
         }
         return sb.toString();
-    }
-
-    private void getKeywordsFromAuthRec(final List<Field> fields, final StringBuilder sb) {
-        fields.stream().filter((final Field f) -> {
-            int tagNumber = Integer.parseInt(f.getTag());
-            return tagNumber >= TAG_100 && tagNumber <= TAG_943;
-        }).forEach((final Field f) -> {
-            String tag = f.getTag();
-            f.getSubfields().stream().forEach((final Subfield s) -> {
-                String data = s.getData();
-                getKeywordsFromSubfield(data, sb);
-                if (isAugmentable(tag, s.getCode())) {
-                    String authText = this.authTextAugmentation.getAuthAugmentations(data);
-                    if (authText != null) {
-                        sb.append(' ').append(authText);
-                    }
-                }
-            });
-        });
     }
 
     private void getKeywordsFromBibRec(final List<Field> fields, final StringBuilder sb) {
