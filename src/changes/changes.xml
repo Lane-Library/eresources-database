@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-03-09" version="2.7.3" description="maintenance release">
+            <action date="2022-03-08" dev="ryanmax" issue="LANEWEB-10900" type="delete">
+                remove authority MARC indexing
+            </action>
+        </release>
         <release date="2022-03-03" version="2.7.2" description="maintenance release">
             <action date="2022-03-03" dev="ryanmax" issue="LANEWEB-10897" type="fix">
                 Redivis indexing is failing because of API and data model changes
