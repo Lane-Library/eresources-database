@@ -30,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.IOUtils;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 
 public class PmcEresourceProcessor extends AbstractEresourceProcessor {
@@ -143,7 +144,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
         try {
             URL url = new URL(this.allJournalsCsvUrl);
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withHeader(HEADERS_CSV).withFirstRecordAsHeader()
-                    .parse(new InputStreamReader(url.openConnection().getInputStream()));
+                    .parse(new InputStreamReader(IOUtils.getStream(url)));
             for (CSVRecord row : records) {
                 PmcJournal journal = new PmcJournal();
                 journal.setDepositStatus(row.get(HEADER_DEPOSIT_STATUS));
