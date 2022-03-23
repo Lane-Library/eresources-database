@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-03-23" version="2.7.4" description="maintenance release">
+            <action date="2022-03-22" dev="ryanmax" issue="LANEWEB-10928" type="fix">
+                PMC indexing is failing
+            </action>
+        </release>
         <release date="2022-03-09" version="2.7.3" description="maintenance release">
             <action date="2022-03-08" dev="ryanmax" issue="LANEWEB-10900" type="delete">
                 remove authority MARC indexing
