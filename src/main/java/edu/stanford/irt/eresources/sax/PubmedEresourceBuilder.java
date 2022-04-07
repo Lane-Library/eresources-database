@@ -1,5 +1,7 @@
 package edu.stanford.irt.eresources.sax;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -16,6 +18,8 @@ import edu.stanford.irt.eresources.pubmed.PubmedSpecialTypesManager;
  *
  */
 public class PubmedEresourceBuilder extends DefaultHandler implements EresourceBuilder {
+
+    private static final int SOLR_FIELD_MAX = 32766;
 
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
             .toFormatter();
@@ -73,8 +77,10 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
         } else if ("er-description".equals(name)) {
             this.currentEresource.setDescription(this.currentText.toString());
         } else if ("publicationAuthor".equals(name)) {
+            limitFieldLength();
             this.currentEresource.addPublicationAuthor(this.currentText.toString());
         } else if ("publicationAuthorFacetable".equals(name)) {
+            limitFieldLength();
             this.currentEresource.addPublicationAuthorFacetable(this.currentText.toString());
         } else if ("publicationAuthorsText".equals(name)) {
             this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
@@ -147,6 +153,17 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             } else {
                 throw new EresourceDatabaseException("unknown field: " + field + " pmid " + pmid + " value " + value);
             }
+        }
+    }
+
+    // LANEWEB-10933: bad author data in one article - 35369709
+    private void limitFieldLength() {
+        try {
+            while (this.currentText.toString().getBytes(StandardCharsets.UTF_8.name()).length > SOLR_FIELD_MAX) {
+                this.currentText.deleteCharAt(this.currentText.toString().length() - 1);
+            }
+        } catch (UnsupportedEncodingException e) {
+            // won't happen
         }
     }
 }
