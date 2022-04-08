@@ -41,7 +41,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     public SulMarcEresource(final Record marcRecord, final KeywordsStrategy keywordsStrategy,
             final SulTypeFactory typeFactory, final LcshMapManager lcshMapManager) {
-        this.record = marcRecord;
+        this.marcRecord = marcRecord;
         this.keywordsStrategy = keywordsStrategy;
         this.sulTypeFactory = typeFactory;
         this.lcshMapManager = lcshMapManager;
@@ -51,7 +51,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     // only include 246 a when all caps
     @Override
     public Collection<String> getAbbreviatedTitles() {
-        return getSubfieldData(getFields(this.record, "246").filter((final Field f) -> {
+        return getSubfieldData(getFields(this.marcRecord, "246").filter((final Field f) -> {
             Subfield i = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'i').findFirst()
                     .orElse(null);
             Subfield a = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').findFirst()
@@ -69,10 +69,10 @@ public class SulMarcEresource extends AbstractMarcEresource {
     public String getKeywords() {
         StringBuilder sb = new StringBuilder();
         try {
-            sb.append(this.keywordsStrategy.getKeywords(this.record));
+            sb.append(this.keywordsStrategy.getKeywords(this.marcRecord));
         } catch (ArrayIndexOutOfBoundsException e) {
             // errors expected on a handful of SUL records
-            log.info("problem extracting keywords from {}, {}", this.record, e.getMessage());
+            log.info("problem extracting keywords from {}, {}", this.marcRecord, e.getMessage());
         }
         return sb.toString();
     }
@@ -80,9 +80,9 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public Collection<String> getMeshTerms() {
         Collection<String> mesh = getSubfieldData(
-                getFields(this.record, "650").filter((final Field f) -> ("2".indexOf(f.getIndicator2()) > -1)), "a")
+                getFields(this.marcRecord, "650").filter((final Field f) -> ("2".indexOf(f.getIndicator2()) > -1)), "a")
                         .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
-        MARCRecordSupport.getFields(this.record, "650").filter((final Field f) -> ("0".indexOf(f.getIndicator2()) > -1))
+        MARCRecordSupport.getFields(this.marcRecord, "650").filter((final Field f) -> ("0".indexOf(f.getIndicator2()) > -1))
                 .forEach((final Field f) -> {
                     StringBuilder sb = new StringBuilder();
                     f.getSubfields().stream().filter((final Subfield sf) -> "ax".indexOf(sf.getCode()) > -1)
@@ -100,14 +100,14 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public String getPrimaryType() {
         if (this.primaryType == null) {
-            this.primaryType = this.sulTypeFactory.getPrimaryType(this.record);
+            this.primaryType = this.sulTypeFactory.getPrimaryType(this.marcRecord);
         }
         return this.primaryType;
     }
 
     @Override
     public int getRecordId() {
-        return MARCRecordSupport.getRecordId(this.record);
+        return MARCRecordSupport.getRecordId(this.marcRecord);
     }
 
     @Override
@@ -117,9 +117,9 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     @Override
     public String getShortTitle() {
-        String title = getSubfieldData(this.record, "222", "a").findFirst().orElse(null);
+        String title = getSubfieldData(this.marcRecord, "222", "a").findFirst().orElse(null);
         if (null == title) {
-            title = getSubfieldData(this.record, "245", "a").findFirst().orElse(null);
+            title = getSubfieldData(this.marcRecord, "245", "a").findFirst().orElse(null);
         }
         return title;
     }
@@ -128,9 +128,9 @@ public class SulMarcEresource extends AbstractMarcEresource {
     public String getTitle() {
         StringBuilder sb = new StringBuilder(super.getTitle());
         // LANEWEB-10639: a few sul records have "<>" to indicate linked 880 title fields
-        String titleLinkage = getSubfieldData(this.record, "245", "6").findFirst().orElse(null);
+        String titleLinkage = getSubfieldData(this.marcRecord, "245", "6").findFirst().orElse(null);
         if (sb.toString().startsWith("<>") && null != titleLinkage && titleLinkage.startsWith("880-")) {
-            getFields(this.record, "880").findAny()
+            getFields(this.marcRecord, "880").findAny()
                     .ifPresent((final Field f) -> f.getSubfields().stream()
                             .filter((final Subfield s) -> '6' == s.getCode() && s.getData().startsWith("245"))
                             .forEach((final Subfield s) -> {
@@ -144,7 +144,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public Collection<String> getTypes() {
         if (this.types == null) {
-            this.types = this.sulTypeFactory.getTypes(this.record);
+            this.types = this.sulTypeFactory.getTypes(this.marcRecord);
         }
         if (!EresourceConstants.OTHER.equals(getPrimaryType()) && !this.types.contains(getPrimaryType())) {
             this.types.add(getPrimaryType());
@@ -155,7 +155,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public LocalDateTime getUpdated() {
         try {
-            return LocalDateTime.parse(getFields(this.record, "005").map(Field::getData).findFirst().orElse(null),
+            return LocalDateTime.parse(getFields(this.marcRecord, "005").map(Field::getData).findFirst().orElse(null),
                     FORMATTER);
         } catch (DateTimeParseException e) {
             throw new EresourceDatabaseException(e);
@@ -166,7 +166,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     public List<Version> getVersions() {
         if (this.versions == null) {
             Collection<Version> versionSet = new TreeSet<>(COMPARATOR);
-            Version version = createVersion(this.record);
+            Version version = createVersion(this.marcRecord);
             if (!version.getLinks().isEmpty()) {
                 versionSet.add(version);
             }
@@ -180,17 +180,17 @@ public class SulMarcEresource extends AbstractMarcEresource {
         if (this.year != 0) {
             return this.year;
         }
-        int yr = MARCRecordSupport.getYear(this.record);
+        int yr = MARCRecordSupport.getYear(this.marcRecord);
         // SUL 008s are sometimes really off; fetch 264c/260c dates as needed
         if (yr < MIN_YEAR || yr >= MAX_YEAR) {
             String date = DateParser.parseYear(
-                    getSubfieldData(getFields(this.record, "264").filter((final Field f) -> f.getIndicator2() == '1'),
+                    getSubfieldData(getFields(this.marcRecord, "264").filter((final Field f) -> f.getIndicator2() == '1'),
                             "c").findFirst().orElse(null));
             if (null == date) {
-                date = DateParser.parseYear(getSubfieldData(this.record, "264", "c").findFirst().orElse(null));
+                date = DateParser.parseYear(getSubfieldData(this.marcRecord, "264", "c").findFirst().orElse(null));
             }
             if (null == date) {
-                date = DateParser.parseYear(getSubfieldData(this.record, "260", "c").findFirst().orElse(null));
+                date = DateParser.parseYear(getSubfieldData(this.marcRecord, "260", "c").findFirst().orElse(null));
             }
             if (null != date && date.length() == YEAR_LENGTH) {
                 yr = Integer.parseInt(date);

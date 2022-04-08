@@ -13,7 +13,7 @@ public class BibMarcEresource extends AbstractMarcEresource {
     public BibMarcEresource(final List<Record> recordList, final KeywordsStrategy keywordsStrategy,
             final ItemService itemService, final TypeFactory typeFactory,
             final HTTPLaneLocationsService locationsService) {
-        this.record = recordList.get(0);
+        this.marcRecord = recordList.get(0);
         this.holdings = recordList.subList(1, recordList.size());
         this.keywordsStrategy = keywordsStrategy;
         this.itemService = itemService;

@@ -83,7 +83,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected String primaryType;
 
-    protected Record record;
+    protected Record marcRecord;
 
     protected TypeFactory typeFactory;
 
@@ -93,7 +93,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public Collection<String> getAbbreviatedTitles() {
-        return getSubfieldData(getFields(this.record, "246").filter((final Field f) -> {
+        return getSubfieldData(getFields(this.marcRecord, "246").filter((final Field f) -> {
             Subfield i = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'i').findFirst()
                     .orElse(null);
             Subfield a = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').findFirst()
@@ -104,12 +104,12 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public Collection<String> getAlternativeTitles() {
-        return getSubfieldData(this.record, "130|210|246|247", "a").collect(Collectors.toSet());
+        return getSubfieldData(this.marcRecord, "130|210|246|247", "a").collect(Collectors.toSet());
     }
 
     @Override
     public Collection<String> getBroadMeshTerms() {
-        return getSubfieldData(getFields(this.record, "650")
+        return getSubfieldData(getFields(this.marcRecord, "650")
                 .filter((final Field f) -> f.getIndicator1() == '4' && "23".indexOf(f.getIndicator2()) > -1), "a")
                         .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
     }
@@ -117,7 +117,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getDate() {
         String date = null;
-        List<Field> fields773 = getFields(this.record, "773").collect(Collectors.toList());
+        List<Field> fields773 = getFields(this.marcRecord, "773").collect(Collectors.toList());
         int subfieldWCount = 0;
         for (Field element : fields773) {
             List<Subfield> subfields = element.getSubfields();
@@ -133,7 +133,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
             date = DateParser.parseDate(COLON_OR_SEMICOLON.matcher(date).replaceAll(" "));
         }
         if (null == date || "0".equals(date) || date.isEmpty()) {
-            String field008 = getFields(this.record, "008").map(Field::getData).findFirst()
+            String field008 = getFields(this.marcRecord, "008").map(Field::getData).findFirst()
                     .orElse(EresourceConstants.EMPTY_008);
             String endDate = TextParserHelper.parseYear(field008.substring(F008_11, F008_15));
             String beginDate = TextParserHelper.parseYear(field008.substring(F008_07, F008_11));
@@ -153,14 +153,14 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
-        getSubfieldData(this.record, "520").forEach((final String s) -> {
+        getSubfieldData(this.marcRecord, "520").forEach((final String s) -> {
             if (sb.length() > 0) {
                 sb.append(' ');
             }
             sb.append(s);
         });
         if (sb.length() == 0) {
-            getSubfieldData(this.record, "505").forEach((final String s) -> {
+            getSubfieldData(this.marcRecord, "505").forEach((final String s) -> {
                 if (sb.length() > 0) {
                     sb.append(' ');
                 }
@@ -177,13 +177,13 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public Collection<String> getIsbns() {
-        return MARCRecordSupport.getSubfieldData(this.record, "020", "az").map(String::trim)
+        return MARCRecordSupport.getSubfieldData(this.marcRecord, "020", "az").map(String::trim)
                 .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
     }
 
     @Override
     public Collection<String> getIssns() {
-        return MARCRecordSupport.getSubfieldData(this.record, "022", "azlm").map(String::trim)
+        return MARCRecordSupport.getSubfieldData(this.marcRecord, "022", "azlm").map(String::trim)
                 .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
     }
 
@@ -198,14 +198,14 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getKeywords() {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.keywordsStrategy.getKeywords(this.record));
+        sb.append(this.keywordsStrategy.getKeywords(this.marcRecord));
         this.holdings.stream().forEach((final Record holding) -> sb.append(this.keywordsStrategy.getKeywords(holding)));
         return sb.toString();
     }
 
     @Override
     public Collection<String> getMeshTerms() {
-        return getSubfieldData(getFields(this.record, "650|651")
+        return getSubfieldData(getFields(this.marcRecord, "650|651")
                 .filter((final Field f) -> ("650".equals(f.getTag()) && "2356".indexOf(f.getIndicator2()) > -1)
                         || ("651".equals(f.getTag()) && f.getIndicator2() == '7')),
                 "a").map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
@@ -214,7 +214,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getPrimaryType() {
         if (this.primaryType == null) {
-            this.primaryType = this.typeFactory.getPrimaryType(this.record);
+            this.primaryType = this.typeFactory.getPrimaryType(this.marcRecord);
         }
         return this.primaryType;
     }
@@ -224,7 +224,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
         return Collections
                 .unmodifiableCollection(
                         getSubfieldData(
-                                getFields(this.record, "100|700").filter((final Field f) -> "100".equals(f.getTag())
+                                getFields(this.marcRecord, "100|700").filter((final Field f) -> "100".equals(f.getTag())
                                         || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal")))),
                                 "a").map((final String s) -> COMMA_DOLLAR.matcher(s).replaceFirst(""))
                                         .map(AbstractMarcEresource::maybeStripFinialPeriodFromAuthor)
@@ -233,7 +233,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getPublicationAuthorsText() {
-        String authorsText = getSubfieldData(this.record, "245", "c")
+        String authorsText = getSubfieldData(this.marcRecord, "245", "c")
                 // get the last c
                 .reduce((final String a, final String b) -> b).orElse(null);
         if (authorsText == null) {
@@ -265,11 +265,11 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getPublicationLanguages() {
         Set<String> languages = new HashSet<>();
-        String field008 = getFields(this.record, "008").map(Field::getData).findFirst()
+        String field008 = getFields(this.marcRecord, "008").map(Field::getData).findFirst()
                 .orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38);
         languages.add(LANGUAGE_MAP.getLanguage(lang.toLowerCase(Locale.US)));
-        languages.addAll(getSubfieldData(this.record, "041").map(String::toLowerCase).map(LANGUAGE_MAP::getLanguage)
+        languages.addAll(getSubfieldData(this.marcRecord, "041").map(String::toLowerCase).map(LANGUAGE_MAP::getLanguage)
                 .collect(Collectors.toSet()));
         return languages;
     }
@@ -282,7 +282,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getPublicationText() {
         StringBuilder sb = new StringBuilder();
-        List<Field> fields773 = getFields(this.record, "773").collect(Collectors.toList());
+        List<Field> fields773 = getFields(this.marcRecord, "773").collect(Collectors.toList());
         int subfieldWCount = 0;
         for (Field field733 : fields773) {
             if (subfieldWCount == 0 && sb.length() == 0) {
@@ -307,7 +307,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getPublicationTitle() {
-        List<Field> fields773 = getFields(this.record, "773").collect(Collectors.toList());
+        List<Field> fields773 = getFields(this.marcRecord, "773").collect(Collectors.toList());
         int countOf733W = 0;
         String data = null;
         for (int i = 0; i < fields773.size() && countOf733W == 0; i++) {
@@ -335,7 +335,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public int getRecordId() {
-        return Integer.parseInt(getFields(this.record, "001").map(Field::getData).findFirst().orElse("0"));
+        return Integer.parseInt(getFields(this.marcRecord, "001").map(Field::getData).findFirst().orElse("0"));
     }
 
     @Override
@@ -345,13 +345,13 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getShortTitle() {
-        return getSubfieldData(this.record, "149", "a").findFirst().orElse(null);
+        return getSubfieldData(this.marcRecord, "149", "a").findFirst().orElse(null);
     }
 
     @Override
     public String getSortTitle() {
-        StringBuilder sb = getTitleStringBuilder(getFields(this.record, "245").findFirst().orElse(null));
-        int offset = getFields(this.record, "245")
+        StringBuilder sb = getTitleStringBuilder(getFields(this.marcRecord, "245").findFirst().orElse(null));
+        int offset = getFields(this.marcRecord, "245")
                 .map((final Field f) -> Integer.valueOf(f.getIndicator2()) - SORT_TITLE_MAX_LENGTH).findFirst()
                 .orElse(0);
         if (offset < 0 || offset > sb.length()) {
@@ -362,9 +362,9 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getTitle() {
-        StringBuilder sb = getTitleStringBuilder(getFields(this.record, "245").findFirst().orElse(null));
+        StringBuilder sb = getTitleStringBuilder(getFields(this.marcRecord, "245").findFirst().orElse(null));
         TextParserHelper.removeTrailingSlashAndSpace(sb);
-        String edition = getSubfieldData(this.record, "250", "a").collect(Collectors.joining(". "));
+        String edition = getSubfieldData(this.marcRecord, "250", "a").collect(Collectors.joining(". "));
         if (!edition.isEmpty()) {
             sb.append(". ").append(edition);
             TextParserHelper.removeTrailingSlashAndSpace(sb);
@@ -375,7 +375,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getTypes() {
         if (this.types == null) {
-            this.types = this.typeFactory.getTypes(this.record);
+            this.types = this.typeFactory.getTypes(this.marcRecord);
         }
         return new HashSet<>(this.types);
     }
@@ -384,7 +384,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     public LocalDateTime getUpdated() {
         try {
             LocalDateTime updated = LocalDateTime
-                    .parse(getFields(this.record, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
+                    .parse(getFields(this.marcRecord, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
             for (Record holding : this.holdings) {
                 LocalDateTime holdingUpdated = LocalDateTime
                         .parse(getFields(holding, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
@@ -415,17 +415,17 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public int getYear() {
-        return MARCRecordSupport.getYear(this.record);
+        return MARCRecordSupport.getYear(this.marcRecord);
     }
 
     @Override
     public boolean isCore() {
-        return getSubfieldData(this.record, "655", "a").anyMatch("core material"::equalsIgnoreCase);
+        return getSubfieldData(this.marcRecord, "655", "a").anyMatch("core material"::equalsIgnoreCase);
     }
 
     @Override
     public boolean isEnglish() {
-        String field008 = getFields(this.record, "008").map(Field::getData).findFirst()
+        String field008 = getFields(this.marcRecord, "008").map(Field::getData).findFirst()
                 .orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
@@ -433,11 +433,11 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public boolean isLaneConnex() {
-        return getSubfieldData(this.record, "655", "a").anyMatch("laneconnex"::equalsIgnoreCase);
+        return getSubfieldData(this.marcRecord, "655", "a").anyMatch("laneconnex"::equalsIgnoreCase);
     }
 
     protected Version createVersion(final Record record) {
-        return new MarcVersion(record, this.record, this, this.itemService, this.locationsService);
+        return new MarcVersion(record, this.marcRecord, this, this.itemService, this.locationsService);
     }
 
     protected StringBuilder getTitleStringBuilder(final Field titleField) {
