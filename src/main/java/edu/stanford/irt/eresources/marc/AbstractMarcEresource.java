@@ -436,8 +436,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
         return getSubfieldData(this.marcRecord, "655", "a").anyMatch("laneconnex"::equalsIgnoreCase);
     }
 
-    protected Version createVersion(final Record record) {
-        return new MarcVersion(record, this.marcRecord, this, this.itemService, this.locationsService);
+    protected Version createVersion(final Record holdingRecord) {
+        return new MarcVersion(holdingRecord, this.marcRecord, this, this.itemService, this.locationsService);
     }
 
     protected StringBuilder getTitleStringBuilder(final Field titleField) {
