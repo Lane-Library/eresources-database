@@ -6,6 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-04-07" version="2.7.5" description="maintenance release">
+            <action date="2022-04-07" dev="ryanmax" issue="LANEWEB-10933" type="fix">
+                PubMed indexing failing because of long author data
+            </action>
+            <action date="2022-04-01" dev="ryanmax" type="update">
+                shell for spring security vulnerability
+            </action>
+        </release>
         <release date="2022-03-23" version="2.7.4" description="maintenance release">
             <action date="2022-03-22" dev="ryanmax" issue="LANEWEB-10928" type="fix">
                 PMC indexing is failing
