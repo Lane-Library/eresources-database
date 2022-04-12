@@ -53,6 +53,7 @@ public class TypeFactoryTest extends MARCRecordSupport {
         assertEquals("Other", this.typefactory.getPrimaryType(this.records.get("234974")));
         assertEquals("Database", this.typefactory.getPrimaryType(this.records.get("213409")));
         assertEquals("Book Digital", this.typefactory.getPrimaryType(this.records.get("23491")));
+        assertEquals("Equipment", this.typefactory.getPrimaryType(this.records.get("357935")));
     }
 
     @Test
@@ -72,5 +73,6 @@ public class TypeFactoryTest extends MARCRecordSupport {
         assertTrue(this.typefactory.getTypes(this.records.get("257445")).contains("Bassett"));
         assertTrue(this.typefactory.getTypes(this.records.get("234974")).isEmpty());
         assertTrue(this.typefactory.getTypes(this.records.get("213409")).contains("Journal"));
+        assertTrue(this.typefactory.getTypes(this.records.get("357935")).contains("Equipment"));
     }
 }

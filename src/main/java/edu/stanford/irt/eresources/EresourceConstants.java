@@ -16,6 +16,8 @@ public final class EresourceConstants {
 
     public static final String DATABASE = "Database";
 
+    public static final String EQUIPMENT = "Equipment";
+
     public static final String EMPTY_008 = "                                        ";
 
     public static final String IMAGE = "Image";

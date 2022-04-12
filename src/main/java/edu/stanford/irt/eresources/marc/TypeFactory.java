@@ -16,12 +16,6 @@ import edu.stanford.lane.catalog.Record.Field;
 
 public class TypeFactory extends MARCRecordSupport {
 
-    protected static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
-            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, EresourceConstants.CHAPTER,
-            "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset", "Exam Prep", "Grand Rounds",
-            EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Web Page", "Mobile", "Print",
-            EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO, EresourceConstants.WEBSITE };
-
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
@@ -41,6 +35,13 @@ public class TypeFactory extends MARCRecordSupport {
             { EresourceConstants.WEBSITE, "Websites" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
+
+    protected static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
+            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, EresourceConstants.CHAPTER,
+            "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT,
+            "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class",
+            "Lane Web Page", "Mobile", "Print", EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO,
+            EresourceConstants.WEBSITE };
     static {
         Collections.addAll(ALLOWED_TYPES, ALLOWED_TYPES_INITIALIZER);
         for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
@@ -76,6 +77,9 @@ public class TypeFactory extends MARCRecordSupport {
         Collection<String> rawTypes = getRawTypes(marcRecord);
         if (primaryType == null) {
             type = EresourceConstants.OTHER;
+            if (rawTypes.contains(EresourceConstants.EQUIPMENT)) {
+                type = EresourceConstants.EQUIPMENT;
+            }
         } else if (EresourceConstants.BOOK.equals(primaryType)) {
             type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
         } else if (EresourceConstants.SERIAL.equals(primaryType)) {
@@ -130,6 +134,9 @@ public class TypeFactory extends MARCRecordSupport {
         if (getSubfieldData(marcRecord, "830", "a").map(String::toLowerCase)
                 .anyMatch((final String s) -> s.contains("stanford") && s.contains("grand rounds"))) {
             rawTypes.add("Grand Rounds");
+        }
+        if (rawTypes.contains("Objects") && rawTypes.contains("Subset, Circbib")) {
+            rawTypes.add("Equipment");
         }
         return rawTypes.stream().map(this::getCompositeType).filter(ALLOWED_TYPES::contains)
                 .collect(Collectors.toSet());
