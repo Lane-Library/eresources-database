@@ -115,7 +115,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         List<Link> links = new ArrayList<>();
         if (!hasLinks()) {
             links.add(new CatalogLink(getFields(this.bib, "001").map(Field::getData).findFirst().orElse(null), this,
-                    "http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=", "Lane Catalog Record"));
+                    "https://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=", "Lane Catalog Record"));
         }
         Version version = this;
         links.addAll(getFields(this.holding, "856").map((final Field f) -> new MarcLink(f, version))

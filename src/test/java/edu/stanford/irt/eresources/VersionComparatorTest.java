@@ -61,7 +61,7 @@ public class VersionComparatorTest {
         expect(this.marcVersion2.getDates()).andReturn("1999-2000.");
         expect(this.marcLink1.getLabel()).andReturn("Impact Factor");
         expect(this.marcLink1.getUrl()).andReturn("foo");
-        expect(this.marcLink2.getUrl()).andReturn("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=foo");
+        expect(this.marcLink2.getUrl()).andReturn("https://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=foo");
         expect(this.marcVersion1.getLinks()).andReturn(Collections.singletonList(this.marcLink1)).anyTimes();
         expect(this.marcVersion2.getLinks()).andReturn(Collections.singletonList(this.marcLink2)).anyTimes();
         replay(this.marcVersion1, this.marcVersion2, this.marcLink1,this.marcLink2);

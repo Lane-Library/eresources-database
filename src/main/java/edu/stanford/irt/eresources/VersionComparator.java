@@ -171,7 +171,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         if (!version.getLinks().isEmpty()) {
             String url = version.getLinks().get(0).getUrl();
             if (null != url) {
-                return url.startsWith("http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=");
+                return url.contains("//lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=");
             }
         }
         return false;
