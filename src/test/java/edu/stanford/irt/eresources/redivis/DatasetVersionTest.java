@@ -65,11 +65,6 @@ public class DatasetVersionTest {
     }
 
     @Test
-    public final void testHasGetPasswordLink() {
-        assertFalse(this.datasetVersion.hasGetPasswordLink());
-    }
-
-    @Test
     public final void testIsProxy() {
         assertFalse(this.datasetVersion.isProxy());
     }

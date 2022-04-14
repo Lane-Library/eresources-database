@@ -98,11 +98,6 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
     }
 
     @Override
-    public boolean hasGetPasswordLink() {
-        return false;
-    }
-
-    @Override
     public boolean isProxy() {
         return this.isProxy;
     }

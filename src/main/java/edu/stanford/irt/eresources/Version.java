@@ -46,7 +46,5 @@ public interface Version {
 
     String getSummaryHoldings();
 
-    boolean hasGetPasswordLink();
-
     boolean isProxy();
 }

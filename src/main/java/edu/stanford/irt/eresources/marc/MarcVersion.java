@@ -31,11 +31,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         return null;
     }
 
-    private static boolean isGetPassword856(final Field field) {
-        return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'u').map(Subfield::getData)
-                .anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
-    }
-
     private Record bib;
 
     private Eresource eresource;
@@ -103,11 +98,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         return dates;
     }
 
-    // required for ObjectMapper to write field
-    public boolean getHasGetPasswordLink() {
-        return hasGetPasswordLink();
-    }
-
     @Override
     public int[] getItemCount() {
         int[] counts = null;
@@ -128,8 +118,8 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                     "http://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=", "Lane Catalog Record"));
         }
         Version version = this;
-        links.addAll(getFields(this.holding, "856").filter((final Field f) -> !isGetPassword856(f))
-                .map((final Field f) -> new MarcLink(f, version)).collect(Collectors.toList()));
+        links.addAll(getFields(this.holding, "856").map((final Field f) -> new MarcLink(f, version))
+                .collect(Collectors.toList()));
         return links;
     }
 
@@ -190,11 +180,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                     .orElse(null);
         }
         return value;
-    }
-
-    @Override
-    public boolean hasGetPasswordLink() {
-        return getSubfieldData(this.holding, "856", "u").anyMatch("http://lane.stanford.edu/secure/ejpw.html"::equals);
     }
 
     @Override

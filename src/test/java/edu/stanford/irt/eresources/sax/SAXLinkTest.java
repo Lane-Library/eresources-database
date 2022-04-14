@@ -18,7 +18,6 @@ public class SAXLinkTest {
         version.addLink(new SAXLink());
         version.setDates("dates");
         version.setProxy(true);
-        version.setHasGetPasswordLink(false);
         link.setVersion(version);
         assertEquals("summaryHoldings, dates", link.getLinkText());
         link.setLabel("");

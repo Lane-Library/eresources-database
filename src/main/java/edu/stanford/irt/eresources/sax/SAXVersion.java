@@ -14,8 +14,6 @@ public class SAXVersion implements Version {
 
     private String dates;
 
-    private boolean hasGetPasswordLink = false;
-
     private boolean isProxy = true;
 
     private List<Link> links;
@@ -47,10 +45,6 @@ public class SAXVersion implements Version {
     @Override
     public String getDates() {
         return this.dates;
-    }
-
-    public boolean getHasGetPasswordLink() {
-        return hasGetPasswordLink();
     }
 
     @Override
@@ -95,15 +89,6 @@ public class SAXVersion implements Version {
 
     /*
      * (non-Javadoc)
-     * @see edu.stanford.irt.eresources.Version#hasGetPasswordLink()
-     */
-    @Override
-    public boolean hasGetPasswordLink() {
-        return this.hasGetPasswordLink;
-    }
-
-    /*
-     * (non-Javadoc)
      * @see edu.stanford.irt.eresources.Version#isProxy()
      */
     @Override
@@ -117,10 +102,6 @@ public class SAXVersion implements Version {
 
     public void setDates(final String dates) {
         this.dates = dates;
-    }
-
-    public void setHasGetPasswordLink(final boolean hasGetPasswordLink) {
-        this.hasGetPasswordLink = hasGetPasswordLink;
     }
 
     public void setProxy(final boolean isProxy) {

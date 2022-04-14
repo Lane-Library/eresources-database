@@ -142,18 +142,6 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetHasGetPasswordLink() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.field.getTag()).andReturn("856");
-        expect(this.subfield.getCode()).andReturn('u');
-        expect(this.subfield.getData()).andReturn("http://lane.stanford.edu/secure/ejpw.html");
-        replay(this.record, this.field, this.subfield);
-        assertTrue(this.version.getHasGetPasswordLink());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
     public void testGetHoldingsAndDates() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("866").times(2);
@@ -189,9 +177,6 @@ public class MarcVersionTest {
     public void testGetLinks() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("856").times(2);
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('u');
-        expect(this.subfield.getData()).andReturn("url");
         replay(this.record, this.field, this.subfield);
         assertEquals(1, this.version.getLinks().size());
         verify(this.record, this.field, this.subfield);
@@ -374,18 +359,6 @@ public class MarcVersionTest {
         replay(this.record, this.field, this.subfield);
         assertEquals("summaryHoldings", this.version.getSummaryHoldings());
         assertEquals("summaryHoldings", this.version.getHoldingsAndDates());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public void testHasGetPasswordLink() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.field.getTag()).andReturn("856");
-        expect(this.subfield.getCode()).andReturn('u');
-        expect(this.subfield.getData()).andReturn("http://lane.stanford.edu/secure/ejpw.html");
-        replay(this.record, this.field, this.subfield);
-        assertTrue(this.version.hasGetPasswordLink());
         verify(this.record, this.field, this.subfield);
     }
 
