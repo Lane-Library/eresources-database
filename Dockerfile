@@ -1,7 +1,7 @@
 #   
 # run phase
 #
-FROM gcr.io/som-laneweb/jre-parent:latest
+FROM gcr.io/som-laneweb/jre-parent:openjdk-11.0.14-jre-slim
 
 
 ADD ./target/eresources.jar /eresources/eresources.jar
