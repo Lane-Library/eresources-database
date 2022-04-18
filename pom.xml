@@ -76,7 +76,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>10.8</version>
+            <version>11.3</version>
         </dependency>
         <dependency>
             <groupId>net.sf.joost</groupId>
