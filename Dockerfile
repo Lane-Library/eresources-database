@@ -1,7 +1,7 @@
 #   
 # run phase
 #
-FROM gcr.io/som-laneweb/jre-parent:prod-latest
+FROM gcr.io/som-laneweb/jre-parent:latest
 
 
 ADD ./target/eresources.jar /eresources/eresources.jar
