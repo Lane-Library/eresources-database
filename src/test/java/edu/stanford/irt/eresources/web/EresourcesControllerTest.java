@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import org.junit.Before;
@@ -83,9 +84,13 @@ public class EresourcesControllerTest {
 
     @Test
     public final void testSulReload() {
-        // this will fail on third Sunday of the month
+        // null status on third Sunday of the month OK
         JobStatus status = this.controller.sulReload();
-        assertEquals(JobStatus.SKIPPED, status);
+        if (null == status) {
+            assertEquals(DayOfWeek.SUNDAY, LocalDate.now().getDayOfWeek());
+        } else {
+            assertEquals(JobStatus.SKIPPED, status);
+        }
     }
 
     @Test
