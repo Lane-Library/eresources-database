@@ -6,6 +6,17 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-04-18" version="2.8.0" description="maintenance release">
+            <action date="2022-04-13" dev="ryanmax" issue="LANEWEB-10944" type="fix">
+                remove special handing for getPassword links
+            </action>
+            <action date="2022-04-13" dev="ryanmax" issue="LANEWEB-10943" type="fix">
+                search help pages are not indexed in Lane Search
+            </action>
+            <action date="2022-04-12" dev="ryanmax" issue="LANEWEB-10936" type="add">
+                add resource type facet for Equipment
+            </action>
+        </release>
         <release date="2022-04-07" version="2.7.5" description="maintenance release">
             <action date="2022-04-07" dev="ryanmax" issue="LANEWEB-10933" type="fix">
                 PubMed indexing failing because of long author data
