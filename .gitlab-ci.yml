@@ -8,7 +8,7 @@ snyk-scan:
   stage: code-analysis
   image: maven:latest
   script:
-    - echo $SNYK_TOKEN && mvn -X -B -q -s settings.xml verify snyk:monitor
+    - mvn -B -q -s settings.xml snyk:test
   cache:
     key: mavenrepo
     paths:
