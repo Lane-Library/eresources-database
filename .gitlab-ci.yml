@@ -4,22 +4,7 @@ include:
   - project: "irt-lane/som-laneweb"
     file: "/cicd/trigger-downstream.yml"
 
-snyk-scan:
-  stage: code-analysis
-  image: maven:latest
-  script:
-    - mkdir -p .mvn && echo "-s $PWD/settings.xml" >> .mvn/maven.config
-    - mvn snyk:monitor
-  cache:
-    key: mavenrepo
-    paths:
-      - ./.m2/repository
-  allow_failure: true
-  tags:
-    - prod-services
-    
 variables:
-  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
   IMAGE_NAME: "eresources"
   KANIKO_CACHE: "true"
 
