@@ -4,16 +4,21 @@ include:
   - project: "irt-lane/som-laneweb"
     file: "/cicd/trigger-downstream.yml"
 
-sonar-scan:
+snyk-scan:
   stage: code-analysis
   image: maven:latest
   script:
-    - mvn snyk:monitor
+    - mvn -B -q -s settings.xml snyk:monitor
+  cache:
+    key: mavenrepo
+    paths:
+      - ./.m2/repository
   allow_failure: true
   tags:
     - prod-services
     
 variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
   IMAGE_NAME: "eresources"
   KANIKO_CACHE: "true"
 
