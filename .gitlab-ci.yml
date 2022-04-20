@@ -9,8 +9,7 @@ snyk-scan:
   image: maven:latest
   script:
     - mkdir -p .mvn && echo "-s $PWD/settings.xml" >> .mvn/maven.config
-    - cat .mvn/maven.config
-    - DEBUG=*snyk* mvn -e -B -s settings.xml snyk:test
+    - mvn -e -B -s settings.xml snyk:monitor
   cache:
     key: mavenrepo
     paths:
