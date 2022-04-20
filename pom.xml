@@ -248,6 +248,7 @@
               <configuration>
                 <apiToken>${env.SNYK_TOKEN}</apiToken>
                 <args>
+                  <arg>--org=02276870-a8dc-41b5-b095-7c47e282275b</arg>
                   <arg>--severity-threshold=critical</arg>
                   <arg>--all-projects</arg>
                 </args>
