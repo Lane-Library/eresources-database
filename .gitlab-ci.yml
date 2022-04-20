@@ -8,8 +8,7 @@ snyk-scan:
   stage: code-analysis
   image: maven:latest
   script:
-    - cp settings.xml /root/.m2/
-    - mvn -e -B -s settings.xml snyk:test
+    - DEBUG=*snyk* mvn -e -B -s settings.xml snyk:test
   cache:
     key: mavenrepo
     paths:
