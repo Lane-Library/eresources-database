@@ -8,7 +8,7 @@ snyk-scan:
   stage: code-analysis
   image: maven:latest
   script:
-    - mvn -e -B -q -s settings.xml snyk:test
+    - mvn -e -B -s settings.xml snyk:test
   cache:
     key: mavenrepo
     paths:
