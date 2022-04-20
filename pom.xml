@@ -231,6 +231,7 @@
               <inherited>false</inherited>
               <executions>
                 <execution>
+                  <phase>none</phase>
                   <id>snyk-test</id>
                   <goals>
                     <goal>test</goal>
