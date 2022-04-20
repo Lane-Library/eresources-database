@@ -237,6 +237,7 @@
                   </goals>
                 </execution>
                 <execution>
+                  <phase>verify</phase>
                   <id>snyk-monitor</id>
                   <goals>
                     <goal>monitor</goal>
