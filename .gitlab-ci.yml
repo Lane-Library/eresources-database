@@ -8,6 +8,8 @@ snyk-scan:
   stage: code-analysis
   image: maven:latest
   script:
+    - mkdir -p .mvn && echo "-s $PWD/settings.xml" >> .mvn/maven.config
+    - cat .mvn/maven.config
     - DEBUG=*snyk* mvn -e -B -s settings.xml snyk:test
   cache:
     key: mavenrepo
