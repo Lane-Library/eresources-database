@@ -131,13 +131,12 @@ public class SolrLoader {
         } else {
             SolrDocument firstResult = rdocs.get(0);
             Date solrDate = (Date) firstResult.getFieldValue("updated");
-            // NOTE: the ZoneId must match Solr's timezone for deletes to work properly
             updated = LocalDateTime.ofInstant(solrDate.toInstant(), ZoneId.systemDefault());
         }
         return updated;
     }
 
-    protected void maybeDeleteOldRecords(final String lastUpdate, final String baseQuery,
+    protected void maybeDeleteOldRecords(final LocalDateTime lastUpdate, final String baseQuery,
             final int minExpectedRecords) {
         int updatedRecords = this.getHandler().getCount();
         if (updatedRecords < minExpectedRecords) {
@@ -146,7 +145,11 @@ public class SolrLoader {
         } else {
             try {
                 // delete everything older than lastUpdate
-                this.solrClient.deleteByQuery(baseQuery + " AND updated:[* TO " + lastUpdate + "]");
+                // need to adjust lastUpdate to Solr's timezone (UTC)
+                LocalDateTime adjustedUpdateDate = LocalDateTime
+                        .ofInstant(lastUpdate.atZone(ZoneId.systemDefault()).toInstant(), ZoneId.of("UTC"));
+                this.solrClient.deleteByQuery(
+                        baseQuery + " AND updated:[* TO " + adjustedUpdateDate.format(SOLR_DATE_FIELD_FORMATTER) + "]");
                 this.solrClient.commit();
             } catch (SolrServerException | IOException e) {
                 throw new EresourceDatabaseException(e);

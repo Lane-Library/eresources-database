@@ -16,6 +16,6 @@ public class PubmedReload extends SolrLoader {
         // set update date to null so Processors fetch everything
         this.setUpdatedDateQuery(null);
         super.load();
-        maybeDeleteOldRecords(updateDate.format(SOLR_DATE_FIELD_FORMATTER), BASE_QUERY, EXPECTED_MIN_RECORDS);
+        maybeDeleteOldRecords(updateDate, BASE_QUERY, EXPECTED_MIN_RECORDS);
     }
 }
