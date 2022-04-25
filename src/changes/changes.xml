@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-04-25" version="2.8.1" description="maintenance release">
+            <action date="2022-04-22" dev="ryanmax" issue="LANEWEB-10950" type="fix">
+                records not always deleted at reload time
+            </action>
+        </release>
         <release date="2022-04-18" version="2.8.0" description="maintenance release">
             <action date="2022-04-13" dev="ryanmax" issue="LANEWEB-10944" type="fix">
                 remove special handing for getPassword links
