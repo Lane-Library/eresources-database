@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-05-03" version="2.8.2" description="maintenance release">
+            <action date="2022-05-02" dev="ryanmax" issue="LANEWEB-10959" type="fix">
+                laneguide not retrievable by author
+            </action>
+        </release>
         <release date="2022-04-25" version="2.8.1" description="maintenance release">
             <action date="2022-04-22" dev="ryanmax" issue="LANEWEB-10950" type="fix">
                 records not always deleted at reload time
