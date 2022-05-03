@@ -12,6 +12,7 @@
             </xsl:variable>
             <xsl:variable name="keywords">
                 <xsl:apply-templates/>
+                <xsl:value-of select="concat(' ', @creator)"/>
             </xsl:variable>
             <title><xsl:value-of select="@title"/></title>
             <primaryType>Lane Web Page</primaryType>
