@@ -15,7 +15,8 @@
                 <xsl:value-of select="concat(' ', @creator)"/>
             </xsl:variable>
             <title><xsl:value-of select="@title"/></title>
-            <primaryType>Lane Web Page</primaryType>
+            <primaryType>Lane Guide</primaryType>
+            <type>Lane Guide</type>
             <type>Lane Web Page</type>
             <keywords> <xsl:value-of select="$keywords"/> </keywords>
             <year><xsl:value-of select="substring(@update,1,4)"/></year>

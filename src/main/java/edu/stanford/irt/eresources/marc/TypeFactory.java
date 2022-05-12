@@ -39,7 +39,7 @@ public class TypeFactory extends MARCRecordSupport {
     protected static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
             EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, EresourceConstants.CHAPTER,
             "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT,
-            "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class",
+            "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Guide",
             "Lane Web Page", "Mobile", "Print", EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO,
             EresourceConstants.WEBSITE };
     static {
