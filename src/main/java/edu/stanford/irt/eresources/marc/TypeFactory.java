@@ -73,25 +73,25 @@ public class TypeFactory extends MARCRecordSupport {
                 .filter((final Field f) -> '4' == f.getIndicator1() && '7' == f.getIndicator2()), "a").findFirst()
                         .orElse("");
         primaryType = PRIMARY_TYPES.get(primaryType.toLowerCase(Locale.US));
-        String type;
+        String pType;
         Collection<String> rawTypes = getRawTypes(marcRecord);
         if (primaryType == null) {
-            type = EresourceConstants.OTHER;
+            pType = EresourceConstants.OTHER;
             if (rawTypes.contains(EresourceConstants.EQUIPMENT)) {
-                type = EresourceConstants.EQUIPMENT;
+                pType = EresourceConstants.EQUIPMENT;
             }
         } else if (EresourceConstants.BOOK.equals(primaryType)) {
-            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
+            pType = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
         } else if (EresourceConstants.SERIAL.equals(primaryType)) {
-            type = getTypeFromSerial(rawTypes, marcRecord);
+            pType = getPrimaryTypeFromSerial(rawTypes, marcRecord);
         } else if (EresourceConstants.COMPONENT.equals(primaryType)) {
-            type = getTypeFromComponent(rawTypes);
+            pType = getPrimaryTypeFromComponent(rawTypes);
         } else if (EresourceConstants.VISUAL_MATERIAL.equals(primaryType)) {
-            type = getTypeFromVisualMaterial(rawTypes);
+            pType = getPrimaryTypeFromVisualMaterial(rawTypes);
         } else {
-            type = primaryType;
+            pType = primaryType;
         }
-        return type;
+        return pType;
     }
 
     public Collection<String> getTypes(final Record marcRecord) {
@@ -142,7 +142,7 @@ public class TypeFactory extends MARCRecordSupport {
                 .collect(Collectors.toSet());
     }
 
-    private String getTypeFromComponent(final Collection<String> rawTypes) {
+    private String getPrimaryTypeFromComponent(final Collection<String> rawTypes) {
         String type = EresourceConstants.OTHER;
         if (rawTypes.contains(EresourceConstants.ARTICLE) && rawTypes.contains(EresourceConstants.CHAPTER)) {
             type = "Article/Chapter";
@@ -154,7 +154,7 @@ public class TypeFactory extends MARCRecordSupport {
         return type;
     }
 
-    private String getTypeFromSerial(final Collection<String> rawTypes, final Record marcRecord) {
+    private String getPrimaryTypeFromSerial(final Collection<String> rawTypes, final Record marcRecord) {
         String type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
         if (rawTypes.contains(EresourceConstants.BOOK)) {
             type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
@@ -164,7 +164,7 @@ public class TypeFactory extends MARCRecordSupport {
         return type;
     }
 
-    private String getTypeFromVisualMaterial(final Collection<String> rawTypes) {
+    private String getPrimaryTypeFromVisualMaterial(final Collection<String> rawTypes) {
         String type = EresourceConstants.IMAGE;
         if (rawTypes.contains(EresourceConstants.VIDEO)) {
             type = EresourceConstants.VIDEO;
