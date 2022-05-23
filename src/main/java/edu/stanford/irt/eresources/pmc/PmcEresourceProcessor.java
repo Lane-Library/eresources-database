@@ -141,10 +141,10 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private List<PmcJournal> getJournals() {
         List<PmcJournal> journals = new LinkedList<>();
+        CSVFormat.Builder builder = CSVFormat.Builder.create().setHeader(HEADERS_CSV).setSkipHeaderRecord(true);
         try {
             URL url = new URL(this.allJournalsCsvUrl);
-            Iterable<CSVRecord> records = CSVFormat.DEFAULT.withHeader(HEADERS_CSV).withFirstRecordAsHeader()
-                    .parse(new InputStreamReader(IOUtils.getStream(url)));
+            Iterable<CSVRecord> records = builder.build().parse(new InputStreamReader(IOUtils.getStream(url)));
             for (CSVRecord row : records) {
                 PmcJournal journal = new PmcJournal();
                 journal.setDepositStatus(row.get(HEADER_DEPOSIT_STATUS));
