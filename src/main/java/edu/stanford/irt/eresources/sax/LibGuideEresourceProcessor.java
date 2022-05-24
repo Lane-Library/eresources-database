@@ -182,8 +182,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                 Element guideAnchor = (Element) guideAnchors.item(i);
                 String link = guideAnchor.getAttribute("href");
                 String id = TextParserHelper.cleanId(link.hashCode());
-                String name = guide.title + " -- "
-                        + StringEscapeUtils.unescapeHtml(maybeFetchTextContent(guideAnchor, "span"));
+                String name = guide.title + " -- " + maybeFetchTextContent(guideAnchor, "span");
                 Guide subGuide = new Guide(id, link, name, guide.creator, guide.description, guide.modifiedDate);
                 subGuides.add(subGuide);
             }
@@ -210,7 +209,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
         String value = "";
         NodeList nodeList = elm.getElementsByTagName(tagName);
         if (nodeList.getLength() > 0) {
-            value = nodeList.item(0).getTextContent();
+            value = StringEscapeUtils.unescapeHtml(nodeList.item(0).getTextContent());
         }
         return value;
     }
