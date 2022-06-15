@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.ZoneId;
@@ -128,6 +129,30 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         replay(this.record, this.field, this.subfield);
         assertEquals("Contents:<br/>Appendix I : thing<br/>Appendix II : thing 2.", this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public final void testGetDescription905And920() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn("920").times(3);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('b');
+        expect(this.subfield.getData()).andReturn("920 data");
+        expect(this.field.getTag()).andReturn("905").anyTimes();
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("905 data");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("Summary:<br/>920 data<br/><br/>Contents:<br/> 905 data", this.eresource.getDescription());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public final void testGetDescriptionEmpty() {
+        expect(this.record.getFields()).andReturn(Collections.emptyList()).anyTimes();
+        replay(this.record);
+        assertNull(this.eresource.getDescription());
+        verify(this.record);
     }
 
     @Test
