@@ -32,14 +32,6 @@ import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMarcEresourceTest extends MARCRecordSupport {
 
-    RecordCollection recordCollection;
-
-    HashMap<String, Record> records = new HashMap<>();
-
-    CatalogRecordService recordService;
-
-    TypeFactory typefactory;
-
     private SulMarcEresource eresource;
 
     private Field field;
@@ -51,6 +43,14 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     private Subfield subfield;
 
     private SulTypeFactory typeFactory;
+
+    RecordCollection recordCollection;
+
+    HashMap<String, Record> records = new HashMap<>();
+
+    CatalogRecordService recordService;
+
+    TypeFactory typefactory;
 
     @Before
     public void setUp() {
@@ -103,6 +103,30 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.subfield.getData()).andReturn("abbrv.");
         replay(this.record, this.field, this.subfield);
         assertTrue(this.eresource.getAbbreviatedTitles().isEmpty());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public final void testGetDescription520() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn("520").anyTimes();
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("Just text");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("Summary:<br/>Just text", this.eresource.getDescription());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public final void testGetDescription905() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn("905").anyTimes();
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("Appendix I : thing -- Appendix II : thing 2.");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("Contents:<br/>Appendix I : thing<br/>Appendix II : thing 2.", this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
     }
 
