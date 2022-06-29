@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +57,7 @@ public class MarcVersionTest {
         expect(this.field.getTag()).andReturn("866");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('u');
+        expect(this.record.getFields()).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
         assertNull(this.version.getAdditionalText());
         verify(this.record, this.field, this.subfield);
@@ -70,6 +70,7 @@ public class MarcVersionTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('z');
         expect(this.subfield.getData()).andReturn("description");
+        expect(this.record.getFields()).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
         assertEquals("description", this.version.getAdditionalText());
         verify(this.record, this.field, this.subfield);
@@ -79,6 +80,7 @@ public class MarcVersionTest {
     public void testGetAdditionalTextMultiple866() {
         expect(this.record.getFields()).andReturn(Arrays.asList(new Field[] { this.field, this.field }));
         expect(this.field.getTag()).andReturn("866").times(2);
+        expect(this.record.getFields()).andReturn(Collections.emptyList());
         replay(this.record, this.field);
         assertEquals("", this.version.getAdditionalText());
         verify(this.record, this.field);
@@ -86,10 +88,27 @@ public class MarcVersionTest {
 
     @Test
     public void testGetAdditionalTextNo866() {
-        expect(this.record.getFields()).andReturn(Collections.emptyList());
+        expect(this.record.getFields()).andReturn(Collections.emptyList()).times(2);
         replay(this.record);
         assertNull(this.version.getAdditionalText());
         verify(this.record);
+    }
+
+    @Test
+    public void testGetAdditionalTextWith931() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("866");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('z');
+        expect(this.subfield.getData()).andReturn("description");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("931");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("shelved under");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("description shelved under", this.version.getAdditionalText());
+        verify(this.record, this.field, this.subfield);
     }
 
     @Test
