@@ -87,13 +87,17 @@ public class EresourcesController {
             if (Job.Type.PUBMED_RELOAD.equals(t) || Job.Type.SUL_RELOAD.equals(t)) {
                 sb.append("<li>");
                 sb.append(t.getName());
+                sb.append(": ");
+                sb.append(t.getDescription());
                 sb.append("</li>");
             } else if (!Job.Type.UNDEFINED.equals(t) && !Job.Type.UNIT_TESTING.equals(t)) {
                 sb.append("<li><a href=\"solrLoader?job=");
                 sb.append(t.getName());
                 sb.append("\">");
                 sb.append(t.getName());
-                sb.append("</a></li>");
+                sb.append("</a>: ");
+                sb.append(t.getDescription());
+                sb.append("</li>");
             }
         }
         sb.append("</ul>");

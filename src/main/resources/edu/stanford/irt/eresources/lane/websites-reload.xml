@@ -3,17 +3,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="../common.xml"/>
-    <import resource="marc-processor.xml"/>
     <import resource="web-processor.xml"/>
     <import resource="classes-processor.xml"/>
     <import resource="laneblog-processor.xml"/>
     <import resource="libguides/libguide-processor.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Reloader" parent="abstractSolrLoader">
-        <constructor-arg name="baseQuery" value="(recordType:bib OR recordType:web)"/>
-        <constructor-arg name="expectedMinRecords" value="300000"/>
-    	<property name="processors">
+        <constructor-arg name="baseQuery" value="recordType:web"/>
+        <constructor-arg name="expectedMinRecords" value="500"/>
+        <property name="processors">
             <list>
-                <ref bean="bibProcessor"/>
                 <ref bean="webProcessor"/>
                 <ref bean="classesProcessor"/>
                 <ref bean="laneblogProcessor"/>

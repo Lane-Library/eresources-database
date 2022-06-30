@@ -3,5 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="pubmed-load.xml"/>
-    <bean id="solrLoader" class="edu.stanford.irt.eresources.PubmedReload" parent="abstractSolrLoader"/>
+    <bean id="solrLoader" class="edu.stanford.irt.eresources.Reloader" parent="abstractSolrLoader">
+        <constructor-arg name="baseQuery" value="recordType:pubmed"/>
+        <constructor-arg name="expectedMinRecords" value="1000000"/>
+    </bean>
 </beans>

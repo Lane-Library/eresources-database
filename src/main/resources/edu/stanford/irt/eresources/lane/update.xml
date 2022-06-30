@@ -8,8 +8,9 @@
     <import resource="classes-processor.xml"/>
     <import resource="laneblog-processor.xml"/>
     <import resource="libguides/libguide-processor.xml"/>
-    <bean id="solrLoader" class="edu.stanford.irt.eresources.LaneUpdate" parent="abstractSolrLoader">
-    	<property name="processors">
+    <bean id="solrLoader" class="edu.stanford.irt.eresources.Updater" parent="abstractSolrLoader">
+        <constructor-arg name="baseQuery" value="(recordType:bib OR recordType:web)"/>
+        <property name="processors">
             <list>
                 <ref bean="bibProcessor"/>
                 <ref bean="webProcessor"/>
