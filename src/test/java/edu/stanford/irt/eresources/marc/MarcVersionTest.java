@@ -112,6 +112,24 @@ public class MarcVersionTest {
     }
 
     @Test
+    public void testGetAdditionalTextWith931RelatedTitleBrowse() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("866");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('z');
+        expect(this.subfield.getData()).andReturn("description");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.field.getTag()).andReturn("931");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData())
+                .andReturn("Use the \"Related Title Browse\" Index to locate individual volumes of this title.");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("description", this.version.getAdditionalText());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
     public void testGetCallNumber() {
         Subfield sf2 = mock(Subfield.class);
         List<Subfield> subs = new ArrayList<>();

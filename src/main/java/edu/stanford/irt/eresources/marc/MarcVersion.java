@@ -64,8 +64,9 @@ public class MarcVersion extends MARCRecordSupport implements Version {
             additionalText = fields.get(0).getSubfields().stream().filter((final Subfield s) -> 'z' == s.getCode())
                     .map(Subfield::getData).findFirst().orElse(null);
         }
+        // LANEWEB-10982: show 931 notes but remove those referring to "Related Title Browse"
         String f931a = getSubfieldData(this.holding, "931", "a").collect(Collectors.joining(" "));
-        if (!f931a.isBlank()) {
+        if (!f931a.isBlank() && !f931a.toLowerCase().contains("use the \"related title browse\" index")) {
             additionalText = (null == additionalText) ? f931a : additionalText + " " + f931a;
         }
         return additionalText;
