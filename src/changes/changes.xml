@@ -6,6 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-07-01" version="2.9.0" description="maintenance release">
+            <action date="2022-06-29" dev="ryanmax" issue="LANEWEB-10982" type="fix">
+                add 931 notes as version notes; remove "Related Title Browse" notes
+            </action>
+            <action date="2022-06-30" dev="ryanmax" type="update">
+                break jobs into more granular chunks
+            </action>
+        </release>
         <release date="2022-06-21" version="2.8.5" description="maintenance release">
             <action date="2022-06-15" dev="ryanmax" issue="LANEWEB-10979" type="fix">
                 poor formatting for SearchWorks description data
