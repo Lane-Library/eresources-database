@@ -41,7 +41,7 @@ public class SulTypeFactory extends MARCRecordSupport {
     private static final Pattern SUPPLEMENTAL_LINK = Pattern
             .compile(".*(table of contents|abstract|description|sample text|finding aid).*", Pattern.CASE_INSENSITIVE);
     static {
-        Collections.addAll(ALLOWED_TYPES, TypeFactory.ALLOWED_TYPES_INITIALIZER);
+        Collections.addAll(ALLOWED_TYPES, LaneTypeFactory.ALLOWED_TYPES_INITIALIZER);
         for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
             for (int j = 1; j < element.length; j++) {
                 COMPOSITE_TYPES.put(element[j], element[0]);

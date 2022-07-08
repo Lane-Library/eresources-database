@@ -51,7 +51,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
 
     CatalogRecordService recordService;
 
-    TypeFactory typefactory;
+    LaneTypeFactory typefactory;
 
     @Before
     public void setUp() {

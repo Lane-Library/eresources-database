@@ -39,7 +39,7 @@ public class MARCRecordEresourceProcessorTest {
 
     private RecordCollectionFactory recordCollectionFactory;
 
-    private TypeFactory typeFactory;
+    private LaneTypeFactory typeFactory;
 
     @Before
     public void setUp() throws Exception {
@@ -49,7 +49,7 @@ public class MARCRecordEresourceProcessorTest {
         this.locationsService = mock(HTTPLaneLocationsService.class);
         this.recordCollectionFactory = mock(RecordCollectionFactory.class);
         this.recordCollection = mock(RecordCollection.class);
-        this.typeFactory = mock(TypeFactory.class);
+        this.typeFactory = mock(LaneTypeFactory.class);
         this.processor = new MARCRecordEresourceProcessor(this.eresourceHandler, this.itemService,
                 this.keywordsStrategy, this.recordCollectionFactory, this.typeFactory, this.locationsService);
         this.marcRecord = mock(Record.class);

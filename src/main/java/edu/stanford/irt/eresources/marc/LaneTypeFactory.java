@@ -14,7 +14,7 @@ import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 
-public class TypeFactory extends MARCRecordSupport {
+public class LaneTypeFactory extends MARCRecordSupport {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 

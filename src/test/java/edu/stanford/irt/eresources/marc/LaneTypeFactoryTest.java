@@ -14,7 +14,7 @@ import edu.stanford.irt.eresources.SulFileCatalogRecordService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class TypeFactoryTest extends MARCRecordSupport {
+public class LaneTypeFactoryTest extends MARCRecordSupport {
 
     RecordCollection recordCollection;
 
@@ -22,11 +22,11 @@ public class TypeFactoryTest extends MARCRecordSupport {
 
     CatalogRecordService recordService;
 
-    TypeFactory typefactory;
+    LaneTypeFactory typefactory;
 
     @Before
     public void setUp() throws Exception {
-        this.typefactory = new TypeFactory();
+        this.typefactory = new LaneTypeFactory();
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
         this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/lane",
