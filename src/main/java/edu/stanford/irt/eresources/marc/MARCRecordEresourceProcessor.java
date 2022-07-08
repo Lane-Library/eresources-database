@@ -35,11 +35,11 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
     private RecordCollectionFactory recordCollectionFactory;
 
-    private LaneTypeFactory typeFactory;
+    private SulTypeFactory typeFactory;
 
     public MARCRecordEresourceProcessor(final EresourceHandler eresourceHandler, final ItemService itemService,
             final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
-            final LaneTypeFactory typeFactory, final HTTPLaneLocationsService locationsService) {
+            final SulTypeFactory typeFactory, final HTTPLaneLocationsService locationsService) {
         this.eresourceHandler = eresourceHandler;
         this.itemService = itemService;
         this.keywordsStrategy = keywordsStrategy;

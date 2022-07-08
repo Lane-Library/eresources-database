@@ -15,7 +15,7 @@ public class AltTitleMarcEresource extends BibMarcEresource {
     private int item;
 
     public AltTitleMarcEresource(final List<Record> recordList, final KeywordsStrategy keywordsStrategy,
-            final LaneTypeFactory typeFactory, final ItemService itemService, final int item,
+            final SulTypeFactory typeFactory, final ItemService itemService, final int item,
             final HTTPLaneLocationsService locationsService) {
         super(recordList, keywordsStrategy, itemService, typeFactory, locationsService);
         this.altTitleRecord = recordList.get(0);

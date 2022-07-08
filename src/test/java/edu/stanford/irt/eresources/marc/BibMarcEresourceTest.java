@@ -50,7 +50,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
 
     private Subfield subfield;
 
-    private LaneTypeFactory typeFactory;
+    private SulTypeFactory typeFactory;
 
     CatalogRecordService recordService;
 
@@ -59,7 +59,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         this.record = mock(Record.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.itemService = mock(ItemService.class);
-        this.typeFactory = mock(LaneTypeFactory.class);
+        this.typeFactory = mock(SulTypeFactory.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
         this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }),
                 this.keywordsStrategy, this.itemService, this.typeFactory, this.locationsService);

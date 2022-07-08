@@ -85,7 +85,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected Record marcRecord;
 
-    protected LaneTypeFactory typeFactory;
+    protected SulTypeFactory typeFactory;
 
     protected Collection<String> types;
 

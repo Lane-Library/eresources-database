@@ -11,7 +11,7 @@ import edu.stanford.lane.catalog.Record;
 public class BibMarcEresource extends AbstractMarcEresource {
 
     public BibMarcEresource(final List<Record> recordList, final KeywordsStrategy keywordsStrategy,
-            final ItemService itemService, final LaneTypeFactory typeFactory,
+            final ItemService itemService, final SulTypeFactory typeFactory,
             final HTTPLaneLocationsService locationsService) {
         this.marcRecord = recordList.get(0);
         this.holdings = recordList.subList(1, recordList.size());
