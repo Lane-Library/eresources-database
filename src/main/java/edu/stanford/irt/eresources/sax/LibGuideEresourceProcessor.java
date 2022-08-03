@@ -119,27 +119,13 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (!guides.isEmpty()) {
                 Guide guide = guides.remove(0);
-                Long updated = getUpdateDate(guide.modifiedDate);
-                if (updated > getStartTime()) {
-                    InputSource source = new InputSource(new URL(guide.link).openConnection().getInputStream());
-                    DOMParser parser = new DOMParser(this.nekoConfig);
-                    parser.parse(source);
-                    Document doc = parser.getDocument();
-                    Element root = doc.getDocumentElement();
-                    root.setAttribute("id", guide.id);
-                    root.setAttribute("creator", guide.creator);
-                    root.setAttribute("description", guide.description);
-                    root.setAttribute("title", guide.title);
-                    root.setAttribute("link", guide.link);
-                    root.setAttribute("update", this.dateFormat.format(updated));
-                    this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+                if (getUpdateDate(guide.modifiedDate) > getStartTime()) {
+                    parseGuide(guide);
                 }
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (IOException e) {
-            log.error("broken guide link: ", e);
-        } catch (SAXException | TransformerException | ParserConfigurationException e) {
+        } catch (SAXException | ParserConfigurationException e) {
             throw new EresourceDatabaseException(e);
         }
     }
@@ -218,5 +204,31 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             value = StringEscapeUtils.unescapeHtml(nodeList.item(0).getTextContent());
         }
         return value;
+    }
+
+    private void parseGuide(final Guide guide) {
+        InputSource source = null;
+        try {
+            source = new InputSource(new URL(guide.link).openConnection().getInputStream());
+        } catch (IOException e) {
+            log.error("problem guide link: ", e);
+        }
+        if (null != source) {
+            DOMParser parser = new DOMParser(this.nekoConfig);
+            try {
+                parser.parse(source);
+                Document doc = parser.getDocument();
+                Element root = doc.getDocumentElement();
+                root.setAttribute("id", guide.id);
+                root.setAttribute("creator", guide.creator);
+                root.setAttribute("description", guide.description);
+                root.setAttribute("title", guide.title);
+                root.setAttribute("link", guide.link);
+                root.setAttribute("update", this.dateFormat.format(getUpdateDate(guide.modifiedDate)));
+                this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+            } catch (IOException | SAXException | TransformerException e) {
+                throw new EresourceDatabaseException(e);
+            }
+        }
     }
 }
