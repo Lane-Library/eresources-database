@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-08-03" version="2.9.1" description="maintenance release">
+            <action date="2022-08-03" dev="ryanmax" issue="LANEWEB-11011" type="fix">
+                broken libguide link halts indexer
+            </action>
+        </release>
         <release date="2022-07-01" version="2.9.0" description="maintenance release">
             <action date="2022-06-29" dev="ryanmax" issue="LANEWEB-10982" type="fix">
                 add 931 notes as version notes; remove "Related Title Browse" notes
