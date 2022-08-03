@@ -28,6 +28,8 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -70,6 +72,8 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private static final String ERESOURCES = "eresources";
+
+    private static final Logger log = LoggerFactory.getLogger(LibGuideEresourceProcessor.class);
 
     private static final Pattern NO_INDEX_KEYWORDS = Pattern
             .compile("libguides best practices|test guide|internal guide", Pattern.CASE_INSENSITIVE);
@@ -133,7 +137,9 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (IOException | SAXException | TransformerException | ParserConfigurationException e) {
+        } catch (IOException e) {
+            log.error("broken guide link: ", e);
+        } catch (SAXException | TransformerException | ParserConfigurationException e) {
             throw new EresourceDatabaseException(e);
         }
     }
