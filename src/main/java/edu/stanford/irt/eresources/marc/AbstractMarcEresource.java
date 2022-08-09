@@ -81,9 +81,9 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected HTTPLaneLocationsService locationsService;
 
-    protected String primaryType;
-
     protected Record marcRecord;
+
+    protected String primaryType;
 
     protected SulTypeFactory typeFactory;
 
@@ -335,7 +335,11 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public int getRecordId() {
-        return Integer.parseInt(getFields(this.marcRecord, "001").map(Field::getData).findFirst().orElse("0"));
+        // this keeps links working, but should we do some other kind of ID handling?
+        // TODO: are SUL records (from FOLIO) OK this way?
+        String id = getFields(this.marcRecord, "001").map(Field::getData).findFirst().orElse("0").replaceAll("[^\\d]",
+                "");
+        return Integer.parseInt(id);
     }
 
     @Override
