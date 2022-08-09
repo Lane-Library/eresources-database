@@ -7,7 +7,7 @@ import java.net.URL;
 
 public class HTTPCatalogRecordService implements CatalogRecordService {
 
-    private static final String END_POINT = "records?time=%s";
+    private static final String END_POINT = "/folio/records/lane?time=%s";
 
     private URI catalogServiceURI;
 
