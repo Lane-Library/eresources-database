@@ -58,7 +58,7 @@ public class HTTPLaneLocationsService {
     }
 
     private Collection<Location> getLocations() {
-        try (InputStream input = IOUtils.getStream(new URL(this.catalogServiceURI.toURL(), "locations"))) {
+        try (InputStream input = IOUtils.getStream(new URL(this.catalogServiceURI.toURL(), "locations/lane"))) {
             return this.objectMapper.readValue(input, new TypeReference<ArrayList<Location>>() {
             });
         } catch (IOException e) {

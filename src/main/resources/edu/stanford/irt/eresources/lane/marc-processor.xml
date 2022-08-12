@@ -43,7 +43,7 @@
         <constructor-arg ref="objectMapper"/>
     </bean>
     <bean id="httpLaneLocationsService" class="edu.stanford.irt.eresources.marc.HTTPLaneLocationsService">
-        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg ref="folioCatalogServiceURI"/>
         <constructor-arg ref="objectMapper"/>
     </bean>
     <bean id="catalogServiceURI" class="java.net.URI">
@@ -55,7 +55,16 @@
         <constructor-arg value="null"/>
         <constructor-arg value="null"/>
     </bean>
+    <bean id="folioCatalogServiceURI" class="java.net.URI">
+        <constructor-arg value="${eresources.catalog-service.scheme}"/>
+        <constructor-arg value="${eresources.catalog-service.userInfo}"/>
+        <constructor-arg value="${eresources.catalog-service.host}"/>
+        <constructor-arg value="${eresources.catalog-service.port}"/>
+        <constructor-arg value="${eresources.catalog-service.path-folio}"/>
+        <constructor-arg value="null"/>
+        <constructor-arg value="null"/>
+    </bean>
     <bean id="httpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
-        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg ref="folioCatalogServiceURI"/>
     </bean>
 </beans>
