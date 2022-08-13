@@ -27,7 +27,7 @@ public class HTTPLaneLocationsServiceTest {
 
     @Test
     public final void testGetLocationName() throws Exception {
-        assertEquals(".Periodicals: A-Z", this.locationsService.getLocationName("PER"));
+        assertEquals(".Periodicals: A-Z", this.locationsService.getLocationName("LANE-PER"));
         assertEquals(null, this.locationsService.getLocationName("none"));
     }
 
@@ -38,7 +38,7 @@ public class HTTPLaneLocationsServiceTest {
 
     @Test
     public final void testGetLocationUrl() {
-        assertEquals(null, this.locationsService.getLocationUrl("PER"));
+        assertEquals(null, this.locationsService.getLocationUrl("LANE-PER"));
         assertEquals(null, this.locationsService.getLocationUrl("none"));
     }
 
