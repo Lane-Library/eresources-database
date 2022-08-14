@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-08-14" version="2.9.1" description="emergency release">
+            <action date="2022-08-14" dev="ryanmax" issue="LANECAT-653" type="fix">
+                Lane Search indexing failing because fewer than expected records (mass suppression event)
+            </action>
+        </release>
         <release date="2022-08-03" version="2.9.1" description="maintenance release">
             <action date="2022-08-03" dev="ryanmax" issue="LANEWEB-11011" type="fix">
                 broken libguide link halts indexer
