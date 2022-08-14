@@ -6,7 +6,7 @@
     <import resource="marc-processor.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Reloader" parent="abstractSolrLoader">
         <constructor-arg name="baseQuery" value="recordType:bib"/>
-        <constructor-arg name="expectedMinRecords" value="300000"/>
+        <constructor-arg name="expectedMinRecords" value="200000"/>
         <property name="processors">
             <list>
                 <ref bean="bibProcessor"/>
