@@ -16,7 +16,6 @@ import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
-import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.RecordCollection;
@@ -24,8 +23,6 @@ import edu.stanford.lane.catalog.RecordCollection;
 public class MARCRecordEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
-
-    private ItemService itemService;
 
     private KeywordsStrategy keywordsStrategy;
 
@@ -44,14 +41,13 @@ public class MARCRecordEresourceProcessorTest {
     @Before
     public void setUp() throws Exception {
         this.eresourceHandler = mock(EresourceHandler.class);
-        this.itemService = mock(ItemService.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
         this.recordCollectionFactory = mock(RecordCollectionFactory.class);
         this.recordCollection = mock(RecordCollection.class);
         this.typeFactory = mock(SulTypeFactory.class);
-        this.processor = new MARCRecordEresourceProcessor(this.eresourceHandler, this.itemService,
-                this.keywordsStrategy, this.recordCollectionFactory, this.typeFactory, this.locationsService);
+        this.processor = new MARCRecordEresourceProcessor(this.eresourceHandler, this.keywordsStrategy,
+                this.recordCollectionFactory, this.typeFactory, this.locationsService);
         this.marcRecord = mock(Record.class);
     }
 

@@ -17,8 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
-import edu.stanford.irt.eresources.ItemCount;
-import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -28,8 +26,6 @@ public class MarcVersionTest {
     private Eresource eresource;
 
     private Field field;
-
-    private ItemService itemService;
 
     private HTTPLaneLocationsService locationsService;
 
@@ -45,10 +41,8 @@ public class MarcVersionTest {
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
         this.eresource = mock(Eresource.class);
-        this.itemService = mock(ItemService.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
-        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService,
-                this.locationsService);
+        this.version = new MarcVersion(this.record, this.record, this.eresource, this.locationsService);
     }
 
     @Test
@@ -192,22 +186,28 @@ public class MarcVersionTest {
 
     @Test
     public void testGetItemCount() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("001");
-        expect(this.field.getData()).andReturn("123");
-        ItemCount itemCount = mock(ItemCount.class);
-        expect(this.itemService.getHoldingsItemCount()).andReturn(itemCount);
-        int[] intArray = { 2, 1 };
-        expect(itemCount.itemCount(123)).andReturn(intArray);
-        replay(this.record, this.field, this.subfield, this.itemService, itemCount);
-        assertEquals(intArray, this.version.getItemCount());
-        verify(this.record, this.field, this.subfield, this.itemService, itemCount);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("888").times(2);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
+        expect(this.subfield.getCode()).andReturn('t');
+        expect(this.subfield.getData()).andReturn("2");
+        expect(this.subfield.getCode()).andReturn('a');
+        expect(this.subfield.getData()).andReturn("1");
+        replay(this.record, this.field, this.subfield);
+        int[] count = this.version.getItemCount();
+        assertEquals(2, count[0]);
+        assertEquals(1, count[1]);
+        verify(this.record, this.field, this.subfield);
     }
 
     @Test
     public void testGetItemCountNull() {
-        this.version = new MarcVersion(this.record, this.record, this.eresource, null, null);
-        assertEquals(0, this.version.getItemCount().length);
+        this.version = new MarcVersion(this.record, this.record, this.eresource, null);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("999").times(2);
+        replay(this.record, this.field);
+        assertEquals(2, this.version.getItemCount().length);
+        verify(this.record, this.field);
     }
 
     @Test
@@ -258,19 +258,15 @@ public class MarcVersionTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
         expect(sf.getCode()).andReturn('w');
         expect(sf.getData()).andReturn("L123");
-        ItemCount itemCount = mock(ItemCount.class);
-        expect(this.itemService.getBibsItemCount()).andReturn(itemCount);
-        int[] parentBibItemCount = { 1, 0 };
-        expect(itemCount.itemCount(123)).andReturn(parentBibItemCount);
-        replay(this.record, this.field, this.locationsService, this.eresource, sf, this.itemService, itemCount);
+        replay(this.record, this.field, this.locationsService, this.eresource, sf);
         assertEquals("eresource publicationText", this.version.getLocationName());
         assertEquals("/view/bib/123", this.version.getLocationUrl());
-        verify(this.record, this.field, this.locationsService, this.eresource, sf, this.itemService, itemCount);
+        verify(this.record, this.field, this.locationsService, this.eresource, sf);
     }
 
     @Test
     public void testGetLocationNameNull() {
-        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService, null);
+        this.version = new MarcVersion(this.record, this.record, this.eresource, null);
         assertEquals(null, this.version.getLocationName());
     }
 
@@ -318,14 +314,10 @@ public class MarcVersionTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
         expect(sf.getCode()).andReturn('a');
         expect(sf.getData()).andReturn("label from 830 ^a");
-        ItemCount itemCount = mock(ItemCount.class);
-        expect(this.itemService.getBibsItemCount()).andReturn(itemCount);
-        int[] parentBibItemCount = { 1, 0 };
-        expect(itemCount.itemCount(123)).andReturn(parentBibItemCount);
-        replay(this.record, this.field, this.locationsService, this.eresource, sf, this.itemService, itemCount);
+        replay(this.record, this.field, this.locationsService, this.eresource, sf);
         assertEquals("/view/bib/123", this.version.getLocationUrl());
         assertEquals("label from 830 ^a", this.version.getLocationName());
-        verify(this.record, this.field, this.locationsService, this.eresource, sf, this.itemService, itemCount);
+        verify(this.record, this.field, this.locationsService, this.eresource, sf);
     }
 
     @Test
@@ -357,20 +349,15 @@ public class MarcVersionTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
         expect(sf.getCode()).andReturn('e');
         expect(sf.getData()).andReturn("label from 787 ^e");
-        ItemCount itemCount = mock(ItemCount.class);
-        expect(this.itemService.getBibsItemCount()).andReturn(itemCount).times(2);
-        int[] parentBibItemCount = { 0, 0 };
-        expect(itemCount.itemCount(123)).andReturn(parentBibItemCount);
-        expect(itemCount.itemCount(999)).andReturn(parentBibItemCount);
-        replay(this.record, this.field, this.locationsService, this.eresource, sf, sf2, this.itemService, itemCount);
+        replay(this.record, this.field, this.locationsService, this.eresource, sf, sf2);
         assertEquals("/view/bib/999", this.version.getLocationUrl());
         assertEquals("label from 787 ^e", this.version.getLocationName());
-        verify(this.record, this.field, this.locationsService, this.eresource, sf, sf2, this.itemService, itemCount);
+        verify(this.record, this.field, this.locationsService, this.eresource, sf, sf2);
     }
 
     @Test
     public void testGetLocationUrlNull() {
-        this.version = new MarcVersion(this.record, this.record, this.eresource, this.itemService, null);
+        this.version = new MarcVersion(this.record, this.record, this.eresource, null);
         assertEquals(null, this.version.getLocationUrl());
     }
 

@@ -20,7 +20,6 @@ import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
-import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
@@ -74,8 +73,6 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     }
 
     protected List<Record> holdings;
-
-    protected ItemService itemService;
 
     protected KeywordsStrategy keywordsStrategy;
 
@@ -189,10 +186,15 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public int[] getItemCount() {
-        if (null != this.itemService) {
-            return this.itemService.getBibsItemCount().itemCount(getRecordId());
-        }
-        return Eresource.super.getItemCount();
+        int[] itemCount = new int[2];
+        int total = this.holdings.stream().flatMap((final Record r) -> MARCRecordSupport.getSubfieldData(r, "888", "t"))
+                .collect(Collectors.toList()).stream().mapToInt(Integer::parseInt).sum();
+        int available = this.holdings.stream()
+                .flatMap((final Record r) -> MARCRecordSupport.getSubfieldData(r, "888", "a"))
+                .collect(Collectors.toList()).stream().mapToInt(Integer::parseInt).sum();
+        itemCount[0] = total;
+        itemCount[1] = available;
+        return itemCount;
     }
 
     @Override
@@ -441,7 +443,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     }
 
     protected Version createVersion(final Record holdingRecord) {
-        return new MarcVersion(holdingRecord, this.marcRecord, this, this.itemService, this.locationsService);
+        return new MarcVersion(holdingRecord, this.marcRecord, this, this.locationsService);
     }
 
     protected StringBuilder getTitleStringBuilder(final Field titleField) {

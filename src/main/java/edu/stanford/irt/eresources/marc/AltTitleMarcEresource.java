@@ -3,7 +3,6 @@ package edu.stanford.irt.eresources.marc;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -15,9 +14,8 @@ public class AltTitleMarcEresource extends BibMarcEresource {
     private int item;
 
     public AltTitleMarcEresource(final List<Record> recordList, final KeywordsStrategy keywordsStrategy,
-            final SulTypeFactory typeFactory, final ItemService itemService, final int item,
-            final HTTPLaneLocationsService locationsService) {
-        super(recordList, keywordsStrategy, itemService, typeFactory, locationsService);
+            final SulTypeFactory typeFactory, final int item, final HTTPLaneLocationsService locationsService) {
+        super(recordList, keywordsStrategy, typeFactory, locationsService);
         this.altTitleRecord = recordList.get(0);
         this.item = item;
     }

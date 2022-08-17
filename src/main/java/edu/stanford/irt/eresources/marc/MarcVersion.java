@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.Eresource;
-import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
@@ -37,20 +36,17 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private Record holding;
 
-    private ItemService itemService;
-
     private String locationName;
 
     private HTTPLaneLocationsService locationsService;
 
     private String locationUrl;
 
-    public MarcVersion(final Record holding, final Record bib, final Eresource eresource, final ItemService itemService,
+    public MarcVersion(final Record holding, final Record bib, final Eresource eresource,
             final HTTPLaneLocationsService locationsService) {
         this.holding = holding;
         this.bib = bib;
         this.eresource = eresource;
-        this.itemService = itemService;
         this.locationsService = locationsService;
     }
 
@@ -105,14 +101,14 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public int[] getItemCount() {
-        int[] counts = null;
-        if (null != this.itemService) {
-            counts = this.itemService.getHoldingsItemCount().itemCount(MARCRecordSupport.getRecordId(this.holding));
-            if (counts[0] > 0) {
-                return counts;
-            }
-        }
-        return Version.super.getItemCount();
+        int[] itemCount = new int[2];
+        int total = MARCRecordSupport.getSubfieldData(this.holding, "888", "t").findFirst().map(Integer::parseInt)
+                .orElse(0);
+        int available = MARCRecordSupport.getSubfieldData(this.holding, "888", "a").findFirst().map(Integer::parseInt)
+                .orElse(0);
+        itemCount[0] = total;
+        itemCount[1] = available;
+        return itemCount;
     }
 
     @Override
@@ -228,9 +224,10 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         for (String cn : cns) {
             Integer recordId = TextParserHelper.recordIdFromLaneControlNumber(cn);
             if (null != recordId) {
-                if (parentHasBibItems(recordId)) {
-                    return recordId.toString();
-                }
+                // getting parent item counts from FOLIO is hard
+                // if (parentHasBibItems(recordId)) {
+                //    return recordId.toString();
+                //}
                 recordIds.add(recordId);
             }
         }
@@ -241,9 +238,10 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         return null;
     }
 
-    private boolean parentHasBibItems(final Integer recordId) {
-        return recordId != null && this.itemService.getBibsItemCount().itemCount(recordId)[0] > 0;
-    }
+    // no parent item counts from FOLIO (yet?)
+    // private boolean parentHasBibItems(final Integer recordId) {
+    //    return recordId != null && this.itemService.getBibsItemCount().itemCount(recordId)[0] > 0;
+    //}
 
     private void setLocationDataForRelatedRecord() {
         String parentRecordId = orderParentLinkingRecords(

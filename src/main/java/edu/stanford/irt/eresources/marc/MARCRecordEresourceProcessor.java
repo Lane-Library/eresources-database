@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
-import edu.stanford.irt.eresources.ItemService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.RecordCollection;
@@ -20,8 +19,6 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private EresourceHandler eresourceHandler;
-
-    private ItemService itemService;
 
     private KeywordsStrategy keywordsStrategy;
 
@@ -37,11 +34,10 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
     private SulTypeFactory typeFactory;
 
-    public MARCRecordEresourceProcessor(final EresourceHandler eresourceHandler, final ItemService itemService,
+    public MARCRecordEresourceProcessor(final EresourceHandler eresourceHandler,
             final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
             final SulTypeFactory typeFactory, final HTTPLaneLocationsService locationsService) {
         this.eresourceHandler = eresourceHandler;
-        this.itemService = itemService;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
         this.typeFactory = typeFactory;
@@ -54,13 +50,13 @@ public class MARCRecordEresourceProcessor extends AbstractEresourceProcessor {
         while (hasNext()) {
             List<Record> recordList = next();
             Record marcRecord = recordList.get(0);
-            this.eresourceHandler.handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy,
-                    this.itemService, this.typeFactory, this.locationsService));
+            this.eresourceHandler.handleEresource(
+                    new BibMarcEresource(recordList, this.keywordsStrategy, this.typeFactory, this.locationsService));
             int altTitleCount = (int) marcRecord.getFields().stream()
                     .filter((final Field f) -> "249".equals(f.getTag())).count();
             for (int i = 0; i < altTitleCount; i++) {
                 this.eresourceHandler.handleEresource(new AltTitleMarcEresource(recordList, this.keywordsStrategy,
-                        this.typeFactory, this.itemService, i + 1, this.locationsService));
+                        this.typeFactory, i + 1, this.locationsService));
             }
         }
     }

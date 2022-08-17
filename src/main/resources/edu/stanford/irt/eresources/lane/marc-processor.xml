@@ -4,7 +4,6 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="bibProcessor" class="edu.stanford.irt.eresources.marc.MARCRecordEresourceProcessor">
         <constructor-arg ref="eresourceHandler"/>
-        <constructor-arg ref="httpItemService"/>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
                 <constructor-arg ref="authTextAugmentation"/>
@@ -37,10 +36,6 @@
         <constructor-arg ref="objectMapper"/>
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="augmentations/reserves"/>
-    </bean>
-    <bean id="httpItemService" class="edu.stanford.irt.eresources.HTTPItemService">
-        <constructor-arg ref="catalogServiceURI"/>
-        <constructor-arg ref="objectMapper"/>
     </bean>
     <bean id="httpLaneLocationsService" class="edu.stanford.irt.eresources.marc.HTTPLaneLocationsService">
         <constructor-arg ref="folioCatalogServiceURI"/>
