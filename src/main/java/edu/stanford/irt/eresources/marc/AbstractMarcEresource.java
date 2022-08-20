@@ -187,13 +187,16 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public int[] getItemCount() {
         int[] itemCount = new int[2];
-        int total = this.holdings.stream().flatMap((final Record r) -> MARCRecordSupport.getSubfieldData(r, "888", "t"))
-                .collect(Collectors.toList()).stream().mapToInt(Integer::parseInt).sum();
-        int available = this.holdings.stream()
-                .flatMap((final Record r) -> MARCRecordSupport.getSubfieldData(r, "888", "a"))
-                .collect(Collectors.toList()).stream().mapToInt(Integer::parseInt).sum();
-        itemCount[0] = total;
-        itemCount[1] = available;
+        if (null != this.holdings) {
+            int total = this.holdings.stream()
+                    .flatMap((final Record r) -> MARCRecordSupport.getSubfieldData(r, "888", "t"))
+                    .collect(Collectors.toList()).stream().mapToInt(Integer::parseInt).sum();
+            int available = this.holdings.stream()
+                    .flatMap((final Record r) -> MARCRecordSupport.getSubfieldData(r, "888", "a"))
+                    .collect(Collectors.toList()).stream().mapToInt(Integer::parseInt).sum();
+            itemCount[0] = total;
+            itemCount[1] = available;
+        }
         return itemCount;
     }
 
