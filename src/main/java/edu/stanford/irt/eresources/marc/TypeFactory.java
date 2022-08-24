@@ -22,26 +22,22 @@ public class TypeFactory extends MARCRecordSupport {
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { EresourceConstants.ARTICLE, "Articles" },
             { EresourceConstants.AUDIO, "Sound Recordings" }, { EresourceConstants.BOOK, "Book Sets", "Books" },
-            { EresourceConstants.CHAPTER, "Chapters" },
             { "Calculators, Formulas, Algorithms", "Decision Support Techniques", "Calculators, Clinical",
                     "Algorithms" },
             { EresourceConstants.DATABASE, "Databases" }, { "Dataset", "Datasets" },
             { "Exam Prep", "Examination Questions", "Outlines", "Problems", "Study Guides" },
             { EresourceConstants.IMAGE, "Graphics" }, { EresourceConstants.JOURNAL, "Periodicals", "Newspapers" },
-            { "Mobile", "Subset, Mobile" },
             { EresourceConstants.SOFTWARE, "Software, Biocomputational", "Software, Educational",
                     "Software, Statistical" },
-            { EresourceConstants.VIDEO, "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" },
-            { EresourceConstants.WEBSITE, "Websites" } };
+            { EresourceConstants.VIDEO, "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" }};
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
 
     protected static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
-            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, EresourceConstants.CHAPTER,
+            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK,
             "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT,
             "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Guide",
-            "Lane Web Page", "Mobile", "Print", EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO,
-            EresourceConstants.WEBSITE };
+            "Lane Web Page", "Print", EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO };
     static {
         Collections.addAll(ALLOWED_TYPES, ALLOWED_TYPES_INITIALIZER);
         for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
@@ -65,7 +61,6 @@ public class TypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("serials", EresourceConstants.SERIAL);
         PRIMARY_TYPES.put("sound recordings", EresourceConstants.AUDIO);
         PRIMARY_TYPES.put("visual materials", EresourceConstants.VISUAL_MATERIAL);
-        PRIMARY_TYPES.put("websites", EresourceConstants.WEBSITE);
     }
 
     public String getPrimaryType(final Record marcRecord) {
@@ -97,7 +92,7 @@ public class TypeFactory extends MARCRecordSupport {
     public Collection<String> getTypes(final Record marcRecord) {
         String pType = getPrimaryType(marcRecord);
         Collection<String> rawTypes = getRawTypes(marcRecord);
-        if (!EresourceConstants.OTHER.equals(pType) && !"Article/Chapter".equals(pType)) {
+        if (!EresourceConstants.OTHER.equals(pType)) {
             rawTypes.add(pType);
         }
         if (pType.startsWith(EresourceConstants.BOOK) || pType.startsWith(EresourceConstants.JOURNAL)) {
@@ -144,12 +139,8 @@ public class TypeFactory extends MARCRecordSupport {
 
     private String getPrimaryTypeFromComponent(final Collection<String> rawTypes) {
         String type = EresourceConstants.OTHER;
-        if (rawTypes.contains(EresourceConstants.ARTICLE) && rawTypes.contains(EresourceConstants.CHAPTER)) {
-            type = "Article/Chapter";
-        } else if (rawTypes.contains(EresourceConstants.ARTICLE)) {
+        if (rawTypes.contains(EresourceConstants.ARTICLE)) {
             type = EresourceConstants.ARTICLE;
-        } else if (rawTypes.contains(EresourceConstants.CHAPTER)) {
-            type = EresourceConstants.CHAPTER;
         }
         return type;
     }
