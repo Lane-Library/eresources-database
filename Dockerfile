@@ -1,30 +1,7 @@
 #   
 # run phase
 #
-#FROM gcr.io/som-laneweb/jre-parent:eclipse-temurin-11.0.16.1_1-jre
-FROM eclipse-temurin:17-jre-jammy
-
-RUN apt update && \
-    apt-get -y install \
-    net-tools \
-    tini \
-    procps \
-    curl \
-    fontconfig
-
-VOLUME /config
-VOLUME /secrets
-
-RUN apt update && \
-    apt-get -y install \
-    net-tools \
-    tini \
-    procps \
-    curl \
-    fontconfig
-
-VOLUME /config
-VOLUME /secrets
+FROM gcr.io/som-laneweb/jre-parent:eclipse-temurin-11.0.16.1_1-jre
 
 ADD ./target/eresources.jar /eresources/eresources.jar
 
