@@ -92,8 +92,8 @@ public class JobManager {
                 this.runningJob = null;
                 return JobStatus.ERROR;
             }
-            final long later = ChronoUnit.MILLIS.between(job.getStart(), LocalDateTime.now());
-            log.info("solrLoader: {}; executed in {}ms", jobName, later);
+            final long later = ChronoUnit.SECONDS.between(job.getStart(), LocalDateTime.now());
+            log.info("solrLoader: {}; executed in {}s", jobName, later);
             this.runningJob = null;
             return JobStatus.COMPLETE;
         });
