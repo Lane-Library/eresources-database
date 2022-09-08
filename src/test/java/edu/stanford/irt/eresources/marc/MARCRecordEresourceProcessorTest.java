@@ -16,13 +16,16 @@ import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.lane.catalog.FolioRecord;
+import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
-import edu.stanford.lane.catalog.RecordCollection;
 
 public class MARCRecordEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
+
+    private FolioRecord folioRecord;
 
     private KeywordsStrategy keywordsStrategy;
 
@@ -32,7 +35,7 @@ public class MARCRecordEresourceProcessorTest {
 
     private MARCRecordEresourceProcessor processor;
 
-    private RecordCollection recordCollection;
+    private FolioRecordCollection recordCollection;
 
     private RecordCollectionFactory recordCollectionFactory;
 
@@ -44,11 +47,12 @@ public class MARCRecordEresourceProcessorTest {
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
         this.recordCollectionFactory = mock(RecordCollectionFactory.class);
-        this.recordCollection = mock(RecordCollection.class);
+        this.recordCollection = mock(FolioRecordCollection.class);
         this.typeFactory = mock(SulTypeFactory.class);
         this.processor = new MARCRecordEresourceProcessor(this.eresourceHandler, this.keywordsStrategy,
                 this.recordCollectionFactory, this.typeFactory, this.locationsService);
         this.marcRecord = mock(Record.class);
+        this.folioRecord = mock(FolioRecord.class);
     }
 
     @Test
@@ -57,18 +61,21 @@ public class MARCRecordEresourceProcessorTest {
         LocalDateTime ldt = LocalDateTime.now();
         this.processor.setStartDate(ldt);
         expect(this.recordCollectionFactory
-                .newRecordCollection(ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
+                .newFolioRecordCollection(ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()))
                         .andReturn(this.recordCollection);
         expect(this.recordCollection.hasNext()).andReturn(true);
-        expect(this.recordCollection.next()).andReturn(this.marcRecord);
+        expect(this.recordCollection.next()).andReturn(this.folioRecord);
         expect(this.recordCollection.hasNext()).andReturn(false);
+        expect(this.folioRecord.getInstanceMarc()).andReturn(this.marcRecord);
+        expect(this.folioRecord.getHoldingsMarc()).andReturn(Collections.emptyList());
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(field));
         expect(field.getTag()).andReturn("249");
-        expect(this.recordCollection.hasNext()).andReturn(false);
         this.eresourceHandler.handleEresource(isA(Eresource.class));
         expectLastCall().times(2);
-        replay(this.recordCollectionFactory, this.recordCollection, this.marcRecord, field, this.eresourceHandler);
+        replay(this.recordCollectionFactory, this.recordCollection, this.folioRecord, this.marcRecord, field,
+                this.eresourceHandler);
         this.processor.process();
-        verify(this.recordCollectionFactory, this.recordCollection, this.marcRecord, field, this.eresourceHandler);
+        verify(this.recordCollectionFactory, this.recordCollection, this.folioRecord, this.marcRecord, field,
+                this.eresourceHandler);
     }
 }
