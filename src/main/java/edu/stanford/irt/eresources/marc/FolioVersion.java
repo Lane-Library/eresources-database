@@ -64,7 +64,7 @@ public class FolioVersion implements Version {
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
         if (!hasLinks()) {
-            links.add(new CatalogLink(String.valueOf(this.eresource.getRecordId()), this,
+            links.add(new CatalogLink(String.valueOf(this.eresource.getId()), this,
                     "https://folio-test.stanford.edu/inventory?qindex=hrid&query=", "FOLIO Record (changeme to SW)"));
         }
         Version version = this;
