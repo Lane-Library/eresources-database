@@ -7,7 +7,7 @@ import java.net.URL;
 
 public class HTTPCatalogRecordService implements CatalogRecordService {
 
-    private static final String END_POINT = "records/lane?time=%s";
+    private static final String END_POINT = "records/lane?format=JSON&time=%s";
 
     private URI catalogServiceURI;
 

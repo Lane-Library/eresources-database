@@ -21,7 +21,7 @@ import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 
-public class MARCRecordEresourceProcessorTest {
+public class FolioRecordEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
@@ -33,7 +33,7 @@ public class MARCRecordEresourceProcessorTest {
 
     private Record marcRecord;
 
-    private MARCRecordEresourceProcessor processor;
+    private FolioRecordEresourceProcessor processor;
 
     private FolioRecordCollection recordCollection;
 
@@ -49,7 +49,7 @@ public class MARCRecordEresourceProcessorTest {
         this.recordCollectionFactory = mock(RecordCollectionFactory.class);
         this.recordCollection = mock(FolioRecordCollection.class);
         this.typeFactory = mock(SulTypeFactory.class);
-        this.processor = new MARCRecordEresourceProcessor(this.eresourceHandler, this.keywordsStrategy,
+        this.processor = new FolioRecordEresourceProcessor(this.eresourceHandler, this.keywordsStrategy,
                 this.recordCollectionFactory, this.typeFactory, this.locationsService);
         this.marcRecord = mock(Record.class);
         this.folioRecord = mock(FolioRecord.class);
@@ -65,13 +65,16 @@ public class MARCRecordEresourceProcessorTest {
                         .andReturn(this.recordCollection);
         expect(this.recordCollection.hasNext()).andReturn(true);
         expect(this.recordCollection.next()).andReturn(this.folioRecord);
-        expect(this.recordCollection.hasNext()).andReturn(false);
-        expect(this.folioRecord.getInstanceMarc()).andReturn(this.marcRecord);
+        expect(this.folioRecord.getInstanceMarc()).andReturn(this.marcRecord).times(2);
         expect(this.folioRecord.getHoldingsMarc()).andReturn(Collections.emptyList());
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(field));
         expect(field.getTag()).andReturn("249");
+        expect(this.recordCollection.hasNext()).andReturn(true);
+        expect(this.recordCollection.next()).andReturn(this.folioRecord);
+        expect(this.folioRecord.getInstanceMarc()).andReturn(null);
+        expect(this.recordCollection.hasNext()).andReturn(false);
         this.eresourceHandler.handleEresource(isA(Eresource.class));
-        expectLastCall().times(2);
+        expectLastCall().times(3);
         replay(this.recordCollectionFactory, this.recordCollection, this.folioRecord, this.marcRecord, field,
                 this.eresourceHandler);
         this.processor.process();

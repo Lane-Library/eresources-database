@@ -10,8 +10,8 @@ public class Job {
     public enum Type {
 
         CANCEL_RUNNING_JOB("cancel-running-job", "cancels whatever job is currently running"),
-        LANE_MARC_RELOAD("lane/marc-reload","Lane MARC reload - nightly"),
-        LANE_MARC_UPDATE("lane/marc-update", "Lane MARC updates - frequently during work hours"),
+        LANE_FOLIO_RELOAD("lane/folio-reload","Lane MARC and native FOLIO formats reload - nightly"),
+        LANE_FOLIO_UPDATE("lane/folio-update", "Lane MARC and native FOLIO formats updates - frequently during work hours"),
         LANE_RELOAD("lane/reload","reload all Lane resource types: MARC, classes, laneweb HTML, blog, libguides - nightly"),
         LANE_UPDATE("lane/update","update all Lane resource types: MARC, classes, laneweb HTML, blog, libguides - frequently"),
         LANE_WEBSITES_RELOAD("lane/websites-reload","reload laneweb HTML, classes, blog, libguides - nightly"),
