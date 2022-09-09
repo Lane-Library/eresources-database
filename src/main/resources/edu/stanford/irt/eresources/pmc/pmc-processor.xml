@@ -21,6 +21,7 @@
     </bean>
 
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
+        <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/auth-augmentations.obj"/>
         <constructor-arg ref="httpAuthTextAugmentationsService"/>
     </bean>
 
