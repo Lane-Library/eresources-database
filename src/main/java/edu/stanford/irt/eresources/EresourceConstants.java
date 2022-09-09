@@ -8,8 +8,6 @@ public final class EresourceConstants {
 
     public static final String BOOK = "Book";
 
-    public static final String CHAPTER = "Chapter";
-
     public static final String COLLECTION = "Collection";
 
     public static final String COMPONENT = "Component";
@@ -39,8 +37,6 @@ public final class EresourceConstants {
     public static final String VIDEO = "Video";
 
     public static final String VISUAL_MATERIAL = "Visual Material";
-
-    public static final String WEBSITE = "Website";
 
     private EresourceConstants() {
         // empty private constructor

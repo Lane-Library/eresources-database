@@ -43,8 +43,6 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
         assertEquals("Journal Digital", this.typefactory.getPrimaryType(this.records.get("55")));
         assertEquals("Image", this.typefactory.getPrimaryType(this.records.get("168269")));
         assertEquals("Software", this.typefactory.getPrimaryType(this.records.get("219590")));
-        assertEquals("Chapter", this.typefactory.getPrimaryType(this.records.get("326951")));
-        assertEquals("Article/Chapter", this.typefactory.getPrimaryType(this.records.get("287781")));
         assertEquals("Article", this.typefactory.getPrimaryType(this.records.get("347355")));
         assertEquals("Video", this.typefactory.getPrimaryType(this.records.get("88090")));
         assertEquals("Other", this.typefactory.getPrimaryType(this.records.get("62326")));
@@ -60,7 +58,6 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
     public final void testGetTypes() {
         assertTrue(this.typefactory.getTypes(this.records.get("55")).contains("Journal"));
         assertTrue(this.typefactory.getTypes(this.records.get("168269")).contains("Image"));
-        assertTrue(this.typefactory.getTypes(this.records.get("326951")).contains("Chapter"));
         assertTrue(this.typefactory.getTypes(this.records.get("287781")).contains("Article"));
         assertTrue(this.typefactory.getTypes(this.records.get("347355")).contains("Article"));
         assertTrue(this.typefactory.getTypes(this.records.get("88090")).contains("Video"));

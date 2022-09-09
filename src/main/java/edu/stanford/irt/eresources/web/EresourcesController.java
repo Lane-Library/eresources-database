@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -74,11 +75,12 @@ public class EresourcesController {
 
     @GetMapping(value = { "*" }, produces = MediaType.TEXT_HTML_VALUE)
     @ResponseBody
-    public String usage() {
+    public String usage(@Value("${eresources.version}") final String version) {
         StringBuilder sb = new StringBuilder();
         sb.append("<h1>eresources indexing</h1>");
         sb.append("status: <a href=\"status.txt\">txt</a> ");
         sb.append("<a href=\"status.json\">json</a>");
+        sb.append(" [" + version + "]");
         sb.append("<h2>jobs</h2>");
         sb.append("<pre>* unlinked jobs run longer than an hour \n");
         sb.append("** pubmed reload takes 8+ hours and requires baseline data from NCBI</pre>");

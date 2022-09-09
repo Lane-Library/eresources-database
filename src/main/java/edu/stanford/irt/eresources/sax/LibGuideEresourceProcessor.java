@@ -28,6 +28,8 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -70,6 +72,8 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
     }
 
     private static final String ERESOURCES = "eresources";
+
+    private static final Logger log = LoggerFactory.getLogger(LibGuideEresourceProcessor.class);
 
     private static final Pattern NO_INDEX_KEYWORDS = Pattern
             .compile("libguides best practices|test guide|internal guide", Pattern.CASE_INSENSITIVE);
@@ -115,25 +119,13 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (!guides.isEmpty()) {
                 Guide guide = guides.remove(0);
-                Long updated = getUpdateDate(guide.modifiedDate);
-                if (updated > getStartTime()) {
-                    InputSource source = new InputSource(new URL(guide.link).openConnection().getInputStream());
-                    DOMParser parser = new DOMParser(this.nekoConfig);
-                    parser.parse(source);
-                    Document doc = parser.getDocument();
-                    Element root = doc.getDocumentElement();
-                    root.setAttribute("id", guide.id);
-                    root.setAttribute("creator", guide.creator);
-                    root.setAttribute("description", guide.description);
-                    root.setAttribute("title", guide.title);
-                    root.setAttribute("link", guide.link);
-                    root.setAttribute("update", this.dateFormat.format(updated));
-                    this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+                if (getUpdateDate(guide.modifiedDate) > getStartTime()) {
+                    parseGuide(guide);
                 }
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (IOException | SAXException | TransformerException | ParserConfigurationException e) {
+        } catch (SAXException | ParserConfigurationException e) {
             throw new EresourceDatabaseException(e);
         }
     }
@@ -212,5 +204,31 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
             value = StringEscapeUtils.unescapeHtml(nodeList.item(0).getTextContent());
         }
         return value;
+    }
+
+    private void parseGuide(final Guide guide) {
+        InputSource source = null;
+        try {
+            source = new InputSource(new URL(guide.link).openConnection().getInputStream());
+        } catch (IOException e) {
+            log.error("problem guide link: ", e);
+        }
+        if (null != source) {
+            DOMParser parser = new DOMParser(this.nekoConfig);
+            try {
+                parser.parse(source);
+                Document doc = parser.getDocument();
+                Element root = doc.getDocumentElement();
+                root.setAttribute("id", guide.id);
+                root.setAttribute("creator", guide.creator);
+                root.setAttribute("description", guide.description);
+                root.setAttribute("title", guide.title);
+                root.setAttribute("link", guide.link);
+                root.setAttribute("update", this.dateFormat.format(getUpdateDate(guide.modifiedDate)));
+                this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
+            } catch (IOException | SAXException | TransformerException e) {
+                throw new EresourceDatabaseException(e);
+            }
+        }
     }
 }

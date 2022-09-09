@@ -6,7 +6,7 @@
         <version>116</version>
     </parent>
     <artifactId>eresources-database</artifactId>
-    <version>2.9.1-SNAPSHOT</version>
+    <version>2.9.4-SNAPSHOT</version>
     <name>eresources-database</name>
     <scm>
         <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
@@ -76,7 +76,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>11.3</version>
+            <version>11.4</version>
         </dependency>
         <dependency>
             <groupId>net.sf.joost</groupId>

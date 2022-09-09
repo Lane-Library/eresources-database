@@ -1,8 +1,7 @@
 #   
 # run phase
 #
-FROM gcr.io/som-laneweb/jre-parent:openjdk-11.0.14-jre-slim
-
+FROM gcr.io/som-laneweb/jre-parent:eclipse-temurin-11.0.16.1_1-jre
 
 ADD ./target/eresources.jar /eresources/eresources.jar
 

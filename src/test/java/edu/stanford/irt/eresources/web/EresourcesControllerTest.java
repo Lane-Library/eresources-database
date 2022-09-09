@@ -117,6 +117,6 @@ public class EresourcesControllerTest {
 
     @Test
     public final void testUsage() {
-        assertTrue(this.controller.usage().contains("reload"));
+        assertTrue(this.controller.usage("version").contains("reload"));
     }
 }
