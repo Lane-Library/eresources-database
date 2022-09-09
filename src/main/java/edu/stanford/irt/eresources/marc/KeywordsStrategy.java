@@ -62,7 +62,7 @@ public class KeywordsStrategy {
             if (isKeywordSubfield(tag, code)) {
                 getKeywordsFromSubfield(subfield.getData(), sb);
             }
-            if (isAugmentable(tag, code)) {
+            if (isAugmentable(tag, code) && null != this.authTextAugmentation) {
                 String authText = this.authTextAugmentation.getAuthAugmentations(subfield.getData());
                 if (authText != null) {
                     sb.append(' ').append(authText);

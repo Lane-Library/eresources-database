@@ -6,7 +6,10 @@
         <constructor-arg ref="eresourceHandler"/>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
-                <constructor-arg ref="authTextAugmentation"/>
+                <!-- no auth or reserves augmentations for SUL records -->
+                <constructor-arg>
+                    <null />
+                </constructor-arg>
                 <constructor-arg>
                     <null />
                 </constructor-arg>
@@ -103,14 +106,6 @@
         </constructor-arg>
         <constructor-arg ref="laneDedupAugmentation"/>
     </bean>
-    <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
-        <constructor-arg ref="httpAuthTextAugmentationsService"/>
-    </bean>
-    <bean id="httpAuthTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
-        <constructor-arg ref="objectMapper"/>
-        <constructor-arg ref="catalogServiceURI"/>
-        <constructor-arg value="augmentations/auth"/>
-    </bean>
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
         <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/dedup-augmentations.obj"/>
         <constructor-arg ref="httpLaneDedupAugmentationService"/>
@@ -126,5 +121,14 @@
         <constructor-arg ref="objectMapper"/>
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="augmentations/dedup"/>
+    </bean>
+    <bean id="catalogServiceURI" class="java.net.URI">
+        <constructor-arg value="${eresources.catalog-service.scheme}"/>
+        <constructor-arg value="${eresources.catalog-service.userInfo}"/>
+        <constructor-arg value="${eresources.catalog-service.host}"/>
+        <constructor-arg value="${eresources.catalog-service.port}"/>
+        <constructor-arg value="${eresources.catalog-service.path}"/>
+        <constructor-arg value="null"/>
+        <constructor-arg value="null"/>
     </bean>
 </beans>

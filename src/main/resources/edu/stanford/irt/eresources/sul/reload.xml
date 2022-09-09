@@ -4,12 +4,6 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="../common.xml"/>
     <import resource="sul-marc-processor.xml"/>
-    <!-- included for authAugmentation, etc. -->
-    <import resource="../lane/marc-processor.xml"/>
-    <!-- override lane/marc-processor.xml bibProcessor and itemCount with bogus bean definitions to avoid fetching unnecessary resources -->
-    <bean id="bibProcessor" class="java.lang.Object"/>
-    <bean id="itemCount" class="java.lang.Object"/>
-    <bean id="httpLaneLocationsService" class="java.lang.Object"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Reloader" parent="abstractSolrLoader">
         <constructor-arg name="baseQuery" value="recordType:sul"/>
         <constructor-arg name="expectedMinRecords" value="1000000"/>
