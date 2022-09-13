@@ -107,16 +107,25 @@
                     "temporaryLocation": {}
                 },
                 "formerIds": [],
-                "callNumber": {},
+                "callNumber": {
+                    "typeId": "95467209-6d7b-468b-94df-0f5d7ad2747d",
+                    "typeName": "Library of Congress classification",
+                    "callNumber": "test CN"
+                },
                 "electronicAccess": [
                     {
                         "uri": "https://test.com",
-                        "name": "reserves records won't' have electronicAccess at the holdings level, but added to verify merging",
+                        "name": "Resource",
+                        "linkText": "linkText",
                         "relationshipId": "f5d0068e-6272-458e-8a81-b85e7b9a14aa"
                     }
                 ],
                 "statisticalCodes": [],
-                "holdingsStatements": [],
+                "holdingsStatements": [
+                    {
+                        "statement": "1900-"
+                    }
+                ],
                 "suppressFromDiscovery": true,
                 "holdingsStatementsForIndexes": [],
                 "holdingsStatementsForSupplements": []
