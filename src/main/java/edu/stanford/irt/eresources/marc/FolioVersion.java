@@ -115,8 +115,13 @@ public class FolioVersion implements Version {
     }
 
     private String getLocationCode() {
-        return (String) ((Map<?, ?>) ((Map<?, ?>) this.folioHolding.get("location")).get("effectiveLocation"))
-                .get("code");
+        Map<?, ?> effectiveLocation = ((Map<?, ?>) ((Map<?, ?>) this.folioHolding.get("location"))
+                .get("effectiveLocation"));
+        String locCode = (String) effectiveLocation.get("item-loc");
+        if (null != locCode) {
+            return locCode;
+        }
+        return (String) effectiveLocation.get("code");
     }
 
     private boolean hasLinks() {

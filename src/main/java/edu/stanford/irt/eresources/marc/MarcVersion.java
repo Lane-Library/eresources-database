@@ -189,10 +189,10 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     }
 
     private String getLocationCode() {
-        int holdingsId = MARCRecordSupport.getRecordId(this.holding);
-        if (null != this.locationsService
-                && this.locationsService.getTemporaryHoldingLocations().containsKey(holdingsId)) {
-            return this.locationsService.getTemporaryHoldingLocations().get(holdingsId);
+        // 852 ^9 is set when all items have a different location than holding record (catalog library does this)
+        String itemLoc = getSubfieldData(this.holding, "852", "9").findFirst().orElse(null);
+        if (null != itemLoc) {
+            return itemLoc;
         }
         return getSubfieldData(this.holding, "852", "b").findFirst().orElse("");
     }

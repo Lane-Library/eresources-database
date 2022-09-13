@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.marc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 
@@ -40,11 +39,5 @@ public class HTTPLaneLocationsServiceTest {
     public final void testGetLocationUrl() {
         assertEquals(null, this.locationsService.getLocationUrl("LANE-PER"));
         assertEquals(null, this.locationsService.getLocationUrl("none"));
-    }
-
-    @Test
-    public final void testGetTemporaryHoldingLocations() {
-        assertTrue(this.locationsService.getTemporaryHoldingLocations().containsKey(227331));
-        assertEquals("CRES", this.locationsService.getTemporaryHoldingLocations().get(227331));
     }
 }

@@ -222,13 +222,11 @@ public class MarcVersionTest {
     @Test
     public void testGetLocationName() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
-        expect(this.field.getTag()).andReturn("001");
-        expect(this.field.getData()).andReturn("001");
+        expect(this.field.getTag()).andReturn("not-852");
         expect(this.field.getTag()).andReturn("852");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('b');
         expect(this.subfield.getData()).andReturn("code");
-        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.emptyMap());
         expect(this.locationsService.getLocationName("code")).andReturn("name");
         int[] intArray = { 1, 1 };
         expect(this.eresource.getItemCount()).andReturn(intArray);
@@ -239,11 +237,12 @@ public class MarcVersionTest {
 
     @Test
     public void testGetLocationNameForComponent() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("001");
-        expect(this.field.getData()).andReturn("001");
-        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code"))
-                .times(2);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("not-852");
+        expect(this.field.getTag()).andReturn("852");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('b');
+        expect(this.subfield.getData()).andReturn("code");
         int[] childBibItemCount = { 0, 0 };
         expect(this.eresource.getItemCount()).andReturn(childBibItemCount);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
@@ -258,10 +257,10 @@ public class MarcVersionTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
         expect(sf.getCode()).andReturn('w');
         expect(sf.getData()).andReturn("L123");
-        replay(this.record, this.field, this.locationsService, this.eresource, sf);
+        replay(this.record, this.field, this.eresource, sf);
         assertEquals("eresource publicationText", this.version.getLocationName());
         assertEquals("/view/bib/123", this.version.getLocationUrl());
-        verify(this.record, this.field, this.locationsService, this.eresource, sf);
+        verify(this.record, this.field, this.eresource, sf);
     }
 
     @Test
@@ -273,10 +272,10 @@ public class MarcVersionTest {
     @Test
     public void testGetLocationUrl() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("001");
-        expect(this.field.getData()).andReturn("001");
-        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code"))
-                .times(2);
+        expect(this.field.getTag()).andReturn("852");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('9');
+        expect(this.subfield.getData()).andReturn("code");
         expect(this.locationsService.getLocationUrl("code")).andReturn("url");
         int[] intArray = { 0, 0 };
         expect(this.eresource.getItemCount()).andReturn(intArray);
@@ -286,18 +285,19 @@ public class MarcVersionTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
         expect(sf.getCode()).andReturn('u');
         expect(sf.getData()).andReturn("foo");
-        replay(this.record, this.field, this.locationsService, this.eresource, sf);
+        replay(this.record, this.field, this.locationsService, this.eresource, this.subfield,sf);
         assertEquals("url", this.version.getLocationUrl());
-        verify(this.record, this.field, this.locationsService, this.eresource, sf);
+        verify(this.record, this.field, this.locationsService, this.eresource, this.subfield,sf);
     }
 
     @Test
     public void testGetLocationUrlForComponent() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("001");
-        expect(this.field.getData()).andReturn("001");
-        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code"))
-                .times(2);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("not-852");
+        expect(this.field.getTag()).andReturn("852");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('b');
+        expect(this.subfield.getData()).andReturn("code");
         int[] intArray = { 0, 0 };
         expect(this.eresource.getItemCount()).andReturn(intArray);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
@@ -314,19 +314,20 @@ public class MarcVersionTest {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
         expect(sf.getCode()).andReturn('a');
         expect(sf.getData()).andReturn("label from 830 ^a");
-        replay(this.record, this.field, this.locationsService, this.eresource, sf);
+        replay(this.record, this.field, this.eresource, sf);
         assertEquals("/view/bib/123", this.version.getLocationUrl());
         assertEquals("label from 830 ^a", this.version.getLocationName());
-        verify(this.record, this.field, this.locationsService, this.eresource, sf);
+        verify(this.record, this.field, this.eresource, sf);
     }
 
     @Test
     public void testGetLocationUrlForRelated() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("001");
-        expect(this.field.getData()).andReturn("001");
-        expect(this.locationsService.getTemporaryHoldingLocations()).andReturn(Collections.singletonMap(1, "code"))
-                .times(2);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("not-852");
+        expect(this.field.getTag()).andReturn("852");
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('b');
+        expect(this.subfield.getData()).andReturn("code");
         int[] intArray = { 0, 0 };
         expect(this.eresource.getItemCount()).andReturn(intArray);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
