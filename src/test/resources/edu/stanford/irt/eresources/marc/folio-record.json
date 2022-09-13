@@ -1,0 +1,162 @@
+{
+    "instanceId": "f17fe6f5-8866-461c-b699-02ac13e78737",
+    "instance": {
+        "id": "f17fe6f5-8866-461c-b699-02ac13e78737",
+        "_version": 1,
+        "hrid": "in00000000125",
+        "source": "FOLIO",
+        "title": "Test title",
+        "indexTitle": "Test title",
+        "alternativeTitles": [
+            {
+                "alternativeTitleTypeId": "02bb9e26-2ece-404b-9381-2fbbdebf79d3",
+                "alternativeTitle": "alt title"
+            }
+        ],
+        "editions": [],
+        "series": [],
+        "identifiers": [],
+        "contributors": [
+            {
+                "contributorNameTypeId": "2e48e713-17f3-4c13-a9f8-23845bb210aa",
+                "name": "Org 1",
+                "contributorTypeId": null,
+                "contributorTypeText": null,
+                "primary": false
+            },
+            {
+                "contributorNameTypeId": "2e48e713-17f3-4c13-a9f8-23845bb210aa",
+                "name": "Org 2",
+                "contributorTypeId": null,
+                "contributorTypeText": "Aggregator:",
+                "primary": false
+            }
+        ],
+        "subjects": [
+            "Test Subject"
+        ],
+        "classifications": [],
+        "publication": [
+            {
+                "publisher": "Test",
+                "place": null,
+                "dateOfPublication": "1900-",
+                "role": null
+            }
+        ],
+        "publicationFrequency": [],
+        "publicationRange": [],
+        "electronicAccess": [],
+        "instanceTypeId": "6312d172-f0cf-40f6-b27d-9fa8feaf332f",
+        "instanceFormatIds": [],
+        "instanceFormats": [],
+        "physicalDescriptions": [],
+        "languages": [],
+        "notes": [
+            {
+                "instanceNoteTypeId": "49475f04-35ef-4f8a-aa7f-92773594ca76",
+                "note": "test note",
+                "staffOnly": false
+            }
+        ],
+        "administrativeNotes": [],
+        "previouslyHeld": false,
+        "staffSuppress": false,
+        "discoverySuppress": true,
+        "statisticalCodeIds": [],
+        "statusId": "daf2681c-25af-4202-a3fa-e58fdf806183",
+        "statusUpdatedDate": "2022-08-16T15:45:15.490+0000",
+        "tags": {
+            "tagList": []
+        },
+        "metadata": {
+            "createdDate": "2022-08-16T15:45:15.489+00:00",
+            "createdByUserId": "964afef7-c806-4b94-a61b-840fe37a1e43",
+            "updatedDate": "2022-08-16T15:45:15.489+00:00",
+            "updatedByUserId": "964afef7-c806-4b94-a61b-840fe37a1e43"
+        },
+        "holdingsRecords2": [],
+        "natureOfContentTermIds": []
+    },
+    "instanceSource": null,
+    "holdingSources": [],
+    "itemsAndHoldings": {
+        "instanceId": "f17fe6f5-8866-461c-b699-02ac13e78737",
+        "source": "FOLIO",
+        "modeOfIssuance": "",
+        "natureOfContent": [],
+        "holdings": [
+            {
+                "id": "019117cf-6140-4c68-a564-caa902879312",
+                "notes": [],
+                "location": {
+                    "effectiveLocation": {
+                        "code": "LANE-ECOLL",
+                        "name": "Lane .Digital: Collection",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {
+                        "code": "LANE-ECOLL",
+                        "name": "Lane .Digital: Collection",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "temporaryLocation": {}
+                },
+                "formerIds": [],
+                "callNumber": {},
+                "electronicAccess": [
+                    {
+                        "uri": "https://test.com",
+                        "name": "reserves records won't' have electronicAccess at the holdings level, but added to verify merging",
+                        "relationshipId": "f5d0068e-6272-458e-8a81-b85e7b9a14aa"
+                    }
+                ],
+                "statisticalCodes": [],
+                "holdingsStatements": [],
+                "suppressFromDiscovery": true,
+                "holdingsStatementsForIndexes": [],
+                "holdingsStatementsForSupplements": []
+            }
+        ],
+        "items": [
+            {
+                "id": "41b43505-c500-496e-918c-77a2171eaaba",
+                "tags": {
+                    "tagList": []
+                },
+                "notes": [],
+                "status": "Available",
+                "location": {
+                    "location": {
+                        "code": "LANE-ECOLL",
+                        "name": "Lane .Digital: Collection",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {},
+                    "temporaryLocation": {}
+                },
+                "formerIds": [],
+                "callNumber": {},
+                "yearCaption": [],
+                "materialType": "electronic resource",
+                "electronicAccess": [
+                    {
+                        "uri": "lane.stanford.edu",
+                        "name": "Resource",
+                        "relationshipId": "f5d0068e-6272-458e-8a81-b85e7b9a14aa"
+                    }
+                ],
+                "holdingsRecordId": "019117cf-6140-4c68-a564-caa902879312",
+                "statisticalCodes": [],
+                "permanentLoanType": "Course reserves",
+                "suppressFromDiscovery": true
+            }
+        ]
+    }
+}
