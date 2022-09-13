@@ -58,13 +58,22 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public String getDescription() {
-        List<String> notes = this.folioRecord.jsonContext().read("$.instance.notes.[?(@.staffOnly=='false')].*note");
+        List<String> notes = this.folioRecord.jsonContext().read("$.instance.notes.[?(@.staffOnly==false)].note");
         return notes.stream().collect(Collectors.joining(" "));
     }
 
     @Override
     public String getId() {
         return this.folioRecord.jsonContext().read("$.instance.hrid");
+    }
+
+    @Override
+    public int[] getItemCount() {
+        int[] itemCount = new int[2];
+        itemCount[0] = this.folioRecord.getItems().size();
+        itemCount[1] = (int) this.folioRecord.getItems().stream()
+                .filter((final Map<String, Object> m) -> "Available".equals(m.get("status"))).count();
+        return itemCount;
     }
 
     @Override
@@ -92,7 +101,12 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public String getPublicationAuthorsText() {
-        return this.getPublicationAuthors().stream().collect(Collectors.joining("; "));
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getPublicationAuthors().stream().collect(Collectors.joining("; ")));
+        if (sb.length() > 0 && !sb.toString().endsWith(".")) {
+            sb.append('.');
+        }
+        return sb.toString();
     }
 
     @Override
