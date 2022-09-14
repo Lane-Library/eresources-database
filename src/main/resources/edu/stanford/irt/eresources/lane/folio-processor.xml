@@ -34,8 +34,8 @@
     </bean>
     <bean id="httpReservesTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
-        <constructor-arg ref="catalogServiceURI"/>
-        <constructor-arg value="augmentations/reserves"/>
+        <constructor-arg ref="folioCatalogServiceURI"/>
+        <constructor-arg value="../coursereserves/eresources/augmentations"/>
     </bean>
     <bean id="httpLaneLocationsService" class="edu.stanford.irt.eresources.marc.HTTPLaneLocationsService">
         <constructor-arg ref="folioCatalogServiceURI"/>
