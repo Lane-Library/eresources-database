@@ -1,8 +1,10 @@
 package edu.stanford.irt.eresources.pmc;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.LinkedList;
@@ -69,6 +71,8 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             HEADER_PUBLISHER, HEADER_LOCATOR_ID, HEADER_LATEST_ISSUE, HEADER_EARLIEST_VOLUME, HEADER_FREE_ACCESS,
             HEADER_OPEN_ACCESS, HEADER_PARTICIPATION_LEVEL, HEADER_DEPOSIT_STATUS, HEADER_JOURNAL_URL };
 
+    private static final int SLEEP_TIME = 1_000;
+
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
             .appendPattern("yyyy-MM-dd'T'HH:mm:ssz").toFormatter();
 
@@ -113,7 +117,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 sb.append(journal.getNlmId());
                 sb.append("&api_key=");
                 sb.append(this.apiKey);
-                InputSource source = new InputSource(new URL(sb.toString()).openConnection().getInputStream());
+                InputSource source = new InputSource(throttledFetch(sb.toString()));
                 this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
                 DocumentBuilder parser = this.factory.newDocumentBuilder();
                 parser.setErrorHandler(this.errorHandler);
@@ -178,5 +182,22 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
     private boolean isIndexable(final PmcJournal journal) {
         // limit to "full" participation as per Thea and Sonam
         return journal.getParticipation().equalsIgnoreCase("Full");
+    }
+
+    private InputStream throttledFetch(final String url) {
+        try {
+            URL urlObject = new URL(url);
+            URLConnection con = urlObject.openConnection();
+            String rateLimit = con.getHeaderField("X-RateLimit-Remaining");
+            if (rateLimit != null && !rateLimit.isEmpty() && Integer.parseInt(rateLimit) <= 2) {
+                Thread.sleep(SLEEP_TIME);
+            }
+            return con.getInputStream();
+        } catch (IOException e) {
+            throw new EresourceDatabaseException(e);
+        } catch (InterruptedException e1) {
+            Thread.currentThread().interrupt();
+            throw new EresourceDatabaseException(e1);
+        }
     }
 }
