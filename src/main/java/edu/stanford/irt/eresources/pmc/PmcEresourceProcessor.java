@@ -21,6 +21,8 @@ import javax.xml.transform.sax.SAXResult;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.ContentHandler;
@@ -36,8 +38,6 @@ import edu.stanford.irt.eresources.IOUtils;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 
 public class PmcEresourceProcessor extends AbstractEresourceProcessor {
-
-    private static final String EFETCH_BASE = "https://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nlmcatalog&retmode=xml&id=";
 
     private static final String ERESOURCES = "eresources";
 
@@ -71,6 +71,10 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             HEADER_PUBLISHER, HEADER_LOCATOR_ID, HEADER_LATEST_ISSUE, HEADER_EARLIEST_VOLUME, HEADER_FREE_ACCESS,
             HEADER_OPEN_ACCESS, HEADER_PARTICIPATION_LEVEL, HEADER_DEPOSIT_STATUS, HEADER_JOURNAL_URL };
 
+    private static final Logger log = LoggerFactory.getLogger(PmcEresourceProcessor.class);
+
+    private static final int MAX_RETRIES = 3;
+
     private static final int SLEEP_TIME = 1_000;
 
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
@@ -82,6 +86,8 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private ContentHandler contentHandler;
 
+    private String efetchBaseUrl;
+
     private ErrorHandler errorHandler = new DefaultHandler();
 
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -90,12 +96,14 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    public PmcEresourceProcessor(final String allJournalsCsvUrl, final ContentHandler contentHandler,
-            final LaneDedupAugmentation laneDedupAugmentation, final String apiKey) {
+    public PmcEresourceProcessor(final String efetchBaseUrl, final String allJournalsCsvUrl,
+            final ContentHandler contentHandler, final LaneDedupAugmentation laneDedupAugmentation,
+            final String apiKey) {
         this.allJournalsCsvUrl = allJournalsCsvUrl;
         this.contentHandler = contentHandler;
         this.laneDedupAugmentation = laneDedupAugmentation;
         this.apiKey = apiKey;
+        this.efetchBaseUrl = efetchBaseUrl;
     }
 
     @Override
@@ -113,11 +121,12 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (!journals.isEmpty()) {
                 PmcJournal journal = journals.remove(0);
-                StringBuilder sb = new StringBuilder(EFETCH_BASE);
+                StringBuilder sb = new StringBuilder(this.efetchBaseUrl);
+                sb.append("?db=nlmcatalog&retmode=xml&id=");
                 sb.append(journal.getNlmId());
                 sb.append("&api_key=");
                 sb.append(this.apiKey);
-                InputSource source = new InputSource(throttledFetch(sb.toString()));
+                InputSource source = new InputSource(doFetch(sb.toString(), MAX_RETRIES));
                 this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
                 DocumentBuilder parser = this.factory.newDocumentBuilder();
                 parser.setErrorHandler(this.errorHandler);
@@ -140,6 +149,33 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             this.contentHandler.endDocument();
         } catch (IOException | SAXException | TransformerException | ParserConfigurationException e) {
             throw new EresourceDatabaseException(e);
+        }
+    }
+
+    private InputStream doFetch(final String url, final int attempt) {
+        int remaining = attempt - 1;
+        String rateLimit = null;
+        try {
+            URL urlObject = new URL(url);
+            URLConnection con = urlObject.openConnection();
+            rateLimit = con.getHeaderField("X-RateLimit-Remaining");
+            if (rateLimit != null && !rateLimit.isEmpty() && Integer.parseInt(rateLimit) <= 1) {
+                log.info("NCBI connection rate limit reached so sleeping");
+                Thread.sleep(SLEEP_TIME);
+            }
+            return con.getInputStream();
+        } catch (IOException e) {
+            // ncbi sometimes returns 400s even when well-below the rate limit, so try again
+            if (remaining > 0) {
+                log.info("NBCI returned an error", e);
+                log.info("RateLimit-Remaining: {}", rateLimit);
+                log.info("will try {} more times", remaining);
+                return doFetch(url, attempt - 1);
+            }
+            throw new EresourceDatabaseException(e);
+        } catch (InterruptedException e1) {
+            Thread.currentThread().interrupt();
+            throw new EresourceDatabaseException(e1);
         }
     }
 
@@ -182,22 +218,5 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
     private boolean isIndexable(final PmcJournal journal) {
         // limit to "full" participation as per Thea and Sonam
         return journal.getParticipation().equalsIgnoreCase("Full");
-    }
-
-    private InputStream throttledFetch(final String url) {
-        try {
-            URL urlObject = new URL(url);
-            URLConnection con = urlObject.openConnection();
-            String rateLimit = con.getHeaderField("X-RateLimit-Remaining");
-            if (rateLimit != null && !rateLimit.isEmpty() && Integer.parseInt(rateLimit) <= 2) {
-                Thread.sleep(SLEEP_TIME);
-            }
-            return con.getInputStream();
-        } catch (IOException e) {
-            throw new EresourceDatabaseException(e);
-        } catch (InterruptedException e1) {
-            Thread.currentThread().interrupt();
-            throw new EresourceDatabaseException(e1);
-        }
     }
 }
