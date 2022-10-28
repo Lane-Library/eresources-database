@@ -77,6 +77,13 @@
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
             <version>11.4</version>
+            <exclusions>
+                <exclusion>
+                    <!-- https://stackoverflow.com/questions/51094274/eclipse-cant-find-xml-related-classes-after-switching-build-path-to-jdk-10 -->
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.sf.joost</groupId>
