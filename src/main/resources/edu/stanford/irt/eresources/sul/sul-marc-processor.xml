@@ -20,6 +20,15 @@
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory"/>
         </constructor-arg>
+        <constructor-arg ref="laneDedupAugmentation"/>
+        <constructor-arg name="inclusionStrategies">
+            <list>
+                <ref bean="acceptableLCCallNumberStrategy"/>
+                <ref bean="acceptableDBCallNumberStrategy"/>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="acceptableLCCallNumberStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableLCCallNumberStrategy">
         <constructor-arg name="acceptableLCCallNumberPrefixes">
             <list>
                 <value>A</value>
@@ -34,6 +43,8 @@
                 <value>Z</value>
             </list>
         </constructor-arg>
+    </bean>
+    <bean id="acceptableDBCallNumberStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableDBCallNumberStrategy">
         <!-- DB call number maps from https://github.com/sul-dlss/solrmarc-sw/blob/master/stanford-sw/translation_maps/db_subjects_map.properties -->
         <constructor-arg name="acceptableDBCallNumbers">
             <list>
@@ -101,7 +112,6 @@
                 <value>ZA</value>
             </list>
         </constructor-arg>
-        <constructor-arg ref="laneDedupAugmentation"/>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
         <constructor-arg ref="httpAuthTextAugmentationsService"/>
