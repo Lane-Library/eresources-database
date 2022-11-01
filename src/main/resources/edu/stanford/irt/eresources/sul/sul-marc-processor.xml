@@ -25,6 +25,7 @@
             <list>
                 <ref bean="acceptableLCCallNumberStrategy"/>
                 <ref bean="acceptableDBCallNumberStrategy"/>
+                <ref bean="acceptableKeywordStrategy"/>
             </list>
         </constructor-arg>
     </bean>
@@ -111,6 +112,23 @@
                 <value>Z</value>
                 <value>ZA</value>
             </list>
+        </constructor-arg>
+    </bean>
+    <bean id="acceptableKeywordStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableKeywordStrategy">
+        <constructor-arg name="acceptablePrimaryTypes">
+            <list>
+                <value>Book Digital</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg name="acceptableKeywords">
+            <list>
+                <value>medicine</value>
+                <value>medical</value>
+                <value>clinical</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory"/>
         </constructor-arg>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">
