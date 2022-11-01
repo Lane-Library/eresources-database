@@ -29,12 +29,9 @@ public class AcceptableKeywordStrategy implements InclusionStrategy {
     // - record has appropriate type
     @Override
     public boolean isAcceptable(final Record marcRecord) {
-        if (isAcceptablePrimaryType(marcRecord) && !isFiction(marcRecord)
+        return isAcceptablePrimaryType(marcRecord) && !isFiction(marcRecord)
                 && !MARCRecordSupport.hasNLMCallNumber(marcRecord)
-                && MARCRecordSupport.extractLCCallNumbers(marcRecord).isEmpty() && hasAcceptableKeywords(marcRecord)) {
-            return true;
-        }
-        return false;
+                && MARCRecordSupport.extractLCCallNumbers(marcRecord).isEmpty() && hasAcceptableKeywords(marcRecord);
     }
 
     private boolean hasAcceptableKeywords(final Record marcRecord) {
