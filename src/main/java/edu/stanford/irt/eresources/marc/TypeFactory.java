@@ -18,6 +18,12 @@ public class TypeFactory extends MARCRecordSupport {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
+    private static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
+            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, "Calculators, Formulas, Algorithms",
+            EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT, "Exam Prep", "Grand Rounds",
+            EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Guide", "Lane Web Page", "Print",
+            EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO };
+
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { EresourceConstants.ARTICLE, "Articles" },
@@ -29,17 +35,11 @@ public class TypeFactory extends MARCRecordSupport {
             { EresourceConstants.IMAGE, "Graphics" }, { EresourceConstants.JOURNAL, "Periodicals", "Newspapers" },
             { EresourceConstants.SOFTWARE, "Software, Biocomputational", "Software, Educational",
                     "Software, Statistical" },
-            { EresourceConstants.VIDEO, "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" }};
+            { EresourceConstants.VIDEO, "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
-
-    protected static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
-            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK,
-            "Calculators, Formulas, Algorithms", EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT,
-            "Exam Prep", "Grand Rounds", EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Guide",
-            "Lane Web Page", "Print", EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO };
     static {
-        Collections.addAll(ALLOWED_TYPES, ALLOWED_TYPES_INITIALIZER);
+        Collections.addAll(ALLOWED_TYPES, getAllowedTypesInitializer());
         for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
             for (int j = 1; j < element.length; j++) {
                 COMPOSITE_TYPES.put(element[j], element[0]);
@@ -61,6 +61,10 @@ public class TypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("serials", EresourceConstants.SERIAL);
         PRIMARY_TYPES.put("sound recordings", EresourceConstants.AUDIO);
         PRIMARY_TYPES.put("visual materials", EresourceConstants.VISUAL_MATERIAL);
+    }
+
+    public static String[] getAllowedTypesInitializer() {
+        return ALLOWED_TYPES_INITIALIZER;
     }
 
     public String getPrimaryType(final Record marcRecord) {
@@ -108,6 +112,32 @@ public class TypeFactory extends MARCRecordSupport {
         return type;
     }
 
+    private String getPrimaryTypeFromComponent(final Collection<String> rawTypes) {
+        String type = EresourceConstants.OTHER;
+        if (rawTypes.contains(EresourceConstants.ARTICLE)) {
+            type = EresourceConstants.ARTICLE;
+        }
+        return type;
+    }
+
+    private String getPrimaryTypeFromSerial(final Collection<String> rawTypes, final Record marcRecord) {
+        String type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
+        if (rawTypes.contains(EresourceConstants.BOOK)) {
+            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
+        } else if (rawTypes.contains(EresourceConstants.DATABASE)) {
+            type = EresourceConstants.DATABASE;
+        }
+        return type;
+    }
+
+    private String getPrimaryTypeFromVisualMaterial(final Collection<String> rawTypes) {
+        String type = EresourceConstants.IMAGE;
+        if (rawTypes.contains(EresourceConstants.VIDEO)) {
+            type = EresourceConstants.VIDEO;
+        }
+        return type;
+    }
+
     private String getPrintOrDigital(final Record marcRecord) {
         boolean isDigital = getSubfieldData(marcRecord, "245", "h").anyMatch((final String s) -> s.contains("digital"));
         if (isDigital) {
@@ -135,31 +165,5 @@ public class TypeFactory extends MARCRecordSupport {
         }
         return rawTypes.stream().map(this::getCompositeType).filter(ALLOWED_TYPES::contains)
                 .collect(Collectors.toSet());
-    }
-
-    private String getPrimaryTypeFromComponent(final Collection<String> rawTypes) {
-        String type = EresourceConstants.OTHER;
-        if (rawTypes.contains(EresourceConstants.ARTICLE)) {
-            type = EresourceConstants.ARTICLE;
-        }
-        return type;
-    }
-
-    private String getPrimaryTypeFromSerial(final Collection<String> rawTypes, final Record marcRecord) {
-        String type = EresourceConstants.JOURNAL + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
-        if (rawTypes.contains(EresourceConstants.BOOK)) {
-            type = EresourceConstants.BOOK + EresourceConstants.SPACE + getPrintOrDigital(marcRecord);
-        } else if (rawTypes.contains(EresourceConstants.DATABASE)) {
-            type = EresourceConstants.DATABASE;
-        }
-        return type;
-    }
-
-    private String getPrimaryTypeFromVisualMaterial(final Collection<String> rawTypes) {
-        String type = EresourceConstants.IMAGE;
-        if (rawTypes.contains(EresourceConstants.VIDEO)) {
-            type = EresourceConstants.VIDEO;
-        }
-        return type;
     }
 }

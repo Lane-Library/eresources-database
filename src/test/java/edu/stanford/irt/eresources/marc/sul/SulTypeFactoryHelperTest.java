@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc;
+package edu.stanford.irt.eresources.marc.sul;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -9,6 +9,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.irt.eresources.SulFileCatalogRecordService;
+import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
-import edu.stanford.irt.eresources.marc.SulTypeFactory;
 import edu.stanford.lane.catalog.Record;
 
 public class AcceptableKeywordStrategy implements InclusionStrategy {

@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc;
+package edu.stanford.irt.eresources.marc.sul;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -19,6 +19,9 @@ import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
+import edu.stanford.irt.eresources.marc.AbstractMarcEresource;
+import edu.stanford.irt.eresources.marc.KeywordsStrategy;
+import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;

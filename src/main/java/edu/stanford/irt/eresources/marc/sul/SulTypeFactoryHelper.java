@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc;
+package edu.stanford.irt.eresources.marc.sul;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 
+import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;

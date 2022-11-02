@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean id="sulMARCProcessor" class="edu.stanford.irt.eresources.marc.SulMARCRecordEresourceProcessor">
+    <bean id="sulMARCProcessor" class="edu.stanford.irt.eresources.marc.sul.SulMARCRecordEresourceProcessor">
         <constructor-arg ref="eresourceHandler"/>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
@@ -18,7 +18,7 @@
             </bean>
         </constructor-arg>
         <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory"/>
+            <bean class="edu.stanford.irt.eresources.marc.sul.SulTypeFactory"/>
         </constructor-arg>
         <constructor-arg ref="laneDedupAugmentation"/>
         <constructor-arg name="inclusionStrategies">
@@ -128,7 +128,7 @@
             </list>
         </constructor-arg>
         <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory"/>
+            <bean class="edu.stanford.irt.eresources.marc.sul.SulTypeFactory"/>
         </constructor-arg>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">

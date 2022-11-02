@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc;
+package edu.stanford.irt.eresources.marc.sul;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,7 +9,10 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.TextParserHelper;
-import edu.stanford.irt.eresources.marc.sul.InclusionStrategy;
+import edu.stanford.irt.eresources.marc.KeywordsStrategy;
+import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
+import edu.stanford.irt.eresources.marc.MARCRecordSupport;
+import edu.stanford.irt.eresources.marc.RecordCollectionFactory;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
