@@ -27,6 +27,14 @@ public class EresourcesControllerTest {
     }
 
     @Test
+    public final void testLaneMarcUpdate() {
+        expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
+        replay(this.manager);
+        this.controller.laneMarcUpdate();
+        verify(this.manager);
+    }
+
+    @Test
     public final void testLaneReload() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
@@ -35,10 +43,10 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testLaneUpdate() {
+    public final void testLaneWebsitesUpdate() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
-        this.controller.laneUpdate();
+        this.controller.laneWebsitesUpdate();
         verify(this.manager);
     }
 
