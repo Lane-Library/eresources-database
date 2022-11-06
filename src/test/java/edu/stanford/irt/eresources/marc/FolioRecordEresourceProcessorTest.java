@@ -72,9 +72,10 @@ public class FolioRecordEresourceProcessorTest {
         expect(this.recordCollection.hasNext()).andReturn(true);
         expect(this.recordCollection.next()).andReturn(this.folioRecord);
         expect(this.folioRecord.getInstanceMarc()).andReturn(null);
+        expect(this.folioRecord.getInstance()).andReturn(null);
         expect(this.recordCollection.hasNext()).andReturn(false);
         this.eresourceHandler.handleEresource(isA(Eresource.class));
-        expectLastCall().times(3);
+        expectLastCall().times(2);
         replay(this.recordCollectionFactory, this.recordCollection, this.folioRecord, this.marcRecord, field,
                 this.eresourceHandler);
         this.processor.process();
