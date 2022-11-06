@@ -3,6 +3,9 @@ package edu.stanford.irt.eresources.marc;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.lane.catalog.FolioRecord;
@@ -11,6 +14,8 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 
 public class FolioRecordEresourceProcessor extends AbstractEresourceProcessor {
+
+    private static final Logger log = LoggerFactory.getLogger(FolioRecordEresourceProcessor.class);
 
     private EresourceHandler eresourceHandler;
 
@@ -39,8 +44,10 @@ public class FolioRecordEresourceProcessor extends AbstractEresourceProcessor {
             FolioRecord fr = frc.next();
             if (null != fr.getInstanceMarc()) {
                 processMarcSource(fr);
-            } else {
+            } else if (null != fr.getInstance()) {
                 processFolioSource(fr);
+            } else {
+                log.info("skipping FolioRecord lacking both source MARC and instance data {}", fr);
             }
         }
     }
