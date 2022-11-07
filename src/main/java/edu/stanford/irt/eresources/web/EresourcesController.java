@@ -31,7 +31,7 @@ public class EresourcesController {
 
     @Scheduled(cron = "${eresources.schedule.cron.laneMarcUpdate}")
     public JobStatus laneMarcUpdate() {
-        return this.jobManager.run(new Job(Job.Type.LANE_UPDATE, LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.LANE_FOLIO_UPDATE, LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.laneReload}")
