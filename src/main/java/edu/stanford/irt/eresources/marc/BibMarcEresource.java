@@ -2,6 +2,7 @@ package edu.stanford.irt.eresources.marc;
 
 import java.util.List;
 
+import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
 import edu.stanford.lane.catalog.Record;
 
 /**

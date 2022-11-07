@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc;
+package edu.stanford.irt.eresources.marc.sul;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
+import edu.stanford.irt.eresources.marc.MarcLink;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 

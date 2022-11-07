@@ -29,14 +29,19 @@ public class EresourcesController {
         this.jobManager = jobManager;
     }
 
+    @Scheduled(cron = "${eresources.schedule.cron.laneMarcUpdate}")
+    public JobStatus laneMarcUpdate() {
+        return this.jobManager.run(new Job(Job.Type.LANE_UPDATE, LocalDateTime.now()));
+    }
+
     @Scheduled(cron = "${eresources.schedule.cron.laneReload}")
     public JobStatus laneReload() {
         return this.jobManager.run(new Job(Job.Type.LANE_RELOAD, LocalDateTime.now()));
     }
 
-    @Scheduled(cron = "${eresources.schedule.cron.laneUpdate}")
-    public JobStatus laneUpdate() {
-        return this.jobManager.run(new Job(Job.Type.LANE_UPDATE, LocalDateTime.now()));
+    @Scheduled(cron = "${eresources.schedule.cron.laneWebsitesUpdate}")
+    public JobStatus laneWebsitesUpdate() {
+        return this.jobManager.run(new Job(Job.Type.LANE_WEBSITES_UPDATE, LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.pmcReload}")

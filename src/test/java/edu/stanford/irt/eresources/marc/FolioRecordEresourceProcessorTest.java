@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
 import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;

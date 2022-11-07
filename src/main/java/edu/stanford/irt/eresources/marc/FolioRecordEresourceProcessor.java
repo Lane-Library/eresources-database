@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
+import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
 import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;

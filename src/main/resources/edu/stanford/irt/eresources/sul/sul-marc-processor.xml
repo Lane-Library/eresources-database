@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean id="sulMARCProcessor" class="edu.stanford.irt.eresources.marc.SulMARCRecordEresourceProcessor">
+    <bean id="sulMARCProcessor" class="edu.stanford.irt.eresources.marc.sul.SulMARCRecordEresourceProcessor">
         <constructor-arg ref="eresourceHandler"/>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
@@ -21,8 +21,18 @@
             </bean>
         </constructor-arg>
         <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory"/>
+            <bean class="edu.stanford.irt.eresources.marc.sul.SulTypeFactory"/>
         </constructor-arg>
+        <constructor-arg ref="laneDedupAugmentation"/>
+        <constructor-arg name="inclusionStrategies">
+            <list>
+                <ref bean="acceptableLCCallNumberStrategy"/>
+                <ref bean="acceptableDBCallNumberStrategy"/>
+                <ref bean="acceptableKeywordStrategy"/>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="acceptableLCCallNumberStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableLCCallNumberStrategy">
         <constructor-arg name="acceptableLCCallNumberPrefixes">
             <list>
                 <value>A</value>
@@ -37,6 +47,8 @@
                 <value>Z</value>
             </list>
         </constructor-arg>
+    </bean>
+    <bean id="acceptableDBCallNumberStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableDBCallNumberStrategy">
         <!-- DB call number maps from https://github.com/sul-dlss/solrmarc-sw/blob/master/stanford-sw/translation_maps/db_subjects_map.properties -->
         <constructor-arg name="acceptableDBCallNumbers">
             <list>
@@ -104,7 +116,23 @@
                 <value>ZA</value>
             </list>
         </constructor-arg>
-        <constructor-arg ref="laneDedupAugmentation"/>
+    </bean>
+    <bean id="acceptableKeywordStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableKeywordStrategy">
+        <constructor-arg name="acceptablePrimaryTypes">
+            <list>
+                <value>Book Digital</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg name="acceptableKeywords">
+            <list>
+                <value>medicine</value>
+                <value>medical</value>
+                <value>clinical</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.sul.SulTypeFactory"/>
+        </constructor-arg>
     </bean>
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
         <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/dedup-augmentations.obj"/>

@@ -24,6 +24,7 @@ import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
+import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;

@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc;
+package edu.stanford.irt.eresources.marc.sul;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;

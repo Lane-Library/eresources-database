@@ -34,7 +34,7 @@ public class HTMLPageEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String ERESOURCES = "eresources";
 
-    private static final Pattern EXCLUDED_DIRS = Pattern.compile("(includes|samples)");
+    private static final Pattern EXCLUDED_DIRS = Pattern.compile("(includes|samples|wilson)");
 
     private String basePath;
 

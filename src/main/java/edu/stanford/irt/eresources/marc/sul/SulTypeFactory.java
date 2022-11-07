@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc;
+package edu.stanford.irt.eresources.marc.sul;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,6 +15,8 @@ import java.util.stream.Stream;
 
 import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.TextParserHelper;
+import edu.stanford.irt.eresources.marc.LaneTypeFactory;
+import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -41,7 +43,7 @@ public class SulTypeFactory extends MARCRecordSupport {
     private static final Pattern SUPPLEMENTAL_LINK = Pattern
             .compile(".*(table of contents|abstract|description|sample text|finding aid).*", Pattern.CASE_INSENSITIVE);
     static {
-        Collections.addAll(ALLOWED_TYPES, LaneTypeFactory.ALLOWED_TYPES_INITIALIZER);
+        Collections.addAll(ALLOWED_TYPES, LaneTypeFactory.getAllowedTypesInitializer());
         for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
             for (int j = 1; j < element.length; j++) {
                 COMPOSITE_TYPES.put(element[j], element[0]);

@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc;
+package edu.stanford.irt.eresources.marc.sul;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -19,6 +19,9 @@ import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
+import edu.stanford.irt.eresources.marc.AbstractMarcEresource;
+import edu.stanford.irt.eresources.marc.KeywordsStrategy;
+import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -37,10 +40,10 @@ public class SulMarcEresource extends AbstractMarcEresource {
     // patterns from SUL's indexer
     // https://github.com/sul-dlss/searchworks_traject_indexer/blob/3efc73bbfed80e31520481fba059dda063770463/lib/traject/config/sirsi_config.rb#L2004
     private static final Pattern[] TOC_LINEBREAK_PATTERNS = { Pattern.compile("[^\\S]--[^\\S]"),
-            Pattern.compile("      +"), Pattern.compile("--[^\\S]"), Pattern.compile("[^\\S]\\.-[^\\S]"),
+            Pattern.compile(" {5}+"), Pattern.compile("--[^\\S]"), Pattern.compile("[^\\S]\\.-[^\\S]"),
             Pattern.compile("(?=(?:Chapter|Section|Appendix|Part|v\\.) \\d+[:\\.-]?\\s+)", Pattern.CASE_INSENSITIVE),
             Pattern.compile("(?=(?:Appendix|Section|Chapter) [XVI]+[\\.-]?)", Pattern.CASE_INSENSITIVE),
-            Pattern.compile("(?=[^\\d](?:\\d+[:\\.-]\\s+))"), Pattern.compile("(?=(?:\\s{2,}\\d+\\s+))") };
+            Pattern.compile("(?=[^\\d]\\d+[:\\.-]\\s+)"), Pattern.compile("(?=\\s{2,}\\d+\\s+)") };
 
     private static final int YEAR_LENGTH = 4;
 

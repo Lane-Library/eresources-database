@@ -26,6 +26,7 @@ import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.SulFileCatalogRecordService;
+import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;

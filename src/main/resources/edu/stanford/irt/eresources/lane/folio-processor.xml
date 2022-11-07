@@ -16,7 +16,7 @@
             </bean>
         </constructor-arg>
         <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.SulTypeFactory"/>
+            <bean class="edu.stanford.irt.eresources.marc.sul.SulTypeFactory"/>
         </constructor-arg>
         <constructor-arg ref="httpLaneLocationsService"/>
     </bean>

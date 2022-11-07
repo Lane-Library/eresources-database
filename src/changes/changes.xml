@@ -6,6 +6,24 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-11-03" version="2.9.6" description="maintenance release">
+            <action date="2022-11-03" dev="ryanmax" issue="LANEWEB-11034" type="update">
+                Lane Search missing Cambridge Core title from SearchWorks
+            </action>
+            <action date="2022-11-01" dev="ryanmax" issue="LANEWEB-11050" type="update">
+                increase frequency of Lane Search indexing
+            </action>
+        </release>
+        <release date="2022-10-31" version="2.9.5" description="maintenance release">
+            <action date="2022-10-27" dev="ryanmax" issue="LANEWEB-11044" type="fix">
+                frequent errors from daily PMC journal indexing
+            </action>
+        </release>
+        <release date="2022-10-21" version="2.9.4" description="maintenance release">
+            <action date="2022-10-21" dev="ryanmax" issue="LANEWEB-11040" type="update">
+                stop indexing wilson book text
+            </action>
+        </release>
         <release date="2022-08-24" version="2.9.3" description="maintenance release">
             <action date="2022-08-24" dev="ryanmax" issue="LANECAT-651" type="fix">
                 Website, Mobile and Chapter no longer expected 655 values;
