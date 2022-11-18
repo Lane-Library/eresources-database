@@ -1,7 +1,4 @@
-#   
-# run phase
-#
-FROM gcr.io/som-laneweb/jre-parent:eclipse-temurin-11.0.16.1_1-jre
+FROM us-docker.pkg.dev/som-laneweb/docker-private/jre-parent:eclipse-temurin-11.0.17_8-jre
 
 ADD ./target/eresources.jar /eresources/eresources.jar
 
