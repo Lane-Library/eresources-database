@@ -2,7 +2,7 @@
 export DOCKER_IMAGE=eresources
 export DOCKER_REGISTRY=us-docker.pkg.dev
 export DOCKER_REGISTRY_USERNAME=_json_key
-export DOCKER_REGISTRY_PASSWORD_PATH=${SEC_PATH}/common/gcr-user
+export DOCKER_REGISTRY_PASSWORD_PATH=${SEC_PATH}/common/ar-writer
 
 # GITLAB CI configuration
 export GITLAB_SERVER=https://gitlab.med.stanford.edu
