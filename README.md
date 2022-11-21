@@ -1,4 +1,4 @@
- eresources in Docker
+eresources in Docker
 
 ## Prerequisites
 
