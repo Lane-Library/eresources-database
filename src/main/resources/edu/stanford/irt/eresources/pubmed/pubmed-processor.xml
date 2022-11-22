@@ -27,7 +27,7 @@
                 <bean class="edu.stanford.irt.eresources.pubmed.PubmedSearcher">
                     <constructor-arg name="field" value="publicationType"/>
                     <constructor-arg name="value" value="Systematic Review"/>
-                    <constructor-arg name="query" value="systematic[sb]+NOT+%22Systematic Review%22[pt]"/>
+                    <constructor-arg name="query" value="systematic[sb]+NOT+%22Systematic+Review%22[pt]"/>
                     <constructor-arg name="apiKey" value="${eresources.pubmedprocessor.ncbi.api_key}"/>
                     <constructor-arg name="appVersion" value="${eresources.version}"/>
                 </bean>
