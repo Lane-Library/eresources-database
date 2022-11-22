@@ -50,7 +50,7 @@ public class PubmedSearcher {
 
     private static final Logger log = LoggerFactory.getLogger(PubmedSearcher.class);
 
-    private static final int RET_MAX = 500_000;
+    private static final int RET_MAX = 10_000;
 
     private String apiKey;
 
@@ -120,7 +120,7 @@ public class PubmedSearcher {
     }
 
     private void doGet() {
-        doSearch();
+        doSearch(); 
         this.pmids = new ArrayList<>();
         int retStart;
         int i = 0;
