@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2022-11-22" version="2.9.8" description="emergency release">
+            <action date="2022-11-22" dev="ryanmax" issue="LANEWEB-11060" type="fix">
+                PubMed indexing is failing: unexpected change to NCBI API
+            </action>
+        </release>
         <release date="2022-11-07" version="2.9.7" description="maintenance release">
             <action date="2022-11-07" dev="ryanmax" issue="LANEWEB-11051" type="update">
                 all Lane Classes are updated every time indexer runs

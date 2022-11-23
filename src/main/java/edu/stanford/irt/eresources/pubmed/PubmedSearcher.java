@@ -50,7 +50,7 @@ public class PubmedSearcher {
 
     private static final Logger log = LoggerFactory.getLogger(PubmedSearcher.class);
 
-    private static final int RET_MAX = 500_000;
+    private static final int RET_MAX = 10_000;
 
     private String apiKey;
 
@@ -65,8 +65,6 @@ public class PubmedSearcher {
     private String query;
 
     private String queryKey;
-
-    private int returnCount;
 
     private String value;
 
@@ -122,36 +120,30 @@ public class PubmedSearcher {
     private void doGet() {
         doSearch();
         this.pmids = new ArrayList<>();
-        int retStart;
-        int i = 0;
-        while (this.pmids.size() < this.returnCount) {
-            retStart = i++ * RET_MAX;
-            StringBuilder q = new StringBuilder(EFETCH_URL);
-            appendApiKey(q);
-            q.append("&query_key=");
-            q.append(this.queryKey);
-            q.append("&WebEnv=");
-            q.append(this.webEnv);
-            q.append("&retmax=");
-            q.append(RET_MAX);
-            q.append("&retstart=");
-            q.append(retStart);
-            String xmlContent = getContent(q.toString());
-            if (null == xmlContent) {
-                log.error("null xmlContent for {}", q);
-            } else {
-                NodeList pmidNodes = null;
-                try {
-                    Document doc = this.factory.newDocumentBuilder()
-                            .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
-                    pmidNodes = (NodeList) this.xpath.evaluate("/IdList/Id", doc, XPathConstants.NODESET);
-                } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
-                    log.error("failed to fetch pmids", e);
-                }
-                for (int n = 0; null != pmidNodes && n < pmidNodes.getLength(); n++) {
-                    Node node = pmidNodes.item(n);
-                    this.pmids.add(node.getTextContent().trim());
-                }
+        StringBuilder q = new StringBuilder(EFETCH_URL);
+        appendApiKey(q);
+        q.append("&query_key=");
+        q.append(this.queryKey);
+        q.append("&WebEnv=");
+        q.append(this.webEnv);
+        q.append("&retmax=");
+        q.append(RET_MAX);
+        q.append("&retstart=0");
+        String xmlContent = getContent(q.toString());
+        if (null == xmlContent) {
+            log.error("null xmlContent for {}", q);
+        } else {
+            NodeList pmidNodes = null;
+            try {
+                Document doc = this.factory.newDocumentBuilder()
+                        .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
+                pmidNodes = (NodeList) this.xpath.evaluate("/IdList/Id", doc, XPathConstants.NODESET);
+            } catch (SAXException | IOException | ParserConfigurationException | XPathExpressionException e) {
+                log.error("failed to fetch pmids", e);
+            }
+            for (int n = 0; null != pmidNodes && n < pmidNodes.getLength(); n++) {
+                Node node = pmidNodes.item(n);
+                this.pmids.add(node.getTextContent().trim());
             }
         }
     }
@@ -170,7 +162,6 @@ public class PubmedSearcher {
                         .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
                 this.queryKey = getNodeContent("/eSearchResult/QueryKey", doc);
                 this.webEnv = getNodeContent("/eSearchResult/WebEnv", doc);
-                this.returnCount = Integer.parseInt(getNodeContent("/eSearchResult/Count", doc));
             } catch (SAXException | IOException | ParserConfigurationException e) {
                 log.error("failed to fetch pmids", e);
             }
