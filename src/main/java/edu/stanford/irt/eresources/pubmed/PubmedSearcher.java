@@ -66,8 +66,6 @@ public class PubmedSearcher {
 
     private String queryKey;
 
-    private int returnCount;
-
     private String value;
 
     private String webEnv;
@@ -164,7 +162,6 @@ public class PubmedSearcher {
                         .parse(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8)));
                 this.queryKey = getNodeContent("/eSearchResult/QueryKey", doc);
                 this.webEnv = getNodeContent("/eSearchResult/WebEnv", doc);
-                this.returnCount = Integer.parseInt(getNodeContent("/eSearchResult/Count", doc));
             } catch (SAXException | IOException | ParserConfigurationException e) {
                 log.error("failed to fetch pmids", e);
             }
