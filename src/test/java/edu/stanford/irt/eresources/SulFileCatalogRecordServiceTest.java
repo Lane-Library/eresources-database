@@ -39,7 +39,7 @@ public class SulFileCatalogRecordServiceTest extends MARCRecordSupport {
         assertNotNull(rc);
         while (rc.hasNext()) {
             Record record = rc.next();
-            assertEquals(8208799, getRecordId(record));
+            assertEquals("8208799", getRecordId(record));
         }
     }
 

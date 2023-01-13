@@ -43,7 +43,7 @@ public class SAXEresourceTest {
         eresource.setPublicationText(null);
         eresource.setPublicationTitle("publicationTitle");
         eresource.setPublicationVolume("publicationVolume");
-        eresource.setRecordId(123);
+        eresource.setRecordId("123");
         eresource.setRecordType("recordType");
         eresource.setShortTitle("shortTitle");
         eresource.setSortTitle("sortTitle");
@@ -75,7 +75,7 @@ public class SAXEresourceTest {
         assertNotNull(eresource.getPublicationTitle());
         assertNotNull(eresource.getPublicationTypes());
         assertNotNull(eresource.getPublicationVolume());
-        assertEquals(123,eresource.getRecordId());
+        assertEquals("123",eresource.getRecordId());
         assertNotNull(eresource.getRecordType());
         assertNotNull(eresource.getShortTitle());
         assertNotNull(eresource.getSortTitle());

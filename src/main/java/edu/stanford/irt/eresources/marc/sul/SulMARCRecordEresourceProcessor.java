@@ -78,7 +78,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     private boolean isLaneDuplicate(final Record marcRecord) {
         Set<String> keys = new HashSet<>();
         keys.add(LaneDedupAugmentation.KEY_CATKEY + LaneDedupAugmentation.SEPARATOR
-                + Integer.toString(MARCRecordSupport.getRecordId(marcRecord)));
+                + MARCRecordSupport.getRecordId(marcRecord));
         for (String lccn : MARCRecordSupport.getSubfieldData(marcRecord, "010", "a").map(String::trim)
                 .collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + lccn);

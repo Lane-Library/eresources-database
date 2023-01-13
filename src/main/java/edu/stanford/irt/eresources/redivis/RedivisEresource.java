@@ -119,8 +119,8 @@ public class RedivisEresource implements Eresource {
     }
 
     @Override
-    public int getRecordId() {
-        return Integer.parseInt(TextParserHelper.cleanId(this.dataset.getReferenceId().hashCode()));
+    public String getRecordId() {
+        return TextParserHelper.cleanId(this.dataset.getReferenceId().hashCode());
     }
 
     @Override

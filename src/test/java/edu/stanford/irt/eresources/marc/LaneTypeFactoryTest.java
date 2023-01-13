@@ -34,7 +34,7 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
         this.recordCollection = new RecordCollection(this.recordService.getRecordStream(0));
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
-            this.records.put(Integer.toString(getRecordId(rec)), rec);
+            this.records.put(getRecordId(rec), rec);
         }
     }
 

@@ -340,12 +340,8 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     }
 
     @Override
-    public int getRecordId() {
-        // this keeps links working, but should we do some other kind of ID handling?
-        // TODO: are SUL records (from FOLIO) OK this way?
-        String id = getFields(this.marcRecord, "001").map(Field::getData).findFirst().orElse("0").replaceAll("[^\\d]",
-                "");
-        return Integer.parseInt(id);
+    public String getRecordId() {
+        return MARCRecordSupport.getRecordId(this.marcRecord);
     }
 
     @Override

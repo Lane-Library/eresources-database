@@ -57,7 +57,7 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
 
     @Test
     public void testGetId() {
-        assertEquals("in00000000125", this.eresource.getId());
+        assertEquals("bib-00000000125", this.eresource.getId());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
 
     @Test
     public void testGetRecordId() {
-        assertEquals(125, this.eresource.getRecordId());
+        assertEquals("00000000125", this.eresource.getRecordId());
     }
 
     @Test

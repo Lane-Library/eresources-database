@@ -132,7 +132,7 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
         if ("eresource".equals(name)) {
             String recordId = atts.getValue("recordId");
             this.currentEresource = new SAXEresource();
-            this.currentEresource.setRecordId(Integer.parseInt(recordId));
+            this.currentEresource.setRecordId(recordId);
             this.currentEresource.setRecordType(atts.getValue("type"));
             this.currentEresource.setId(atts.getValue("id"));
             getSpecialTypesForPmid(recordId);

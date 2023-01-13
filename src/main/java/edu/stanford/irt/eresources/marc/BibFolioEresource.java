@@ -64,7 +64,7 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public String getId() {
-        return this.folioRecord.jsonContext().read("$.instance.hrid");
+        return getRecordType() + "-" + getRecordId();
     }
 
     @Override
@@ -151,10 +151,8 @@ public class BibFolioEresource implements Eresource {
     }
 
     @Override
-    public int getRecordId() {
-        // TODO: determine strategy around ID handling
-        String hrid = this.folioRecord.jsonContext().read("$.instance.hrid", String.class).replaceAll("[^\\d]", "");
-        return Integer.parseInt(hrid);
+    public String getRecordId() {
+        return this.folioRecord.jsonContext().read("$.instance.hrid", String.class).replaceAll("[^\\d]", "");
     }
 
     @Override

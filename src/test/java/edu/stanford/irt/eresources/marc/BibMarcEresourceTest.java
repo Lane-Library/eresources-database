@@ -344,7 +344,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
-            if (168269 == getRecordId(rec)) {
+            if ("168269".equals(getRecordId(rec))) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
                         this.keywordsStrategy, this.typeFactory, this.locationsService);
                 assertEquals("bib-168269", er.getId());
@@ -364,7 +364,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
                 assertEquals("[Opera chirurgica]..  [ca. 1400] fol. 66 [i.e. 26]", er.getPublicationText());
                 assertEquals("[Opera chirurgica].", er.getPublicationTitle());
             }
-            if (67043 == getRecordId(rec)) {
+            if ("67043".equals(getRecordId(rec))) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
                         this.keywordsStrategy, this.typeFactory, this.locationsService);
                 assertEquals("[Collection of reprints by John Uri Lloyd from the Western Druggist]. ",
@@ -372,13 +372,13 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
                 assertEquals("[Collection of reprints by John Uri Lloyd from the Western Druggist]",
                         er.getPublicationTitle());
             }
-            if (77614 == getRecordId(rec)) {
+            if ("77614".equals(getRecordId(rec))) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
                         this.keywordsStrategy, this.typeFactory, this.locationsService);
                 assertEquals("Stanford University Medical Center Records. ", er.getPublicationText());
                 assertEquals("Stanford University Medical Center Records", er.getPublicationTitle());
             }
-            if (21171 == getRecordId(rec)) {
+            if ("21171".equals(getRecordId(rec))) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
                         this.keywordsStrategy, this.typeFactory, this.locationsService);
                 assertEquals(
@@ -395,7 +395,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("12");
         replay(this.record, this.field, this.subfield);
-        assertEquals(12, this.eresource.getRecordId());
+        assertEquals("12", this.eresource.getRecordId());
         verify(this.record, this.field, this.subfield);
     }
 

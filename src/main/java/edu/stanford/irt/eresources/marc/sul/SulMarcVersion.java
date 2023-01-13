@@ -73,8 +73,8 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
                     .collect(Collectors.toList()));
         }
         if (links.isEmpty()) {
-            links.add(new CatalogLink(Integer.toString(this.eresource.getRecordId()), this,
-                    "https://searchworks.stanford.edu/view/", "SU Catalog (SearchWorks)"));
+            links.add(new CatalogLink(this.eresource.getRecordId(), this, "https://searchworks.stanford.edu/view/",
+                    "SU Catalog (SearchWorks)"));
         }
         return links;
     }

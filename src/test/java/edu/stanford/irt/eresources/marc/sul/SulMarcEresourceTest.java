@@ -71,7 +71,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         this.recordCollection = new RecordCollection(this.recordService.getRecordStream(0));
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
-            this.records.put(Integer.toString(getRecordId(rec)), rec);
+            this.records.put(getRecordId(rec), rec);
         }
     }
 
@@ -193,7 +193,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("1234");
         replay(this.record, this.field);
-        assertEquals(1234, this.eresource.getRecordId());
+        assertEquals("1234", this.eresource.getRecordId());
         verify(this.record, this.field);
     }
 
@@ -203,7 +203,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("not a number");
         replay(this.record, this.field);
-        assertEquals(0, this.eresource.getRecordId());
+        assertEquals("", this.eresource.getRecordId());
         verify(this.record, this.field);
     }
 

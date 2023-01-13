@@ -58,7 +58,7 @@ public interface Eresource {
 
     String getPublicationVolume();
 
-    int getRecordId();
+    String getRecordId();
 
     String getRecordType();
 

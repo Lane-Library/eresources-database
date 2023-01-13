@@ -115,7 +115,7 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         if ("eresource".equals(name)) {
             this.currentEresource = new SAXEresource();
             this.currentEresource.setId(atts.getValue("id"));
-            this.currentEresource.setRecordId(Integer.parseInt(atts.getValue("recordId")));
+            this.currentEresource.setRecordId(atts.getValue("recordId"));
             this.currentEresource.setRecordType(atts.getValue("type"));
             this.currentEresource.setUpdated(LocalDateTime.parse(atts.getValue("update"), FORMATTER));
         } else if ("version".equals(name)) {

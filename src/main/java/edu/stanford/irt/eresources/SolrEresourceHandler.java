@@ -151,7 +151,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         String kws = getKeywords(eresource);
         int[] itemCount = eresource.getItemCount();
         doc.addField("id", eresource.getId());
-        doc.addField("recordId", Integer.toString(eresource.getRecordId()));
+        doc.addField("recordId", eresource.getRecordId());
         doc.addField("recordType", eresource.getRecordType());
         doc.addField("description", eresource.getDescription());
         doc.addField("text", kws);

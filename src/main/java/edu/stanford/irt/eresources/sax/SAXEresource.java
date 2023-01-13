@@ -76,7 +76,7 @@ public class SAXEresource implements Eresource {
 
     private String publicationVolume;
 
-    private int recordId;
+    private String recordId;
 
     private String recordType;
 
@@ -259,7 +259,7 @@ public class SAXEresource implements Eresource {
     }
 
     @Override
-    public int getRecordId() {
+    public String getRecordId() {
         return this.recordId;
     }
 
@@ -382,7 +382,7 @@ public class SAXEresource implements Eresource {
         this.publicationVolume = publicationVolume;
     }
 
-    public void setRecordId(final int recordId) {
+    public void setRecordId(final String recordId) {
         this.recordId = recordId;
     }
 

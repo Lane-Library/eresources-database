@@ -24,16 +24,9 @@ public class MARCRecordSupport {
         return marcRecord.getFields().stream().filter((final Field f) -> tagString.indexOf(f.getTag()) > -1);
     }
 
-    public static int getRecordId(final Record marcRecord) {
-        int i;
-        String f001 = NOT_DIGIT.matcher(getFields(marcRecord, "001").map(Field::getData).findFirst().orElse("0"))
+    public static String getRecordId(final Record marcRecord) {
+        return NOT_DIGIT.matcher(getFields(marcRecord, "001").map(Field::getData).findFirst().orElse(""))
                 .replaceAll("");
-        try {
-            i = Integer.parseInt(f001);
-        } catch (NumberFormatException e) {
-            i = 0;
-        }
-        return i;
     }
 
     public static Stream<String> getSubfieldData(final Record marcRecord, final String tagString) {

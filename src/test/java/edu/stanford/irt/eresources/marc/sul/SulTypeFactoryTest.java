@@ -35,40 +35,40 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     public final void testGetPrimaryType() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
-            if (355410 == getRecordId(rec)) {
+            if ("355410".equals(getRecordId(rec))) {
                 assertEquals("Book Print", this.typefactory.getPrimaryType(rec));
             }
-            if (2996989 == getRecordId(rec)) {
+            if ("2996989".equals(getRecordId(rec))) {
                 assertEquals("Journal Print", this.typefactory.getPrimaryType(rec));
             }
-            if (8161047 == getRecordId(rec)) {
+            if ("8161047".equals(getRecordId(rec))) {
                 assertEquals("Journal Digital", this.typefactory.getPrimaryType(rec));
             }
-            if (10009616 == getRecordId(rec)) {
+            if ("10009616".equals(getRecordId(rec))) {
                 assertEquals("Other", this.typefactory.getPrimaryType(rec));
             }
-            if (10763925 == getRecordId(rec)) {
+            if ("10763925".equals(getRecordId(rec))) {
                 assertEquals("Other", this.typefactory.getPrimaryType(rec));
             }
-            if (8208799 == getRecordId(rec)) {
+            if ("8208799".equals(getRecordId(rec))) {
                 assertEquals("Journal Digital", this.typefactory.getPrimaryType(rec));
             }
-            if (8223791 == getRecordId(rec)) {
+            if ("8223791".equals(getRecordId(rec))) {
                 assertEquals("Book Print", this.typefactory.getPrimaryType(rec));
             }
-            if (13117763 == getRecordId(rec)) {
+            if ("13117763".equals(getRecordId(rec))) {
                 assertEquals("Book Print", this.typefactory.getPrimaryType(rec));
             }
-            if (11514068 == getRecordId(rec)) {
+            if ("11514068".equals(getRecordId(rec))) {
                 assertEquals("Book Print", this.typefactory.getPrimaryType(rec));
             }
-            if (9952520 == getRecordId(rec)) {
+            if ("9952520".equals(getRecordId(rec))) {
                 assertEquals("Video", this.typefactory.getPrimaryType(rec));
             }
-            if (10931045 == getRecordId(rec)) {
+            if ("10931045".equals(getRecordId(rec))) {
                 assertEquals("Audio", this.typefactory.getPrimaryType(rec));
             }
-            if (13112673 == getRecordId(rec)) {
+            if ("13112673".equals(getRecordId(rec))) {
                 assertEquals("Audio", this.typefactory.getPrimaryType(rec));
             }
         }
@@ -78,7 +78,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     public final void testGetTypes() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
-            if (10784454 == getRecordId(rec)) {
+            if ("10784454".equals(getRecordId(rec))) {
                 assertTrue(this.typefactory.getTypes(rec).contains("Statistics"));
             }
         }

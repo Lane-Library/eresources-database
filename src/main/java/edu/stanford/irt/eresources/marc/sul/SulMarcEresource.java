@@ -150,7 +150,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     }
 
     @Override
-    public int getRecordId() {
+    public String getRecordId() {
         return MARCRecordSupport.getRecordId(this.marcRecord);
     }
 

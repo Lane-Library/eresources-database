@@ -66,7 +66,7 @@ public class SolrEresourceHandlerTest {
         expect(this.eresource.getTitle()).andReturn("title").anyTimes();
         expect(this.eresource.getItemCount()).andReturn(new int[2]);
         expect(this.eresource.getId()).andReturn("id");
-        expect(this.eresource.getRecordId()).andReturn(123);
+        expect(this.eresource.getRecordId()).andReturn("123");
         expect(this.eresource.getRecordType()).andReturn("recordType");
         expect(this.eresource.getDescription()).andReturn("description").anyTimes();
         expect(this.eresource.getKeywords()).andReturn("keywords");
