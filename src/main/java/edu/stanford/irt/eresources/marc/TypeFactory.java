@@ -20,7 +20,7 @@ public class TypeFactory extends MARCRecordSupport {
 
     private static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
             EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, "Calculators, Formulas, Algorithms",
-            EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT, "Exam Prep", "Grand Rounds",
+            EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT, "Exam Prep",
             EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Guide", "Lane Web Page", "Print",
             EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO };
 
@@ -155,10 +155,6 @@ public class TypeFactory extends MARCRecordSupport {
         }
         if (getSubfieldData(marcRecord, "035", "a").anyMatch((final String s) -> s.startsWith("(Bassett)"))) {
             rawTypes.add("Bassett");
-        }
-        if (getSubfieldData(marcRecord, "830", "a").map(String::toLowerCase)
-                .anyMatch((final String s) -> s.contains("stanford") && s.contains("grand rounds"))) {
-            rawTypes.add("Grand Rounds");
         }
         if (rawTypes.contains("Objects") && rawTypes.contains("Subset, Circbib")) {
             rawTypes.add("Equipment");

@@ -66,7 +66,6 @@ public class TypeFactoryTest extends MARCRecordSupport {
         assertTrue(this.typefactory.getTypes(this.records.get("143701")).contains("Software"));
         assertTrue(this.typefactory.getTypes(this.records.get("143701")).contains("Software"));
         assertTrue(this.typefactory.getTypes(this.records.get("219562")).contains("Software"));
-        assertTrue(this.typefactory.getTypes(this.records.get("292351")).contains("Grand Rounds"));
         assertTrue(this.typefactory.getTypes(this.records.get("257445")).contains("Bassett"));
         assertTrue(this.typefactory.getTypes(this.records.get("234974")).isEmpty());
         assertTrue(this.typefactory.getTypes(this.records.get("213409")).contains("Journal"));
