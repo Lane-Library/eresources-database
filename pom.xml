@@ -76,7 +76,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>11.4</version>
+            <version>12.0</version>
             <exclusions>
                 <exclusion>
                     <!-- https://stackoverflow.com/questions/51094274/eclipse-cant-find-xml-related-classes-after-switching-build-path-to-jdk-10 -->
@@ -164,7 +164,7 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>journal-titles</artifactId>
-            <version>3.0.4</version>
+            <version>3.0.5</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.irt.suggest</groupId>
