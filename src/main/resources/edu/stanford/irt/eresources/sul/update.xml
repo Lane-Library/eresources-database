@@ -4,16 +4,12 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="../common.xml"/>
     <import resource="sul-marc-processor.xml"/>
-    <bean id="solrLoader" class="edu.stanford.irt.eresources.SulUpdate" parent="abstractSolrLoader">
-        <constructor-arg name="basePath" value="${eresources.sul.file-record-service.basePath}/incr"/>
+    <bean id="solrLoader" class="edu.stanford.irt.eresources.Updater" parent="abstractSolrLoader">
+        <constructor-arg name="baseQuery" value="recordType:sul"/>
     	<property name="processors">
             <list>
                 <ref bean="sulMARCProcessor"/>
             </list>
         </property>
-    </bean>
-    <bean id="sulFileCatalogRecordService" class="edu.stanford.irt.eresources.SulFileCatalogRecordService">
-        <constructor-arg name="basePath" value="${eresources.sul.file-record-service.basePath}/incr"/>
-        <constructor-arg name="executor" ref="executor"/>
     </bean>
 </beans>

@@ -13,8 +13,4 @@
             </list>
         </property>
     </bean>
-    <bean id="sulFileCatalogRecordService" class="edu.stanford.irt.eresources.SulFileCatalogRecordService">
-        <constructor-arg name="basePath" value="${eresources.sul.file-record-service.basePath}/full"/>
-        <constructor-arg name="executor" ref="executor"/>
-    </bean>
 </beans>

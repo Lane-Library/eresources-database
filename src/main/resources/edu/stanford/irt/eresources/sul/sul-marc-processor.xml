@@ -17,7 +17,7 @@
         </constructor-arg>
         <constructor-arg>
             <bean class="edu.stanford.irt.eresources.marc.RecordCollectionFactory">
-                <constructor-arg ref="sulFileCatalogRecordService"/>
+                <constructor-arg ref="sulHttpCatalogRecordService"/>
             </bean>
         </constructor-arg>
         <constructor-arg>
@@ -158,5 +158,17 @@
         <constructor-arg value="${eresources.catalog-service.path}"/>
         <constructor-arg value="null"/>
         <constructor-arg value="null"/>
+    </bean>
+    <bean id="folioCatalogServiceURI" class="java.net.URI">
+        <constructor-arg value="${eresources.catalog-service.scheme}"/>
+        <constructor-arg value="${eresources.catalog-service.userInfo}"/>
+        <constructor-arg value="${eresources.catalog-service.host}"/>
+        <constructor-arg value="${eresources.catalog-service.port}"/>
+        <constructor-arg value="${eresources.catalog-service.path-folio}"/>
+        <constructor-arg value="null"/>
+        <constructor-arg value="null"/>
+    </bean>
+    <bean id="sulHttpCatalogRecordService" class="edu.stanford.irt.eresources.SulHTTPCatalogRecordService">
+        <constructor-arg ref="folioCatalogServiceURI"/>
     </bean>
 </beans>

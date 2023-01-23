@@ -6,6 +6,9 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.TextParserHelper;
@@ -13,10 +16,11 @@ import edu.stanford.irt.eresources.marc.KeywordsStrategy;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.irt.eresources.marc.RecordCollectionFactory;
+import edu.stanford.lane.catalog.FolioRecord;
+import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
-import edu.stanford.lane.catalog.RecordCollection;
 import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
@@ -26,6 +30,8 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     private static final int F008_DATES_BEGIN = 7;
 
     private static final int F008_DATES_END = 15;
+
+    private static final Logger log = LoggerFactory.getLogger(SulMARCRecordEresourceProcessor.class);
 
     private static final Pattern NOT_ALPHANUM_OR_SPACE = Pattern.compile("[^a-zA-Z_0-9 ]");
 
@@ -57,10 +63,15 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
 
     @Override
     public void process() {
-        RecordCollection recordCollection = this.recordCollectionFactory.newRecordCollection(getStartTime());
+        FolioRecordCollection recordCollection = this.recordCollectionFactory.newFolioRecordCollection(getStartTime());
         while (recordCollection.hasNext()) {
-            Record marcRecord = recordCollection.next();
-            if (isInScope(marcRecord) && !isLane(marcRecord) && !isLaneDuplicate(marcRecord)) {
+            FolioRecord folioRecord = recordCollection.next();
+            Record marcRecord = folioRecord.getInstanceMarc();
+            if (null == marcRecord) {
+                log.info("dropping non-marc record {}: {}", folioRecord.getInstanceHrid(), folioRecord.getTitle());
+            }
+            if (null != marcRecord && isInScope(marcRecord) && !isLane(folioRecord, marcRecord)
+                    && !isLaneDuplicate(marcRecord)) {
                 this.eresourceHandler.handleEresource(
                         new SulMarcEresource(marcRecord, this.keywordsStrategy, this.typeFactory, this.lcshMapManager));
             }
@@ -71,8 +82,14 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         return this.inclusionStrategies.stream().anyMatch((final InclusionStrategy is) -> is.isAcceptable(marcRecord));
     }
 
-    private boolean isLane(final Record marcRecord) {
-        return MARCRecordSupport.getSubfieldData(marcRecord, "999", "m").anyMatch("LANE-MED"::equalsIgnoreCase);
+    private boolean isLane(final FolioRecord folioRecord, final Record marcRecord) {
+        if (folioRecord.toString().contains("\"libraryName\": \"Lane")) {
+            return true;
+        } else if (MARCRecordSupport.getRecordId(marcRecord).startsWith("L")) {
+            log.info("Lane HRID but not Lane library: {}", folioRecord);
+            return true;
+        }
+        return false;
     }
 
     private boolean isLaneDuplicate(final Record marcRecord) {
