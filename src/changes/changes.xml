@@ -6,7 +6,7 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
-        <release date="2023-01-" version="2.9.9" description="maintenance release">
+        <release date="2023-01-23" version="2.9.9" description="maintenance release">
             <action date="2023-01-13" dev="ryanmax" issue="LANEWEB-11072" type="update">
                 remove Grand Rounds type from Lane Search indexing
             </action>
