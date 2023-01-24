@@ -18,6 +18,12 @@ public class LaneTypeFactory extends MARCRecordSupport {
 
     private static final Set<String> ALLOWED_TYPES = new HashSet<>();
 
+    private static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
+            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, "Calculators, Formulas, Algorithms",
+            EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT, "Exam Prep",
+            EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Guide", "Lane Web Page", "Print",
+            EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO };
+
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 
     private static final String[][] COMPOSITE_TYPES_INITIALIZER = { { EresourceConstants.ARTICLE, "Articles" },
@@ -32,14 +38,8 @@ public class LaneTypeFactory extends MARCRecordSupport {
             { EresourceConstants.VIDEO, "Digital Video", "Digital Video, Local", "Digital Video, Local, Public" } };
 
     private static final Map<String, String> PRIMARY_TYPES = new HashMap<>();
-
-    private static final String[] ALLOWED_TYPES_INITIALIZER = { EresourceConstants.ARTICLE, "Atlases, Pictorial",
-            EresourceConstants.AUDIO, "Bassett", EresourceConstants.BOOK, "Calculators, Formulas, Algorithms",
-            EresourceConstants.DATABASE, "Dataset", EresourceConstants.EQUIPMENT, "Exam Prep", "Grand Rounds",
-            EresourceConstants.IMAGE, EresourceConstants.JOURNAL, "Lane Class", "Lane Guide", "Lane Web Page", "Print",
-            EresourceConstants.SOFTWARE, "Statistics", EresourceConstants.VIDEO };
     static {
-        Collections.addAll(ALLOWED_TYPES, ALLOWED_TYPES_INITIALIZER);
+        Collections.addAll(ALLOWED_TYPES, getAllowedTypesInitializer());
         for (String[] element : COMPOSITE_TYPES_INITIALIZER) {
             for (int j = 1; j < element.length; j++) {
                 COMPOSITE_TYPES.put(element[j], element[0]);
@@ -155,10 +155,6 @@ public class LaneTypeFactory extends MARCRecordSupport {
         }
         if (getSubfieldData(marcRecord, "035", "a").anyMatch((final String s) -> s.startsWith("(Bassett)"))) {
             rawTypes.add("Bassett");
-        }
-        if (getSubfieldData(marcRecord, "830", "a").map(String::toLowerCase)
-                .anyMatch((final String s) -> s.contains("stanford") && s.contains("grand rounds"))) {
-            rawTypes.add("Grand Rounds");
         }
         if (rawTypes.contains("Objects") && rawTypes.contains("Subset, Circbib")) {
             rawTypes.add("Equipment");
