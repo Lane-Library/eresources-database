@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-01-23" version="2.9.9" description="maintenance release">
+            <action date="2023-01-13" dev="ryanmax" issue="LANEWEB-11072" type="update">
+                remove Grand Rounds type from Lane Search indexing
+            </action>
+        </release>
         <release date="2022-11-22" version="2.9.8" description="emergency release">
             <action date="2022-11-22" dev="ryanmax" issue="LANEWEB-11060" type="fix">
                 PubMed indexing is failing: unexpected change to NCBI API
