@@ -18,9 +18,6 @@ public class SulHTTPCatalogRecordService implements CatalogRecordService {
     @Override
     public InputStream getRecordStream(final long time) {
         try {
-            //1668887154000 = Your time zone: Saturday, November 19, 2022 11:45:54 AM GMT-08:00
-            //1669009909255 = Your time zone: Sunday, November 20, 2022 9:51:49.255 PM GMT-08:00
-            //1669906909255 = Your time zone: Thursday, December 1, 2022 7:01:49.255 AM GMT-08:00
             String endpoint = String.format(END_POINT, time);
             return IOUtils.getStream(new URL(this.catalogServiceURI.toURL(), endpoint));
         } catch (IOException e) {
