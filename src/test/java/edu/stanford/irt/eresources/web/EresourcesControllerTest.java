@@ -83,10 +83,10 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testSolrLoaderCancelRunningJob() {
-        expect(this.manager.cancelRunningJob()).andReturn(JobStatus.INTERRUPTED);
+    public final void testSolrLoaderCancelRunningJobs() {
+        expect(this.manager.cancelRunningJobs()).andReturn(JobStatus.INTERRUPTED);
         replay(this.manager);
-        this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOB.getName());
+        this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOBS.getQualifiedName());
         verify(this.manager);
     }
 

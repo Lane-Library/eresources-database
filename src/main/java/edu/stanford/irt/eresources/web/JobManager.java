@@ -2,6 +2,8 @@ package edu.stanford.irt.eresources.web;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -25,25 +27,34 @@ public class JobManager {
     private int maxJobDurationInHours;
 
     // protected for unit testing
-    protected Future<JobStatus> runningFuture;
+    protected List<Future<Job>> runningFutures;
 
     // protected for unit testing
-    protected Job runningJob;
+    protected List<Job> runningJobs;
 
     public JobManager(final ExecutorService executor, final int maxJobDurationInHours) {
         this.maxJobDurationInHours = maxJobDurationInHours;
         this.executor = executor;
+        this.runningFutures = new ArrayList<>();
+        this.runningJobs = new ArrayList<>();
     }
 
     /**
-     * terminate the running job so another can be submitted.
+     * terminate all running jobs
      *
-     * @return {@link JobStatus} INTERRUPTED if job can be canceled, otherwise COMPLETE
+     * @return {@link JobStatus} INTERRUPTED if we canceled at least one job, otherwise COMPLETE
      */
-    public JobStatus cancelRunningJob() {
-        this.runningJob = null;
-        if (null != this.runningFuture && !this.runningFuture.isDone()) {
-            this.runningFuture.cancel(true);
+    public JobStatus cancelRunningJobs() {
+        this.runningJobs.clear();
+        boolean interrupted = false;
+        for (Future<Job> future : this.runningFutures) {
+            if (!future.isDone()) {
+                future.cancel(true);
+                interrupted = true;
+            }
+        }
+        this.runningFutures.clear();
+        if (interrupted) {
             return JobStatus.INTERRUPTED;
         }
         return JobStatus.COMPLETE;
@@ -53,49 +64,56 @@ public class JobManager {
         return this.maxJobDurationInHours;
     }
 
-    public Job getRunningJob() {
-        return this.runningJob;
+    public List<Job> getRunningJobs() {
+        return this.runningJobs;
     }
 
     public JobStatus run(final Job job) {
         String jobName = job.getType().getName();
-        if (null != this.runningJob) {
-            log.warn("{} failed to start job; previous {} job sill running", jobName,
-                    this.runningJob.getType().getName());
+        String jobDataSource = job.getType().getDataSource();
+        Job jobOfSameDataSource = this.runningJobs.stream()
+                .filter((final Job j) -> jobDataSource.equals(j.getType().getDataSource())).findFirst().orElse(null);
+        if (null != jobOfSameDataSource) {
+            log.warn("{} failed to start job; conflicting job with same data source {} sill running", jobName,
+                    jobDataSource);
             return JobStatus.RUNNING;
         }
-        this.runningJob = job;
-        this.runningFuture = doRun(job);
+        this.runningJobs.add(job);
+        Future<Job> future = doRun(job);
+        this.runningFutures.add(future);
         try {
-            return this.runningFuture.get(this.maxJobDurationInHours, TimeUnit.HOURS);
+            return future.get(this.maxJobDurationInHours, TimeUnit.HOURS).getStatus();
         } catch (TimeoutException e) {
             long duration = ChronoUnit.HOURS.between(job.getStart(), LocalDateTime.now());
             log.error("job {} running for {} hours", jobName, duration, e);
-            return JobStatus.INTERRUPTED;
+            job.setStatus(JobStatus.INTERRUPTED);
         } catch (InterruptedException | ExecutionException e) {
             log.error("job {} interrupted ", jobName, e);
-            return JobStatus.INTERRUPTED;
+            job.setStatus(JobStatus.INTERRUPTED);
         } finally {
-            this.runningFuture = null;
+            this.runningFutures.remove(future);
             Thread.currentThread().interrupt();
         }
+        return job.getStatus();
     }
 
-    private Future<JobStatus> doRun(final Job job) {
+    private Future<Job> doRun(final Job job) {
         return this.executor.submit(() -> {
-            String jobName = job.getType().getName();
+            String jobName = job.getType().getQualifiedName();
             String[] args = { jobName };
             try {
                 SolrLoader.main(args);
             } catch (Exception e) {
                 log.error("solrLoader exception ", e);
-                this.runningJob = null;
-                return JobStatus.ERROR;
+                this.runningJobs.remove(job);
+                job.setStatus(JobStatus.ERROR);
+                return job;
             }
-            final long later = ChronoUnit.MILLIS.between(job.getStart(), LocalDateTime.now());
-            log.info("solrLoader: {}; executed in {}ms", jobName, later);
-            this.runningJob = null;
-            return JobStatus.COMPLETE;
+            final long later = ChronoUnit.SECONDS.between(job.getStart(), LocalDateTime.now());
+            log.info("solrLoader: {}; executed in {}s", jobName, later);
+            this.runningJobs.remove(job);
+            job.setStatus(JobStatus.COMPLETE);
+            return job;
         });
     }
 }

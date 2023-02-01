@@ -7,7 +7,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.Callable;
@@ -34,18 +34,19 @@ public class JobManagerTest {
 
     @Test
     public final void testCancelRunningJob() {
-        this.manager.runningJob = new Job(Job.Type.UNIT_TESTING, null);
-        this.manager.runningFuture = mock(Future.class);
-        assertNotNull(this.manager.getRunningJob());
-        expect(this.manager.runningFuture.isDone()).andReturn(false);
-        expect(this.manager.runningFuture.cancel(true)).andReturn(true);
-        replay(this.manager.runningFuture);
-        assertEquals(JobStatus.INTERRUPTED, this.manager.cancelRunningJob());
-        verify(this.manager.runningFuture);
-        this.manager.runningFuture = null;
-        assertEquals(JobStatus.COMPLETE, this.manager.cancelRunningJob());
-        assertNull(this.manager.getRunningJob());
-        assertNull(this.manager.runningFuture);
+        this.manager.runningJobs.add(new Job(Job.Type.UNIT_TESTING, null));
+        Future future = mock(Future.class);
+        this.manager.runningFutures.add(future);
+        assertNotNull(this.manager.getRunningJobs());
+        expect(future.isDone()).andReturn(false);
+        expect(future.cancel(true)).andReturn(true);
+        replay(future);
+        assertEquals(JobStatus.INTERRUPTED, this.manager.cancelRunningJobs());
+        verify(future);
+        this.manager.runningFutures.clear();
+        assertEquals(JobStatus.COMPLETE, this.manager.cancelRunningJobs());
+        assertTrue(this.manager.getRunningJobs().isEmpty());
+        assertTrue(this.manager.runningFutures.isEmpty());
     }
 
     @Test
@@ -54,18 +55,20 @@ public class JobManagerTest {
     }
 
     @Test
-    public final void testGetRunningJob() {
-        assertNull(this.manager.getRunningJob());
+    public final void testGetRunningJobs() {
+        assertTrue(this.manager.getRunningJobs().isEmpty());
     }
 
     @Test
     public final void testRun() {
-        assertEquals(JobStatus.COMPLETE, this.manager.run(new Job(Job.Type.UNIT_TESTING, LocalDateTime.now())));
+        Job test = new Job(Job.Type.UNIT_TESTING, LocalDateTime.now());
+        assertEquals(JobStatus.COMPLETE, this.manager.run(test));
+        assertTrue(test.toString().contains("type: UNIT_TESTING;"));
     }
 
     @Test
     public final void testRunAlreadyRunning() {
-        this.manager.runningJob = new Job(Job.Type.UNIT_TESTING, null);
+        this.manager.runningJobs.add(new Job(Job.Type.UNDEFINED, null));
         assertEquals(JobStatus.RUNNING, this.manager.run(new Job(Job.Type.UNDEFINED, null)));
     }
 

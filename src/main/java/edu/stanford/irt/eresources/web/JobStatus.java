@@ -13,15 +13,19 @@ public enum JobStatus {
      */
     ERROR,
     /**
-     * job currently executing
-     */
-    RUNNING,
-    /**
      * job was stopped prematurely
      */
     INTERRUPTED,
     /**
+     * job currently executing
+     */
+    RUNNING,
+    /**
      * job did not run
      */
-    SKIPPED;
+    SKIPPED,
+    /**
+     * job started but not yet running
+     */
+    STARTED;
 }
