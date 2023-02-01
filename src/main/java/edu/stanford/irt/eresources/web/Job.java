@@ -54,10 +54,6 @@ public class Job {
             return this.description;
         }
 
-        public String getName() {
-            return this.name;
-        }
-
         public String getQualifiedName() {
             return this.dataSource + "/" + this.name;
         }
