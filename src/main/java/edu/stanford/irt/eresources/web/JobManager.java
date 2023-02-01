@@ -74,7 +74,7 @@ public class JobManager {
         Job jobOfSameDataSource = this.runningJobs.stream()
                 .filter((final Job j) -> jobDataSource.equals(j.getType().getDataSource())).findFirst().orElse(null);
         if (null != jobOfSameDataSource) {
-            log.warn("{} failed to start job; conflicting job with same data source ({}) sill running", jobName,
+            log.warn("{} failed to start job; conflicting job with same data source ({}) still running", jobName,
                     jobDataSource);
             return JobStatus.RUNNING;
         }
