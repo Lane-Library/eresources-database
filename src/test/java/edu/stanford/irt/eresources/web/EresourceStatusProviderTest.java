@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -29,8 +30,8 @@ public class EresourceStatusProviderTest {
 
     @Test
     public final void testAddStatusItemsLongRunningJob() {
-        Job job = new Job(Job.Type.UNDEFINED, LocalDateTime.MIN);
-        expect(this.manager.getRunningJob()).andReturn(job);
+        List<Job> runningJobs = Collections.singletonList(new Job(Job.Type.UNDEFINED, LocalDateTime.MIN));
+        expect(this.manager.getRunningJobs()).andReturn(runningJobs).times(2);
         expect(this.manager.getMaxJobDurationInHours()).andReturn(10);
         replay(this.manager);
         List<StatusItem> list = this.provider.getStatusItems();
@@ -41,7 +42,7 @@ public class EresourceStatusProviderTest {
 
     @Test
     public final void testAddStatusItemsNoRunningJob() {
-        expect(this.manager.getRunningJob()).andReturn(null);
+        expect(this.manager.getRunningJobs()).andReturn(Collections.emptyList());
         replay(this.manager);
         List<StatusItem> list = this.provider.getStatusItems();
         assertEquals(1, list.size());
@@ -49,8 +50,8 @@ public class EresourceStatusProviderTest {
 
     @Test
     public final void testAddStatusItemsRunningJob() {
-        Job job = new Job(Job.Type.UNDEFINED, LocalDateTime.now());
-        expect(this.manager.getRunningJob()).andReturn(job);
+        List<Job> runningJobs = Collections.singletonList(new Job(Job.Type.UNDEFINED, LocalDateTime.now()));
+        expect(this.manager.getRunningJobs()).andReturn(runningJobs).times(2);
         expect(this.manager.getMaxJobDurationInHours()).andReturn(10);
         replay(this.manager);
         List<StatusItem> list = this.provider.getStatusItems();

@@ -24,6 +24,8 @@ import edu.stanford.irt.status.StatusService;
         DispatcherServletAutoConfiguration.class, EresourcesController.class, StatusController.class })
 public class EresourcesWebApplication {
 
+    private static final int THREADPOOL_SIZE = 5;
+
     public static void main(final String[] args) {
         SpringApplication.run(EresourcesWebApplication.class, args);
     }
@@ -43,7 +45,7 @@ public class EresourcesWebApplication {
 
     @Bean
     public ExecutorService jobManagerExecutor() {
-        return Executors.newSingleThreadExecutor();
+        return Executors.newFixedThreadPool(THREADPOOL_SIZE);
     }
 
     @Bean
