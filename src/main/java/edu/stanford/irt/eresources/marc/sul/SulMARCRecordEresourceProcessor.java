@@ -68,7 +68,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             FolioRecord folioRecord = recordCollection.next();
             Record marcRecord = folioRecord.getInstanceMarc();
             if (null == marcRecord) {
-                log.info("dropping non-marc record {}: {}", folioRecord.getInstanceHrid(), folioRecord.getTitle());
+                log.info("dropping non-marc record: {}", folioRecord);
             }
             if (null != marcRecord && isInScope(marcRecord) && !isLane(folioRecord, marcRecord)
                     && !isLaneDuplicate(marcRecord)) {
