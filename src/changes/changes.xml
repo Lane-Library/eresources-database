@@ -6,7 +6,7 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
-        <release date="2023-02-23" version="2.10.1" description="maintenance release">
+        <release date="2023-02-23" version="2.10.0" description="maintenance release">
             <action date="2023-01-31" dev="ryanmax" issue="" type="add">
                 allow overlapping jobs from different data sources to help with long-running FOLIO indexing tasks
             </action>
