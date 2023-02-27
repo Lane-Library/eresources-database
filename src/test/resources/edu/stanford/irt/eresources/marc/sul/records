@@ -1,0 +1,969 @@
+{
+    "instanceId": "28efba1d-8672-5d2a-aa02-a7d2b165ca52",
+    "instanceSource": {
+        "fields": [
+            {
+                "001": "L307325"
+            },
+            {
+                "005": "20170406131101.0"
+            },
+            {
+                "008": "130815s2014    pau      b    001 0 eng d"
+            },
+            {
+                "010": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "  2013033292"
+                        }
+                    ]
+                }
+            },
+            {
+                "020": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "0323065198 (pbk. : alk. paper)"
+                        }
+                    ]
+                }
+            },
+            {
+                "020": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "9780323065191 (pbk. : alk. paper)"
+                        }
+                    ]
+                }
+            },
+            {
+                "035": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "9": "L307325"
+                        }
+                    ]
+                }
+            },
+            {
+                "035": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "(OCoLC)856623128"
+                        }
+                    ]
+                }
+            },
+            {
+                "035": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "307325"
+                        }
+                    ]
+                }
+            },
+            {
+                "040": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "DNLM/DLC"
+                        },
+                        {
+                            "e": "rda"
+                        },
+                        {
+                            "b": "eng"
+                        },
+                        {
+                            "c": "DLC"
+                        },
+                        {
+                            "d": "YDX"
+                        },
+                        {
+                            "d": "BTCTA"
+                        },
+                        {
+                            "d": "NLM"
+                        },
+                        {
+                            "d": "OCLCO"
+                        },
+                        {
+                            "d": "YDXCP"
+                        }
+                    ]
+                }
+            },
+            {
+                "042": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "pcc"
+                        }
+                    ]
+                }
+            },
+            {
+                "050": {
+                    "ind1": "0",
+                    "ind2": "0",
+                    "subfields": [
+                        {
+                            "a": "RC683.5.R3"
+                        },
+                        {
+                            "b": "R43 2014"
+                        }
+                    ]
+                }
+            },
+            {
+                "060": {
+                    "ind1": "0",
+                    "ind2": "0",
+                    "subfields": [
+                        {
+                            "a": "2014 A-433"
+                        }
+                    ]
+                }
+            },
+            {
+                "060": {
+                    "ind1": "1",
+                    "ind2": "0",
+                    "subfields": [
+                        {
+                            "a": "WG 18.2"
+                        }
+                    ]
+                }
+            },
+            {
+                "100": {
+                    "ind1": "1",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "Reddy, Gautham P."
+                        },
+                        {
+                            "0": "Z161281"
+                        }
+                    ]
+                }
+            },
+            {
+                "149": {
+                    "ind1": " ",
+                    "ind2": "8",
+                    "subfields": [
+                        {
+                            "a": "Cardiac imaging"
+                        },
+                        {
+                            "s": "02"
+                        },
+                        {
+                            "d": "2014"
+                        },
+                        {
+                            "h": "[print]"
+                        },
+                        {
+                            "w": "L307325"
+                        }
+                    ]
+                }
+            },
+            {
+                "245": {
+                    "ind1": "1",
+                    "ind2": "0",
+                    "subfields": [
+                        {
+                            "a": "Cardiac imaging"
+                        },
+                        {
+                            "h": "[print] :"
+                        },
+                        {
+                            "b": "case review /"
+                        },
+                        {
+                            "c": "Gautham P. Reddy, Robert M. Steiner, Christopher M. Walker."
+                        }
+                    ]
+                }
+            },
+            {
+                "250": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "Second edition. [2nd ed.]"
+                        }
+                    ]
+                }
+            },
+            {
+                "264": {
+                    "ind1": " ",
+                    "ind2": "1",
+                    "subfields": [
+                        {
+                            "a": "Philadelphia, PA :"
+                        },
+                        {
+                            "b": "Elsevier/Saunders,"
+                        },
+                        {
+                            "c": "[2014]"
+                        }
+                    ]
+                }
+            },
+            {
+                "300": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "ix, 326 pages ;"
+                        },
+                        {
+                            "c": "28 cm"
+                        }
+                    ]
+                }
+            },
+            {
+                "336": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "text"
+                        },
+                        {
+                            "2": "rdacontent"
+                        }
+                    ]
+                }
+            },
+            {
+                "337": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "unmediated"
+                        },
+                        {
+                            "2": "rdamedia"
+                        }
+                    ]
+                }
+            },
+            {
+                "338": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "volume"
+                        },
+                        {
+                            "2": "rdacarrier"
+                        }
+                    ]
+                }
+            },
+            {
+                "490": {
+                    "ind1": "1",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "Case review series"
+                        }
+                    ]
+                }
+            },
+            {
+                "500": {
+                    "ind1": "1",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "Test note"
+                        }
+                    ]
+                }
+            },
+            {
+                "504": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "Includes bibliographical references and indexes."
+                        }
+                    ]
+                }
+            },
+            {
+                "650": {
+                    "ind1": "1",
+                    "ind2": "2",
+                    "subfields": [
+                        {
+                            "a": "Cardiac Imaging Techniques"
+                        },
+                        {
+                            "x": "methods"
+                        },
+                        {
+                            "0": "Z79878"
+                        },
+                        {
+                            "0": "Z3653"
+                        }
+                    ]
+                }
+            },
+            {
+                "650": {
+                    "ind1": "2",
+                    "ind2": "2",
+                    "subfields": [
+                        {
+                            "a": "Cardiovascular Diseases"
+                        },
+                        {
+                            "x": "diagnostic imaging"
+                        },
+                        {
+                            "0": "Z17169"
+                        },
+                        {
+                            "0": "Z355797"
+                        }
+                    ]
+                }
+            },
+            {
+                "650": {
+                    "ind1": "2",
+                    "ind2": "2",
+                    "subfields": [
+                        {
+                            "a": "Radiography"
+                        },
+                        {
+                            "0": "Z16679"
+                        }
+                    ]
+                }
+            },
+            {
+                "650": {
+                    "ind1": "4",
+                    "ind2": "2",
+                    "subfields": [
+                        {
+                            "a": "Cardiology"
+                        },
+                        {
+                            "0": "Z4559"
+                        }
+                    ]
+                }
+            },
+            {
+                "650": {
+                    "ind1": "4",
+                    "ind2": "2",
+                    "subfields": [
+                        {
+                            "a": "Diagnostic Imaging"
+                        },
+                        {
+                            "0": "Z15657"
+                        }
+                    ]
+                }
+            },
+            {
+                "655": {
+                    "ind1": "1",
+                    "ind2": "7",
+                    "subfields": [
+                        {
+                            "a": "Problems"
+                        },
+                        {
+                            "0": "Z257146"
+                        }
+                    ]
+                }
+            },
+            {
+                "655": {
+                    "ind1": "4",
+                    "ind2": "7",
+                    "subfields": [
+                        {
+                            "a": "Books"
+                        },
+                        {
+                            "0": "Z17041"
+                        }
+                    ]
+                }
+            },
+            {
+                "655": {
+                    "ind1": "7",
+                    "ind2": "7",
+                    "subfields": [
+                        {
+                            "a": "LaneConnex"
+                        },
+                        {
+                            "0": "Z67636"
+                        }
+                    ]
+                }
+            },
+            {
+                "660": {
+                    "ind1": " ",
+                    "ind2": "0",
+                    "subfields": [
+                        {
+                            "a": "Heart"
+                        },
+                        {
+                            "x": "Imaging"
+                        },
+                        {
+                            "v": "Case studies."
+                        }
+                    ]
+                }
+            },
+            {
+                "660": {
+                    "ind1": " ",
+                    "ind2": "0",
+                    "subfields": [
+                        {
+                            "a": "Heart"
+                        },
+                        {
+                            "x": "Imaging"
+                        },
+                        {
+                            "v": "Problems, exercises, etc."
+                        }
+                    ]
+                }
+            },
+            {
+                "700": {
+                    "ind1": "1",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "Steiner, Robert M."
+                        },
+                        {
+                            "0": "Z172061"
+                        }
+                    ]
+                }
+            },
+            {
+                "700": {
+                    "ind1": "1",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "Walker, Christopher M."
+                        },
+                        {
+                            "0": "Z331434"
+                        }
+                    ]
+                }
+            },
+            {
+                "830": {
+                    "ind1": " ",
+                    "ind2": "0",
+                    "subfields": [
+                        {
+                            "a": "Case review series."
+                        },
+                        {
+                            "d": "2014;"
+                        }
+                    ]
+                }
+            },
+            {
+                "903": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "NEW1405"
+                        }
+                    ]
+                }
+            },
+            {
+                "941": {
+                    "ind1": " ",
+                    "ind2": "8",
+                    "subfields": [
+                        {
+                            "a": "Pennsylvania"
+                        }
+                    ]
+                }
+            },
+            {
+                "942": {
+                    "ind1": " ",
+                    "ind2": "8",
+                    "subfields": [
+                        {
+                            "a": "English"
+                        }
+                    ]
+                }
+            },
+            {
+                "943": {
+                    "ind1": " ",
+                    "ind2": "8",
+                    "subfields": [
+                        {
+                            "a": "2014"
+                        }
+                    ]
+                }
+            },
+            {
+                "990": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "CKp"
+                        }
+                    ]
+                }
+            },
+            {
+                "998": {
+                    "ind1": " ",
+                    "ind2": " ",
+                    "subfields": [
+                        {
+                            "a": "0006a 0007m 010 0101b 0102b 010a 020 0201b 0202b 020a 035 0351b 0352b 0359 035a 042 0421b 0422b 042a 050 05010 05020 050a 050b 060 06010 06011 06020 060a 100 1000 10011 1002b 100a 149 1491b 14928 149a 149d 149h 149s 149w 245 24511 24520 245a 245b 245c 245h 250 2501b 2502b 250a 264 2641b 26421 264a 264b 264c 300 3001b 3002b 300a 300c 336 3361b 3362 3362b 336a 337 3371b 3372 3372b 337a 338 3381b 3382 3382b 338a 490 49011 4902b 490a 504 5041b 5042b 504a 650 6500 65011 65012 65014 65022 650a 650x 655 6550 65511 65514 65517 65527 655a 660 6601b 66020 660a 660v 660x 700 7000 70011 7002b 700a 830 8301b 83020 830a 830d 903 9031b 9032b 903a 941 9411b 94128 941a 942 9421b 94228 942a 943 9431b 94328 943a 990 9901b 9902b 990a"
+                        }
+                    ]
+                }
+            },
+            {
+                "999": {
+                    "ind1": "f",
+                    "ind2": "f",
+                    "subfields": [
+                        {
+                            "i": "28efba1d-8672-5d2a-aa02-a7d2b165ca52"
+                        },
+                        {
+                            "s": "7006bbad-259c-55ea-b8e9-b515ca3115e7"
+                        }
+                    ]
+                }
+            }
+        ],
+        "leader": "02536cam a2200553Ei 4500"
+    },
+    "holdingSources": [
+            {
+                "fields": [
+                    {
+                        "001": "foo"
+                    },
+                    {
+                        "004": "307325"
+                    },
+                    {
+                        "999": {
+                            "ind1": "f",
+                            "ind2": "f",
+                            "subfields": [
+                                {
+                                    "i": "foo"
+                                },
+                                {
+                                    "s": "55810fbe-d410-5571-b322-a7feb97f3adc"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "leader": "00210cx  a22000974  4500"
+            },
+            {
+                "fields": [
+                    {
+                        "001": "LH353577"
+                    },
+                    {
+                        "004": "307325"
+                    },
+                    {
+                        "005": "20140514115352.0"
+                    },
+                    {
+                        "008": "1404214u    8   1001uu   0901128"
+                    },
+                    {
+                        "852": {
+                            "ind1": "0",
+                            "ind2": " ",
+                            "subfields": [
+                                {
+                                    "a": "BOOKS"
+                                },
+                                {
+                                    "b": "LANE-LAN"
+                                },
+                                {
+                                    "h": "RC683.5.R3"
+                                },
+                                {
+                                    "i": "R43 2014"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "866": {
+                            "ind1": " ",
+                            "ind2": " ",
+                            "subfields": [
+                                {
+                                    "y": "2014"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "999": {
+                            "ind1": "f",
+                            "ind2": "f",
+                            "subfields": [
+                                {
+                                    "i": "276ad22b-694c-59e8-89d8-937757457642"
+                                },
+                                {
+                                    "s": "55810fbe-d410-5571-b322-a7feb97f3adc"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "leader": "00210cx  a22000974  4500"
+            }
+    ],
+    "itemsAndHoldings": {
+        "instanceId": "28efba1d-8672-5d2a-aa02-a7d2b165ca52",
+        "source": "MARC",
+        "modeOfIssuance": "single unit",
+        "natureOfContent": [],
+        "holdings": [
+            {
+                "id": "276ad22b-694c-59e8-89d8-937757457642",
+                "notes": [],
+                "location": {
+                    "effectiveLocation": {
+                        "code": "LANE-LAN",
+                        "name": "Lane Books: General Collection (Downstairs)",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {
+                        "code": "LANE-LAN",
+                        "name": "Lane Books: General Collection (Downstairs)",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "temporaryLocation": {}
+                },
+                "formerIds": [],
+                "callNumber": {
+                    "typeId": "95467209-6d7b-468b-94df-0f5d7ad2747d",
+                    "typeName": "Library of Congress classification",
+                    "callNumber": "RC683.5.R3 R43 2014"
+                },
+                "electronicAccess": [],
+                "statisticalCodes": [],
+                "holdingsStatements": [
+                    {
+                        "statement": "2014"
+                    }
+                ],
+                "suppressFromDiscovery": false,
+                "holdingsStatementsForIndexes": [],
+                "holdingsStatementsForSupplements": []
+            }
+        ],
+        "items": [
+            {
+                "id": "6f418de5-fb4d-5d53-80ef-22f8eab46908",
+                "notes": [],
+                "status": "Checked out",
+                "barcode": "24504683900",
+                "location": {
+                    "location": {
+                        "code": "LANE-CRES",
+                        "name": "Lane Reserves: Course Reserves",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {},
+                    "temporaryLocation": {
+                        "code": "LANE-CRES",
+                        "name": "Lane Reserves: Course Reserves",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    }
+                },
+                "formerIds": [],
+                "callNumber": {
+                    "typeId": "95467209-6d7b-468b-94df-0f5d7ad2747d",
+                    "typeName": "Library of Congress classification",
+                    "callNumber": "RC683.5.R3 R43 2014"
+                },
+                "chronology": "RAD 500:",
+                "copyNumber": "1",
+                "yearCaption": [],
+                "materialType": "book",
+                "numberOfPieces": "1",
+                "electronicAccess": [],
+                "holdingsRecordId": "276ad22b-694c-59e8-89d8-937757457642",
+                "statisticalCodes": [],
+                "permanentLoanType": "Can circulate",
+                "temporaryLoanType": "28 day res loan type",
+                "suppressFromDiscovery": false
+            },
+            {
+                "id": "6f418de5-fb4d-5d53-80ef-22f8eab46908-faked",
+                "notes": [],
+                "status": "Available",
+                "barcode": "24504683900zz",
+                "location": {
+                    "location": {
+                        "code": "LANE-CRES",
+                        "name": "Lane Reserves: Course Reserves",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {},
+                    "temporaryLocation": {
+                        "code": "LANE-CRES",
+                        "name": "Lane Reserves: Course Reserves",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    }
+                },
+                "formerIds": [],
+                "callNumber": {
+                    "typeId": "95467209-6d7b-468b-94df-0f5d7ad2747d",
+                    "typeName": "Library of Congress classification",
+                    "callNumber": "RC683.5.R3 R43 2014"
+                },
+                "chronology": "RAD 500:",
+                "copyNumber": "1",
+                "yearCaption": [],
+                "materialType": "book",
+                "numberOfPieces": "1",
+                "electronicAccess": [],
+                "holdingsRecordId": "276ad22b-694c-59e8-89d8-937757457642",
+                "statisticalCodes": [],
+                "permanentLoanType": "Can circulate",
+                "temporaryLoanType": "28 day res loan type",
+                "suppressFromDiscovery": false
+            }
+        ]
+    }
+}
+
+{
+    "instanceId": "f17fe6f5-8866-461c-b699-02ac13e78737",
+    "instance": {
+        "id": "f17fe6f5-8866-461c-b699-02ac13e78737",
+        "_version": 1,
+        "hrid": "in00000000125",
+        "source": "FOLIO",
+        "title": "Test electronic item",
+        "alternativeTitles": [],
+        "editions": [],
+        "series": [],
+        "identifiers": [],
+        "contributors": [],
+        "subjects": [],
+        "classifications": [],
+        "publication": [],
+        "publicationFrequency": [],
+        "publicationRange": [],
+        "electronicAccess": [],
+        "instanceTypeId": "6312d172-f0cf-40f6-b27d-9fa8feaf332f",
+        "instanceFormatIds": [],
+        "instanceFormats": [],
+        "physicalDescriptions": [],
+        "languages": [],
+                "notes": [
+                    {
+                        "instanceNoteTypeId": "6a2533a7-4de2-4e64-8466-074c2fa9308c",
+                        "note": "Checkout for 2 hours - test note",
+                        "staffOnly": false
+                    }
+                ],
+        "administrativeNotes": [],
+        "previouslyHeld": false,
+        "staffSuppress": false,
+        "discoverySuppress": true,
+        "statisticalCodeIds": [],
+        "statusId": "daf2681c-25af-4202-a3fa-e58fdf806183",
+        "statusUpdatedDate": "2022-08-16T15:45:15.490+0000",
+        "tags": {
+            "tagList": []
+        },
+        "metadata": {
+            "createdDate": "2022-08-16T15:45:15.489+00:00",
+            "createdByUserId": "964afef7-c806-4b94-a61b-840fe37a1e43",
+            "updatedDate": "2022-08-16T15:45:15.489+00:00",
+            "updatedByUserId": "964afef7-c806-4b94-a61b-840fe37a1e43"
+        },
+        "holdingsRecords2": [],
+        "natureOfContentTermIds": []
+    },
+    "instanceSource": null,
+    "holdingSources": [],
+    "itemsAndHoldings": {
+        "instanceId": "f17fe6f5-8866-461c-b699-02ac13e78737",
+        "source": "FOLIO",
+        "modeOfIssuance": "",
+        "natureOfContent": [],
+        "holdings": [
+            {
+                "id": "019117cf-6140-4c68-a564-caa902879312",
+                "notes": [],
+                "location": {
+                    "effectiveLocation": {
+                        "code": "LANE-ECOLL",
+                        "name": "Lane .Digital: Collection",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {
+                        "code": "LANE-ECOLL",
+                        "name": "Lane .Digital: Collection",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "temporaryLocation": {}
+                },
+                "formerIds": [],
+                "callNumber": {},
+                "electronicAccess": [
+                    {
+                        "uri": "https://test.com",
+                        "name": "reserves records won't' have electronicAccess at the holdings level, but added to verify merging",
+                        "relationshipId": "f5d0068e-6272-458e-8a81-b85e7b9a14aa"
+                    }
+                ],
+                "statisticalCodes": [],
+                "holdingsStatements": [],
+                "suppressFromDiscovery": true,
+                "holdingsStatementsForIndexes": [],
+                "holdingsStatementsForSupplements": []
+            }
+        ],
+        "items": [
+            {
+                "id": "41b43505-c500-496e-918c-77a2171eaaba",
+                "tags": {
+                    "tagList": []
+                },
+                "notes": [],
+                "status": "Available",
+                "location": {
+                    "location": {
+                        "code": "LANE-ECOLL",
+                        "name": "Lane .Digital: Collection",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {},
+                    "temporaryLocation": {}
+                },
+                "formerIds": [],
+                "callNumber": {},
+                "yearCaption": [],
+                "materialType": "electronic resource",
+                "electronicAccess": [
+                    {
+                        "uri": "lane.stanford.edu",
+                        "name": "Resource",
+                        "relationshipId": "f5d0068e-6272-458e-8a81-b85e7b9a14aa"
+                    }
+                ],
+                "holdingsRecordId": "019117cf-6140-4c68-a564-caa902879312",
+                "statisticalCodes": [],
+                "permanentLoanType": "Course reserves",
+                "suppressFromDiscovery": true
+            }
+        ]
+    }
+}
+
