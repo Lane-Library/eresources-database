@@ -5,7 +5,6 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.Collections;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class ReservesTextAugmentationTest {
         expect(this.service.buildAugmentations()).andReturn(this.augmentations);
         replay(this.service);
         assertEquals("aug1", this.augmentation.getReservesAugmentations("1"));
-        assertNull(this.augmentation.getReservesAugmentations("100"));
+        assertEquals("", this.augmentation.getReservesAugmentations("100"));
         verify(this.service);
     }
 }
