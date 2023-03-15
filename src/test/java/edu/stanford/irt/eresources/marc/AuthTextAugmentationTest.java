@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.util.Collections;
@@ -41,6 +42,7 @@ public class AuthTextAugmentationTest {
 
     @Test
     public final void testGetAugmentations() {
-        assertEquals("variant authority text", this.augmentation.getAuthAugmentations("1"));
+        assertNull(this.augmentation.getAuthAugmentations("100", "text"));
+        assertEquals("variant authority", this.augmentation.getAuthAugmentations("1", "text"));
     }
 }

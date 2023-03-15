@@ -57,14 +57,18 @@ public class KeywordsStrategy {
     }
 
     private void getKeywordsFromField(final String tag, final List<Subfield> subfields, final StringBuilder sb) {
+        StringBuilder fieldStrings = new StringBuilder();
         for (Subfield subfield : subfields) {
             char code = subfield.getCode();
+            String data = subfield.getData();
             if (isKeywordSubfield(tag, code)) {
-                getKeywordsFromSubfield(subfield.getData(), sb);
+                getKeywordsFromSubfield(data, sb);
+                fieldStrings.append(data);
+                fieldStrings.append(' ');
             }
             if (isAugmentable(tag, code)) {
-                String authText = this.authTextAugmentation.getAuthAugmentations(subfield.getData());
-                if (authText != null) {
+                String authText = this.authTextAugmentation.getAuthAugmentations(data, fieldStrings.toString().trim());
+                if (authText != null && !authText.isBlank()) {
                     sb.append(' ').append(authText);
                 }
             }
