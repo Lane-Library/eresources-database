@@ -73,8 +73,8 @@ public class KeywordsStrategyTest {
         expect(this.field.getData()).andReturn("cn");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
         expect(this.subfield.getCode()).andReturn('0').times(2);
-        expect(this.subfield.getData()).andReturn("1000").times(2);
-        expect(this.augmentation.getAuthAugmentations("1000", "1000")).andReturn("augmentation").times(2);
+        expect(this.subfield.getData()).andReturn("1000").times(4);
+        expect(this.augmentation.getAuthAugmentations("1000")).andReturn("augmentation").times(2);
         expect(this.reservesAugmentation.getReservesAugmentations("cn")).andReturn("reservesAug");
         replay(this.record, this.field, this.subfield, this.augmentation, this.reservesAugmentation);
         assertEquals("1000  augmentation 1000  augmentation reservesAug", this.strategy.getKeywords(this.record));
