@@ -181,17 +181,7 @@ public class RedivisEresourceTest {
     }
 
     @Test
-    public final void testIsCore() {
-        assertFalse(this.eresource.isCore());
-    }
-
-    @Test
     public final void testIsEnglish() {
         assertTrue(this.eresource.isEnglish());
-    }
-
-    @Test
-    public final void testIsLaneConnex() {
-        assertFalse(this.eresource.isLaneConnex());
     }
 }

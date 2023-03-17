@@ -246,16 +246,6 @@ public class SulMarcEresource extends AbstractMarcEresource {
         return this.year;
     }
 
-    @Override
-    public boolean isCore() {
-        return false;
-    }
-
-    @Override
-    public boolean isLaneConnex() {
-        return false;
-    }
-
     private boolean isAllCaps(final String string) {
         String caps = string.toUpperCase(Locale.US);
         return string.equals(caps);

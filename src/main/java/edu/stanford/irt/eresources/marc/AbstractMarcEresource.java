@@ -419,21 +419,11 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     }
 
     @Override
-    public boolean isCore() {
-        return getSubfieldData(this.marcRecord, "655", "a").anyMatch("core material"::equalsIgnoreCase);
-    }
-
-    @Override
     public boolean isEnglish() {
         String field008 = getFields(this.marcRecord, "008").map(Field::getData).findFirst()
                 .orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
-    }
-
-    @Override
-    public boolean isLaneConnex() {
-        return getSubfieldData(this.marcRecord, "655", "a").anyMatch("laneconnex"::equalsIgnoreCase);
     }
 
     protected Version createVersion(final Record holdingRecord) {

@@ -352,7 +352,6 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
                 assertEquals(null, er.getPublicationPages());
                 assertTrue(er.getPublicationTypes().isEmpty());
                 assertEquals(null, er.getPublicationVolume());
-                assertFalse(er.isLaneConnex());
                 expect(this.typeFactory.getTypes(rec)).andReturn(Collections.singletonList("a type"));
                 expect(this.keywordsStrategy.getKeywords(isA(Record.class))).andReturn("keywords").times(2);
                 replay(this.typeFactory, this.keywordsStrategy);
@@ -533,30 +532,6 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getData()).andReturn("01234561955xxxx");
         replay(this.record, this.field, this.subfield);
         assertEquals(1955, this.eresource.getYear());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public void testIsCore() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("655");
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("Core Material");
-        replay(this.record, this.field, this.subfield);
-        assertTrue(this.eresource.isCore());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public void testIsCoreNot() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("655");
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("not core");
-        replay(this.record, this.field, this.subfield);
-        assertFalse(this.eresource.isCore());
         verify(this.record, this.field, this.subfield);
     }
 

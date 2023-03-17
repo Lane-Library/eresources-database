@@ -171,10 +171,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("date", eresource.getDate());
         // ertlsw = random, uncommon string so single letter isn't stopword'd out of results
         doc.addField("title_starts", "ertlsw" + getFirstCharacter(sortTitle));
-        doc.addField("isChild", Boolean.toString(isChild(eresource)));
-        doc.addField("isCore", Boolean.toString(eresource.isCore()));
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
-        doc.addField("isLaneConnex", Boolean.toString(eresource.isLaneConnex()));
         doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
         doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
         doc.addField("publicationText", eresource.getPublicationText());
@@ -309,29 +306,6 @@ public class SolrEresourceHandler implements EresourceHandler {
             meshBroad.add(broadHeading);
         }
         doc.addField("mesh_broad", meshBroad);
-    }
-
-    /**
-     * Determine if this eresource is about children </br>
-     * Could use PubmedSpecialTypesManager instead but would miss Lane Catalog child articles </br>
-     * Strategy is based on PubMed search in pubmed_allchild search engine: (child* [tiab] OR teen* [tiab] OR adolesc*
-     * [tiab] OR pediatric* [tiab] OR infant* [tiab] OR newborn* [tiab] OR neonat* [tiab] OR "infant"[MeSH Terms] OR
-     * "child"[MeSH Terms] OR "adolescent"[MeSH Terms])
-     *
-     * @param eresource
-     * @return true if this eresource is about children
-     */
-    private boolean isChild(final Eresource eresource) {
-        for (String m : eresource.getMeshTerms()) {
-            if (CHILD_MESH.matcher(m).matches()) {
-                return true;
-            }
-        }
-        StringBuilder tiab = new StringBuilder();
-        tiab.append(eresource.getTitle());
-        tiab.append(' ');
-        tiab.append(eresource.getDescription());
-        return CHILD.matcher(tiab.toString()).matches();
     }
 
     private boolean isMarc(final Eresource eresource) {

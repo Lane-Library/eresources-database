@@ -166,19 +166,9 @@ public class RedivisEresource implements Eresource {
     }
 
     @Override
-    public boolean isCore() {
-        return false;
-    }
-
-    @Override
     public boolean isEnglish() {
         // assume all datasets are English?
         return true;
-    }
-
-    @Override
-    public boolean isLaneConnex() {
-        return false;
     }
 
     private String buildDescription() {
