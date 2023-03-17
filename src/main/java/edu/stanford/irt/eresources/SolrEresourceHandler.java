@@ -41,12 +41,6 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private static final Pattern BASIC_NONFILING = Pattern.compile("^\\W?(?:A|An|The) ");
 
-    private static final Pattern CHILD = Pattern.compile(".*\\b(?:child|teen|adolesc|pediatric|infant|newborn).*",
-            Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern CHILD_MESH = Pattern.compile("^(?:infant|child|adolescent).*",
-            Pattern.CASE_INSENSITIVE);
-
     private static final String EMPTY = "";
 
     private static final Logger log = LoggerFactory.getLogger(SolrEresourceHandler.class);
