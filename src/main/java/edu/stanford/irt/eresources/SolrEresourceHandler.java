@@ -326,6 +326,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("title_starts", "ertlsw" + getFirstCharacter(sortTitle));
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
         doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
+        doc.addField("isRecentEdition", Boolean.toString(eresource.isRecentEdition()));
         doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
         doc.addField("publicationText", eresource.getPublicationText());
         doc.addField("publicationTitle", eresource.getPublicationTitle());

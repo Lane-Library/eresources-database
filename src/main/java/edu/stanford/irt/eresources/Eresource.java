@@ -77,4 +77,8 @@ public interface Eresource {
     int getYear();
 
     boolean isEnglish();
+
+    default boolean isRecentEdition() {
+        return false;
+    }
 }

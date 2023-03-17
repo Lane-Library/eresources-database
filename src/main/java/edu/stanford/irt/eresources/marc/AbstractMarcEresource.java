@@ -81,9 +81,9 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     protected HTTPLaneLocationsService locationsService;
 
-    protected String primaryType;
-
     protected Record marcRecord;
+
+    protected String primaryType;
 
     protected TypeFactory typeFactory;
 
@@ -424,6 +424,12 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
                 .orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
+    }
+
+    @Override
+    public boolean isRecentEdition() {
+        return getSubfieldData(this.marcRecord, "780", "w").count() > 0
+                && getSubfieldData(this.marcRecord, "785", "w").count() == 0;
     }
 
     protected Version createVersion(final Record holdingRecord) {
