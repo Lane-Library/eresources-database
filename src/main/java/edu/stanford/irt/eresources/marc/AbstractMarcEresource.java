@@ -178,13 +178,13 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getIsbns() {
         return MARCRecordSupport.getSubfieldData(this.marcRecord, "020", "az").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toList());
     }
 
     @Override
     public Collection<String> getIssns() {
         return MARCRecordSupport.getSubfieldData(this.marcRecord, "022", "azlm").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toList());
     }
 
     @Override
