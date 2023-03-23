@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>124</version>
+        <version>126</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.10.1-SNAPSHOT</version>
@@ -76,7 +76,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>12.0</version>
+            <version>12.1</version>
             <exclusions>
                 <exclusion>
                     <!-- https://stackoverflow.com/questions/51094274/eclipse-cant-find-xml-related-classes-after-switching-build-path-to-jdk-10 -->
