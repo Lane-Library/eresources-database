@@ -21,7 +21,7 @@
         <dependency>
             <artifactId>catalog</artifactId>
             <groupId>edu.stanford.irt</groupId>
-            <version>3.9.8</version>
+            <version>3.9.9</version>
         </dependency>
         <dependency>
             <artifactId>nekohtml</artifactId>
@@ -120,7 +120,7 @@
         <dependency>
             <artifactId>solr-solrj</artifactId>
             <groupId>org.apache.solr</groupId>
-            <version>9.1.1</version>
+            <version>9.2.0</version>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
