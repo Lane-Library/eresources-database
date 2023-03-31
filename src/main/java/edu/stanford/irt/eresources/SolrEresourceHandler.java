@@ -325,12 +325,7 @@ public class SolrEresourceHandler implements EresourceHandler {
         // ertlsw = random, uncommon string so single letter isn't stopword'd out of results
         doc.addField("title_starts", "ertlsw" + getFirstCharacter(sortTitle));
         doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
-        boolean isRecent = (THIS_YEAR - eresource.getYear()) <= TEN;
-        doc.addField("isRecent", Boolean.toString(isRecent));
-        boolean isRecentEdition = eresource.isRecentEdition() && isRecent;
-        if (isRecentEdition) {
-            doc.addField("isRecentEdition", Boolean.toString(isRecentEdition));
-        }
+        doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
         doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
         doc.addField("publicationText", eresource.getPublicationText());
         doc.addField("publicationTitle", eresource.getPublicationTitle());

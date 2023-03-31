@@ -79,7 +79,6 @@ public class SolrEresourceHandlerTest {
         expect(this.eresource.getYear()).andReturn(1990).anyTimes();
         expect(this.eresource.getDate()).andReturn("date");
         expect(this.eresource.isEnglish()).andReturn(true);
-        expect(this.eresource.isRecentEdition()).andReturn(true);
         expect(this.eresource.getPublicationAuthorsText()).andReturn("PublicationAuthorsText");
         expect(this.eresource.getPublicationAuthors()).andReturn(Collections.singletonList("PublicationAuthor"))
                 .anyTimes();

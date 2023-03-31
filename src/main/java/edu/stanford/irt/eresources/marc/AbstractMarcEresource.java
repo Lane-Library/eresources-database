@@ -426,12 +426,6 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
     }
 
-    @Override
-    public boolean isRecentEdition() {
-        return getSubfieldData(this.marcRecord, "780", "w").count() > 0
-                && getSubfieldData(this.marcRecord, "785", "w").count() == 0;
-    }
-
     protected Version createVersion(final Record holdingRecord) {
         return new MarcVersion(holdingRecord, this.marcRecord, this, this.itemService, this.locationsService);
     }
