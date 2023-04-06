@@ -10,6 +10,9 @@
             <action date="2023-03-16" dev="ryanmax" issue="LANEWEB-11111" type="update">
                 remove unused search fields
             </action>
+            <action date="2023-03-23" dev="ryanmax" issue="LANEWEB-11115" type="fix">
+                bookcover image lookups happen in random order
+            </action>
         </release>
         <release date="2023-02-23" version="2.10.0" description="maintenance release">
             <action date="2023-01-31" dev="ryanmax" issue="" type="add">
