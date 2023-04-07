@@ -11,11 +11,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
+import edu.stanford.irt.eresources.Link;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -103,6 +105,17 @@ public class SulMarcVersionTest {
         expect(this.field.getTag()).andReturn("856").times(2);
         replay(this.record, this.field, this.subfield);
         assertEquals(1, this.version.getLinks().size());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
+    public void testGetLinksSW() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("999").times(2);
+        replay(this.record, this.field, this.subfield);
+        List<Link> links = this.version.getLinks();
+        assertEquals(1, links.size());
+        assertEquals("SU Catalog (SearchWorks)", links.get(0).getLabel());
         verify(this.record, this.field, this.subfield);
     }
 
