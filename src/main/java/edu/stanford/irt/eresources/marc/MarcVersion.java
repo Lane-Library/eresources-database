@@ -95,10 +95,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
                     .map(Subfield::getData).findFirst().orElse(null);
         }
         if (dates == null && needToAddBibDates(this.eresource)) {
-            dates = getSubfieldData(this.bib, "260", "c").findFirst().orElse(null);
-            if (dates == null) {
-                dates = getYear(this.bib) > 0 ? Integer.toString(getYear(this.bib)) : "";
-            }
+            dates = getSubfieldData(this.bib, "260", "c").findFirst().orElse("");
             dates = TextParserHelper.maybeStripTrailingPeriod(dates);
             dates = TextParserHelper.maybeStripTrailingUnbalancedBracket(dates);
         }

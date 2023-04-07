@@ -170,7 +170,7 @@ public class MarcVersionTest {
 
     @Test
     public void testGetDatesFromBib() {
-        expect(this.record.getFields()).andReturn(Collections.emptyList()).times(7);
+        expect(this.record.getFields()).andReturn(Collections.emptyList()).times(6);
         expect(this.eresource.getPublicationText()).andReturn("");
         expect(this.eresource.getPrimaryType()).andReturn("Book");
         replay(this.record, this.eresource, this.field, this.subfield);
