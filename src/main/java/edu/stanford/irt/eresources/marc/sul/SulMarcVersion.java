@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.CatalogLink;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
@@ -58,6 +59,8 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
                 dates = getSubfieldData(this.bib, "260", "c").findFirst()
                         .orElse(Integer.toString(this.eresource.getYear()));
             }
+            dates = TextParserHelper.maybeStripTrailingPeriod(dates);
+            dates = TextParserHelper.maybeStripTrailingUnbalancedBracket(dates);
         }
         return dates;
     }

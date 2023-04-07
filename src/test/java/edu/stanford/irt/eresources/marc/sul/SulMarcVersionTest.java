@@ -91,7 +91,7 @@ public class SulMarcVersionTest {
         expect(this.eresource.getYear()).andReturn(9999);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('c');
-        expect(this.subfield.getData()).andReturn("dates");
+        expect(this.subfield.getData()).andReturn("dates].");
         replay(this.record, this.eresource, this.field, this.subfield);
         assertEquals("dates", this.version.getDates());
         verify(this.record, this.eresource, this.field, this.subfield);
