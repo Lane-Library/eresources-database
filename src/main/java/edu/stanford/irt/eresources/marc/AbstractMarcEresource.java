@@ -345,7 +345,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getShortTitle() {
-        return getSubfieldData(this.marcRecord, "149", "a").findFirst().orElse(null);
+        return getSubfieldData(this.marcRecord, "245", "a").findFirst().orElse(null);
     }
 
     @Override

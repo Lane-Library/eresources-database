@@ -358,7 +358,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
                 assertTrue(er.getKeywords().contains("keywords"));
                 assertTrue(er.getTypes().contains("a type"));
                 verify(this.typeFactory, this.keywordsStrategy);
-                assertEquals("Petrosilinum vel persil, materia medica].", er.getShortTitle());
+                assertEquals("[Petrosilinum vel persil, materia medica].", er.getShortTitle());
                 assertEquals("[Opera chirurgica]..  [ca. 1400] fol. 66 [i.e. 26]", er.getPublicationText());
                 assertEquals("[Opera chirurgica].", er.getPublicationTitle());
             }

@@ -77,7 +77,7 @@ public final class TextParserHelper {
      * @return cleaned string
      */
     public static String cleanIsxn(final String isxn) {
-        if (null!= isxn && !isxn.isEmpty()) {
+        if (null != isxn && !isxn.isEmpty()) {
             return DIGIT_OR_X_PATTERN.matcher(isxn.split(" ")[0]).replaceAll("").toLowerCase(Locale.US);
         }
         return isxn;
@@ -182,6 +182,24 @@ public final class TextParserHelper {
         if (lastPeriod >= 0) {
             int lastPosition = string.length() - 1;
             if (lastPeriod == lastPosition) {
+                return string.substring(0, lastPosition);
+            }
+        }
+        return string;
+    }
+
+    /**
+     * remove unbalanced ending bracket; useful for 260 ^c
+     *
+     * @param string
+     *            text with possible unbalanced bracket at end
+     * @return text w/o bracket at end
+     */
+    public static String maybeStripTrailingUnbalancedBracket(final String string) {
+        int lastBracket = string.lastIndexOf(']');
+        if (lastBracket >= 0 && !string.contains("[")) {
+            int lastPosition = string.length() - 1;
+            if (lastBracket == lastPosition) {
                 return string.substring(0, lastPosition);
             }
         }
