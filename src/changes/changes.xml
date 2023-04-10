@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-04-10" version="2.10.2" description="maintenance release">
+            <action date="2023-04-06" dev="ryanmax" issue="LANEWEB-11110" type="update">
+                cease using 149 data in Lane Search indexing
+            </action>
+        </release>
         <release date="2023-03-31" version="2.10.1" description="maintenance release">
             <action date="2023-03-16" dev="ryanmax" issue="LANEWEB-11111" type="update">
                 remove unused search fields
