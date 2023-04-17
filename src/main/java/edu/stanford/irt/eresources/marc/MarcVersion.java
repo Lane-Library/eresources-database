@@ -125,6 +125,16 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     }
 
     @Override
+    public String getLocationCode() {
+        // 852 ^9 is set when all items have a different location than holding record (catalog library does this)
+        String itemLoc = getSubfieldData(this.holding, "852", "9").findFirst().orElse(null);
+        if (null != itemLoc) {
+            return itemLoc;
+        }
+        return getSubfieldData(this.holding, "852", "b").findFirst().orElse("");
+    }
+
+    @Override
     public String getLocationName() {
         if (null != this.locationName) {
             return this.locationName;
@@ -186,15 +196,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public boolean isProxy() {
         return getSubfieldData(this.holding, "655", "a").noneMatch("subset, noproxy"::equalsIgnoreCase);
-    }
-
-    private String getLocationCode() {
-        // 852 ^9 is set when all items have a different location than holding record (catalog library does this)
-        String itemLoc = getSubfieldData(this.holding, "852", "9").findFirst().orElse(null);
-        if (null != itemLoc) {
-            return itemLoc;
-        }
-        return getSubfieldData(this.holding, "852", "b").findFirst().orElse("");
     }
 
     private boolean hasLinks() {

@@ -96,6 +96,7 @@ public class SolrEresourceHandlerTest {
         int[] itemCount = { 10, 5 };
         expect(v.getItemCount()).andReturn(itemCount);
         expect(v.getCallnumber()).andReturn("cn");
+        expect(v.getLocationCode()).andReturn("loc code");
         expect(v.getLocationName()).andReturn("loc name");
         expect(v.getLocationUrl()).andReturn("loc url");
         expect(v.getLinks()).andReturn(Collections.singletonList(l)).times(2);

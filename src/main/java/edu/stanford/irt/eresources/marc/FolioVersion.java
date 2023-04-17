@@ -75,6 +75,17 @@ public class FolioVersion implements Version {
     }
 
     @Override
+    public String getLocationCode() {
+        Map<?, ?> effectiveLocation = ((Map<?, ?>) ((Map<?, ?>) this.folioHolding.get("location"))
+                .get("effectiveLocation"));
+        String locCode = (String) effectiveLocation.get("item-loc");
+        if (null != locCode) {
+            return locCode;
+        }
+        return (String) effectiveLocation.get("code");
+    }
+
+    @Override
     public String getLocationName() {
         if (null != this.locationName) {
             return this.locationName;
@@ -112,16 +123,6 @@ public class FolioVersion implements Version {
     public boolean isProxy() {
         // determine a way to store and retrieve this from folio holdings?
         return true;
-    }
-
-    private String getLocationCode() {
-        Map<?, ?> effectiveLocation = ((Map<?, ?>) ((Map<?, ?>) this.folioHolding.get("location"))
-                .get("effectiveLocation"));
-        String locCode = (String) effectiveLocation.get("item-loc");
-        if (null != locCode) {
-            return locCode;
-        }
-        return (String) effectiveLocation.get("code");
     }
 
     private boolean hasLinks() {

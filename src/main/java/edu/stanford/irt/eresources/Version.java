@@ -34,10 +34,14 @@ public interface Version {
 
     List<Link> getLinks();
 
-    default String getLocationName() {
+    default String getLocationCode() {
         return null;
     }
 
+    default String getLocationName() {
+        return null;
+    }
+    
     default String getLocationUrl() {
         return null;
     }
