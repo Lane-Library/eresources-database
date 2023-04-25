@@ -41,12 +41,6 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private static final Pattern BASIC_NONFILING = Pattern.compile("^\\W?(?:A|An|The) ");
 
-    private static final Pattern CHILD = Pattern.compile(".*\\b(?:child|teen|adolesc|pediatric|infant|newborn).*",
-            Pattern.CASE_INSENSITIVE);
-
-    private static final Pattern CHILD_MESH = Pattern.compile("^(?:infant|child|adolescent).*",
-            Pattern.CASE_INSENSITIVE);
-
     private static final String EMPTY = "";
 
     private static final Logger log = LoggerFactory.getLogger(SolrEresourceHandler.class);
@@ -57,7 +51,17 @@ public class SolrEresourceHandler implements EresourceHandler {
     private static final int SORT_AUTHOR_MAX = 50;
 
     private static final int SORT_TITLE_MAX = 100;
-    
+
+    private static String getSortText(final String text, final int max) {
+        if (null == text) {
+            return EMPTY;
+        }
+        if (text.length() > max) {
+            return text.substring(0, max);
+        }
+        return text;
+    }
+
     private int count;
 
     private volatile boolean keepGoing = true;
@@ -81,16 +85,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         this.queue = queue;
         this.solrClient = solrClient;
         this.solrMaxDocs = solrMaxDocs;
-    }
-
-    private static String getSortText(final String text, int max) {
-        if (null == text) {
-            return EMPTY;
-        }
-        if (text.length() > max) {
-            return text.substring(0, max);
-        }
-        return text;
     }
 
     @Override
@@ -143,66 +137,6 @@ public class SolrEresourceHandler implements EresourceHandler {
     @Override
     public void stop() {
         this.keepGoing = false;
-    }
-
-    protected void insertEresource(final Eresource eresource) {
-        SolrInputDocument doc = new SolrInputDocument();
-        String sortTitle = getSortTitle(eresource);
-        String kws = getKeywords(eresource);
-        int[] itemCount = eresource.getItemCount();
-        doc.addField("id", eresource.getId());
-        doc.addField("recordId", eresource.getRecordId());
-        doc.addField("recordType", eresource.getRecordType());
-        doc.addField("description", eresource.getDescription());
-        doc.addField("text", kws);
-        doc.addField("title", eresource.getTitle());
-        for (String altTitle : eresource.getAbbreviatedTitles()) {
-            doc.addField("title_abbr", altTitle);
-        }
-        for (String altTitle : eresource.getAlternativeTitles()) {
-            doc.addField("title_alt", altTitle);
-        }
-        doc.addField("title_short", eresource.getShortTitle());
-        doc.addField("title_sort", sortTitle);
-        doc.addField("primaryType", eresource.getPrimaryType());
-        doc.addField("totalItems", Integer.toString(itemCount[0]));
-        doc.addField("availableItems", Integer.toString(itemCount[1]));
-        doc.addField("year", Integer.toString(eresource.getYear()));
-        doc.addField("date", eresource.getDate());
-        // ertlsw = random, uncommon string so single letter isn't stopword'd out of results
-        doc.addField("title_starts", "ertlsw" + getFirstCharacter(sortTitle));
-        doc.addField("isChild", Boolean.toString(isChild(eresource)));
-        doc.addField("isCore", Boolean.toString(eresource.isCore()));
-        doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
-        doc.addField("isLaneConnex", Boolean.toString(eresource.isLaneConnex()));
-        doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
-        doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
-        doc.addField("publicationText", eresource.getPublicationText());
-        doc.addField("publicationTitle", eresource.getPublicationTitle());
-        doc.addField("type", eresource.getTypes());
-        StringBuilder authorSort = new StringBuilder();
-        Collection<String> authors = eresource.getPublicationAuthors();
-        doc.addField("author", authors);
-        for (String author : authors) {
-            authorSort.append(author);
-        }
-        addPublicationAuthors(eresource, doc);
-        doc.addField("authors_sort", getSortText(authorSort.toString(), SORT_AUTHOR_MAX));
-        doc.addField("publicationLanguage", eresource.getPublicationLanguages());
-        for (String pubType : eresource.getPublicationTypes()) {
-            doc.addField("publicationType", pubType);
-            for (String parentType : this.meshManager.getParentHeadingsLimitToPubmedPublicationTypes(pubType)) {
-                doc.addField("publicationType", parentType);
-            }
-        }
-        doc.addField("versionsJson", versionsToJson(eresource));
-        doc.addField("citationText", buildCitationKeywords(eresource));
-        maybeAddDoi(kws, doc);
-        doc.addField("isbns", eresource.getIsbns());
-        doc.addField("issns", eresource.getIssns());
-        maybeAddProxyHosts(eresource, doc);
-        handleMesh(eresource, doc);
-        this.solrDocs.add(doc);
     }
 
     private void addPublicationAuthors(final Eresource eresource, final SolrInputDocument doc) {
@@ -311,29 +245,6 @@ public class SolrEresourceHandler implements EresourceHandler {
         doc.addField("mesh_broad", meshBroad);
     }
 
-    /**
-     * Determine if this eresource is about children </br>
-     * Could use PubmedSpecialTypesManager instead but would miss Lane Catalog child articles </br>
-     * Strategy is based on PubMed search in pubmed_allchild search engine: (child* [tiab] OR teen* [tiab] OR adolesc*
-     * [tiab] OR pediatric* [tiab] OR infant* [tiab] OR newborn* [tiab] OR neonat* [tiab] OR "infant"[MeSH Terms] OR
-     * "child"[MeSH Terms] OR "adolescent"[MeSH Terms])
-     *
-     * @param eresource
-     * @return true if this eresource is about children
-     */
-    private boolean isChild(final Eresource eresource) {
-        for (String m : eresource.getMeshTerms()) {
-            if (CHILD_MESH.matcher(m).matches()) {
-                return true;
-            }
-        }
-        StringBuilder tiab = new StringBuilder();
-        tiab.append(eresource.getTitle());
-        tiab.append(' ');
-        tiab.append(eresource.getDescription());
-        return CHILD.matcher(tiab.toString()).matches();
-    }
-
     private boolean isMarc(final Eresource eresource) {
         return AbstractMarcEresource.class.isAssignableFrom(eresource.getClass());
     }
@@ -385,5 +296,62 @@ public class SolrEresourceHandler implements EresourceHandler {
             throw new EresourceDatabaseException(e);
         }
         return json;
+    }
+
+    protected void insertEresource(final Eresource eresource) {
+        SolrInputDocument doc = new SolrInputDocument();
+        String sortTitle = getSortTitle(eresource);
+        String kws = getKeywords(eresource);
+        int[] itemCount = eresource.getItemCount();
+        doc.addField("id", eresource.getId());
+        doc.addField("recordId", eresource.getRecordId());
+        doc.addField("recordType", eresource.getRecordType());
+        doc.addField("description", eresource.getDescription());
+        doc.addField("text", kws);
+        doc.addField("title", eresource.getTitle());
+        for (String altTitle : eresource.getAbbreviatedTitles()) {
+            doc.addField("title_abbr", altTitle);
+        }
+        for (String altTitle : eresource.getAlternativeTitles()) {
+            doc.addField("title_alt", altTitle);
+        }
+        doc.addField("title_short", eresource.getShortTitle());
+        doc.addField("title_sort", sortTitle);
+        doc.addField("primaryType", eresource.getPrimaryType());
+        doc.addField("totalItems", Integer.toString(itemCount[0]));
+        doc.addField("availableItems", Integer.toString(itemCount[1]));
+        doc.addField("year", Integer.toString(eresource.getYear()));
+        doc.addField("date", eresource.getDate());
+        // ertlsw = random, uncommon string so single letter isn't stopword'd out of results
+        doc.addField("title_starts", "ertlsw" + getFirstCharacter(sortTitle));
+        doc.addField("isEnglish", Boolean.toString(eresource.isEnglish()));
+        doc.addField("isRecent", Boolean.toString(THIS_YEAR - eresource.getYear() <= TEN));
+        doc.addField("publicationAuthorsText", eresource.getPublicationAuthorsText());
+        doc.addField("publicationText", eresource.getPublicationText());
+        doc.addField("publicationTitle", eresource.getPublicationTitle());
+        doc.addField("type", eresource.getTypes());
+        StringBuilder authorSort = new StringBuilder();
+        Collection<String> authors = eresource.getPublicationAuthors();
+        doc.addField("author", authors);
+        for (String author : authors) {
+            authorSort.append(author);
+        }
+        addPublicationAuthors(eresource, doc);
+        doc.addField("authors_sort", getSortText(authorSort.toString(), SORT_AUTHOR_MAX));
+        doc.addField("publicationLanguage", eresource.getPublicationLanguages());
+        for (String pubType : eresource.getPublicationTypes()) {
+            doc.addField("publicationType", pubType);
+            for (String parentType : this.meshManager.getParentHeadingsLimitToPubmedPublicationTypes(pubType)) {
+                doc.addField("publicationType", parentType);
+            }
+        }
+        doc.addField("versionsJson", versionsToJson(eresource));
+        doc.addField("citationText", buildCitationKeywords(eresource));
+        maybeAddDoi(kws, doc);
+        doc.addField("isbns", eresource.getIsbns());
+        doc.addField("issns", eresource.getIssns());
+        maybeAddProxyHosts(eresource, doc);
+        handleMesh(eresource, doc);
+        this.solrDocs.add(doc);
     }
 }

@@ -213,17 +213,7 @@ public class BibFolioEresource implements Eresource {
     }
 
     @Override
-    public boolean isCore() {
-        return false;
-    }
-
-    @Override
     public boolean isEnglish() {
         return this.getPublicationLanguages().contains("English");
-    }
-
-    @Override
-    public boolean isLaneConnex() {
-        return this.getMeshTerms().contains("LaneConnex");
     }
 }

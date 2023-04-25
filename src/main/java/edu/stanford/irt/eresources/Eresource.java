@@ -76,9 +76,5 @@ public interface Eresource {
 
     int getYear();
 
-    boolean isCore();
-
     boolean isEnglish();
-
-    boolean isLaneConnex();
 }

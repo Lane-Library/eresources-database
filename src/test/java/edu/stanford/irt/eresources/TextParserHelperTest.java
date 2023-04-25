@@ -69,6 +69,13 @@ public class TextParserHelperTest {
     }
 
     @Test
+    public final void testMaybeStripUnbalancedBracket() {
+        assertEquals("string", TextParserHelper.maybeStripTrailingUnbalancedBracket("string]"));
+        assertEquals("[string]", TextParserHelper.maybeStripTrailingUnbalancedBracket("[string]"));
+        assertEquals("string] ", TextParserHelper.maybeStripTrailingUnbalancedBracket("string] "));
+    }
+
+    @Test
     public final void testMonthAlternates() {
         assertEquals("", TextParserHelper.explodeMonth(null));
         assertEquals("", TextParserHelper.explodeMonth(""));

@@ -323,13 +323,4 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
 //        assertEquals(1999, this.eresource.getYear());
 //        verify(this.record, this.field, this.subfield);
 //    }
-    @Test
-    public final void testIsCore() {
-        assertFalse(this.eresource.isCore());
-    }
-
-    @Test
-    public final void testIsLaneConnex() {
-        assertFalse(this.eresource.isLaneConnex());
-    }
 }

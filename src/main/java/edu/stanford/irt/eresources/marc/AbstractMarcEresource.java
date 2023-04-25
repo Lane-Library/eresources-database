@@ -176,13 +176,13 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getIsbns() {
         return MARCRecordSupport.getSubfieldData(this.marcRecord, "020", "az").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toList());
     }
 
     @Override
     public Collection<String> getIssns() {
         return MARCRecordSupport.getSubfieldData(this.marcRecord, "022", "azlm").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).collect(Collectors.toSet());
+                .map(TextParserHelper::cleanIsxn).collect(Collectors.toList());
     }
 
     @Override
@@ -351,7 +351,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getShortTitle() {
-        return getSubfieldData(this.marcRecord, "149", "a").findFirst().orElse(null);
+        return getSubfieldData(this.marcRecord, "245", "a").findFirst().orElse(null);
     }
 
     @Override
@@ -425,21 +425,11 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     }
 
     @Override
-    public boolean isCore() {
-        return getSubfieldData(this.marcRecord, "655", "a").anyMatch("core material"::equalsIgnoreCase);
-    }
-
-    @Override
     public boolean isEnglish() {
         String field008 = getFields(this.marcRecord, "008").map(Field::getData).findFirst()
                 .orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
-    }
-
-    @Override
-    public boolean isLaneConnex() {
-        return getSubfieldData(this.marcRecord, "655", "a").anyMatch("laneconnex"::equalsIgnoreCase);
     }
 
     protected Version createVersion(final Record holdingRecord) {

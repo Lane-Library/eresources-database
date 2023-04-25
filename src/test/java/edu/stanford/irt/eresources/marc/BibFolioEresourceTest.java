@@ -133,17 +133,7 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testIsCore() {
-        assertFalse(this.eresource.isCore());
-    }
-
-    @Test
     public void testIsEnglish() {
         assertFalse(this.eresource.isEnglish());
-    }
-
-    @Test
-    public void testIsLaneConnex() {
-        assertFalse(this.eresource.isLaneConnex());
     }
 }

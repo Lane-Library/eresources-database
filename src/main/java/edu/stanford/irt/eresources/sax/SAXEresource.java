@@ -40,11 +40,7 @@ public class SAXEresource implements Eresource {
 
     private String id;
 
-    private boolean isCore = false;
-
     private boolean isDigital = false;
-
-    private boolean isLaneConnex = false;
 
     private Collection<String> issns = new HashSet<>();
 
@@ -303,11 +299,6 @@ public class SAXEresource implements Eresource {
         return this.year;
     }
 
-    @Override
-    public boolean isCore() {
-        return this.isCore;
-    }
-
     public boolean isDigital() {
         return this.isDigital;
     }
@@ -315,11 +306,6 @@ public class SAXEresource implements Eresource {
     @Override
     public boolean isEnglish() {
         return this.publicationLanguages.contains(ENG);
-    }
-
-    @Override
-    public boolean isLaneConnex() {
-        return this.isLaneConnex;
     }
 
     public void setDate(final String date) {
@@ -334,16 +320,8 @@ public class SAXEresource implements Eresource {
         this.id = id;
     }
 
-    public void setIsCore(final boolean isCore) {
-        this.isCore = isCore;
-    }
-
     public void setIsDigital(final boolean isDigital) {
         this.isDigital = isDigital;
-    }
-
-    public void setIsLaneConnex(final boolean isLaneConnex) {
-        this.isLaneConnex = isLaneConnex;
     }
 
     public void setKeywords(final String keywords) {

@@ -3,10 +3,10 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>123</version>
+        <version>127</version>
     </parent>
     <artifactId>eresources-database</artifactId>
-    <version>2.9.10-SNAPSHOT</version>
+    <version>2.10.3-SNAPSHOT</version>
     <name>eresources-database</name>
     <scm>
         <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
@@ -76,7 +76,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>12.0</version>
+            <version>12.1</version>
             <exclusions>
                 <exclusion>
                     <!-- https://stackoverflow.com/questions/51094274/eclipse-cant-find-xml-related-classes-after-switching-build-path-to-jdk-10 -->
@@ -120,7 +120,7 @@
         <dependency>
             <artifactId>solr-solrj</artifactId>
             <groupId>org.apache.solr</groupId>
-            <version>9.1.0</version>
+            <version>9.2.0</version>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
@@ -212,7 +212,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.9.0</version>
+            <version>1.10.0</version>
         </dependency>
     </dependencies>
     <build>
