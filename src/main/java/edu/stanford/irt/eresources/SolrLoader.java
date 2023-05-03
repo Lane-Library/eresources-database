@@ -34,9 +34,11 @@ public class SolrLoader {
 
     protected SolrClient solrClient;
 
+    protected String solrCollection = null;
+
     private Executor executor = null;
 
-    private EresourceHandler handler = null;
+    private SolrEresourceHandler handler = null;
 
     private Collection<AbstractEresourceProcessor> processors = Collections.emptyList();
 
@@ -80,8 +82,9 @@ public class SolrLoader {
         this.executor = executor;
     }
 
-    public void setHandler(final EresourceHandler handler) {
+    public void setHandler(final SolrEresourceHandler handler) {
         this.handler = handler;
+        this.handler.setSolrCollection(this.solrCollection);
     }
 
     public void setProcessors(final Collection<AbstractEresourceProcessor> processors) {
@@ -99,6 +102,10 @@ public class SolrLoader {
         this.solrClient = solrClient;
     }
 
+    public void setSolrCollection(final String solrCollection) {
+        this.solrCollection = solrCollection;
+    }
+
     public void setUpdatedDateQuery(final String solrUpdatedDateQuery) {
         this.updatedDateQuery = solrUpdatedDateQuery;
     }
@@ -107,7 +114,7 @@ public class SolrLoader {
         this.version = version;
     }
 
-    protected EresourceHandler getHandler() {
+    protected SolrEresourceHandler getHandler() {
         return this.handler;
     }
 
@@ -120,7 +127,7 @@ public class SolrLoader {
         query.add("sort", "updated desc");
         QueryResponse rsp = null;
         try {
-            rsp = this.solrClient.query(query);
+            rsp = this.solrClient.query(this.solrCollection, query);
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }
@@ -148,9 +155,9 @@ public class SolrLoader {
                 // need to adjust lastUpdate to Solr's timezone (UTC)
                 LocalDateTime adjustedUpdateDate = LocalDateTime
                         .ofInstant(lastUpdate.atZone(ZoneId.systemDefault()).toInstant(), ZoneId.of("UTC"));
-                this.solrClient.deleteByQuery(
+                this.solrClient.deleteByQuery(this.solrCollection,
                         baseQuery + " AND updated:[* TO " + adjustedUpdateDate.format(SOLR_DATE_FIELD_FORMATTER) + "]");
-                this.solrClient.commit();
+                this.solrClient.commit(this.solrCollection);
             } catch (SolrServerException | IOException e) {
                 throw new EresourceDatabaseException(e);
             }

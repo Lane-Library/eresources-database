@@ -7,6 +7,7 @@
     <!-- included for catalogServiceURI, etc. -->
     <import resource="../lane/marc-processor.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Reloader" parent="abstractSolrLoader">
+        <constructor-arg name="solrCollection" value="pmc"/>
         <constructor-arg name="baseQuery" value="recordType:dnlm"/>
         <constructor-arg name="expectedMinRecords" value="20"/>
         <property name="processors">

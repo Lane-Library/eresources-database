@@ -12,6 +12,7 @@
     <bean id="httpLaneLocationsService" class="java.lang.Object"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.SulUpdate" parent="abstractSolrLoader">
         <constructor-arg name="basePath" value="${eresources.sul.file-record-service.basePath}/incr"/>
+        <constructor-arg name="solrCollection" value="sul"/>
     	<property name="processors">
             <list>
                 <ref bean="sulMARCProcessor"/>

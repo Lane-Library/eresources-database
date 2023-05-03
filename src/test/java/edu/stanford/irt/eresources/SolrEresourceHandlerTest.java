@@ -33,6 +33,7 @@ public class SolrEresourceHandlerTest {
         this.queue = mock(BlockingQueue.class);
         this.solrClient = mock(SolrClient.class);
         this.handler = new SolrEresourceHandler(this.queue, this.solrClient, 1);
+        this.handler.setSolrCollection("collection");
         this.eresource = mock(AbstractMarcEresource.class);
     }
 
@@ -112,7 +113,7 @@ public class SolrEresourceHandlerTest {
         expect(this.eresource.getIsbns()).andReturn(Collections.singletonList("isbn"));
         expect(this.eresource.getIssns()).andReturn(Collections.singletonList("issn"));
         expect(this.queue.isEmpty()).andReturn(true);
-        expect(this.solrClient.add(isA(Collection.class))).andReturn(null);
+        expect(this.solrClient.add(isA(String.class), isA(Collection.class))).andReturn(null);
         replay(this.eresource, this.queue, v, l, this.solrClient);
         // clearly poor design ... have to stop before run so that keepGoing doesn't run forever
         this.handler.stop();

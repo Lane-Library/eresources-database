@@ -76,6 +76,8 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private SolrClient solrClient;
 
+    private String solrCollection;
+
     private Collection<SolrInputDocument> solrDocs = new ArrayList<>();
 
     private int solrMaxDocs;
@@ -134,6 +136,10 @@ public class SolrEresourceHandler implements EresourceHandler {
         }
     }
 
+    public void setSolrCollection(final String collection) {
+        this.solrCollection = collection;
+    }
+
     @Override
     public void stop() {
         this.keepGoing = false;
@@ -152,10 +158,10 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     private void addSolrDocs(final boolean commit) {
         try {
-            this.solrClient.add(this.solrDocs);
+            this.solrClient.add(this.solrCollection, this.solrDocs);
             this.solrDocs.clear();
             if (commit) {
-                this.solrClient.commit();
+                this.solrClient.commit(this.solrCollection);
             }
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException("solr add failed", e);

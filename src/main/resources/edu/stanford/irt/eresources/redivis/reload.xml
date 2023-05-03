@@ -4,6 +4,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="../common.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Reloader" parent="abstractSolrLoader">
+        <constructor-arg name="solrCollection" value="redivis"/>
         <constructor-arg name="baseQuery" value="recordType:redivis"/>
         <constructor-arg name="expectedMinRecords" value="20"/>
         <property name="handler" ref="eresourceHandler"/>

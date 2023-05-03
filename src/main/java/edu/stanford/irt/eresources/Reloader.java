@@ -8,7 +8,8 @@ public class Reloader extends SolrLoader {
 
     private final int expectedMinRecords;
 
-    public Reloader(final String baseQuery, final int expectedMinRecords) {
+    public Reloader(final String solrCollection, final String baseQuery, final int expectedMinRecords) {
+        this.solrCollection = solrCollection;
         this.baseQuery = baseQuery;
         this.expectedMinRecords = expectedMinRecords;
     }

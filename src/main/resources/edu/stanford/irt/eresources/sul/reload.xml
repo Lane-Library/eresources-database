@@ -11,6 +11,7 @@
     <bean id="itemCount" class="java.lang.Object"/>
     <bean id="httpLaneLocationsService" class="java.lang.Object"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Reloader" parent="abstractSolrLoader">
+        <constructor-arg name="solrCollection" value="sul"/>
         <constructor-arg name="baseQuery" value="recordType:sul"/>
         <constructor-arg name="expectedMinRecords" value="1000000"/>
         <property name="processors">

@@ -23,8 +23,9 @@ public class SulUpdate extends SolrLoader {
 
     private String basePath;
 
-    public SulUpdate(final String basePath) {
+    public SulUpdate(final String basePath, final String solrCollection) {
         this.basePath = basePath;
+        this.solrCollection = solrCollection;
     }
 
     @Override
@@ -54,9 +55,9 @@ public class SulUpdate extends SolrLoader {
         if (!deletes.isEmpty()) {
             try {
                 for (String id : deletes) {
-                    this.solrClient.deleteByQuery("id:sul-" + id);
+                    this.solrClient.deleteByQuery(this.solrCollection, "id:sul-" + id);
                 }
-                this.solrClient.commit();
+                this.solrClient.commit(this.solrCollection);
             } catch (SolrServerException | IOException e) {
                 throw new EresourceDatabaseException(e);
             }

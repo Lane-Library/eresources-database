@@ -4,6 +4,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="pubmed-load.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Reloader" parent="abstractSolrLoader">
+        <constructor-arg name="solrCollection" value="pubmed"/>
         <constructor-arg name="baseQuery" value="recordType:pubmed"/>
         <constructor-arg name="expectedMinRecords" value="1000000"/>
     </bean>

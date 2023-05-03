@@ -5,6 +5,7 @@
     <import resource="../common.xml"/>
     <import resource="marc-processor.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Updater" parent="abstractSolrLoader">
+        <constructor-arg name="solrCollection" value="lane"/>
         <constructor-arg name="baseQuery" value="recordType:bib"/>
         <property name="processors">
             <list>

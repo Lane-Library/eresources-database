@@ -15,13 +15,14 @@ public class PubmedUpdate extends SolrLoader {
 
     @Override
     public void load() {
+        this.getHandler().setSolrCollection(this.solrCollection);
         this.setUpdatedDateQuery("recordType:pubmed");
         super.load();
         try {
             // pubmed2er.stx handles deletes from NCBI by zeroing out record data
             // here we delete them ... records lacking year and title
-            this.solrClient.deleteByQuery("recordType:pubmed AND year:0 AND title:''");
-            this.solrClient.commit();
+            this.solrClient.deleteByQuery(this.solrCollection, "recordType:pubmed AND year:0 AND title:''");
+            this.solrClient.commit(this.solrCollection);
         } catch (SolrServerException | IOException e) {
             throw new EresourceDatabaseException(e);
         }

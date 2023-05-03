@@ -7,6 +7,7 @@
     <import resource="laneblog-processor.xml"/>
     <import resource="libguides/libguide-processor.xml"/>
     <bean id="solrLoader" class="edu.stanford.irt.eresources.Updater" parent="abstractSolrLoader">
+        <constructor-arg name="solrCollection" value="lane"/>
         <constructor-arg name="baseQuery" value="recordType:web"/>
         <property name="processors">
             <list>

@@ -4,7 +4,8 @@ public class Updater extends SolrLoader {
 
     private String baseQuery;
 
-    public Updater(final String baseQuery) {
+    public Updater(final String solrCollection, final String baseQuery) {
+        this.solrCollection = solrCollection;
         this.baseQuery = baseQuery;
     }
 
