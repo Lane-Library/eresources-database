@@ -17,7 +17,7 @@ public class Job {
         LANE_WEBSITES_RELOAD("lane", "websites-reload","reload laneweb HTML, classes, blog, libguides - nightly"),
         LANE_WEBSITES_UPDATE("lane", "websites-update","update laneweb HTML, classes, blog, libguides - frequently"),
         PMC_RELOAD("pmc", RELOAD, "reload PMC journals - daily"),
-        PUBMED_RELOAD("pubmed", UPDATE, "reload all PubMed records - annual or less"),
+        PUBMED_RELOAD("pubmed", RELOAD, "reload all PubMed records - annual or less"),
         PUBMED_UPDATE("pubmed", UPDATE, "updates from PubMed - a few times a day"),
         REDIVIS_RELOAD("redivis",RELOAD, "reload Redivis - monthly"),
         SUL_RELOAD("sul",RELOAD, "reload SUL MARC - monthly"),
