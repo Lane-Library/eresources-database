@@ -100,6 +100,19 @@ public class SulMarcVersionTest {
     }
 
     @Test
+    public void testGetDatesJournal() {
+        expect(this.eresource.getPublicationText()).andReturn("");
+        expect(this.eresource.getPrimaryType()).andReturn("Journal");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
+        expect(this.field.getTag()).andReturn("999");
+        expect(this.field.getTag()).andReturn("008");
+        expect(this.field.getData()).andReturn("010105c20009999pauqr p 0 a0eng d");
+        replay(this.record, this.eresource, this.field);
+        assertEquals("2000-", this.version.getDates());
+        verify(this.record, this.eresource, this.field);
+    }
+
+    @Test
     public void testGetLinks() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("856").times(2);
