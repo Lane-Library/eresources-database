@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
+import edu.stanford.irt.eresources.marc.type.TypeFactory;
 import edu.stanford.lane.catalog.Record;
 
 public class AcceptableKeywordStrategy implements InclusionStrategy {
@@ -13,13 +14,9 @@ public class AcceptableKeywordStrategy implements InclusionStrategy {
 
     List<String> acceptablePrimaryTypes;
 
-    SulTypeFactory typeFactory;
-
-    public AcceptableKeywordStrategy(final List<String> acceptableKeywords, final List<String> acceptablePrimaryTypes,
-            final SulTypeFactory typeFactory) {
+    public AcceptableKeywordStrategy(final List<String> acceptableKeywords, final List<String> acceptablePrimaryTypes) {
         this.acceptableKeywords = acceptableKeywords;
         this.acceptablePrimaryTypes = acceptablePrimaryTypes;
-        this.typeFactory = typeFactory;
     }
 
     // check keywords for record inclusion when
@@ -45,6 +42,6 @@ public class AcceptableKeywordStrategy implements InclusionStrategy {
     }
 
     private boolean isAcceptablePrimaryType(final Record marcRecord) {
-        return this.acceptablePrimaryTypes.contains(this.typeFactory.getPrimaryType(marcRecord));
+        return this.acceptablePrimaryTypes.contains(TypeFactory.getPrimaryType(marcRecord));
     }
 }

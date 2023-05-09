@@ -15,9 +15,6 @@
                 <constructor-arg ref="httpCatalogRecordService"/>
             </bean>
         </constructor-arg>
-        <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.sul.SulTypeFactory"/>
-        </constructor-arg>
         <constructor-arg ref="httpLaneLocationsService"/>
     </bean>
     <bean id="authTextAugmentation" class="edu.stanford.irt.eresources.marc.AuthTextAugmentation">

@@ -16,7 +16,6 @@ import org.junit.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
-import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
 import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
@@ -40,8 +39,6 @@ public class FolioRecordEresourceProcessorTest {
 
     private RecordCollectionFactory recordCollectionFactory;
 
-    private SulTypeFactory typeFactory;
-
     @Before
     public void setUp() throws Exception {
         this.eresourceHandler = mock(EresourceHandler.class);
@@ -49,9 +46,8 @@ public class FolioRecordEresourceProcessorTest {
         this.locationsService = mock(HTTPLaneLocationsService.class);
         this.recordCollectionFactory = mock(RecordCollectionFactory.class);
         this.recordCollection = mock(FolioRecordCollection.class);
-        this.typeFactory = mock(SulTypeFactory.class);
         this.processor = new FolioRecordEresourceProcessor(this.eresourceHandler, this.keywordsStrategy,
-                this.recordCollectionFactory, this.typeFactory, this.locationsService);
+                this.recordCollectionFactory, this.locationsService);
         this.marcRecord = mock(Record.class);
         this.folioRecord = mock(FolioRecord.class);
     }

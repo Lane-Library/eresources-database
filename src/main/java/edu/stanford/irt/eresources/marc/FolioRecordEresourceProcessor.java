@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
-import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
 import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
@@ -26,15 +25,12 @@ public class FolioRecordEresourceProcessor extends AbstractEresourceProcessor {
 
     private RecordCollectionFactory recordCollectionFactory;
 
-    private SulTypeFactory typeFactory;
-
     public FolioRecordEresourceProcessor(final EresourceHandler eresourceHandler,
             final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
-            final SulTypeFactory typeFactory, final HTTPLaneLocationsService locationsService) {
+            final HTTPLaneLocationsService locationsService) {
         this.eresourceHandler = eresourceHandler;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
-        this.typeFactory = typeFactory;
         this.locationsService = locationsService;
     }
 
@@ -62,13 +58,13 @@ public class FolioRecordEresourceProcessor extends AbstractEresourceProcessor {
         Record bibRecord = folioRecord.getInstanceMarc();
         recordList.add(bibRecord);
         recordList.addAll(folioRecord.getHoldingsMarc());
-        this.eresourceHandler.handleEresource(
-                new BibMarcEresource(recordList, this.keywordsStrategy, this.typeFactory, this.locationsService));
+        this.eresourceHandler
+                .handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy, this.locationsService));
         int altTitleCount = (int) bibRecord.getFields().stream().filter((final Field f) -> "249".equals(f.getTag()))
                 .count();
         for (int i = 0; i < altTitleCount; i++) {
-            this.eresourceHandler.handleEresource(new AltTitleMarcEresource(recordList, this.keywordsStrategy,
-                    this.typeFactory, i + 1, this.locationsService));
+            this.eresourceHandler.handleEresource(
+                    new AltTitleMarcEresource(recordList, this.keywordsStrategy, i + 1, this.locationsService));
         }
     }
 }

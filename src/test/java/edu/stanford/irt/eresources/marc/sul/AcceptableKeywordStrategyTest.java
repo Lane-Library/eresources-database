@@ -1,22 +1,24 @@
 package edu.stanford.irt.eresources.marc.sul;
 
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import edu.stanford.irt.eresources.CatalogRecordService;
+import edu.stanford.irt.eresources.SulFileCatalogRecordService;
+import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
+import edu.stanford.lane.catalog.RecordCollection;
 
 public class AcceptableKeywordStrategyTest {
 
@@ -28,15 +30,26 @@ public class AcceptableKeywordStrategyTest {
 
     private Subfield subfield;
 
-    private SulTypeFactory typeFactory;
+    RecordCollection recordCollection;
+
+    HashMap<String, Record> records = new HashMap<>();
+
+    CatalogRecordService recordService;
 
     @Before
     public void setUp() throws Exception {
-        this.typeFactory = mock(SulTypeFactory.class);
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.initialize();
+        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc",
+                executor);
+        this.recordCollection = new RecordCollection(this.recordService.getRecordStream(0));
+        while (this.recordCollection.hasNext()) {
+            Record rec = this.recordCollection.next();
+            this.records.put(MARCRecordSupport.getRecordId(rec), rec);
+        }
         List<String> acceptableKeywords = Collections.singletonList("keyword");
         List<String> acceptablePrimaryTypes = Collections.singletonList("pType");
-        this.inclusionStrategy = new AcceptableKeywordStrategy(acceptableKeywords, acceptablePrimaryTypes,
-                this.typeFactory);
+        this.inclusionStrategy = new AcceptableKeywordStrategy(acceptableKeywords, acceptablePrimaryTypes);
         this.marcRecord = mock(Record.class);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
@@ -44,101 +57,42 @@ public class AcceptableKeywordStrategyTest {
 
     @Test
     public final void testIsAcceptableFiction() {
-        expect(this.typeFactory.getPrimaryType(this.marcRecord)).andReturn("pType");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
-        expect(this.field.getTag()).andReturn("655").times(3);
-        expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("fiction");
-        replay(this.marcRecord, this.field, this.subfield, this.typeFactory);
-        assertFalse(this.inclusionStrategy.isAcceptable(this.marcRecord));
-        verify(this.marcRecord, this.field, this.subfield, this.typeFactory);
+        assertFalse(this.inclusionStrategy.isAcceptable(this.records.get("8223791")));
     }
 
     @Test
     public final void testIsAcceptableInspectKeywordsFalse() {
-        expect(this.typeFactory.getPrimaryType(this.marcRecord)).andReturn("pType");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
-        expect(this.field.getTag()).andReturn("655").times(3);
-        expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("nonfiction");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("069");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("059");
-        // .toString() cannot be mocked with easymock
-        // https://easymock.org/user-guide.html#mocking-limitations
-        // this.marcRecord.toString() will return "easymock for class edu.stanford.lane.catalog.record"
-        replay(this.marcRecord, this.field, this.subfield, this.typeFactory);
-        assertFalse(this.inclusionStrategy.isAcceptable(this.marcRecord));
-        verify(this.marcRecord, this.field, this.subfield, this.typeFactory);
+        // should fail because has 050
+        List<String> acceptableKeywords = Collections.singletonList("foo");
+        List<String> acceptablePrimaryTypes = Collections.singletonList("Book Print");
+        this.inclusionStrategy = new AcceptableKeywordStrategy(acceptableKeywords, acceptablePrimaryTypes);
+        assertFalse(this.inclusionStrategy.isAcceptable(this.records.get("13117763")));
     }
 
     @Test
     public final void testIsAcceptableInspectKeywordsTrue() {
-        List<String> acceptableKeywords = Collections.singletonList("easymock");
-        List<String> acceptablePrimaryTypes = Collections.singletonList("pType");
-        this.inclusionStrategy = new AcceptableKeywordStrategy(acceptableKeywords, acceptablePrimaryTypes,
-                this.typeFactory);
-        expect(this.typeFactory.getPrimaryType(this.marcRecord)).andReturn("pType");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
-        expect(this.field.getTag()).andReturn("655").times(3);
-        expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("nonfiction");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("069");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("059");
-        // .toString() cannot be mocked with easymock
-        // https://easymock.org/user-guide.html#mocking-limitations
-        // this.marcRecord.toString() will return "easymock for class edu.stanford.lane.catalog.record"
-        replay(this.marcRecord, this.field, this.subfield, this.typeFactory);
-        assertTrue(this.inclusionStrategy.isAcceptable(this.marcRecord));
-        verify(this.marcRecord, this.field, this.subfield, this.typeFactory);
-    }
-
-    @Test
-    public final void testIsAcceptableLCCN() {
-        expect(this.typeFactory.getPrimaryType(this.marcRecord)).andReturn("pType");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
-        expect(this.field.getTag()).andReturn("655").times(3);
-        expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("nonfiction");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("069");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("050");
-        expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("lccn");
-        replay(this.marcRecord, this.field, this.subfield, this.typeFactory);
-        assertFalse(this.inclusionStrategy.isAcceptable(this.marcRecord));
-        verify(this.marcRecord, this.field, this.subfield, this.typeFactory);
+        List<String> acceptableKeywords = Collections.singletonList("mozambique");
+        List<String> acceptablePrimaryTypes = Collections.singletonList("Other");
+        this.inclusionStrategy = new AcceptableKeywordStrategy(acceptableKeywords, acceptablePrimaryTypes);
+        assertTrue(this.inclusionStrategy.isAcceptable(this.records.get("10784454")));
+        acceptableKeywords = Collections.singletonList("notmozambique");
+        this.inclusionStrategy = new AcceptableKeywordStrategy(acceptableKeywords, acceptablePrimaryTypes);
+        assertFalse(this.inclusionStrategy.isAcceptable(this.records.get("10784454")));
     }
 
     @Test
     public final void testIsAcceptableNLMCN() {
-        expect(this.typeFactory.getPrimaryType(this.marcRecord)).andReturn("pType");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
-        expect(this.field.getTag()).andReturn("655").times(3);
-        expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
-        expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("nonfiction");
-        expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("060");
-        replay(this.marcRecord, this.field, this.subfield, this.typeFactory);
-        assertFalse(this.inclusionStrategy.isAcceptable(this.marcRecord));
-        verify(this.marcRecord, this.field, this.subfield, this.typeFactory);
+        Collections.singletonList("red");
+        Collections.singletonList("Book Digital");
+        // red book has 060 so should not be included
+        assertFalse(this.inclusionStrategy.isAcceptable(this.records.get("23491")));
     }
 
     @Test
     public final void testIsAcceptableNotPrimaryType() {
-        expect(this.typeFactory.getPrimaryType(this.marcRecord)).andReturn("nope");
-        replay(this.marcRecord, this.typeFactory);
-        assertFalse(this.inclusionStrategy.isAcceptable(this.marcRecord));
-        verify(this.marcRecord, this.typeFactory);
+        List<String> acceptableKeywords = Collections.singletonList("mozambique");
+        List<String> acceptablePrimaryTypes = Collections.singletonList("non-existent primary type");
+        this.inclusionStrategy = new AcceptableKeywordStrategy(acceptableKeywords, acceptablePrimaryTypes);
+        assertFalse(this.inclusionStrategy.isAcceptable(this.records.get("10784454")));
     }
 }

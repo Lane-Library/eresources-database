@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -26,7 +27,6 @@ import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.SulFileCatalogRecordService;
-import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -46,18 +46,15 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
 
     private Subfield subfield;
 
-    private SulTypeFactory typeFactory;
-
     CatalogRecordService recordService;
 
     @Before
     public void setUp() {
         this.record = mock(Record.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
-        this.typeFactory = mock(SulTypeFactory.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
         this.eresource = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }),
-                this.keywordsStrategy, this.typeFactory, this.locationsService);
+                this.keywordsStrategy, this.locationsService);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
     }
@@ -346,26 +343,25 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
             Record rec = rc.next();
             if ("168269".equals(getRecordId(rec))) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
-                        this.keywordsStrategy, this.typeFactory, this.locationsService);
+                        this.keywordsStrategy, this.locationsService);
                 assertEquals("bib-168269", er.getId());
                 assertEquals(null, er.getPublicationDate());
                 assertEquals(null, er.getPublicationIssue());
                 assertEquals(null, er.getPublicationPages());
                 assertTrue(er.getPublicationTypes().isEmpty());
                 assertEquals(null, er.getPublicationVolume());
-                expect(this.typeFactory.getTypes(rec)).andReturn(Collections.singletonList("a type"));
                 expect(this.keywordsStrategy.getKeywords(isA(Record.class))).andReturn("keywords").times(2);
-                replay(this.typeFactory, this.keywordsStrategy);
+                replay(this.keywordsStrategy);
                 assertTrue(er.getKeywords().contains("keywords"));
-                assertTrue(er.getTypes().contains("a type"));
-                verify(this.typeFactory, this.keywordsStrategy);
+                assertTrue(er.getTypes().contains("Image"));
+                verify(this.keywordsStrategy);
                 assertEquals("[Petrosilinum vel persil, materia medica].", er.getShortTitle());
                 assertEquals("[Opera chirurgica]..  [ca. 1400] fol. 66 [i.e. 26]", er.getPublicationText());
                 assertEquals("[Opera chirurgica].", er.getPublicationTitle());
             }
             if ("67043".equals(getRecordId(rec))) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
-                        this.keywordsStrategy, this.typeFactory, this.locationsService);
+                        this.keywordsStrategy, this.locationsService);
                 assertEquals("[Collection of reprints by John Uri Lloyd from the Western Druggist]. ",
                         er.getPublicationText());
                 assertEquals("[Collection of reprints by John Uri Lloyd from the Western Druggist]",
@@ -373,13 +369,13 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
             }
             if ("77614".equals(getRecordId(rec))) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
-                        this.keywordsStrategy, this.typeFactory, this.locationsService);
+                        this.keywordsStrategy, this.locationsService);
                 assertEquals("Stanford University Medical Center Records. ", er.getPublicationText());
                 assertEquals("Stanford University Medical Center Records", er.getPublicationTitle());
             }
             if ("21171".equals(getRecordId(rec))) {
                 Eresource er = new BibMarcEresource(Arrays.asList(new Record[] { rec, this.record }),
-                        this.keywordsStrategy, this.typeFactory, this.locationsService);
+                        this.keywordsStrategy, this.locationsService);
                 assertEquals(
                         "Clinical pharmacology and therapeutics.  1981 Sep-; 30(3)-; Journal of the American Medical Association 1972 Nov 27-1981 Feb 27; 222(9)-245(8)",
                         er.getPublicationText());
@@ -490,8 +486,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
 
     @Test
     public void testGetVersions() {
-        BibMarcEresource e = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }), null,
-                this.typeFactory, null);
+        BibMarcEresource e = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }), null, null);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("856").atLeastOnce();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).atLeastOnce();
@@ -499,11 +494,12 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.subfield.getData()).andReturn("url").atLeastOnce();
         expect(this.field.getIndicator1()).andReturn('4').atLeastOnce();
         expect(this.field.getIndicator2()).andReturn('1').atLeastOnce();
-        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("primary type").atLeastOnce();
-        replay(this.record, this.field, this.subfield, this.typeFactory);
+        byte b = 0;
+        expect(this.record.getLeaderByte(EasyMock.anyInt())).andReturn(b).atLeastOnce();
+        replay(this.record, this.field, this.subfield);
         assertEquals(1, e.getVersions().size());
         assertEquals(1, e.getVersions().size());
-        verify(this.record, this.field, this.subfield, this.typeFactory);
+        verify(this.record, this.field, this.subfield);
     }
 
     @Test

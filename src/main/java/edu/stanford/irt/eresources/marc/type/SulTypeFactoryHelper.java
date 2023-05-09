@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc.sul;
+package edu.stanford.irt.eresources.marc.type;
 
 import java.util.Collections;
 import java.util.HashSet;

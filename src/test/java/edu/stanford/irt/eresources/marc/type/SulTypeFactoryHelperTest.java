@@ -1,4 +1,4 @@
-package edu.stanford.irt.eresources.marc.sul;
+package edu.stanford.irt.eresources.marc.type;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

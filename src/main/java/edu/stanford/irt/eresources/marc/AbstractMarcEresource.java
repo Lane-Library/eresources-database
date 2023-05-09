@@ -24,7 +24,7 @@ import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
-import edu.stanford.irt.eresources.marc.sul.SulTypeFactory;
+import edu.stanford.irt.eresources.marc.type.TypeFactory;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -82,8 +82,6 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     protected Record marcRecord;
 
     protected String primaryType;
-
-    protected SulTypeFactory typeFactory;
 
     protected Collection<String> types;
 
@@ -220,7 +218,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getPrimaryType() {
         if (this.primaryType == null) {
-            this.primaryType = this.typeFactory.getPrimaryType(this.marcRecord);
+            this.primaryType = TypeFactory.getPrimaryType(this.marcRecord);
         }
         return this.primaryType;
     }
@@ -381,7 +379,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getTypes() {
         if (this.types == null) {
-            this.types = this.typeFactory.getTypes(this.marcRecord);
+            this.types = TypeFactory.getTypes(this.marcRecord);
         }
         return new HashSet<>(this.types);
     }

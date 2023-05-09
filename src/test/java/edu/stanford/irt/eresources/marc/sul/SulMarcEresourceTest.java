@@ -6,18 +6,16 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -45,22 +43,17 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
 
     private Subfield subfield;
 
-    private SulTypeFactory typeFactory;
-
     RecordCollection recordCollection;
 
     HashMap<String, Record> records = new HashMap<>();
 
     CatalogRecordService recordService;
 
-    SulTypeFactory typefactory;
-
     @Before
     public void setUp() {
         this.record = mock(Record.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
-        this.typeFactory = mock(SulTypeFactory.class);
-        this.eresource = new SulMarcEresource(this.record, this.keywordsStrategy, this.typeFactory, null);
+        this.eresource = new SulMarcEresource(this.record, this.keywordsStrategy, null);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
         // real marc to simplify testing for getYear, mesh, etc.
@@ -169,7 +162,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     public final void testGetMesh() {
         LcshMapManager lcshMapManager = mock(LcshMapManager.class);
         SulMarcEresource mesh = new SulMarcEresource(this.records.get("7811516"), this.keywordsStrategy,
-                this.typeFactory, lcshMapManager);
+                lcshMapManager);
         expect(lcshMapManager.getMeshForHeading(isA(String.class))).andReturn(Collections.singleton("mappedMesh"))
                 .atLeastOnce();
         replay(lcshMapManager);
@@ -178,15 +171,15 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         verify(lcshMapManager);
     }
 
-    @Test
-    public final void testGetPrimaryType() {
-        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("primary");
-        replay(this.typeFactory);
-        assertEquals("primary", this.eresource.getPrimaryType());
-        assertEquals("primary", this.eresource.getPrimaryType());
-        verify(this.typeFactory);
-    }
-
+//    @Test
+//    public final void testGetPrimaryType() {
+//        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("primary");
+//        replay(this.typeFactory);
+//        assertEquals("primary", this.eresource.getPrimaryType());
+//        assertEquals("primary", this.eresource.getPrimaryType());
+//        verify(this.typeFactory);
+//    }
+//
     @Test
     public final void testGetRecordId() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
@@ -230,18 +223,17 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     @Test
     public final void testGetTitleLinked() {
         SulMarcEresource linkedTitleEr = new SulMarcEresource(this.records.get("10494697"), this.keywordsStrategy,
-                this.typeFactory, null);
+                null);
         assertEquals("Рост Кристаллоь / Rost Kristallov / Growth of Crystals : Volume 12", linkedTitleEr.getTitle());
     }
-
-    @Test
-    public final void testGetTypes() {
-        List<String> types = new ArrayList<>();
-        expect(this.typeFactory.getTypes(this.record)).andReturn(types);
-        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("Other");
-        replay(this.typeFactory, this.record);
-        assertTrue(this.eresource.getTypes().isEmpty());
-    }
+//    @Test
+//    public final void testGetTypes() {
+//        List<String> types = new ArrayList<>();
+//        expect(this.typeFactory.getTypes(this.record)).andReturn(types);
+//        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("Other");
+//        replay(this.typeFactory, this.record);
+//        assertTrue(this.eresource.getTypes().isEmpty());
+//    }
 
     @Test
     public final void testGetUpdated() {
@@ -269,7 +261,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
 
     @Test
     public final void testGetVersions() {
-        SulMarcEresource e = new SulMarcEresource(this.record, null, this.typeFactory, null);
+        SulMarcEresource e = new SulMarcEresource(this.record, null, null);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("956").atLeastOnce();
         expect(this.field.getIndicator1()).andReturn('4').atLeastOnce();
@@ -277,10 +269,11 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).atLeastOnce();
         expect(this.subfield.getCode()).andReturn('u').atLeastOnce();
         expect(this.subfield.getData()).andReturn("url").atLeastOnce();
-        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("Journal").atLeastOnce();
-        replay(this.record, this.field, this.subfield, this.typeFactory);
+        byte b = 0;
+        expect(this.record.getLeaderByte(EasyMock.anyInt())).andReturn(b).atLeastOnce();
+        replay(this.record, this.field, this.subfield);
         assertEquals(1, e.getVersions().size());
-        verify(this.record, this.field, this.subfield, this.typeFactory);
+        verify(this.record, this.field, this.subfield);
     }
 
     @Test
@@ -296,12 +289,10 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
 
     @Test
     public final void testGetYearRealMarc() {
-        SulMarcEresource badDate = new SulMarcEresource(this.records.get("90009616"), this.keywordsStrategy,
-                this.typeFactory, null);
+        SulMarcEresource badDate = new SulMarcEresource(this.records.get("90009616"), this.keywordsStrategy, null);
         assertEquals(2005, badDate.getYear());
         assertEquals("20050101", badDate.getDate());
     }
-
 //    @Test
 //    public final void testGetYearNo() {
 //        List<Field> fields = new ArrayList<>();

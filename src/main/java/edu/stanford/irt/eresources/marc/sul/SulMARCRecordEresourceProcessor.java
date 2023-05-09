@@ -47,16 +47,12 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
 
     private RecordCollectionFactory recordCollectionFactory;
 
-    private SulTypeFactory typeFactory;
-
     public SulMARCRecordEresourceProcessor(final EresourceHandler eresourceHandler,
             final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
-            final SulTypeFactory typeFactory, final LaneDedupAugmentation laneDedupAugmentation,
-            final List<InclusionStrategy> inclusionStrategies) {
+            final LaneDedupAugmentation laneDedupAugmentation, final List<InclusionStrategy> inclusionStrategies) {
         this.eresourceHandler = eresourceHandler;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
-        this.typeFactory = typeFactory;
         this.laneDedupAugmentation = laneDedupAugmentation;
         this.inclusionStrategies = inclusionStrategies;
     }
@@ -72,8 +68,8 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             }
             if (null != marcRecord && isInScope(marcRecord) && !isLane(folioRecord, marcRecord)
                     && !isLaneDuplicate(marcRecord)) {
-                this.eresourceHandler.handleEresource(
-                        new SulMarcEresource(marcRecord, this.keywordsStrategy, this.typeFactory, this.lcshMapManager));
+                this.eresourceHandler
+                        .handleEresource(new SulMarcEresource(marcRecord, this.keywordsStrategy, this.lcshMapManager));
             }
         }
     }

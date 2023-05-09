@@ -22,6 +22,7 @@ import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.AbstractMarcEresource;
 import edu.stanford.irt.eresources.marc.KeywordsStrategy;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
+import edu.stanford.irt.eresources.marc.type.TypeFactory;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -49,15 +50,12 @@ public class SulMarcEresource extends AbstractMarcEresource {
 
     private LcshMapManager lcshMapManager;
 
-    private SulTypeFactory sulTypeFactory;
-
     private int year;
 
     public SulMarcEresource(final Record marcRecord, final KeywordsStrategy keywordsStrategy,
-            final SulTypeFactory typeFactory, final LcshMapManager lcshMapManager) {
+            final LcshMapManager lcshMapManager) {
         this.marcRecord = marcRecord;
         this.keywordsStrategy = keywordsStrategy;
-        this.sulTypeFactory = typeFactory;
         this.lcshMapManager = lcshMapManager;
     }
 
@@ -144,7 +142,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public String getPrimaryType() {
         if (this.primaryType == null) {
-            this.primaryType = this.sulTypeFactory.getPrimaryType(this.marcRecord);
+            this.primaryType = TypeFactory.getPrimaryType(this.marcRecord);
         }
         return this.primaryType;
     }
@@ -188,7 +186,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public Collection<String> getTypes() {
         if (this.types == null) {
-            this.types = this.sulTypeFactory.getTypes(this.marcRecord);
+            this.types = TypeFactory.getTypes(this.marcRecord);
         }
         if (!EresourceConstants.OTHER.equals(getPrimaryType()) && !this.types.contains(getPrimaryType())) {
             this.types.add(getPrimaryType());

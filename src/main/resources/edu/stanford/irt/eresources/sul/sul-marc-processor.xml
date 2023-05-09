@@ -20,9 +20,6 @@
                 <constructor-arg ref="sulHttpCatalogRecordService"/>
             </bean>
         </constructor-arg>
-        <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.sul.SulTypeFactory"/>
-        </constructor-arg>
         <constructor-arg ref="laneDedupAugmentation"/>
         <constructor-arg name="inclusionStrategies">
             <list>
@@ -129,9 +126,6 @@
                 <value>medical</value>
                 <value>clinical</value>
             </list>
-        </constructor-arg>
-        <constructor-arg>
-            <bean class="edu.stanford.irt.eresources.marc.sul.SulTypeFactory"/>
         </constructor-arg>
     </bean>
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">

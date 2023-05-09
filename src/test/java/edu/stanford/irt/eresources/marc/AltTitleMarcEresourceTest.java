@@ -28,7 +28,7 @@ public class AltTitleMarcEresourceTest {
     @Before
     public void setUp() {
         this.record = mock(Record.class);
-        this.eresource = new AltTitleMarcEresource(Collections.singletonList(this.record), null, null, 1, null);
+        this.eresource = new AltTitleMarcEresource(Collections.singletonList(this.record), null, 1, null);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
     }

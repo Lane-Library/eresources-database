@@ -20,8 +20,16 @@ public class MARCRecordSupport {
 
     private static final Pattern NOT_DIGIT = Pattern.compile("\\D");
 
+    public static Set<String> extractLCCallNumbers(final Record marcRecord) {
+        return getSubfieldData(marcRecord, "050|090", "a").collect(Collectors.toSet());
+    }
+
     public static Stream<Field> getFields(final Record marcRecord, final String tagString) {
         return marcRecord.getFields().stream().filter((final Field f) -> tagString.indexOf(f.getTag()) > -1);
+    }
+
+    public static Stream<Field> getFieldsWild(final Record marcRecord, final String tagString) {
+        return marcRecord.getFields().stream().filter((final Field f) -> f.getTag().matches(tagString));
     }
 
     public static String getRecordId(final Record marcRecord) {
@@ -60,14 +68,6 @@ public class MARCRecordSupport {
         return year;
     }
 
-    public static boolean hasNLMCallNumber(final Record marcRecord) {
-        return getFields(marcRecord, "060").findAny().isPresent();
-    }
-
-    public static Set<String> extractLCCallNumbers(final Record marcRecord) {
-        return getSubfieldData(marcRecord, "050|090", "a").collect(Collectors.toSet());
-    }
-
     public static String getYears(final Record marcRecord) {
         int end = 0;
         StringBuilder sb = new StringBuilder();
@@ -86,5 +86,9 @@ public class MARCRecordSupport {
             }
         }
         return sb.toString();
+    }
+
+    public static boolean hasNLMCallNumber(final Record marcRecord) {
+        return getFields(marcRecord, "060").findAny().isPresent();
     }
 }
