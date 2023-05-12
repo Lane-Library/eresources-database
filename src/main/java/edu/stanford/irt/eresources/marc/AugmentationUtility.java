@@ -45,7 +45,7 @@ public final class AugmentationUtility {
             log.info("fetched and wrote {} augmentations to file {} ", augmentationsService.getClass(),
                     augmentationsFileName);
         } else if (objFile.exists()) {
-            log.info("empty augmentations so pulling from file {} ", augmentationsFileName);
+            log.info("pulling augmentations from file {} ", augmentationsFileName);
             try (ValidatingObjectInputStream ois = new ValidatingObjectInputStream(new FileInputStream(objFile))) {
                 ois.accept(HashMap.class);
                 augmentations = (HashMap<String, String>) ois.readObject();
