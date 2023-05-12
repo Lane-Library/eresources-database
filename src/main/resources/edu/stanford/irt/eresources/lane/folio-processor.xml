@@ -26,6 +26,8 @@
     </bean>
     <bean id="httpAuthTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
+        <!-- TODO: change this to folioCatalogServiceURI closer to FOLIO go-live -->
+        <!-- FOLIO will not have auth data so we need to continue pulling from Voyager until we can't any longer -->
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="augmentations/auth"/>
     </bean>

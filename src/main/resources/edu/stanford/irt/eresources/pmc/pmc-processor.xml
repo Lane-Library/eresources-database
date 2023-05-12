@@ -28,6 +28,8 @@
 
     <bean id="httpAuthTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
+        <!-- TODO: change this to folioCatalogServiceURI closer to FOLIO go-live -->
+        <!-- FOLIO will not have auth data so we need to continue pulling from Voyager until we can't any longer -->
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="augmentations/auth"/>
     </bean>
@@ -43,10 +45,19 @@
 
     <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
-        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg ref="folioCatalogServiceURI"/>
         <constructor-arg value="augmentations/dedup"/>
     </bean>
 
+    <bean id="folioCatalogServiceURI" class="java.net.URI">
+        <constructor-arg value="${eresources.catalog-service.scheme}"/>
+        <constructor-arg value="${eresources.catalog-service.userInfo}"/>
+        <constructor-arg value="${eresources.catalog-service.host}"/>
+        <constructor-arg value="${eresources.catalog-service.port}"/>
+        <constructor-arg value="${eresources.catalog-service.path-folio}"/>
+        <constructor-arg value="null"/>
+        <constructor-arg value="null"/>
+    </bean>
     <bean id="catalogServiceURI" class="java.net.URI">
         <constructor-arg value="${eresources.catalog-service.scheme}"/>
         <constructor-arg value="${eresources.catalog-service.userInfo}"/>
