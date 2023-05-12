@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +18,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.stanford.irt.eresources.EresourceDatabaseException;
+
 public class AugmentationUtilityTest {
+
+    Map<String, String> aMap;
 
     AugmentationsService augmentationsService;
 
@@ -30,6 +33,8 @@ public class AugmentationUtilityTest {
     @Before
     public void setUp() throws Exception {
         this.augmentationsService = mock(AugmentationsService.class);
+        this.aMap = new HashMap<>();
+        this.aMap.put("key", "value");
     }
 
     @After
@@ -39,30 +44,41 @@ public class AugmentationUtilityTest {
 
     @Test
     public final void testFetchAugmentations() throws Exception {
-        Map<String, String> aMap = new HashMap<>();
-        aMap.put("foo", "fee");
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(this.objectFile));
-        oos.writeObject(aMap);
+        oos.writeObject(this.aMap);
         oos.close();
-        assertEquals(aMap,
+        assertEquals(this.aMap,
                 AugmentationUtility.fetchAugmentations(this.objectFile, this.augmentationsService, Integer.MAX_VALUE));
     }
 
     @Test
     public final void testFetchAugmentationsBuild() throws Exception {
-        expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
+        expect(this.augmentationsService.buildAugmentations()).andReturn(this.aMap).times(2);
         replay(this.augmentationsService);
         assertTrue(AugmentationUtility.fetchAugmentations(this.objectFile, this.augmentationsService, Integer.MIN_VALUE)
-                .isEmpty());
+                .containsKey("key"));
+        // obj file now exists
+        File of = new File(this.objectFile);
+        assertTrue(of.exists());
+        of.setLastModified(0);
+        assertTrue(AugmentationUtility.fetchAugmentations(this.objectFile, this.augmentationsService, Integer.MAX_VALUE)
+                .containsKey("key"));
         verify(this.augmentationsService);
     }
 
-    @Test(expected = NotSerializableException.class)
-    public final void testFetchAugmentationsException() throws Exception {
-        Object notAMap = new Object();
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(this.objectFile));
-        oos.writeObject(notAMap);
-        oos.close();
-        AugmentationUtility.fetchAugmentations(this.objectFile, this.augmentationsService, 100);
+    @Test(expected = EresourceDatabaseException.class)
+    public final void testFetchAugmentationsIOException1() throws Exception {
+        expect(this.augmentationsService.buildAugmentations()).andReturn(this.aMap);
+        replay(this.augmentationsService);
+        AugmentationUtility.fetchAugmentations("/foo", this.augmentationsService, 100);
+        verify(this.augmentationsService);
+    }
+
+    @Test
+    public final void testFetchAugmentationsIOException2() throws Exception {
+        expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
+        replay(this.augmentationsService);
+        AugmentationUtility.fetchAugmentations("/foo", this.augmentationsService, 100);
+        verify(this.augmentationsService);
     }
 }
