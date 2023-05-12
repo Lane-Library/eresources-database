@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,22 +22,30 @@ public final class AugmentationUtility {
 
     private static final Logger log = LoggerFactory.getLogger(AugmentationUtility.class);
 
-    private AugmentationUtility() {
-        // empty private constructor
-    }
-
     public static Map<String, String> fetchAugmentations(final String augmentationsFileName,
             final AugmentationsService augmentationsService, final int timePeriod) {
-        Map<String, String> augmentations;
+        log.info("starting {} fetch",
+                StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getSimpleName());
+        Map<String, String> augmentations = Collections.emptyMap();
+        long now = System.currentTimeMillis();
         File objFile = new File(augmentationsFileName);
-        if (!objFile.exists() || objFile.lastModified() < System.currentTimeMillis() - timePeriod) {
+        if (!objFile.exists() || objFile.lastModified() < now - timePeriod) {
             augmentations = augmentationsService.buildAugmentations();
+            log.info("found {} augmentations ", augmentations.size());
+            if (objFile.exists() && objFile.setLastModified(now)) {
+                log.info("won't check augmentation source again until {}", new Date(now + timePeriod));
+            }
+        }
+        if (!augmentations.isEmpty()) {
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(augmentationsFileName))) {
                 oos.writeObject(new HashMap<>(augmentations));
             } catch (IOException e) {
                 throw new EresourceDatabaseException(e);
             }
-        } else {
+            log.info("fetched and wrote {} augmentations to file {} ", augmentationsService.getClass(),
+                    augmentationsFileName);
+        } else if (objFile.exists()) {
+            log.info("empty augmentations so pulling from file {} ", augmentationsFileName);
             try (ValidatingObjectInputStream ois = new ValidatingObjectInputStream(new FileInputStream(objFile))) {
                 ois.accept(HashMap.class);
                 augmentations = (HashMap<String, String>) ois.readObject();
@@ -48,5 +57,9 @@ public final class AugmentationUtility {
             }
         }
         return augmentations;
+    }
+
+    private AugmentationUtility() {
+        // empty private constructor
     }
 }
