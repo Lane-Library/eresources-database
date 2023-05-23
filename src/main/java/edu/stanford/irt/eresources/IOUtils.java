@@ -12,11 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.http.HttpStatus;
+
 public final class IOUtils {
 
-    private IOUtils() {
-        // private empty constructor
-    }
+    private static final int POLLING_INTERVAL = 30_000;
 
     public static InputStream getStream(final URL url) throws IOException {
         InputStream inputStream;
@@ -30,6 +30,15 @@ public final class IOUtils {
                         .append(Base64.getEncoder().encodeToString(userInfo.getBytes(StandardCharsets.UTF_8)))
                         .toString();
                 httpConnection.setRequestProperty("Authorization", authorization);
+            }
+            if (httpConnection.getResponseCode() == HttpStatus.SC_ACCEPTED) {
+                try {
+                    Thread.sleep(POLLING_INTERVAL);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new EresourceDatabaseException(e);
+                }
+                return getStream(url);
             }
             inputStream = httpConnection.getInputStream();
             if ("gzip".equals(httpConnection.getContentEncoding())) {
@@ -55,5 +64,9 @@ public final class IOUtils {
             }
         }
         return result;
+    }
+
+    private IOUtils() {
+        // private empty constructor
     }
 }

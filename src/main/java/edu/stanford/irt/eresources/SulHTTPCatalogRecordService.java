@@ -7,7 +7,7 @@ import java.net.URL;
 
 public class SulHTTPCatalogRecordService implements CatalogRecordService {
 
-    private static final String END_POINT = "records?limitToLane=false&time=%s";
+    private static final String END_POINT = "records/sul?time=%s";
 
     private URI catalogServiceURI;
 
