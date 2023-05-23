@@ -7,18 +7,19 @@ import java.net.URL;
 
 public class HTTPCatalogRecordService implements CatalogRecordService {
 
-    private static final String END_POINT = "records/lane?time=%s";
-
     private URI catalogServiceURI;
 
-    public HTTPCatalogRecordService(final URI catalogServiceURI) {
+    private String endPoint;
+
+    public HTTPCatalogRecordService(final URI catalogServiceURI, final String endpoint) {
         this.catalogServiceURI = catalogServiceURI;
+        this.endPoint = endpoint;
     }
 
     @Override
     public InputStream getRecordStream(final long time) {
         try {
-            String endpoint = String.format(END_POINT, time);
+            String endpoint = String.format(this.endPoint, time);
             return IOUtils.getStream(new URL(this.catalogServiceURI.toURL(), endpoint));
         } catch (IOException e) {
             throw new EresourceDatabaseException(e);

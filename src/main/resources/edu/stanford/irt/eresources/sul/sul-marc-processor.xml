@@ -162,7 +162,8 @@
         <constructor-arg value="null"/>
         <constructor-arg value="null"/>
     </bean>
-    <bean id="sulHttpCatalogRecordService" class="edu.stanford.irt.eresources.SulHTTPCatalogRecordService">
+    <bean id="sulHttpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
         <constructor-arg ref="folioCatalogServiceURI"/>
+        <constructor-arg value="records/sul?time=%s"/>
     </bean>
 </beans>

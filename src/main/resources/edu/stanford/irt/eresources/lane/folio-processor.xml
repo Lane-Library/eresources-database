@@ -60,5 +60,6 @@
     </bean>
     <bean id="httpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
         <constructor-arg ref="folioCatalogServiceURI"/>
+        <constructor-arg value="records/lane?time=%s"/>
     </bean>
 </beans>

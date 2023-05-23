@@ -11,16 +11,16 @@ import org.junit.Test;
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class SulHTTPCatalogRecordServiceTest {
+public class HTTPCatalogRecordServiceTest {
 
     private URI uri;
 
-    SulHTTPCatalogRecordService recordService;
+    HTTPCatalogRecordService recordService;
 
     @Before
     public void setUp() throws Exception {
-        this.uri = SulHTTPCatalogRecordServiceTest.class.getResource("./marc/sul/").toURI();
-        this.recordService = new SulHTTPCatalogRecordService(this.uri);
+        this.uri = HTTPCatalogRecordServiceTest.class.getResource("./").toURI();
+        this.recordService = new HTTPCatalogRecordService(this.uri, "marc/folio-records");
     }
 
     @Test
@@ -33,7 +33,7 @@ public class SulHTTPCatalogRecordServiceTest {
 
     @Test(expected = EresourceDatabaseException.class)
     public final void testGetRecordStreamNullBasePath() throws Exception {
-        this.recordService = new SulHTTPCatalogRecordService(new URI("http://localhost:1/"));
+        this.recordService = new HTTPCatalogRecordService(new URI("http://localhost:1/"), "");
         new RecordCollection(this.recordService.getRecordStream(0));
     }
 }
