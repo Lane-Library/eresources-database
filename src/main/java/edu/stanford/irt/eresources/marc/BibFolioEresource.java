@@ -68,6 +68,18 @@ public class BibFolioEresource implements Eresource {
     }
 
     @Override
+    public Collection<String> getIsbns() {
+        return this.folioRecord.jsonContext()
+                .read("$.instance.identifiers.[?(@.identifierTypeId=='8261054f-be78-422d-bd51-4ed9f33c3422')].value");
+    }
+
+    @Override
+    public Collection<String> getIssns() {
+        return this.folioRecord.jsonContext()
+                .read("$.instance.identifiers.[?(@.identifierTypeId=='913300b2-03ed-469a-8179-c1092c991227')].value");
+    }
+
+    @Override
     public int[] getItemCount() {
         int[] itemCount = new int[2];
         itemCount[0] = this.folioRecord.getItems().size();

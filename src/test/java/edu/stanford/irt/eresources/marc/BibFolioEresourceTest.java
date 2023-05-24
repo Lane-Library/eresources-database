@@ -61,6 +61,16 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
     }
 
     @Test
+    public void testGetIsbn() {
+        assertTrue(this.eresource.getIsbns().contains("fake-isbn"));
+    }
+
+    @Test
+    public void testGetIssn() {
+        assertTrue(this.eresource.getIssns().contains("fake-issn"));
+    }
+
+    @Test
     public void testGetItemCount() {
         int[] count = this.eresource.getItemCount();
         assertEquals(1, count[0]);

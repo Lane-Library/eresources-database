@@ -15,7 +15,9 @@
         ],
         "editions": [],
         "series": [],
-        "identifiers": [],
+        "identifiers": [
+            {"value":"fake-isbn","identifierTypeId":"8261054f-be78-422d-bd51-4ed9f33c3422"},
+            {"value":"fake-issn","identifierTypeId":"913300b2-03ed-469a-8179-c1092c991227"}],
         "contributors": [
             {
                 "contributorNameTypeId": "2e48e713-17f3-4c13-a9f8-23845bb210aa",
