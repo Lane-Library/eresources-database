@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>129</version>
+        <version>130</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.10.3-SNAPSHOT</version>
@@ -21,7 +21,7 @@
         <dependency>
             <artifactId>catalog</artifactId>
             <groupId>edu.stanford.irt</groupId>
-            <version>3.9.10</version>
+            <version>3.9.11</version>
         </dependency>
         <dependency>
             <artifactId>nekohtml</artifactId>
@@ -76,7 +76,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>12.1</version>
+            <version>12.2</version>
             <exclusions>
                 <exclusion>
                     <!-- https://stackoverflow.com/questions/51094274/eclipse-cant-find-xml-related-classes-after-switching-build-path-to-jdk-10 -->
@@ -120,7 +120,7 @@
         <dependency>
             <artifactId>solr-solrj</artifactId>
             <groupId>org.apache.solr</groupId>
-            <version>9.2.0</version>
+            <version>9.2.1</version>
         </dependency>
         <dependency>
             <artifactId>jackson-databind</artifactId>
@@ -164,7 +164,7 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>journal-titles</artifactId>
-            <version>3.0.5</version>
+            <version>3.0.6</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.irt.suggest</groupId>
@@ -185,7 +185,7 @@
         <dependency>
             <groupId>org.marc4j</groupId>
             <artifactId>marc4j</artifactId>
-            <version>2.9.2</version>
+            <version>2.9.5</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
