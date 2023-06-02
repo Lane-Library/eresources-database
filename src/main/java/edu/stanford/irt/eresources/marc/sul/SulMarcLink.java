@@ -41,6 +41,7 @@ public class SulMarcLink extends MarcLink {
                 .map(Subfield::getData).collect(Collectors.toList());
         for (String string : strings) {
             if (SU_AFFIL_AT.matcher(string).matches()) {
+                this.version.setIsProxy(true);
                 if (strings.size() > 1) {
                     // don't add "available to Stanford users" if there are more strings
                     string = "";
