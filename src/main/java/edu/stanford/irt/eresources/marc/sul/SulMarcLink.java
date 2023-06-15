@@ -75,6 +75,8 @@ public class SulMarcLink extends MarcLink {
         // strip SUL proxy prefix from links
         String url = super.getUrl();
         if (null != url && SUL_PROXY_PREFIX.matcher(url).find()) {
+            // remove setting proxy here? SUL uses SU_AFFIL_AT to toggle proxy prefix
+            // but as of 2023-06-15 there were still hundreds of proxy prefixes in SUL records
             this.version.setIsProxy(true);
             url = SUL_PROXY_PREFIX.matcher(url).replaceFirst("");
         }
