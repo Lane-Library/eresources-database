@@ -1,5 +1,9 @@
 package edu.stanford.irt.eresources;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -7,8 +11,6 @@ import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.easymock.EasyMock.*;
 
 import edu.stanford.irt.eresources.marc.MarcLink;
 import edu.stanford.irt.eresources.marc.MarcVersion;
@@ -22,20 +24,20 @@ public class VersionComparatorTest {
 
     private VersionComparator comparator;
 
+    private MarcLink marcLink1;
+
+    private MarcLink marcLink2;
+
+    private MarcVersion marcVersion1;
+
+    private MarcVersion marcVersion2;
+
     private SAXLink saxLink;
 
-    private MarcLink marcLink1;
-    
-    private MarcLink marcLink2;
-    
     private SAXVersion saxVersion1;
 
     private SAXVersion saxVersion2;
 
-    private MarcVersion marcVersion1;
-    
-    private MarcVersion marcVersion2;
-    
     @Before
     public void setUp() {
         this.saxVersion1 = new SAXVersion();
@@ -59,14 +61,13 @@ public class VersionComparatorTest {
     public void testCompareCatalogBeforeImpactFactor() {
         expect(this.marcVersion1.getDates()).andReturn("1999-2000.");
         expect(this.marcVersion2.getDates()).andReturn("1999-2000.");
-        expect(this.marcLink1.getLabel()).andReturn("Impact Factor");
-        expect(this.marcLink1.getUrl()).andReturn("foo");
-        expect(this.marcLink2.getUrl()).andReturn("https://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=foo");
+        expect(this.marcLink1.getLabel()).andReturn("Impact Factor").times(2);
+        expect(this.marcLink2.getLabel()).andReturn("Lane Record in SearchWorks");
         expect(this.marcVersion1.getLinks()).andReturn(Collections.singletonList(this.marcLink1)).anyTimes();
         expect(this.marcVersion2.getLinks()).andReturn(Collections.singletonList(this.marcLink2)).anyTimes();
-        replay(this.marcVersion1, this.marcVersion2, this.marcLink1,this.marcLink2);
+        replay(this.marcVersion1, this.marcVersion2, this.marcLink1, this.marcLink2);
         assertTrue(this.comparator.compare(this.marcVersion1, this.marcVersion2) > 0);
-        verify(this.marcVersion1, this.marcVersion2, this.marcLink1,this.marcLink2);
+        verify(this.marcVersion1, this.marcVersion2, this.marcLink1, this.marcLink2);
     }
 
     @Test

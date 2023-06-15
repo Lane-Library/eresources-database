@@ -169,9 +169,9 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     private boolean firstLinkIsCatalogLink(final Version version) {
         if (!version.getLinks().isEmpty()) {
-            String url = version.getLinks().get(0).getUrl();
-            if (null != url) {
-                return url.contains("//lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=");
+            String label = version.getLinks().get(0).getLabel();
+            if (null != label) {
+                return label.equals("Lane Record in SearchWorks");
             }
         }
         return false;

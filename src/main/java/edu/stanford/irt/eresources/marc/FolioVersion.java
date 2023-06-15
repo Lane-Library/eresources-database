@@ -65,7 +65,7 @@ public class FolioVersion implements Version {
         List<Link> links = new ArrayList<>();
         if (!hasLinks()) {
             links.add(new CatalogLink(this.eresource.getId(), this,
-                    "https://lmldb.stanford.edu/cgi-bin/Pwebrecon.cgi?BBID=", "Lane Catalog Record"));
+                    "https://searchworks.stanford.edu/view/", "Lane Record in SearchWorks"));
         }
         Version version = this;
         List<Map<?, ?>> electronicAccesses = (List<Map<?, ?>>) this.folioHolding.get("electronicAccess");

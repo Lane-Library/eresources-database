@@ -490,8 +490,8 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("856").atLeastOnce();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).atLeastOnce();
-        expect(this.subfield.getCode()).andReturn('u').atLeastOnce();
-        expect(this.subfield.getData()).andReturn("url").atLeastOnce();
+        expect(this.subfield.getCode()).andReturn('z').atLeastOnce();
+        expect(this.subfield.getData()).andReturn("label").atLeastOnce();
         expect(this.field.getIndicator1()).andReturn('4').atLeastOnce();
         expect(this.field.getIndicator2()).andReturn('1').atLeastOnce();
         byte b = 0;
