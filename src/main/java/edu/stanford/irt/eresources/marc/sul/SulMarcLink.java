@@ -41,6 +41,7 @@ public class SulMarcLink extends MarcLink {
                 .map(Subfield::getData).collect(Collectors.toList());
         for (String string : strings) {
             if (SU_AFFIL_AT.matcher(string).matches()) {
+                this.version.setIsProxy(true);
                 if (strings.size() > 1) {
                     // don't add "available to Stanford users" if there are more strings
                     string = "";
@@ -74,6 +75,8 @@ public class SulMarcLink extends MarcLink {
         // strip SUL proxy prefix from links
         String url = super.getUrl();
         if (null != url && SUL_PROXY_PREFIX.matcher(url).find()) {
+            // remove setting proxy here? SUL uses SU_AFFIL_AT to toggle proxy prefix
+            // but as of 2023-06-15 there were still hundreds of proxy prefixes in SUL records
             this.version.setIsProxy(true);
             url = SUL_PROXY_PREFIX.matcher(url).replaceFirst("");
         }

@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-06-02" version="2.10.3" description="emergency release">
+            <action date="2023-06-02" dev="ryanmax" issue="LANEWEB-11134" type="fix">
+                    missing most of SUL's proxyable hosts
+            </action>
+        </release>
         <release date="2023-04-10" version="2.10.2" description="maintenance release">
             <action date="2023-04-06" dev="ryanmax" issue="LANEWEB-11110" type="update">
                 cease using 149 data in Lane Search indexing
