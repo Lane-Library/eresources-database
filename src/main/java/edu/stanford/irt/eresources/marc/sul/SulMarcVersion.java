@@ -10,6 +10,7 @@ import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.CatalogLink;
+import edu.stanford.irt.eresources.marc.CatalogLink.Type;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -76,8 +77,7 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
                     .collect(Collectors.toList()));
         }
         if (links.isEmpty()) {
-            links.add(new CatalogLink(this.eresource.getRecordId(), this, "https://searchworks.stanford.edu/view/",
-                    "SU Catalog (SearchWorks)"));
+            links.add(new CatalogLink(Type.SUL, this.eresource.getRecordId(), this));
         }
         return links;
     }

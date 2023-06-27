@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.stanford.irt.eresources.Version;
+import edu.stanford.irt.eresources.marc.CatalogLink.Type;
 
 public class CatalogLinkTest {
 
@@ -24,7 +25,7 @@ public class CatalogLinkTest {
     @Before
     public void setUp() throws Exception {
         this.version = mock(Version.class);
-        this.link = new CatalogLink("recordId", this.version, "url", "label");
+        this.link = new CatalogLink(Type.BIB, "recordId", this.version);
     }
 
     @Test
@@ -39,7 +40,7 @@ public class CatalogLinkTest {
 
     @Test
     public final void testGetLabel() {
-        assertEquals("label", this.link.getLabel());
+        assertEquals("Lane Record in SearchWorks", this.link.getLabel());
     }
 
     @Test
@@ -47,14 +48,8 @@ public class CatalogLinkTest {
         expect(this.version.getHoldingsAndDates()).andReturn("HoldingsAndDates");
         expect(this.version.getLinks()).andReturn(Collections.emptyList());
         replay(this.version);
-        assertEquals("label", this.link.getLinkText());
+        assertEquals("Lane Record in SearchWorks", this.link.getLinkText());
         verify(this.version);
-    }
-
-    @Test
-    public final void testGetLinkTextImpactFactor() {
-        assertEquals("Impact Factor",
-                (new CatalogLink("recordId", this.version, "url", "imPact faCtor")).getLinkText());
     }
 
     @Test
@@ -68,6 +63,6 @@ public class CatalogLinkTest {
 
     @Test
     public final void testGetUrl() {
-        assertEquals("urlrecordId", this.link.getUrl());
+        assertEquals("https://searchworks.stanford.edu/view/LrecordId", this.link.getUrl());
     }
 }

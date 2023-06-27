@@ -10,6 +10,7 @@ import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
+import edu.stanford.irt.eresources.marc.CatalogLink.Type;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -114,8 +115,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
         if (!hasLinks()) {
-            links.add(new CatalogLink(getFields(this.bib, "001").map(Field::getData).findFirst().orElse(null), this,
-                    "https://searchworks.stanford.edu/view/", "Lane Record in SearchWorks"));
+            links.add(new CatalogLink(Type.BIB, this.eresource.getRecordId(), this));
         }
         Version version = this;
         links.addAll(getFields(this.holding, "856").map((final Field f) -> new MarcLink(f, version))

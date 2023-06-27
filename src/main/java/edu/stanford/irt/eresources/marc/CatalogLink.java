@@ -7,16 +7,36 @@ import edu.stanford.irt.eresources.Version;
 
 public class CatalogLink implements Link {
 
+    public enum Type {
+        BIB, SUL
+    }
+
+    private static final String BASE_URL = "https://searchworks.stanford.edu/view/";
+
     private String label;
 
     private String url;
 
     private Version version;
 
-    public CatalogLink(final String recordId, final Version version, final String baseUrl, final String label) {
-        this.url = baseUrl + recordId;
+    public CatalogLink(final Type type, final String recordId, final Version version) {
+        // raw FOLIO instance hrid is not stored in Solr, only the numeric portion is stored as recordId
+        // idiosyncratic rules around SearchWorks/FOLIO ID prefixes:
+        // - "in" for all Folio-created records (SUL or Lane) -->
+        // - strip "a" from migrated SUL records -->
+        // - "L" from migrated Lane records -->
+        String prefix = "";
+        if (null != recordId && recordId.startsWith("000")) {
+            prefix = "in";
+        } else if (type.equals(Type.BIB)) {
+            prefix = "L";
+        }
+        this.label = "SU Catalog (SearchWorks)";
+        if (type.equals(Type.BIB)) {
+            this.label = "Lane Record in SearchWorks";
+        }
+        this.url = BASE_URL + prefix + recordId;
         this.version = version;
-        this.label = label;
     }
 
     @Override
@@ -32,11 +52,7 @@ public class CatalogLink implements Link {
     @Override
     public String getLinkText() {
         StringBuilder sb = new StringBuilder();
-        if ("impact factor".equalsIgnoreCase(this.label)) {
-            sb.append("Impact Factor");
-        } else {
-            appendHoldingsAndDates(sb);
-        }
+        appendHoldingsAndDates(sb);
         return sb.toString();
     }
 

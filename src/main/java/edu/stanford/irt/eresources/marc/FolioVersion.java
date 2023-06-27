@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
+import edu.stanford.irt.eresources.marc.CatalogLink.Type;
 
 /**
  * FolioVersion encapsulates a folio holding record (from /inventory-hierarchy/items-and-holdings, not
@@ -64,8 +65,7 @@ public class FolioVersion implements Version {
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
         if (!hasLinks()) {
-            links.add(new CatalogLink(this.eresource.getId(), this,
-                    "https://searchworks.stanford.edu/view/", "Lane Record in SearchWorks"));
+            links.add(new CatalogLink(Type.BIB, this.eresource.getId(), this));
         }
         Version version = this;
         List<Map<?, ?>> electronicAccesses = (List<Map<?, ?>>) this.folioHolding.get("electronicAccess");
