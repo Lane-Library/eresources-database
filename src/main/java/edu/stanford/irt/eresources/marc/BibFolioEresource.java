@@ -81,11 +81,7 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public int[] getItemCount() {
-        int[] itemCount = new int[2];
-        itemCount[0] = this.folioRecord.getItems().size();
-        itemCount[1] = (int) this.folioRecord.getItems().stream()
-                .filter((final Map<String, Object> m) -> "Available".equals(m.get("status"))).count();
-        return itemCount;
+        return this.folioRecord.getInstanceItemCounts();
     }
 
     @Override
