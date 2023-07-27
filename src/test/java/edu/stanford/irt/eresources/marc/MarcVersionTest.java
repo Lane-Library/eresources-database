@@ -187,27 +187,30 @@ public class MarcVersionTest {
 
     @Test
     public void testGetItemCount() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
-        expect(this.field.getTag()).andReturn("888").times(2);
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
+        expect(this.field.getTag()).andReturn("888").times(3);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(3);
         expect(this.subfield.getCode()).andReturn('t');
         expect(this.subfield.getData()).andReturn("2");
         expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("1");
+        expect(this.subfield.getCode()).andReturn('c');
+        expect(this.subfield.getData()).andReturn("0");
         replay(this.record, this.field, this.subfield);
         int[] count = this.version.getItemCount();
         assertEquals(2, count[0]);
         assertEquals(1, count[1]);
+        assertEquals(0, count[2]);
         verify(this.record, this.field, this.subfield);
     }
 
     @Test
     public void testGetItemCountNull() {
         this.version = new MarcVersion(this.record, this.record, this.eresource, null);
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
-        expect(this.field.getTag()).andReturn("999").times(2);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
+        expect(this.field.getTag()).andReturn("999").times(3);
         replay(this.record, this.field);
-        assertEquals(2, this.version.getItemCount().length);
+        assertEquals(3, this.version.getItemCount().length);
         verify(this.record, this.field);
     }
 

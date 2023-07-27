@@ -9,6 +9,7 @@ import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.CatalogLink.Type;
+import edu.stanford.lane.catalog.FolioRecord;
 
 /**
  * FolioVersion encapsulates a folio holding record (from /inventory-hierarchy/items-and-holdings, not
@@ -53,11 +54,13 @@ public class FolioVersion implements Version {
 
     @Override
     public int[] getItemCount() {
-        int[] itemCount = new int[2];
-        int total = (int) this.folioHolding.get("totalItems");
-        int available = (int) this.folioHolding.get("availableItems");
+        int[] itemCount = new int[3];
+        int total = (int) this.folioHolding.get(FolioRecord.TOTAL_ITEMS);
+        int available = (int) this.folioHolding.get(FolioRecord.AVAILABLE_ITEMS);
+        int out = (int) this.folioHolding.get(FolioRecord.OUT_ITEMS);
         itemCount[0] = total;
         itemCount[1] = available;
+        itemCount[2] = out;
         return itemCount;
     }
 

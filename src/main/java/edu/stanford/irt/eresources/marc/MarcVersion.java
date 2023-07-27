@@ -101,13 +101,16 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     @Override
     public int[] getItemCount() {
-        int[] itemCount = new int[2];
+        int[] itemCount = new int[3];
         int total = MARCRecordSupport.getSubfieldData(this.holding, "888", "t").findFirst().map(Integer::parseInt)
                 .orElse(0);
         int available = MARCRecordSupport.getSubfieldData(this.holding, "888", "a").findFirst().map(Integer::parseInt)
                 .orElse(0);
+        int out = MARCRecordSupport.getSubfieldData(this.holding, "888", "c").findFirst().map(Integer::parseInt)
+                .orElse(0);
         itemCount[0] = total;
         itemCount[1] = available;
+        itemCount[2] = out;
         return itemCount;
     }
 
@@ -226,8 +229,8 @@ public class MarcVersion extends MARCRecordSupport implements Version {
             if (null != recordId) {
                 // getting parent item counts from FOLIO is hard
                 // if (parentHasBibItems(recordId)) {
-                //    return recordId.toString();
-                //}
+                // return recordId.toString();
+                // }
                 recordIds.add(recordId);
             }
         }
@@ -237,11 +240,10 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         }
         return null;
     }
-
     // no parent item counts from FOLIO (yet?)
     // private boolean parentHasBibItems(final Integer recordId) {
-    //    return recordId != null && this.itemService.getBibsItemCount().itemCount(recordId)[0] > 0;
-    //}
+    // return recordId != null && this.itemService.getBibsItemCount().itemCount(recordId)[0] > 0;
+    // }
 
     private void setLocationDataForRelatedRecord() {
         String parentRecordId = orderParentLinkingRecords(
