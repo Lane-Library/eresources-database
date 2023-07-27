@@ -185,11 +185,13 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public int[] getItemCount() {
-        int[] itemCount = new int[2];
+        int[] itemCount = new int[3];
         String total = MARCRecordSupport.getSubfieldData(this.marcRecord, "888", "t").findFirst().orElse("0");
         String available = MARCRecordSupport.getSubfieldData(this.marcRecord, "888", "a").findFirst().orElse("0");
+        String out = MARCRecordSupport.getSubfieldData(this.marcRecord, "888", "c").findFirst().orElse("0");
         itemCount[0] = Integer.parseInt(total);
         itemCount[1] = Integer.parseInt(available);
+        itemCount[2] = Integer.parseInt(out);
         return itemCount;
     }
 
