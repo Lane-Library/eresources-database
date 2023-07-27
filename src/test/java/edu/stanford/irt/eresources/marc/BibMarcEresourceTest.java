@@ -251,29 +251,33 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     @Test
     public void testGetItemCount() {
         // this.record is really holdings here
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
-        expect(this.field.getTag()).andReturn("888").times(2);
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
+        expect(this.field.getTag()).andReturn("888").times(3);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(3);
         expect(this.subfield.getCode()).andReturn('t');
         expect(this.subfield.getData()).andReturn("1");
         expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("1");
+        expect(this.subfield.getCode()).andReturn('c');
+        expect(this.subfield.getData()).andReturn("0");
         replay(this.record, this.field, this.subfield);
         int[] count = this.eresource.getItemCount();
         assertEquals(1, count[0]);
         assertEquals(1, count[1]);
+        assertEquals(0, count[2]);
         verify(this.record, this.field, this.subfield);
     }
 
     @Test
     public void testGetItemCountNullItemCount() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
-        expect(this.field.getTag()).andReturn("444").times(2);
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
+        expect(this.field.getTag()).andReturn("444").times(3);
         replay(this.record, this.field);
         int[] count = this.eresource.getItemCount();
-        assertEquals(2, count.length);
+        assertEquals(3, count.length);
         assertEquals(0, count[0]);
         assertEquals(0, count[1]);
+        assertEquals(0, count[2]);
         verify(this.record, this.field);
     }
 
