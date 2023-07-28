@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-07-28" version="2.10.4" description="maintenance release">
+            <action date="2023-07-27" dev="ryanmax" issue="LANECAT-721" type="fix">
+                    866$y (single volume monographs) discontinuation (include 264 ^c in Version.getDates())
+            </action>
+        </release>
         <release date="2023-06-02" version="2.10.3" description="emergency release">
             <action date="2023-06-02" dev="ryanmax" issue="LANEWEB-11134" type="fix">
                     missing most of SUL's proxyable hosts
