@@ -68,7 +68,7 @@ public class FolioVersion implements Version {
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
         if (!hasLinks()) {
-            links.add(new CatalogLink(Type.BIB, this.eresource.getId(), this));
+            links.add(new CatalogLink(Type.BIB, this.eresource.getRecordId(), this));
         }
         Version version = this;
         List<Map<?, ?>> electronicAccesses = (List<Map<?, ?>>) this.folioHolding.get("electronicAccess");
