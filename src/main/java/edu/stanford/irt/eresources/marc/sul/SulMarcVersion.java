@@ -55,9 +55,8 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
             if (this.eresource.getPrimaryType().startsWith("Journal")) {
                 dates = getYears(this.bib);
             } else {
-                // 260c or 008 date1
-                // add 264c?
-                dates = getSubfieldData(this.bib, "260", "c").findFirst()
+                // 260/4c or 008 date1
+                dates = getSubfieldData(getFields(this.bib, "260|264"), "c").findFirst()
                         .orElse(Integer.toString(this.eresource.getYear()));
             }
             dates = TextParserHelper.maybeStripTrailingPeriod(dates);
