@@ -89,10 +89,14 @@ public class TypeFactory extends MARCRecordSupport {
     }
 
     public static String getPrimaryType(final FolioRecord folioRecord) {
-        if (folioRecord.toString().contains("LANE-EQUIP")) {
-            return EresourceConstants.EQUIPMENT;
+        for (Map<String, Object> item : folioRecord.getItems()) {
+            // the LANE-EQUIP location is likely best but can't hurt to include equipment material types as well?
+            // folio material types: library equipment \d, av equipment \d
+            if (((String) item.get("materialType")).contains("equipment") || item.toString().contains("LANE-EQUIP")) {
+                return EresourceConstants.EQUIPMENT;
+            }
         }
-        // not sure where to other types from Folio instance records
+        // not sure where to get other types from Folio instance records
         return null;
     }
 
@@ -132,7 +136,7 @@ public class TypeFactory extends MARCRecordSupport {
         if (EresourceConstants.EQUIPMENT.equals(getPrimaryType(folioRecord))) {
             return Collections.singletonList(EresourceConstants.EQUIPMENT);
         }
-        // not sure where to other types from Folio instance records
+        // not sure where to get other types from Folio instance records
         return Collections.emptyList();
     }
 
