@@ -1,0 +1,174 @@
+{
+    "instanceId": "796b4ef7-97a5-45d7-aca9-06959472952b",
+    "instance": {
+        "id": "796b4ef7-97a5-45d7-aca9-06959472952b",
+        "_version": 2,
+        "hrid": "in00000067069",
+        "source": "FOLIO",
+        "title": "Charge for MacBook Pro and USB-C to MagSafe3 cable",
+        "alternativeTitles": [],
+        "editions": [],
+        "series": [],
+        "identifiers": [],
+        "contributors": [],
+        "subjects": [],
+        "classifications": [],
+        "publication": [
+            {
+                "publisher": "\tLaiou Inc",
+                "place": "China",
+                "dateOfPublication": "2022",
+                "role": "140W USB C Power Adapter PD 3.1 Charger for MacBook Pro 16 15 14 13 Inch"
+            }
+        ],
+        "publicationFrequency": [],
+        "publicationRange": [],
+        "publicationPeriod": {
+            "start": 2022
+        },
+        "electronicAccess": [],
+        "instanceTypeId": "df5dddff-9c30-4507-8b82-119ff972d4d7",
+        "instanceFormatIds": [],
+        "instanceFormats": [],
+        "physicalDescriptions": [],
+        "languages": [],
+        "notes": [],
+        "administrativeNotes": [],
+        "modeOfIssuanceId": "612bbd3d-c16b-4bfb-8517-2afafc60204a",
+        "catalogedDate": "2023-07-31",
+        "previouslyHeld": false,
+        "staffSuppress": false,
+        "discoverySuppress": false,
+        "statisticalCodeIds": [],
+        "statusId": "2a340d34-6b70-443a-bb1b-1b8d1c65d862",
+        "statusUpdatedDate": "2023-07-31T21:32:24.707+0000",
+        "tags": {
+            "tagList": []
+        },
+        "metadata": {
+            "createdDate": 1690839144706,
+            "createdByUserId": "dbe0f91f-b064-4e18-a331-8ae51c446c91",
+            "updatedDate": 1690839588395,
+            "updatedByUserId": "dbe0f91f-b064-4e18-a331-8ae51c446c91"
+        },
+        "holdingsRecords2": [],
+        "natureOfContentTermIds": []
+    },
+    "instanceSource": null,
+    "holdingSources": [],
+    "itemsAndHoldings": {
+        "instanceId": "796b4ef7-97a5-45d7-aca9-06959472952b",
+        "source": "FOLIO",
+        "modeOfIssuance": "unspecified",
+        "natureOfContent": [],
+        "holdings": [
+            {
+                "id": "1c8ef10a-adad-45d3-b287-ec4d41c6383c",
+                "notes": [],
+                "location": {
+                    "effectiveLocation": {
+                        "code": "LANE-EQUIP",
+                        "name": "Equipment. Shelved at Information Desk",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical Library",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {
+                        "code": "LANE-EQUIP",
+                        "name": "Equipment. Shelved at Information Desk",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical Library",
+                        "institutionName": "Stanford University"
+                    },
+                    "temporaryLocation": {}
+                },
+                "formerIds": [],
+                "callNumber": {
+                    "typeId": "6caca63e-5651-4db6-9247-3205156e9699",
+                    "typeName": "Other scheme",
+                    "callNumber": "LML #30 C1"
+                },
+                "electronicAccess": [],
+                "statisticalCodes": [],
+                "holdingsStatements": [],
+                "suppressFromDiscovery": false,
+                "holdingsStatementsForIndexes": [],
+                "holdingsStatementsForSupplements": []
+            }
+        ],
+        "items": [
+            {
+                "id": "3ed6abd5-d82f-4968-8ce4-60b4d01c6985",
+                "tags": {
+                    "tagList": []
+                },
+                "notes": [],
+                "status": "Available",
+                "barcode": "24504830620",
+                "location": {
+                    "location": {
+                        "code": "LANE-EQUIP",
+                        "name": "Equipment. Shelved at Information Desk",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical Library",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {
+                        "code": "LANE-EQUIP",
+                        "name": "Equipment. Shelved at Information Desk",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical Library",
+                        "institutionName": "Stanford University"
+                    },
+                    "temporaryLocation": {}
+                },
+                "formerIds": [],
+                "callNumber": {
+                    "typeId": "6caca63e-5651-4db6-9247-3205156e9699",
+                    "typeName": "Other scheme",
+                    "callNumber": "LML #30 C2"
+                },
+                "yearCaption": [],
+                "materialType": "library equipment 1",
+                "electronicAccess": [],
+                "holdingsRecordId": "1c8ef10a-adad-45d3-b287-ec4d41c6383c",
+                "statisticalCodes": [],
+                "permanentLoanType": "12-hour short term",
+                "suppressFromDiscovery": false
+            },
+            {
+                "id": "52f24f0b-2595-4fe0-a4c1-a46c0a9778a9",
+                "tags": {
+                    "tagList": []
+                },
+                "notes": [],
+                "status": "Available",
+                "barcode": "24504830638",
+                "location": {
+                    "location": {
+                        "code": "LANE-EQUIP",
+                        "name": "Equipment. Shelved at Information Desk",
+                        "campusName": "Medical Center",
+                        "libraryName": "Lane Medical Library",
+                        "institutionName": "Stanford University"
+                    },
+                    "permanentLocation": {},
+                    "temporaryLocation": {}
+                },
+                "formerIds": [],
+                "callNumber": {
+                    "typeId": "6caca63e-5651-4db6-9247-3205156e9699",
+                    "typeName": "Other scheme",
+                    "callNumber": "LML #30 C1"
+                },
+                "yearCaption": [],
+                "materialType": "library equipment 1",
+                "electronicAccess": [],
+                "holdingsRecordId": "1c8ef10a-adad-45d3-b287-ec4d41c6383c",
+                "statisticalCodes": [],
+                "permanentLoanType": "12-hour short term",
+                "suppressFromDiscovery": false
+            }
+        ]
+    }
+}
