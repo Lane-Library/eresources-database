@@ -88,6 +88,15 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
     }
 
     @Test
+    public void testGetPrimaryTypeText() throws Exception {
+        this.record = new FolioRecord(
+                BibFolioEresourceTest.class.getResourceAsStream("folio-record-equipment.json").readAllBytes());
+        this.eresource = new BibFolioEresource(this.record, this.locationsService);
+        assertEquals("Equipment", this.eresource.getPrimaryType());
+        assertTrue(this.eresource.getTypes().contains("Equipment"));
+    }
+
+    @Test
     public void testGetPublicationAuthorsText() {
         assertEquals("Org 1; Org 2.", this.eresource.getPublicationAuthorsText());
     }

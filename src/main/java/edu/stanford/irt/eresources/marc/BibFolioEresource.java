@@ -14,6 +14,7 @@ import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
+import edu.stanford.irt.eresources.marc.type.TypeFactory;
 import edu.stanford.lane.catalog.FolioRecord;
 
 /**
@@ -98,8 +99,7 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public String getPrimaryType() {
-        // not sure where to get this from instance record
-        return null;
+        return TypeFactory.getPrimaryType(this.folioRecord);
     }
 
     @Override
@@ -186,8 +186,7 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public Collection<String> getTypes() {
-        // not sure where to get this from Folio instance records
-        return Collections.emptyList();
+        return TypeFactory.getTypes(this.folioRecord);
     }
 
     @Override

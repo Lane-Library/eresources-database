@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.EresourceConstants;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
+import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -87,6 +88,14 @@ public class TypeFactory extends MARCRecordSupport {
         PRIMARY_TYPES.put("visual materials", EresourceConstants.VISUAL_MATERIAL);
     }
 
+    public static String getPrimaryType(final FolioRecord folioRecord) {
+        if (folioRecord.toString().contains("LANE-EQUIP")) {
+            return EresourceConstants.EQUIPMENT;
+        }
+        // not sure where to other types from Folio instance records
+        return null;
+    }
+
     public static String getPrimaryType(final Record marcRecord) {
         // Lane will be moving away from 655s, but use if still present
         String primaryType = getSubfieldData(getFields(marcRecord, "655")
@@ -117,6 +126,14 @@ public class TypeFactory extends MARCRecordSupport {
             type = primaryType;
         }
         return type;
+    }
+
+    public static List<String> getTypes(final FolioRecord folioRecord) {
+        if (EresourceConstants.EQUIPMENT.equals(getPrimaryType(folioRecord))) {
+            return Collections.singletonList(EresourceConstants.EQUIPMENT);
+        }
+        // not sure where to other types from Folio instance records
+        return Collections.emptyList();
     }
 
     public static List<String> getTypes(final Record marcRecord) {
@@ -208,6 +225,7 @@ public class TypeFactory extends MARCRecordSupport {
         if (getSubfieldData(marcRecord, "035", "a").anyMatch((final String s) -> s.startsWith("(Bassett)"))) {
             rawTypes.add("Bassett");
         }
+        // TODO: remove once all Lane Equipment records are source = FOLIO
         if (rawTypes.contains("Objects") && rawTypes.contains("Subset, Circbib")) {
             rawTypes.add("Equipment");
         }
