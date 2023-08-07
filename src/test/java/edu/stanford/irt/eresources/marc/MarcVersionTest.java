@@ -19,6 +19,8 @@ import org.junit.Test;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.ItemCount;
 import edu.stanford.irt.eresources.ItemService;
+import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -232,6 +234,7 @@ public class MarcVersionTest {
         expect(this.locationsService.getLocationName("code")).andReturn("name");
         int[] intArray = { 1, 1 };
         expect(this.eresource.getItemCount()).andReturn(intArray);
+        expect(this.eresource.getVersions()).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield, this.locationsService, this.eresource);
         assertEquals("name", this.version.getLocationName());
         verify(this.record, this.field, this.subfield, this.locationsService, this.eresource);
@@ -246,8 +249,7 @@ public class MarcVersionTest {
                 .times(2);
         int[] childBibItemCount = { 0, 0 };
         expect(this.eresource.getItemCount()).andReturn(childBibItemCount);
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("999");
+        expect(this.eresource.getVersions()).andReturn(Collections.emptyList());
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(5);
         expect(this.field.getTag()).andReturn("773").times(5);
         expect(this.eresource.getPublicationText()).andReturn("eresource publicationText");
@@ -284,15 +286,14 @@ public class MarcVersionTest {
         expect(this.locationsService.getLocationUrl("code")).andReturn("url");
         int[] intArray = { 0, 0 };
         expect(this.eresource.getItemCount()).andReturn(intArray);
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("856");
-        Subfield sf = mock(Subfield.class);
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(sf));
-        expect(sf.getCode()).andReturn('u');
-        expect(sf.getData()).andReturn("foo");
-        replay(this.record, this.field, this.locationsService, this.eresource, sf);
+        Version v = mock(MarcVersion.class);
+        Link l = mock(Link.class);
+        expect(this.eresource.getVersions()).andReturn(Collections.singleton(v));
+        expect(v.getLinks()).andReturn(Collections.singletonList(l));
+        expect(l.getUrl()).andReturn("https://test.com");
+        replay(this.record, this.field, v, l, this.locationsService, this.eresource);
         assertEquals("url", this.version.getLocationUrl());
-        verify(this.record, this.field, this.locationsService, this.eresource, sf);
+        verify(this.record, this.field, v, l, this.locationsService, this.eresource);
     }
 
     @Test
@@ -304,8 +305,7 @@ public class MarcVersionTest {
                 .times(2);
         int[] intArray = { 0, 0 };
         expect(this.eresource.getItemCount()).andReturn(intArray);
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("999");
+        expect(this.eresource.getVersions()).andReturn(Collections.emptyList());
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(6);
         expect(this.field.getTag()).andReturn("830").times(6);
         Subfield sf = mock(Subfield.class);
@@ -337,8 +337,7 @@ public class MarcVersionTest {
                 .times(2);
         int[] intArray = { 0, 0 };
         expect(this.eresource.getItemCount()).andReturn(intArray);
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("999");
+        expect(this.eresource.getVersions()).andReturn(Collections.emptyList());
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(6);
         expect(this.field.getTag()).andReturn("787").times(6);
         Subfield sf = mock(Subfield.class);

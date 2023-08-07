@@ -205,8 +205,9 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     }
 
     private boolean isNoItemsPrintBibAndHasParentRelationship() {
-        return this.eresource.getItemCount()[0] == 0
-                && !getSubfieldData(getFields(this.bib, "856"), "u").findAny().isPresent()
+        boolean hasLinks = this.eresource.getVersions().stream().anyMatch((final Version v) -> v.getLinks().stream()
+                .anyMatch((final Link l) -> !l.getUrl().contains("Pwebrecon.cgi?BBID=")));
+        return this.eresource.getItemCount()[0] == 0 && !hasLinks
                 && getSubfieldData(getFields(this.bib, "772|773|787|830"), "w").findAny().isPresent();
     }
 
