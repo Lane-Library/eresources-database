@@ -6,9 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-08-10" version="2.10.6" description="emergency release">
+            <action date="2023-08-03" dev="ryanmax" issue="LANECAT-714" type="fix">
+                FOLIO-related data changes: linking text from 856$y instead of 844$a
+            </action>
+        </release>
         <release date="2023-08-07" version="2.10.5" description="emergency release">
             <action date="2023-08-07" dev="ryanmax" issue="LANEWEB-11170" type="fix">
-                records appearing without proper links
+                FOLIO-related data changes: records appearing without proper links
             </action>
         </release>
         <release date="2023-07-28" version="2.10.4" description="maintenance release">
