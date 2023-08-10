@@ -166,10 +166,9 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public String getPublisher() {
         String publisher = null;
-        Field field = getFields(this.holding, "844").findFirst().orElse(null);
-        if (field != null) {
-            publisher = field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a')
-                    .map(Subfield::getData).findFirst().orElse(null);
+        publisher = getSubfieldData(this.holding, "856", "y").findFirst().orElse(null);
+        if (null == publisher) {
+            publisher = getSubfieldData(this.holding, "844", "a").findFirst().orElse(null);
         }
         return publisher;
     }
