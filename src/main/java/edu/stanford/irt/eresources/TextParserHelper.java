@@ -25,8 +25,6 @@ public final class TextParserHelper {
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
-    private static final Pattern DIGIT_OR_X_PATTERN = Pattern.compile("[^\\dxX]+");
-
     private static final Pattern DOI_PATTERN = Pattern.compile("\\b(?:(?:doi:)?(10\\.[^ ]+)(?: +doi)?)\\b");
 
     private static final String EMPTY = "";
@@ -67,20 +65,6 @@ public final class TextParserHelper {
      */
     public static String cleanId(final int hashCode) {
         return Integer.toString(hashCode).replace("-", "");
-    }
-
-    /**
-     * ISBNs and ISSNs should only have digits or Xs. Ignore all but the first space-separated component of string.
-     *
-     * @param isxn
-     *            isbn or isbn
-     * @return cleaned string
-     */
-    public static String cleanIsxn(final String isxn) {
-        if (null != isxn && !isxn.isEmpty()) {
-            return DIGIT_OR_X_PATTERN.matcher(isxn.split(" ")[0]).replaceAll("").toLowerCase(Locale.US);
-        }
-        return isxn;
     }
 
     /**

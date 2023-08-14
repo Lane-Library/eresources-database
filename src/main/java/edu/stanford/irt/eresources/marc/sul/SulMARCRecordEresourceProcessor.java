@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
-import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.marc.KeywordsStrategy;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
@@ -17,6 +16,7 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 import edu.stanford.lane.catalog.RecordCollection;
+import edu.stanford.lane.catalog.TextHelper;
 import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
@@ -84,13 +84,11 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             keys.add(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + lccn);
         }
         for (String isbn : MARCRecordSupport.getSubfieldData(marcRecord, "020").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).filter((final String s) -> !s.isEmpty())
-                .collect(Collectors.toSet())) {
+                .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR + isbn);
         }
         for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).filter((final String s) -> !s.isEmpty())
-                .collect(Collectors.toSet())) {
+                .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISSN + LaneDedupAugmentation.SEPARATOR + issn);
         }
         Set<String> ocolcs = MARCRecordSupport.getSubfieldData(marcRecord, "035", "a")

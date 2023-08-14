@@ -31,15 +31,6 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testCleanIsxn() {
-        assertEquals("981102488x", TextParserHelper.cleanIsxn("981102488X"));
-        assertEquals("0721619673", TextParserHelper.cleanIsxn("0721619673 (v. 1)"));
-        assertEquals("0393064239", TextParserHelper.cleanIsxn("0393064239 (pbk.) :"));
-        assertEquals("0393064190", TextParserHelper.cleanIsxn("0393064190 :"));
-        assertEquals(null, TextParserHelper.cleanIsxn(null));
-    }
-
-    @Test
     public final void testCleanOrcid() {
         assertEquals("0000-0001-5769-0004", TextParserHelper.cleanOrcid("0000-0001-5769-0004"));
         assertEquals("0000-0001-5321-983X", TextParserHelper.cleanOrcid("0000-0001-5321-983x"));

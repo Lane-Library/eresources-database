@@ -17,6 +17,7 @@ import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
+import edu.stanford.lane.catalog.TextHelper;
 
 public class SAXEresource implements Eresource {
 
@@ -176,7 +177,7 @@ public class SAXEresource implements Eresource {
     @Override
     public Collection<String> getIssns() {
         return new HashSet<>(
-                this.issns.stream().map(String::trim).map(TextParserHelper::cleanIsxn).collect(Collectors.toSet()));
+                this.issns.stream().map(String::trim).map(TextHelper::cleanIsxn).collect(Collectors.toSet()));
     }
 
     @Override

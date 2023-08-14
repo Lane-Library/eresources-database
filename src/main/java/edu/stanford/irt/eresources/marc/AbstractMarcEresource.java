@@ -28,6 +28,7 @@ import edu.stanford.irt.eresources.VersionComparator;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
+import edu.stanford.lane.catalog.TextHelper;
 
 /**
  * An Eresource that encapsulates the marc Records from which it is derived.
@@ -178,13 +179,13 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getIsbns() {
         return MARCRecordSupport.getSubfieldData(this.marcRecord, "020", "az").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).collect(Collectors.toList());
+                .map(TextHelper::cleanIsxn).collect(Collectors.toList());
     }
 
     @Override
     public Collection<String> getIssns() {
         return MARCRecordSupport.getSubfieldData(this.marcRecord, "022", "azlm").map(String::trim)
-                .map(TextParserHelper::cleanIsxn).collect(Collectors.toList());
+                .map(TextHelper::cleanIsxn).collect(Collectors.toList());
     }
 
     @Override
