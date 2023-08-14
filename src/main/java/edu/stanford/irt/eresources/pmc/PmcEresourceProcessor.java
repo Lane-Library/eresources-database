@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -34,7 +35,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
-import edu.stanford.irt.eresources.IOUtils;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 
 public class PmcEresourceProcessor extends AbstractEresourceProcessor {
@@ -161,7 +161,9 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             rateLimit = con.getHeaderField("X-RateLimit-Remaining");
             if (rateLimit != null && !rateLimit.isEmpty() && Integer.parseInt(rateLimit) <= 1) {
                 log.info("NCBI connection rate limit reached so sleeping");
-                Thread.sleep(SLEEP_TIME);
+            }
+            if ("gzip".equals(con.getContentEncoding())) {
+                return new GZIPInputStream(con.getInputStream());
             }
             return con.getInputStream();
         } catch (IOException e) {
@@ -170,12 +172,15 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 log.info("NBCI returned an error", e);
                 log.info("RateLimit-Remaining: {}", rateLimit);
                 log.info("will try {} more times", remaining);
+                try {
+                    Thread.sleep(SLEEP_TIME);
+                } catch (InterruptedException e1) {
+                    Thread.currentThread().interrupt();
+                    throw new EresourceDatabaseException(e1);
+                }
                 return doFetch(url, attempt - 1);
             }
             throw new EresourceDatabaseException(e);
-        } catch (InterruptedException e1) {
-            Thread.currentThread().interrupt();
-            throw new EresourceDatabaseException(e1);
         }
     }
 
@@ -183,8 +188,8 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
         List<PmcJournal> journals = new LinkedList<>();
         CSVFormat.Builder builder = CSVFormat.Builder.create().setHeader(HEADERS_CSV).setSkipHeaderRecord(true);
         try {
-            URL url = new URL(this.allJournalsCsvUrl);
-            Iterable<CSVRecord> records = builder.build().parse(new InputStreamReader(IOUtils.getStream(url)));
+            Iterable<CSVRecord> records = builder.build()
+                    .parse(new InputStreamReader(doFetch(this.allJournalsCsvUrl, MAX_RETRIES)));
             for (CSVRecord row : records) {
                 PmcJournal journal = new PmcJournal();
                 journal.setDepositStatus(row.get(HEADER_DEPOSIT_STATUS));
