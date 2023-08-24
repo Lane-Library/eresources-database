@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
-import edu.stanford.irt.eresources.SulFileCatalogRecordService;
+import edu.stanford.irt.eresources.FileCatalogRecordService;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -40,7 +40,7 @@ public class AcceptableKeywordStrategyTest {
     public void setUp() throws Exception {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
-        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc",
+        this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc",
                 executor);
         this.recordCollection = new RecordCollection(this.recordService.getRecordStream(0));
         while (this.recordCollection.hasNext()) {

@@ -26,7 +26,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
-import edu.stanford.irt.eresources.SulFileCatalogRecordService;
+import edu.stanford.irt.eresources.FileCatalogRecordService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -340,7 +340,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     public void testGetPublicationTextTitleEtc() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
-        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/lane",
+        this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/lane",
                 executor);
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {

@@ -14,9 +14,9 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SulFileCatalogRecordService extends PipedInputStream implements Runnable, CatalogRecordService {
+public class FileCatalogRecordService extends PipedInputStream implements Runnable, CatalogRecordService {
 
-    private static final Logger log = LoggerFactory.getLogger(SulFileCatalogRecordService.class);
+    private static final Logger log = LoggerFactory.getLogger(FileCatalogRecordService.class);
 
     private String basePath;
 
@@ -26,7 +26,7 @@ public class SulFileCatalogRecordService extends PipedInputStream implements Run
 
     private long time;
 
-    public SulFileCatalogRecordService(final String basePath, final Executor executor) {
+    public FileCatalogRecordService(final String basePath, final Executor executor) {
         this.basePath = basePath;
         this.executor = executor;
     }

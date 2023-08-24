@@ -19,17 +19,17 @@ import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class SulFileCatalogRecordServiceTest extends MARCRecordSupport {
+public class FileCatalogRecordServiceTest extends MARCRecordSupport {
 
     ThreadPoolTaskExecutor executor;
 
-    SulFileCatalogRecordService recordService;
+    FileCatalogRecordService recordService;
 
     @Before
     public void setUp() throws Exception {
         this.executor = new ThreadPoolTaskExecutor();
         this.executor.initialize();
-        this.recordService = new SulFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/sul-marc",
+        this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/sul-marc",
                 this.executor);
     }
 
@@ -45,7 +45,7 @@ public class SulFileCatalogRecordServiceTest extends MARCRecordSupport {
 
     @Test(expected = IllegalStateException.class)
     public final void testGetRecordStreamNullBasePath() {
-        this.recordService = new SulFileCatalogRecordService(null, this.executor);
+        this.recordService = new FileCatalogRecordService(null, this.executor);
         new RecordCollection(this.recordService.getRecordStream(0));
     }
 
