@@ -6,6 +6,29 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-08-24" version="2.11.0" description="folio release">
+            <action date="2023-08-10" dev="ryanmax" issue="LANEWEB-11125" type="add">
+                build FOLIO request links
+            </action>
+            <action date="2023-08-10" dev="ryanmax" issue="LANEWEB-11154" type="add">
+                equipment records should not have request button
+            </action>
+            <action date="2023-08-01" dev="ryanmax" issue="LANEWEB-11162" type="add">
+                change definition for Lane Equipment records - loc code LANE-EQUIP
+            </action>
+            <action date="2023-07-31" dev="ryanmax" issue="LANEWEB-11157" type="add">
+                recall button is not appearing correctly
+            </action>
+            <action date="2023-07-28" dev="ryanmax" issue="LANEWEB-11161" type="add">
+                searchworks link has incorrect record ID
+            </action>
+            <action date="2023-07-06" dev="ryanmax" issue="LANEWEB-11129" type="add">
+                Lane Search must handle mixed holdings types for FOLIO
+            </action>
+            <action date="2022-09-07" dev="ryanmax" issue="" type="add">
+                indexing for FOLIO
+            </action>
+        </release>
         <release date="2023-08-14" version="2.10.7" description="maintenance release">
             <action date="2023-08-14" dev="ryanmax" issue="LANEWEB-11176" type="fix">
                 irrelevant SUL records included in Lane Search
