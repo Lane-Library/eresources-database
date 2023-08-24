@@ -1,10 +1,6 @@
 package edu.stanford.irt.eresources.web;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjusters;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @EnableScheduling
 public class EresourcesController {
-
-    private static final int THIRD = 3;
 
     private JobManager jobManager;
 
@@ -70,7 +64,7 @@ public class EresourcesController {
 
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
     public JobStatus sulReload() {
-        return sulReload(LocalDate.now());
+        return this.jobManager.run(new Job(Job.Type.SUL_RELOAD, LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.sulUpdate}")
@@ -109,26 +103,5 @@ public class EresourcesController {
         }
         sb.append("</ul>");
         return sb.toString();
-    }
-
-    /**
-     * @param date
-     *            parameter for unit testing only
-     * @return status of job
-     */
-    protected JobStatus sulReload(final LocalDate date) {
-        var today = LocalDate.now();
-        if (null != date) {
-            today = date;
-        }
-        // SUL full export occurs every third Saturday of the month (and completes Sunday)
-        // cron scheduling doesn't support this directly, so enforce "day-of-week-in-month" check here
-        // by making sure yesterday was 3rd Saturday in the month
-        LocalDate yesterday = today.minus(1, ChronoUnit.DAYS);
-        LocalDate thirdSaturdayOfMonth = yesterday.with(TemporalAdjusters.dayOfWeekInMonth(THIRD, DayOfWeek.SATURDAY));
-        if (yesterday.isEqual(thirdSaturdayOfMonth)) {
-            return this.jobManager.run(new Job(Job.Type.SUL_RELOAD, LocalDateTime.now()));
-        }
-        return JobStatus.SKIPPED;
     }
 }

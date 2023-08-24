@@ -5,11 +5,7 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -92,26 +88,9 @@ public class EresourcesControllerTest {
 
     @Test
     public final void testSulReload() {
-        // null status on third Sunday of the month OK
-        JobStatus status = this.controller.sulReload();
-        if (null == status) {
-            assertEquals(DayOfWeek.SUNDAY, LocalDate.now().getDayOfWeek());
-        } else {
-            assertEquals(JobStatus.SKIPPED, status);
-        }
-    }
-
-    @Test
-    public final void testSulReloadSkipped() {
-        assertEquals(JobStatus.SKIPPED, this.controller.sulReload(LocalDate.MAX));
-    }
-
-    @Test
-    public final void testSulReloadThirdSunday() {
-        LocalDate knownThirdSundayOfMonth = LocalDate.of(2020, 01, 19);
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
-        this.controller.sulReload(knownThirdSundayOfMonth);
+        this.controller.sulReload();
         verify(this.manager);
     }
 
