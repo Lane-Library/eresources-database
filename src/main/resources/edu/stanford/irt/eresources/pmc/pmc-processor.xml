@@ -45,7 +45,7 @@
 
     <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
-        <constructor-arg ref="folioCatalogServiceURI"/>
+        <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="augmentations/dedup"/>
     </bean>
 
