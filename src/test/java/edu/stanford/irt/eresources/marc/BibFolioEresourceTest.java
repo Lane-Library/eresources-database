@@ -47,7 +47,7 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
 
     @Test
     public void testGetDate() {
-        assertEquals("1900-", this.eresource.getDate());
+        assertEquals("19000101", this.eresource.getDate());
     }
 
     @Test

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.Version;
@@ -54,7 +55,11 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public String getDate() {
-        return this.folioRecord.jsonContext().read("$.instance.publication[0].dateOfPublication");
+        String date = this.folioRecord.jsonContext().read("$.instance.publication[0].dateOfPublication");
+        if (null != date) {
+            return DateParser.parseDate(date);
+        }
+        return date;
     }
 
     @Override
