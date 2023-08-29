@@ -213,8 +213,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private boolean needToAddBibDates(final Eresource eresource) {
         return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
-                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches()
-                && getLinks().stream().noneMatch((final Link l) -> "impact factor".equalsIgnoreCase(l.getLabel()));
+                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches();
     }
 
     // LANEWEB-10855

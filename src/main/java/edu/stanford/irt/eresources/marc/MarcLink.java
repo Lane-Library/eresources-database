@@ -49,21 +49,17 @@ public class MarcLink implements Link {
     public String getLinkText() {
         StringBuilder sb = new StringBuilder();
         String l = getLabel();
-        if ("impact factor".equalsIgnoreCase(l)) {
-            sb.append("Impact Factor");
+        String holdingsAndDates = this.version.getHoldingsAndDates();
+        List<Link> links = this.version.getLinks();
+        if (holdingsAndDates != null && links != null && links.size() == 1) {
+            sb.append(holdingsAndDates);
         } else {
-            String holdingsAndDates = this.version.getHoldingsAndDates();
-            List<Link> links = this.version.getLinks();
-            if (holdingsAndDates != null && links != null && links.size() == 1) {
-                sb.append(holdingsAndDates);
-            } else {
-                if (l != null) {
-                    sb.append(l);
-                }
-            }
-            if (sb.length() == 0) {
+            if (l != null) {
                 sb.append(l);
             }
+        }
+        if (sb.length() == 0) {
+            sb.append(l);
         }
         return sb.toString();
     }

@@ -90,10 +90,8 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      * ++ dates or summaryHoldings (866 ^v) end in "-"
      * ++ additionalText (866 ^z) is "current edition"
      * -- additionalText (866 ^z) has "delayed" in it
-     * -- first link label is "Impact Factor"
      * -- has period at end of dates or summaryHoldings
      * -- catalog links (print)
-     *    catalog links before impact factor (case 112189: records with only an impact factor link)
      * </pre>
      *
      * @param version
@@ -106,8 +104,6 @@ public class VersionComparator implements Comparator<Version>, Serializable {
             score = Integer.MIN_VALUE;
         } else if (firstLinkIsCatalogLink(version)) {
             score = MIN_SCORE + 1;
-        } else if ("Impact Factor".equals(links.get(0).getLabel())) {
-            score = MIN_SCORE;
         } else {
             score = calculateLinkScore(links.get(0), score);
             score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);

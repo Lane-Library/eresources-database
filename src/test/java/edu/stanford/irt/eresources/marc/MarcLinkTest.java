@@ -139,15 +139,6 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLinkTextImpactFactor() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("iMpAcT fAcToR");
-        replay(this.field, this.subfield);
-        assertEquals("Impact Factor", this.link.getLinkText());
-    }
-
-    @Test
     public void testGetLinkTextNoHoldingsAndDates() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');

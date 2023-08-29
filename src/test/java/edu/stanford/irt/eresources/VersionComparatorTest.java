@@ -58,19 +58,6 @@ public class VersionComparatorTest {
     }
 
     @Test
-    public void testCompareCatalogBeforeImpactFactor() {
-        expect(this.marcVersion1.getDates()).andReturn("1999-2000.");
-        expect(this.marcVersion2.getDates()).andReturn("1999-2000.");
-        expect(this.marcLink1.getLabel()).andReturn("Impact Factor").times(2);
-        expect(this.marcLink2.getLabel()).andReturn("Lane Record in SearchWorks");
-        expect(this.marcVersion1.getLinks()).andReturn(Collections.singletonList(this.marcLink1)).anyTimes();
-        expect(this.marcVersion2.getLinks()).andReturn(Collections.singletonList(this.marcLink2)).anyTimes();
-        replay(this.marcVersion1, this.marcVersion2, this.marcLink1, this.marcLink2);
-        assertTrue(this.comparator.compare(this.marcVersion1, this.marcVersion2) > 0);
-        verify(this.marcVersion1, this.marcVersion2, this.marcLink1, this.marcLink2);
-    }
-
-    @Test
     public void testCompareClosedDates() {
         this.saxVersion1.setDates("1999-2000.");
         this.saxVersion2.setDates("1999-2000.");
@@ -115,18 +102,6 @@ public class VersionComparatorTest {
         this.saxVersion1.setSummaryHoldings("v. 10-20.");
         this.saxVersion2.setSummaryHoldings("v. 10-");
         assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) > 0);
-    }
-
-    @Test
-    public void testCompareImpactFactorHoldings() {
-        this.saxVersion1.setSummaryHoldings("v. 1.");
-        this.saxVersion2.setSummaryHoldings("v. 1.");
-        this.saxVersion1.setDates("1999-2000.");
-        this.saxVersion2.setDates("1999-2000.");
-        this.saxVersion1.addLink(new SAXLink());
-        this.saxLink.setLabel("Impact Factor");
-        this.saxVersion2.addLink(this.saxLink);
-        assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
     }
 
     @Test
