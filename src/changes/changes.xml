@@ -28,6 +28,9 @@
             <action date="2023-07-06" dev="ryanmax" issue="LANEWEB-11129" type="add">
                 Lane Search must handle mixed holdings types for FOLIO
             </action>
+            <action date="2023-05-10" dev="ryanmax" issue="LANEWEB-10987" type="update">
+                experiment with SUL format type assignments for Lane Search
+            </action>
             <action date="2022-09-07" dev="ryanmax" issue="" type="add">
                 indexing for FOLIO
             </action>
