@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources.pmc;
 
-import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.lane.catalog.TextHelper;
 
 public class PmcJournal {

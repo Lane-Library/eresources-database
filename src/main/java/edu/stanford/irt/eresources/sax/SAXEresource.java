@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
-import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 import edu.stanford.lane.catalog.TextHelper;
