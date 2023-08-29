@@ -70,7 +70,7 @@ public class AugmentationUtilityTest {
     public final void testFetchAugmentationsIOException1() throws Exception {
         expect(this.augmentationsService.buildAugmentations()).andReturn(this.aMap);
         replay(this.augmentationsService);
-        AugmentationUtility.fetchAugmentations("/foo", this.augmentationsService, 100);
+        AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
         verify(this.augmentationsService);
     }
 
@@ -78,7 +78,7 @@ public class AugmentationUtilityTest {
     public final void testFetchAugmentationsIOException2() throws Exception {
         expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
         replay(this.augmentationsService);
-        AugmentationUtility.fetchAugmentations("/foo", this.augmentationsService, 100);
+        AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
         verify(this.augmentationsService);
     }
 }
