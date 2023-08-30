@@ -25,7 +25,7 @@ public final class TextParserHelper {
 
     private static final Pattern ACCEPTED_YEAR_PATTERN = Pattern.compile("^\\d[\\d|u]{3}$");
 
-    private static final Pattern DOI_PATTERN = Pattern.compile("\\b(?:(?:doi:)?(10\\.[^ ]+)(?: +doi)?)\\b");
+    private static final Pattern DOI_PATTERN = Pattern.compile("\\b(?:doi:)?(10\\.[^ ]+)(?: +doi)?\\b");
 
     private static final String EMPTY = "";
 
