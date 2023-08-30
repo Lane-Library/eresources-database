@@ -48,7 +48,7 @@ public class FolioVersion implements Version {
 
     @Override
     public String getDates() {
-        List<Map<?, ?>> statements = (List<Map<?, ?>>) this.folioHolding.get("holdingsStatements");
+        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get("holdingsStatements");
         return statements.stream().map((final Map m) -> (String) m.get("statement")).collect(Collectors.joining("; "));
     }
 
@@ -71,7 +71,8 @@ public class FolioVersion implements Version {
             links.add(new CatalogLink(Type.BIB, this.eresource.getRecordId(), this));
         }
         Version version = this;
-        List<Map<?, ?>> electronicAccesses = (List<Map<?, ?>>) this.folioHolding.get("electronicAccess");
+        List<Map<String, String>> electronicAccesses = (List<Map<String, String>>) this.folioHolding
+                .get("electronicAccess");
         links.addAll(electronicAccesses.stream().map((final Map ea) -> new FolioLink(ea, version))
                 .collect(Collectors.toList()));
         return links;
