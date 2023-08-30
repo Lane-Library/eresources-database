@@ -204,9 +204,8 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     }
 
     private boolean isNoItemsPrintBibAndHasParentRelationship() {
-        boolean hasLinks = this.eresource.getVersions().stream()
-                .anyMatch((final Version v) -> v.getLinks().stream().anyMatch((final Link l) -> null != l.getUrl()
-                        && !l.getUrl().contains("searchworks.stanford.edu/view/")));
+        boolean hasLinks = this.getLinks().stream().anyMatch((final Link l) -> null != l.getUrl()
+                && !l.getUrl().contains("searchworks.stanford.edu/view/"));
         return this.eresource.getItemCount()[0] == 0 && !hasLinks
                 && getSubfieldData(getFields(this.bib, "772|773|787|830"), "w").findAny().isPresent();
     }
