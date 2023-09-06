@@ -25,14 +25,20 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SolrLoader {
 
-    protected static final DateTimeFormatter SOLR_DATE_FIELD_FORMATTER = new DateTimeFormatterBuilder()
-            .appendPattern("yyyy-MM-dd'T'HH:mm:ss.S'Z'").toFormatter();
-
     private static final Logger log = LoggerFactory.getLogger(SolrLoader.class);
 
     private static final LocalDateTime MIN_DT = LocalDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
 
-    protected SolrClient solrClient;
+    protected static final DateTimeFormatter SOLR_DATE_FIELD_FORMATTER = new DateTimeFormatterBuilder()
+            .appendPattern("yyyy-MM-dd'T'HH:mm:ss.S'Z'").toFormatter();
+
+    public static void main(final String[] args) {
+        try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+                "edu/stanford/irt/eresources/" + args[0] + ".xml")) {
+            SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
+            loader.load();
+        }
+    }
 
     private Executor executor = null;
 
@@ -46,13 +52,7 @@ public class SolrLoader {
 
     private String version = null;
 
-    public static void main(final String[] args) {
-        try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-                "edu/stanford/irt/eresources/" + args[0] + ".xml")) {
-            SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
-            loader.load();
-        }
-    }
+    protected SolrClient solrClient;
 
     public void load() {
         log.info("starting up version {}", this.version);
@@ -148,8 +148,10 @@ public class SolrLoader {
                 // need to adjust lastUpdate to Solr's timezone (UTC)
                 LocalDateTime adjustedUpdateDate = LocalDateTime
                         .ofInstant(lastUpdate.atZone(ZoneId.systemDefault()).toInstant(), ZoneId.of("UTC"));
-                this.solrClient.deleteByQuery(
-                        baseQuery + " AND updated:[* TO " + adjustedUpdateDate.format(SOLR_DATE_FIELD_FORMATTER) + "]");
+                String query = baseQuery + " AND updated:[* TO " + adjustedUpdateDate.format(SOLR_DATE_FIELD_FORMATTER)
+                        + "]";
+                log.info("deleting: {}", query);
+                this.solrClient.deleteByQuery(query);
                 this.solrClient.commit();
             } catch (SolrServerException | IOException e) {
                 throw new EresourceDatabaseException(e);
