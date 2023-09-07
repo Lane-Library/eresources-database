@@ -23,6 +23,11 @@ public class EresourcesController {
         this.jobManager = jobManager;
     }
 
+    @Scheduled(cron = "${eresources.schedule.cron.deletesFolioHourly}")
+    public JobStatus folioDeletesRoutine() {
+        return this.jobManager.run(new Job(Job.Type.DELETES_FOLIO_HOURLY, LocalDateTime.now()));
+    }
+
     @Scheduled(cron = "${eresources.schedule.cron.laneMarcUpdate}")
     public JobStatus laneMarcUpdate() {
         return this.jobManager.run(new Job(Job.Type.LANE_FOLIO_UPDATE, LocalDateTime.now()));
