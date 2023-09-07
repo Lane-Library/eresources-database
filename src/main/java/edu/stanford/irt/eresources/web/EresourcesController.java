@@ -1,6 +1,9 @@
 package edu.stanford.irt.eresources.web;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,11 +15,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import edu.stanford.irt.eresources.web.Job.Type;
+
 @Controller
 @EnableScheduling
 public class EresourcesController {
 
     private JobManager jobManager;
+
+    // these don't get clickable interface links
+    protected static final Collection<Type> LONG_RUNNING_JOBS = new ArrayList<>(
+            List.of(Type.DELETES_FOLIO_ALL, Type.PUBMED_RELOAD, Type.SUL_RELOAD));
 
     @Autowired
     public EresourcesController(final JobManager jobManager) {
@@ -90,7 +99,7 @@ public class EresourcesController {
         sb.append("** pubmed reload takes 8+ hours and requires baseline data from NCBI</pre>");
         sb.append("<ul>");
         for (Job.Type t : Job.Type.values()) {
-            if (Job.Type.PUBMED_RELOAD.equals(t) || Job.Type.SUL_RELOAD.equals(t)) {
+            if (Job.LONG_RUNNING_JOBS.contains(t)) {
                 sb.append("<li>");
                 sb.append(t.getQualifiedName());
                 sb.append(": ");

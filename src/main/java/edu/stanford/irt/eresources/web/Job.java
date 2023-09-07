@@ -1,6 +1,9 @@
 package edu.stanford.irt.eresources.web;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * indexing job
@@ -64,6 +67,10 @@ public class Job {
     private static final String RELOAD = "reload";
 
     private static final String UPDATE = "update";
+
+    // these don't get clickable interface links
+    protected static final Collection<Type> LONG_RUNNING_JOBS = new ArrayList<>(
+            List.of(Type.DELETES_FOLIO_ALL, Type.PUBMED_RELOAD, Type.SUL_RELOAD));
 
     private LocalDateTime start;
 
