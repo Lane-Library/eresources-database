@@ -22,6 +22,8 @@ public class FolioDeletes extends SolrLoader {
 
     private static final long ONE_HOUR = (60 * 60 * 1000);
 
+    private static final long TWENTY_FOUR_HOURS = ONE_HOUR * 24;
+    
     private static final String SUL = "recordType:sul";
 
     private HTTPCatalogRecordDeleteService catalogRecordDeleteService;
@@ -42,6 +44,9 @@ public class FolioDeletes extends SolrLoader {
         long time = -1;
         if ("hourly".equals(this.interval)) {
             time = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() - ONE_HOUR;
+        }
+        else if ("daily".equals(this.interval)) {
+            time = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() - TWENTY_FOUR_HOURS;
         }
         return this.catalogRecordDeleteService.getDeletes(time);
     }

@@ -13,8 +13,9 @@ public class Job {
     public enum Type {
 
         CANCEL_RUNNING_JOBS("all", "cancel-running-jobs", "cancels all currently running jobs"),
-        DELETES_FOLIO_ALL("deletes", "folio-all","delete all suppressed Lane and SUL records (slow)"),
-        DELETES_FOLIO_HOURLY("deletes", "folio-hourly","delete recently suppressed Lane and SUL records"),
+        DELETES_FOLIO_ALL(DELETE, "folio-all","delete all suppressed Lane and SUL records (slow)"),
+        DELETES_FOLIO_HOURLY(DELETE, "folio-hourly","delete recently suppressed Lane and SUL records"),
+        DELETES_FOLIO_DAILY(DELETE, "folio-daily","delete recently suppressed Lane and SUL records"),
         LANE_FOLIO_RELOAD("lane", "folio-reload","Lane MARC and native FOLIO formats reload - nightly"),
         LANE_FOLIO_UPDATE("lane", "folio-update", "Lane MARC and native FOLIO formats updates - frequently during work hours"),
         LANE_RELOAD("lane", RELOAD,"reload all Lane resource types: MARC, classes, laneweb HTML, blog, libguides - nightly"),
@@ -63,6 +64,8 @@ public class Job {
             return this.dataSource + "/" + this.name;
         }
     }
+
+    private static final String DELETE = "delete";
 
     private static final String RELOAD = "reload";
 

@@ -66,6 +66,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             if (null == marcRecord) {
                 log.info("dropping non-marc record: {}", folioRecord);
             }
+            //TODO: remove all but deduplication check now that we rely on MetaDB? what about keyword check?
             if (null != marcRecord && isInScope(marcRecord) && !isLane(folioRecord, marcRecord)
                     && !isLaneDuplicate(marcRecord)) {
                 this.eresourceHandler
@@ -79,6 +80,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     }
 
     private boolean isLane(final FolioRecord folioRecord, final Record marcRecord) {
+        //FIXME: this will never evaluate to true since SUL records lack items/holdings data
         if (folioRecord.toString().contains("\"libraryName\": \"Lane")) {
             return true;
         } else if (MARCRecordSupport.getRecordId(marcRecord).startsWith("L")) {

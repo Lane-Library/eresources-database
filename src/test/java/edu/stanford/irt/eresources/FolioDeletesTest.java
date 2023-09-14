@@ -48,6 +48,15 @@ public class FolioDeletesTest {
     }
 
     @Test
+    public final void testLoadDaily() throws Exception {
+        this.deletes = new FolioDeletes("daily", this.deleteService);
+        expect(this.deleteService.getDeletes(anyInt())).andReturn(Collections.emptyList());
+        replay(this.deleteService);
+        this.deletes.load();
+        verify(this.deleteService);
+    }
+
+    @Test
     public final void testLoadException() throws Exception {
         List<String> records = new ArrayList<>();
         records.add("deletable-record-id-123");
