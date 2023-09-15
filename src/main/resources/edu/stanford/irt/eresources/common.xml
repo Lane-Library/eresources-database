@@ -56,13 +56,4 @@
         <constructor-arg value="null"/>
         <constructor-arg value="null"/>
     </bean>
-    <bean id="folioCatalogServiceURI" class="java.net.URI">
-        <constructor-arg value="${eresources.catalog-service.scheme}"/>
-        <constructor-arg value="${eresources.catalog-service.userInfo}"/>
-        <constructor-arg value="${eresources.catalog-service.host}"/>
-        <constructor-arg value="${eresources.catalog-service.port}"/>
-        <constructor-arg value="${eresources.catalog-service.path-folio}"/>
-        <constructor-arg value="null"/>
-        <constructor-arg value="null"/>
-    </bean>
 </beans>

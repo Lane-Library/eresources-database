@@ -26,22 +26,20 @@
     </bean>
     <bean id="httpAuthTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
-        <!-- TODO: change this to folioCatalogServiceURI closer to FOLIO go-live -->
-        <!-- FOLIO will not have auth data so we need to continue pulling from Voyager until we can't any longer -->
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="augmentations/auth"/>
     </bean>
     <bean id="httpReservesTextAugmentationsService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
-        <constructor-arg ref="folioCatalogServiceURI"/>
-        <constructor-arg value="../coursereserves/eresources/augmentations"/>
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="augmentations/reserves"/>
     </bean>
     <bean id="httpLaneLocationsService" class="edu.stanford.irt.eresources.marc.HTTPLaneLocationsService">
-        <constructor-arg ref="folioCatalogServiceURI"/>
+        <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg ref="objectMapper"/>
     </bean>
     <bean id="httpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
-        <constructor-arg ref="folioCatalogServiceURI"/>
+        <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="records/lane?time=%s"/>
     </bean>
 </beans>

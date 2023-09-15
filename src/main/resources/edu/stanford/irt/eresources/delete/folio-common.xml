@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="../common.xml"/>
     <bean id="httpCatalogDeleteRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordDeleteService">
-        <constructor-arg ref="folioCatalogServiceURI"/>
+        <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="deletes?time=%s"/>
         <constructor-arg ref="objectMapper"/>
     </bean>

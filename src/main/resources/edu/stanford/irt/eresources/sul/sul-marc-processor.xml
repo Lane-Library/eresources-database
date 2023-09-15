@@ -145,7 +145,7 @@
         <constructor-arg value="augmentations/dedup"/>
     </bean>
     <bean id="sulHttpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
-        <constructor-arg ref="folioCatalogServiceURI"/>
+        <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="records/sul?time=%s"/>
     </bean>
 </beans>
