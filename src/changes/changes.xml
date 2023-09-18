@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-09-18" version="2.11.3" description="maintenance release">
+            <action date="2023-09-15" dev="ryanmax" issue="" type="add">
+                enable hourly folio deletes
+            </action>
+        </release>
         <release date="2023-09-15" version="2.11.2" description="emergency release">
             <action date="2023-09-15" dev="ryanmax" issue="LANEWEB-11207" type="fix">
                 laneguides not indexed in Lane Search
