@@ -4,7 +4,7 @@
 <title>Subject Guide</title></head>
 <body>
 <div id="s-lg-guide-tabs">
-<ul><li><a href="file:src/test/resources/edu/stanford/irt/eresources/sax/libguide.xml" aria-label="foo"></a></li></ul>
+<ul id="libguide-pages"><li><a href="file:src/test/resources/edu/stanford/irt/eresources/sax/libguide.xml" aria-label="foo"></a></li></ul>
 </div>
 </body>
 </html>
