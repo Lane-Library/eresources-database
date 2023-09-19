@@ -92,22 +92,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <artifactId>ojdbc8</artifactId>
-            <groupId>com.oracle</groupId>
-            <version>12.2.0.1</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ucp</artifactId>
-            <version>12.2.0.1</version>
-        </dependency>
-        <dependency>
-            <artifactId>spring-jdbc</artifactId>
-            <groupId>org.springframework</groupId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
