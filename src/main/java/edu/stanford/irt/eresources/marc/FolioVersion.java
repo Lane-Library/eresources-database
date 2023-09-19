@@ -75,7 +75,7 @@ public class FolioVersion implements Version {
         List<Map<String, String>> electronicAccesses = (List<Map<String, String>>) this.folioHolding
                 .get("electronicAccess");
         links.addAll(electronicAccesses.stream().map((final Map<String, String> ea) -> new FolioLink(ea, version))
-                .collect(Collectors.toList()));
+                .toList());
         return links;
     }
 

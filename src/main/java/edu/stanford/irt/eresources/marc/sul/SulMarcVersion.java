@@ -38,7 +38,7 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
     public String getAdditionalText() {
         String additionalText = null;
         // doubt 866 ^z present in sul data
-        List<Field> fields = getFields(this.bib, "866").collect(Collectors.toList());
+        List<Field> fields = getFields(this.bib, "866").toList();
         if (fields.size() > 1) {
             additionalText = "";
         } else if (fields.size() == 1) {
@@ -70,10 +70,10 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
         List<Link> links = new ArrayList<>();
         Version version = this;
         links.addAll(getFields(this.bib, "956").map((final Field f) -> new SulMarcLink(f, version))
-                .collect(Collectors.toList()));
+                .toList());
         if (links.isEmpty()) {
             links.addAll(getFields(this.bib, "856").map((final Field f) -> new SulMarcLink(f, version))
-                    .collect(Collectors.toList()));
+                    .toList());
         }
         if (links.isEmpty()) {
             links.add(new CatalogLink(Type.SUL, this.eresource.getRecordId(), this));

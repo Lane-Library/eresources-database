@@ -32,7 +32,7 @@ public class AltTitleMarcEresource extends BibMarcEresource {
 
     @Override
     public String getTitle() {
-        Field field = getFields(this.altTitleRecord, "249").collect(Collectors.toList()).get(this.item - 1);
+        Field field = getFields(this.altTitleRecord, "249").toList().get(this.item - 1);
         return field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').map(Subfield::getData)
                 .findFirst().orElse(null);
     }

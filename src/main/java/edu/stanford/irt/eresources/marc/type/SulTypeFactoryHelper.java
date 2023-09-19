@@ -210,7 +210,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
         Pattern subAPattern = Pattern.compile(
                 "^(A\\d|F\\d|M\\d|MISC \\d|(MSS (CODEX|MEDIA|PHOTO|PRINTS))|PC\\d|SC[\\d|D|M]|V\\d)",
                 Pattern.CASE_INSENSITIVE);
-        for (Field f : getFields(marcRecord, "999").collect(Collectors.toList())) {
+        for (Field f : getFields(marcRecord, "999").toList()) {
             boolean mSpecColl = f.getSubfields().stream()
                     .anyMatch((final Subfield s) -> s.getCode() == 'm' && "SPEC-COLL".equals(s.getData()));
             boolean wAlphanum = f.getSubfields().stream()

@@ -38,7 +38,7 @@ public class SulMarcLink extends MarcLink {
         StringBuilder sb = new StringBuilder();
         List<String> strings = this.field.getSubfields().stream()
                 .filter((final Subfield s) -> (s.getCode() == '3' || s.getCode() == 'z' || s.getCode() == 'y'))
-                .map(Subfield::getData).collect(Collectors.toList());
+                .map(Subfield::getData).toList();
         for (String string : strings) {
             if (SU_AFFIL_AT.matcher(string).matches()) {
                 this.version.setIsProxy(true);

@@ -114,7 +114,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getDate() {
         String date = null;
-        List<Field> fields773 = getFields(this.marcRecord, "773").collect(Collectors.toList());
+        List<Field> fields773 = getFields(this.marcRecord, "773").toList();
         int subfieldWCount = 0;
         for (Field element : fields773) {
             List<Subfield> subfields = element.getSubfields();
@@ -175,13 +175,13 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public Collection<String> getIsbns() {
         return MARCRecordSupport.getSubfieldData(this.marcRecord, "020", "az").map(String::trim)
-                .map(TextHelper::cleanIsxn).collect(Collectors.toList());
+                .map(TextHelper::cleanIsxn).toList();
     }
 
     @Override
     public Collection<String> getIssns() {
         return MARCRecordSupport.getSubfieldData(this.marcRecord, "022", "azlm").map(String::trim)
-                .map(TextHelper::cleanIsxn).collect(Collectors.toList());
+                .map(TextHelper::cleanIsxn).toList();
     }
 
     @Override
@@ -229,7 +229,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
                                         || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal")))),
                                 "a").map((final String s) -> COMMA_DOLLAR.matcher(s).replaceFirst(""))
                                         .map(AbstractMarcEresource::maybeStripFinialPeriodFromAuthor)
-                                        .collect(Collectors.toList()));
+                                        .toList());
     }
 
     @Override
@@ -283,7 +283,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     @Override
     public String getPublicationText() {
         StringBuilder sb = new StringBuilder();
-        List<Field> fields773 = getFields(this.marcRecord, "773").collect(Collectors.toList());
+        List<Field> fields773 = getFields(this.marcRecord, "773").toList();
         int subfieldWCount = 0;
         for (Field field733 : fields773) {
             if (subfieldWCount == 0 && sb.length() == 0) {
@@ -308,7 +308,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getPublicationTitle() {
-        List<Field> fields773 = getFields(this.marcRecord, "773").collect(Collectors.toList());
+        List<Field> fields773 = getFields(this.marcRecord, "773").toList();
         int countOf733W = 0;
         String data = null;
         for (int i = 0; i < fields773.size() && countOf733W == 0; i++) {

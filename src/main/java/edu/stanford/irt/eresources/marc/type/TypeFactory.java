@@ -154,7 +154,7 @@ public class TypeFactory extends MARCRecordSupport {
                 types.add(type);
             }
         }
-        return types.stream().filter(ALLOWED_TYPES::contains).collect(Collectors.toList());
+        return types.stream().filter(ALLOWED_TYPES::contains).toList();
     }
 
     private static String getCompositeType(final String type) {
@@ -197,7 +197,7 @@ public class TypeFactory extends MARCRecordSupport {
         }
         List<Field> linkFields = getFieldsWild(marcRecord, "[8|9]56").filter(
                 (final Field f) -> f.getSubfields().stream().anyMatch((final Subfield sf) -> sf.getCode() == 'u'))
-                .collect(Collectors.toList());
+                .toList();
         int digitalLinks = (int) linkFields.stream().filter(TypeFactory::isDigitalLink).count();
         if (digitalLinks > 0) {
             return "Digital";
@@ -218,10 +218,10 @@ public class TypeFactory extends MARCRecordSupport {
         for (String type : SulTypeFactoryHelper.getTypes(marcRecord)) {
             rawTypes.add(getCompositeType(type));
         }
-        List<Field> fields655 = getFields(marcRecord, "655").collect(Collectors.toList());
+        List<Field> fields655 = getFields(marcRecord, "655").toList();
         rawTypes.addAll(getSubfieldData(fields655.stream(), "a").map(TextParserHelper::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet()));
-        List<Field> fields6xx = getFieldsWild(marcRecord, "6..").collect(Collectors.toList());
+        List<Field> fields6xx = getFieldsWild(marcRecord, "6..").toList();
         rawTypes.addAll(getSubfieldData(fields6xx.stream(), "v").map(TextParserHelper::maybeStripTrailingPeriod)
                 .collect(Collectors.toSet()));
         rawTypes.addAll(

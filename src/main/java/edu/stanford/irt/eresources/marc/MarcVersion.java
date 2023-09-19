@@ -54,7 +54,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     @Override
     public String getAdditionalText() {
         String additionalText = null;
-        List<Field> fields = getFields(this.holding, "866").collect(Collectors.toList());
+        List<Field> fields = getFields(this.holding, "866").toList();
         if (fields.size() > 1) {
             additionalText = "";
         } else if (fields.size() == 1) {
@@ -122,7 +122,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         }
         Version version = this;
         links.addAll(getFields(this.holding, "856").map((final Field f) -> new MarcLink(f, version))
-                .collect(Collectors.toList()));
+                .toList());
         return links;
     }
 
@@ -246,22 +246,22 @@ public class MarcVersion extends MARCRecordSupport implements Version {
 
     private void setLocationDataForRelatedRecord() {
         String parentRecordId = orderParentLinkingRecords(
-                getSubfieldData(this.bib, "772", "w").collect(Collectors.toList()));
+                getSubfieldData(this.bib, "772", "w").toList());
         if (null != parentRecordId) {
             this.locationName = getSubfieldData(this.bib, "772", "abtdg").collect(Collectors.joining(" "));
             this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
         }
-        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "773", "w").collect(Collectors.toList()));
+        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "773", "w").toList());
         if (null != parentRecordId) {
             this.locationName = this.eresource.getPublicationText();
             this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
         }
-        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "787", "w").collect(Collectors.toList()));
+        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "787", "w").toList());
         if (null != parentRecordId) {
             this.locationName = getSubfieldData(this.bib, "787", "etdn").collect(Collectors.joining(" "));
             this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
         }
-        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "830", "w").collect(Collectors.toList()));
+        parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "830", "w").toList());
         if (null != parentRecordId) {
             this.locationName = getSubfieldData(this.bib, "830", "adv").collect(Collectors.joining(" "));
             this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
