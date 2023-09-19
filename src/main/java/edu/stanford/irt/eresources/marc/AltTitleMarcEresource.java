@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;

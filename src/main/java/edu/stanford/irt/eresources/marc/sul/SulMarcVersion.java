@@ -3,7 +3,6 @@ package edu.stanford.irt.eresources.marc.sul;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Link;
@@ -69,11 +68,9 @@ public class SulMarcVersion extends MARCRecordSupport implements Version {
     public List<Link> getLinks() {
         List<Link> links = new ArrayList<>();
         Version version = this;
-        links.addAll(getFields(this.bib, "956").map((final Field f) -> new SulMarcLink(f, version))
-                .toList());
+        links.addAll(getFields(this.bib, "956").map((final Field f) -> new SulMarcLink(f, version)).toList());
         if (links.isEmpty()) {
-            links.addAll(getFields(this.bib, "856").map((final Field f) -> new SulMarcLink(f, version))
-                    .toList());
+            links.addAll(getFields(this.bib, "856").map((final Field f) -> new SulMarcLink(f, version)).toList());
         }
         if (links.isEmpty()) {
             links.add(new CatalogLink(Type.SUL, this.eresource.getRecordId(), this));
