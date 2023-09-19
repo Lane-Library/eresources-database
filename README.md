@@ -1,4 +1,11 @@
-eresources in Docker
+
+# Eresources Indexing
+
+## Background
+
+ETL for all Lane Search data sources (FOLIO, PubMed, etc.).
+
+Jobs run on a configurable schedule or on-demand via an [admin interface](http://localhost:8080/).
 
 ## Prerequisites
 
