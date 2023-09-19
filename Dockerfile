@@ -1,4 +1,4 @@
-FROM us-docker.pkg.dev/som-laneweb/docker-private/jre-parent:eclipse-temurin-11.0.17_8-jre
+FROM us-docker.pkg.dev/som-laneweb/docker-private/jre-parent:eclipse-temurin-20.0.1_9-jre
 
 ADD ./target/eresources.jar /eresources/eresources.jar
 
@@ -10,4 +10,3 @@ RUN ln -s /config/application.properties application.properties
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD  ["java", "-Duser.timezone=America/Los_Angeles", "-jar", "/eresources/eresources.jar"]
-
