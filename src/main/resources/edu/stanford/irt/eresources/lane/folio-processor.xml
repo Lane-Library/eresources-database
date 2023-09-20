@@ -35,11 +35,12 @@
         <constructor-arg value="augmentations/reserves"/>
     </bean>
     <bean id="httpLaneLocationsService" class="edu.stanford.irt.eresources.marc.HTTPLaneLocationsService">
-        <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg ref="objectMapper"/>
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="locations"/>
     </bean>
     <bean id="httpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
         <constructor-arg ref="catalogServiceURI"/>
-        <constructor-arg value="records/lane?time=%s"/>
+        <constructor-arg value="records/lane"/>
     </bean>
 </beans>

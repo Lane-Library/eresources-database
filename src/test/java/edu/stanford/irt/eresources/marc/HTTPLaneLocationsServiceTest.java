@@ -20,8 +20,8 @@ public class HTTPLaneLocationsServiceTest {
     @Before
     public void setUp() throws Exception {
         this.mapper = new ObjectMapper();
-        this.locationsService = new HTTPLaneLocationsService(
-                HTTPLaneLocationsServiceTest.class.getResource(".").toURI(), this.mapper);
+        this.locationsService = new HTTPLaneLocationsService(this.mapper,
+                HTTPLaneLocationsServiceTest.class.getResource(".").toURI(), "locations");
     }
 
     @Test
@@ -32,7 +32,7 @@ public class HTTPLaneLocationsServiceTest {
 
     @Test(expected = EresourceDatabaseException.class)
     public final void testGetLocationsException() throws Exception {
-        this.locationsService = new HTTPLaneLocationsService(new URI("fake://foo"), this.mapper);
+        this.locationsService = new HTTPLaneLocationsService(this.mapper, new URI("fake://foo"), "");
     }
 
     @Test

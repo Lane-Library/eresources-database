@@ -146,6 +146,6 @@
     </bean>
     <bean id="sulHttpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
         <constructor-arg ref="catalogServiceURI"/>
-        <constructor-arg value="records/sul?time=%s"/>
+        <constructor-arg value="records/sul"/>
     </bean>
 </beans>

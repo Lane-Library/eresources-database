@@ -1,6 +1,8 @@
 package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDateTime;
@@ -33,10 +35,10 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
+    private static final String ERESOURCES = "eresources";
+
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
             .appendPattern("EEE, d MMM yyyy HH:mm:ss Z").toFormatter();
-
-    private static final String ERESOURCES = "eresources";
 
     private ContentHandler contentHandler;
 
@@ -60,7 +62,7 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
     @Override
     public void process() {
         try {
-            URL url = new URL(this.rssURL);
+            URL url = new URI(this.rssURL).toURL();
             URLConnection con = url.openConnection();
             con.setRequestProperty("User-Agent", this.rssUserAgent);
             InputSource source = new InputSource(con.getInputStream());
@@ -75,7 +77,8 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (SAXException | IOException | ParserConfigurationException | TransformerException e) {
+        } catch (SAXException | IOException | ParserConfigurationException | TransformerException
+                | URISyntaxException e) {
             throw new EresourceDatabaseException(e);
         }
     }

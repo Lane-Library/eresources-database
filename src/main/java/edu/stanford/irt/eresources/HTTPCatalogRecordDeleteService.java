@@ -3,33 +3,40 @@ package edu.stanford.irt.eresources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.Collection;
+
+import org.apache.http.client.utils.URIBuilder;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HTTPCatalogRecordDeleteService {
 
+    private static final String TIME = "time";
+
     private URI catalogServiceURI;
 
-    private String endPoint;
+    private String endpoint;
 
     private ObjectMapper objectMapper;
 
-    public HTTPCatalogRecordDeleteService(final URI catalogServiceURI, final String endpoint,
-            final ObjectMapper objectMapper) {
+    public HTTPCatalogRecordDeleteService(final ObjectMapper objectMapper, final URI catalogServiceURI,
+            final String endpoint) {
         this.catalogServiceURI = catalogServiceURI;
-        this.endPoint = endpoint;
+        this.endpoint = endpoint;
         this.objectMapper = objectMapper;
     }
 
     public Collection<String> getDeletes(final long time) {
-        String endpoint = String.format(this.endPoint, time);
-        try (InputStream input = IOUtils.getStream(new URL(this.catalogServiceURI.toURL(), endpoint))) {
+        String path = this.catalogServiceURI.getPath() + this.endpoint;
+        URIBuilder builder = new URIBuilder(this.catalogServiceURI);
+        builder.setPath(path);
+        builder.setParameter(TIME, Long.toString(time));
+        try (InputStream input = IOUtils.getStream(builder.build().toURL())) {
             return this.objectMapper.readValue(input, new TypeReference<Collection<String>>() {
             });
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new EresourceDatabaseException(e);
         }
     }

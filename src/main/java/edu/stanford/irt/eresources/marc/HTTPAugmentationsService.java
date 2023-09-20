@@ -3,8 +3,10 @@ package edu.stanford.irt.eresources.marc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.util.Map;
+
+import org.apache.http.client.utils.URIBuilder;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,23 +18,26 @@ public class HTTPAugmentationsService implements AugmentationsService {
 
     private URI catalogServiceURI;
 
-    private String endpointPath;
+    private String endpoint;
 
     private ObjectMapper objectMapper;
 
     public HTTPAugmentationsService(final ObjectMapper objectMapper, final URI catalogServiceURI,
-            final String endpointPath) {
+            final String endpoint) {
         this.objectMapper = objectMapper;
         this.catalogServiceURI = catalogServiceURI;
-        this.endpointPath = endpointPath;
+        this.endpoint = endpoint;
     }
 
     @Override
     public Map<String, String> buildAugmentations() {
-        try (InputStream input = IOUtils.getStream(new URL(this.catalogServiceURI.toURL(), this.endpointPath))) {
+        String path = this.catalogServiceURI.getPath() + this.endpoint;
+        URIBuilder builder = new URIBuilder(this.catalogServiceURI);
+        builder.setPath(path);
+        try (InputStream input = IOUtils.getStream(builder.build().toURL())) {
             return this.objectMapper.readValue(input, new TypeReference<Map<String, String>>() {
             });
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new EresourceDatabaseException(e);
         }
     }

@@ -3,6 +3,8 @@ package edu.stanford.irt.eresources.pmc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.format.DateTimeFormatter;
@@ -156,7 +158,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
         int remaining = attempt - 1;
         String rateLimit = null;
         try {
-            URL urlObject = new URL(url);
+            URL urlObject = new URI(url).toURL();
             URLConnection con = urlObject.openConnection();
             rateLimit = con.getHeaderField("X-RateLimit-Remaining");
             if (rateLimit != null && !rateLimit.isEmpty() && Integer.parseInt(rateLimit) <= 1) {
@@ -180,6 +182,8 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 }
                 return doFetch(url, attempt - 1);
             }
+            throw new EresourceDatabaseException(e);
+        } catch (URISyntaxException e) {
             throw new EresourceDatabaseException(e);
         }
     }

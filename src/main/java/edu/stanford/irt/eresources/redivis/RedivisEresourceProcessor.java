@@ -2,6 +2,8 @@ package edu.stanford.irt.eresources.redivis;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -70,10 +72,10 @@ public class RedivisEresourceProcessor extends AbstractEresourceProcessor {
         }
         return results;
     }
-    
+
     private InputStream throttledFetch(final String url) {
         try {
-            URL urlObject = new URL(url);
+            URL urlObject = new URI(url).toURL();
             URLConnection con = urlObject.openConnection();
             con.addRequestProperty("Authorization", "Bearer " + this.token);
             String rateLimit = con.getHeaderField("X-RateLimit-Remaining");
@@ -81,7 +83,7 @@ public class RedivisEresourceProcessor extends AbstractEresourceProcessor {
                 Thread.sleep(SLEEP_TIME);
             }
             return con.getInputStream();
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new EresourceDatabaseException(e);
         } catch (InterruptedException e1) {
             Thread.currentThread().interrupt();

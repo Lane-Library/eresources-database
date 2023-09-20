@@ -1,6 +1,8 @@
 package edu.stanford.irt.eresources.sax;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -133,7 +135,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
     private List<Guide> getGuides() {
         List<Guide> guides = new LinkedList<>();
         try {
-            URL url = new URL(this.allGuidesURL);
+            URL url = new URI(this.allGuidesURL).toURL();
             InputSource source = new InputSource(url.openConnection().getInputStream());
             DocumentBuilder parser = this.factory.newDocumentBuilder();
             parser.setErrorHandler(this.errorHandler);
@@ -152,7 +154,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                     guides.addAll(getSubGuides(guide));
                 }
             }
-        } catch (SAXException | ParserConfigurationException | IOException e) {
+        } catch (SAXException | ParserConfigurationException | IOException | URISyntaxException e) {
             throw new EresourceDatabaseException(e);
         }
         return guides;
@@ -161,7 +163,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
     private List<Guide> getSubGuides(final Guide guide) {
         List<Guide> subGuides = new LinkedList<>();
         try {
-            URL url = new URL(guide.link);
+            URL url = new URI(guide.link).toURL();
             InputSource source = new InputSource(url.openConnection().getInputStream());
             DOMParser parser = new DOMParser(this.nekoConfig);
             parser.parse(source);
@@ -178,7 +180,7 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
                 Guide subGuide = new Guide(id, link, name, guide.creator, guide.description, guide.modifiedDate);
                 subGuides.add(subGuide);
             }
-        } catch (SAXException | IOException | XPathExpressionException e) {
+        } catch (SAXException | IOException | XPathExpressionException | URISyntaxException e) {
             throw new EresourceDatabaseException(e);
         }
         return subGuides;
@@ -209,8 +211,8 @@ public class LibGuideEresourceProcessor extends AbstractEresourceProcessor {
     private void parseGuide(final Guide guide) {
         InputSource source = null;
         try {
-            source = new InputSource(new URL(guide.link).openConnection().getInputStream());
-        } catch (IOException e) {
+            source = new InputSource(new URI(guide.link).toURL().openConnection().getInputStream());
+        } catch (IOException | URISyntaxException e) {
             log.error("problem guide link: ", e);
         }
         if (null != source) {
