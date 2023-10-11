@@ -180,30 +180,29 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
 
     @Test
     public void testGetDescription505() {
-        expect(this.record.getFields()).andReturn(Collections.emptyList());
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("505");
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getData()).andReturn("data");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn("505").anyTimes();
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).anyTimes();
+        expect(this.subfield.getData()).andReturn("1 Introduction and general issues -- 2 Tools, facilities, and the operating team -- 3 Anesthesia for cataract surgery");
         replay(this.record, this.field, this.subfield);
-        assertEquals("data", this.eresource.getDescription());
+        assertEquals("::Contents##<br/>1 Introduction and general issues<br/>2 Tools, facilities, and the operating team<br/>3 Anesthesia for cataract surgery", this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
     }
 
     @Test
     public void testGetDescription520() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("520");
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn("520").anyTimes();
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).anyTimes();
         expect(this.subfield.getData()).andReturn("data");
         replay(this.record, this.field, this.subfield);
-        assertEquals("data", this.eresource.getDescription());
+        assertEquals("::Summary## data", this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
     }
 
     @Test
     public void testGetDescriptionNull() {
-        expect(this.record.getFields()).andReturn(Collections.emptyList()).times(2);
+        expect(this.record.getFields()).andReturn(Collections.emptyList()).anyTimes();
         replay(this.record, this.field, this.subfield);
         assertNull(this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);

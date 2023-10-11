@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -30,21 +29,11 @@ import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMarcEresource extends AbstractMarcEresource {
 
-    private static final String BR = "<br/>";
-
     private static final Logger log = LoggerFactory.getLogger(SulMarcEresource.class);
 
     private static final int MAX_YEAR = TextParserHelper.THIS_YEAR + 5;
 
     private static final int MIN_YEAR = 500;
-
-    // patterns from SUL's indexer
-    // https://github.com/sul-dlss/searchworks_traject_indexer/blob/3efc73bbfed80e31520481fba059dda063770463/lib/traject/config/sirsi_config.rb#L2004
-    private static final Pattern[] TOC_LINEBREAK_PATTERNS = { Pattern.compile("[^\\S]--[^\\S]"),
-            Pattern.compile(" {5}+"), Pattern.compile("--[^\\S]"), Pattern.compile("[^\\S]\\.-[^\\S]"),
-            Pattern.compile("(?=(?:Chapter|Section|Appendix|Part|v\\.) \\d+[:\\.-]?\\s+)", Pattern.CASE_INSENSITIVE),
-            Pattern.compile("(?=(?:Appendix|Section|Chapter) [XVI]+[\\.-]?)", Pattern.CASE_INSENSITIVE),
-            Pattern.compile("(?=[^\\d]\\d+[:\\.-]\\s+)"), Pattern.compile("(?=\\s{2,}\\d+\\s+)") };
 
     private static final int YEAR_LENGTH = 4;
 
@@ -75,36 +64,6 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public String getDate() {
         return DateParser.parseDate(Integer.toString(getYear()));
-    }
-
-    @Override
-    public String getDescription() {
-        // prefer 905s over 505s and 920s over 520s
-        // 905/505 get linebreak parsing to improve formatting
-        String tag = getFields(this.marcRecord, "920").count() > 0 ? "920" : "520";
-        final String labelSummary = getFields(this.marcRecord, "520|920").count() > 0 ? "Summary:" + BR : "";
-        StringBuilder sb = new StringBuilder(labelSummary);
-        getSubfieldData(this.marcRecord, tag, "ab").forEach((final String s) -> {
-            if (sb.length() > labelSummary.length()) {
-                sb.append(' ');
-            }
-            sb.append(s);
-        });
-        tag = getFields(this.marcRecord, "905").count() > 0 ? "905" : "505";
-        final String labelContents = getFields(this.marcRecord, "505|905").count() > 0 ? "Contents:" + BR : "";
-        // add breaks before the contents label if a summary is already present
-        if (sb.length() > labelSummary.length() && !labelContents.isEmpty()) {
-            sb.append(BR);
-            sb.append(BR);
-        }
-        sb.append(labelContents);
-        getSubfieldData(this.marcRecord, tag, "a").forEach((final String s) -> {
-            if (sb.length() > labelContents.length()) {
-                sb.append(' ');
-            }
-            sb.append(replaceTOCLinebreaks(s));
-        });
-        return sb.length() > 0 ? sb.toString() : null;
     }
 
     @Override
@@ -247,19 +206,6 @@ public class SulMarcEresource extends AbstractMarcEresource {
     private boolean isAllCaps(final String string) {
         String caps = string.toUpperCase(Locale.US);
         return string.equals(caps);
-    }
-
-    private String replaceTOCLinebreaks(final String desc) {
-        String d = desc;
-        if (null != d) {
-            for (Pattern pattern : TOC_LINEBREAK_PATTERNS) {
-                if (pattern.matcher(desc).find()) {
-                    d = pattern.matcher(desc).replaceAll(BR);
-                    return d;
-                }
-            }
-        }
-        return d;
     }
 
     @Override
