@@ -11,8 +11,6 @@ Jobs run on a configurable schedule or on-demand via an [admin interface](http:/
 
 1. **[Install Docker](https://www.docker.com/products/docker)**
 
-1. **[Install Drone command line tools](http://readme.drone.io/devs/cli/)**
-
 ## Build eresources image
 
 ### Clone the eresources repo and build the docker image
