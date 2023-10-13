@@ -26,6 +26,7 @@
                 <ref bean="acceptableLCCallNumberStrategy"/>
                 <ref bean="acceptableDBCallNumberStrategy"/>
                 <ref bean="acceptableKeywordStrategy"/>
+                <bean class="edu.stanford.irt.eresources.marc.sul.LaneStaffInclusionStrategy"/>
             </list>
         </constructor-arg>
     </bean>
