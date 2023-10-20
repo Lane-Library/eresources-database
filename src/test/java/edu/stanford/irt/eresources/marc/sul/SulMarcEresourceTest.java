@@ -107,10 +107,9 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("520").anyTimes();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("Just text");
         replay(this.record, this.field, this.subfield);
-        assertEquals("Summary:<br/>Just text", this.eresource.getDescription());
+        assertEquals("::Summary## Just text", this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -119,26 +118,34 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("905").anyTimes();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("Appendix I : thing -- Appendix II : thing 2.");
         replay(this.record, this.field, this.subfield);
-        assertEquals("Contents:<br/>Appendix I : thing<br/>Appendix II : thing 2.", this.eresource.getDescription());
+        assertEquals("::Contents##<br/>Appendix I : thing<br/>Appendix II : thing 2.", this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
     }
 
+    @Test
+    public final void testGetDescription505() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn("505").anyTimes();
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getData()).andReturn("Ch. 1 Introduction -- Ch. 2 Functional organization of the visual system -- Pt. I Development of the visual system -- ");
+        replay(this.record, this.field, this.subfield);
+        assertEquals("::Contents##<br/>Ch. 1 Introduction<br/>Ch. 2 Functional organization of the visual system<br/>Pt. I Development of the visual system<br/>", this.eresource.getDescription());
+        verify(this.record, this.field, this.subfield);
+    }
+    
     @Test
     public final void testGetDescription905And920() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("920").times(3);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('b');
         expect(this.subfield.getData()).andReturn("920 data");
         expect(this.field.getTag()).andReturn("905").anyTimes();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("905 data");
         replay(this.record, this.field, this.subfield);
-        assertEquals("Summary:<br/>920 data<br/><br/>Contents:<br/> 905 data", this.eresource.getDescription());
+        assertEquals("::Summary## 920 data<br/>::Contents##<br/>905 data", this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
     }
 

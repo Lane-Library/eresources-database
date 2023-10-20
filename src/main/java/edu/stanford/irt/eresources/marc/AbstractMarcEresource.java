@@ -35,7 +35,17 @@ import edu.stanford.lane.catalog.TextHelper;
  */
 public abstract class AbstractMarcEresource extends MARCRecordSupport implements Eresource {
 
+    private static final String BR = "<br/>";
+
     private static final int SORT_TITLE_MAX_LENGTH = 48;
+
+    // patterns from SUL's indexer
+    // https://github.com/sul-dlss/searchworks_traject_indexer/blob/28c9056dd318f8d17f2ec11e622d50981cdfcab0/lib/traject/common/marc_utils.rb#L391
+    private static final Pattern[] TOC_LINEBREAK_PATTERNS = { Pattern.compile("[^\\S]--[^\\S]"),
+            Pattern.compile(" {5}+"), Pattern.compile("--[^\\S]"), Pattern.compile("[^\\S]\\.-[^\\S]"),
+            Pattern.compile("(?=(?:Chapter|Section|Appendix|Part|v\\.) \\d+[:\\.-]?\\s+)", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?=(?:Appendix|Section|Chapter) [XVI]+[\\.-]?)", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?=[^\\d]\\d+[:\\.-]\\s+)"), Pattern.compile("(?=\\s{2,}\\d+\\s+)") };
 
     protected static final Pattern COLON_OR_SEMICOLON = Pattern.compile("[:;]");
 
@@ -149,21 +159,31 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public String getDescription() {
-        StringBuilder sb = new StringBuilder();
-        getSubfieldData(this.marcRecord, "520").forEach((final String s) -> {
-            if (sb.length() > 0) {
+        // prefer 905s over 505s and 920s over 520s
+        // 905/505 get linebreak parsing to improve formatting
+        String tag = getFields(this.marcRecord, "920").count() > 0 ? "920" : "520";
+        final String labelSummary = getFields(this.marcRecord, "520|920").count() > 0 ? "::Summary## " : "";
+        StringBuilder sb = new StringBuilder(labelSummary);
+        getSubfieldData(this.marcRecord, tag).forEach((final String s) -> {
+            if (sb.length() > labelSummary.length()) {
                 sb.append(' ');
             }
             sb.append(s);
         });
-        if (sb.length() == 0) {
-            getSubfieldData(this.marcRecord, "505").forEach((final String s) -> {
-                if (sb.length() > 0) {
-                    sb.append(' ');
-                }
-                sb.append(s);
-            });
+        tag = getFields(this.marcRecord, "905").count() > 0 ? "905" : "505";
+        final String labelContents = getFields(this.marcRecord, "505|905").count() > 0 ? "::Contents##" + BR : "";
+        // add breaks before the contents label if a summary is already present
+        if (sb.length() > labelSummary.length() && !labelContents.isEmpty()) {
+            sb.append(BR);
         }
+        StringBuilder sbContents = new StringBuilder(labelContents);
+        getSubfieldData(this.marcRecord, tag).forEach((final String s) -> {
+            if (sbContents.length() > labelContents.length()) {
+                sbContents.append(' ');
+            }
+            sbContents.append(s);
+        });
+        sb.append(replaceTOCLinebreaks(sbContents.toString()));
         return sb.length() > 0 ? sb.toString() : null;
     }
 
@@ -228,8 +248,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
                                 getFields(this.marcRecord, "100|700").filter((final Field f) -> "100".equals(f.getTag())
                                         || ("700".equals(f.getTag()) && !(getPrimaryType().startsWith("Journal")))),
                                 "a").map((final String s) -> COMMA_DOLLAR.matcher(s).replaceFirst(""))
-                                        .map(AbstractMarcEresource::maybeStripFinialPeriodFromAuthor)
-                                        .toList());
+                                        .map(AbstractMarcEresource::maybeStripFinialPeriodFromAuthor).toList());
     }
 
     @Override
@@ -425,6 +444,19 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
                 .orElse(EresourceConstants.EMPTY_008);
         String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
+    }
+
+    private String replaceTOCLinebreaks(final String desc) {
+        String d = desc;
+        if (null != d) {
+            for (Pattern pattern : TOC_LINEBREAK_PATTERNS) {
+                if (pattern.matcher(desc).find()) {
+                    d = pattern.matcher(desc).replaceAll(BR);
+                    return d;
+                }
+            }
+        }
+        return d;
     }
 
     protected Version createVersion(final Record holdingRecord) {
