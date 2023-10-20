@@ -6,6 +6,20 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-10-20" version="2.12.0" description="spring-6 release">
+            <action date="2023-10-13" dev="ryanmax" issue="LANECAT-776" type="update">
+                909 field triggers Lane Search indexing of SUL records
+            </action>
+            <action date="2023-10-11" dev="ryanmax" issue="LANEWEB-11213" type="update">
+                standardize formatting for summary and contents notes between SUL and Lane data
+            </action>
+            <action date="2023-10-11" dev="ryanmax" issue="LANEWEB-11217" type="fix">
+                blank "contents" note
+             </action>
+            <action date="2023-09-19" dev="ryanmax" issue="" type="update">
+                spring-6, java 20
+            </action>
+        </release>
         <release date="2023-09-18" version="2.11.3" description="maintenance release">
             <action date="2023-09-15" dev="ryanmax" issue="" type="add">
                 enable hourly folio deletes
