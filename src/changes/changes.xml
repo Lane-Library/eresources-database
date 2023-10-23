@@ -17,7 +17,7 @@
                 blank "contents" note
              </action>
             <action date="2023-09-19" dev="ryanmax" issue="" type="update">
-                spring-6, java 20
+                spring-6, java 21
             </action>
         </release>
         <release date="2023-09-18" version="2.11.3" description="maintenance release">
