@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-11-02" version="2.12.1" description="maintenance release">
+            <action date="2023-11-02" dev="ryanmax" issue="" type="update">
+                increase indexing frequency for Lane records from every 20 minutes to every 5
+            </action>
+        </release>
         <release date="2023-10-20" version="2.12.0" description="spring-6 release">
             <action date="2023-10-13" dev="ryanmax" issue="LANECAT-776" type="update">
                 909 field triggers Lane Search indexing of SUL records
