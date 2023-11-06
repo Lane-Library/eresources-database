@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-11-06" version="2.12.2" description="maintenance release">
+            <action date="2023-11-06" dev="ryanmax" issue="LANEWEB-11240" type="update">
+                hanging sul/update job
+            </action>
+        </release>
         <release date="2023-11-02" version="2.12.1" description="maintenance release">
             <action date="2023-11-02" dev="ryanmax" issue="" type="update">
                 increase indexing frequency for Lane records from every 20 minutes to every 5
