@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
@@ -51,6 +52,8 @@ public class SolrEresourceHandler implements EresourceHandler {
     private static final int SORT_AUTHOR_MAX = 50;
 
     private static final int SORT_TITLE_MAX = 100;
+
+    private static final UrlValidator URL_VALIDATOR = new UrlValidator();
 
     private static String getSortText(final String text, final int max) {
         if (null == text) {
@@ -272,13 +275,13 @@ public class SolrEresourceHandler implements EresourceHandler {
             try {
                 URI uri = new URI(link);
                 String host = uri.getHost();
-                if (null != host && !NOPROXY_HOSTS.matcher(host).matches()) {
+                if (URL_VALIDATOR.isValid(link) && !NOPROXY_HOSTS.matcher(host).matches()) {
                     hosts.add(host);
                 }
             } catch (URISyntaxException e) {
-                log.debug("uri problem: {}", e.getMessage(), e);
+                log.debug("uri problem: eresource id - {}, {}", eresource.getId(), e.getMessage(), e);
                 // ok
-                // maybe report these to Dick's group?
+                // maybe report these to Resource Management?
             }
         }
         doc.addField("proxyHosts", hosts);
