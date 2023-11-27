@@ -21,11 +21,11 @@ import edu.stanford.irt.eresources.web.Job.Type;
 @EnableScheduling
 public class EresourcesController {
 
-    private JobManager jobManager;
-
     // these don't get clickable interface links
     protected static final Collection<Type> LONG_RUNNING_JOBS = new ArrayList<>(
             List.of(Type.DELETES_FOLIO_ALL, Type.PUBMED_RELOAD, Type.SUL_RELOAD));
+
+    private JobManager jobManager;
 
     @Autowired
     public EresourcesController(final JobManager jobManager) {
@@ -69,7 +69,7 @@ public class EresourcesController {
 
     @GetMapping(value = { "/solrLoader" }, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public JobStatus solrLoader(@RequestParam final String job) {
+    public JobStatus solrLoader(@RequestParam("job") final String job) {
         if (Job.Type.CANCEL_RUNNING_JOBS.getQualifiedName().equals(job)) {
             return this.jobManager.cancelRunningJobs();
         }
