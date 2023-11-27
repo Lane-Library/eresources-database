@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-11-27" version="2.12.3" description="maintenance release">
+            <action date="2023-11-27" dev="ryanmax" issue="LANEWEB-11250" type="fix">
+                bad entry in ezproxy-servers.txt config file
+            </action>
+        </release>
         <release date="2023-11-06" version="2.12.2" description="maintenance release">
             <action date="2023-11-06" dev="ryanmax" issue="LANEWEB-11240" type="update">
                 hanging sul/update job
