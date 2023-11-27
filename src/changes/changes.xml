@@ -7,7 +7,7 @@
     </properties>
     <body>
         <release date="2023-11-27" version="2.12.3" description="maintenance release">
-            <action date="2023-11-27" dev="ryanmax" issue="LANEWEB-11250" type="fix">
+            <action date="2023-11-21" dev="ryanmax" issue="LANEWEB-11250" type="fix">
                 bad entry in ezproxy-servers.txt config file
             </action>
         </release>
