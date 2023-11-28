@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -27,7 +26,6 @@ public class EresourcesController {
 
     private JobManager jobManager;
 
-    @Autowired
     public EresourcesController(final JobManager jobManager) {
         this.jobManager = jobManager;
     }
