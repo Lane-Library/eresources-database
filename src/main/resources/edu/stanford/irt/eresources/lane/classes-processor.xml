@@ -2,8 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="classesProcessor"
         class="edu.stanford.irt.eresources.sax.ClassesEresourceProcessor">
-        <constructor-arg index="1" name="contentHandler" ref="classesTransformer"/>
-        <constructor-arg index="0" name="classesServiceURI" ref="classesURI"/>
+        <constructor-arg name="classesServiceURI" ref="classesURI"/>
+        <constructor-arg name="contentHandler" ref="classesTransformer"/>
     </bean>
     <bean id= "classesTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/lane/classes2er.xsl"/>

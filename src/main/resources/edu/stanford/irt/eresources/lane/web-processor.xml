@@ -2,8 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="webProcessor"
         class="edu.stanford.irt.eresources.sax.HTMLPageEresourceProcessor">
-        <constructor-arg name="contentHandler" ref="webTransformer"/>
         <constructor-arg name="basePath" value="${eresources.webprocessor.basepath}"/>
+        <constructor-arg name="contentHandler" ref="webTransformer"/>
     </bean>
     <bean id= "webTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/lane/web2er.xsl"/>

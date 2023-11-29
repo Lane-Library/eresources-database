@@ -2,9 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="laneblogProcessor"
         class="edu.stanford.irt.eresources.sax.LaneblogEresourceProcessor">
-        <constructor-arg name="contentHandler" ref="laneblogTransformer"/>
         <constructor-arg name="rssURL" value="${eresources.laneblog-rss-url}"/>
         <constructor-arg name="rssUserAgent" value="${eresources.laneblog-rss-userAgent}"/>
+        <constructor-arg name="contentHandler" ref="laneblogTransformer"/>
     </bean>
     <bean id= "laneblogTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/lane/laneblogRSS2er.xsl"/>
