@@ -6,9 +6,15 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
-        <release date="2023-11-27" version="2.12.3" description="maintenance release">
+        <release date="2023-11-30" version="2.12.3" description="maintenance release">
             <action date="2023-11-21" dev="ryanmax" issue="LANEWEB-11250" type="fix">
                 bad entry in ezproxy-servers.txt config file
+            </action>
+            <action date="2023-11-29" dev="ryanmax" issue="LANEWEB-11249" type="fix">
+                incorrect primary links on Bassett search results
+            </action>
+            <action date="2023-11-30" dev="ryanmax" issue="LANEWEB-11256" type="fix">
+                fix in catalog-3.9.17: holdings location not changing in Lane Search when all items have different loc than holdings loc from MARC 852
             </action>
         </release>
         <release date="2023-11-06" version="2.12.2" description="maintenance release">
