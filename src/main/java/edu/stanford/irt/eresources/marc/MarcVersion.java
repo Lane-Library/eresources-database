@@ -121,8 +121,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
             links.add(new CatalogLink(Type.BIB, this.eresource.getRecordId(), this));
         }
         Version version = this;
-        links.addAll(getFields(this.holding, "856").map((final Field f) -> new MarcLink(f, version))
-                .toList());
+        links.addAll(getFields(this.holding, "856").map((final Field f) -> new MarcLink(f, version)).toList());
         return links;
     }
 
@@ -203,11 +202,16 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         return getFields(this.holding, "856").count() > 0;
     }
 
+    private boolean isBassett() {
+        return this.eresource.getRecordId().equals("254573")
+                || getSubfieldData(getFields(this.bib, "773"), "w").anyMatch("L254573"::equals);
+    }
+
     private boolean isNoItemsPrintBibAndHasParentRelationship() {
-        boolean hasLinks = this.getLinks().stream().anyMatch((final Link l) -> null != l.getUrl()
-                && !l.getUrl().contains("searchworks.stanford.edu/view/"));
+        boolean hasLinks = this.getLinks().stream().anyMatch(
+                (final Link l) -> null != l.getUrl() && !l.getUrl().contains("searchworks.stanford.edu/view/"));
         return this.eresource.getItemCount()[0] == 0 && !hasLinks
-                && getSubfieldData(getFields(this.bib, "772|773|787|830"), "w").findAny().isPresent();
+                && getSubfieldData(getFields(this.bib, "772|773|787|830"), "w").findAny().isPresent() && !isBassett();
     }
 
     private boolean needToAddBibDates(final Eresource eresource) {
@@ -245,8 +249,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     // }
 
     private void setLocationDataForRelatedRecord() {
-        String parentRecordId = orderParentLinkingRecords(
-                getSubfieldData(this.bib, "772", "w").toList());
+        String parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "772", "w").toList());
         if (null != parentRecordId) {
             this.locationName = getSubfieldData(this.bib, "772", "abtdg").collect(Collectors.joining(" "));
             this.locationUrl = createLocationUrlFromRecordId(parentRecordId);
