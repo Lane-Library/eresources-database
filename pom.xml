@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>139-springsix</version>
+        <version>141-springsix</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.12.4-SNAPSHOT</version>
@@ -226,6 +226,7 @@
                         </goals>
                         <configuration>
                           <mainClass>edu.stanford.irt.eresources.web.EresourcesWebApplication</mainClass>
+                          <loaderImplementation>CLASSIC</loaderImplementation>
                         </configuration>                        
                     </execution>
                 </executions>
