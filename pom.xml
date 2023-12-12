@@ -81,7 +81,7 @@
             <artifactId>Saxon-HE</artifactId>
             <groupId>net.sf.saxon</groupId>
             <scope>runtime</scope>
-            <version>12.3</version>
+            <version>12.4</version>
             <exclusions>
                 <exclusion>
                     <!-- https://stackoverflow.com/questions/51094274/eclipse-cant-find-xml-related-classes-after-switching-build-path-to-jdk-10 -->
