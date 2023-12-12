@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2023-12-12" version="2.12.4" description="maintenance release">
+            <action date="2023-12-08" dev="ryanmax" issue="" type="update">
+                spring-boot-3.2.x, spring-6.1.x
+            </action>
+        </release>
         <release date="2023-11-30" version="2.12.3" description="maintenance release">
             <action date="2023-11-21" dev="ryanmax" issue="LANEWEB-11250" type="fix">
                 bad entry in ezproxy-servers.txt config file
