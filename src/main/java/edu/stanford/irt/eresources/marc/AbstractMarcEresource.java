@@ -287,7 +287,10 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
         Set<String> languages = new HashSet<>();
         String field008 = getFields(this.marcRecord, "008").map(Field::getData).findFirst()
                 .orElse(EresourceConstants.EMPTY_008);
-        String lang = field008.substring(F008_35, F008_38);
+        String lang = "";
+        if (field008.length() > F008_38) {
+            lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
+        }
         languages.add(LANGUAGE_MAP.getLanguage(lang.toLowerCase(Locale.US)));
         languages.addAll(getSubfieldData(this.marcRecord, "041").map(String::toLowerCase).map(LANGUAGE_MAP::getLanguage)
                 .collect(Collectors.toSet()));
@@ -442,7 +445,10 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     public boolean isEnglish() {
         String field008 = getFields(this.marcRecord, "008").map(Field::getData).findFirst()
                 .orElse(EresourceConstants.EMPTY_008);
-        String lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
+        String lang = "";
+        if (field008.length() > F008_38) {
+            lang = field008.substring(F008_35, F008_38).toLowerCase(Locale.US);
+        }
         return "eng".equals(lang) || ("mul".equals(lang) && getPublicationLanguages().contains("English"));
     }
 
