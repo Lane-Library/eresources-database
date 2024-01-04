@@ -226,7 +226,6 @@
                         </goals>
                         <configuration>
                           <mainClass>edu.stanford.irt.eresources.web.EresourcesWebApplication</mainClass>
-                          <loaderImplementation>CLASSIC</loaderImplementation>
                         </configuration>                        
                     </execution>
                 </executions>
