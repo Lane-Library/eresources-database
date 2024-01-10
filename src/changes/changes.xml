@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-01-09" version="2.12.6" description="maintenance release">
+            <action date="2024-01-09" dev="ryanmax" issue="LANEWEB-11267" type="fix">
+                redivis indexing failing
+            </action>
+        </release>
         <release date="2023-12-17" version="2.12.5" description="maintenance release">
             <action date="2023-12-08" dev="ryanmax" issue="LANEWEB-11261" type="fix">
                 bad 008 data causing SUL reload job to hang
