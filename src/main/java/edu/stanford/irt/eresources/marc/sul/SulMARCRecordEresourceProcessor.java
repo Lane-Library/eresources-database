@@ -66,9 +66,8 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             if (null == marcRecord) {
                 log.info("dropping non-marc record: {}", folioRecord);
             }
-            //TODO: remove all but deduplication check now that we rely on MetaDB? what about keyword check?
-            if (null != marcRecord && isInScope(marcRecord) && !isLane(folioRecord, marcRecord)
-                    && !isLaneDuplicate(marcRecord)) {
+            // TODO: remove all but deduplication check now that we rely on MetaDB? what about keyword check?
+            if (null != marcRecord && isInScope(marcRecord) && !isLaneDuplicate(marcRecord)) {
                 this.eresourceHandler
                         .handleEresource(new SulMarcEresource(marcRecord, this.keywordsStrategy, this.lcshMapManager));
             }
@@ -79,17 +78,6 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         return this.inclusionStrategies.stream().anyMatch((final InclusionStrategy is) -> is.isAcceptable(marcRecord));
     }
 
-    private boolean isLane(final FolioRecord folioRecord, final Record marcRecord) {
-        //FIXME: this will never evaluate to true since SUL records lack items/holdings data
-        if (folioRecord.toString().contains("\"libraryName\": \"Lane")) {
-            return true;
-        } else if (MARCRecordSupport.getRecordId(marcRecord).startsWith("L")) {
-            log.info("Lane HRID but not Lane library: {}", folioRecord);
-            return true;
-        }
-        return false;
-    }
-
     private boolean isLaneDuplicate(final Record marcRecord) {
         Set<String> keys = new HashSet<>();
         keys.add(LaneDedupAugmentation.KEY_CATKEY + LaneDedupAugmentation.SEPARATOR
@@ -98,11 +86,11 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                 .collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + lccn);
         }
-        for (String isbn : MARCRecordSupport.getSubfieldData(marcRecord, "020").map(String::trim)
+        for (String isbn : MARCRecordSupport.getSubfieldData(marcRecord, "020", "a").map(String::trim)
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR + isbn);
         }
-        for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022").map(String::trim)
+        for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022", "a").map(String::trim)
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISSN + LaneDedupAugmentation.SEPARATOR + issn);
         }
