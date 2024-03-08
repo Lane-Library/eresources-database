@@ -1,6 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
@@ -11,6 +12,9 @@ import edu.stanford.lane.catalog.Record.Subfield;
  * A Link that encapsulates the DataField from which it is derived.
  */
 public class MarcLink implements Link {
+
+    protected static final Pattern SU_AFFIL_AT = Pattern.compile(
+            "(available[ -]?to[ -]?stanford[ -]?affiliated[ -]?users)([ -]?at)?[:;.]?", Pattern.CASE_INSENSITIVE);
 
     private Field field;
 
@@ -38,7 +42,8 @@ public class MarcLink implements Link {
                 .map(Subfield::getData).findFirst().orElse(null);
         if (l == null) {
             l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'z')
-                    .map(Subfield::getData).findFirst().orElse(null);
+                    .map(Subfield::getData).filter((final String st) -> !SU_AFFIL_AT.matcher(st).matches()).findFirst()
+                    .orElse(null);
         } else if (l.startsWith("(") && l.endsWith(")") && !"()".equals(l)) {
             l = l.substring(1, l.length() - 1);
         }
@@ -72,6 +77,7 @@ public class MarcLink implements Link {
 
     /**
      * A related resource link (856 42) will be down-sorted by version comparator. See case LANEWEB-10642
+     *
      * @return has 856 42
      */
     @Override
@@ -81,6 +87,7 @@ public class MarcLink implements Link {
 
     /**
      * A related resource link (856 40) will be up-sorted by version comparator. See case LANEWEB-10642
+     *
      * @return has 856 40
      */
     @Override

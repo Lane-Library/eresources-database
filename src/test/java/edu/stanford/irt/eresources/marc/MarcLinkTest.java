@@ -7,7 +7,9 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -91,6 +93,21 @@ public class MarcLinkTest {
         expect(this.subfield.getData()).andReturn("q label");
         replay(this.field, this.subfield);
         assertEquals("q label", this.link.getLabel());
+    }
+
+    @Test
+    public void testGetLabelSuAffiliation() {
+        Subfield sf1 = mock(Subfield.class);
+        Subfield sf2 = mock(Subfield.class);
+        List<Subfield> sfs = Arrays.asList(sf1, sf2);
+        expect(this.field.getSubfields()).andReturn(sfs).times(2);
+        expect(sf1.getCode()).andReturn('z').times(2);
+        expect(sf2.getCode()).andReturn('z').times(2);
+        expect(sf1.getData()).andReturn("Available to Stanford-affiliated users.");
+        expect(sf2.getData()).andReturn("z label");
+        replay(this.field, this.subfield, sf1, sf2);
+        assertEquals("z label", this.link.getLabel());
+        verify(this.field, this.subfield, sf1, sf2);
     }
 
     @Test
