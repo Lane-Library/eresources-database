@@ -12,9 +12,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -25,7 +23,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.irt.eresources.Eresource;
-import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.FileCatalogRecordService;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -183,9 +180,12 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("505").anyTimes();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).anyTimes();
-        expect(this.subfield.getData()).andReturn("1 Introduction and general issues -- 2 Tools, facilities, and the operating team -- 3 Anesthesia for cataract surgery");
+        expect(this.subfield.getData()).andReturn(
+                "1 Introduction and general issues -- 2 Tools, facilities, and the operating team -- 3 Anesthesia for cataract surgery");
         replay(this.record, this.field, this.subfield);
-        assertEquals("::Contents##<br/>1 Introduction and general issues<br/>2 Tools, facilities, and the operating team<br/>3 Anesthesia for cataract surgery", this.eresource.getDescription());
+        assertEquals(
+                "::Contents##<br/>1 Introduction and general issues<br/>2 Tools, facilities, and the operating team<br/>3 Anesthesia for cataract surgery",
+                this.eresource.getDescription());
         verify(this.record, this.field, this.subfield);
     }
 
@@ -445,45 +445,6 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         replay(this.record, this.field, this.subfield);
         assertEquals("HELP with nursing audit and quality assurance : management guide.... 3rd ed.",
                 this.eresource.getTitle());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public void testGetUpdated() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
-        expect(this.field.getTag()).andReturn("005").times(2);
-        expect(this.field.getData()).andReturn("19550519120000").times(2);
-        replay(this.record, this.field, this.subfield);
-        Calendar cal = Calendar.getInstance();
-        cal.set(1955, 4, 19, 12, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        assertEquals(cal.getTimeInMillis(),
-                this.eresource.getUpdated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public void testGetUpdatedHoldingsNewer() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
-        expect(this.field.getTag()).andReturn("005").times(2);
-        expect(this.field.getData()).andReturn("19550519120000");
-        expect(this.field.getData()).andReturn("19690505120000");
-        replay(this.record, this.field, this.subfield);
-        Calendar cal = Calendar.getInstance();
-        cal.set(1969, 4, 5, 12, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        assertEquals(cal.getTimeInMillis(),
-                this.eresource.getUpdated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test(expected = EresourceDatabaseException.class)
-    public void testGetUpdatedParseException() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("005");
-        expect(this.field.getData()).andReturn("notavaliddatestring");
-        replay(this.record, this.field, this.subfield);
-        this.eresource.getUpdated();
         verify(this.record, this.field, this.subfield);
     }
 

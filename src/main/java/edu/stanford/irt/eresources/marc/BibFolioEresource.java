@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources.marc;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -192,12 +191,6 @@ public class BibFolioEresource implements Eresource {
     @Override
     public Collection<String> getTypes() {
         return TypeFactory.getTypes(this.folioRecord);
-    }
-
-    @Override
-    public LocalDateTime getUpdated() {
-        // TODO is this even used?
-        return null;
     }
 
     @Override

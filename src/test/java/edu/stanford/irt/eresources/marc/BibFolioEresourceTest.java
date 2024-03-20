@@ -137,11 +137,6 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetUpdated() {
-        assertNull(this.eresource.getUpdated());
-    }
-
-    @Test
     public void testGetVersions() {
         assertEquals(1, this.eresource.getVersions().size());
     }

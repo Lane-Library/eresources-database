@@ -9,9 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -21,7 +19,6 @@ import org.junit.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
-import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.FileCatalogRecordService;
 import edu.stanford.irt.eresources.marc.KeywordsStrategy;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
@@ -103,6 +100,20 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
+    public final void testGetDescription505() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn("505").anyTimes();
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getData()).andReturn(
+                "Ch. 1 Introduction -- Ch. 2 Functional organization of the visual system -- Pt. I Development of the visual system -- ");
+        replay(this.record, this.field, this.subfield);
+        assertEquals(
+                "::Contents##<br/>Ch. 1 Introduction<br/>Ch. 2 Functional organization of the visual system<br/>Pt. I Development of the visual system<br/>",
+                this.eresource.getDescription());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
     public final void testGetDescription520() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("520").anyTimes();
@@ -124,17 +135,6 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         verify(this.record, this.field, this.subfield);
     }
 
-    @Test
-    public final void testGetDescription505() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
-        expect(this.field.getTag()).andReturn("505").anyTimes();
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getData()).andReturn("Ch. 1 Introduction -- Ch. 2 Functional organization of the visual system -- Pt. I Development of the visual system -- ");
-        replay(this.record, this.field, this.subfield);
-        assertEquals("::Contents##<br/>Ch. 1 Introduction<br/>Ch. 2 Functional organization of the visual system<br/>Pt. I Development of the visual system<br/>", this.eresource.getDescription());
-        verify(this.record, this.field, this.subfield);
-    }
-    
     @Test
     public final void testGetDescription905And920() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
@@ -241,30 +241,6 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
 //        replay(this.typeFactory, this.record);
 //        assertTrue(this.eresource.getTypes().isEmpty());
 //    }
-
-    @Test
-    public final void testGetUpdated() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("005");
-        expect(this.field.getData()).andReturn("20120216180000");
-        replay(this.record, this.field, this.subfield);
-        Calendar cal = Calendar.getInstance();
-        cal.set(2012, 1, 16, 18, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        assertEquals(cal.getTimeInMillis(),
-                this.eresource.getUpdated().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test(expected = EresourceDatabaseException.class)
-    public final void testGetUpdatedBadDate() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("005");
-        expect(this.field.getData()).andReturn("not a date");
-        replay(this.record, this.field, this.subfield);
-        this.eresource.getUpdated();
-        verify(this.record, this.field, this.subfield);
-    }
 
     @Test
     public final void testGetVersions() {

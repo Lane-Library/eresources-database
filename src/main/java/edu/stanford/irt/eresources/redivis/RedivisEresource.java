@@ -149,11 +149,6 @@ public class RedivisEresource implements Eresource {
     }
 
     @Override
-    public LocalDateTime getUpdated() {
-        return this.dataset.getUpdatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-    }
-
-    @Override
     public Collection<Version> getVersions() {
         List<Version> versions = new ArrayList<>();
         versions.add(new DatasetVersion(this.dataset));
@@ -188,5 +183,9 @@ public class RedivisEresource implements Eresource {
         sb.append(this.dataset.getName()).append(" ");
         sb.append(this.dataset.getDescription()).append(" ");
         return sb.toString();
+    }
+
+    private LocalDateTime getUpdated() {
+        return this.dataset.getUpdatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 }

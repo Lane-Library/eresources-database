@@ -1,9 +1,7 @@
 package edu.stanford.irt.eresources.marc;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +17,6 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceConstants;
-import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.LanguageMap;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
@@ -401,24 +398,6 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
             this.types = TypeFactory.getTypes(this.marcRecord);
         }
         return new HashSet<>(this.types);
-    }
-
-    @Override
-    public LocalDateTime getUpdated() {
-        try {
-            LocalDateTime updated = LocalDateTime
-                    .parse(getFields(this.marcRecord, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
-            for (Record holding : this.holdings) {
-                LocalDateTime holdingUpdated = LocalDateTime
-                        .parse(getFields(holding, "005").map(Field::getData).findFirst().orElse(null), FORMATTER);
-                if (holdingUpdated.compareTo(updated) > 0) {
-                    updated = holdingUpdated;
-                }
-            }
-            return updated;
-        } catch (DateTimeParseException e) {
-            throw new EresourceDatabaseException(e);
-        }
     }
 
     @Override
