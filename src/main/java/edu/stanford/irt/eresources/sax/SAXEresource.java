@@ -84,8 +84,6 @@ public class SAXEresource implements Eresource {
 
     private Collection<String> types = new HashSet<>();
 
-    private LocalDateTime updated;
-
     private Set<Version> versions = new TreeSet<>(COMPARATOR);
 
     private int year;
@@ -285,11 +283,6 @@ public class SAXEresource implements Eresource {
     }
 
     @Override
-    public LocalDateTime getUpdated() {
-        return this.updated;
-    }
-
-    @Override
     public Collection<Version> getVersions() {
         return Collections.unmodifiableCollection(this.versions);
     }
@@ -381,7 +374,6 @@ public class SAXEresource implements Eresource {
     }
 
     public void setUpdated(final LocalDateTime updated) {
-        this.updated = updated;
     }
 
     public void setYear(final int year) {

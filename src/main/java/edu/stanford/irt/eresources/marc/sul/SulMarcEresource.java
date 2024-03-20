@@ -1,7 +1,5 @@
 package edu.stanford.irt.eresources.marc.sul;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.EresourceConstants;
-import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.AbstractMarcEresource;
@@ -151,16 +148,6 @@ public class SulMarcEresource extends AbstractMarcEresource {
             this.types.add(getPrimaryType());
         }
         return new ArrayList<>(this.types);
-    }
-
-    @Override
-    public LocalDateTime getUpdated() {
-        try {
-            return LocalDateTime.parse(getFields(this.marcRecord, "005").map(Field::getData).findFirst().orElse(null),
-                    FORMATTER);
-        } catch (DateTimeParseException e) {
-            throw new EresourceDatabaseException(e);
-        }
     }
 
     @Override

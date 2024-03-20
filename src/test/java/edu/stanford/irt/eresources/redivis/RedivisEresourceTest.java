@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDateTime;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -163,11 +161,6 @@ public class RedivisEresourceTest {
     @Test
     public final void testGetTypes() {
         assertTrue(this.eresource.getTypes().contains("Dataset"));
-    }
-
-    @Test
-    public final void testGetUpdated() {
-        assertTrue(this.eresource.getUpdated().isBefore(LocalDateTime.now()));
     }
 
     @Test

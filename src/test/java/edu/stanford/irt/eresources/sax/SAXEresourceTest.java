@@ -73,15 +73,14 @@ public class SAXEresourceTest {
         assertNotNull(eresource.getPublicationTitle());
         assertNotNull(eresource.getPublicationTypes());
         assertNotNull(eresource.getPublicationVolume());
-        assertEquals("123",eresource.getRecordId());
+        assertEquals("123", eresource.getRecordId());
         assertNotNull(eresource.getRecordType());
         assertNotNull(eresource.getShortTitle());
         assertNotNull(eresource.getSortTitle());
         assertNotNull(eresource.getTitle());
         assertNotNull(eresource.getTypes());
-        assertNotNull(eresource.getUpdated());
         assertNotNull(eresource.getVersions());
-        assertEquals(2000,eresource.getYear());
+        assertEquals(2000, eresource.getYear());
         assertTrue(eresource.isDigital());
         assertFalse(eresource.isEnglish());
         assertNotNull(eresource.getIssns());

@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="pmcProcessor" class="edu.stanford.irt.eresources.pmc.PmcEresourceProcessor">
-        <constructor-arg name="efetchBaseUrl" value="${eresources.pmc.efetchBaseUrl}"/>
+        <constructor-arg name="eutilsBaseUrl" value="${eresources.pmc.eutilsBaseUrl}"/>
         <constructor-arg name="allJournalsCsvUrl" value="${eresources.pmc.allJournalsCsvUrl}"/>
         <constructor-arg name="contentHandler" ref="pmcTransformer"/>
         <constructor-arg name="laneDedupAugmentation" ref="laneDedupAugmentation"/>

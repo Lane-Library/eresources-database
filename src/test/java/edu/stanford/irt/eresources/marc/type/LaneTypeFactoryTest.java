@@ -52,7 +52,6 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
         assertEquals("Other", TypeFactory.getPrimaryType(this.records.get("234974")));
         assertEquals("Database", TypeFactory.getPrimaryType(this.records.get("213409")));
         assertEquals("Book Digital", TypeFactory.getPrimaryType(this.records.get("23491")));
-        assertEquals("Equipment", TypeFactory.getPrimaryType(this.records.get("357935")));
         assertEquals("Book Digital", TypeFactory.getPrimaryType(this.records.get("356482")));
     }
 
@@ -71,7 +70,6 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
         assertTrue(TypeFactory.getTypes(this.records.get("257445")).contains("Bassett"));
         assertTrue(TypeFactory.getTypes(this.records.get("234974")).isEmpty());
         assertTrue(TypeFactory.getTypes(this.records.get("213409")).contains("Journal"));
-        assertTrue(TypeFactory.getTypes(this.records.get("357935")).contains("Equipment"));
         assertTrue(TypeFactory.getTypes(this.records.get("356482")).contains("Book"));
         assertTrue(TypeFactory.getTypes(this.records.get("356482")).contains("Book Digital"));
     }

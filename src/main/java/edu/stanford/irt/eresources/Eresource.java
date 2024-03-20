@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -69,8 +68,6 @@ public interface Eresource {
     String getTitle();
 
     Collection<String> getTypes();
-
-    LocalDateTime getUpdated();
 
     Collection<Version> getVersions();
 

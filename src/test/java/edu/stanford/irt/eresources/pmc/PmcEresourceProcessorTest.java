@@ -31,18 +31,18 @@ public class PmcEresourceProcessorTest {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
         this.laneDedupAugmentation = EasyMock.mock(LaneDedupAugmentation.class);
         this.processor = new PmcEresourceProcessor(
-                PmcEresourceProcessorTest.class.getResource("efetch.xml").toExternalForm(),
+                PmcEresourceProcessorTest.class.getResource(".").toExternalForm(),
                 PmcEresourceProcessorTest.class.getResource("jlist.csv").toExternalForm(), this.contentHandler,
                 this.laneDedupAugmentation, "key");
     }
 
     @Test
     public final void testBadUrl() throws Exception {
-        this.processor = new PmcEresourceProcessor("file://",
+        this.processor = new PmcEresourceProcessor("file:/",
                 PmcEresourceProcessorTest.class.getResource("jlist.csv").toExternalForm(), this.contentHandler,
                 this.laneDedupAugmentation, "key");
         this.thrown.expect(EresourceDatabaseException.class);
-        this.thrown.expectMessage("java.io.FileNotFoundException:  (No such file or directory)");
+        this.thrown.expectMessage("java.io.FileNotFoundException: /esearch.fcgi (No such file or directory)");
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
