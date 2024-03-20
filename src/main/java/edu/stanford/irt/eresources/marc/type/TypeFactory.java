@@ -229,10 +229,6 @@ public class TypeFactory extends MARCRecordSupport {
         if (getSubfieldData(marcRecord, "035", "a").anyMatch((final String s) -> s.startsWith("(Bassett)"))) {
             rawTypes.add("Bassett");
         }
-        // TODO: remove once all Lane Equipment records are source = FOLIO
-        if (rawTypes.contains("Objects") && rawTypes.contains("Subset, Circbib")) {
-            rawTypes.add("Equipment");
-        }
         return rawTypes.stream().map(TypeFactory::getCompositeType)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
