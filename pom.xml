@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>146-springsix</version>
+        <version>147-springsix</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.12.8-SNAPSHOT</version>
@@ -69,12 +69,12 @@
         <dependency>
             <groupId>org.eclipse.angus</groupId>
             <artifactId>angus-mail</artifactId>
-            <version>2.0.2</version>
+            <version>2.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.angus</groupId>
             <artifactId>angus-activation</artifactId>
-            <version>2.0.1</version>
+            <version>2.0.2</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
