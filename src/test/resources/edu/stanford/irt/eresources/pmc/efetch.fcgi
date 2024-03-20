@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE NLMCatalogRecordSet PUBLIC "-//NLM//DTD NLMCatalogRecordSet, 1st June 2017//EN" "https://www.nlm.nih.gov/databases/dtd/nlmcatalogrecordset_170601.dtd">
+<!--<!DOCTYPE NLMCatalogRecordSet PUBLIC "-//NLM//DTD NLMCatalogRecordSet, 1st June 2017//EN" "https://www.nlm.nih.gov/databases/dtd/nlmcatalogrecordset_170601.dtd">-->
 <NLMCatalogRecordSet><NLMCatalogRecord Owner="NLM" Status="Completed">
 <NlmUniqueID>101565857</NlmUniqueID>
 <!-- 

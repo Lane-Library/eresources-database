@@ -21,6 +21,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -28,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -42,6 +48,10 @@ import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String ERESOURCES = "eresources";
+
+    private static final String EUTILS_EFETCH_BASE = "efetch.fcgi?db=nlmcatalog";
+
+    private static final String EUTILS_ESEARCH_BASE = "esearch.fcgi?db=nlmcatalog";
 
     private static final String HEADER_DEPOSIT_STATUS = " Deposit status";
 
@@ -92,20 +102,26 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private ErrorHandler errorHandler = new DefaultHandler();
 
+    private String esearchBaseUrl;
+
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
     private LaneDedupAugmentation laneDedupAugmentation;
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    public PmcEresourceProcessor(final String efetchBaseUrl, final String allJournalsCsvUrl,
+    private XPath xpath;
+
+    public PmcEresourceProcessor(final String eutilsBaseUrl, final String allJournalsCsvUrl,
             final ContentHandler contentHandler, final LaneDedupAugmentation laneDedupAugmentation,
             final String apiKey) {
         this.allJournalsCsvUrl = allJournalsCsvUrl;
         this.contentHandler = contentHandler;
         this.laneDedupAugmentation = laneDedupAugmentation;
         this.apiKey = apiKey;
-        this.efetchBaseUrl = efetchBaseUrl;
+        this.efetchBaseUrl = eutilsBaseUrl + EUTILS_EFETCH_BASE;
+        this.esearchBaseUrl = eutilsBaseUrl + EUTILS_ESEARCH_BASE;
+        this.xpath = XPathFactory.newInstance().newXPath();
     }
 
     @Override
@@ -123,9 +139,10 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             while (!journals.isEmpty()) {
                 PmcJournal journal = journals.remove(0);
+                String nlmcatalogId = doSearch(journal.getNlmId());
                 StringBuilder sb = new StringBuilder(this.efetchBaseUrl);
-                sb.append("?db=nlmcatalog&retmode=xml&id=");
-                sb.append(journal.getNlmId());
+                sb.append("&retmode=xml&id=");
+                sb.append(nlmcatalogId);
                 sb.append("&api_key=");
                 sb.append(this.apiKey);
                 InputSource source = new InputSource(doFetch(sb.toString(), MAX_RETRIES));
@@ -163,6 +180,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             rateLimit = con.getHeaderField("X-RateLimit-Remaining");
             if (rateLimit != null && !rateLimit.isEmpty() && Integer.parseInt(rateLimit) <= 1) {
                 log.info("NCBI connection rate limit reached so sleeping");
+                Thread.sleep(SLEEP_TIME);
             }
             if ("gzip".equals(con.getContentEncoding())) {
                 return new GZIPInputStream(con.getInputStream());
@@ -174,18 +192,32 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 log.info("NBCI returned an error", e);
                 log.info("RateLimit-Remaining: {}", rateLimit);
                 log.info("will try {} more times", remaining);
-                try {
-                    Thread.sleep(SLEEP_TIME);
-                } catch (InterruptedException e1) {
-                    Thread.currentThread().interrupt();
-                    throw new EresourceDatabaseException(e1);
-                }
                 return doFetch(url, attempt - 1);
             }
             throw new EresourceDatabaseException(e);
         } catch (URISyntaxException e) {
             throw new EresourceDatabaseException(e);
+        } catch (InterruptedException e1) {
+            Thread.currentThread().interrupt();
+            throw new EresourceDatabaseException(e1);
         }
+    }
+
+    private String doSearch(final String nlmUniqueId) {
+        StringBuilder sb = new StringBuilder(this.esearchBaseUrl);
+        sb.append("&api_key=");
+        sb.append(this.apiKey);
+        sb.append("&term=");
+        sb.append(nlmUniqueId);
+        sb.append("[NLM%20Unique%20ID]");
+        try {
+            Document doc = this.factory.newDocumentBuilder()
+                    .parse(new InputSource(doFetch(sb.toString(), MAX_RETRIES)));
+            return getNodeContent("/eSearchResult/IdList/Id", doc);
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            log.error("failed to fetch nlm ids", e);
+        }
+        return null;
     }
 
     private List<PmcJournal> getJournals() {
@@ -216,6 +248,16 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             throw new EresourceDatabaseException(e);
         }
         return journals;
+    }
+
+    private String getNodeContent(final String xpath, final Document doc) {
+        try {
+            Node node = ((NodeList) this.xpath.evaluate(xpath, doc, XPathConstants.NODESET)).item(0);
+            return node.getTextContent().trim();
+        } catch (XPathExpressionException e) {
+            log.error("failed to fetch content", e);
+        }
+        return null;
     }
 
     private boolean isDuplicate(final PmcJournal journal) {
