@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources.sax;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
@@ -136,7 +135,6 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
             this.currentEresource.setRecordType(atts.getValue("type"));
             this.currentEresource.setId(atts.getValue("id"));
             getSpecialTypesForPmid(recordId);
-            this.currentEresource.setUpdated(LocalDateTime.parse(atts.getValue("update"), FORMATTER));
         } else if ("version".equals(name)) {
             this.currentVersion = new SAXVersion();
         } else if ("link".equals(name)) {

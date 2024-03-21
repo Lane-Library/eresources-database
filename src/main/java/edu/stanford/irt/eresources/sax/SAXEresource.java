@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources.sax;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -371,9 +370,6 @@ public class SAXEresource implements Eresource {
 
     public void setTitle(final String title) {
         this.title = title;
-    }
-
-    public void setUpdated(final LocalDateTime updated) {
     }
 
     public void setYear(final int year) {
