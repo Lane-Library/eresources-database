@@ -6,8 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDateTime;
-
 import org.junit.Test;
 
 public class SAXEresourceTest {
@@ -46,7 +44,6 @@ public class SAXEresourceTest {
         eresource.setShortTitle("shortTitle");
         eresource.setSortTitle("sortTitle");
         eresource.setTitle("title");
-        eresource.setUpdated(LocalDateTime.now());
         eresource.setYear(2000);
         eresource.addIssn("1550-7416");
         assertNotNull(eresource.toString());

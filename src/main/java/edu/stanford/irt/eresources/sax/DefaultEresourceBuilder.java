@@ -1,6 +1,5 @@
 package edu.stanford.irt.eresources.sax;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
@@ -117,7 +116,6 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
             this.currentEresource.setId(atts.getValue("id"));
             this.currentEresource.setRecordId(atts.getValue("recordId"));
             this.currentEresource.setRecordType(atts.getValue("type"));
-            this.currentEresource.setUpdated(LocalDateTime.parse(atts.getValue("update"), FORMATTER));
         } else if ("version".equals(name)) {
             this.currentVersion = new SAXVersion();
         } else if ("link".equals(name)) {
