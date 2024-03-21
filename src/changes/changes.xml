@@ -6,6 +6,14 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-03-21" version="2.12.8" description="maintenance release">
+            <action date="2024-03-20" dev="ryanmax" issue="LANEWEB-11300" type="fix">
+                PMC indexing errors: http 400s from NCBI but also missing many journals
+            </action>
+            <action date="2024-03-08" dev="ryanmax" issue="LANEWEB-11293" type="update">
+                Lane Search indexing support in anticipation of 856 ^r -> 856 ^z changes
+            </action>
+        </release>
         <release date="2024-01-22" version="2.12.7" description="maintenance release">
             <action date="2024-01-22" dev="ryanmax" issue="LANEWEB-11272" type="fix">
                 course reserves items should not be requestable in Lane Search
