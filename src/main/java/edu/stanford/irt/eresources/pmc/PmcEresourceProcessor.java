@@ -177,6 +177,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
         try {
             URL urlObject = new URI(url).toURL();
             URLConnection con = urlObject.openConnection();
+            con.setRequestProperty("User-Agent", "Lane Indexer");
             rateLimit = con.getHeaderField("X-RateLimit-Remaining");
             if (rateLimit != null && !rateLimit.isEmpty() && Integer.parseInt(rateLimit) <= 1) {
                 log.info("NCBI connection rate limit reached so sleeping");
