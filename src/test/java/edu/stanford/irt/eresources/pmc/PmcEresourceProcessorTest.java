@@ -154,4 +154,58 @@ public class PmcEresourceProcessorTest {
         this.processor.process();
         EasyMock.verify(this.contentHandler, this.laneDedupAugmentation);
     }
+
+    @Test
+    public final void testProcessDup1() throws Exception {
+        this.contentHandler.startDocument();
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
+                isA(AttributesImpl.class));
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.endElement(isA(String.class), isA(String.class), isA(String.class));
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.endDocument();
+        EasyMock.expectLastCall().atLeastOnce();
+        EasyMock.expect(this.laneDedupAugmentation.isDuplicate("dnlm", "101565857")).andReturn(true);
+        EasyMock.replay(this.contentHandler, this.laneDedupAugmentation);
+        this.processor.process();
+        EasyMock.verify(this.contentHandler, this.laneDedupAugmentation);
+    }
+
+    @Test
+    public final void testProcessDup2() throws Exception {
+        this.contentHandler.startDocument();
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
+                isA(AttributesImpl.class));
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.endElement(isA(String.class), isA(String.class), isA(String.class));
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.endDocument();
+        EasyMock.expectLastCall().atLeastOnce();
+        EasyMock.expect(this.laneDedupAugmentation.isDuplicate("dnlm", "101565857")).andReturn(false);
+        EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "21905738")).andReturn(true);
+        EasyMock.replay(this.contentHandler, this.laneDedupAugmentation);
+        this.processor.process();
+        EasyMock.verify(this.contentHandler, this.laneDedupAugmentation);
+    }
+
+    @Test
+    public final void testProcessDup3() throws Exception {
+        this.contentHandler.startDocument();
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
+                isA(AttributesImpl.class));
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.endElement(isA(String.class), isA(String.class), isA(String.class));
+        EasyMock.expectLastCall().atLeastOnce();
+        this.contentHandler.endDocument();
+        EasyMock.expectLastCall().atLeastOnce();
+        EasyMock.expect(this.laneDedupAugmentation.isDuplicate("dnlm", "101565857")).andReturn(false);
+        EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "21905738")).andReturn(false);
+        EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "2190572x")).andReturn(true);
+        EasyMock.replay(this.contentHandler, this.laneDedupAugmentation);
+        this.processor.process();
+        EasyMock.verify(this.contentHandler, this.laneDedupAugmentation);
+    }
 }
