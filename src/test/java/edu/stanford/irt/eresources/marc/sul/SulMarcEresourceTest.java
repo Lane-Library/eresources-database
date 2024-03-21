@@ -10,12 +10,17 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
@@ -28,7 +33,27 @@ import edu.stanford.lane.catalog.Record.Subfield;
 import edu.stanford.lane.catalog.RecordCollection;
 import edu.stanford.lane.lcsh.LcshMapManager;
 
+@RunWith(Parameterized.class)
 public class SulMarcEresourceTest extends MARCRecordSupport {
+
+    @Parameters
+    public static Collection<String[]> testData() {
+        return Arrays.asList(new String[][] { 
+            { "505",
+              "Ch. 1 Introduction -- Ch. 2 Functional organization of the visual system -- Pt. I Development of the visual system -- ",
+              "::Contents##<br/>Ch. 1 Introduction<br/>Ch. 2 Functional organization of the visual system<br/>Pt. I Development of the visual system<br/>" },
+            { "520", "Just text", "::Summary## Just text" },
+            { "905", "Appendix I : thing -- Appendix II : thing 2.", "::Contents##<br/>Appendix I : thing<br/>Appendix II : thing 2." } });
+    }
+
+    @Parameter(2)
+    public String expectedDescription;
+
+    @Parameter(1)
+    public String subfieldData;
+
+    @Parameter(0)
+    public String tag;
 
     private SulMarcEresource eresource;
 
@@ -100,42 +125,6 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetDescription505() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
-        expect(this.field.getTag()).andReturn("505").anyTimes();
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getData()).andReturn(
-                "Ch. 1 Introduction -- Ch. 2 Functional organization of the visual system -- Pt. I Development of the visual system -- ");
-        replay(this.record, this.field, this.subfield);
-        assertEquals(
-                "::Contents##<br/>Ch. 1 Introduction<br/>Ch. 2 Functional organization of the visual system<br/>Pt. I Development of the visual system<br/>",
-                this.eresource.getDescription());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public final void testGetDescription520() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
-        expect(this.field.getTag()).andReturn("520").anyTimes();
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getData()).andReturn("Just text");
-        replay(this.record, this.field, this.subfield);
-        assertEquals("::Summary## Just text", this.eresource.getDescription());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
-    public final void testGetDescription905() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
-        expect(this.field.getTag()).andReturn("905").anyTimes();
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getData()).andReturn("Appendix I : thing -- Appendix II : thing 2.");
-        replay(this.record, this.field, this.subfield);
-        assertEquals("::Contents##<br/>Appendix I : thing<br/>Appendix II : thing 2.", this.eresource.getDescription());
-        verify(this.record, this.field, this.subfield);
-    }
-
-    @Test
     public final void testGetDescription905And920() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("920").times(3);
@@ -155,6 +144,17 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         replay(this.record);
         assertNull(this.eresource.getDescription());
         verify(this.record);
+    }
+
+    @Test
+    public void testGetDescriptionParameterized() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn(this.tag).anyTimes();
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getData()).andReturn(this.subfieldData);
+        replay(this.record, this.field, this.subfield);
+        assertEquals(this.expectedDescription, this.eresource.getDescription());
+        verify(this.record, this.field, this.subfield);
     }
 
     @Test
