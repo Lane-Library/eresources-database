@@ -15,6 +15,7 @@ import edu.stanford.irt.eresources.marc.KeywordsStrategy;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.irt.eresources.marc.RecordCollectionFactory;
+import edu.stanford.irt.eresources.pmc.PmcDedupAugmentation;
 import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
@@ -45,15 +46,19 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
 
     private LcshMapManager lcshMapManager = new LcshMapManager();
 
+    private PmcDedupAugmentation pmcDedupAugmentation;
+
     private RecordCollectionFactory recordCollectionFactory;
 
     public SulMARCRecordEresourceProcessor(final EresourceHandler eresourceHandler,
             final KeywordsStrategy keywordsStrategy, final RecordCollectionFactory recordCollectionFactory,
-            final LaneDedupAugmentation laneDedupAugmentation, final List<InclusionStrategy> inclusionStrategies) {
+            final LaneDedupAugmentation laneDedupAugmentation, final PmcDedupAugmentation pmcDedupAugmentation,
+            final List<InclusionStrategy> inclusionStrategies) {
         this.eresourceHandler = eresourceHandler;
         this.keywordsStrategy = keywordsStrategy;
         this.recordCollectionFactory = recordCollectionFactory;
         this.laneDedupAugmentation = laneDedupAugmentation;
+        this.pmcDedupAugmentation = pmcDedupAugmentation;
         this.inclusionStrategies = inclusionStrategies;
     }
 
@@ -139,7 +144,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             keys.add(LaneDedupAugmentation.KEY_DNLM_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + dnlm);
         }
         for (String entry : keys) {
-            if (this.laneDedupAugmentation.isDuplicate(entry)) {
+            if (this.laneDedupAugmentation.isDuplicate(entry) || this.pmcDedupAugmentation.isDuplicate(entry)) {
                 return true;
             }
         }
