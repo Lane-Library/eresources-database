@@ -21,6 +21,7 @@
             </bean>
         </constructor-arg>
         <constructor-arg ref="laneDedupAugmentation"/>
+        <constructor-arg ref="pmcDedupAugmentation"/>
         <constructor-arg name="inclusionStrategies">
             <list>
                 <ref bean="acceptableLCCallNumberStrategy"/>
@@ -148,5 +149,8 @@
     <bean id="sulHttpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
         <constructor-arg ref="catalogServiceURI"/>
         <constructor-arg value="records/sul"/>
+    </bean>
+    <bean id="pmcDedupAugmentation" class="edu.stanford.irt.eresources.pmc.PmcDedupAugmentation">
+        <constructor-arg name="solrClient" ref="solrClient"/>
     </bean>
 </beans>
