@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-03-27" version="2.12.9" description="maintenance release">
+            <action date="2024-03-22" dev="ryanmax" issue="LANEWEB-11308" type="add">
+                don't load SearchWorks records when Lane PMC record already exists  
+            </action>
+        </release>
         <release date="2024-03-21" version="2.12.8" description="maintenance release">
             <action date="2024-03-20" dev="ryanmax" issue="LANEWEB-11300" type="fix">
                 PMC indexing errors: http 400s from NCBI but also missing many journals
