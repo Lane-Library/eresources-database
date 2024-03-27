@@ -3,10 +3,10 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>147-springsix</version>
+        <version>148-springsix</version>
     </parent>
     <artifactId>eresources-database</artifactId>
-    <version>2.12.9-SNAPSHOT</version>
+    <version>2.12.10-SNAPSHOT</version>
     <name>eresources-database</name>
     <scm>
         <developerConnection>scm:git:git@gitlab.med.stanford.edu:lane/eresources-database.git</developerConnection>
@@ -153,7 +153,7 @@
         <dependency>
             <groupId>edu.stanford.irt</groupId>
             <artifactId>journal-titles</artifactId>
-            <version>3.0.7</version>
+            <version>3.0.8</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.irt.suggest</groupId>
