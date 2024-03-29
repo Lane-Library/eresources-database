@@ -36,8 +36,8 @@
         <STARTTLS>true</STARTTLS>
         <smtpHost>${SMTP_HOST:-smtp.stanford.edu}</smtpHost>
         <smtpPort>${SMTP_PORT:-587}</smtpPort>
-        <smtpPort>${SMTP_USER}</smtpPort>
-        <smtpPort>${SMTP_PASS}</smtpPort>
+        <username>${SMTP_USER}</username>
+        <password>${SMTP_PASS}</password>
         <to>${eresources.log.email.to:-ryanmax@stanford.edu}</to>
         <from>${eresources.log.email.from:-ryanmax@stanford.edu}</from>
         <subject>${eresources.log.email.subject:-er-db ERROR}</subject>
