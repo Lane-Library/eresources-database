@@ -33,8 +33,11 @@
             <timeLimitMinutes>60</timeLimitMinutes>
         </evaluator>
         <asynchronousSending>false</asynchronousSending>
-        <smtpHost>${eresources.log.email.smtpHost:-medmail.stanford.edu}</smtpHost>
-        <smtpPort>${eresources.log.email.smtpPort:-25}</smtpPort>
+        <STARTTLS>true</STARTTLS>
+        <smtpHost>${SMTP_HOST:-smtp.stanford.edu}</smtpHost>
+        <smtpPort>${SMTP_PORT:-587}</smtpPort>
+        <username>${SMTP_USER}</username>
+        <password>${SMTP_PASS}</password>
         <to>${eresources.log.email.to:-ryanmax@stanford.edu}</to>
         <from>${eresources.log.email.from:-ryanmax@stanford.edu}</from>
         <subject>${eresources.log.email.subject:-er-db ERROR}</subject>
