@@ -7,7 +7,7 @@
     </properties>
     <body>
         <release date="2024-04-09" version="2.12.10" description="maintenance release">
-            <action date="2024-03-22" dev="ryanmax" issue="LANEWEB-11150" type="update">
+            <action date="2024-03-29" dev="ryanmax" issue="LANEWEB-11150" type="update">
                 use smtp.stanford.edu instead of mail.dcs/medmail
             </action>
         </release>
