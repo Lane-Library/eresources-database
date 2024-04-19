@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lane-parent</artifactId>
         <groupId>edu.stanford.irt</groupId>
-        <version>148-springsix</version>
+        <version>150-springsix</version>
     </parent>
     <artifactId>eresources-database</artifactId>
     <version>2.12.11-SNAPSHOT</version>
