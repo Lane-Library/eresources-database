@@ -32,65 +32,94 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
 
     @Override
     public void endElement(final String uri, final String localName, final String name) throws SAXException {
-        if ("eresource".equals(name)) {
-            this.eresourceHandler.handleEresource(this.currentEresource);
-            this.currentEresource = null;
-        } else if ("version".equals(name)) {
-            this.currentEresource.addVersion(this.currentVersion);
-            this.currentVersion = null;
-        } else if ("link".equals(name)) {
-            this.currentVersion.addLink(this.currentLink);
-            this.currentLink = null;
-        } else if ("url".equals(name)) {
-            this.currentLink.setUrl(this.currentText.toString());
-        } else if ("label".equals(name)) {
-            this.currentLink.setLabel(this.currentText.toString());
-        } else if ("date".equals(name)) {
-            this.currentVersion.setDates(this.currentText.toString());
-        } else if ("summary-holdings".equals(name)) {
-            this.currentVersion.setSummaryHoldings(this.currentText.toString());
-        } else if ("publisher".equals(name)) {
-            this.currentVersion.setPublisher(this.currentText.toString());
-        } else if ("type".equals(name)) {
-            this.currentEresource.addType(this.currentText.toString());
-        } else if ("primaryType".equals(name)) {
-            String type = this.currentText.toString();
-            this.currentEresource.setPrimaryType(type);
-            this.currentEresource.addType(type);
-        } else if ("keywords".equals(name)) {
-            this.currentEresource.setKeywords(this.currentText.toString());
-        } else if ("mesh".equals(name)) {
-            this.currentEresource.addMeshTerm(this.currentText.toString());
-        } else if ("mesh_broad".equals(name)) {
-            this.currentEresource.addBroadMeshTerm(this.currentText.toString());
-        } else if ("title".equals(name)) {
-            this.currentEresource.setTitle(this.currentText.toString());
-        } else if ("title_abbr".equals(name)) {
-            this.currentEresource.addAbbreviatedTitle(this.currentText.toString());
-        } else if ("title_alt".equals(name)) {
-            this.currentEresource.addAlternativeTitle(this.currentText.toString());
-        } else if ("title_short".equals(name)) {
-            this.currentEresource.setShortTitle(this.currentText.toString());
-        } else if ("version-additionalText".equals(name)) {
-            this.currentVersion.setAdditionalText(this.currentText.toString());
-        } else if ("instruction".equals(name)) {
-            this.currentLink.setInstruction(this.currentText.toString());
-        } else if ("description".equals(name)) {
-            this.currentEresource.setDescription(this.currentText.toString());
-        } else if ("publicationAuthorsText".equals(name)) {
-            this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
-        } else if ("publicationAuthor".equals(name)) {
-            this.currentEresource.addPublicationAuthor(this.currentText.toString());
-        } else if ("publicationAuthorFacetable".equals(name)) {
-            this.currentEresource.addPublicationAuthorFacetable(this.currentText.toString());
-        } else if ("year".equals(name)) {
-            this.currentEresource.setYear(Integer.parseInt(this.currentText.toString()));
-        } else if ("er-date".equals(name)) {
-            this.currentEresource.setDate(this.currentText.toString());
-        } else if ("issn".equals(name)) {
-            this.currentEresource.addIssn(this.currentText.toString());
-        } else if (!"eresources".equals(name)) {
-            throw new EresourceDatabaseException("cant handle " + name);
+        switch (name) {
+            case "eresource":
+                this.eresourceHandler.handleEresource(this.currentEresource);
+                this.currentEresource = null;
+                break;
+            case "version":
+                this.currentEresource.addVersion(this.currentVersion);
+                this.currentVersion = null;
+                break;
+            case "link":
+                this.currentVersion.addLink(this.currentLink);
+                this.currentLink = null;
+                break;
+            case "url":
+                this.currentLink.setUrl(this.currentText.toString());
+                break;
+            case "label":
+                this.currentLink.setLabel(this.currentText.toString());
+                break;
+            case "date":
+                this.currentVersion.setDates(this.currentText.toString());
+                break;
+            case "summary-holdings":
+                this.currentVersion.setSummaryHoldings(this.currentText.toString());
+                break;
+            case "publisher":
+                this.currentVersion.setPublisher(this.currentText.toString());
+                break;
+            case "type":
+                this.currentEresource.addType(this.currentText.toString());
+                break;
+            case "primaryType":
+                String type = this.currentText.toString();
+                this.currentEresource.setPrimaryType(type);
+                this.currentEresource.addType(type);
+                break;
+            case "keywords":
+                this.currentEresource.setKeywords(this.currentText.toString());
+                break;
+            case "mesh":
+                this.currentEresource.addMeshTerm(this.currentText.toString());
+                break;
+            case "mesh_broad":
+                this.currentEresource.addBroadMeshTerm(this.currentText.toString());
+                break;
+            case "title":
+                this.currentEresource.setTitle(this.currentText.toString());
+                break;
+            case "title_abbr":
+                this.currentEresource.addAbbreviatedTitle(this.currentText.toString());
+                break;
+            case "title_alt":
+                this.currentEresource.addAlternativeTitle(this.currentText.toString());
+                break;
+            case "title_short":
+                this.currentEresource.setShortTitle(this.currentText.toString());
+                break;
+            case "version-additionalText":
+                this.currentVersion.setAdditionalText(this.currentText.toString());
+                break;
+            case "instruction":
+                this.currentLink.setInstruction(this.currentText.toString());
+                break;
+            case "description":
+                this.currentEresource.setDescription(this.currentText.toString());
+                break;
+            case "publicationAuthorsText":
+                this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
+                break;
+            case "publicationAuthor":
+                this.currentEresource.addPublicationAuthor(this.currentText.toString());
+                break;
+            case "publicationAuthorFacetable":
+                this.currentEresource.addPublicationAuthorFacetable(this.currentText.toString());
+                break;
+            case "year":
+                this.currentEresource.setYear(Integer.parseInt(this.currentText.toString()));
+                break;
+            case "er-date":
+                this.currentEresource.setDate(this.currentText.toString());
+                break;
+            case "issn":
+                this.currentEresource.addIssn(this.currentText.toString());
+                break;
+            case "eresources":
+                break;
+            default:
+                throw new EresourceDatabaseException("cant handle " + name);
         }
     }
 
