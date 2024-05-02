@@ -23,17 +23,17 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
             .toFormatter();
 
-    private SAXEresource currentEresource;
-
-    private SAXLink currentLink;
-
-    private StringBuilder currentText;
-
-    private SAXVersion currentVersion;
-
     private EresourceHandler eresourceHandler;
 
     private PubmedSpecialTypesManager specialTypesManager;
+
+    protected SAXEresource currentEresource;
+
+    protected SAXLink currentLink;
+
+    protected StringBuilder currentText;
+
+    protected SAXVersion currentVersion;
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
@@ -106,8 +106,7 @@ public class PubmedEresourceBuilder extends DefaultHandler implements EresourceB
                 this.currentEresource.setPublicationAuthorsText(this.currentText.toString());
                 break;
             case "publicationDate":
-                String pDate = this.currentText.toString();
-                this.currentEresource.setPublicationDate(pDate);
+                this.currentEresource.setPublicationDate(this.currentText.toString());
                 break;
             case "publicationIssue":
                 this.currentEresource.setPublicationIssue(this.currentText.toString());
