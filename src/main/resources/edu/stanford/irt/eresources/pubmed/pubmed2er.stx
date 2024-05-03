@@ -70,7 +70,7 @@
             </stx:assign>
             <title><stx:value-of select="normalize-space($title)"/></title>
             <stx:if test="$description != ''">
-                <er-description><stx:value-of select="normalize-space($description)"/></er-description>
+                <description><stx:value-of select="normalize-space($description)"/></description>
             </stx:if>
             <version>
                 <link>
