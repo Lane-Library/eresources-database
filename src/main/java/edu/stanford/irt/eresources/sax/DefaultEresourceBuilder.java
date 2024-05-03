@@ -15,15 +15,15 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMddHHmmss")
             .toFormatter();
 
-    private SAXEresource currentEresource;
+    protected SAXEresource currentEresource;
 
-    private SAXLink currentLink;
+    protected SAXLink currentLink;
 
-    private StringBuilder currentText;
+    protected StringBuilder currentText;
 
-    private SAXVersion currentVersion;
+    protected SAXVersion currentVersion;
 
-    private EresourceHandler eresourceHandler;
+    protected EresourceHandler eresourceHandler;
 
     @Override
     public void characters(final char[] ch, final int start, final int length) throws SAXException {
@@ -150,13 +150,5 @@ public class DefaultEresourceBuilder extends DefaultHandler implements Eresource
         } else if ("link".equals(name)) {
             this.currentLink = new SAXLink();
         }
-    }
-
-    protected SAXEresource getCurrentEresource() {
-        return this.currentEresource;
-    }
-
-    protected String getCurrentText() {
-        return this.currentText.toString();
     }
 }
