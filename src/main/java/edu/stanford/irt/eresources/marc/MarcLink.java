@@ -38,10 +38,14 @@ public class MarcLink implements Link {
 
     @Override
     public String getLabel() {
+        // ^q = materialsSpecification
+        // ^y = linkText
+        // ^z = publicNote
         String l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'q')
                 .map(Subfield::getData).findFirst().orElse(null);
         if (l == null) {
-            l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'z')
+            // order? what if both ^y and ^z are present?
+            l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'y' || s.getCode() == 'z')
                     .map(Subfield::getData).filter((final String st) -> !SU_AFFIL_AT.matcher(st).matches()).findFirst()
                     .orElse(null);
         } else if (l.startsWith("(") && l.endsWith(")") && !"()".equals(l)) {
