@@ -21,7 +21,7 @@
         <dependency>
             <artifactId>catalog</artifactId>
             <groupId>edu.stanford.irt</groupId>
-            <version>3.10.0</version>
+            <version>3.10.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <artifactId>nekohtml</artifactId>
