@@ -175,6 +175,7 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     public String getPublisher() {
         String publisher = null;
         publisher = getSubfieldData(this.holding, "856", "y").findFirst().orElse(null);
+        // remove this?
         if (null == publisher) {
             publisher = getSubfieldData(this.holding, "844", "a").findFirst().orElse(null);
         }
