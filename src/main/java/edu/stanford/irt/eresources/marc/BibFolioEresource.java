@@ -98,7 +98,7 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public Collection<String> getMeshTerms() {
-        return this.folioRecord.jsonContext().read("$.instance.subjects.*");
+        return this.folioRecord.jsonContext().read("$.instance.subjects.*.value");
     }
 
     @Override
