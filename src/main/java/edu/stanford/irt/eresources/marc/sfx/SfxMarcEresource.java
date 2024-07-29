@@ -2,26 +2,45 @@ package edu.stanford.irt.eresources.marc.sfx;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import edu.stanford.irt.eresources.EresourceConstants;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.KeywordsStrategy;
+import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.irt.eresources.marc.sul.SulMarcEresource;
-import edu.stanford.irt.eresources.marc.sul.SulMarcVersion;
-import edu.stanford.irt.eresources.marc.type.TypeFactory;
 import edu.stanford.lane.catalog.Record;
+import edu.stanford.lane.catalog.Record.Field;
+import edu.stanford.lane.catalog.Record.Subfield;
 import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SfxMarcEresource extends SulMarcEresource {
 
+    private LcshMapManager lcshMapManager;
+
     public SfxMarcEresource(Record marcRecord, KeywordsStrategy keywordsStrategy, LcshMapManager lcshMapManager) {
         super(marcRecord, keywordsStrategy, lcshMapManager);
+        this.lcshMapManager = lcshMapManager;
     }
 
-    private static final Logger log = LoggerFactory.getLogger(SfxMarcEresource.class);
+    @Override
+    public Collection<String> getMeshTerms() {
+        // pull in category info as "MeSH"; likely not super helpful but could help relevance a little?
+        Collection<String> mesh = getSubfieldData(getFields(this.marcRecord, "650"), "a")
+                .map(TextParserHelper::maybeStripTrailingPeriod).collect(Collectors.toSet());
+        MARCRecordSupport.getFields(this.marcRecord, "650").forEach((final Field f) -> {
+            StringBuilder sb = new StringBuilder();
+            f.getSubfields().stream().filter((final Subfield sf) -> "ax".indexOf(sf.getCode()) > -1)
+                    .forEach((final Subfield sf) -> {
+                        if ('x' == sf.getCode()) {
+                            sb.append("--");
+                        }
+                        sb.append(TextParserHelper.maybeStripTrailingPeriod(sf.getData()));
+                    });
+            mesh.addAll(this.lcshMapManager.getMeshForHeading(sb.toString()));
+        });
+        return mesh;
+    }
 
     @Override
     public String getRecordType() {
@@ -42,17 +61,6 @@ public class SfxMarcEresource extends SulMarcEresource {
         types.add(getPrimaryType());
         return types;
     }
-
-    // @Override
-    // public String getPrimaryType() {
-    //     if (getSubfieldData(this.marcRecord, "020", "a").findFirst().isPresent()) {
-    //         this.primaryType = "Book Digital";
-    //     }
-    //     if (this.primaryType == null) {
-    //         this.primaryType = TypeFactory.getPrimaryType(this.marcRecord);
-    //     }
-    //     return this.primaryType;
-    // }
 
     @Override
     public String getRecordId() {
