@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="sulMARCProcessor" class="edu.stanford.irt.eresources.marc.sfx.SfxRecordEresourceProcessor">
+        <constructor-arg ref="eresourceHandler"/>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
+                <!-- no auth or reserves augmentations for SUL records -->
+                <constructor-arg>
+                    <null />
+                </constructor-arg>
+                <constructor-arg>
+                    <null />
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.RecordCollectionFactory">
+                <constructor-arg ref="sfxCatalogRecordService"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg ref="laneDedupAugmentation"/>
+        <constructor-arg ref="pmcDedupAugmentation"/>
+        <constructor-arg name="inclusionStrategies">
+            <list>
+                <ref bean="acceptableLCCallNumberStrategy"/>
+                <ref bean="acceptableDBCallNumberStrategy"/>
+                <ref bean="acceptableKeywordStrategy"/>
+                <bean class="edu.stanford.irt.eresources.marc.sul.LaneStaffInclusionStrategy"/>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="acceptableLCCallNumberStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableLCCallNumberStrategy">
+        <constructor-arg name="acceptableLCCallNumberPrefixes">
+            <list>
+                <value>A</value>
+                <value>BF</value>
+                <value>BJ</value>
+                <value>GE</value>
+                <value>H</value>
+                <value>LB</value>
+                <value>LC</value>
+                <value>Q</value>
+                <value>R</value>
+                <value>Z</value>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="acceptableDBCallNumberStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableDBCallNumberStrategy">
+        <!-- DB call number maps from https://github.com/sul-dlss/solrmarc-sw/blob/master/stanford-sw/translation_maps/db_subjects_map.properties -->
+        <constructor-arg name="acceptableDBCallNumbers">
+            <list>
+                <value>A</value>
+                <value>AC</value>
+                <value>AE</value>
+                <value>AG</value>
+                <value>AI</value>
+                <value>AM</value>
+                <value>AN</value>
+                <value>AP</value>
+                <value>AS</value>
+                <value>AY</value>
+                <value>AZ</value>
+                <value>BF</value>
+                <value>BJ</value>
+                <value>H</value>
+                <value>HA</value>
+                <value>HB</value>
+                <value>HC</value>
+                <value>HD</value>
+                <value>HE</value>
+                <value>HF</value>
+                <value>HG</value>
+                <value>HJ</value>
+                <value>HM</value>
+                <value>HN</value>
+                <value>HQ</value>
+                <value>HS</value>
+                <value>HT</value>
+                <value>HV</value>
+                <value>HX</value>
+                <value>LB</value>
+                <value>LC</value>
+                <value>Q</value>
+                <value>QA</value>
+                <value>QB</value>
+                <value>QC</value>
+                <value>QD</value>
+                <value>QE</value>
+                <value>QH</value>
+                <value>QK</value>
+                <value>QL</value>
+                <value>QM</value>
+                <value>QP</value>
+                <value>QR</value>
+                <value>R</value>
+                <value>RA</value>
+                <value>RB</value>
+                <value>RC</value>
+                <value>RD</value>
+                <value>RE</value>
+                <value>RF</value>
+                <value>RG</value>
+                <value>RJ</value>
+                <value>RK</value>
+                <value>RL</value>
+                <value>RM</value>
+                <value>RS</value>
+                <value>RT</value>
+                <value>RV</value>
+                <value>RX</value>
+                <value>RZ</value>
+                <value>Z</value>
+                <value>ZA</value>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="acceptableKeywordStrategy" class="edu.stanford.irt.eresources.marc.sul.AcceptableKeywordStrategy">
+        <constructor-arg name="acceptablePrimaryTypes">
+            <list>
+                <value>Book Digital</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg name="acceptableKeywords">
+            <list>
+                <value>medicine</value>
+                <value>medical</value>
+                <value>clinical</value>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
+        <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/dedup-augmentations.obj"/>
+        <constructor-arg ref="httpLaneDedupAugmentationService"/>
+        <constructor-arg name="manualSkips">
+            <set>
+                <!-- example excluding one of SUL's PubMed records that's not excluded otherwise -->
+                <value>catkey->3965020</value>
+                <value>catkey->5371405</value>
+            </set>
+        </constructor-arg>
+    </bean>
+    <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
+        <constructor-arg ref="objectMapper"/>
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="augmentations/dedup"/>
+    </bean>
+    <bean id="sfxCatalogRecordService" class="edu.stanford.irt.eresources.marc.sfx.SfxFileCatalogRecordService">
+        <constructor-arg name="basePath" value="/Users/ryanmax/Downloads/"/>
+        <constructor-arg name="executor" ref="executor"/>
+    </bean>
+    <bean id="pmcDedupAugmentation" class="edu.stanford.irt.eresources.pmc.PmcDedupAugmentation">
+        <constructor-arg name="solrClient" ref="solrClient"/>
+    </bean>
+</beans>

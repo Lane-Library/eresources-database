@@ -81,11 +81,11 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         }
     }
 
-    private boolean isInScope(final Record marcRecord) {
+    public boolean isInScope(final Record marcRecord) {
         return this.inclusionStrategies.stream().anyMatch((final InclusionStrategy is) -> is.isAcceptable(marcRecord));
     }
 
-    private boolean isLaneDuplicate(final Record marcRecord) {
+    public boolean isLaneDuplicate(final Record marcRecord) {
         // LANECAT-776, LANECAT-872: presence of a 909 in SUL records triggers
         // inclusion and skips deduplication
         if (MARCRecordSupport.getFields(marcRecord, "909").count() > 0) {
