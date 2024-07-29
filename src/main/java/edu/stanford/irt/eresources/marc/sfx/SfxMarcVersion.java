@@ -9,8 +9,11 @@ import edu.stanford.lane.catalog.Record;
  */
 public class SfxMarcVersion extends SulMarcVersion {
 
+    private Eresource eresource;
+
     public SfxMarcVersion(final Record bib, final Eresource eresource) {
         super(bib, eresource);
+        this.eresource = eresource;
     }
 
     @Override
@@ -27,6 +30,15 @@ public class SfxMarcVersion extends SulMarcVersion {
         // .map(Subfield::getData).findFirst().orElse(null);
         // }
         return additionalText;
+    }
+
+    @Override
+    public String getDates() {
+        int year = this.eresource.getYear();
+        if (year > 0) {
+            return Integer.toString(year);
+        }
+        return null;
     }
 
 }
