@@ -147,7 +147,7 @@
         <constructor-arg value="augmentations/dedup"/>
     </bean>
     <bean id="sfxCatalogRecordService" class="edu.stanford.irt.eresources.marc.sfx.SfxFileCatalogRecordService">
-        <constructor-arg name="basePath" value="/Users/ryanmax/Downloads/"/>
+        <constructor-arg name="basePath" value="${eresources.sfx.export-path}"/>
         <constructor-arg name="executor" ref="executor"/>
     </bean>
     <bean id="pmcDedupAugmentation" class="edu.stanford.irt.eresources.pmc.PmcDedupAugmentation">
