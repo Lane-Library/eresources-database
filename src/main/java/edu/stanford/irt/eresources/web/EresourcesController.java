@@ -74,6 +74,11 @@ public class EresourcesController {
         return this.jobManager.run(new Job(Job.Type.fromString(job), LocalDateTime.now()));
     }
 
+    @Scheduled(cron = "${eresources.schedule.cron.sfxReload}")
+    public JobStatus sfxReload() {
+        return this.jobManager.run(new Job(Job.Type.SFX_RELOAD, LocalDateTime.now()));
+    }
+
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
     public JobStatus sulReload() {
         return this.jobManager.run(new Job(Job.Type.SUL_RELOAD, LocalDateTime.now()));
