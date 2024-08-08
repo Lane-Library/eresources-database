@@ -74,7 +74,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             // retain inclusion checks here b/c MetaDB inclusion
             // (catalog-service getSulUpdates.sql) does not include strategies
             // like digital book keywords and fiction
-            if (null != marcRecord && isInScope(marcRecord) && !isLaneDuplicate(marcRecord)) {
+            if (null != marcRecord && isInScope(marcRecord) && !isDuplicate(marcRecord)) {
                 this.eresourceHandler
                         .handleEresource(new SulMarcEresource(marcRecord, this.keywordsStrategy, this.lcshMapManager));
             }
@@ -85,7 +85,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         return this.inclusionStrategies.stream().anyMatch((final InclusionStrategy is) -> is.isAcceptable(marcRecord));
     }
 
-    public boolean isLaneDuplicate(final Record marcRecord) {
+    public boolean isDuplicate(final Record marcRecord) {
         // LANECAT-776, LANECAT-872: presence of a 909 in SUL records triggers
         // inclusion and skips deduplication
         if (MARCRecordSupport.getFields(marcRecord, "909").count() > 0) {
