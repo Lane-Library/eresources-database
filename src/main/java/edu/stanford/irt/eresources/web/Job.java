@@ -26,7 +26,7 @@ public class Job {
         PUBMED_RELOAD("pubmed", RELOAD, "reload all PubMed records - annual or less"),
         PUBMED_UPDATE("pubmed", UPDATE, "updates from PubMed - a few times a day"),
         REDIVIS_RELOAD("redivis",RELOAD, "reload Redivis - monthly"),
-        SFX_RELOAD("sfx",RELOAD, "reload SFX MARC - monthly"),
+        SFX_RELOAD("sfx",RELOAD, "reload SFX MARC - daily"),
         SUL_RELOAD("sul",RELOAD, "reload SUL MARC - monthly"),
         SUL_UPDATE("sul", UPDATE, "update SUL MARC - daily"),
         UNDEFINED("none", "undefined","for unit testing"),
