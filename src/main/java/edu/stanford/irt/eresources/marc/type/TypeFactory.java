@@ -191,10 +191,13 @@ public class TypeFactory extends MARCRecordSupport {
     }
 
     private static String getPrintOrDigital(final Record marcRecord) {
-        boolean isDigital = getSubfieldData(marcRecord, "245", "h").anyMatch((final String s) -> s.contains("digital"));
-        if (isDigital) {
+        // 245 $h for older Lane data, 338 $a for RDA records
+        if (getSubfieldData(marcRecord, "245", "h").anyMatch((final String s) -> s.toLowerCase().contains("digital"))
+                || getSubfieldData(marcRecord, "338", "a")
+                        .anyMatch((final String s) -> s.toLowerCase().contains("online resource"))) {
             return "Digital";
         }
+        // 8/9 56 fields with $u are found in SUL instance MARC
         List<Field> linkFields = getFieldsWild(marcRecord, "[8|9]56").filter(
                 (final Field f) -> f.getSubfields().stream().anyMatch((final Subfield sf) -> sf.getCode() == 'u'))
                 .toList();
