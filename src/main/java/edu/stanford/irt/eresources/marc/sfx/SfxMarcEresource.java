@@ -49,13 +49,13 @@ public class SfxMarcEresource extends SulMarcEresource {
 
     @Override
     public String getPrimaryType() {
-        // assume everything is a book?
+        // assume everything is a book: change this id ISBN filter is removed
         return "Book Digital";
     }
 
     @Override
     public Collection<String> getTypes() {
-        // assume everything is a book?
+        // assume everything is a book: change this id ISBN filter is removed
         Collection<String> types = new ArrayList<>();
         types.add("Book");
         types.add(getPrimaryType());
