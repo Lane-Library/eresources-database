@@ -12,7 +12,7 @@ public class KeywordsStrategy {
 
     private static final String BIB_KEYWORD_TAG_ADDITIONS = "020|022|024|030|035|901|902|903|909|915|941|942|943";
 
-    private static final String HLDG_KEYWORD_TAGS = "852|856|866|907";
+    private static final String HLDG_KEYWORD_TAGS = "020|022|655|844|852|856|866|907|931";
 
     private static final int TAG_100 = 100;
 
