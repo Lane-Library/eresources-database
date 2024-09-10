@@ -59,14 +59,14 @@ public class VersionComparatorTest {
 
     @Test
     public void testCompareClosedDates() {
-        this.saxVersion1.setDates("v. 1-16, 1995-2020.");
-        this.saxVersion2.setDates("v. 1-16, 1995-2020.");
+        this.saxVersion1.setDates("1999-2000.");
+        this.saxVersion2.setDates("1999-2000.");
         assertEquals(1, this.comparator.compare(this.saxVersion1, this.saxVersion2));
-        this.saxVersion1.setDates("v. 1-16, 1995-2020.");
-        this.saxVersion2.setDates("v. 1-6, 1995-2010.");
+        this.saxVersion1.setDates("1999-2010.");
+        this.saxVersion2.setDates("1999-2000.");
         assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
-        this.saxVersion1.setDates("v. 1-, 1947-");
-        this.saxVersion2.setDates("v. 1, 1947.");
+        this.saxVersion1.setDates("2020-");
+        this.saxVersion2.setDates("2020.");
         this.saxVersion1.addLink(this.saxLink);
         this.saxVersion2.addLink(this.saxLink);
         assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
@@ -74,33 +74,33 @@ public class VersionComparatorTest {
 
     @Test
     public void testCompareCurrentHoldings() {
-        this.saxVersion1.setDates("v. 1-");
+        this.saxVersion1.setSummaryHoldings("v. 1-");
         this.saxVersion1.addLink(this.saxLink);
         this.saxVersion2.addLink(this.saxLink);
-        this.saxVersion2.setDates("v. 1-");
+        this.saxVersion2.setSummaryHoldings("v. 1-");
         this.saxVersion2.setAdditionalText("current edition");
         assertTrue(this.comparator.compare(this.saxVersion2, this.saxVersion1) < 0);
     }
 
     @Test
     public void testCompareDelayedHoldings() {
-        this.saxVersion1.setDates("v. 1-");
+        this.saxVersion1.setSummaryHoldings("v. 1-");
         this.saxVersion1.addLink(this.saxLink);
         this.saxVersion2.addLink(this.saxLink);
-        this.saxVersion2.setDates("v. 1-");
+        this.saxVersion2.setSummaryHoldings("v. 1-");
         this.saxVersion2.setAdditionalText("foo delayed bar");
         assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
     }
 
     @Test
     public void testCompareHoldings() {
-        this.saxVersion1.setDates("v. 1-");
-        this.saxVersion2.setDates("v. 1.");
+        this.saxVersion1.setSummaryHoldings("v. 1-");
+        this.saxVersion2.setSummaryHoldings("v. 1.");
         this.saxVersion1.addLink(this.saxLink);
         this.saxVersion2.addLink(this.saxLink);
         assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
-        this.saxVersion1.setDates("v. 10-20.");
-        this.saxVersion2.setDates("v. 10-");
+        this.saxVersion1.setSummaryHoldings("v. 10-20.");
+        this.saxVersion2.setSummaryHoldings("v. 10-");
         assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) > 0);
     }
 

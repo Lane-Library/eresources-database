@@ -17,7 +17,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
 
     private static final ZoneId AMERICA_LA = ZoneId.of("America/Los_Angeles");
 
-    private static final Pattern CLOSED_DATE_PATTERN = Pattern.compile(".*(\\d{4})\\-(\\d{4})\\.");
+    private static final Pattern CLOSED_DATE_PATTERN = Pattern.compile("(\\d{4})\\-(\\d{4})\\.");
 
     private static final List<String> FAVORED_PUBLISHERS = Arrays.asList("sciencedirect", "wiley", "springer",
             "highwire", "ovid", "nature", "liebert", "informaworld", "karger", "pubmed central");
@@ -87,7 +87,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
      * Calculate sorting score for version based on:
      *
      * <pre>
-     * ++ dates or summaryHoldings (866 ^y) end in "-"
+     * ++ dates or summaryHoldings (866 ^v) end in "-"
      * ++ additionalText (866 ^z) is "current edition"
      * -- additionalText (866 ^z) has "delayed" in it
      * -- has period at end of dates or summaryHoldings
@@ -106,7 +106,7 @@ public class VersionComparator implements Comparator<Version>, Serializable {
             score = MIN_SCORE + 1;
         } else {
             score = calculateLinkScore(links.get(0), score);
-            score = calculateSummaryHoldingsScoreFromDates(version.getDates(), score);
+            score = calculateSummaryHoldingsScore(version.getSummaryHoldings(), score);
             score = calculateDatesScore(version.getDates(), score);
             score = calculateAdditionalTextScore(version.getAdditionalText(), score);
         }
@@ -151,12 +151,12 @@ public class VersionComparator implements Comparator<Version>, Serializable {
         return score;
     }
 
-    private int calculateSummaryHoldingsScoreFromDates(final String dates, final int score) {
+    private int calculateSummaryHoldingsScore(final String summaryHoldings, final int score) {
         int calculatedScore = score;
-        if (dates != null) {
-            if (dates.endsWith("-") || dates.startsWith("v. 1-")) {
+        if (summaryHoldings != null) {
+            if (summaryHoldings.endsWith("-") || summaryHoldings.startsWith("v. 1-")) {
                 calculatedScore++;
-            } else if (dates.endsWith(".")) {
+            } else if (summaryHoldings.endsWith(".")) {
                 calculatedScore--;
             }
         }
