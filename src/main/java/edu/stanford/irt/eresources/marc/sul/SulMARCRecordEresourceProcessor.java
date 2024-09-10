@@ -98,11 +98,11 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                 .collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + lccn);
         }
-        for (String isbn : MARCRecordSupport.getSubfieldData(marcRecord, "020").map(String::trim)
+        for (String isbn : MARCRecordSupport.getSubfieldData(marcRecord, "020", "a").map(String::trim)
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR + isbn);
         }
-        for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022").map(String::trim)
+        for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022", "a").map(String::trim)
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISSN + LaneDedupAugmentation.SEPARATOR + issn);
         }

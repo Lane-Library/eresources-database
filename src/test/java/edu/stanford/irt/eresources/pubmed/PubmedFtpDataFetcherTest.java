@@ -34,8 +34,10 @@ public class PubmedFtpDataFetcherTest {
 
     FTPFile[] ftpFiles;
 
+    String tempFile = "eresources-unit-test-file.tmp";
+
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.ftpClient = mock(FTPClient.class);
         this.ftpFileFilter = mock(PubmedFtpFileFilter.class);
         this.fetcher = new PubmedFtpDataFetcher("/tmp", this.ftpClient, this.ftpFileFilter, "ftpHostname",
@@ -46,8 +48,8 @@ public class PubmedFtpDataFetcherTest {
     }
 
     @After
-    public void tearDown() throws Exception {
-        new File("/tmp/foo").delete();
+    public void tearDown() {
+        new File("/tmp/" + this.tempFile).delete();
     }
 
     @Test
@@ -60,7 +62,7 @@ public class PubmedFtpDataFetcherTest {
         expectLastCall();
         expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true);
         expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles);
-        expect(this.ftpFile.getName()).andReturn("foo").times(2);
+        expect(this.ftpFile.getName()).andReturn(this.tempFile).times(2);
         expect(this.ftpClient.retrieveFile(isA(String.class), isA(FileOutputStream.class))).andReturn(true);
         this.ftpClient.disconnect();
         expectLastCall();
@@ -94,7 +96,7 @@ public class PubmedFtpDataFetcherTest {
         expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true).atLeastOnce();
         expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles)
                 .atLeastOnce();
-        expect(this.ftpFile.getName()).andReturn("foo").atLeastOnce();
+        expect(this.ftpFile.getName()).andReturn(this.tempFile).atLeastOnce();
         expect(this.ftpClient.retrieveFile(isA(String.class), isA(FileOutputStream.class)))
                 .andThrow(new IOException("oops")).atLeastOnce();
         this.ftpClient.disconnect();
@@ -114,7 +116,7 @@ public class PubmedFtpDataFetcherTest {
         expectLastCall();
         expect(this.ftpClient.changeWorkingDirectory("ftpPathname")).andReturn(true);
         expect(this.ftpClient.listFiles(isA(String.class), isA(PubmedFtpFileFilter.class))).andReturn(this.ftpFiles);
-        expect(this.ftpFile.getName()).andReturn("foo").times(2);
+        expect(this.ftpFile.getName()).andReturn(this.tempFile).times(2);
         expect(this.ftpClient.retrieveFile(isA(String.class), isA(FileOutputStream.class))).andReturn(false);
         this.ftpClient.disconnect();
         expectLastCall().andThrow(new IOException());

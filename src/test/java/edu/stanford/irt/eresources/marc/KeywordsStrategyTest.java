@@ -83,13 +83,31 @@ public class KeywordsStrategyTest {
 
     @Test
     public void testGetKeywordsHolding() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        List<Field> fields = new ArrayList<>();
+        Field f1 = mock(Field.class);
+        Field f2 = mock(Field.class);
+        fields.add(f1);
+        fields.add(f2);
+        Subfield sf1 = mock(Subfield.class);
+        List<Subfield> subs = new ArrayList<>();
+        Subfield sf2 = mock(Subfield.class);
+        Subfield sf3 = mock(Subfield.class);
+        subs.add(sf2);
+        subs.add(sf3);
+        expect(this.record.getFields()).andReturn(fields);
         expect(this.record.getLeaderByte(6)).andReturn((byte) 'u');
-        expect(this.field.getTag()).andReturn("852");
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getData()).andReturn("852");
-        replay(this.record, this.field, this.subfield);
-        assertEquals("852 ", this.strategy.getKeywords(this.record));
-        verify(this.record, this.field, this.subfield);
+        expect(f1.getTag()).andReturn("852");
+        expect(f1.getSubfields()).andReturn(Collections.singletonList(sf1));
+        expect(sf1.getCode()).andReturn('b');
+        expect(sf1.getData()).andReturn("852-b-indexed");
+        expect(f2.getTag()).andReturn("907");
+        expect(f2.getSubfields()).andReturn(subs);
+        expect(sf2.getCode()).andReturn('x');
+        expect(sf2.getData()).andReturn("907-x-indexed");
+        // 907 a should not be indexed
+        expect(sf3.getCode()).andReturn('a');
+        replay(this.record, f1, f2, sf1, sf2, sf3);
+        assertEquals("852-b-indexed  907-x-indexed ", this.strategy.getKeywords(this.record));
+        verify(this.record, f1, f2, sf1, sf2, sf3);
     }
 }
