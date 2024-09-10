@@ -27,27 +27,29 @@ public class MarcLink implements Link {
 
     @Override
     public String getAdditionalText() {
-        Subfield i = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'i')
-                .reduce((final Subfield a, final Subfield b) -> b).orElse(null);
-        String text = i != null ? i.getData() : null;
-        if ("click link above for location/circulation status.".equalsIgnoreCase(text)) {
-            text = null;
-        }
-        return text;
+        // ^i = publicNote
+        return this.field.getSubfields().stream()
+                .filter((final Subfield s) -> s.getCode() == 'i')
+                .map(Subfield::getData)
+                .map(st -> SU_AFFIL_AT.matcher(st).replaceAll(""))
+                .filter((final String st) -> !st.isEmpty())
+                .findFirst().orElse(null);
     }
 
     @Override
     public String getLabel() {
         // ^q = materialsSpecification
         // ^y = linkText
-        // ^z = publicNote
+        // ^z can likely be removed after FOLIO holdings migration
         String l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'q')
                 .map(Subfield::getData).findFirst().orElse(null);
         if (l == null) {
             // order? what if both ^y and ^z are present?
             l = this.field.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'y' || s.getCode() == 'z')
-                    .map(Subfield::getData).filter((final String st) -> !SU_AFFIL_AT.matcher(st).matches()).findFirst()
-                    .orElse(null);
+                .map(Subfield::getData)
+                .map(st -> SU_AFFIL_AT.matcher(st).replaceAll(""))
+                .filter((final String st) -> !st.isEmpty())
+                .findFirst().orElse(null);
         } else if (l.startsWith("(") && l.endsWith(")") && !"()".equals(l)) {
             l = l.substring(1, l.length() - 1);
         }
@@ -67,7 +69,7 @@ public class MarcLink implements Link {
                 sb.append(l);
             }
         }
-        if (sb.length() == 0) {
+        if (sb.length() == 0 && null != l) {
             sb.append(l);
         }
         return sb.toString();

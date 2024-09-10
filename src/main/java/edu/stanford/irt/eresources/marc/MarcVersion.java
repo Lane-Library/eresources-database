@@ -3,6 +3,7 @@ package edu.stanford.irt.eresources.marc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -175,9 +176,16 @@ public class MarcVersion extends MARCRecordSupport implements Version {
     public String getPublisher() {
         String publisher = null;
         publisher = getSubfieldData(this.holding, "856", "y").findFirst().orElse(null);
-        // remove this?
+        // remove this? 2024-09-05 perhaps after FOLIO holdings migration?
         if (null == publisher) {
             publisher = getSubfieldData(this.holding, "844", "a").findFirst().orElse(null);
+        }
+        // both publisher and MarcLink.getLabel() can use 856 ^y; do not duplicate publisher string
+        // MarcLink.getLinkText() could be a candidate instead?
+        String firstLinkLabel = this.getLinks().stream().map(Link::getLabel).filter(Objects::nonNull)
+                .findFirst().orElse("");
+        if (firstLinkLabel.equals(publisher)) {
+            publisher = null;
         }
         return publisher;
     }
