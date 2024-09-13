@@ -19,21 +19,25 @@ import edu.stanford.lane.catalog.FolioRecord;
  */
 public class FolioVersion implements Version {
 
+    private static final Pattern BOOK_OR_VIDEO = Pattern.compile("^(Book|Video).*");
+
     private static final String ELECTRONIC_ACCESS = "electronicAccess";
 
     private static final String HOLDINGS_STATEMENTS = "holdingsStatements";
 
+    private static final String STATEMENT = "statement";
+
     private Eresource eresource;
 
     private Map<String, ?> folioHolding;
+
+    private FolioRecord folioRecord;
 
     private String locationName;
 
     private HTTPLaneLocationsService locationsService;
 
     private String locationUrl;
-
-    private FolioRecord folioRecord;
 
     public FolioVersion(final FolioRecord folioRecord, final Map<String, ?> folioHolding, final Eresource eresource,
             final HTTPLaneLocationsService locationsService) {
@@ -74,19 +78,12 @@ public class FolioVersion implements Version {
         return ((Map<String, String>) this.folioHolding.get("callNumber")).get("callNumber");
     }
 
-    private boolean needToAddBibDates(final Eresource eresource) {
-        return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
-                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches();
-    }
-
-    private static final Pattern BOOK_OR_VIDEO = Pattern.compile("^(Book|Video).*");
-
     @Override
     public String getDates() {
         String value = null;
         List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get(HOLDINGS_STATEMENTS);
-        if (!statements.isEmpty() && !statements.get(0).get("statement").isBlank()) {
-            value = statements.get(0).get("statement");
+        if (!statements.isEmpty() && !statements.get(0).get(STATEMENT).isBlank()) {
+            value = statements.get(0).get(STATEMENT);
             if (value.contains(" = ")) {
                 String[] parts = value.split(" = ");
                 value = parts[1];
@@ -191,8 +188,8 @@ public class FolioVersion implements Version {
     public String getSummaryHoldings() {
         String value = null;
         List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get(HOLDINGS_STATEMENTS);
-        if (!statements.isEmpty() && !statements.get(0).get("statement").isBlank()) {
-            value = statements.get(0).get("statement");
+        if (!statements.isEmpty() && !statements.get(0).get(STATEMENT).isBlank()) {
+            value = statements.get(0).get(STATEMENT);
             if (value.contains(" = ")) {
                 String[] parts = value.split(" = ");
                 value = parts[0];
@@ -212,5 +209,10 @@ public class FolioVersion implements Version {
 
     private boolean hasLinks() {
         return !((List<?>) this.folioHolding.get(ELECTRONIC_ACCESS)).isEmpty();
+    }
+
+    private boolean needToAddBibDates(final Eresource eresource) {
+        return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
+                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches();
     }
 }
