@@ -36,8 +36,4 @@ public class DatasetLink implements Link {
         return this.dataset.getUrl();
     }
 
-    @Override
-    public void setVersion(final Version version) {
-        // not implemented
-    }
 }

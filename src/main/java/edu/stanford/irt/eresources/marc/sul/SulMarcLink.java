@@ -109,8 +109,4 @@ public class SulMarcLink implements Link {
         return '4' == this.field.getIndicator1() && '0' == this.field.getIndicator2();
     }
 
-    @Override
-    public void setVersion(final Version version) {
-        // not implemented
-    }
 }

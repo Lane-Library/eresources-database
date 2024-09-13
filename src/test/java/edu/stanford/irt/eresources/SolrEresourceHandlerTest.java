@@ -43,16 +43,11 @@ public class SolrEresourceHandlerTest {
 
     @Test
     public final void testHandleEresource() throws Exception {
-        Version v = mock(Version.class);
-        Link l = mock(Link.class);
-        expect(this.eresource.getVersions()).andReturn(Collections.singletonList(v));
-        expect(v.getLinks()).andReturn(Collections.singletonList(l));
-        l.setVersion(v);
         this.queue.put(this.eresource);
-        replay(this.eresource, v, l, this.queue);
+        replay(this.eresource, this.queue);
         this.handler.handleEresource(this.eresource);
         assertEquals(1, this.handler.getCount());
-        verify(this.eresource, v, l, this.queue);
+        verify(this.eresource, this.queue);
     }
 
     @Test

@@ -59,7 +59,6 @@ public class SAXLink implements Link {
         this.url = url;
     }
 
-    @Override
     public void setVersion(final Version version) {
         this.version = version;
     }

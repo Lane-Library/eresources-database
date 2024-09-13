@@ -99,8 +99,4 @@ public class FolioLink implements Link {
         return "Resource".equals(this.folioElectronicAccess.get("name"));
     }
 
-    @Override
-    public void setVersion(final Version version) {
-        // not implemented
-    }
 }

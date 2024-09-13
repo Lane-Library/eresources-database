@@ -61,11 +61,6 @@ public class CatalogLink implements Link {
         return this.url;
     }
 
-    @Override
-    public void setVersion(final Version version) {
-        // not implemented
-    }
-
     private void appendHoldingsAndDates(final StringBuilder sb) {
         String holdingsAndDates = this.version.getHoldingsAndDates();
         List<Link> links = this.version.getLinks();

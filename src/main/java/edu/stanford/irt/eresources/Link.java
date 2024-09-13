@@ -22,5 +22,4 @@ public interface Link {
         return false;
     }
 
-    void setVersion(Version version);
 }
