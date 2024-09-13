@@ -3,7 +3,6 @@ package edu.stanford.irt.eresources.marc;
 import java.util.List;
 import java.util.Map;
 
-import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -76,11 +75,11 @@ public class KeywordsStrategy {
             statCodes.stream().forEach((final Map<String, Object> statCode) -> sb.append(statCode.get("code"))
                     .append(' ').append(statCode.get("name")).append(' '));
             List<Map<String, Object>> electronicAccesses = (List<Map<String, Object>>) holding.get("electronicAccess");
-            electronicAccesses.stream().forEach((final Map<String, Object> electronicAccess) -> {
-                sb.append(electronicAccess.get("uri")).append(' ').append(electronicAccess.get("linkText")).append(' ')
-                        .append(electronicAccess.get("materialsSpecification")).append(' ')
-                        .append(electronicAccess.get("publicNote")).append(' ');
-            });
+            electronicAccesses.stream()
+                    .forEach((final Map<String, Object> electronicAccess) -> sb.append(electronicAccess.get("uri"))
+                            .append(' ').append(electronicAccess.get("linkText")).append(' ')
+                            .append(electronicAccess.get("materialsSpecification")).append(' ')
+                            .append(electronicAccess.get("publicNote")).append(' '));
         }
         return sb.toString().trim();
     }

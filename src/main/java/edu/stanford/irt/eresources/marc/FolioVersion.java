@@ -14,10 +14,14 @@ import edu.stanford.irt.eresources.marc.CatalogLink.Type;
 import edu.stanford.lane.catalog.FolioRecord;
 
 /**
- * FolioVersion encapsulates a folio holding record (from
- * /inventory-hierarchy/items-and-holdings, not /holdings-storage/holdings).
+ * FolioVersion encapsulates a folio holding record (from /inventory-hierarchy/items-and-holdings, not
+ * /holdings-storage/holdings).
  */
 public class FolioVersion implements Version {
+
+    private static final String ELECTRONIC_ACCESS = "electronicAccess";
+
+    private static final String HOLDINGS_STATEMENTS = "holdingsStatements";
 
     private Eresource eresource;
 
@@ -44,7 +48,7 @@ public class FolioVersion implements Version {
         // 866 ^z mapped to holdingsStatements.note
         // for print example of this, see NYTimes L89316
         String additionalText = null;
-        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get("holdingsStatements");
+        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get(HOLDINGS_STATEMENTS);
         if (statements.size() > 1) {
             additionalText = "";
         } else if (statements.size() == 1) {
@@ -80,7 +84,7 @@ public class FolioVersion implements Version {
     @Override
     public String getDates() {
         String value = null;
-        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get("holdingsStatements");
+        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get(HOLDINGS_STATEMENTS);
         if (!statements.isEmpty() && !statements.get(0).get("statement").isBlank()) {
             value = statements.get(0).get("statement");
             if (value.contains(" = ")) {
@@ -126,7 +130,7 @@ public class FolioVersion implements Version {
         }
         Version version = this;
         List<Map<String, String>> electronicAccesses = (List<Map<String, String>>) this.folioHolding
-                .get("electronicAccess");
+                .get(ELECTRONIC_ACCESS);
         links.addAll(
                 electronicAccesses.stream().map((final Map<String, String> ea) -> new FolioLink(ea, version)).toList());
         return links;
@@ -169,7 +173,7 @@ public class FolioVersion implements Version {
     public String getPublisher() {
         String publisher = null;
         // 856 ^y is mapped to electronicAccess[0].linkText
-        publisher = ((List<Map<String, String>>) this.folioHolding.get("electronicAccess")).stream()
+        publisher = ((List<Map<String, String>>) this.folioHolding.get(ELECTRONIC_ACCESS)).stream()
                 .map((final Map<String, String> ea) -> ea.get("linkText")).filter(Objects::nonNull).findFirst()
                 .orElse(null);
         // both publisher and FolioLink.getLabel() can use 856 ^y (linkText); do
@@ -186,7 +190,7 @@ public class FolioVersion implements Version {
     @Override
     public String getSummaryHoldings() {
         String value = null;
-        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get("holdingsStatements");
+        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get(HOLDINGS_STATEMENTS);
         if (!statements.isEmpty() && !statements.get(0).get("statement").isBlank()) {
             value = statements.get(0).get("statement");
             if (value.contains(" = ")) {
@@ -207,6 +211,6 @@ public class FolioVersion implements Version {
     }
 
     private boolean hasLinks() {
-        return !((List<?>) this.folioHolding.get("electronicAccess")).isEmpty();
+        return !((List<?>) this.folioHolding.get(ELECTRONIC_ACCESS)).isEmpty();
     }
 }
