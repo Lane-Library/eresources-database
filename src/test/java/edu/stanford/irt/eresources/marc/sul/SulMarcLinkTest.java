@@ -3,7 +3,9 @@ package edu.stanford.irt.eresources.marc.sul;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -43,6 +45,33 @@ public class SulMarcLinkTest {
     }
 
     @Test
+    public void testGetAdditionalText() {
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('i');
+        expect(this.subfield.getData()).andReturn("additional text");
+        replay(this.field, this.subfield);
+        assertEquals("additional text", this.link.getAdditionalText());
+    }
+
+    @Test
+    public void testGetAdditionalTextNull() {
+        expect(this.field.getSubfields()).andReturn(Collections.emptyList());
+        replay(this.field, this.subfield, this.version);
+        assertNull(this.link.getAdditionalText());
+    }
+
+    @Test
+    public void testGetLinkTextHoldingsAndDates() {
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('q').times(3);
+        expect(this.subfield.getData()).andReturn("label");
+        expect(this.version.getHoldingsAndDates()).andReturn("holdings and dates");
+        replay(this.version, this.field, this.subfield);
+        assertEquals("holdings and dates", this.link.getLinkText());
+        verify(this.version);
+    }
+
+    @Test
     public void testGetLabelZ() {
         List<Subfield> subfieldZs = new ArrayList<>();
         Subfield z1 = mock(Subfield.class);
@@ -56,6 +85,44 @@ public class SulMarcLinkTest {
         expect(z2.getData()).andReturn("last z");
         replay(this.field, this.subfield, z1, z2);
         assertEquals("last z", this.link.getLabel());
+    }
+
+    @Test
+    public void testGetLinkTextNoHoldingsAndDates() {
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.subfield.getCode()).andReturn('z').times(3);
+        expect(this.subfield.getData()).andReturn("label");
+        expect(this.version.getHoldingsAndDates()).andReturn(null);
+        replay(this.version, this.field, this.subfield);
+        assertEquals("label", this.link.getLinkText());
+        verify(this.version);
+    }
+
+    @Test
+    public void testIsResourceLink() {
+        expect(this.field.getIndicator1()).andReturn('4');
+        expect(this.field.getIndicator2()).andReturn('0');
+        replay(this.version, this.field);
+        assertEquals(true, this.link.isResourceLink());
+        verify(this.version, this.field);
+    }
+
+    @Test
+    public void testIsRelatedResourceLink() {
+        expect(this.field.getIndicator1()).andReturn('4');
+        expect(this.field.getIndicator2()).andReturn('2');
+        replay(this.version, this.field);
+        assertEquals(true, this.link.isRelatedResourceLink());
+        verify(this.version, this.field);
+    }
+
+    @Test
+    public void testGetLinkTextNoHoldingsAndDatesNoLabel() {
+        expect(this.field.getSubfields()).andReturn(Collections.emptyList()).times(2);
+        expect(this.version.getHoldingsAndDates()).andReturn(null);
+        replay(this.version, this.field, this.subfield);
+        assertEquals("", this.link.getLinkText());
+        verify(this.version);
     }
 
     @Test

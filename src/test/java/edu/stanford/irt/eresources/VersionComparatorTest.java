@@ -1,19 +1,11 @@
 package edu.stanford.irt.eresources;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.mock;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.stanford.irt.eresources.marc.MarcLink;
-import edu.stanford.irt.eresources.marc.MarcVersion;
 import edu.stanford.irt.eresources.sax.SAXLink;
 import edu.stanford.irt.eresources.sax.SAXVersion;
 
@@ -23,14 +15,6 @@ import edu.stanford.irt.eresources.sax.SAXVersion;
 public class VersionComparatorTest {
 
     private VersionComparator comparator;
-
-    private MarcLink marcLink1;
-
-    private MarcLink marcLink2;
-
-    private MarcVersion marcVersion1;
-
-    private MarcVersion marcVersion2;
 
     private SAXLink saxLink;
 
@@ -43,10 +27,6 @@ public class VersionComparatorTest {
         this.saxVersion1 = new SAXVersion();
         this.saxVersion2 = new SAXVersion();
         this.saxLink = new SAXLink();
-        this.marcLink1 = mock(MarcLink.class);
-        this.marcLink2 = mock(MarcLink.class);
-        this.marcVersion1 = mock(MarcVersion.class);
-        this.marcVersion2 = mock(MarcVersion.class);
         this.comparator = new VersionComparator();
     }
 

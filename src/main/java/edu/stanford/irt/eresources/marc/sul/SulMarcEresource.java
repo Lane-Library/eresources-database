@@ -125,7 +125,8 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public String getTitle() {
         StringBuilder sb = new StringBuilder(super.getTitle());
-        // LANEWEB-10639: a few sul records have "<>" to indicate linked 880 title fields
+        // LANEWEB-10639: a few sul records have "<>" to indicate linked 880
+        // title fields
         String titleLinkage = getSubfieldData(this.marcRecord, "245", "6").findFirst().orElse(null);
         if (sb.toString().startsWith("<>") && null != titleLinkage && titleLinkage.startsWith("880-")) {
             getFields(this.marcRecord, "880").findAny()
@@ -154,7 +155,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     public List<Version> getVersions() {
         if (this.versions == null) {
             Collection<Version> versionSet = new TreeSet<>(COMPARATOR);
-            Version version = createVersion(this.marcRecord);
+            Version version = new SulMarcVersion(this.marcRecord, this);
             if (!version.getLinks().isEmpty()) {
                 versionSet.add(version);
             }
@@ -193,10 +194,5 @@ public class SulMarcEresource extends AbstractMarcEresource {
     private boolean isAllCaps(final String string) {
         String caps = string.toUpperCase(Locale.US);
         return string.equals(caps);
-    }
-
-    @Override
-    protected Version createVersion(final Record holdingsRecord) {
-        return new SulMarcVersion(holdingsRecord, this);
     }
 }

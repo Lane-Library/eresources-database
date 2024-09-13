@@ -2,7 +2,6 @@ package edu.stanford.irt.eresources.marc;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -402,17 +400,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
 
     @Override
     public List<Version> getVersions() {
-        if (this.versions == null) {
-            Collection<Version> versionSet = new TreeSet<>(COMPARATOR);
-            for (Record holding : this.holdings) {
-                Version version = createVersion(holding);
-                if (!version.getLinks().isEmpty()) {
-                    versionSet.add(version);
-                }
-            }
-            this.versions = Collections.unmodifiableList(new ArrayList<>(versionSet));
-        }
-        return new ArrayList<>(this.versions);
+        return Collections.emptyList();
     }
 
     @Override
@@ -442,10 +430,6 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
             }
         }
         return d;
-    }
-
-    protected Version createVersion(final Record holdingRecord) {
-        return new MarcVersion(holdingRecord, this.marcRecord, this, this.locationsService);
     }
 
     protected StringBuilder getTitleStringBuilder(final Field titleField) {

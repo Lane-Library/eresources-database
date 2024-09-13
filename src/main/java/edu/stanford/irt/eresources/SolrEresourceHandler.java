@@ -97,6 +97,7 @@ public class SolrEresourceHandler implements EresourceHandler {
 
     @Override
     public void handleEresource(final Eresource eresource) {
+        // why is this loop needed?
         for (Version version : eresource.getVersions()) {
             for (Link link : version.getLinks()) {
                 link.setVersion(version);
