@@ -29,7 +29,7 @@ public class FolioVersionTest {
         this.record = new FolioRecord(FolioVersionTest.class.getResourceAsStream("folio-record.json").readAllBytes());
         this.eresource = mock(Eresource.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
-        this.version = new FolioVersion(this.record.getHoldings().get(0), this.eresource, this.locationsService);
+        this.version = new FolioVersion(this.record, this.record.getHoldings().get(0), this.eresource, this.locationsService);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class FolioVersionTest {
 
     @Test
     public void testGetSummaryHoldings() {
-        assertEquals(this.version.getDates(), this.version.getSummaryHoldings());
+        assertEquals("v. 1-", this.version.getSummaryHoldings());
     }
 
     @Test
