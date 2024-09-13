@@ -1,0 +1,742 @@
+{
+    "instanceId": "d72816fa-1cf9-583a-9e48-105b2dcff34c",
+    "instance": null,
+    "instanceSource": {
+      "fields": [
+        {
+          "001": "L342630"
+        },
+        {
+          "005": "20230815121556.0"
+        },
+        {
+          "008": "180116s2018    nyu     xb    000 0 eng d"
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "z": "9780062800794"
+              },
+              {
+                "q": "(cd)"
+              }
+            ]
+          }
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "z": "0062674676"
+              },
+              {
+                "q": "(hardcover)"
+              }
+            ]
+          }
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "z": "0062845020"
+              },
+              {
+                "q": "(international)"
+              }
+            ]
+          }
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "z": "9780062674678"
+              },
+              {
+                "q": "(hardcover)"
+              }
+            ]
+          }
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "z": "9780062845023"
+              },
+              {
+                "q": "(international)"
+              }
+            ]
+          }
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "z": "0062674692"
+              },
+              {
+                "q": "electronic book"
+              }
+            ]
+          }
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "z": "9780062674692"
+              },
+              {
+                "q": "electronic book"
+              }
+            ]
+          }
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "0062674714"
+              },
+              {
+                "q": "electronic audio book"
+              }
+            ]
+          }
+        },
+        {
+          "020": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "9780062674715"
+              },
+              {
+                "q": "electronic audio book"
+              }
+            ]
+          }
+        },
+        {
+          "035": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "9": "L342630"
+              }
+            ]
+          }
+        },
+        {
+          "035": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "(OCoLC)1011242979"
+              }
+            ]
+          }
+        },
+        {
+          "035": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "342630"
+              }
+            ]
+          }
+        },
+        {
+          "040": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "DLC"
+              },
+              {
+                "b": "eng"
+              },
+              {
+                "e": "rda"
+              },
+              {
+                "c": "DLC"
+              },
+              {
+                "d": "BDX"
+              },
+              {
+                "d": "HQD"
+              },
+              {
+                "d": "YDX"
+              },
+              {
+                "d": "OCLCO"
+              },
+              {
+                "d": "JTH"
+              },
+              {
+                "d": "CLE"
+              },
+              {
+                "d": "IK2"
+              },
+              {
+                "d": "VP@"
+              },
+              {
+                "d": "OCLCF"
+              },
+              {
+                "d": "JAI"
+              },
+              {
+                "d": "VTL"
+              },
+              {
+                "d": "FM0"
+              },
+              {
+                "d": "PCX"
+              },
+              {
+                "d": "PRSPR"
+              },
+              {
+                "d": "NDS"
+              },
+              {
+                "d": "ILC"
+              },
+              {
+                "d": "YDX"
+              },
+              {
+                "d": "OCLCO"
+              },
+              {
+                "d": "BUR"
+              },
+              {
+                "d": "OCL"
+              },
+              {
+                "d": "XII"
+              },
+              {
+                "d": "OCLCQ"
+              },
+              {
+                "d": "TJC"
+              },
+              {
+                "d": "OCLCQ"
+              },
+              {
+                "d": "FJD"
+              },
+              {
+                "d": "S1C"
+              },
+              {
+                "d": "PHCSB"
+              },
+              {
+                "d": "QGK"
+              },
+              {
+                "d": "UKMGB"
+              },
+              {
+                "d": "OCLCQ"
+              },
+              {
+                "d": "MOQ"
+              }
+            ]
+          }
+        },
+        {
+          "042": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "pcc"
+              }
+            ]
+          }
+        },
+        {
+          "050": {
+            "ind1": "0",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "HB615"
+              },
+              {
+                "b": ".V385 2018"
+              }
+            ]
+          }
+        },
+        {
+          "100": {
+            "ind1": "1",
+            "ind2": " ",
+            "subfields": [
+              {
+                "e": "Author:"
+              },
+              {
+                "a": "Vaynerchuk, Gary."
+              },
+              {
+                "0": "unverified"
+              }
+            ]
+          }
+        },
+        {
+          "245": {
+            "ind1": "1",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "Crushing it!"
+              },
+              {
+                "h": "[sound recording] :"
+              },
+              {
+                "b": "how great entrepreneurs build their business and influence--and how you can, too /"
+              },
+              {
+                "c": "Gary Vaynerchuk."
+              }
+            ]
+          }
+        },
+        {
+          "250": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "First edition."
+              }
+            ]
+          }
+        },
+        {
+          "264": {
+            "ind1": " ",
+            "ind2": "1",
+            "subfields": [
+              {
+                "a": "New York, NY :"
+              },
+              {
+                "b": "HarperBusiness, an imprint of HarperCollins Publishers,"
+              },
+              {
+                "c": "[2018]"
+              }
+            ]
+          }
+        },
+        {
+          "264": {
+            "ind1": " ",
+            "ind2": "4",
+            "subfields": [
+              {
+                "c": "©2018"
+              }
+            ]
+          }
+        },
+        {
+          "300": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "online resource (1 audio file)"
+              }
+            ]
+          }
+        },
+        {
+          "336": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "spoken word"
+              },
+              {
+                "2": "rdacontent"
+              }
+            ]
+          }
+        },
+        {
+          "337": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "computer"
+              },
+              {
+                "2": "rdamedia"
+              }
+            ]
+          }
+        },
+        {
+          "338": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "online resource"
+              },
+              {
+                "2": "rdacarrier"
+              }
+            ]
+          }
+        },
+        {
+          "504": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "Includes bibliographical references (pages 267-272)."
+              }
+            ]
+          }
+        },
+        {
+          "505": {
+            "ind1": "0",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "Part I, Get pumped: The path is all yours -- What (still) matters -- The eighth essential -- content -- What's stopping you? -- The only thing you need to give yourself to crush it -- Part II, Create your pillar: First, do this -- Get discovered -- Musical.ly -- Snapchat -- Twitter -- YouTube -- Facebook -- Instagram -- Podcasts -- Voice-first -- Conclusion."
+              }
+            ]
+          }
+        },
+        {
+          "520": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "\"In his 2009 book Crush It, Gary Vaynerchuk insisted that a vibrant personal brand was crucial to entrepreneurial success. Now Gary explains why that's even more true today, offering his perspective on what has changed in the last nine years and what principles remain timeless. He also shares stories from other entrepreneurs who have grown wealthier -- and not just financially -- than they ever imagined possible by following Crush It principles. The secret to their success (and Gary's) has everything to do with their understanding of the social media platforms and their willingness to do whatever it took to make these tools work to their utmost potential. Gary dissects every current major social media platform so that anyone, from a plumber to a professional ice skater, will know exactly how to amplify his or her personal brand on each. He offers both theoretical and tactical advice on how to become the biggest thing on old standbys like Twitter, Facebook, YouTube, Instagram, Pinterest, and Snapchat; podcast platforms like Spotify, Soundcloud, iHeartRadio, and iTunes; and other emerging platforms such as Musical.ly. For those with more experience, Crushing It! illuminates some little-known nuances and provides innovative tips and clever tweaks proven to enhance more common tried-and-true strategies. Crushing It! is a guide to building your own path to professional and financial success and a blueprint to living life on your own terms.\"--"
+              },
+              {
+                "c": "Provided by publisher."
+              }
+            ]
+          }
+        },
+        {
+          "650": {
+            "ind1": "1",
+            "ind2": "2",
+            "subfields": [
+              {
+                "a": "Entrepreneurship"
+              },
+              {
+                "0": "Z24998"
+              }
+            ]
+          }
+        },
+        {
+          "650": {
+            "ind1": "1",
+            "ind2": "2",
+            "subfields": [
+              {
+                "a": "Marketing"
+              },
+              {
+                "0": "Z51356"
+              }
+            ]
+          }
+        },
+        {
+          "650": {
+            "ind1": "1",
+            "ind2": "2",
+            "subfields": [
+              {
+                "a": "Social Media"
+              },
+              {
+                "0": "Z152236"
+              }
+            ]
+          }
+        },
+        {
+          "655": {
+            "ind1": "2",
+            "ind2": "7",
+            "subfields": [
+              {
+                "a": "Index not Present"
+              },
+              {
+                "0": "Z257275"
+              }
+            ]
+          }
+        },
+        {
+          "655": {
+            "ind1": "4",
+            "ind2": "7",
+            "subfields": [
+              {
+                "a": "Books"
+              },
+              {
+                "0": "Z17041"
+              }
+            ]
+          }
+        },
+        {
+          "655": {
+            "ind1": "7",
+            "ind2": "7",
+            "subfields": [
+              {
+                "a": "BioSciCareer Business & Management"
+              }
+            ]
+          }
+        },
+        {
+          "660": {
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "Branding (Marketing)"
+              }
+            ]
+          }
+        },
+        {
+          "660": {
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "Entrepreneurship."
+              }
+            ]
+          }
+        },
+        {
+          "660": {
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "Influence (Psychology)"
+              }
+            ]
+          }
+        },
+        {
+          "660": {
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "Internet marketing."
+              }
+            ]
+          }
+        },
+        {
+          "660": {
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "New business enterprises."
+              }
+            ]
+          }
+        },
+        {
+          "660": {
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "Social influence."
+              }
+            ]
+          }
+        },
+        {
+          "660": {
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "Social media"
+              },
+              {
+                "x": "Economic aspects."
+              }
+            ]
+          }
+        },
+        {
+          "660": {
+            "ind1": " ",
+            "ind2": "0",
+            "subfields": [
+              {
+                "a": "Success in business."
+              }
+            ]
+          }
+        },
+        {
+          "990": {
+            "ind1": " ",
+            "ind2": " ",
+            "subfields": [
+              {
+                "a": "If textual book/ebook is purchased; record will need some clean up -- did minimal work to make it look like an audio book rather than textual"
+              }
+            ]
+          }
+        },
+        {
+          "999": {
+            "ind1": "f",
+            "ind2": "f",
+            "subfields": [
+              {
+                "i": "d72816fa-1cf9-583a-9e48-105b2dcff34c"
+              },
+              {
+                "s": "13aa0f7e-f6fa-573a-a6ea-8fe578a4ec19"
+              }
+            ]
+          }
+        }
+      ],
+      "leader": "04047cam a2200565Ei 4500"
+    },
+    "holdingSources": [],
+    "itemsAndHoldings": {
+      "instanceId": "d72816fa-1cf9-583a-9e48-105b2dcff34c",
+      "source": "MARC",
+      "modeOfIssuance": "single unit",
+      "natureOfContent": [],
+      "holdings": [
+        {
+          "id": "cf54eb04-5bb1-5c92-b8d9-4aa2c31a2246",
+          "notes": [],
+          "location": {
+            "effectiveLocation": {
+              "code": "LANE-EDOC",
+              "name": "Digital: Document",
+              "campusName": "Medical Center",
+              "libraryName": "Lane Medical Library",
+              "institutionName": "Stanford University"
+            },
+            "permanentLocation": {
+              "code": "LANE-EDOC",
+              "name": "Digital: Document",
+              "campusName": "Medical Center",
+              "libraryName": "Lane Medical Library",
+              "institutionName": "Stanford University"
+            },
+            "temporaryLocation": {}
+          },
+          "formerIds": [],
+          "callNumber": {
+            "typeId": "6caca63e-5651-4db6-9247-3205156e9699",
+            "typeName": "Other scheme",
+            "callNumber": ""
+          },
+          "holdingsType": "Electronic",
+          "electronicAccess": [
+            {
+              "uri": "https://link.overdrive.com/?websiteID=201995&titleID=3349831",
+              "name": "Resource",
+              "linkText": "OverDrive",
+              "publicNote": "Available to Stanford-affiliated users. SUNet ID login required",
+              "relationshipId": "f5d0068e-6272-458e-8a81-b85e7b9a14aa"
+            }
+          ],
+          "statisticalCodes": [
+            {
+              "id": "285282c5-e1e3-49c3-b014-d17c085190e2",
+              "code": "Lane-NoProxy",
+              "name": "Lane holding NoProxy",
+              "source": "local",
+              "statisticalCodeType": "Holding"
+            }
+          ],
+          "holdingsStatements": [
+            {
+              "note": "Limited to 1 simultaneous users",
+              "statement": ""
+            }
+          ],
+          "suppressFromDiscovery": false,
+          "holdingsStatementsForIndexes": [],
+          "holdingsStatementsForSupplements": []
+        }
+      ],
+      "items": []
+    }
+  }

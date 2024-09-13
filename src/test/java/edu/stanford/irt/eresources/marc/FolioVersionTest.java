@@ -8,6 +8,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +32,8 @@ public class FolioVersionTest {
         this.record = new FolioRecord(FolioVersionTest.class.getResourceAsStream("folio-record.json").readAllBytes());
         this.eresource = mock(Eresource.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
-        this.version = new FolioVersion(this.record, this.record.getHoldings().get(0), this.eresource, this.locationsService);
+        this.version = new FolioVersion(this.record, this.record.getHoldings().get(0), this.eresource,
+                this.locationsService);
     }
 
     @Test
@@ -48,6 +52,19 @@ public class FolioVersionTest {
     }
 
     @Test
+    public void testGetDatesFromBib() throws Exception {
+        this.record = new FolioRecord(
+                FolioVersionTest.class.getResourceAsStream("folio-record-book.json").readAllBytes());
+        this.version = new FolioVersion(this.record, this.record.getHoldings().get(0), this.eresource,
+                this.locationsService);
+        expect(this.eresource.getPublicationText()).andReturn("");
+        expect(this.eresource.getPrimaryType()).andReturn("Book");
+        replay(this.eresource);
+        assertEquals("[2018]", this.version.getDates());
+        verify(this.eresource);
+    }
+
+    @Test
     public void testGetItemCount() {
         int[] count = this.version.getItemCount();
         assertEquals(1, count[0]);
@@ -58,6 +75,19 @@ public class FolioVersionTest {
     public void testGetLinks() {
         assertEquals(2, this.version.getLinks().size());
         assertEquals("https://test.com", this.version.getLinks().get(0).getUrl());
+    }
+
+    @Test
+    public void testGetLinksHasNoLinks() throws Exception {
+        this.record = new FolioRecord(
+                FolioVersionTest.class.getResourceAsStream("folio-record-equipment.json").readAllBytes());
+        this.version = new FolioVersion(this.record, this.record.getHoldings().get(0), this.eresource,
+                this.locationsService);
+        expect(this.eresource.getRecordId()).andReturn("123").times(2);
+        replay(this.eresource);
+        assertEquals(1, this.version.getLinks().size());
+        assertEquals("https://searchworks.stanford.edu/view/L123", this.version.getLinks().get(0).getUrl());
+        verify(this.eresource);
     }
 
     @Test
@@ -92,4 +122,5 @@ public class FolioVersionTest {
     public void testIsProxy() {
         assertTrue(this.version.isProxy());
     }
+
 }
