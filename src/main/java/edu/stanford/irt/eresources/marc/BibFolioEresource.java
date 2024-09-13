@@ -198,7 +198,7 @@ public class BibFolioEresource implements Eresource {
         if (this.versions == null) {
             Collection<Version> versionSet = new TreeSet<>(COMPARATOR);
             for (Map<String, ?> holding : this.folioRecord.getHoldings()) {
-                Version version = new FolioVersion(holding, this, this.locationsService);
+                Version version = new FolioVersion(this.folioRecord, holding, this, this.locationsService);
                 if (!version.getLinks().isEmpty()) {
                     versionSet.add(version);
                 }

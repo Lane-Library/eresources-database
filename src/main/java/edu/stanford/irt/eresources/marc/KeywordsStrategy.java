@@ -1,7 +1,9 @@
 package edu.stanford.irt.eresources.marc;
 
 import java.util.List;
+import java.util.Map;
 
+import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
@@ -40,6 +42,47 @@ public class KeywordsStrategy {
             getKeywordsFromBibRec(fields, sb);
         }
         return sb.toString();
+    }
+
+    public String getKeywordsFromFolioHoldings(final List<Map<String, Object>> folioHoldings) {
+        // folioHoldings fields to extract as keywords:
+        // notes.note
+        // location.effectiveLocation.code
+        // location.effectiveLocation.name
+        // callNumber.callNumber
+        // statisticalCodes.code
+        // electronicAccess.uri
+        // electronicAccess.linkText
+        // electronicAccess.materialsSpecification
+        // electronicAccess.publicNote
+        StringBuilder sb = new StringBuilder();
+        for (Map<String, Object> holding : folioHoldings) {
+            List<Map<String, String>> statisticalCodes = (List<Map<String, String>>) holding.get("statisticalCodes");
+            for (Map<String, String> code : statisticalCodes) {
+                sb.append(code.get("code")).append(' ');
+            }
+            List<Map<String, String>> notes = (List<Map<String, String>>) holding.get("notes");
+            for (Map<String, String> note : notes) {
+                if (null != note && null != note.get("staffOnly") && note.get("staffOnly").equals("false")) {
+                    sb.append(note.get("note")).append(' ');
+                }
+            }
+            Map<String, Object> location = (Map<String, Object>) holding.get("location");
+            Map<String, String> effectiveLocation = (Map<String, String>) location.get("effectiveLocation");
+            sb.append(effectiveLocation.get("code")).append(' ').append(effectiveLocation.get("name")).append(' ');
+            Map<String, String> callNumber = (Map<String, String>) holding.get("callNumber");
+            sb.append(callNumber.get("callNumber")).append(' ');
+            List<Map<String, Object>> statCodes = (List<Map<String, Object>>) holding.get("statisticalCodes");
+            statCodes.stream().forEach((final Map<String, Object> statCode) -> sb.append(statCode.get("code"))
+                    .append(' ').append(statCode.get("name")).append(' '));
+            List<Map<String, Object>> electronicAccesses = (List<Map<String, Object>>) holding.get("electronicAccess");
+            electronicAccesses.stream().forEach((final Map<String, Object> electronicAccess) -> {
+                sb.append(electronicAccess.get("uri")).append(' ').append(electronicAccess.get("linkText")).append(' ')
+                        .append(electronicAccess.get("materialsSpecification")).append(' ')
+                        .append(electronicAccess.get("publicNote")).append(' ');
+            });
+        }
+        return sb.toString().trim();
     }
 
     private void getKeywordsFromBibRec(final List<Field> fields, final StringBuilder sb) {

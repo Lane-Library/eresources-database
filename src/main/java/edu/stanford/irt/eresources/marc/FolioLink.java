@@ -2,14 +2,19 @@ package edu.stanford.irt.eresources.marc;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 
 /**
- * A Link that encapsulates the Folio Electronic Access object from which it is derived.
+ * A Link that encapsulates the Folio Electronic Access object from which it is
+ * derived.
  */
 public class FolioLink implements Link {
+
+    protected static final Pattern SU_AFFIL_AT = Pattern.compile(
+            "(available[ -]?to[ -]?stanford[ -]?affiliated[ -]?users)([ -]?at)?[:;.]?", Pattern.CASE_INSENSITIVE);
 
     private Map<String, String> folioElectronicAccess;
 
@@ -22,12 +27,30 @@ public class FolioLink implements Link {
 
     @Override
     public String getAdditionalText() {
-        return this.folioElectronicAccess.get("publicNote");
+        String text = this.folioElectronicAccess.get("publicNote");
+        return maybeRemoveAffiliation(text);
+    }
+
+    private String maybeRemoveAffiliation(final String text) {
+        String reString = text;
+        if (reString != null) {
+            reString = SU_AFFIL_AT.matcher(text).replaceAll("").trim();
+            if (reString.isBlank()) {
+                return null;
+            }
+        }
+        return reString;
     }
 
     @Override
     public String getLabel() {
-        return this.folioElectronicAccess.get("linkText");
+        String label = this.folioElectronicAccess.get("materialsSpecification");
+        if (label == null) {
+            label = this.folioElectronicAccess.get("linkText");
+        } else if (label.startsWith("(") && label.endsWith(")") && !"()".equals(label)) {
+            label = label.substring(1, label.length() - 1);
+        }
+        return label;
     }
 
     @Override
@@ -55,7 +78,8 @@ public class FolioLink implements Link {
     }
 
     /**
-     * A related resource link (856 42) will be down-sorted by version comparator. See case LANEWEB-10642
+     * A related resource link (856 42) will be down-sorted by version
+     * comparator. See case LANEWEB-10642
      *
      * @return has 856 42
      */
@@ -65,15 +89,14 @@ public class FolioLink implements Link {
     }
 
     /**
-     * A related resource link (856 40) will be up-sorted by version comparator. See case LANEWEB-10642
+     * A related resource link (856 40) will be up-sorted by version comparator.
+     * See case LANEWEB-10642
      *
      * @return has 856 40
      */
     @Override
     public boolean isResourceLink() {
-        String name = this.folioElectronicAccess.get("name");
-        // not sure if Resource or Version of resource is correct here?
-        return "Version of resource".equals(name) || "Resource".endsWith(name);
+        return "Resource".equals(this.folioElectronicAccess.get("name"));
     }
 
     @Override

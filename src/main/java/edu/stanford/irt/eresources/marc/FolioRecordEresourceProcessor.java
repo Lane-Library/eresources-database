@@ -1,8 +1,5 @@
 package edu.stanford.irt.eresources.marc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +7,6 @@ import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.FolioRecordCollection;
-import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 
 public class FolioRecordEresourceProcessor extends AbstractEresourceProcessor {
@@ -40,31 +36,27 @@ public class FolioRecordEresourceProcessor extends AbstractEresourceProcessor {
         while (frc.hasNext()) {
             FolioRecord fr = frc.next();
             if (null != fr.getInstanceMarc()) {
-                processMarcSource(fr);
+                processMarcInstanceFolioHoldings(fr);
             } else if (null != fr.getInstance()) {
-                processFolioSource(fr);
+                processFolioInstanceFolioHoldings(fr);
             } else {
                 log.info("skipping FolioRecord lacking both source MARC and instance data {}", fr);
             }
         }
     }
 
-    private void processFolioSource(final FolioRecord folioRecord) {
+    private void processFolioInstanceFolioHoldings(final FolioRecord folioRecord) {
         this.eresourceHandler.handleEresource(new BibFolioEresource(folioRecord, this.locationsService));
     }
 
-    private void processMarcSource(final FolioRecord folioRecord) {
-        List<Record> recordList = new ArrayList<>();
-        Record bibRecord = folioRecord.getInstanceMarc();
-        recordList.add(bibRecord);
-        recordList.addAll(folioRecord.getHoldingsMarc());
-        this.eresourceHandler
-                .handleEresource(new BibMarcEresource(recordList, this.keywordsStrategy, this.locationsService));
-        int altTitleCount = (int) bibRecord.getFields().stream().filter((final Field f) -> "249".equals(f.getTag()))
-                .count();
+    private void processMarcInstanceFolioHoldings(final FolioRecord folioRecord) {
+        this.eresourceHandler.handleEresource(
+                new LaneMarcEresourceFolioHoldings(folioRecord, this.keywordsStrategy, this.locationsService));
+        int altTitleCount = (int) folioRecord.getInstanceMarc().getFields().stream()
+                .filter((final Field f) -> "249".equals(f.getTag())).count();
         for (int i = 0; i < altTitleCount; i++) {
-            this.eresourceHandler.handleEresource(
-                    new AltTitleMarcEresource(recordList, this.keywordsStrategy, i + 1, this.locationsService));
+            this.eresourceHandler.handleEresource(new AltTitleLaneMarcEresourceFolioHoldings(folioRecord,
+                    this.keywordsStrategy, i + 1, this.locationsService));
         }
     }
 }

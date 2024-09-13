@@ -3,17 +3,19 @@ package edu.stanford.irt.eresources.marc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.Link;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.CatalogLink.Type;
 import edu.stanford.lane.catalog.FolioRecord;
 
 /**
- * FolioVersion encapsulates a folio holding record (from /inventory-hierarchy/items-and-holdings, not
- * /holdings-storage/holdings).
+ * FolioVersion encapsulates a folio holding record (from
+ * /inventory-hierarchy/items-and-holdings, not /holdings-storage/holdings).
  */
 public class FolioVersion implements Version {
 
@@ -27,8 +29,11 @@ public class FolioVersion implements Version {
 
     private String locationUrl;
 
-    public FolioVersion(final Map<String, ?> folioHolding, final Eresource eresource,
+    private FolioRecord folioRecord;
+
+    public FolioVersion(final FolioRecord folioRecord, final Map<String, ?> folioHolding, final Eresource eresource,
             final HTTPLaneLocationsService locationsService) {
+        this.folioRecord = folioRecord;
         this.folioHolding = folioHolding;
         this.eresource = eresource;
         this.locationsService = locationsService;
@@ -36,9 +41,28 @@ public class FolioVersion implements Version {
 
     @Override
     public String getAdditionalText() {
-        // 866 ^z not mapped to holdings, so return nothing?
+        // 866 ^z mapped to holdingsStatements.note
         // for print example of this, see NYTimes L89316
-        return null;
+        String additionalText = null;
+        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get("holdingsStatements");
+        if (statements.size() > 1) {
+            additionalText = "";
+        } else if (statements.size() == 1) {
+            additionalText = statements.get(0).get("note");
+        }
+        // LANEWEB-10982: show 931 notes but remove those referring to "Related
+        // Title Browse"
+        // 931 ^a is mapped to notes[].note when notes[].staffOnly == false
+        List<Map<String, String>> notes = (List<Map<String, String>>) this.folioHolding.get("notes");
+        for (Map<String, String> note : notes) {
+            if (null != note && null != note.get("staffOnly") && note.get("staffOnly").equals("false")) {
+                String noteText = note.get("note");
+                if (null != noteText && !noteText.toLowerCase().contains("use the \"related title browse\" index")) {
+                    additionalText = (null == additionalText) ? noteText : additionalText + " " + noteText;
+                }
+            }
+        }
+        return additionalText;
     }
 
     @Override
@@ -46,11 +70,40 @@ public class FolioVersion implements Version {
         return ((Map<String, String>) this.folioHolding.get("callNumber")).get("callNumber");
     }
 
+    private boolean needToAddBibDates(final Eresource eresource) {
+        return null == getSummaryHoldings() && eresource.getPublicationText().isEmpty()
+                && BOOK_OR_VIDEO.matcher(eresource.getPrimaryType()).matches();
+    }
+
+    private static final Pattern BOOK_OR_VIDEO = Pattern.compile("^(Book|Video).*");
+
     @Override
     public String getDates() {
+        String value = null;
         List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get("holdingsStatements");
-        return statements.stream().map((final Map<String, String> m) -> m.get("statement"))
-                .collect(Collectors.joining("; "));
+        if (!statements.isEmpty() && !statements.get(0).get("statement").isBlank()) {
+            value = statements.get(0).get("statement");
+            if (value.contains(" = ")) {
+                String[] parts = value.split(" = ");
+                value = parts[1];
+            } else {
+                value = null;
+            }
+        }
+        // 260/4 ^c = publication.dateOfPublication
+        if (null == value && needToAddBibDates(this.eresource)) {
+            // jsonContext will have MARC for MARC instance and FOLIO for FOLIO
+            // instance
+            List<String> dates = this.folioRecord.jsonContext()
+                    .read("$.instanceSource.fields[?(@['260'] || @['264'])].*.subfields.*.c");
+            value = dates.stream().findFirst().orElse(null);
+            value = null != value ? value
+                    : this.folioRecord.jsonContext().read("$.instance.publication[0].dateOfPublication");
+            value = null == value ? "" : value;
+            value = TextParserHelper.maybeStripTrailingPeriod(value);
+            value = TextParserHelper.maybeStripTrailingUnbalancedBracket(value);
+        }
+        return value;
     }
 
     @Override
@@ -74,8 +127,8 @@ public class FolioVersion implements Version {
         Version version = this;
         List<Map<String, String>> electronicAccesses = (List<Map<String, String>>) this.folioHolding
                 .get("electronicAccess");
-        links.addAll(electronicAccesses.stream().map((final Map<String, String> ea) -> new FolioLink(ea, version))
-                .toList());
+        links.addAll(
+                electronicAccesses.stream().map((final Map<String, String> ea) -> new FolioLink(ea, version)).toList());
         return links;
     }
 
@@ -114,20 +167,43 @@ public class FolioVersion implements Version {
 
     @Override
     public String getPublisher() {
-        // not sure where to get this? callnumber with a specific scheme type?
-        return null;
+        String publisher = null;
+        // 856 ^y is mapped to electronicAccess[0].linkText
+        publisher = ((List<Map<String, String>>) this.folioHolding.get("electronicAccess")).stream()
+                .map((final Map<String, String> ea) -> ea.get("linkText")).filter(Objects::nonNull).findFirst()
+                .orElse(null);
+        // both publisher and FolioLink.getLabel() can use 856 ^y (linkText); do
+        // not duplicate publisher string
+        // FolioLink.getLinkText() could be a candidate instead?
+        String firstLinkLabel = this.getLinks().stream().map(Link::getLabel).filter(Objects::nonNull).findFirst()
+                .orElse("");
+        if (firstLinkLabel.equals(publisher)) {
+            publisher = null;
+        }
+        return publisher;
     }
 
     @Override
     public String getSummaryHoldings() {
-        // holdingsStatements ... same as getDates so use that for now
-        return this.getDates();
+        String value = null;
+        List<Map<String, String>> statements = (List<Map<String, String>>) this.folioHolding.get("holdingsStatements");
+        if (!statements.isEmpty() && !statements.get(0).get("statement").isBlank()) {
+            value = statements.get(0).get("statement");
+            if (value.contains(" = ")) {
+                String[] parts = value.split(" = ");
+                value = parts[0];
+            }
+        }
+        return value;
     }
 
     @Override
     public boolean isProxy() {
-        // determine a way to store and retrieve this from folio holdings?
-        return true;
+        // true if statisticalCodes[].code != "Lane-NoProxy"
+        List<Map<String, String>> statisticalCodes = (List<Map<String, String>>) this.folioHolding
+                .get("statisticalCodes");
+        return statisticalCodes.stream()
+                .noneMatch((final Map<String, String> sc) -> "Lane-NoProxy".equalsIgnoreCase((sc.get("code"))));
     }
 
     private boolean hasLinks() {
