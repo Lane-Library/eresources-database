@@ -22,12 +22,6 @@
             </bean>
         </constructor-arg>
         <constructor-arg ref="laneDedupAugmentation"/>
-        <constructor-arg ref="pmcDedupAugmentation"/>
-        <constructor-arg name="inclusionStrategies">
-            <list>
-                <null />
-            </list>
-        </constructor-arg>
     </bean>
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
         <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/augmentations-dedup-all-records.obj"/>
@@ -46,8 +40,5 @@
     <bean id="sfxCatalogRecordService" class="edu.stanford.irt.eresources.marc.sfx.SfxFileCatalogRecordService">
         <constructor-arg name="basePath" value="${eresources.sfx.export-path}"/>
         <constructor-arg name="executor" ref="executor"/>
-    </bean>
-    <bean id="pmcDedupAugmentation" class="edu.stanford.irt.eresources.pmc.PmcDedupAugmentation">
-        <constructor-arg name="solrClient" ref="solrClient"/>
     </bean>
 </beans>
