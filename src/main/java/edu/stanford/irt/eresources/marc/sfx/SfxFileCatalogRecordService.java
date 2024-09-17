@@ -84,4 +84,8 @@ public class SfxFileCatalogRecordService extends PipedInputStream implements Run
         }
     }
 
+    // for unit testing
+    public void setPipedOutputStream(final PipedOutputStream outputStream) {
+        this.output = outputStream;
+    }
 }
