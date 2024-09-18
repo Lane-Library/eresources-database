@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.validator.routines.ISBNValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +102,10 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         for (String isbn : MARCRecordSupport.getSubfieldData(marcRecord, "020", "a").map(String::trim)
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR + isbn);
+            if (isbn.length() == 10) {
+                keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR
+                        + ISBNValidator.getInstance().convertToISBN13(isbn));
+            }
         }
         for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022", "a").map(String::trim)
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
