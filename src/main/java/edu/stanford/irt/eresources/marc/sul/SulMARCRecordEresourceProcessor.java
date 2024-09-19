@@ -1,12 +1,8 @@
 package edu.stanford.irt.eresources.marc.sul;
 
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-import org.apache.commons.validator.routines.ISBNValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,29 +12,29 @@ import edu.stanford.irt.eresources.marc.KeywordsStrategy;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.irt.eresources.marc.RecordCollectionFactory;
+import edu.stanford.irt.eresources.marc.dedup.CatkeyExtractionStrategy;
+import edu.stanford.irt.eresources.marc.dedup.DnlmExtractionStrategy;
+import edu.stanford.irt.eresources.marc.dedup.IsbnExtractionStrategy;
+import edu.stanford.irt.eresources.marc.dedup.IssnExtractionStrategy;
+import edu.stanford.irt.eresources.marc.dedup.KeyExtractionStrategy;
+import edu.stanford.irt.eresources.marc.dedup.LccnExtractionStrategy;
+import edu.stanford.irt.eresources.marc.dedup.OclcExtractionStrategy;
+import edu.stanford.irt.eresources.marc.dedup.TitleDateExtractionStrategy;
+import edu.stanford.irt.eresources.marc.dedup.UrlExtractionStrategy;
 import edu.stanford.irt.eresources.pmc.PmcDedupAugmentation;
 import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
-import edu.stanford.lane.catalog.Record.Field;
-import edu.stanford.lane.catalog.Record.Subfield;
-import edu.stanford.lane.catalog.TextHelper;
 import edu.stanford.lane.lcsh.LcshMapManager;
 
 public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor {
 
-    private static final Pattern BEGINS_HTTPS_OR_ENDS_SLASH = Pattern.compile("(^https?://)|(/$)");
-
-    private static final int F008_DATES_BEGIN = 7;
-
-    private static final int F008_DATES_END = 15;
-
     private static final Logger log = LoggerFactory.getLogger(SulMARCRecordEresourceProcessor.class);
-
-    private static final Pattern NOT_ALPHANUM_OR_SPACE = Pattern.compile("[^a-zA-Z_0-9 ]");
 
     private EresourceHandler eresourceHandler;
 
+    private List<KeyExtractionStrategy> deduplicationStrategies;
+    
     private List<InclusionStrategy> inclusionStrategies;
 
     private KeywordsStrategy keywordsStrategy;
@@ -61,6 +57,16 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         this.laneDedupAugmentation = laneDedupAugmentation;
         this.pmcDedupAugmentation = pmcDedupAugmentation;
         this.inclusionStrategies = inclusionStrategies;
+        this.deduplicationStrategies = Arrays.asList(
+            new CatkeyExtractionStrategy(),
+            new LccnExtractionStrategy(), 
+            new IsbnExtractionStrategy(), 
+            new IssnExtractionStrategy(),
+            new OclcExtractionStrategy(), 
+            new UrlExtractionStrategy(), 
+            new TitleDateExtractionStrategy(),
+            new DnlmExtractionStrategy()
+        );
     }
 
     @Override
@@ -93,99 +99,15 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
             return false;
         }
 
-        Set<String> keys = new HashSet<>();
-        addCatKey(keys, marcRecord);
-        addLccnKeys(keys, marcRecord);
-        addIsbnKeys(keys, marcRecord);
-        addIssnKeys(keys, marcRecord);
-        addOcolcKeys(keys, marcRecord);
-        addUrlKeys(keys, marcRecord);
-        addTitleDateKey(keys, marcRecord);
-        addDnmlKeys(keys, marcRecord);
-
-        for (String entry : keys) {
-            if (this.laneDedupAugmentation.isDuplicate(entry) || this.pmcDedupAugmentation.isDuplicate(entry)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void addCatKey(Set<String> keys, Record marcRecord) {
-        keys.add(LaneDedupAugmentation.KEY_CATKEY + LaneDedupAugmentation.SEPARATOR
-                + MARCRecordSupport.getRecordId(marcRecord));
-    }
-
-    private void addLccnKeys(Set<String> keys, Record marcRecord) {
-        for (String lccn : MARCRecordSupport.getSubfieldData(marcRecord, "010", "a").map(String::trim)
-                .collect(Collectors.toSet())) {
-            keys.add(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + lccn);
-        }
-    }
-
-    private void addIsbnKeys(Set<String> keys, Record marcRecord) {
-        for (String isbn : MARCRecordSupport.getSubfieldData(marcRecord, "020", "a").map(String::trim)
-                .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
-            keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR + isbn);
-            if (isbn.length() == 10) {
-                try {
-                    keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR
-                            + ISBNValidator.getInstance().convertToISBN13(isbn));
-                } catch (IllegalArgumentException e) {
-                    log.warn("invalid ISBN: {}", isbn);
+        for (KeyExtractionStrategy strategy : this.deduplicationStrategies) {
+            for (String key : strategy.extractKeys(marcRecord)) {
+                if (this.laneDedupAugmentation.isDuplicate(key) || this.pmcDedupAugmentation.isDuplicate(key)) {
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 
-    private void addIssnKeys(Set<String> keys, Record marcRecord) {
-        for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022", "a").map(String::trim)
-                .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
-            keys.add(LaneDedupAugmentation.KEY_ISSN + LaneDedupAugmentation.SEPARATOR + issn);
-        }
-    }
-
-    private void addOcolcKeys(Set<String> keys, Record marcRecord) {
-        Set<String> ocolcs = MARCRecordSupport.getSubfieldData(marcRecord, "035", "a")
-                .filter((final String s) -> s.startsWith("(OCoLC"))
-                .map((final String s) -> s.substring(s.indexOf(')') + 1, s.length())).collect(Collectors.toSet());
-        for (String ocolc : ocolcs) {
-            keys.add(LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + ocolc);
-        }
-    }
-
-    private void addUrlKeys(Set<String> keys, Record marcRecord) {
-        Set<String> urls = MARCRecordSupport.getSubfieldData(marcRecord, "856", "u")
-                .map((final String s) -> s.replace("https://stanford.idm.oclc.org/login?url=", "")).map(String::trim)
-                .map((final String s) -> BEGINS_HTTPS_OR_ENDS_SLASH.matcher(s).replaceAll(""))
-                .collect(Collectors.toSet());
-        for (String url : urls) {
-            keys.add(LaneDedupAugmentation.KEY_URL + LaneDedupAugmentation.SEPARATOR + url);
-        }
-    }
-
-    private void addTitleDateKey(Set<String> keys, Record marcRecord) {
-        String title = NOT_ALPHANUM_OR_SPACE.matcher(
-                MARCRecordSupport.getSubfieldData(marcRecord, "245", "a").findFirst().map(String::trim).orElse(""))
-                .replaceAll("");
-        String dates = MARCRecordSupport.getFields(marcRecord, "008").map(Field::getData).findFirst()
-                .map((final String s) -> s.substring(F008_DATES_BEGIN, F008_DATES_END)).orElse("00000000");
-        StringBuilder sb = new StringBuilder(title);
-        sb.append(dates);
-        keys.add(LaneDedupAugmentation.KEY_TITLE_DATE + LaneDedupAugmentation.SEPARATOR + sb.toString());
-    }
-
-    private void addDnmlKeys(Set<String> keys, Record marcRecord) {
-        Set<String> dnlms = MARCRecordSupport.getSubfieldData(MARCRecordSupport.getFields(marcRecord, "016")
-                .filter((final Field f) -> f.getIndicator1() == '7').filter((final Field f) -> {
-                    Subfield s2 = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == '2').findFirst()
-                            .orElse(null);
-                    Subfield sa = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == 'a').findFirst()
-                            .orElse(null);
-                    return s2 != null && sa != null && "DNLM".equalsIgnoreCase(s2.getData());
-                }), "a").collect(Collectors.toSet());
-        for (String dnlm : dnlms) {
-            keys.add(LaneDedupAugmentation.KEY_DNLM_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + dnlm);
-        }
-    }
 }
