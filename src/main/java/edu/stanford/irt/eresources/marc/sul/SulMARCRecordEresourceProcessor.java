@@ -103,8 +103,12 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR + isbn);
             if (isbn.length() == 10) {
-                keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR
-                        + ISBNValidator.getInstance().convertToISBN13(isbn));
+                try {
+                    keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR
+                            + ISBNValidator.getInstance().convertToISBN13(isbn));
+                } catch (IllegalArgumentException e) {
+                    log.warn("invalid ISBN: {}", isbn);
+                }
             }
         }
         for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022", "a").map(String::trim)
