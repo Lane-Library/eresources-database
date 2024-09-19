@@ -32,7 +32,7 @@ public class TypeFactory extends MARCRecordSupport {
             "Lane Class", "Lane Guide", "Lane Web Page", "Print", EresourceConstants.SOFTWARE, "Statistics",
             EresourceConstants.VIDEO };
 
-    private static final Pattern BEGIN_OR_END_BRACKET_MAYBE_SPACE_COLON = Pattern.compile("(^\\[)|(\\][ :/]{0,2}+$)");
+    private static final Pattern BEGIN_OR_END_BRACKET_MAYBE_SPACE_COLON = Pattern.compile("(^\\[)|(\\][ :/]{0,3}+$)");
 
     private static final Map<String, String> COMPOSITE_TYPES = new HashMap<>();
 
@@ -214,7 +214,12 @@ public class TypeFactory extends MARCRecordSupport {
         Set<String> rawTypes = new LinkedHashSet<>();
         rawTypes.addAll(getSubfieldData(marcRecord, "245", "h").map(TextParserHelper::maybeStripTrailingPeriod)
                 .map((final String s) -> BEGIN_OR_END_BRACKET_MAYBE_SPACE_COLON.matcher(s).replaceAll(""))
-                .map(TextParserHelper::toTitleCase).collect(Collectors.toSet()));
+                .filter((final String s) -> !s.equalsIgnoreCase("digital"))
+                .filter((final String s) -> !s.equalsIgnoreCase("print"))
+                .filter((final String s) -> !s.equalsIgnoreCase("print/digital"))
+                .filter((final String s) -> !s.equalsIgnoreCase("electronic resource"))
+                .map(TextParserHelper::toTitleCase)
+                .collect(Collectors.toSet()));
         if (getSubfieldData(marcRecord, "245", "h").anyMatch((final String s) -> s.contains("videorecording"))) {
             rawTypes.add("Video");
         }

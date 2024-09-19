@@ -45,7 +45,6 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
                 assertEquals("Journal Digital", TypeFactory.getPrimaryType(rec));
             }
             if ("10009616".equals(getRecordId(rec))) {
-                // should really be Video
                 assertEquals("Video", TypeFactory.getPrimaryType(rec));
             }
             if ("10763925".equals(getRecordId(rec))) {
@@ -71,6 +70,21 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
             }
             if ("13112673".equals(getRecordId(rec))) {
                 assertEquals("Audio", TypeFactory.getPrimaryType(rec));
+            }
+            if ("303511".equals(getRecordId(rec))) {
+                assertEquals("Book Digital", TypeFactory.getPrimaryType(rec));
+            }
+            if ("12467871".equals(getRecordId(rec))) {
+                assertEquals("Book Digital", TypeFactory.getPrimaryType(rec));
+            }
+            if ("342999".equals(getRecordId(rec))) {
+                assertEquals("Book Digital", TypeFactory.getPrimaryType(rec));
+            }
+            if ("353282".equals(getRecordId(rec))) {
+                assertEquals("Book Digital", TypeFactory.getPrimaryType(rec));
+            }
+            if ("360417".equals(getRecordId(rec))) {
+                assertEquals("Book Print", TypeFactory.getPrimaryType(rec));
             }
         }
     }
