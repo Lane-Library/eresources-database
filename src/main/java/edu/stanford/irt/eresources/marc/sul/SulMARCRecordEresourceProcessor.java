@@ -92,13 +92,38 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         if (MARCRecordSupport.getFields(marcRecord, "909").count() > 0) {
             return false;
         }
+
         Set<String> keys = new HashSet<>();
+        addCatKey(keys, marcRecord);
+        addLccnKeys(keys, marcRecord);
+        addIsbnKeys(keys, marcRecord);
+        addIssnKeys(keys, marcRecord);
+        addOcolcKeys(keys, marcRecord);
+        addUrlKeys(keys, marcRecord);
+        addTitleDateKey(keys, marcRecord);
+        addDnmlKeys(keys, marcRecord);
+
+        for (String entry : keys) {
+            if (this.laneDedupAugmentation.isDuplicate(entry) || this.pmcDedupAugmentation.isDuplicate(entry)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void addCatKey(Set<String> keys, Record marcRecord) {
         keys.add(LaneDedupAugmentation.KEY_CATKEY + LaneDedupAugmentation.SEPARATOR
                 + MARCRecordSupport.getRecordId(marcRecord));
+    }
+
+    private void addLccnKeys(Set<String> keys, Record marcRecord) {
         for (String lccn : MARCRecordSupport.getSubfieldData(marcRecord, "010", "a").map(String::trim)
                 .collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_LC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + lccn);
         }
+    }
+
+    private void addIsbnKeys(Set<String> keys, Record marcRecord) {
         for (String isbn : MARCRecordSupport.getSubfieldData(marcRecord, "020", "a").map(String::trim)
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISBN + LaneDedupAugmentation.SEPARATOR + isbn);
@@ -111,16 +136,25 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                 }
             }
         }
+    }
+
+    private void addIssnKeys(Set<String> keys, Record marcRecord) {
         for (String issn : MARCRecordSupport.getSubfieldData(marcRecord, "022", "a").map(String::trim)
                 .map(TextHelper::cleanIsxn).filter((final String s) -> !s.isEmpty()).collect(Collectors.toSet())) {
             keys.add(LaneDedupAugmentation.KEY_ISSN + LaneDedupAugmentation.SEPARATOR + issn);
         }
+    }
+
+    private void addOcolcKeys(Set<String> keys, Record marcRecord) {
         Set<String> ocolcs = MARCRecordSupport.getSubfieldData(marcRecord, "035", "a")
                 .filter((final String s) -> s.startsWith("(OCoLC"))
                 .map((final String s) -> s.substring(s.indexOf(')') + 1, s.length())).collect(Collectors.toSet());
         for (String ocolc : ocolcs) {
             keys.add(LaneDedupAugmentation.KEY_OCLC_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + ocolc);
         }
+    }
+
+    private void addUrlKeys(Set<String> keys, Record marcRecord) {
         Set<String> urls = MARCRecordSupport.getSubfieldData(marcRecord, "856", "u")
                 .map((final String s) -> s.replace("https://stanford.idm.oclc.org/login?url=", "")).map(String::trim)
                 .map((final String s) -> BEGINS_HTTPS_OR_ENDS_SLASH.matcher(s).replaceAll(""))
@@ -128,6 +162,9 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         for (String url : urls) {
             keys.add(LaneDedupAugmentation.KEY_URL + LaneDedupAugmentation.SEPARATOR + url);
         }
+    }
+
+    private void addTitleDateKey(Set<String> keys, Record marcRecord) {
         String title = NOT_ALPHANUM_OR_SPACE.matcher(
                 MARCRecordSupport.getSubfieldData(marcRecord, "245", "a").findFirst().map(String::trim).orElse(""))
                 .replaceAll("");
@@ -136,6 +173,9 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         StringBuilder sb = new StringBuilder(title);
         sb.append(dates);
         keys.add(LaneDedupAugmentation.KEY_TITLE_DATE + LaneDedupAugmentation.SEPARATOR + sb.toString());
+    }
+
+    private void addDnmlKeys(Set<String> keys, Record marcRecord) {
         Set<String> dnlms = MARCRecordSupport.getSubfieldData(MARCRecordSupport.getFields(marcRecord, "016")
                 .filter((final Field f) -> f.getIndicator1() == '7').filter((final Field f) -> {
                     Subfield s2 = f.getSubfields().stream().filter((final Subfield s) -> s.getCode() == '2').findFirst()
@@ -147,11 +187,5 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         for (String dnlm : dnlms) {
             keys.add(LaneDedupAugmentation.KEY_DNLM_CONTROL_NUMBER + LaneDedupAugmentation.SEPARATOR + dnlm);
         }
-        for (String entry : keys) {
-            if (this.laneDedupAugmentation.isDuplicate(entry) || this.pmcDedupAugmentation.isDuplicate(entry)) {
-                return true;
-            }
-        }
-        return false;
     }
 }
