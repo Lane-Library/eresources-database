@@ -44,11 +44,11 @@
         <property name="interceptorNames"
             value="exceptionAdvisor,beforeMethodAdvisor,afterMethodAdvisor"/>
     </bean>
-    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
     <bean id="exceptionAdvisor" class="edu.stanford.irt.eresources.logging.ExceptionAdvisor"/>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor"/>
     <bean id="afterMethodAdvisor" class="edu.stanford.irt.eresources.logging.ReturnMethodAdvisor"/>
     -->
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
     <bean id="catalogServiceURI" class="java.net.URI">
         <constructor-arg value="${eresources.catalog-service.scheme}"/>
         <constructor-arg value="${eresources.catalog-service.userInfo}"/>
