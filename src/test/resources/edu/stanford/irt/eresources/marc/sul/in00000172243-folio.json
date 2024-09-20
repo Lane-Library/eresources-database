@@ -1,0 +1,390 @@
+{
+  "instanceId": "e60c2639-bdd2-46fb-a774-c991c96a8f7a",
+  "instance": null,
+  "instanceSource": {
+    "fields": [
+      {
+        "001": "in00000172243"
+      },
+      {
+        "006": "m     o  d        "
+      },
+      {
+        "007": "cr |n|||||||||"
+      },
+      {
+        "008": "240611s2025    enk     o     000 0 eng d"
+      },
+      {
+        "005": "20240912231635.0"
+      },
+      {
+        "020": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "9781800569355"
+            },
+            {
+              "q": "(electronic bk.)"
+            }
+          ]
+        }
+      },
+      {
+        "020": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "1800569351"
+            },
+            {
+              "q": "(electronic bk.)"
+            }
+          ]
+        }
+      },
+      {
+        "020": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "z": "180056080X"
+            }
+          ]
+        }
+      },
+      {
+        "020": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "z": "9781800560802"
+            }
+          ]
+        }
+      },
+      {
+        "035": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "sfon1438664202"
+            }
+          ]
+        }
+      },
+      {
+        "035": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "(OCoLC)1438664202"
+            }
+          ]
+        }
+      },
+      {
+        "037": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "9781800560802"
+            },
+            {
+              "b": "O'Reilly Media"
+            }
+          ]
+        }
+      },
+      {
+        "040": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "YDX"
+            },
+            {
+              "b": "eng"
+            },
+            {
+              "c": "YDX"
+            },
+            {
+              "d": "ORMDA"
+            },
+            {
+              "d": "OCLCO"
+            },
+            {
+              "d": "CSt"
+            }
+          ]
+        }
+      },
+      {
+        "049": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "MAIN"
+            }
+          ]
+        }
+      },
+      {
+        "050": {
+          "ind1": " ",
+          "ind2": "4",
+          "subfields": [
+            {
+              "a": "QA76.76.A65"
+            }
+          ]
+        }
+      },
+      {
+        "082": {
+          "ind1": "0",
+          "ind2": "4",
+          "subfields": [
+            {
+              "a": "005.3"
+            },
+            {
+              "2": "23/eng/20240709"
+            }
+          ]
+        }
+      },
+      {
+        "100": {
+          "ind1": "1",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "Staveley, Confidence,"
+            },
+            {
+              "e": "author."
+            }
+          ]
+        }
+      },
+      {
+        "245": {
+          "ind1": "1",
+          "ind2": "0",
+          "subfields": [
+            {
+              "a": "API SECURITY FOR WHITE HAT HACKERS"
+            },
+            {
+              "h": "[electronic resource] :"
+            },
+            {
+              "b": "uncover offensive defense strategies and get up to speed with secure API implementation /"
+            },
+            {
+              "c": "Confidence Staveley ; foreword by Christopher Romeo."
+            }
+          ]
+        }
+      },
+      {
+        "260": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "Birmingham, UK :"
+            },
+            {
+              "b": "Packt Publishing Ltd.,"
+            },
+            {
+              "c": "2024."
+            }
+          ]
+        }
+      },
+      {
+        "300": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "1 online resource"
+            }
+          ]
+        }
+      },
+      {
+        "520": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "Become an API security professional and safeguard your applications against threats with this comprehensive guide Key Features Gain hands-on experience in testing and fixing API security flaws through practical exercises Develop a deep understanding of API security to better protect your organization's data Integrate API security into your company's culture and strategy, ensuring data protection Purchase of the print or Kindle book includes a free PDF eBook Book Description APIs have evolved into an essential part of modern applications, making them an attractive target for cybercriminals. Written for security professionals and developers, this comprehensive guide offers practical insights into testing APIs, identifying vulnerabilities, and fixing them. With a focus on hands-on learning, this book guides you through securing your APIs in a step-by-step manner. You'll learn how to bypass authentication controls, circumvent authorization controls, and identify vulnerabilities in APIs using open-source and commercial tools. Moreover, you'll gain the skills you need to write comprehensive vulnerability reports and recommend and implement effective mitigation strategies to address the identified vulnerabilities. This book isn't just about hacking APIs; it's also about understanding how to defend them. You'll explore various API security management strategies and understand how to use them to safeguard APIs against emerging threats. By the end of this book, you'll have a profound understanding of API security and how to defend against the latest threats. Whether you're a developer, security professional, or ethical hacker, this book will ensure that your APIs are secure and your organization's data is protected. What you will learn Implement API security best practices and industry standards Conduct effective API penetration testing and vulnerability assessments Implement security measures for API security management Understand threat modeling and risk assessment in API security Gain proficiency in defending against emerging API security threats Become well-versed in evasion techniques and defend your APIs against them Integrate API security into your DevOps workflow Implement API governance and risk management initiatives like a pro Who this book is for If you're a cybersecurity professional, web developer, or software engineer looking to gain a comprehensive understanding of API security, this book is for you. The book is ideal for those who have beginner to advanced-level knowledge of cybersecurity and API programming concepts. Professionals involved in designing, developing, or maintaining APIs will also benefit from the topics covered in this book."
+            }
+          ]
+        }
+      },
+      {
+        "650": {
+          "ind1": " ",
+          "ind2": "0",
+          "subfields": [
+            {
+              "a": "Application software"
+            },
+            {
+              "x": "Security measures."
+            }
+          ]
+        }
+      },
+      {
+        "650": {
+          "ind1": " ",
+          "ind2": "6",
+          "subfields": [
+            {
+              "a": "Logiciels d'application"
+            },
+            {
+              "x": "Sécurité"
+            },
+            {
+              "x": "Mesures."
+            }
+          ]
+        }
+      },
+      {
+        "700": {
+          "ind1": "1",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "Romeo, Christopher,"
+            },
+            {
+              "e": "writer of foreword."
+            }
+          ]
+        }
+      },
+      {
+        "776": {
+          "ind1": "0",
+          "ind2": "8",
+          "subfields": [
+            {
+              "i": "Print version:"
+            },
+            {
+              "z": "180056080X"
+            },
+            {
+              "z": "9781800560802"
+            },
+            {
+              "w": "(OCoLC)1405366603"
+            }
+          ]
+        }
+      },
+      {
+        "856": {
+          "ind1": "4",
+          "ind2": "0",
+          "subfields": [
+            {
+              "z": "Available to Stanford-affiliated users."
+            },
+            {
+              "u": "https://go.oreilly.com/stanford-university/library/view/-/9781800560802/?ar"
+            },
+            {
+              "x": "WMS"
+            },
+            {
+              "y": "Safari Books Online"
+            },
+            {
+              "x": "Provider: ProQuest"
+            },
+            {
+              "x": "subscribed"
+            },
+            {
+              "x": "eLoaderURL"
+            },
+            {
+              "x": "sf4"
+            },
+            {
+              "x": "sfon1438664202"
+            }
+          ]
+        }
+      },
+      {
+        "910": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "eLoaderRecord "
+            },
+            {
+              "x": "sf4"
+            }
+          ]
+        }
+      },
+      {
+        "994": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "92"
+            },
+            {
+              "b": "STF"
+            }
+          ]
+        }
+      },
+      {
+        "999": {
+          "ind1": "f",
+          "ind2": "f",
+          "subfields": [
+            {
+              "i": "e60c2639-bdd2-46fb-a774-c991c96a8f7a"
+            },
+            {
+              "s": "15271fac-1e3e-4e3e-968f-3405676158a4"
+            }
+          ]
+        }
+      }
+    ],
+    "leader": "04296cam a22003737a 4500"
+  },
+  "holdingSources": [],
+  "itemsAndHoldings": {
+ }
+}

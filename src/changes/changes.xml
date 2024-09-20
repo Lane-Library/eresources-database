@@ -6,6 +6,25 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-09-20" version="2.12.14" description="maintenance release">
+            <action date="2024-09-20" dev="ryanmax" issue="LANEWEB-11367" type="fix">
+                bad xml from laneblog causes intermittent indexing errors
+            </action>
+            <action date="2024-09-18" dev="ryanmax" issue="LANEWEB-11363" type="fix">
+                primaryType erroneously assigned "Other"
+            </action>
+            <action date="2024-09-17" dev="ryanmax" issue="LANEWEB-11364" type="update">
+                improve deduplication: ISBN10s converted to ISBN13s for better matching
+            </action>
+        </release>
+        <release date="2024-08-26" version="2.12.13" description="maintenance release">
+            <action date="2024-08-26" dev="ryanmax" issue="LANEWEB-11357" type="fix">
+                instructions from holdings records are not searchable
+            </action>
+            <action date="2024-07-24" dev="ryanmax" issue="LANECAT-893" type="fix">
+                some Ebooks not displaying in LS when filtering for Book Digital
+            </action>
+        </release>
         <release date="2024-06-23" version="2.12.12" description="FOLIO poppy release">
             <action date="2024-02-01" dev="ryanmax" issue="LANEWEB-11280" type="update">
                 FOLIO upgrade to poppy

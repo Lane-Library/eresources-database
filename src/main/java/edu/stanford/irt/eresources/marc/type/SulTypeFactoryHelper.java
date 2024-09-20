@@ -42,7 +42,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1401
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L945
      *
      * @param marcRecord
      * @return set of types
@@ -97,7 +97,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1452
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1001
      *
      * @param marcRecord
      * @param currentTypes
@@ -146,7 +146,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1488
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1037
      *
      * @param marcRecord
      * @param currentTypes
@@ -201,7 +201,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1522
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1083
      *
      * @param marcRecord
      * @return set of types
@@ -225,7 +225,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1537
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1098
      *
      * @param marcRecord
      * @return set of types
@@ -240,7 +240,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1550
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1106
      *
      * @param marcRecord
      * @param currentTypes
@@ -259,7 +259,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1561
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1115
      *
      * @param marcRecord
      * @return set of types
@@ -272,7 +272,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1570
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1123
      *
      * @param marcRecord
      * @param currentTypes
@@ -287,7 +287,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1581
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1141
      *
      * @param marcRecord
      * @param currentTypes
@@ -335,7 +335,7 @@ public final class SulTypeFactoryHelper extends MARCRecordSupport {
     }
 
     /**
-     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/master/lib/traject/config/sirsi_config.rb#L1622
+     * https://github.com/sul-dlss/searchworks_traject_indexer/blob/d2cff1ec72fbadfe5d7911404317684824288875/lib/traject/config/folio_config.rb#L1183
      *
      * @param currentTypes
      *            set of assigned types

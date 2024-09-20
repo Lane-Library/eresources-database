@@ -1,14 +1,19 @@
 package edu.stanford.irt.eresources.sax;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -52,6 +57,10 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
+    private int fetchIntervalMilliSeconds = 5_0000;
+
+    private static final int FETCH_RETRIES = 3;
+
     public LaneblogEresourceProcessor(final String rssURL, final String rssUserAgent,
             final ContentHandler contentHandler) {
         this.rssURL = rssURL;
@@ -59,17 +68,53 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
         this.contentHandler = contentHandler;
     }
 
+    // for unit testing
+    public void setFetchIntervalMilliSeconds(final int fetchIntervalMilliSeconds) {
+        this.fetchIntervalMilliSeconds = fetchIntervalMilliSeconds;
+    }
+
+    private Document fetchDocument() {
+        int retryCount = 0;
+        Document doc = null;
+        String xmlContent = "";
+        while (retryCount < FETCH_RETRIES) {
+            try {
+                URL url = new URI(this.rssURL).toURL();
+                URLConnection con = url.openConnection();
+                con.setRequestProperty("User-Agent", this.rssUserAgent);
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                    xmlContent = reader.lines().collect(Collectors.joining("\n"));
+                }
+                this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+                DocumentBuilder parser = this.factory.newDocumentBuilder();
+                parser.setErrorHandler(this.errorHandler);
+                return parser
+                        .parse(new InputSource(new ByteArrayInputStream(xmlContent.getBytes(StandardCharsets.UTF_8))));
+            } catch (IOException | ParserConfigurationException | URISyntaxException e) {
+                throw new EresourceDatabaseException(e);
+            } catch (SAXException e) {
+                retryCount++;
+                try {
+                    Thread.sleep((long) this.fetchIntervalMilliSeconds * retryCount);
+                } catch (InterruptedException e2) {
+                    Thread.currentThread().interrupt();
+                    throw new EresourceDatabaseException(e2);
+                }
+                if (retryCount >= FETCH_RETRIES) {
+                    String message = String.format("Failed to parse XML after %d retries: %n%n%s%n", FETCH_RETRIES,
+                            xmlContent);
+                    throw new EresourceDatabaseException(message, e);
+                }
+            }
+        }
+        return doc;
+    }
+
     @Override
     public void process() {
+        Document doc;
         try {
-            URL url = new URI(this.rssURL).toURL();
-            URLConnection con = url.openConnection();
-            con.setRequestProperty("User-Agent", this.rssUserAgent);
-            InputSource source = new InputSource(con.getInputStream());
-            this.factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            DocumentBuilder parser = this.factory.newDocumentBuilder();
-            parser.setErrorHandler(this.errorHandler);
-            Document doc = parser.parse(source);
+            doc = fetchDocument();
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             if (getUpdateDate(doc) > getStartTime()) {
@@ -77,8 +122,7 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
-        } catch (SAXException | IOException | ParserConfigurationException | TransformerException
-                | URISyntaxException e) {
+        } catch (SAXException | TransformerException e) {
             throw new EresourceDatabaseException(e);
         }
     }
