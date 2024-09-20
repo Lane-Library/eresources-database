@@ -1,6 +1,9 @@
 package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.isA;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -20,7 +23,7 @@ public class LaneblogEresourceProcessorTest {
     LaneblogEresourceProcessor processor;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
         this.processor = new LaneblogEresourceProcessor(
                 "file:src/test/resources/edu/stanford/irt/eresources/sax/rss.xml", "user agent", this.contentHandler);
@@ -57,12 +60,30 @@ public class LaneblogEresourceProcessorTest {
         EasyMock.verify(this.contentHandler);
     }
 
-    @Test(expected = EresourceDatabaseException.class)
+    @Test
     public final void testProcessException() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().andThrow(new SAXException("foo"));
         EasyMock.replay(this.contentHandler);
-        this.processor.process();
+        try {
+            this.processor.process();
+        } catch (EresourceDatabaseException e) {
+            assertSame(EresourceDatabaseException.class, e.getClass());
+            assertEquals("foo", e.getCause().getMessage());
+        }
         EasyMock.verify(this.contentHandler);
+    }
+
+    @Test
+    public final void testProcessBadXml() {
+        this.processor = new LaneblogEresourceProcessor(
+                "file:src/test/resources/edu/stanford/irt/eresources/sax/rss-bad.xml", "user agent",
+                this.contentHandler);
+        this.processor.setFetchIntervalMilliSeconds(2);
+        try {
+            this.processor.process();
+        } catch (EresourceDatabaseException e) {
+            assertTrue(e.getMessage().startsWith("Failed to parse XML"));
+        }
     }
 }
