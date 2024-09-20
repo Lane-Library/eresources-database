@@ -35,6 +35,7 @@
         <property name="maxPoolSize" value="5"/>
         <property name="queueCapacity" value="0"/>
     </bean>
+    <!-- commenting aop logging; more error emails than it's worth?
     <bean id="autoProxyCreator"
         class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
         <property name="proxyTargetClass" value="true"/>
@@ -47,6 +48,7 @@
     <bean id="exceptionAdvisor" class="edu.stanford.irt.eresources.logging.ExceptionAdvisor"/>
     <bean id="beforeMethodAdvisor" class="edu.stanford.irt.eresources.logging.BeforeMethodAdvisor"/>
     <bean id="afterMethodAdvisor" class="edu.stanford.irt.eresources.logging.ReturnMethodAdvisor"/>
+    -->
     <bean id="catalogServiceURI" class="java.net.URI">
         <constructor-arg value="${eresources.catalog-service.scheme}"/>
         <constructor-arg value="${eresources.catalog-service.userInfo}"/>
