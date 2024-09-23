@@ -1,7 +1,6 @@
 package edu.stanford.irt.eresources.marc.type;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     CatalogRecordService recordService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/sul",
@@ -32,55 +31,74 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryType() {
+    public final void testGetPrimaryTypeBookPrint() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
-            if ("355410".equals(getRecordId(rec))) {
+            if ("355410".equals(getRecordId(rec)) || "8223791".equals(getRecordId(rec))
+                    || "13117763".equals(getRecordId(rec)) || "11514068".equals(getRecordId(rec))
+                    || "360417".equals(getRecordId(rec))) {
                 assertEquals("Book Print", TypeFactory.getPrimaryType(rec));
             }
+        }
+    }
+
+    @Test
+    public final void testGetPrimaryTypeJournalPrint() {
+        while (this.recordCollection.hasNext()) {
+            Record rec = this.recordCollection.next();
             if ("2996989".equals(getRecordId(rec))) {
                 assertEquals("Journal Print", TypeFactory.getPrimaryType(rec));
             }
-            if ("8161047".equals(getRecordId(rec))) {
+        }
+    }
+
+    @Test
+    public final void testGetPrimaryTypeJournalDigital() {
+        while (this.recordCollection.hasNext()) {
+            Record rec = this.recordCollection.next();
+            if ("8161047".equals(getRecordId(rec)) || "8208799".equals(getRecordId(rec))) {
                 assertEquals("Journal Digital", TypeFactory.getPrimaryType(rec));
             }
-            if ("10009616".equals(getRecordId(rec))) {
-                // should really be Video
+        }
+    }
+
+    @Test
+    public final void testGetPrimaryTypeVideo() {
+        while (this.recordCollection.hasNext()) {
+            Record rec = this.recordCollection.next();
+            if ("10009616".equals(getRecordId(rec)) || "9952520".equals(getRecordId(rec))) {
                 assertEquals("Video", TypeFactory.getPrimaryType(rec));
             }
+        }
+    }
+
+    @Test
+    public final void testGetPrimaryTypeOther() {
+        while (this.recordCollection.hasNext()) {
+            Record rec = this.recordCollection.next();
             if ("10763925".equals(getRecordId(rec))) {
                 assertEquals("Other", TypeFactory.getPrimaryType(rec));
             }
-            if ("8208799".equals(getRecordId(rec))) {
-                assertEquals("Journal Digital", TypeFactory.getPrimaryType(rec));
-            }
-            if ("8223791".equals(getRecordId(rec))) {
-                assertEquals("Book Print", TypeFactory.getPrimaryType(rec));
-            }
-            if ("13117763".equals(getRecordId(rec))) {
-                assertEquals("Book Print", TypeFactory.getPrimaryType(rec));
-            }
-            if ("11514068".equals(getRecordId(rec))) {
-                assertEquals("Book Print", TypeFactory.getPrimaryType(rec));
-            }
-            if ("9952520".equals(getRecordId(rec))) {
-                assertEquals("Video", TypeFactory.getPrimaryType(rec));
-            }
-            if ("10931045".equals(getRecordId(rec))) {
-                assertEquals("Audio", TypeFactory.getPrimaryType(rec));
-            }
-            if ("13112673".equals(getRecordId(rec))) {
+        }
+    }
+
+    @Test
+    public final void testGetPrimaryTypeAudio() {
+        while (this.recordCollection.hasNext()) {
+            Record rec = this.recordCollection.next();
+            if ("10931045".equals(getRecordId(rec)) || "13112673".equals(getRecordId(rec))) {
                 assertEquals("Audio", TypeFactory.getPrimaryType(rec));
             }
         }
     }
 
     @Test
-    public final void testGetTypes() {
+    public final void testGetPrimaryTypeBookDigital() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
-            if ("10784454".equals(getRecordId(rec))) {
-                assertTrue(TypeFactory.getTypes(rec).contains("Statistics"));
+            if ("303511".equals(getRecordId(rec)) || "12467871".equals(getRecordId(rec))
+                    || "342999".equals(getRecordId(rec)) || "353282".equals(getRecordId(rec))) {
+                assertEquals("Book Digital", TypeFactory.getPrimaryType(rec));
             }
         }
     }

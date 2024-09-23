@@ -1,0 +1,299 @@
+{
+  "instanceId": "7b31cd4b-7471-5f18-901b-8cd964afb94e",
+  "instance": null,
+  "instanceSource": {
+    "fields": [
+      {
+        "001": "a10009616"
+      },
+      {
+        "003": "SIRSI"
+      },
+      {
+        "005": "20101130211721.0"
+      },
+      {
+        "008": "050921s2005    miu039            vleng d"
+      },
+      {
+        "010": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "fake-lccn"
+            }
+          ]
+        }
+      },
+      {
+        "016": {
+          "ind1": "7",
+          "ind2": " ",
+          "subfields": [
+            {
+              "2": "DNLM"
+            },
+            {
+              "a": "fake-dnlm"
+            }
+          ]
+        }
+      },
+      {
+        "020": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "1": "fake-invalid-isbn"
+            },
+            {
+              "a": "12345678xx"
+            }
+          ]
+        }
+      },
+      {
+        "022": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "1": "fake-issn"
+            },
+            {
+              "a": "12345678x"
+            }
+          ]
+        }
+      },
+      {
+        "035": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "(Sirsi) bus172253"
+            }
+          ]
+        }
+      },
+      {
+        "035": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "172253"
+            }
+          ]
+        }
+      },
+      {
+        "090": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "Media Center Video 312"
+            }
+          ]
+        }
+      },
+      {
+        "245": {
+          "ind1": "0",
+          "ind2": "4",
+          "subfields": [
+            {
+              "a": "The real deal"
+            },
+            {
+              "h": "[videorecording] /"
+            },
+            {
+              "c": "ABC News."
+            }
+          ]
+        }
+      },
+      {
+        "260": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "New Hudson, MI :"
+            },
+            {
+              "b": "ABC News,"
+            },
+            {
+              "c": "2005."
+            }
+          ]
+        }
+      },
+      {
+        "300": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "1 videocassette (39 min.) :"
+            },
+            {
+              "b": "sd., col. ;"
+            },
+            {
+              "c": "1/2 in."
+            }
+          ]
+        }
+      },
+      {
+        "500": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "Segment from ABC's 20/20."
+            }
+          ]
+        }
+      },
+      {
+        "538": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "VHS."
+            }
+          ]
+        }
+      },
+      {
+        "520": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "Is what you believe really true? From premium vodkas and cellulite treatments to gold jewelry and even works of art, \"20/20\" correspondents report on people's perceptions of some common products, and the answers may be surprising. John Stossel also reports people's abilities to tell if someone is straight or gay. Premium vodka is all the rage these days but do consumers really need to spend more money to get better taste? Correspondent Bill Ritter with an unscientific taste test. In the midst of bathing suit season, do those cellulite treatments really work? JuJu Chang reports. (updated from a report that originally aired August 2004). Ever wondered if your gold jewelry was fake? Consumer reporter Jim Avila investigates and finds that all that glitters is not necessarily gold. (originally aired December 2004)  John Stossel posses the question: do people really know what art is? \"20/20\" mixed reproductions of famous abstract art, two pieces bought at a thrift store and paintings by four year olds to see if people could tell the difference between a \"masterpiece\" that costs millions of dollars and the painting of a pre-schooler. Is \"gaydar\" -- the word that denotes the ability to tell if someone is gay -- nonsense? \"20/20\" wanted to know if \"gaydar\" really exists, and found 10 men - five straight and five gay - to subject themselves to dozens of people's \"gaydar.\" John Stossel reports. (originally aired October 2004)  Many people say that green tea fights cancer but does it really have medicinal properties? Elizabeth Vargas reports. (originally aired April 2005)."
+            }
+          ]
+        }
+      },
+      {
+        "650": {
+          "ind1": " ",
+          "ind2": "0",
+          "subfields": [
+            {
+              "a": "Perception."
+            },
+            {
+              "0": "(SIRSI)1047865"
+            }
+          ]
+        }
+      },
+      {
+        "650": {
+          "ind1": " ",
+          "ind2": "0",
+          "subfields": [
+            {
+              "a": "Cellulite."
+            },
+            {
+              "0": "(SIRSI)3045010"
+            }
+          ]
+        }
+      },
+      {
+        "650": {
+          "ind1": " ",
+          "ind2": "0",
+          "subfields": [
+            {
+              "a": "Vodka."
+            },
+            {
+              "0": "(SIRSI)1073799"
+            }
+          ]
+        }
+      },
+      {
+        "710": {
+          "ind1": "2",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "ABC News."
+            },
+            {
+              "0": "(SIRSI)73802"
+            }
+          ]
+        }
+      },
+      {
+        "730": {
+          "ind1": "0",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "20/20 (Television program)"
+            },
+            {
+              "0": "(SIRSI)1171647"
+            }
+          ]
+        }
+      },
+      {
+        "596": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "28"
+            }
+          ]
+        }
+      },
+      {
+        "918": {
+          "ind1": " ",
+          "ind2": " ",
+          "subfields": [
+            {
+              "a": "10009616"
+            }
+          ]
+        }
+      },
+      {
+        "999": {
+          "ind1": "f",
+          "ind2": "f",
+          "subfields": [
+            {
+              "i": "7b31cd4b-7471-5f18-901b-8cd964afb94e"
+            },
+            {
+              "s": "627f6549-556f-5aaf-9f61-1a7a1e7cda7d"
+            }
+          ]
+        }
+      }
+    ],
+    "leader": "02358cgm a22002655i 4500"
+  },
+  "holdingSources": [],
+  "itemsAndHoldings": {}
+}
