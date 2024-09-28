@@ -57,9 +57,9 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    private int fetchIntervalMilliSeconds = 5_0000;
+    private int fetchIntervalMilliSeconds = 10_0000;
 
-    private static final int FETCH_RETRIES = 3;
+    private static final int FETCH_RETRIES = 5;
 
     public LaneblogEresourceProcessor(final String rssURL, final String rssUserAgent,
             final ContentHandler contentHandler) {
