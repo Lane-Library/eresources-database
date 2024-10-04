@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-10-04" version="2.13.0" description="SFX indexing release">
+            <action date="2024-08-08" dev="ryanmax" issue="LANEWEB-11341" type="add">
+                Index SFX records and make them discoverable in Lane Search
+            </action>
+        </release>
         <release date="2024-09-20" version="2.12.14" description="maintenance release">
             <action date="2024-09-20" dev="ryanmax" issue="LANEWEB-11367" type="fix">
                 bad xml from laneblog causes intermittent indexing errors
