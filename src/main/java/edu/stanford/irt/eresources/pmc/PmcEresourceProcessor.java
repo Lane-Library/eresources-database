@@ -140,6 +140,10 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             while (!journals.isEmpty()) {
                 PmcJournal journal = journals.remove(0);
                 String nlmcatalogId = doSearch(journal.getNlmId());
+                if (nlmcatalogId == null) {
+                    log.warn("problem fetching nlmcatalogId for journal: {}; defaulting to nlm id from jlist", journal.getNlmId());
+                    nlmcatalogId = journal.getNlmId();
+                }
                 StringBuilder sb = new StringBuilder(this.efetchBaseUrl);
                 sb.append("&retmode=xml&id=");
                 sb.append(nlmcatalogId);
@@ -214,8 +218,13 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
         try {
             Document doc = this.factory.newDocumentBuilder()
                     .parse(new InputSource(doFetch(sb.toString(), MAX_RETRIES)));
-            return getNodeContent("/eSearchResult/IdList/Id", doc);
-        } catch (SAXException | IOException | ParserConfigurationException e) {
+            String ret = getNodeContent("/eSearchResult/IdList/Id", doc);
+            if (null != ret && !ret.isEmpty()) {
+                return ret;
+            }
+            log.warn("problem fetching nlm ids: " + sb.toString());
+            return null;
+    } catch (SAXException | IOException | ParserConfigurationException e) {
             log.error("failed to fetch nlm ids", e);
         }
         return null;
@@ -254,7 +263,9 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
     private String getNodeContent(final String xpath, final Document doc) {
         try {
             Node node = ((NodeList) this.xpath.evaluate(xpath, doc, XPathConstants.NODESET)).item(0);
-            return node.getTextContent().trim();
+            if (null != node) {
+                return node.getTextContent().trim();
+            }
         } catch (XPathExpressionException e) {
             log.error("failed to fetch content", e);
         }
