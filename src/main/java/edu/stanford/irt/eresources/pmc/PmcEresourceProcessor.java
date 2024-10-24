@@ -21,10 +21,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -32,14 +28,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.ReadContext;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -83,6 +82,8 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             HEADER_ISSN_E, HEADER_NLM_ID, HEADER_MOST_RECENT, HEADER_EARLIEST, HEADER_EMBARGO, HEADER_AGREEMENT_STATUS,
             HEADER_AGREEMENT_TO_DEPOSIT, HEADER_JOURNAL_NOTE, HEADER_JOURNAL_URL };
 
+    private static final Configuration JSON_CONF;
+
     private static final Logger log = LoggerFactory.getLogger(PmcEresourceProcessor.class);
 
     private static final int MAX_RETRIES = 3;
@@ -91,6 +92,9 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
             .appendPattern("yyyy-MM-dd'T'HH:mm:ssz").toFormatter();
+    static {
+        JSON_CONF = Configuration.defaultConfiguration().setOptions(Option.SUPPRESS_EXCEPTIONS);
+    }
 
     private String allJournalsCsvUrl;
 
@@ -110,8 +114,6 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    private XPath xpath;
-
     public PmcEresourceProcessor(final String eutilsBaseUrl, final String allJournalsCsvUrl,
             final ContentHandler contentHandler, final LaneDedupAugmentation laneDedupAugmentation,
             final String apiKey) {
@@ -121,7 +123,6 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
         this.apiKey = apiKey;
         this.efetchBaseUrl = eutilsBaseUrl + EUTILS_EFETCH_BASE;
         this.esearchBaseUrl = eutilsBaseUrl + EUTILS_ESEARCH_BASE;
-        this.xpath = XPathFactory.newInstance().newXPath();
     }
 
     @Override
@@ -141,7 +142,8 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 PmcJournal journal = journals.remove(0);
                 String nlmcatalogId = doSearch(journal.getNlmId());
                 if (nlmcatalogId == null) {
-                    log.warn("problem fetching nlmcatalogId for journal: {}; defaulting to nlm id from jlist", journal.getNlmId());
+                    log.warn("problem fetching nlmcatalogId for journal: {}; defaulting to nlm id from jlist",
+                            journal.getNlmId());
                     nlmcatalogId = journal.getNlmId();
                 }
                 StringBuilder sb = new StringBuilder(this.efetchBaseUrl);
@@ -210,24 +212,15 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private String doSearch(final String nlmUniqueId) {
         StringBuilder sb = new StringBuilder(this.esearchBaseUrl);
+        sb.append("&retmode=json");
         sb.append("&api_key=");
         sb.append(this.apiKey);
         sb.append("&term=");
         sb.append(nlmUniqueId);
         sb.append("[NLM%20Unique%20ID]");
-        try {
-            Document doc = this.factory.newDocumentBuilder()
-                    .parse(new InputSource(doFetch(sb.toString(), MAX_RETRIES)));
-            String ret = getNodeContent("/eSearchResult/IdList/Id", doc);
-            if (null != ret && !ret.isEmpty()) {
-                return ret;
-            }
-            log.warn("problem fetching nlm ids: " + sb.toString());
-            return null;
-    } catch (SAXException | IOException | ParserConfigurationException e) {
-            log.error("failed to fetch nlm ids", e);
-        }
-        return null;
+        InputStream is = doFetch(sb.toString(), MAX_RETRIES);
+        ReadContext ctx = JsonPath.using(JSON_CONF).parse(is);
+        return ctx.read("$.esearchresult.idlist[0]");
     }
 
     private List<PmcJournal> getJournals() {
@@ -258,18 +251,6 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             throw new EresourceDatabaseException(e);
         }
         return journals;
-    }
-
-    private String getNodeContent(final String xpath, final Document doc) {
-        try {
-            Node node = ((NodeList) this.xpath.evaluate(xpath, doc, XPathConstants.NODESET)).item(0);
-            if (null != node) {
-                return node.getTextContent().trim();
-            }
-        } catch (XPathExpressionException e) {
-            log.error("failed to fetch content", e);
-        }
-        return null;
     }
 
     private boolean isDuplicate(final PmcJournal journal) {
