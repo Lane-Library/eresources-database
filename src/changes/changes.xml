@@ -10,8 +10,8 @@
             <action date="2024-10-29" dev="ryanmax" issue="LANEWEB-11382" type="fix">
                 Lane Blog indexing missing keywords
             </action>
-            <action date="2024-10-24" dev="ryanmax" issue="LANEWEB-11377" type="update">
-                change PMC schedule to twice a week
+            <action date="2024-10-24" dev="ryanmax" issue="LANEWEB-11381" type="update">
+                use json output for eSearch instead of XML and change PMC schedule to twice a week
             </action>
         </release>
         <release date="2024-10-22" version="2.13.1" description="maintenance release">
