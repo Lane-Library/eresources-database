@@ -4,21 +4,19 @@ import edu.stanford.lane.catalog.TextHelper;
 
 public class PmcJournal {
 
-    private String depositStatus;
+    private String agreementStatus;
 
-    private String earliestVolume;
+    private String earliest;
 
     private String eIssn;
 
-    private String freeAccess;
+    private String embargo;
 
     private String journalUrl;
 
     private String lastIssue;
 
     private String nlmId;
-
-    private String openAcess;
 
     private String participation;
 
@@ -31,17 +29,17 @@ public class PmcJournal {
     private String titleTA;
 
     /**
-     * @return the depositStatus
+     * @return the agreementStatus
      */
-    public String getDepositStatus() {
-        return this.depositStatus;
+    public String getAgreementStatus() {
+        return this.agreementStatus;
     }
 
     /**
-     * @return the earliestVolume
+     * @return the earliest
      */
-    public String getEarliestVolume() {
-        return this.earliestVolume;
+    public String getEarliest() {
+        return this.earliest;
     }
 
     /**
@@ -52,11 +50,11 @@ public class PmcJournal {
     }
 
     /**
-     * @return the freeAccess
+     * @return the Release Delay (Embargo)
      */
-    public String getFreeAccess() {
-        if (this.freeAccess.contains("months")) {
-            return "Full text delayed " + this.freeAccess;
+    public String getEmbargo() {
+        if (this.embargo.contains("month") && !this.embargo.contains("0 months")) {
+            return "Full text delayed " + this.embargo;
         }
         return null;
     }
@@ -83,14 +81,7 @@ public class PmcJournal {
     }
 
     /**
-     * @return the openAcess
-     */
-    public String getOpenAcess() {
-        return this.openAcess;
-    }
-
-    /**
-     * @return the participation
+     * @return the participation or agreement to deposit
      */
     public String getParticipation() {
         return this.participation;
@@ -128,16 +119,16 @@ public class PmcJournal {
      * @param depositStatus
      *            the depositStatus to set
      */
-    public void setDepositStatus(final String depositStatus) {
-        this.depositStatus = depositStatus.trim();
+    public void setAgreementStatus(final String depositStatus) {
+        this.agreementStatus = depositStatus.trim();
     }
 
     /**
      * @param earliestVolume
      *            the earliestVolume to set
      */
-    public void setEarliestVolume(final String earliestVolume) {
-        this.earliestVolume = earliestVolume.trim();
+    public void setEarliest(final String earliestVolume) {
+        this.earliest = earliestVolume.trim();
     }
 
     /**
@@ -149,11 +140,11 @@ public class PmcJournal {
     }
 
     /**
-     * @param freeAccess
-     *            the freeAccess to set
+     * @param embargo
+     *            the embargo to set
      */
-    public void setFreeAccess(final String freeAccess) {
-        this.freeAccess = freeAccess.trim();
+    public void setEmbargo(final String embargo) {
+        this.embargo = embargo.trim();
     }
 
     /**
@@ -181,16 +172,8 @@ public class PmcJournal {
     }
 
     /**
-     * @param openAcess
-     *            the openAcess to set
-     */
-    public void setOpenAcess(final String openAcess) {
-        this.openAcess = openAcess.trim();
-    }
-
-    /**
      * @param participation
-     *            the participation to set
+     *            the participation or agreement to deposit to set
      */
     public void setParticipation(final String participation) {
         this.participation = participation.trim();

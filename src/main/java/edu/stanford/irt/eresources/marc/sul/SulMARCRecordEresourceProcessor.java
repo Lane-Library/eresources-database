@@ -34,7 +34,7 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
     private EresourceHandler eresourceHandler;
 
     private List<KeyExtractionStrategy> deduplicationStrategies;
-    
+
     private List<InclusionStrategy> inclusionStrategies;
 
     private KeywordsStrategy keywordsStrategy;
@@ -98,7 +98,6 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
         if (MARCRecordSupport.getFields(marcRecord, "909").count() > 0) {
             return false;
         }
-
         for (KeyExtractionStrategy strategy : this.deduplicationStrategies) {
             for (String key : strategy.extractKeys(marcRecord)) {
                 if (this.laneDedupAugmentation.isDuplicate(key) || this.pmcDedupAugmentation.isDuplicate(key)) {
@@ -106,8 +105,6 @@ public class SulMARCRecordEresourceProcessor extends AbstractEresourceProcessor 
                 }
             }
         }
-
         return false;
     }
-
 }

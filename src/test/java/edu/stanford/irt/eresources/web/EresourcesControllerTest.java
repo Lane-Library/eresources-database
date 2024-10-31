@@ -87,6 +87,14 @@ public class EresourcesControllerTest {
     }
 
     @Test
+    public final void testSfxReload() {
+        expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
+        replay(this.manager);
+        this.controller.sfxReload();
+        verify(this.manager);
+    }
+
+    @Test
     public final void testSulReload() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);

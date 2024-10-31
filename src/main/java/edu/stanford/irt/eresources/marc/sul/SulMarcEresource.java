@@ -142,7 +142,7 @@ public class SulMarcEresource extends AbstractMarcEresource {
     @Override
     public Collection<String> getTypes() {
         if (this.types == null) {
-            this.types = TypeFactory.getTypes(this.marcRecord);
+            this.types = new ArrayList<>(TypeFactory.getTypes(this.marcRecord));
         }
         if (!EresourceConstants.OTHER.equals(getPrimaryType()) && !this.types.contains(getPrimaryType())) {
             this.types.add(getPrimaryType());

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<collection xmlns="http://www.loc.gov/MARC21/slim">
+ <!-- FIRST INCREMENTAL -->
+ <!-- INSTANCE:local -->
+ <record>
+  <leader>-----nam-a2200000z--4500</leader>
+  <controlfield tag="008">240726uuuuuuuuuxx-uu-|------u|----|eng-d</controlfield>
+  <datafield tag="245" ind1="" ind2="0">
+   <subfield code="a">Madison: Proposed Amendments to the Constitution</subfield>
+  </datafield>
+  <datafield tag="246" ind1="" ind2="">
+   <subfield code="a">Madison</subfield>
+  </datafield>
+  <datafield tag="260" ind1="" ind2="">
+   <subfield code="b">Great Neck Publishing</subfield>
+   <subfield code="c">2017</subfield>
+  </datafield>
+  <datafield tag="100" ind1="1" ind2="">
+   <subfield code="a">Madison, James</subfield>
+  </datafield>
+  <datafield tag="090" ind1="" ind2="">
+   <subfield code="a">110978984449203</subfield>
+  </datafield>
+  <datafield tag="856" ind1="" ind2="">
+   <subfield code="u">http://sfx.stanford.edu/local?url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;ctx_enc=info:ofi/enc:UTF-8&amp;rfr_id=info:sid/sfxit.com:opac_856&amp;url_ctx_fmt=info:ofi/fmt:kev:mtx:ctx&amp;sfx.ignore_date_threshold=1&amp;rft.object_id=110978984449203&amp;svc_val_fmt=info:ofi/fmt:kev:mtx:sch_svc&amp;svc.fulltext=yes&amp;</subfield>
+  </datafield>
+  <datafield tag="866" ind1="" ind2="">
+   <subfield code="s">110975947325577</subfield>
+   <subfield code="t">110975947325575</subfield>
+   <subfield code="x">EBSCOhost Academic Search Premier:Full Text</subfield>
+   <subfield code="z">4100000023347333</subfield>
+  </datafield>
+  <datafield tag="650" ind1="" ind2="4">
+   <subfield code="a">Law</subfield>
+   <subfield code="x">Constitution and Judicial System</subfield>
+  </datafield>
+ </record>
+</collection>
+

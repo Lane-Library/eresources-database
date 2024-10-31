@@ -21,10 +21,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -32,14 +28,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.ReadContext;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -53,35 +52,37 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private static final String EUTILS_ESEARCH_BASE = "esearch.fcgi?db=nlmcatalog";
 
-    private static final String HEADER_DEPOSIT_STATUS = " Deposit status";
+    private static final String HEADER_AGREEMENT_STATUS = "Agreement Status";
 
-    private static final String HEADER_EARLIEST_VOLUME = "Earliest volume";
+    private static final String HEADER_AGREEMENT_TO_DEPOSIT = "Agreement to Deposit";
 
-    private static final String HEADER_EISSN = "eISSN";
+    private static final String HEADER_EARLIEST = "Earliest";
 
-    private static final String HEADER_FREE_ACCESS = "Free access";
+    private static final String HEADER_EMBARGO = "Release Delay (Embargo)";
 
-    private static final String HEADER_JOURNAL_TITLE = "Journal title";
+    private static final String HEADER_ISSN_E = "ISSN (online)";
 
-    private static final String HEADER_JOURNAL_URL = " Journal URL";
+    private static final String HEADER_ISSN_P = "ISSN (print)";
 
-    private static final String HEADER_LATEST_ISSUE = "Latest issue";
+    private static final String HEADER_JOURNAL_NOTE = "Journal Note";
 
-    private static final String HEADER_LOCATOR_ID = "LOCATORplus ID";
+    private static final String HEADER_JOURNAL_TITLE = "Journal Title";
 
-    private static final String HEADER_NLM_TA = "NLM TA";
+    private static final String HEADER_JOURNAL_URL = "PMC URL";
 
-    private static final String HEADER_OPEN_ACCESS = "Open access";
+    private static final String HEADER_MOST_RECENT = "Most Recent";
 
-    private static final String HEADER_PARTICIPATION_LEVEL = "Participation level";
+    private static final String HEADER_NLM_ID = "NLM Unique ID";
 
-    private static final String HEADER_PISSN = "pISSN";
+    private static final String HEADER_NLM_TA = "NLM Title Abbreviation (TA)";
 
     private static final String HEADER_PUBLISHER = "Publisher";
 
-    private static final String[] HEADERS_CSV = { HEADER_JOURNAL_TITLE, HEADER_NLM_TA, HEADER_PISSN, HEADER_EISSN,
-            HEADER_PUBLISHER, HEADER_LOCATOR_ID, HEADER_LATEST_ISSUE, HEADER_EARLIEST_VOLUME, HEADER_FREE_ACCESS,
-            HEADER_OPEN_ACCESS, HEADER_PARTICIPATION_LEVEL, HEADER_DEPOSIT_STATUS, HEADER_JOURNAL_URL };
+    private static final String[] HEADERS_CSV = { HEADER_JOURNAL_TITLE, HEADER_NLM_TA, HEADER_PUBLISHER, HEADER_ISSN_P,
+            HEADER_ISSN_E, HEADER_NLM_ID, HEADER_MOST_RECENT, HEADER_EARLIEST, HEADER_EMBARGO, HEADER_AGREEMENT_STATUS,
+            HEADER_AGREEMENT_TO_DEPOSIT, HEADER_JOURNAL_NOTE, HEADER_JOURNAL_URL };
+
+    private static final Configuration JSON_CONF;
 
     private static final Logger log = LoggerFactory.getLogger(PmcEresourceProcessor.class);
 
@@ -91,6 +92,9 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     protected static final DateTimeFormatter FORMATTER = new DateTimeFormatterBuilder()
             .appendPattern("yyyy-MM-dd'T'HH:mm:ssz").toFormatter();
+    static {
+        JSON_CONF = Configuration.defaultConfiguration().setOptions(Option.SUPPRESS_EXCEPTIONS);
+    }
 
     private String allJournalsCsvUrl;
 
@@ -110,8 +114,6 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    private XPath xpath;
-
     public PmcEresourceProcessor(final String eutilsBaseUrl, final String allJournalsCsvUrl,
             final ContentHandler contentHandler, final LaneDedupAugmentation laneDedupAugmentation,
             final String apiKey) {
@@ -121,7 +123,6 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
         this.apiKey = apiKey;
         this.efetchBaseUrl = eutilsBaseUrl + EUTILS_EFETCH_BASE;
         this.esearchBaseUrl = eutilsBaseUrl + EUTILS_ESEARCH_BASE;
-        this.xpath = XPathFactory.newInstance().newXPath();
     }
 
     @Override
@@ -140,6 +141,11 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
             while (!journals.isEmpty()) {
                 PmcJournal journal = journals.remove(0);
                 String nlmcatalogId = doSearch(journal.getNlmId());
+                if (nlmcatalogId == null) {
+                    log.warn("problem fetching nlmcatalogId for journal: {}; defaulting to nlm id from jlist",
+                            journal.getNlmId());
+                    nlmcatalogId = journal.getNlmId();
+                }
                 StringBuilder sb = new StringBuilder(this.efetchBaseUrl);
                 sb.append("&retmode=xml&id=");
                 sb.append(nlmcatalogId);
@@ -156,10 +162,10 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 root.setAttribute("journalUrl", journal.getJournalUrl());
                 root.setAttribute("eIssn", journal.geteIssn());
                 root.setAttribute("pIssn", journal.getpIssn());
-                root.setAttribute("freeAccess", journal.getFreeAccess());
-                root.setAttribute("earliestVolume", journal.getEarliestVolume());
+                root.setAttribute("embargo", journal.getEmbargo());
+                root.setAttribute("earliestVolume", journal.getEarliest());
                 root.setAttribute("lastIssue", journal.getLastIssue());
-                root.setAttribute("depositStatus", journal.getDepositStatus());
+                root.setAttribute("agreementStatus", journal.getAgreementStatus());
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
                 this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
                 this.contentHandler.endDocument();
@@ -206,19 +212,15 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private String doSearch(final String nlmUniqueId) {
         StringBuilder sb = new StringBuilder(this.esearchBaseUrl);
+        sb.append("&retmode=json");
         sb.append("&api_key=");
         sb.append(this.apiKey);
         sb.append("&term=");
         sb.append(nlmUniqueId);
         sb.append("[NLM%20Unique%20ID]");
-        try {
-            Document doc = this.factory.newDocumentBuilder()
-                    .parse(new InputSource(doFetch(sb.toString(), MAX_RETRIES)));
-            return getNodeContent("/eSearchResult/IdList/Id", doc);
-        } catch (SAXException | IOException | ParserConfigurationException e) {
-            log.error("failed to fetch nlm ids", e);
-        }
-        return null;
+        InputStream is = doFetch(sb.toString(), MAX_RETRIES);
+        ReadContext ctx = JsonPath.using(JSON_CONF).parse(is);
+        return ctx.read("$.esearchresult.idlist[0]");
     }
 
     private List<PmcJournal> getJournals() {
@@ -229,18 +231,18 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                     .parse(new InputStreamReader(doFetch(this.allJournalsCsvUrl, MAX_RETRIES)));
             for (CSVRecord row : records) {
                 PmcJournal journal = new PmcJournal();
-                journal.setDepositStatus(row.get(HEADER_DEPOSIT_STATUS));
-                journal.setEarliestVolume(row.get(HEADER_EARLIEST_VOLUME));
-                journal.seteIssn(row.get(HEADER_EISSN));
-                journal.setpIssn(row.get(HEADER_PISSN));
-                journal.setFreeAccess(row.get(HEADER_FREE_ACCESS));
+                journal.setAgreementStatus(row.get(HEADER_AGREEMENT_STATUS));
+                journal.setEarliest(row.get(HEADER_EARLIEST));
+                journal.seteIssn(row.get(HEADER_ISSN_E));
+                journal.setpIssn(row.get(HEADER_ISSN_P));
+                journal.setEmbargo(row.get(HEADER_EMBARGO));
                 journal.setJournalUrl(row.get(HEADER_JOURNAL_URL));
-                journal.setParticipation(row.get(HEADER_PARTICIPATION_LEVEL));
+                journal.setParticipation(row.get(HEADER_AGREEMENT_TO_DEPOSIT));
                 journal.setPublisher(row.get(HEADER_PUBLISHER));
-                journal.setNlmId(row.get(HEADER_LOCATOR_ID));
+                journal.setNlmId(row.get(HEADER_NLM_ID));
                 journal.setTitleTA(row.get(HEADER_NLM_TA));
                 journal.setTitle(row.get(HEADER_JOURNAL_TITLE));
-                journal.setLastIssue(row.get(HEADER_LATEST_ISSUE));
+                journal.setLastIssue(row.get(HEADER_MOST_RECENT));
                 if (isIndexable(journal) && !isDuplicate(journal)) {
                     journals.add(journal);
                 }
@@ -251,16 +253,6 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
         return journals;
     }
 
-    private String getNodeContent(final String xpath, final Document doc) {
-        try {
-            Node node = ((NodeList) this.xpath.evaluate(xpath, doc, XPathConstants.NODESET)).item(0);
-            return node.getTextContent().trim();
-        } catch (XPathExpressionException e) {
-            log.error("failed to fetch content", e);
-        }
-        return null;
-    }
-
     private boolean isDuplicate(final PmcJournal journal) {
         return this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_DNLM_CONTROL_NUMBER, journal.getNlmId())
                 || this.laneDedupAugmentation.isDuplicate(LaneDedupAugmentation.KEY_ISSN, journal.geteIssn())
@@ -269,6 +261,8 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
 
     private boolean isIndexable(final PmcJournal journal) {
         // limit to "full" participation as per Thea and Sonam
-        return journal.getParticipation().equalsIgnoreCase("Full");
+        // "participation" field changed to "Agreement to Deposit" in 2024
+        // and value to look for is now "All"
+        return journal.getParticipation().equalsIgnoreCase("All articles");
     }
 }

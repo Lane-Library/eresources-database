@@ -33,7 +33,7 @@
     </bean>
 
     <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
-        <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/dedup-augmentations.obj"/>
+        <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/augmentations-dedup-lane-records.obj"/>
         <constructor-arg ref="httpLaneDedupAugmentationService"/>
         <constructor-arg name="manualSkips">
             <set>
@@ -44,7 +44,7 @@
     <bean id="httpLaneDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
         <constructor-arg ref="objectMapper"/>
         <constructor-arg ref="catalogServiceURI"/>
-        <constructor-arg value="augmentations/dedup"/>
+        <constructor-arg value="augmentations/dedup/lane-records"/>
     </bean>
 
 </beans>

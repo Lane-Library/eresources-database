@@ -59,12 +59,12 @@
             <type>Journal</type>
             <year><xsl:value-of select="$year"/></year>
             <version>
-                <version-additionalText><xsl:value-of select="//@freeAccess"/></version-additionalText>
+                <version-additionalText><xsl:value-of select="//@embargo"/></version-additionalText>
                 <link>
                     <url><xsl:value-of select="//@journalUrl"/></url>
                     <publisher>PubMed Central</publisher>
                     <summary-holdings><xsl:value-of select="$summary-holdings"/></summary-holdings>
-                    <xsl:if test="//@depositStatus = 'No New Content' and PublicationInfo/PublicationEndYear = '9999'">
+                    <xsl:if test="//@agreementStatus = 'No longer participating' and PublicationInfo/PublicationEndYear = '9999'">
                         <instruction>Holdings vary, current years not included</instruction>
                     </xsl:if>
                 </link>

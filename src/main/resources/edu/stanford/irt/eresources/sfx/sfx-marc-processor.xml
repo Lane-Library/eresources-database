@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- SFX extends SUL records processor -->
+    <bean id="sulMARCProcessor" class="edu.stanford.irt.eresources.marc.sfx.SfxRecordEresourceProcessor">
+        <constructor-arg ref="eresourceHandler"/>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.KeywordsStrategy">
+                <!-- no auth or reserves augmentations for SUL records (or SFX) -->
+                <constructor-arg>
+                    <null />
+                </constructor-arg>
+                <constructor-arg>
+                    <null />
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="edu.stanford.irt.eresources.marc.RecordCollectionFactory">
+                <constructor-arg ref="sfxCatalogRecordService"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg ref="laneDedupAugmentation"/>
+    </bean>
+    <bean id="laneDedupAugmentation" class="edu.stanford.irt.eresources.marc.LaneDedupAugmentation">
+        <constructor-arg name="augmentationsFile" value="${eresources.data.basepath}/augmentations-dedup-all-records.obj"/>
+        <constructor-arg ref="httpAllFolioDedupAugmentationService"/>
+        <constructor-arg name="manualSkips">
+            <set>
+                <null />
+            </set>
+        </constructor-arg>
+    </bean>
+    <bean id="httpAllFolioDedupAugmentationService" class="edu.stanford.irt.eresources.marc.HTTPAugmentationsService">
+        <constructor-arg ref="objectMapper"/>
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="augmentations/dedup/all-records"/>
+    </bean>
+    <bean id="sfxCatalogRecordService" class="edu.stanford.irt.eresources.marc.sfx.SfxFileCatalogRecordService">
+        <constructor-arg name="basePath" value="${eresources.sfx.export-path}"/>
+        <constructor-arg name="executor" ref="executor"/>
+    </bean>
+</beans>
