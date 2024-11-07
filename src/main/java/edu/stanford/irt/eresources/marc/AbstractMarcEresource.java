@@ -467,6 +467,7 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
                         TextParserHelper.removeTrailingSlashAndSpace(sb);
                     });
         }
-        return sb;
+        String titleCase = TextParserHelper.toTitleCase(sb.toString());
+        return new StringBuilder(titleCase);
     }
 }

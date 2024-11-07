@@ -35,6 +35,10 @@ public final class TextParserHelper {
 
     private static final int MONTH_PATTERN_MAX = 4;
 
+    private static final String[] NO_CAP_WORDS = { "a", "and", "as", "at", "but", "by", "for", "from", "if", "in",
+            "into", "like", "nor", "of", "off", "on", "once", "onto", "or", "over", "so", "than", "that", "the", "to",
+            "upon", "when", "with", "yet" };
+
     private static final int ORCID_MAX_LENGTH = 19;
 
     private static final Pattern ORCID_PATTERN = Pattern.compile("(\\b(?:\\d{4}[\\- ]){3,}\\d{3}[\\dXx]\\b)");
@@ -285,27 +289,43 @@ public final class TextParserHelper {
     }
 
     /**
-     * Capitalize all the space-separated words in a {@code String}
+     * Capitalize all the space-separated words in a {@code String}, ignoring some English words like articles and
+     * prepositions.
      *
      * @param string
      *            needing caps
      * @return capitalized string
      */
     public static String toTitleCase(final String string) {
+        if (string == null || string.trim().isEmpty()) {
+            return string;
+        }
+        String title = string.trim();
+        if (title.endsWith(".")) {
+            title = title.substring(0, title.length() - 1);
+        }
+        // e-Anatomy ... maybe others? worth a special case?
+        if (title.matches("^[a-zA-Z]-.*") || title.matches("^[a-z][A-Z].*")) {
+            return title;
+        }
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < string.length(); i++) {
-            char c = string.charAt(i);
-            boolean needsCap = false;
-            if (i == 0 || (i > 0 && ' ' == string.charAt(i - 1))) {
-                needsCap = true;
-            }
-            if (needsCap) {
+        boolean capitalizeNext = true;
+        for (char c : title.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+                sb.append(c);
+            } else if (capitalizeNext) {
                 sb.append(Character.toTitleCase(c));
+                capitalizeNext = false;
             } else {
                 sb.append(c);
             }
         }
-        return sb.toString();
+        String titleCased = sb.toString();
+        for (String preposition : NO_CAP_WORDS) {
+            titleCased = titleCased.replaceAll("(?i)(?<!^)\\b" + preposition + "\\b", preposition);
+        }
+        return titleCased;
     }
 
     /**

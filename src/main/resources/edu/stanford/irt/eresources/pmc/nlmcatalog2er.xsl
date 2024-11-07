@@ -31,7 +31,7 @@
         </xsl:variable>
         <eresource id="dnlm-{NlmUniqueID}" recordId="{NlmUniqueID}" type="dnlm" update="19690101000000">
             <title>
-                <xsl:value-of select="TitleMain/Title" />
+                <xsl:value-of select="//@normedTitle" />
             </title>
             <xsl:for-each select="TitleAlternate/Title">
                 <title_alt>
