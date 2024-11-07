@@ -170,6 +170,16 @@ public class TextParserHelperTest {
     public final void testToTitleCase() {
         assertEquals("Sound Recording", TextParserHelper.toTitleCase("sound recording"));
         assertEquals("Foo 123 Bar", TextParserHelper.toTitleCase("foo 123 bar"));
+        assertEquals("e-Anatomy", TextParserHelper.toTitleCase("e-Anatomy"));
+        assertEquals("Foo 123 Bar", TextParserHelper.toTitleCase("foo 123 bar"));
+        assertEquals("The Atlantic", TextParserHelper.toTitleCase("The Atlantic."));
+        assertEquals("NEJM AI", TextParserHelper.toTitleCase("NEJM AI."));
+        assertEquals("Red Book (American Academy of Pediatrics)", TextParserHelper.toTitleCase("Red book (American Academy of Pediatrics)"));
+        assertEquals("New York Times (National Edition)", TextParserHelper.toTitleCase("New York times (National edition)"));
+        assertEquals("The New York Times", TextParserHelper.toTitleCase("The New York times"));
+        assertEquals("New England Journal of Medicine", TextParserHelper.toTitleCase("New England journal of medicine"));
+        assertEquals("Stream Ecology. Third Edition", TextParserHelper.toTitleCase("Stream ecology. Third edition."));
+        assertEquals("aBIOTECH", TextParserHelper.toTitleCase("aBIOTECH."));
     }
 
     @Test

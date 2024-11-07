@@ -39,9 +39,9 @@ public class AltTitleMarcEresourceTest {
         expect(this.field.getTag()).andReturn("249");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('a');
-        expect(this.subfield.getData()).andReturn("prefered title");
+        expect(this.subfield.getData()).andReturn("preferred title");
         replay(this.record, this.field, this.subfield);
-        assertEquals("prefered title", this.eresource.getTitle());
+        assertEquals("Preferred Title", this.eresource.getTitle());
         verify(this.record, this.field, this.subfield);
     }
 }
