@@ -133,7 +133,7 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
 
     @Test
     public void testGetTitle() {
-        assertEquals("Test title", this.eresource.getTitle());
+        assertEquals("Test Title", this.eresource.getTitle());
     }
 
     @Test

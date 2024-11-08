@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-11-07" version="2.13.3" description="maintenance release">
+            <action date="2024-10-25" dev="ryanmax" issue="LANEWEB-11383" type="add">
+                web-friendly title capitalization for Lane Search results (Lane, SUL, PMC)
+            </action>
+        </release>
         <release date="2024-10-29" version="2.13.2" description="maintenance release">
             <action date="2024-10-29" dev="ryanmax" issue="LANEWEB-11382" type="fix">
                 Lane Blog indexing missing keywords

@@ -413,7 +413,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.subfield.getData()).andReturn("title");
         expect(this.record.getFields()).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
-        assertEquals("title", this.eresource.getSortTitle());
+        assertEquals("Title", this.eresource.getSortTitle());
     }
 
     @Test
@@ -425,7 +425,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.subfield.getData()).andReturn("title");
         expect(this.record.getFields()).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
-        assertEquals("title", this.eresource.getTitle());
+        assertEquals("Title", this.eresource.getTitle());
     }
 
     @Test
@@ -443,7 +443,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("3rd ed.");
         replay(this.record, this.field, this.subfield);
-        assertEquals("HELP with nursing audit and quality assurance : management guide.... 3rd ed.",
+        assertEquals("HELP with Nursing Audit and Quality Assurance : Management Guide... 3rd ed.",
                 this.eresource.getTitle());
         verify(this.record, this.field, this.subfield);
     }

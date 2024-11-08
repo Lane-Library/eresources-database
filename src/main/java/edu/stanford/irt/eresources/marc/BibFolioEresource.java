@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import edu.stanford.irt.eresources.DateParser;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.LanguageMap;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.VersionComparator;
 import edu.stanford.irt.eresources.marc.type.TypeFactory;
@@ -185,7 +186,7 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public String getTitle() {
-        return this.folioRecord.jsonContext().read("$.instance.title");
+        return TextParserHelper.toTitleCase(this.folioRecord.jsonContext().read("$.instance.title"));
     }
 
     @Override

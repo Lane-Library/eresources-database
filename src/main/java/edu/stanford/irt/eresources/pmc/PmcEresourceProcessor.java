@@ -42,6 +42,7 @@ import com.jayway.jsonpath.ReadContext;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
+import edu.stanford.irt.eresources.TextParserHelper;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 
 public class PmcEresourceProcessor extends AbstractEresourceProcessor {
@@ -166,6 +167,7 @@ public class PmcEresourceProcessor extends AbstractEresourceProcessor {
                 root.setAttribute("earliestVolume", journal.getEarliest());
                 root.setAttribute("lastIssue", journal.getLastIssue());
                 root.setAttribute("agreementStatus", journal.getAgreementStatus());
+                root.setAttribute("normedTitle", TextParserHelper.toTitleCase(journal.getTitle()));
                 this.tf.newTransformer().transform(new DOMSource(doc), new SAXResult(this.contentHandler));
                 this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
                 this.contentHandler.endDocument();
