@@ -301,13 +301,6 @@ public final class TextParserHelper {
             return string;
         }
         String title = string.trim();
-        if (title.endsWith(".")) {
-            title = title.substring(0, title.length() - 1);
-        }
-        // e-Anatomy ... maybe others? worth a special case?
-        if (title.matches("^[a-zA-Z]-.*") || title.matches("^[a-z][A-Z].*")) {
-            return title;
-        }
         StringBuilder sb = new StringBuilder();
         boolean capitalizeNext = true;
         for (char c : title.toCharArray()) {
@@ -324,6 +317,19 @@ public final class TextParserHelper {
         String titleCased = sb.toString();
         for (String preposition : NO_CAP_WORDS) {
             titleCased = titleCased.replaceAll("(?i)(?<!^)\\b" + preposition + "\\b", preposition);
+        }
+        // Preserve original casing for words like iPhone, e-Anatomy, aBIOTECH, etc.
+        String[] words = titleCased.split("\\s+");
+        String[] originalWords = string.split("\\s+");
+        for (int i = 0; i < words.length; i++) {
+            if (originalWords[i].matches("^[a-z][A-Z].*") || originalWords[i].matches("^[a-zA-Z]-.*")) {
+                words[i] = originalWords[i];
+            }
+        }
+        titleCased = String.join(" ", words);
+        //remove finial period
+        if (titleCased.endsWith(".")) {
+            titleCased = titleCased.substring(0, titleCased.length() - 1);
         }
         return titleCased;
     }

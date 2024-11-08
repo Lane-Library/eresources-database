@@ -180,6 +180,8 @@ public class TextParserHelperTest {
         assertEquals("New England Journal of Medicine", TextParserHelper.toTitleCase("New England journal of medicine"));
         assertEquals("Stream Ecology. Third Edition", TextParserHelper.toTitleCase("Stream ecology. Third edition."));
         assertEquals("aBIOTECH", TextParserHelper.toTitleCase("aBIOTECH."));
+        assertEquals("Apple iPhone Lightning USB Data Cable & Wall Charger", TextParserHelper.toTitleCase("Apple iPhone lightning USB Data Cable & Wall Charger."));
+        assertEquals("Dell External USB Ultra Slim DVD +/- RW Slot Drive", TextParserHelper.toTitleCase("Dell External USB Ultra Slim DVD +/- RW Slot Drive"));
     }
 
     @Test
