@@ -6,6 +6,17 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-11-11" version="2.13.4" description="maintenance release">
+            <action date="2024-11-08" dev="ryanmax" issue="LANEWEB-11387" type="fix">
+                titles in foreign languages should not get capitalization
+            </action>
+            <action date="2024-11-08" dev="ryanmax" issue="LANEWEB-11386" type="fix">
+                incorrect capitalization: IPhone
+            </action>
+            <action date="2024-11-08" dev="ryanmax" issue="LANEWEB-11385" type="fix">
+                capitalization missing on equipment records (FOLIO format)
+            </action>
+        </release>
         <release date="2024-11-07" version="2.13.3" description="maintenance release">
             <action date="2024-10-25" dev="ryanmax" issue="LANEWEB-11383" type="add">
                 web-friendly title capitalization for Lane Search results (Lane, SUL, PMC)
