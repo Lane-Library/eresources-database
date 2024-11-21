@@ -6,6 +6,11 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-11-21" version="2.13.5" description="maintenance release">
+            <action date="2024-11-20" dev="ryanmax" issue="LANEWEB-11393" type="fix">
+                PsychiatryOnline display includes "null"
+            </action>
+        </release>
         <release date="2024-11-11" version="2.13.4" description="maintenance release">
             <action date="2024-11-08" dev="ryanmax" issue="LANEWEB-11387" type="fix">
                 titles in foreign languages should not get capitalization
