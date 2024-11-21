@@ -173,7 +173,7 @@ public class MarcLinkTest {
         expect(this.version.getHoldingsAndDates()).andReturn(null);
         expect(this.version.getLinks()).andReturn(null);
         replay(this.version, this.field, this.subfield);
-        assertEquals("null", this.link.getLinkText());
+        assertEquals("", this.link.getLinkText());
         verify(this.version);
     }
 

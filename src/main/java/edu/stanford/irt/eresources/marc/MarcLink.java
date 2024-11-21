@@ -63,7 +63,7 @@ public class MarcLink implements Link {
                 sb.append(l);
             }
         }
-        if (sb.length() == 0) {
+        if (sb.length() == 0 && null != l) {
             sb.append(l);
         }
         return sb.toString();
