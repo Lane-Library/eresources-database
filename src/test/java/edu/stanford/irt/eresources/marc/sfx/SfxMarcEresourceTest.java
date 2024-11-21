@@ -34,7 +34,7 @@ public class SfxMarcEresourceTest {
 
     @Test
     public void testCreateVersion() {
-
+        assertEquals("2017", this.sfxMarcEresource.createVersion(this.record).getHoldingsAndDates());
     }
 
     @Test
