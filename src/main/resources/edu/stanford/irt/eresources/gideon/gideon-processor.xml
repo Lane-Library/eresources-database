@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="gideonProcessor" class="edu.stanford.irt.eresources.gideon.GideonEresourceProcessor">
+        <constructor-arg name="basePath" value="${eresources.gideon.basepath}"/>
+        <constructor-arg name="contentHandler" ref="gideonTransformer"/>
+    </bean>
+    <bean id= "gideonTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
+        <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/gideon/gideon2er.xsl"/>
+        <property name="transformerFactory" value="net.sf.saxon.TransformerFactoryImpl"/>
+        <property name="namespace" value=""/>
+        <property name="element" value="records"/>
+        <property name="contentHandler" ref="gideonBuilder"/>
+    </bean>
+    <bean id="gideonBuilder" class="edu.stanford.irt.eresources.sax.DefaultEresourceBuilder">
+        <property name="eresourceHandler" ref="eresourceHandler"/>
+    </bean>
+</beans>
