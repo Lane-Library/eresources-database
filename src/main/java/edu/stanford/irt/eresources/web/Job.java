@@ -30,7 +30,15 @@ public class Job {
         SUL_RELOAD("sul",RELOAD, "reload SUL MARC - monthly"),
         SUL_UPDATE("sul", UPDATE, "update SUL MARC - daily"),
         UNDEFINED("none", "undefined","for unit testing"),
-        UNIT_TESTING("lane", "unit-test", "for unit testing");
+        UNIT_TESTING("lane", "unit-test", "for unit testing"),
+        PAUSE_DELETE(DELETE, PAUSE,"pause/unpause FOLIO delete jobs"),
+        PAUSE_LANE("lane", PAUSE,"pause/unpause Lane jobs"),
+        PAUSE_PMC("pmc", PAUSE,"pause/unpause PMC jobs"),
+        PAUSE_PUBMED("pubmed", PAUSE,"pause/unpause PubMed jobs"),
+        PAUSE_REDIVIS("redivis", PAUSE,"pause/unpause Redivis jobs"),
+        PAUSE_SFX("sfx", PAUSE,"pause/unpause SFX jobs"),
+        PAUSE_SUL("sul", PAUSE,"pause/unpause SUL jobs"),
+        PAUSE_UNDEFINED("none", PAUSE, "pause for unit testing");
 
         public static Type fromString(final String name) {
             for (Job.Type type : Job.Type.values()) {
@@ -61,12 +69,18 @@ public class Job {
             return this.description;
         }
 
+        public String getName() {
+            return this.name;
+        }
+
         public String getQualifiedName() {
             return this.dataSource + "/" + this.name;
         }
     }
 
     private static final String DELETE = "delete";
+
+    private static final String PAUSE = "pause";
 
     private static final String RELOAD = "reload";
 

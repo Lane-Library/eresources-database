@@ -27,7 +27,7 @@ public class JobManagerTest {
     private JobManager manager;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.executor = Executors.newSingleThreadExecutor();
         this.manager = new JobManager(this.executor, 1);
     }
@@ -55,8 +55,30 @@ public class JobManagerTest {
     }
 
     @Test
+    public final void testGetPausedDataSources() {
+        assertTrue(this.manager.getPausedDataSources().isEmpty());
+    }
+
+    @Test
     public final void testGetRunningJobs() {
         assertTrue(this.manager.getRunningJobs().isEmpty());
+    }
+
+    @Test
+    public final void testPause() {
+        assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
+    }
+
+    @Test
+    public final void testPauseAlreadyRunning() {
+        this.manager.runningJobs.add(new Job(Job.Type.UNDEFINED, null));
+        assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
+    }
+
+    @Test
+    public final void testPauseThenUnpause() {
+        assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
+        assertEquals(JobStatus.RUNNING, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
     }
 
     @Test
@@ -64,6 +86,12 @@ public class JobManagerTest {
         Job test = new Job(Job.Type.UNIT_TESTING, LocalDateTime.now());
         assertEquals(JobStatus.COMPLETE, this.manager.run(test));
         assertTrue(test.toString().contains("type: UNIT_TESTING;"));
+    }
+
+    @Test
+    public final void testRunAlreadyPaused() {
+        assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
+        assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.UNDEFINED, null)));
     }
 
     @Test
