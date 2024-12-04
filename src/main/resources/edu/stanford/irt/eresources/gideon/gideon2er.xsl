@@ -26,9 +26,9 @@
         <xsl:variable name="keywords">
                 <xsl:value-of select="concat('gideon ', $title, ' ', $description, ' ', $subjects, ' ', $category)" />
         </xsl:variable>
-        <xsl:variable name="year" select="substring(update_date,0,4)" />
+        <xsl:variable name="year" select="substring(update_date,1,4)" />
         <xsl:variable name="er-date">
-            <xsl:value-of select="update_date" />
+            <xsl:value-of select="replace(update_date,'-','')" />
         </xsl:variable>
         <xsl:variable name="primary-type">
             <xsl:choose>
