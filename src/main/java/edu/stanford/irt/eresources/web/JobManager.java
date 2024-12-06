@@ -27,6 +27,9 @@ public class JobManager {
     private int maxJobDurationInHours;
 
     // protected for unit testing
+    protected List<String> pausedDataSources;
+
+    // protected for unit testing
     protected List<Future<Job>> runningFutures;
 
     // protected for unit testing
@@ -37,6 +40,7 @@ public class JobManager {
         this.executor = executor;
         this.runningFutures = new ArrayList<>();
         this.runningJobs = new ArrayList<>();
+        this.pausedDataSources = new ArrayList<>();
     }
 
     /**
@@ -64,18 +68,41 @@ public class JobManager {
         return this.maxJobDurationInHours;
     }
 
+    public List<String> getPausedDataSources() {
+        return this.pausedDataSources;
+    }
+
     public List<Job> getRunningJobs() {
         return this.runningJobs;
     }
 
     public JobStatus run(final Job job) {
-        String jobName = job.getType().getQualifiedName();
+        String jobName = job.getType().getName();
+        String jobQualifiedName = job.getType().getQualifiedName();
         String jobDataSource = job.getType().getDataSource();
         Job jobOfSameDataSource = this.runningJobs.stream()
                 .filter((final Job j) -> jobDataSource.equals(j.getType().getDataSource())).findFirst().orElse(null);
+        boolean pausedDataSource = this.pausedDataSources.contains(jobDataSource);
+        if ("pause".equals(jobName)) {
+            if (null != jobOfSameDataSource) {
+                log.warn(
+                        "job with data source ({}) already running and won't be interrupted; consider canceling all running jobs",
+                        jobDataSource);
+            }
+            if (this.pausedDataSources.contains(jobDataSource)) {
+                this.pausedDataSources.remove(job.getType().getDataSource());
+                return JobStatus.RUNNING;
+            }
+            this.pausedDataSources.add(job.getType().getDataSource());
+            return JobStatus.PAUSED;
+        }
+        if (pausedDataSource) {
+            log.warn("{} failed to start job; data source ({}) paused", jobQualifiedName, jobDataSource);
+            return JobStatus.PAUSED;
+        }
         if (null != jobOfSameDataSource) {
-            log.warn("{} failed to start job; conflicting job with same data source ({}) still running", jobName,
-                    jobDataSource);
+            log.warn("{} failed to start job; conflicting job with same data source ({}) still running",
+                    jobQualifiedName, jobDataSource);
             return JobStatus.RUNNING;
         }
         this.runningJobs.add(job);
@@ -85,10 +112,10 @@ public class JobManager {
             return future.get(this.maxJobDurationInHours, TimeUnit.HOURS).getStatus();
         } catch (TimeoutException e) {
             long duration = ChronoUnit.HOURS.between(job.getStart(), LocalDateTime.now());
-            log.error("job {} running for {} hours", jobName, duration, e);
+            log.error("job {} running for {} hours", jobQualifiedName, duration, e);
             job.setStatus(JobStatus.INTERRUPTED);
         } catch (InterruptedException | ExecutionException e) {
-            log.error("job {} interrupted ", jobName, e);
+            log.error("job {} interrupted ", jobQualifiedName, e);
             job.setStatus(JobStatus.INTERRUPTED);
         } finally {
             this.runningFutures.remove(future);

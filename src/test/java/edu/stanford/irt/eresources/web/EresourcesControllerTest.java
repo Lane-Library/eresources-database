@@ -7,6 +7,8 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -120,6 +122,10 @@ public class EresourcesControllerTest {
 
     @Test
     public final void testUsage() {
-        assertTrue(this.controller.usage("version").contains("reload"));
+        expect(this.manager.getRunningJobs()).andReturn(Collections.emptyList());
+        expect(this.manager.getPausedDataSources()).andReturn(Collections.emptyList());
+        replay(this.manager);
+        assertTrue(this.controller.usage().contains("reload"));
+        verify(this.manager);
     }
 }

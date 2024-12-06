@@ -12,7 +12,9 @@ import edu.stanford.irt.status.StatusItem;
 
 public class EresourceStatusProvider extends RuntimeMXBeanStatusProvider {
 
-    private static final String MESSAGE = "(%s) running for %s %s";
+    private static final String MESSAGE_PAUSED = "jobs with data source \"%s\" are paused";
+
+    private static final String MESSAGE_RUNNING = "(%s) running for %s %s";
 
     private JobManager jobManager;
 
@@ -24,15 +26,21 @@ public class EresourceStatusProvider extends RuntimeMXBeanStatusProvider {
     protected void addStatusItems(final List<StatusItem> items, final RuntimeMXBean mxBean) {
         if (!this.jobManager.getRunningJobs().isEmpty()) {
             for (var runningJob : this.jobManager.getRunningJobs()) {
-                var msg = String.format(MESSAGE, runningJob.getType().getQualifiedName(),
+                var msg = String.format(MESSAGE_RUNNING, runningJob.getType().getQualifiedName(),
                         ChronoUnit.MINUTES.between(runningJob.getStart(), LocalDateTime.now()), ChronoUnit.MINUTES);
                 items.add(new StatusItem(Status.INFO, msg));
                 if (LocalDateTime.now().isAfter(
                         runningJob.getStart().plus(Duration.ofHours(this.jobManager.getMaxJobDurationInHours())))) {
-                    msg = String.format(MESSAGE, "long-running job " + runningJob.getType().getQualifiedName(),
+                    msg = String.format(MESSAGE_RUNNING, "long-running job " + runningJob.getType().getQualifiedName(),
                             ChronoUnit.HOURS.between(runningJob.getStart(), LocalDateTime.now()), ChronoUnit.HOURS);
                     items.add(new StatusItem(Status.ERROR, msg));
                 }
+            }
+        }
+        if (!this.jobManager.getPausedDataSources().isEmpty()) {
+            for (var pausedDataSource : this.jobManager.getPausedDataSources()) {
+                var msg = String.format(MESSAGE_PAUSED, pausedDataSource);
+                items.add(new StatusItem(Status.INFO, msg));
             }
         }
     }
