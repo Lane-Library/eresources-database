@@ -18,6 +18,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
+import edu.stanford.irt.eresources.DataFetcher;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
@@ -27,13 +28,16 @@ public class GideonEresourceProcessorTest {
 
     private ContentHandler contentHandler;
 
+    private DataFetcher dataFetcher;
+
     private GideonEresourceProcessor processor;
 
     @Before
     public void setUp() {
         this.contentHandler = createMock(ContentHandler.class);
         this.basePath = new File(GideonEresourceProcessor.class.getResource("good/empty.xml").getPath()).getParent();
-        this.processor = new GideonEresourceProcessor(this.basePath, this.contentHandler);
+        this.dataFetcher = createMock(DataFetcher.class);
+        this.processor = new GideonEresourceProcessor(this.basePath, this.dataFetcher, this.contentHandler);
     }
 
     @Test
@@ -88,7 +92,7 @@ public class GideonEresourceProcessorTest {
 
     @Test
     public void testProcessNullBasePath() {
-        this.processor = new GideonEresourceProcessor(null, this.contentHandler);
+        this.processor = new GideonEresourceProcessor(null, this.dataFetcher, this.contentHandler);
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             this.processor.process();
         });
@@ -97,7 +101,16 @@ public class GideonEresourceProcessorTest {
 
     @Test
     public void testProcessNullContentHandler() {
-        this.processor = new GideonEresourceProcessor(this.basePath, null);
+        this.processor = new GideonEresourceProcessor(this.basePath, this.dataFetcher, null);
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            this.processor.process();
+        });
+        assertNotNull(exception);
+    }
+
+    @Test
+    public void testProcessNullDataFetcher() {
+        this.processor = new GideonEresourceProcessor(this.basePath, null, this.contentHandler);
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             this.processor.process();
         });

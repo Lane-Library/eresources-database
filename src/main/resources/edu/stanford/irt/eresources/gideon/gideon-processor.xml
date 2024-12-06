@@ -3,7 +3,15 @@
 
     <bean id="gideonProcessor" class="edu.stanford.irt.eresources.gideon.GideonEresourceProcessor">
         <constructor-arg name="basePath" value="${eresources.gideon.basepath}"/>
+        <constructor-arg name="dataFetcher" ref="gideonDataFetcher"/>
         <constructor-arg name="contentHandler" ref="gideonTransformer"/>
+    </bean>
+    <bean id="gideonDataFetcher" class="edu.stanford.irt.eresources.gideon.GideonDataFetcher">
+        <constructor-arg name="host" value="${eresources.gideon.sftp.host}"/>
+        <constructor-arg name="hostPublicKey" value="${eresources.gideon.sftp.hostPublicKey}"/>
+        <constructor-arg name="user" value="${eresources.gideon.sftp.user}"/>
+        <constructor-arg name="password" value="${eresources.gideon.sftp.password}"/>
+        <constructor-arg name="localDirectory" value="${eresources.gideon.basepath}"/>
     </bean>
     <bean id= "gideonTransformer" class="edu.stanford.lane.catalog.impl.xml.FilteringXSLTTransformer" init-method="init">
         <property name="stylesheet" value="classpath://edu/stanford/irt/eresources/gideon/gideon2er.xsl"/>

@@ -28,6 +28,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
 
 import edu.stanford.irt.eresources.AbstractEresourceProcessor;
+import edu.stanford.irt.eresources.DataFetcher;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
 public class GideonEresourceProcessor extends AbstractEresourceProcessor {
@@ -44,10 +45,14 @@ public class GideonEresourceProcessor extends AbstractEresourceProcessor {
 
     private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
+    private DataFetcher gideonDataFetcher;
+
     private TransformerFactory tf = TransformerFactory.newInstance();
 
-    public GideonEresourceProcessor(final String basePath, final ContentHandler contentHandler) {
+    public GideonEresourceProcessor(final String basePath, final DataFetcher dataFetcher,
+            final ContentHandler contentHandler) {
         this.basePath = basePath;
+        this.gideonDataFetcher = dataFetcher;
         this.contentHandler = contentHandler;
     }
 
@@ -56,18 +61,19 @@ public class GideonEresourceProcessor extends AbstractEresourceProcessor {
         if (null == this.basePath) {
             throw new IllegalStateException("null basePath");
         }
+        if (null == this.gideonDataFetcher) {
+            throw new IllegalStateException("null dataFetcher");
+        }
         if (null == this.contentHandler) {
             throw new IllegalStateException("null contentHandler");
         }
+        this.gideonDataFetcher.getUpdateFiles();
         try {
             this.contentHandler.startDocument();
             this.contentHandler.startElement("", ERESOURCES, ERESOURCES, new AttributesImpl());
             List<File> filesToParse = getXMLFiles(new File(this.basePath));
             while (!filesToParse.isEmpty()) {
-                File file = filesToParse.remove(0);
-                if (getStartTime() <= file.lastModified()) {
-                    parseFile(file);
-                }
+                parseFile(filesToParse.remove(0));
             }
             this.contentHandler.endElement("", ERESOURCES, ERESOURCES);
             this.contentHandler.endDocument();
@@ -110,12 +116,6 @@ public class GideonEresourceProcessor extends AbstractEresourceProcessor {
         } catch (IOException | SAXException | ParserConfigurationException | TransformerException e) {
             log.error("problem parsing {}", file);
             throw new EresourceDatabaseException(e);
-        }
-        // touch file so it's not processed again at update time
-        if (file.setLastModified(System.currentTimeMillis())) {
-            log.info("processed: {}", file);
-        } else {
-            log.error("couldn't update file's timestamp: {}; make sure it's not loading on every run", file);
         }
     }
 }
