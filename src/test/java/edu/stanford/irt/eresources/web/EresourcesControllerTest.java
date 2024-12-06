@@ -17,9 +17,17 @@ public class EresourcesControllerTest {
     private JobManager manager;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.manager = mock(JobManager.class);
         this.controller = new EresourcesController(this.manager);
+    }
+
+    @Test
+    public final void testGideonReload() {
+        expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
+        replay(this.manager);
+        this.controller.gideonReload();
+        verify(this.manager);
     }
 
     @Test
@@ -71,6 +79,14 @@ public class EresourcesControllerTest {
     }
 
     @Test
+    public final void testSfxReload() {
+        expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
+        replay(this.manager);
+        this.controller.sfxReload();
+        verify(this.manager);
+    }
+
+    @Test
     public final void testSolrLoader() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
@@ -83,14 +99,6 @@ public class EresourcesControllerTest {
         expect(this.manager.cancelRunningJobs()).andReturn(JobStatus.INTERRUPTED);
         replay(this.manager);
         this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOBS.getQualifiedName());
-        verify(this.manager);
-    }
-
-    @Test
-    public final void testSfxReload() {
-        expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
-        replay(this.manager);
-        this.controller.sfxReload();
         verify(this.manager);
     }
 

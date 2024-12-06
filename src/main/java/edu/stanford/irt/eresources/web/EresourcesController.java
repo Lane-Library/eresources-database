@@ -35,6 +35,11 @@ public class EresourcesController {
         return this.jobManager.run(new Job(Job.Type.DELETES_FOLIO_HOURLY, LocalDateTime.now()));
     }
 
+    @Scheduled(cron = "${eresources.schedule.cron.gideonReload}")
+    public JobStatus gideonReload() {
+        return this.jobManager.run(new Job(Job.Type.GIDEON_RELOAD, LocalDateTime.now()));
+    }
+
     @Scheduled(cron = "${eresources.schedule.cron.laneMarcUpdate}")
     public JobStatus laneMarcUpdate() {
         return this.jobManager.run(new Job(Job.Type.LANE_FOLIO_UPDATE, LocalDateTime.now()));
@@ -65,6 +70,11 @@ public class EresourcesController {
         return this.jobManager.run(new Job(Job.Type.REDIVIS_RELOAD, LocalDateTime.now()));
     }
 
+    @Scheduled(cron = "${eresources.schedule.cron.sfxReload}")
+    public JobStatus sfxReload() {
+        return this.jobManager.run(new Job(Job.Type.SFX_RELOAD, LocalDateTime.now()));
+    }
+
     @GetMapping(value = { "/solrLoader" }, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JobStatus solrLoader(@RequestParam("job") final String job) {
@@ -72,11 +82,6 @@ public class EresourcesController {
             return this.jobManager.cancelRunningJobs();
         }
         return this.jobManager.run(new Job(Job.Type.fromString(job), LocalDateTime.now()));
-    }
-
-    @Scheduled(cron = "${eresources.schedule.cron.sfxReload}")
-    public JobStatus sfxReload() {
-        return this.jobManager.run(new Job(Job.Type.SFX_RELOAD, LocalDateTime.now()));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
