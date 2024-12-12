@@ -17,6 +17,10 @@ public enum JobStatus {
      */
     INTERRUPTED,
     /**
+     * job (data source) is paused; no impact on running jobs
+     */
+    PAUSED,
+    /**
      * job currently executing
      */
     RUNNING,

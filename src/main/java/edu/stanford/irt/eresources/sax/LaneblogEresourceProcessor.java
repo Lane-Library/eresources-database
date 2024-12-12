@@ -59,7 +59,7 @@ public class LaneblogEresourceProcessor extends AbstractEresourceProcessor {
 
     private int fetchIntervalMilliSeconds = 10_0000;
 
-    private static final int FETCH_RETRIES = 5;
+    private static final int FETCH_RETRIES = 12;
 
     public LaneblogEresourceProcessor(final String rssURL, final String rssUserAgent,
             final ContentHandler contentHandler) {

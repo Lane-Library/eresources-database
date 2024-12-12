@@ -148,6 +148,6 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
 
     @Test
     public void testIsEnglish() {
-        assertFalse(this.eresource.isEnglish());
+        assertTrue(this.eresource.isEnglish());
     }
 }

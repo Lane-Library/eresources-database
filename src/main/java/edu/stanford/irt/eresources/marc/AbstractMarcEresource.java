@@ -384,6 +384,9 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
     public String getTitle() {
         StringBuilder sb = getTitleStringBuilder(getFields(this.marcRecord, "245").findFirst().orElse(null));
         TextParserHelper.removeTrailingSlashAndSpace(sb);
+        if (isEnglish()) {
+            sb =  new StringBuilder(TextParserHelper.toTitleCase(sb.toString()));
+        }
         String edition = getSubfieldData(this.marcRecord, "250", "a").collect(Collectors.joining(". "));
         if (!edition.isEmpty()) {
             sb.append(". ").append(edition);
@@ -467,7 +470,6 @@ public abstract class AbstractMarcEresource extends MARCRecordSupport implements
                         TextParserHelper.removeTrailingSlashAndSpace(sb);
                     });
         }
-        String titleCase = TextParserHelper.toTitleCase(sb.toString());
-        return new StringBuilder(titleCase);
+        return sb;
     }
 }

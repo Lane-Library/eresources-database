@@ -186,7 +186,11 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public String getTitle() {
-        return TextParserHelper.toTitleCase(this.folioRecord.jsonContext().read("$.instance.title"));
+        String title = this.folioRecord.jsonContext().read("$.instance.title");
+        if (isEnglish()) {
+            return TextParserHelper.toTitleCase(title);
+        }
+        return title;
     }
 
     @Override
@@ -220,6 +224,7 @@ public class BibFolioEresource implements Eresource {
 
     @Override
     public boolean isEnglish() {
-        return this.getPublicationLanguages().contains("English");
+        // assume English if no language set (Lane Equipment records)
+        return getPublicationLanguages().isEmpty() || getPublicationLanguages().contains("English");
     }
 }

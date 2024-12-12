@@ -6,6 +6,30 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2024-12-06" version="2.13.6" description="maintenance release">
+            <action date="2024-12-03" dev="ryanmax" issue="LANEWEB-11402" type="add">
+                pause jobs by data source (support for annoying emails during frequent FOLIO outages)
+            </action>
+            <action date="2024-12-05" dev="ryanmax" issue="" type="update">
+                laneblog occassionally returns bad xml: increase retries from 5 to 12 (2.5 min max wait to 13 min)
+            </action>
+        </release>
+        <release date="2024-11-21" version="2.13.5" description="maintenance release">
+            <action date="2024-11-20" dev="ryanmax" issue="LANEWEB-11393" type="fix">
+                PsychiatryOnline display includes "null"
+            </action>
+        </release>
+        <release date="2024-11-11" version="2.13.4" description="maintenance release">
+            <action date="2024-11-08" dev="ryanmax" issue="LANEWEB-11387" type="fix">
+                titles in foreign languages should not get capitalization
+            </action>
+            <action date="2024-11-08" dev="ryanmax" issue="LANEWEB-11386" type="fix">
+                incorrect capitalization: IPhone
+            </action>
+            <action date="2024-11-08" dev="ryanmax" issue="LANEWEB-11385" type="fix">
+                capitalization missing on equipment records (FOLIO format)
+            </action>
+        </release>
         <release date="2024-11-07" version="2.13.3" description="maintenance release">
             <action date="2024-10-25" dev="ryanmax" issue="LANEWEB-11383" type="add">
                 web-friendly title capitalization for Lane Search results (Lane, SUL, PMC)

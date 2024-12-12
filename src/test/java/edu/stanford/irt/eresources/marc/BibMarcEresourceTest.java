@@ -413,7 +413,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.subfield.getData()).andReturn("title");
         expect(this.record.getFields()).andReturn(Collections.emptyList());
         replay(this.record, this.field, this.subfield);
-        assertEquals("Title", this.eresource.getSortTitle());
+        assertEquals("title", this.eresource.getSortTitle());
     }
 
     @Test
@@ -423,9 +423,14 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('a').times(2);
         expect(this.subfield.getData()).andReturn("title");
+        Field f008 = mock(Field.class);
+        expect(f008.getTag()).andReturn("008");
+        expect(f008.getData()).andReturn("950714s1951____xx____________00|_0_eng_d");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(f008));
         expect(this.record.getFields()).andReturn(Collections.emptyList());
-        replay(this.record, this.field, this.subfield);
+        replay(this.record, f008, this.field, this.subfield);
         assertEquals("Title", this.eresource.getTitle());
+        verify(this.record, f008, this.field, this.subfield);
     }
 
     @Test
@@ -437,15 +442,19 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
         expect(this.subfield.getData()).andReturn("HELP with nursing audit and quality assurance");
         expect(this.subfield.getCode()).andReturn('b').times(2);
         expect(this.subfield.getData()).andReturn("management guide.../");
+        Field f008 = mock(Field.class);
+        expect(f008.getTag()).andReturn("008");
+        expect(f008.getData()).andReturn("950714s1951____xx____________00|_0_eng_d");
+        expect(this.record.getFields()).andReturn(Collections.singletonList(f008));
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("250");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("3rd ed.");
-        replay(this.record, this.field, this.subfield);
+        replay(this.record, this.field, f008, this.subfield);
         assertEquals("HELP with Nursing Audit and Quality Assurance : Management Guide... 3rd ed.",
                 this.eresource.getTitle());
-        verify(this.record, this.field, this.subfield);
+        verify(this.record, this.field, f008, this.subfield);
     }
 
     @Test
