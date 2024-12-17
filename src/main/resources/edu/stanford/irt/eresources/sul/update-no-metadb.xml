@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <import resource="update.xml"/>
+    <!-- override HTTPCatalogRecordService: everythign else should be identical to update.xml -->
+    <bean id="sulHttpCatalogRecordService" class="edu.stanford.irt.eresources.HTTPCatalogRecordService">
+        <constructor-arg ref="catalogServiceURI"/>
+        <constructor-arg value="records/sul-no-metadb"/>
+    </bean>
+</beans>
