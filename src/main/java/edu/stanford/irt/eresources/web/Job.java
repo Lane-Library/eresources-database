@@ -39,6 +39,7 @@ public class Job {
         SFX_RELOAD(DataSource.SFX,RELOAD, "reload SFX MARC - daily"),
         SUL_RELOAD(DataSource.SUL,RELOAD, "reload SUL MARC - monthly"),
         SUL_UPDATE(DataSource.SUL, UPDATE, "update SUL MARC - daily"),
+        SUL_UPDATE_NO_METADB(DataSource.SUL, UPDATE + "-no-metadb", "update SUL MARC without using metadb - manual <br/>(use <i>updateOverride</i> argument to set arbitrary update date instead of getting most recent Solr update date. Example: <i>&updateOverride=2030-01-01T00:00:00</i>)"),
         UNDEFINED(DataSource.UNDEFINED, "undefined","for unit testing"),
         UNIT_TESTING(DataSource.LANE, "unit-test", "for unit testing"),
         PAUSE_DELETE(DataSource.FOLIO_DELETE, PAUSE,"pause/unpause FOLIO delete jobs"),
@@ -98,6 +99,8 @@ public class Job {
     protected static final Collection<Type> LONG_RUNNING_JOBS = new ArrayList<>(
             List.of(Type.DELETES_FOLIO_ALL, Type.PUBMED_RELOAD, Type.SUL_RELOAD));
 
+    private String dataUpdateOverride;
+
     private LocalDateTime start;
 
     private JobStatus status;
@@ -105,9 +108,18 @@ public class Job {
     private Type type;
 
     public Job(final Type jobType, final LocalDateTime start) {
+        this(jobType, start, null);
+    }
+
+    public Job(final Type jobType, final LocalDateTime start, final String dataUpdateOverride) {
         this.type = jobType;
         this.start = start;
         this.status = JobStatus.STARTED;
+        this.dataUpdateOverride = dataUpdateOverride;
+    }
+
+    public String getDataUpdateOverride() {
+        return this.dataUpdateOverride;
     }
 
     public LocalDateTime getStart() {
@@ -132,6 +144,7 @@ public class Job {
         sb.append("type: ").append(this.type);
         sb.append("; start: ").append(this.start);
         sb.append("; status: ").append(this.status);
+        sb.append("; dataUpdateOverride: ").append(this.start);
         return sb.toString();
     }
 }

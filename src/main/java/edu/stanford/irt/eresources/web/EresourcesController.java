@@ -75,11 +75,12 @@ public class EresourcesController {
 
     @GetMapping(value = { "/solrLoader" }, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public JobStatus solrLoader(@RequestParam("job") final String job) {
+    public JobStatus solrLoader(@RequestParam("job") final String job,
+            @RequestParam(value = "updateOverride", required = false) final String updateOverride) {
         if (Job.Type.CANCEL_RUNNING_JOBS.getQualifiedName().equals(job)) {
             return this.jobManager.cancelRunningJobs();
         }
-        return this.jobManager.run(new Job(Job.Type.fromString(job), LocalDateTime.now()));
+        return this.jobManager.run(new Job(Job.Type.fromString(job), LocalDateTime.now(), updateOverride));
     }
 
     @Scheduled(cron = "${eresources.schedule.cron.sulReload}")
@@ -111,6 +112,7 @@ public class EresourcesController {
         sb.append("<pre><strong>bold jobs</strong> are currently running \n");
         sb.append("* unlinked jobs run longer than an hour \n");
         sb.append("** pubmed reload takes 8+ hours and requires baseline data from NCBI</pre>");
+        sb.append("<i>updateOverride</i> argument is supported on lane and sul jobs\n");
         sb.append("<ul>");
         List<Job> runningJobs = this.jobManager.getRunningJobs();
         List<String> pausedDataSources = this.jobManager.getPausedDataSources();
