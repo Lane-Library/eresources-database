@@ -92,7 +92,7 @@ public class EresourcesControllerTest {
     public final void testSolrLoader() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
-        this.controller.solrLoader("job");
+        this.controller.solrLoader("job", null);
         verify(this.manager);
     }
 
@@ -100,7 +100,7 @@ public class EresourcesControllerTest {
     public final void testSolrLoaderCancelRunningJobs() {
         expect(this.manager.cancelRunningJobs()).andReturn(JobStatus.INTERRUPTED);
         replay(this.manager);
-        this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOBS.getQualifiedName());
+        this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOBS.getQualifiedName(), null);
         verify(this.manager);
     }
 

@@ -127,7 +127,7 @@ public class JobManager {
     private Future<Job> doRun(final Job job) {
         return this.executor.submit(() -> {
             String jobName = job.getType().getQualifiedName();
-            String[] args = { jobName };
+            String[] args = { jobName, job.getDataUpdateOverride() };
             try {
                 SolrLoader.main(args);
             } catch (Exception e) {
