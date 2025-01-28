@@ -84,7 +84,7 @@ public class GideonDataFetcherTest {
     public void testGetUpdateFilesIOException() {
         File tempDir = new File(System.getProperty("java.io.tmpdir"), "another");
         tempDir.mkdirs();
-        String parentTemp = tempDir.getParent();
+        String parentTemp = tempDir.getParentFile().getParent();
         this.dataFetcher = new GideonDataFetcher(HOST, HOST_PUBLIC_KEY, USER, PASSWORD, parentTemp);
         EresourceDatabaseException exception = assertThrows(EresourceDatabaseException.class, () -> {
             this.dataFetcher.getUpdateFiles();
