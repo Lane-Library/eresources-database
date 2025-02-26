@@ -12,7 +12,7 @@ public class Job {
 
     public enum DataSource {
 
-        ALL, FOLIO_DELETE, LANE, PMC, PUBMED, REDIVIS, SFX, SUL, UNDEFINED;
+        ALL, FOLIO_DELETE, GIDEON, LANE, PMC, PUBMED, REDIVIS, SFX, SUL, UNDEFINED;
 
         @Override
         public String toString() {
@@ -26,6 +26,7 @@ public class Job {
         DELETES_FOLIO_ALL(DataSource.FOLIO_DELETE, "folio-all","delete all suppressed Lane and SUL records (slow)"),
         DELETES_FOLIO_HOURLY(DataSource.FOLIO_DELETE, "folio-hourly","delete recently suppressed Lane and SUL records"),
         DELETES_FOLIO_DAILY(DataSource.FOLIO_DELETE, "folio-daily","delete recently suppressed Lane and SUL records"),
+        GIDEON_RELOAD(DataSource.GIDEON, RELOAD, "reload GIDEON - daily"),
         LANE_FOLIO_RELOAD(DataSource.LANE, "folio-reload","Lane MARC and native FOLIO formats reload - nightly"),
         LANE_FOLIO_UPDATE(DataSource.LANE, "folio-update", "Lane MARC and native FOLIO formats updates - frequently during work hours"),
         LANE_RELOAD(DataSource.LANE, RELOAD,"reload all Lane resource types: MARC, classes, laneweb HTML, blog, libguides - nightly"),
@@ -39,9 +40,11 @@ public class Job {
         SFX_RELOAD(DataSource.SFX,RELOAD, "reload SFX MARC - daily"),
         SUL_RELOAD(DataSource.SUL,RELOAD, "reload SUL MARC - monthly"),
         SUL_UPDATE(DataSource.SUL, UPDATE, "update SUL MARC - daily"),
+        SUL_UPDATE_NO_METADB(DataSource.SUL, UPDATE + "-no-metadb", "update SUL MARC without using metadb - manual <br/>(use <i>updateOverride</i> argument to set arbitrary update date instead of getting most recent Solr update date. Example: <i>&updateOverride=2030-01-01T00:00:00</i>)"),
         UNDEFINED(DataSource.UNDEFINED, "undefined","for unit testing"),
         UNIT_TESTING(DataSource.LANE, "unit-test", "for unit testing"),
         PAUSE_DELETE(DataSource.FOLIO_DELETE, PAUSE,"pause/unpause FOLIO delete jobs"),
+        PAUSE_GIDEON(DataSource.GIDEON, PAUSE,"pause/unpause GIDEON jobs"),
         PAUSE_LANE(DataSource.LANE, PAUSE,"pause/unpause Lane jobs"),
         PAUSE_PMC(DataSource.PMC, PAUSE,"pause/unpause PMC jobs"),
         PAUSE_PUBMED(DataSource.PUBMED, PAUSE,"pause/unpause PubMed jobs"),
@@ -98,6 +101,8 @@ public class Job {
     protected static final Collection<Type> LONG_RUNNING_JOBS = new ArrayList<>(
             List.of(Type.DELETES_FOLIO_ALL, Type.PUBMED_RELOAD, Type.SUL_RELOAD));
 
+    private String dataUpdateOverride;
+
     private LocalDateTime start;
 
     private JobStatus status;
@@ -105,9 +110,18 @@ public class Job {
     private Type type;
 
     public Job(final Type jobType, final LocalDateTime start) {
+        this(jobType, start, null);
+    }
+
+    public Job(final Type jobType, final LocalDateTime start, final String dataUpdateOverride) {
         this.type = jobType;
         this.start = start;
         this.status = JobStatus.STARTED;
+        this.dataUpdateOverride = dataUpdateOverride;
+    }
+
+    public String getDataUpdateOverride() {
+        return this.dataUpdateOverride;
     }
 
     public LocalDateTime getStart() {
@@ -132,6 +146,7 @@ public class Job {
         sb.append("type: ").append(this.type);
         sb.append("; start: ").append(this.start);
         sb.append("; status: ").append(this.status);
+        sb.append("; dataUpdateOverride: ").append(this.start);
         return sb.toString();
     }
 }

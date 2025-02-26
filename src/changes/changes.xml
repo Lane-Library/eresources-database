@@ -6,6 +6,17 @@
         <title>eresources-database releases</title>
     </properties>
     <body>
+        <release date="2025-01-06" version="2.13.7" description="maintenance release">
+            <action date="2025-01-06" dev="ryanmax" issue="" type="update">
+                upgrade to springframework-6.2.1, spring-boot-3.4.1
+            </action>
+            <action date="2024-12-17" dev="ryanmax" issue="LANEWEB-11411" type="add">
+                SUL indexing relies on Metadb and Metadb sync with FOLIO is frequently severed
+            </action>
+            <action date="2024-12-09" dev="ryanmax" type="update" issue="">
+                upgrade to springframework-6.2.0
+            </action>
+        </release>
         <release date="2024-12-06" version="2.13.6" description="maintenance release">
             <action date="2024-12-03" dev="ryanmax" issue="LANEWEB-11402" type="add">
                 pause jobs by data source (support for annoying emails during frequent FOLIO outages)

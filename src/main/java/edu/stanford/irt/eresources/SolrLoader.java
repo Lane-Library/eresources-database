@@ -36,6 +36,8 @@ public class SolrLoader {
         try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 "edu/stanford/irt/eresources/" + args[0] + ".xml")) {
             SolrLoader loader = (SolrLoader) context.getBean("solrLoader");
+            // when not null, args[1] overrides the update date instead of querying for it in Solr
+            loader.setUpdateDateOverride(args[1]);
             loader.load();
         }
     }
@@ -47,6 +49,8 @@ public class SolrLoader {
     private Collection<AbstractEresourceProcessor> processors = Collections.emptyList();
 
     private Queue<Eresource> queue = null;
+
+    private String updateDateOverride = null;
 
     private String updatedDateQuery = null;
 
@@ -99,6 +103,10 @@ public class SolrLoader {
         this.solrClient = solrClient;
     }
 
+    public void setUpdateDateOverride(final String updateDate) {
+        this.updateDateOverride = updateDate;
+    }
+
     public void setUpdatedDateQuery(final String solrUpdatedDateQuery) {
         this.updatedDateQuery = solrUpdatedDateQuery;
     }
@@ -112,6 +120,9 @@ public class SolrLoader {
     }
 
     protected LocalDateTime getUpdatedDate() {
+        if (null != this.updateDateOverride) {
+            return LocalDateTime.parse(this.updateDateOverride);
+        }
         if (null == this.updatedDateQuery) {
             return MIN_DT;
         }
