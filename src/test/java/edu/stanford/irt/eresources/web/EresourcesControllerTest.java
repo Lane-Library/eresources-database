@@ -5,12 +5,12 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class EresourcesControllerTest {
 
@@ -18,7 +18,7 @@ public class EresourcesControllerTest {
 
     private JobManager manager;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.manager = mock(JobManager.class);
         this.controller = new EresourcesController(this.manager);

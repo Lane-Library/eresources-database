@@ -1,16 +1,11 @@
 package edu.stanford.irt.eresources;
 
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Collections;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.marc.MarcLink;
 import edu.stanford.irt.eresources.marc.MarcVersion;
@@ -38,7 +33,7 @@ public class VersionComparatorTest {
 
     private SAXVersion saxVersion2;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.saxVersion1 = new SAXVersion();
         this.saxVersion2 = new SAXVersion();

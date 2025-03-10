@@ -1,12 +1,12 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.URI;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,7 +18,7 @@ public class HTTPCatalogRecordDeleteServiceTest {
 
     HTTPCatalogRecordDeleteService deletesService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.mapper = new ObjectMapper();
         this.uri = HTTPCatalogRecordDeleteServiceTest.class.getResource("./").toURI();
@@ -33,6 +33,6 @@ public class HTTPCatalogRecordDeleteServiceTest {
     @Test
     public final void testGetRecordStreamNullBasePath() throws Exception {
         this.deletesService = new HTTPCatalogRecordDeleteService(this.mapper, new URI("http://localhost:1/"), "");
-        Assert.assertThrows(EresourceDatabaseException.class, () -> this.deletesService.getDeletes(0));
+        assertThrows(EresourceDatabaseException.class, () -> this.deletesService.getDeletes(0));
     }
 }

@@ -4,15 +4,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record.Field;
@@ -28,7 +28,7 @@ public class MarcLinkTest {
 
     private Version version;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.version = mock(Version.class);
         this.field = mock(Field.class);

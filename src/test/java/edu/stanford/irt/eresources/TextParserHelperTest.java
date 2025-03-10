@@ -1,12 +1,12 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TextParserHelperTest {
 
@@ -174,14 +174,19 @@ public class TextParserHelperTest {
         assertEquals("Foo 123 Bar", TextParserHelper.toTitleCase("foo 123 bar"));
         assertEquals("The Atlantic", TextParserHelper.toTitleCase("The Atlantic."));
         assertEquals("NEJM AI", TextParserHelper.toTitleCase("NEJM AI."));
-        assertEquals("Red Book (American Academy of Pediatrics)", TextParserHelper.toTitleCase("Red book (American Academy of Pediatrics)"));
-        assertEquals("New York Times (National Edition)", TextParserHelper.toTitleCase("New York times (National edition)"));
+        assertEquals("Red Book (American Academy of Pediatrics)",
+                TextParserHelper.toTitleCase("Red book (American Academy of Pediatrics)"));
+        assertEquals("New York Times (National Edition)",
+                TextParserHelper.toTitleCase("New York times (National edition)"));
         assertEquals("The New York Times", TextParserHelper.toTitleCase("The New York times"));
-        assertEquals("New England Journal of Medicine", TextParserHelper.toTitleCase("New England journal of medicine"));
+        assertEquals("New England Journal of Medicine",
+                TextParserHelper.toTitleCase("New England journal of medicine"));
         assertEquals("Stream Ecology. Third Edition", TextParserHelper.toTitleCase("Stream ecology. Third edition."));
         assertEquals("aBIOTECH", TextParserHelper.toTitleCase("aBIOTECH."));
-        assertEquals("Apple iPhone Lightning USB Data Cable & Wall Charger", TextParserHelper.toTitleCase("Apple iPhone lightning USB Data Cable & Wall Charger."));
-        assertEquals("Dell External USB Ultra Slim DVD +/- RW Slot Drive", TextParserHelper.toTitleCase("Dell External USB Ultra Slim DVD +/- RW Slot Drive"));
+        assertEquals("Apple iPhone Lightning USB Data Cable & Wall Charger",
+                TextParserHelper.toTitleCase("Apple iPhone lightning USB Data Cable & Wall Charger."));
+        assertEquals("Dell External USB Ultra Slim DVD +/- RW Slot Drive",
+                TextParserHelper.toTitleCase("Dell External USB Ultra Slim DVD +/- RW Slot Drive"));
     }
 
     @Test

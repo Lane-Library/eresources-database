@@ -5,14 +5,14 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -32,7 +32,7 @@ public class GideonEresourceProcessorTest {
 
     private GideonEresourceProcessor processor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.contentHandler = createMock(ContentHandler.class);
         this.basePath = new File(GideonEresourceProcessor.class.getResource("good/empty.xml").getPath()).getParent();

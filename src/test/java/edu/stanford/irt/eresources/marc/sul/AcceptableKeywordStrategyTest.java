@@ -1,15 +1,15 @@
 package edu.stanford.irt.eresources.marc.sul;
 
 import static org.easymock.EasyMock.mock;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
@@ -36,7 +36,7 @@ public class AcceptableKeywordStrategyTest {
 
     CatalogRecordService recordService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();

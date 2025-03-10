@@ -1,13 +1,13 @@
 package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.isA;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -22,7 +22,7 @@ public class LaneblogEresourceProcessorTest {
 
     LaneblogEresourceProcessor processor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
         this.processor = new LaneblogEresourceProcessor(

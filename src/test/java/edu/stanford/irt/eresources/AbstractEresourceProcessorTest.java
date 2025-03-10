@@ -1,12 +1,13 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AbstractEresourceProcessorTest {
 
@@ -20,14 +21,16 @@ public class AbstractEresourceProcessorTest {
 
     EresourceProcessorTest processor;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.processor = new EresourceProcessorTest();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public final void testNull() {
-        this.processor.setStartDate(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.processor.setStartDate(null);
+        });
     }
 
     @Test

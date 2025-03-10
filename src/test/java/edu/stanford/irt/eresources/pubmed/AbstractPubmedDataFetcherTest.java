@@ -1,7 +1,8 @@
 package edu.stanford.irt.eresources.pubmed;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -10,11 +11,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
@@ -31,17 +30,14 @@ public class AbstractPubmedDataFetcherTest {
 
     private static final String TODAY = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     PubmedDataFetcherTest fetcher;
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() throws Exception {
         FileUtils.forceDelete(new File(BP));
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         new File(BP).mkdir();
         this.fetcher = new PubmedDataFetcherTest();
@@ -54,11 +50,11 @@ public class AbstractPubmedDataFetcherTest {
         List<String> pmids = new ArrayList<>();
         pmids.add("12345");
         if (!EutilsIsReachable.eutilsIsReachable()) {
-            this.thrown.expect(EresourceDatabaseException.class);
+            assertTrue(false);
         }
         this.fetcher.pmidListToFiles(pmids, "baseFilename");
         // fails on drone ... not sure why since succeeded 6/5
-        //assertTrue(new File(BP + "/" + TODAY + "/baseFilename1.xml").exists());
+        // assertTrue(new File(BP + "/" + TODAY + "/baseFilename1.xml").exists());
     }
 
     @Test
@@ -67,23 +63,28 @@ public class AbstractPubmedDataFetcherTest {
         List<String> pmids = new ArrayList<>();
         pmids.add("12345");
         if (EutilsIsReachable.eutilsIsReachable()) {
-            this.thrown.expect(EresourceDatabaseException.class);
+
         }
-        this.fetcher.pmidListToFiles(pmids, "baseFilename");
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.fetcher.pmidListToFiles(pmids, "baseFilename");
+        });
+
         new File(BP).mkdir();
     }
 
     @Test
     public final void testSetBasePathEmpty() {
-        this.thrown.expect(IllegalArgumentException.class);
         PubmedDataFetcherTest myFetcher = new PubmedDataFetcherTest();
-        myFetcher.setBasePath("");
+        assertThrows(IllegalArgumentException.class, () -> {
+            myFetcher.setBasePath("");
+        });
     }
 
     @Test
     public final void testSetBasePathNull() {
-        this.thrown.expect(IllegalArgumentException.class);
         PubmedDataFetcherTest myFetcher = new PubmedDataFetcherTest();
-        myFetcher.setBasePath(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            myFetcher.setBasePath(null);
+        });
     }
 }

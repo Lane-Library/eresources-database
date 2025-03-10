@@ -1,12 +1,13 @@
 package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.isA;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.URI;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -23,7 +24,7 @@ public class ClassesEresourceProcessorTest {
 
     ClassesEresourceProcessor processor;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.classesURI = new URI("file:src/test/resources/edu/stanford/irt/eresources/sax/class.xml");
         this.contentHandler = EasyMock.mock(ContentHandler.class);
@@ -51,12 +52,14 @@ public class ClassesEresourceProcessorTest {
         EasyMock.verify(this.contentHandler);
     }
 
-    @Test(expected = EresourceDatabaseException.class)
+    @Test
     public final void testProcessException() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().andThrow(new SAXException("foo"));
         EasyMock.replay(this.contentHandler);
-        this.processor.process();
-        EasyMock.verify(this.contentHandler);
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.processor.process();
+            EasyMock.verify(this.contentHandler);
+        });
     }
 }

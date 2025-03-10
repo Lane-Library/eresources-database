@@ -1,14 +1,15 @@
 package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.Attributes;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -25,7 +26,7 @@ public class PubmedEresourceBuilderTest {
 
     private PubmedSpecialTypesManager specialTypesManager;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.attributes = EasyMock.mock(Attributes.class);
         this.eresourceHandler = EasyMock.mock(EresourceHandler.class);
@@ -128,9 +129,11 @@ public class PubmedEresourceBuilderTest {
         assertEquals("publicationVolume", this.builder.currentEresource.getPublicationVolume());
     }
 
-    @Test(expected = EresourceDatabaseException.class)
+    @Test
     public void testEndElementUnknown() throws Exception {
-        this.builder.endElement(null, null, "unknown-tag");
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.builder.endElement(null, null, "unknown-tag");
+        });
     }
 
     @Test

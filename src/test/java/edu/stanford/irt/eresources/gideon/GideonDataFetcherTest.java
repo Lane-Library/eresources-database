@@ -6,15 +6,15 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
@@ -44,7 +44,7 @@ public class GideonDataFetcherTest {
 
     private Session session;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         File tempDir = new File(System.getProperty("java.io.tmpdir"), "gideonDataFetcherTest");
         tempDir.mkdirs();
@@ -82,7 +82,7 @@ public class GideonDataFetcherTest {
     }
 
     @Test
-    @Ignore // failing on GitLb CI/CD
+    @Disabled // failing on GitLb CI/CD
     public void testGetUpdateFilesIOException() {
         File tempDir = new File(System.getProperty("java.io.tmpdir"), "another");
         tempDir.mkdirs();

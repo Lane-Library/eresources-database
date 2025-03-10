@@ -1,17 +1,17 @@
 package edu.stanford.irt.eresources.marc.sfx;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.PipedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -25,7 +25,7 @@ public class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
 
     SfxFileCatalogRecordService recordService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.executor = new ThreadPoolTaskExecutor();
         this.executor.initialize();
@@ -65,10 +65,12 @@ public class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
         });
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public final void testGetRecordStreamNullBasePath() {
         this.recordService = new SfxFileCatalogRecordService(null, this.executor);
-        new RecordCollection(this.recordService.getRecordStream(0));
+        assertThrows(IllegalStateException.class, () -> {
+            new RecordCollection(this.recordService.getRecordStream(0));
+        });
     }
 
 }

@@ -4,11 +4,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -21,7 +21,7 @@ public class TimeLimitedOnErrorEvaluatorTest {
 
     Level level;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.evaluator = new TimeLimitedOnErrorEvaluator();
         this.event = mock(ILoggingEvent.class);

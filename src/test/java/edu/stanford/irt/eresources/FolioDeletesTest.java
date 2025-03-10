@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,9 +14,9 @@ import java.util.List;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.UpdateResponse;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class FolioDeletesTest {
 
@@ -25,7 +26,7 @@ public class FolioDeletesTest {
 
     SolrClient solrClient;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.deleteService = mock(HTTPCatalogRecordDeleteService.class);
         this.deletes = new FolioDeletes("", this.deleteService);
@@ -65,8 +66,10 @@ public class FolioDeletesTest {
         expect(this.solrClient.deleteByQuery("recordType:bib AND recordId:1234"))
                 .andThrow(new SolrServerException("oops"));
         replay(this.deleteService, this.solrClient);
-        Assert.assertThrows(EresourceDatabaseException.class, () -> this.deletes.load());
-        verify(this.deleteService, this.solrClient);
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.deletes.load();
+            verify(this.deleteService, this.solrClient);
+        });
     }
 
     @Test

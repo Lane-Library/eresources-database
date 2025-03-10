@@ -1,11 +1,12 @@
 package edu.stanford.irt.eresources.marc;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.URI;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,7 +18,7 @@ public class HTTPLaneLocationsServiceTest {
 
     private ObjectMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.mapper = new ObjectMapper();
         this.locationsService = new HTTPLaneLocationsService(this.mapper,
@@ -30,9 +31,11 @@ public class HTTPLaneLocationsServiceTest {
         assertEquals(null, this.locationsService.getLocationName("none"));
     }
 
-    @Test(expected = EresourceDatabaseException.class)
+    @Test
     public final void testGetLocationsException() throws Exception {
-        this.locationsService = new HTTPLaneLocationsService(this.mapper, new URI("fake://foo"), "");
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.locationsService = new HTTPLaneLocationsService(this.mapper, new URI("fake://foo"), "");
+        });
     }
 
     @Test

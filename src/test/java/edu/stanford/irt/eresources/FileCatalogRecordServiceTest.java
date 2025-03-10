@@ -4,15 +4,16 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.PipedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
@@ -25,7 +26,7 @@ public class FileCatalogRecordServiceTest extends MARCRecordSupport {
 
     FileCatalogRecordService recordService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.executor = new ThreadPoolTaskExecutor();
         this.executor.initialize();
@@ -43,10 +44,12 @@ public class FileCatalogRecordServiceTest extends MARCRecordSupport {
         }
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public final void testGetRecordStreamNullBasePath() {
         this.recordService = new FileCatalogRecordService(null, this.executor);
-        new RecordCollection(this.recordService.getRecordStream(0));
+        assertThrows(IllegalStateException.class, () -> {
+            new RecordCollection(this.recordService.getRecordStream(0));
+        });
     }
 
     @Test

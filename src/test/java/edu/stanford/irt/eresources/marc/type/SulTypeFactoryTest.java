@@ -1,9 +1,9 @@
 package edu.stanford.irt.eresources.marc.type;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
@@ -13,7 +13,8 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
 /**
- * there's only one TypeFactory now, but keep separate unit tests for SUL and Lane
+ * there's only one TypeFactory now, but keep separate unit tests for SUL and
+ * Lane
  */
 public class SulTypeFactoryTest extends MARCRecordSupport {
 
@@ -21,7 +22,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
 
     CatalogRecordService recordService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();

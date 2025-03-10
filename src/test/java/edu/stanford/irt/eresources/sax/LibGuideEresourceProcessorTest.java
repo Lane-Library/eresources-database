@@ -1,10 +1,11 @@
 package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.isA;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -19,10 +20,11 @@ public class LibGuideEresourceProcessorTest {
 
     LibGuideEresourceProcessor processor;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
-        this.processor = new LibGuideEresourceProcessor("file:src/test/resources/edu/stanford/irt/eresources/sax/oai-pmh-libguides.xml",
+        this.processor = new LibGuideEresourceProcessor(
+                "file:src/test/resources/edu/stanford/irt/eresources/sax/oai-pmh-libguides.xml",
                 this.contentHandler);
     }
 
@@ -53,22 +55,28 @@ public class LibGuideEresourceProcessorTest {
         EasyMock.verify(this.contentHandler);
     }
 
-    @Test(expected = EresourceDatabaseException.class)
+    @Test
     public final void testProcessException() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().andThrow(new SAXException("foo"));
         EasyMock.replay(this.contentHandler);
-        this.processor.process();
-        EasyMock.verify(this.contentHandler);
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.processor.process();
+            EasyMock.verify(this.contentHandler);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public final void testProcessNullBasepath() throws Exception {
-        (new LibGuideEresourceProcessor(null, this.contentHandler)).process();
+        assertThrows(IllegalArgumentException.class, () -> {
+            (new LibGuideEresourceProcessor(null, this.contentHandler)).process();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public final void testProcessNullContentHandler() throws Exception {
-        (new LibGuideEresourceProcessor("", null)).process();
+        assertThrows(IllegalArgumentException.class, () -> {
+            (new LibGuideEresourceProcessor("", null)).process();
+        });
     }
 }

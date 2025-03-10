@@ -4,14 +4,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -33,7 +33,7 @@ public class KeywordsStrategyTest {
 
     private List<Field> twoFields;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.augmentation = mock(AuthTextAugmentation.class);
         this.reservesAugmentation = mock(ReservesTextAugmentation.class);

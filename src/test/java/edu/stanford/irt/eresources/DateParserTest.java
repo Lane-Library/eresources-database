@@ -1,8 +1,8 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DateParserTest {
 
@@ -39,7 +39,7 @@ public class DateParserTest {
         assertEquals("20150101", DateParser.parseDate("2015 31/12"));
         assertEquals("20150101", DateParser.parseDate("2015 47 25"));
     }
-    
+
     @Test
     public final void testParseYear() throws Exception {
         assertEquals("1200", DateParser.parseYear("just one 1200 year"));

@@ -14,8 +14,8 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.SolrEresourceHandler;
@@ -43,7 +43,7 @@ public class SulMARCRecordEresourceProcessorTest {
 
         private List<InclusionStrategy> inclusionStrategies;
 
-        @Before
+        @BeforeEach
         public void setup() {
                 this.eresourceHandler = mock(SolrEresourceHandler.class);
                 this.keywordsStrategy = mock(KeywordsStrategy.class);

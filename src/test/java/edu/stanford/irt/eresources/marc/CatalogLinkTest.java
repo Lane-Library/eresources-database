@@ -4,14 +4,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.CatalogLink.Type;
@@ -22,7 +22,7 @@ public class CatalogLinkTest {
 
     Version version;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.version = mock(Version.class);
         this.link = new CatalogLink(Type.BIB, "recordId", this.version);

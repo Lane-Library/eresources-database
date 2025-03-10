@@ -5,14 +5,14 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.lcsh.LcshMapManager;
@@ -23,7 +23,7 @@ public class SfxMarcEresourceTest {
     SfxMarcEresource sfxMarcEresource;
     LcshMapManager lcshMapManager;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         byte[] marc = Files
                 .readAllBytes(Paths.get("src/test/resources/edu/stanford/irt/eresources/marc/sfx/sfx-export.marc"));

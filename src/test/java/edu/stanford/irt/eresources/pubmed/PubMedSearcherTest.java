@@ -1,19 +1,20 @@
 package edu.stanford.irt.eresources.pubmed;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PubMedSearcherTest {
 
     private Collection<PubmedSearcher> searchers;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.searchers = new ArrayList<PubmedSearcher>();
         this.searchers.add(new PubmedSearcher("field_foo", "value_foo", "24120354", null, "version"));
@@ -25,10 +26,12 @@ public class PubMedSearcherTest {
         assertTrue(search.getPmids().isEmpty());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public final void testNullQuery() throws Exception {
-        PubmedSearcher search = new PubmedSearcher("field", "value", null, null, "version");
-        search.getPmids();
+        assertThrows(IllegalStateException.class, () -> {
+            PubmedSearcher search = new PubmedSearcher("field", "value", null, null, "version");
+            search.getPmids();
+        });
     }
 
     @Test

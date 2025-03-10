@@ -2,14 +2,15 @@ package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isA;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.Attributes;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -23,7 +24,7 @@ public class DefaultEresourceBuilderTest {
 
     private EresourceHandler eresourceHandler;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.attributes = EasyMock.mock(Attributes.class);
         this.eresourceHandler = EasyMock.mock(EresourceHandler.class);
@@ -238,9 +239,11 @@ public class DefaultEresourceBuilderTest {
         assertEquals("new type", this.builder.currentEresource.getTypes().stream().findFirst().get());
     }
 
-    @Test(expected = EresourceDatabaseException.class)
+    @Test
     public void testEndElementUnknown() throws Exception {
-        this.builder.endElement(null, null, "unknown-tag");
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.builder.endElement(null, null, "unknown-tag");
+        });
     }
 
     @Test
@@ -278,10 +281,12 @@ public class DefaultEresourceBuilderTest {
         assertEquals(2012, this.builder.currentEresource.getYear());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testStartDocumentNullErHandler() throws Exception {
         this.builder.setEresourceHandler(null);
-        this.builder.startDocument();
+        assertThrows(IllegalStateException.class, () -> {
+            this.builder.startDocument();
+        });
     }
 
     @Test

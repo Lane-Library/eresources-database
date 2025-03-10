@@ -4,8 +4,9 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,9 +15,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
@@ -30,14 +31,14 @@ public class AugmentationUtilityTest {
 
     String objectFile = "unit-test-augmentation-utility.obj";
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.augmentationsService = mock(AugmentationsService.class);
         this.aMap = new HashMap<>();
         this.aMap.put("key", "value");
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         new File(this.objectFile).delete();
     }
@@ -66,20 +67,22 @@ public class AugmentationUtilityTest {
         verify(this.augmentationsService);
     }
 
-    @Test(expected = EresourceDatabaseException.class)
+    @Test
     public final void testFetchAugmentationsIOException1() throws Exception {
         expect(this.augmentationsService.buildAugmentations()).andReturn(this.aMap);
         replay(this.augmentationsService);
-        AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
-        verify(this.augmentationsService);
+        assertThrows(EresourceDatabaseException.class, () -> {
+            AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
+            verify(this.augmentationsService);
+        });
     }
 
     // failing on gitlab runner only
-//    @Test
-//    public final void testFetchAugmentationsIOException2() throws Exception {
-//        expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
-//        replay(this.augmentationsService);
-//        AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
-//        verify(this.augmentationsService);
-//    }
+    // @Test
+    // public final void testFetchAugmentationsIOException2() throws Exception {
+    // expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
+    // replay(this.augmentationsService);
+    // AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
+    // verify(this.augmentationsService);
+    // }
 }

@@ -4,15 +4,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AuthTextAugmentationTest {
 
@@ -24,7 +24,7 @@ public class AuthTextAugmentationTest {
 
     private AugmentationsService service;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.service = mock(AugmentationsService.class);
         this.augmentations = Collections.singletonMap("1", "variant authority text");
@@ -34,7 +34,7 @@ public class AuthTextAugmentationTest {
         verify(this.service);
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         new File(this.objectFile).delete();
     }

@@ -4,14 +4,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
@@ -27,7 +27,7 @@ public class AcceptableDBCallNumberStrategyTest {
 
     private Subfield subfield;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.inclusionStrategy = new AcceptableDBCallNumberStrategy(Collections.singletonList("A"));
         this.marcRecord = mock(Record.class);

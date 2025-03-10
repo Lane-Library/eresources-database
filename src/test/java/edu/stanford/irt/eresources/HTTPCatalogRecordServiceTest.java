@@ -1,12 +1,13 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.URI;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.RecordCollection;
@@ -17,7 +18,7 @@ public class HTTPCatalogRecordServiceTest {
 
     HTTPCatalogRecordService recordService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         this.uri = HTTPCatalogRecordServiceTest.class.getResource("./").toURI();
         this.recordService = new HTTPCatalogRecordService(this.uri, "marc/folio-records");
@@ -31,9 +32,11 @@ public class HTTPCatalogRecordServiceTest {
         assertEquals("in00000000125", rc.next().getInstanceHrid());
     }
 
-    @Test(expected = EresourceDatabaseException.class)
+    @Test
     public final void testGetRecordStreamNullBasePath() throws Exception {
         this.recordService = new HTTPCatalogRecordService(new URI("http://localhost:1/"), "");
-        new RecordCollection(this.recordService.getRecordStream(0));
+        assertThrows(EresourceDatabaseException.class, () -> {
+            new RecordCollection(this.recordService.getRecordStream(0));
+        });
     }
 }

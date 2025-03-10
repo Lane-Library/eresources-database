@@ -1,10 +1,10 @@
 package edu.stanford.irt.eresources.marc.type;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
@@ -17,7 +17,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
 
     CatalogRecordService recordService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
