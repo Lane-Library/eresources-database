@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
@@ -78,11 +79,12 @@ public class AugmentationUtilityTest {
     }
 
     // failing on gitlab runner only
-    // @Test
-    // public final void testFetchAugmentationsIOException2() throws Exception {
-    // expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
-    // replay(this.augmentationsService);
-    // AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
-    // verify(this.augmentationsService);
-    // }
+    @Test
+    @Disabled
+    public final void testFetchAugmentationsIOException2() throws Exception {
+        expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
+        replay(this.augmentationsService);
+        AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
+        verify(this.augmentationsService);
+    }
 }
