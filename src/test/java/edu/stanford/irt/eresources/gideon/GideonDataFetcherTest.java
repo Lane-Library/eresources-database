@@ -82,7 +82,7 @@ class GideonDataFetcherTest {
     }
 
     @Test
-    @Disabled // failing on GitLb CI/CD
+    @Disabled("failing on GitLb CI/CD")
     void testGetUpdateFilesIOException() {
         File tempDir = new File(System.getProperty("java.io.tmpdir"), "another");
         tempDir.mkdirs();

@@ -78,9 +78,8 @@ class AugmentationUtilityTest {
         verify(this.augmentationsService);
     }
 
-    // failing on gitlab runner only
     @Test
-    @Disabled
+    @Disabled("failing on gitlab runner only")
     final void testFetchAugmentationsIOException2() {
         expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
         replay(this.augmentationsService);
