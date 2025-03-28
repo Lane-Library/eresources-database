@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import edu.stanford.irt.eresources.CatalogRecordService;
 import edu.stanford.lane.catalog.FolioRecord;
 
-public class BibFolioEresourceTest extends MARCRecordSupport {
+class BibFolioEresourceTest extends MARCRecordSupport {
 
     private BibFolioEresource eresource;
 
@@ -22,7 +22,7 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
     CatalogRecordService recordService;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         this.record = new FolioRecord(
                 BibFolioEresourceTest.class.getResourceAsStream("folio-record.json").readAllBytes());
         this.locationsService = mock(HTTPLaneLocationsService.class);
@@ -30,64 +30,64 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetAbbreviatedTitles() {
+    void testGetAbbreviatedTitles() {
         assertTrue(this.eresource.getAbbreviatedTitles().isEmpty());
     }
 
     @Test
-    public void testGetAlternativeTitles() {
+    void testGetAlternativeTitles() {
         assertEquals("alt title", this.eresource.getAlternativeTitles().stream().findFirst().get());
     }
 
     @Test
-    public void testGetBroadMeshTerms() {
+    void testGetBroadMeshTerms() {
         assertTrue(this.eresource.getBroadMeshTerms().isEmpty());
     }
 
     @Test
-    public void testGetDate() {
+    void testGetDate() {
         assertEquals("19000101", this.eresource.getDate());
     }
 
     @Test
-    public void testGetDescription() {
+    void testGetDescription() {
         assertEquals("test note", this.eresource.getDescription());
     }
 
     @Test
-    public void testGetId() {
+    void testGetId() {
         assertEquals("bib-00000000125", this.eresource.getId());
     }
 
     @Test
-    public void testGetIsbn() {
+    void testGetIsbn() {
         assertTrue(this.eresource.getIsbns().contains("fake-isbn"));
     }
 
     @Test
-    public void testGetIssn() {
+    void testGetIssn() {
         assertTrue(this.eresource.getIssns().contains("fake-issn"));
     }
 
     @Test
-    public void testGetItemCount() {
+    void testGetItemCount() {
         int[] count = this.eresource.getItemCount();
         assertEquals(1, count[0]);
         assertEquals(1, count[1]);
     }
 
     @Test
-    public void testGetKeywords() {
+    void testGetKeywords() {
         assertTrue(this.eresource.getKeywords().contains("Lane .Digital: Collection"));
     }
 
     @Test
-    public void testGetMeshTerms() {
+    void testGetMeshTerms() {
         assertTrue(this.eresource.getMeshTerms().contains("Test Subject"));
     }
 
     @Test
-    public void testGetPrimaryTypeText() throws Exception {
+    void testGetPrimaryTypeText() throws Exception {
         this.record = new FolioRecord(
                 BibFolioEresourceTest.class.getResourceAsStream("folio-record-equipment.json").readAllBytes());
         this.eresource = new BibFolioEresource(this.record, this.locationsService);
@@ -96,57 +96,57 @@ public class BibFolioEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetPublicationAuthorsText() {
+    void testGetPublicationAuthorsText() {
         assertEquals("Org 1; Org 2.", this.eresource.getPublicationAuthorsText());
     }
 
     @Test
-    public void testGetPublicationLanguages() {
+    void testGetPublicationLanguages() {
         assertTrue(this.eresource.getPublicationLanguages().isEmpty());
     }
 
     @Test
-    public void testGetPublicationTextTitleEtc() {
+    void testGetPublicationTextTitleEtc() {
         assertNull(this.eresource.getPublicationTitle());
     }
 
     @Test
-    public void testGetRecordId() {
+    void testGetRecordId() {
         assertEquals("00000000125", this.eresource.getRecordId());
     }
 
     @Test
-    public void testGetRecordType() {
+    void testGetRecordType() {
         assertEquals("bib", this.eresource.getRecordType());
     }
 
     @Test
-    public void testGetShortTitle() {
+    void testGetShortTitle() {
         assertEquals("Test title", this.eresource.getShortTitle());
     }
 
     @Test
-    public void testGetSortTitle() {
+    void testGetSortTitle() {
         assertEquals("Test title", this.eresource.getSortTitle());
     }
 
     @Test
-    public void testGetTitle() {
+    void testGetTitle() {
         assertEquals("Test Title", this.eresource.getTitle());
     }
 
     @Test
-    public void testGetVersions() {
+    void testGetVersions() {
         assertEquals(1, this.eresource.getVersions().size());
     }
 
     @Test
-    public void testGetYear() {
+    void testGetYear() {
         assertEquals(1900, this.eresource.getYear());
     }
 
     @Test
-    public void testIsEnglish() {
+    void testIsEnglish() {
         assertTrue(this.eresource.isEnglish());
     }
 }

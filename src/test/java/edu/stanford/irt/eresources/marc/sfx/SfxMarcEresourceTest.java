@@ -17,55 +17,55 @@ import org.junit.jupiter.api.Test;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.lcsh.LcshMapManager;
 
-public class SfxMarcEresourceTest {
+class SfxMarcEresourceTest {
 
-    Record record;
-    SfxMarcEresource sfxMarcEresource;
     LcshMapManager lcshMapManager;
 
+    Record rec;
+
+    SfxMarcEresource sfxMarcEresource;
+
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         byte[] marc = Files
                 .readAllBytes(Paths.get("src/test/resources/edu/stanford/irt/eresources/marc/sfx/sfx-export.marc"));
-        this.record = new Record(marc);
+        this.rec = new Record(marc);
         this.lcshMapManager = mock(LcshMapManager.class);
-        this.sfxMarcEresource = new SfxMarcEresource(record, null, lcshMapManager);
+        this.sfxMarcEresource = new SfxMarcEresource(this.rec, null, this.lcshMapManager);
     }
 
     @Test
-    public void testCreateVersion() {
-        assertEquals("2017", this.sfxMarcEresource.createVersion(this.record).getHoldingsAndDates());
+    void testCreateVersion() {
+        assertEquals("2017", this.sfxMarcEresource.createVersion(this.rec).getHoldingsAndDates());
     }
 
     @Test
-    public void testGetMeshTerms() {
-        expect(lcshMapManager.getMeshForHeading(isA(String.class))).andReturn(Collections.singleton("mappedMesh"))
+    void testGetMeshTerms() {
+        expect(this.lcshMapManager.getMeshForHeading(isA(String.class))).andReturn(Collections.singleton("mappedMesh"))
                 .atLeastOnce();
-        replay(lcshMapManager);
+        replay(this.lcshMapManager);
         assertEquals("Law", this.sfxMarcEresource.getMeshTerms().toArray()[0]);
         assertEquals("mappedMesh", this.sfxMarcEresource.getMeshTerms().toArray()[1]);
-        verify(lcshMapManager);
+        verify(this.lcshMapManager);
     }
 
     @Test
-    public void testGetPrimaryType() {
+    void testGetPrimaryType() {
         assertEquals("Book Digital", this.sfxMarcEresource.getPrimaryType());
-
     }
 
     @Test
-    public void testGetRecordId() {
+    void testGetRecordId() {
         assertEquals("110978984449203", this.sfxMarcEresource.getRecordId());
-
     }
 
     @Test
-    public void testGetRecordType() {
+    void testGetRecordType() {
         assertEquals("sfx", this.sfxMarcEresource.getRecordType());
     }
 
     @Test
-    public void testGetTypes() {
+    void testGetTypes() {
         assertEquals("Book", this.sfxMarcEresource.getTypes().toArray()[0]);
     }
 }

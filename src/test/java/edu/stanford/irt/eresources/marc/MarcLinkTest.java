@@ -18,7 +18,7 @@ import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class MarcLinkTest {
+class MarcLinkTest {
 
     private Field field;
 
@@ -29,7 +29,7 @@ public class MarcLinkTest {
     private Version version;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.version = mock(Version.class);
         this.field = mock(Field.class);
         this.link = new MarcLink(this.field, this.version);
@@ -37,7 +37,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetAdditionalText() {
+    void testGetAdditionalText() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('i');
         expect(this.subfield.getData()).andReturn("additional text");
@@ -46,14 +46,14 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetAdditionalTextNull() {
+    void testGetAdditionalTextNull() {
         expect(this.field.getSubfields()).andReturn(Collections.emptyList());
         replay(this.field, this.subfield, this.version);
         assertNull(this.link.getAdditionalText());
     }
 
     @Test
-    public void testGetLabelEmptyParens() {
+    void testGetLabelEmptyParens() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');
         expect(this.subfield.getData()).andReturn("()");
@@ -62,14 +62,14 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLabelNull() {
+    void testGetLabelNull() {
         expect(this.field.getSubfields()).andReturn(Collections.emptyList()).times(2);
         replay(this.field, this.subfield);
         assertNull(this.link.getLabel());
     }
 
     @Test
-    public void testGetLabelOpenParens() {
+    void testGetLabelOpenParens() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');
         expect(this.subfield.getData()).andReturn("(label");
@@ -78,7 +78,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLabelParens() {
+    void testGetLabelParens() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');
         expect(this.subfield.getData()).andReturn("(label)");
@@ -87,7 +87,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLabelQ() {
+    void testGetLabelQ() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');
         expect(this.subfield.getData()).andReturn("q label");
@@ -96,7 +96,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLabelSuAffiliation() {
+    void testGetLabelSuAffiliation() {
         Subfield sf1 = mock(Subfield.class);
         Subfield sf2 = mock(Subfield.class);
         List<Subfield> sfs = Arrays.asList(sf1, sf2);
@@ -111,7 +111,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLabelZ() {
+    void testGetLabelZ() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
         expect(this.subfield.getCode()).andReturn('z').times(2);
         expect(this.subfield.getData()).andReturn("z label");
@@ -120,7 +120,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLinkTextHoldingsAndDates() {
+    void testGetLinkTextHoldingsAndDates() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');
         expect(this.subfield.getData()).andReturn("label");
@@ -132,7 +132,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLinkTextHoldingsAndDatesNoLinks() {
+    void testGetLinkTextHoldingsAndDatesNoLinks() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');
         expect(this.subfield.getData()).andReturn("label");
@@ -144,7 +144,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLinkTextHoldingsAndDatesNullLinks() {
+    void testGetLinkTextHoldingsAndDatesNullLinks() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');
         expect(this.subfield.getData()).andReturn("label");
@@ -156,7 +156,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLinkTextNoHoldingsAndDates() {
+    void testGetLinkTextNoHoldingsAndDates() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('q');
         expect(this.subfield.getData()).andReturn("label");
@@ -168,7 +168,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetLinkTextNoHoldingsAndDatesNoLabel() {
+    void testGetLinkTextNoHoldingsAndDatesNoLabel() {
         expect(this.field.getSubfields()).andReturn(Collections.emptyList()).times(2);
         expect(this.version.getHoldingsAndDates()).andReturn(null);
         expect(this.version.getLinks()).andReturn(null);
@@ -178,7 +178,7 @@ public class MarcLinkTest {
     }
 
     @Test
-    public void testGetUrl() {
+    void testGetUrl() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('u');
         expect(this.subfield.getData()).andReturn("url");

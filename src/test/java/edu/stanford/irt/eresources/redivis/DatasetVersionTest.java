@@ -13,20 +13,20 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DatasetVersionTest {
+class DatasetVersionTest {
 
     Result dataset;
 
     DatasetVersion datasetVersion;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.dataset = mock(Result.class);
         this.datasetVersion = new DatasetVersion(this.dataset);
     }
 
     @Test
-    public final void testGetAdditionalText() {
+    final void testGetAdditionalText() {
         expect(this.dataset.getAccessLevel()).andReturn("data");
         replay(this.dataset);
         assertNull(this.datasetVersion.getAdditionalText());
@@ -40,37 +40,37 @@ public class DatasetVersionTest {
     }
 
     @Test
-    public final void testGetDates() {
+    final void testGetDates() {
         assertNull(this.datasetVersion.getDates());
     }
 
     @Test
-    public final void testGetHoldingsAndDates() {
+    final void testGetHoldingsAndDates() {
         assertNull(this.datasetVersion.getHoldingsAndDates());
     }
 
     @Test
-    public final void testGetLinks() {
+    final void testGetLinks() {
         assertNotNull(this.datasetVersion.getLinks());
     }
 
     @Test
-    public final void testGetPublisher() {
+    final void testGetPublisher() {
         assertNull(this.datasetVersion.getPublisher());
     }
 
     @Test
-    public final void testGetSummaryHoldings() {
+    final void testGetSummaryHoldings() {
         assertNull(this.datasetVersion.getSummaryHoldings());
     }
 
     @Test
-    public final void testIsProxy() {
+    final void testIsProxy() {
         assertFalse(this.datasetVersion.isProxy());
     }
 
     @Test
-    public final void testVersionInterface() {
+    final void testVersionInterface() {
         assertNull(this.datasetVersion.getCallnumber());
         assertNull(this.datasetVersion.getLocationName());
         assertNull(this.datasetVersion.getLocationUrl());

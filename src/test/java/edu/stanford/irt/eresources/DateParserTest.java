@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class DateParserTest {
+class DateParserTest {
 
     @Test
-    public final void testParseDate1() throws Exception {
+    final void testParseDate1() {
         assertEquals("12000101", DateParser.parseDate("1200"));
         assertEquals("19770404", DateParser.parseDate("1977 Apr 4"));
         assertEquals("20120216", DateParser.parseDate("2012 Feb 16"));
@@ -25,7 +25,7 @@ public class DateParserTest {
     }
 
     @Test
-    public final void testParseDate2() throws Exception {
+    final void testParseDate2() throws Exception {
         assertEquals("20160401", DateParser.parseDate("2016 spring-summer"));
         assertEquals("20160401", DateParser.parseDate("2016 spring/summer"));
         assertEquals("20160101", DateParser.parseDate("2016 foo"));
@@ -41,7 +41,7 @@ public class DateParserTest {
     }
 
     @Test
-    public final void testParseYear() throws Exception {
+    final void testParseYear() {
         assertEquals("1200", DateParser.parseYear("just one 1200 year"));
         assertEquals("1938", DateParser.parseYear("1938 oregon"));
         assertEquals("2012", DateParser.parseYear("02/16/2012"));

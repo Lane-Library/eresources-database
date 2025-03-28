@@ -15,7 +15,7 @@ import edu.stanford.irt.eresources.sax.SAXVersion;
 /**
  * @author ryanmax
  */
-public class VersionComparatorTest {
+class VersionComparatorTest {
 
     private VersionComparator comparator;
 
@@ -34,7 +34,7 @@ public class VersionComparatorTest {
     private SAXVersion saxVersion2;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.saxVersion1 = new SAXVersion();
         this.saxVersion2 = new SAXVersion();
         this.saxLink = new SAXLink();
@@ -46,14 +46,14 @@ public class VersionComparatorTest {
     }
 
     @Test
-    public void testCompare() {
+    void testCompare() {
         this.saxVersion1.setDates("1999.");
         this.saxVersion2.setDates("1999.");
         assertEquals(1, this.comparator.compare(this.saxVersion1, this.saxVersion2));
     }
 
     @Test
-    public void testCompareClosedDates() {
+    void testCompareClosedDates() {
         this.saxVersion1.setDates("1999-2000.");
         this.saxVersion2.setDates("1999-2000.");
         assertEquals(1, this.comparator.compare(this.saxVersion1, this.saxVersion2));
@@ -68,7 +68,7 @@ public class VersionComparatorTest {
     }
 
     @Test
-    public void testCompareCurrentHoldings() {
+    void testCompareCurrentHoldings() {
         this.saxVersion1.setSummaryHoldings("v. 1-");
         this.saxVersion1.addLink(this.saxLink);
         this.saxVersion2.addLink(this.saxLink);
@@ -78,7 +78,7 @@ public class VersionComparatorTest {
     }
 
     @Test
-    public void testCompareDelayedHoldings() {
+    void testCompareDelayedHoldings() {
         this.saxVersion1.setSummaryHoldings("v. 1-");
         this.saxVersion1.addLink(this.saxLink);
         this.saxVersion2.addLink(this.saxLink);
@@ -88,7 +88,7 @@ public class VersionComparatorTest {
     }
 
     @Test
-    public void testCompareHoldings() {
+    void testCompareHoldings() {
         this.saxVersion1.setSummaryHoldings("v. 1-");
         this.saxVersion2.setSummaryHoldings("v. 1.");
         this.saxVersion1.addLink(this.saxLink);
@@ -100,7 +100,7 @@ public class VersionComparatorTest {
     }
 
     @Test
-    public void testCompareOpenDates() {
+    void testCompareOpenDates() {
         this.saxVersion1.setDates("1999-");
         this.saxVersion2.setDates("1999-2000.");
         assertTrue(this.comparator.compare(this.saxVersion1, this.saxVersion2) < 0);
@@ -112,7 +112,7 @@ public class VersionComparatorTest {
     }
 
     @Test
-    public void testComparePublishers() {
+    void testComparePublishers() {
         this.saxVersion1.setDates("1999.");
         this.saxVersion1.setPublisher("ScienceDirect");
         this.saxVersion2.setDates("1999.");

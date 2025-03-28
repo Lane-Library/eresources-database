@@ -21,7 +21,7 @@ import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 
-public class FolioRecordEresourceProcessorTest {
+class FolioRecordEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
@@ -40,7 +40,7 @@ public class FolioRecordEresourceProcessorTest {
     private RecordCollectionFactory recordCollectionFactory;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.eresourceHandler = mock(EresourceHandler.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
@@ -53,7 +53,7 @@ public class FolioRecordEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessBib() {
+    final void testProcessBib() {
         Field field = mock(Field.class);
         LocalDateTime ldt = LocalDateTime.now();
         this.processor.setStartDate(ldt);

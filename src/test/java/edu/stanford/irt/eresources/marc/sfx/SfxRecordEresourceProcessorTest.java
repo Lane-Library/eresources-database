@@ -23,7 +23,7 @@ import edu.stanford.irt.eresources.marc.RecordCollectionFactory;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class SfxRecordEresourceProcessorTest {
+class SfxRecordEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
@@ -36,7 +36,7 @@ public class SfxRecordEresourceProcessorTest {
     private SfxRecordEresourceProcessor sfxRecordEresourceProcessor;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.eresourceHandler = mock(SolrEresourceHandler.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.recordCollectionFactory = mock(RecordCollectionFactory.class);
@@ -46,7 +46,7 @@ public class SfxRecordEresourceProcessorTest {
     }
 
     @Test
-    public void testProcess() throws Exception {
+    void testProcess() throws Exception {
         LocalDateTime startDate = LocalDateTime.now();
         Long start = startDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         this.sfxRecordEresourceProcessor.setStartDate(startDate);

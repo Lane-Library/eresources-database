@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DatasetLinkTest {
+class DatasetLinkTest {
 
     private Result dataset;
 
@@ -19,24 +19,24 @@ public class DatasetLinkTest {
     private DatasetVersion version;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.version = mock(DatasetVersion.class);
         this.dataset = mock(Result.class);
         this.datasetLink = new DatasetLink(this.dataset, this.version);
     }
 
     @Test
-    public final void testGetAdditionalText() {
+    final void testGetAdditionalText() {
         assertNull(this.datasetLink.getAdditionalText());
     }
 
     @Test
-    public final void testGetLabel() {
+    final void testGetLabel() {
         assertEquals("Redivis", this.datasetLink.getLabel());
     }
 
     @Test
-    public final void testGetLinkText() {
+    final void testGetLinkText() {
         expect(this.version.getDates()).andReturn("dates");
         replay(this.version);
         assertEquals("dates", this.datasetLink.getLinkText());
@@ -44,7 +44,7 @@ public class DatasetLinkTest {
     }
 
     @Test
-    public final void testGetUrl() {
+    final void testGetUrl() {
         expect(this.dataset.getUrl()).andReturn("url");
         replay(this.dataset);
         assertEquals("url", this.datasetLink.getUrl());

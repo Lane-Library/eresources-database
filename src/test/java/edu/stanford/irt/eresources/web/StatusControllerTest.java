@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import edu.stanford.irt.status.ApplicationStatus;
 import edu.stanford.irt.status.StatusService;
 
-public class StatusControllerTest {
+class StatusControllerTest {
 
     private ApplicationStatus applicationStatus;
 
@@ -21,14 +21,14 @@ public class StatusControllerTest {
     private StatusService service;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.service = mock(StatusService.class);
         this.controller = new StatusController(this.service);
         this.applicationStatus = mock(ApplicationStatus.class);
     }
 
     @Test
-    public void testGetStatusJson() {
+    void testGetStatusJson() {
         expect(this.service.getStatus()).andReturn(this.applicationStatus);
         replay(this.service);
         assertEquals(this.applicationStatus, this.controller.getStatusJson());
@@ -36,7 +36,7 @@ public class StatusControllerTest {
     }
 
     @Test
-    public void testGetStatusTxt() {
+    void testGetStatusTxt() {
         expect(this.service.getStatus()).andReturn(this.applicationStatus);
         replay(this.service);
         assertEquals(this.applicationStatus.toString(), this.controller.getStatusTxt());

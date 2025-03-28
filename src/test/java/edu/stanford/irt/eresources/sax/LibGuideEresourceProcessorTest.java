@@ -14,14 +14,14 @@ import org.xml.sax.helpers.AttributesImpl;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
-public class LibGuideEresourceProcessorTest {
+class LibGuideEresourceProcessorTest {
 
     ContentHandler contentHandler;
 
     LibGuideEresourceProcessor processor;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
         this.processor = new LibGuideEresourceProcessor(
                 "file:src/test/resources/edu/stanford/irt/eresources/sax/oai-pmh-libguides.xml",
@@ -29,7 +29,7 @@ public class LibGuideEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcess() throws Exception {
+    final void testProcess() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -56,7 +56,7 @@ public class LibGuideEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessException() throws Exception {
+    final void testProcessException() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().andThrow(new SAXException("foo"));
         EasyMock.replay(this.contentHandler);
@@ -67,14 +67,14 @@ public class LibGuideEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessNullBasepath() throws Exception {
+    final void testProcessNullBasepath() {
         assertThrows(IllegalArgumentException.class, () -> {
             (new LibGuideEresourceProcessor(null, this.contentHandler)).process();
         });
     }
 
     @Test
-    public final void testProcessNullContentHandler() throws Exception {
+    final void testProcessNullContentHandler() {
         assertThrows(IllegalArgumentException.class, () -> {
             (new LibGuideEresourceProcessor("", null)).process();
         });

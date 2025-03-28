@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 
-public class LaneStaffInclusionStrategyTest {
+class LaneStaffInclusionStrategyTest {
 
     private Field field;
 
@@ -24,14 +24,14 @@ public class LaneStaffInclusionStrategyTest {
     private Record marcRecord;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.inclusionStrategy = new LaneStaffInclusionStrategy();
         this.marcRecord = mock(Record.class);
         this.field = mock(Field.class);
     }
 
     @Test
-    public final void testIsAcceptableFalse() {
+    final void testIsAcceptableFalse() {
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("900");
         replay(this.marcRecord, this.field);
@@ -40,7 +40,7 @@ public class LaneStaffInclusionStrategyTest {
     }
 
     @Test
-    public final void testIsAcceptableTrue() {
+    final void testIsAcceptableTrue() {
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("909");
         replay(this.marcRecord, this.field);

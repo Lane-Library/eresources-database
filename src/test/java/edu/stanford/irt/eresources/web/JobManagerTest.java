@@ -20,20 +20,20 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class JobManagerTest {
+class JobManagerTest {
 
     private ExecutorService executor;
 
     private JobManager manager;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.executor = Executors.newSingleThreadExecutor();
         this.manager = new JobManager(this.executor, 1);
     }
 
     @Test
-    public final void testCancelRunningJob() {
+    final void testCancelRunningJob() {
         this.manager.runningJobs.add(new Job(Job.Type.UNIT_TESTING, null));
         Future future = mock(Future.class);
         this.manager.runningFutures.add(future);
@@ -50,63 +50,63 @@ public class JobManagerTest {
     }
 
     @Test
-    public final void testGetMaxJobDurationInHours() {
+    final void testGetMaxJobDurationInHours() {
         assertEquals(1, this.manager.getMaxJobDurationInHours());
     }
 
     @Test
-    public final void testGetPausedDataSources() {
+    final void testGetPausedDataSources() {
         assertTrue(this.manager.getPausedDataSources().isEmpty());
     }
 
     @Test
-    public final void testGetRunningJobs() {
+    final void testGetRunningJobs() {
         assertTrue(this.manager.getRunningJobs().isEmpty());
     }
 
     @Test
-    public final void testPause() {
+    final void testPause() {
         assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
     }
 
     @Test
-    public final void testPauseAlreadyRunning() {
+    final void testPauseAlreadyRunning() {
         this.manager.runningJobs.add(new Job(Job.Type.UNDEFINED, null));
         assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
     }
 
     @Test
-    public final void testPauseThenUnpause() {
+    final void testPauseThenUnpause() {
         assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
         assertEquals(JobStatus.RUNNING, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
     }
 
     @Test
-    public final void testRun() {
+    final void testRun() {
         Job test = new Job(Job.Type.UNIT_TESTING, LocalDateTime.now());
         assertEquals(JobStatus.COMPLETE, this.manager.run(test));
         assertTrue(test.toString().contains("type: UNIT_TESTING;"));
     }
 
     @Test
-    public final void testRunAlreadyPaused() {
+    final void testRunAlreadyPaused() {
         assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.PAUSE_UNDEFINED, null)));
         assertEquals(JobStatus.PAUSED, this.manager.run(new Job(Job.Type.UNDEFINED, null)));
     }
 
     @Test
-    public final void testRunAlreadyRunning() {
+    final void testRunAlreadyRunning() {
         this.manager.runningJobs.add(new Job(Job.Type.UNDEFINED, null));
         assertEquals(JobStatus.RUNNING, this.manager.run(new Job(Job.Type.UNDEFINED, null)));
     }
 
     @Test
-    public final void testRunError() {
+    final void testRunError() {
         assertEquals(JobStatus.ERROR, this.manager.run(new Job(Job.Type.UNDEFINED, null)));
     }
 
     @Test
-    public final void testRunInterrupt() throws Exception {
+    final void testRunInterrupt() throws Exception {
         ExecutorService es = mock(ExecutorService.class);
         this.manager = new JobManager(es, 1);
         Future<JobStatus> futureJob = mock(Future.class);
@@ -119,7 +119,7 @@ public class JobManagerTest {
     }
 
     @Test
-    public final void testRunTimeout() {
+    final void testRunTimeout() {
         this.manager = new JobManager(this.executor, 0);
         assertEquals(JobStatus.INTERRUPTED, this.manager.run(new Job(Job.Type.UNIT_TESTING, LocalDateTime.now())));
     }

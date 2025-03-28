@@ -17,7 +17,7 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class AcceptableDBCallNumberStrategyTest {
+class AcceptableDBCallNumberStrategyTest {
 
     private Field field;
 
@@ -28,7 +28,7 @@ public class AcceptableDBCallNumberStrategyTest {
     private Subfield subfield;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.inclusionStrategy = new AcceptableDBCallNumberStrategy(Collections.singletonList("A"));
         this.marcRecord = mock(Record.class);
         this.field = mock(Field.class);
@@ -36,7 +36,7 @@ public class AcceptableDBCallNumberStrategyTest {
     }
 
     @Test
-    public final void testIsAcceptableFalse() {
+    final void testIsAcceptableFalse() {
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("099");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
@@ -48,7 +48,7 @@ public class AcceptableDBCallNumberStrategyTest {
     }
 
     @Test
-    public final void testIsAcceptableTrue() {
+    final void testIsAcceptableTrue() {
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("099");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));

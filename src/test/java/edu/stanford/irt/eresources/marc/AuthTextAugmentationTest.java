@@ -14,7 +14,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AuthTextAugmentationTest {
+class AuthTextAugmentationTest {
 
     private AuthTextAugmentation augmentation;
 
@@ -25,7 +25,7 @@ public class AuthTextAugmentationTest {
     private AugmentationsService service;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.service = mock(AugmentationsService.class);
         this.augmentations = Collections.singletonMap("1", "variant authority text");
         expect(this.service.buildAugmentations()).andReturn(this.augmentations);
@@ -35,12 +35,12 @@ public class AuthTextAugmentationTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    void tearDown() throws Exception {
         new File(this.objectFile).delete();
     }
 
     @Test
-    public final void testGetAugmentations() {
+    final void testGetAugmentations() {
         assertEquals("variant authority text", this.augmentation.getAuthAugmentations("1"));
     }
 }

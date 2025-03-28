@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class SAXEresourceTest {
+class SAXEresourceTest {
 
     @Test
-    public final void testSaxEresource() {
+    final void testSaxEresource() {
         SAXEresource eresource = new SAXEresource();
         SAXVersion version = new SAXVersion();
         eresource.addAbbreviatedTitle("abtitle");
@@ -84,7 +84,7 @@ public class SAXEresourceTest {
     }
 
     @Test
-    public final void testSaxEresourceNulls() {
+    final void testSaxEresourceNulls() {
         SAXEresource eresource = new SAXEresource();
         assertNull(eresource.getDate());
         eresource.setYear(2000);

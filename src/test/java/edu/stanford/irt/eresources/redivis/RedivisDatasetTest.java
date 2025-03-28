@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public final class RedivisDatasetTest {
+final class RedivisDatasetTest {
 
     @Test
-    public void testMap() throws Exception {
+    void testMap() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         DatasetList datasets = mapper.readValue(RedivisDatasetTest.class.getResourceAsStream("datasets.json"),

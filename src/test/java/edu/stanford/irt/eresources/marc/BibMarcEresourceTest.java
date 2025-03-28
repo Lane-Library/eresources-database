@@ -29,7 +29,7 @@ import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class BibMarcEresourceTest extends MARCRecordSupport {
+class BibMarcEresourceTest extends MARCRecordSupport {
 
     private BibMarcEresource eresource;
 
@@ -46,7 +46,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     CatalogRecordService recordService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.record = mock(Record.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
@@ -57,7 +57,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetAbbreviatedTitles() {
+    void testGetAbbreviatedTitles() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("246");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield }))
@@ -76,7 +76,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetAbbreviatedTitlesNull() {
+    void testGetAbbreviatedTitlesNull() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("246");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield }))
@@ -88,7 +88,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetAlternativeTitles() {
+    void testGetAlternativeTitles() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("130");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -100,7 +100,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetAuthorsText() {
+    void testGetAuthorsText() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("245");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -112,7 +112,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetBroadMeshTerms() {
+    void testGetBroadMeshTerms() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("650");
         expect(this.field.getIndicator1()).andReturn('4');
@@ -126,7 +126,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetDate() {
+    void testGetDate() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("773");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -140,7 +140,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetDate77319690505() {
+    void testGetDate77319690505() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("773");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -152,7 +152,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetDate77319910418() {
+    void testGetDate77319910418() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("773");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -164,7 +164,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetDateTwo773() {
+    void testGetDateTwo773() {
         expect(this.record.getFields()).andReturn(Arrays.asList(new Field[] { this.field, this.field }));
         expect(this.field.getTag()).andReturn("773").times(2);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
@@ -176,7 +176,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetDescription505() {
+    void testGetDescription505() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("505").anyTimes();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).anyTimes();
@@ -190,7 +190,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetDescription520() {
+    void testGetDescription520() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("520").anyTimes();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).anyTimes();
@@ -201,7 +201,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetDescriptionNull() {
+    void testGetDescriptionNull() {
         expect(this.record.getFields()).andReturn(Collections.emptyList()).anyTimes();
         replay(this.record, this.field, this.subfield);
         assertNull(this.eresource.getDescription());
@@ -209,7 +209,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetIsbns() {
+    void testGetIsbns() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("020");
         expect(this.field.getSubfields())
@@ -228,7 +228,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetIssns() {
+    void testGetIssns() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("022");
         expect(this.field.getSubfields())
@@ -248,7 +248,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetItemCount() {
+    void testGetItemCount() {
         // this.record is really holdings here
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
         expect(this.field.getTag()).andReturn("888").times(3);
@@ -268,7 +268,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetItemCountNullItemCount() {
+    void testGetItemCountNullItemCount() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
         expect(this.field.getTag()).andReturn("444").times(3);
         replay(this.record, this.field);
@@ -281,7 +281,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetMeshTerms() {
+    void testGetMeshTerms() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("650").times(2);
         expect(this.field.getIndicator2()).andReturn('2');
@@ -294,7 +294,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetPublicationAuthorsText() {
+    void testGetPublicationAuthorsText() {
         expect(this.field.getTag()).andReturn("100").times(4);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
         expect(this.subfield.getCode()).andReturn('a').times(2);
@@ -308,7 +308,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetPublicationAuthorsText245TwoC() {
+    void testGetPublicationAuthorsText245TwoC() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("245");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield }));
@@ -321,7 +321,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetPublicationLanguages() {
+    void testGetPublicationLanguages() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("008");
         expect(this.field.getData()).andReturn("860402s1982____ja_______d____00|10_jpn_d");
@@ -336,7 +336,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetPublicationTextTitleEtc() {
+    void testGetPublicationTextTitleEtc() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/lane",
@@ -388,7 +388,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetRecordId() {
+    void testGetRecordId() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("12");
@@ -398,14 +398,14 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetRecordType() {
+    void testGetRecordType() {
         replay(this.record, this.field, this.subfield);
         assertEquals("bib", this.eresource.getRecordType());
         verify(this.record, this.field, this.subfield);
     }
 
     @Test
-    public void testGetSortTitle() {
+    void testGetSortTitle() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("245");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -417,7 +417,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetTitle() {
+    void testGetTitle() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("245");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -434,7 +434,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetTitleTrailingSlash() {
+    void testGetTitleTrailingSlash() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("245");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield }));
@@ -458,7 +458,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetVersions() {
+    void testGetVersions() {
         BibMarcEresource e = new BibMarcEresource(Arrays.asList(new Record[] { this.record, this.record }), null, null);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("856").atLeastOnce();
@@ -476,7 +476,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetYear() {
+    void testGetYear() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("008");
         expect(this.field.getData()).andReturn("012345619551969");
@@ -486,7 +486,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetYearNullDates() {
+    void testGetYearNullDates() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("008");
         expect(this.field.getData()).andReturn("0123456xxxxxxxx");
@@ -496,7 +496,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testGetYearNullEnddate() {
+    void testGetYearNullEnddate() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("008");
         expect(this.field.getData()).andReturn("01234561955xxxx");
@@ -506,7 +506,7 @@ public class BibMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public void testIsEnglish() {
+    void testIsEnglish() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("008");
         expect(this.field.getData()).andReturn("860402s1982____ja_______d____00|10_jpn_d");

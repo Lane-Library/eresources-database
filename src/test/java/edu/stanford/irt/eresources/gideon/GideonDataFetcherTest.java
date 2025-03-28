@@ -24,7 +24,7 @@ import com.jcraft.jsch.SftpException;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class GideonDataFetcherTest {
+class GideonDataFetcherTest {
 
     private static final String HOST = "test.host";
 
@@ -45,7 +45,7 @@ public class GideonDataFetcherTest {
     private Session session;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         File tempDir = new File(System.getProperty("java.io.tmpdir"), "gideonDataFetcherTest");
         tempDir.mkdirs();
         this.localDirectory = tempDir.getAbsolutePath();
@@ -57,7 +57,7 @@ public class GideonDataFetcherTest {
     }
 
     @Test
-    public void testGetUpdateFiles() throws Exception {
+    void testGetUpdateFiles() throws Exception {
         this.jsch.setKnownHosts(isA(String.class));
         expectLastCall();
         expect(this.jsch.getSession(USER, HOST, 22)).andReturn(this.session);
@@ -83,7 +83,7 @@ public class GideonDataFetcherTest {
 
     @Test
     @Disabled // failing on GitLb CI/CD
-    public void testGetUpdateFilesIOException() {
+    void testGetUpdateFilesIOException() {
         File tempDir = new File(System.getProperty("java.io.tmpdir"), "another");
         tempDir.mkdirs();
         String parentTemp = tempDir.getParent();
@@ -96,7 +96,7 @@ public class GideonDataFetcherTest {
     }
 
     @Test
-    public void testGetUpdateFilesJSchException() throws Exception {
+    void testGetUpdateFilesJSchException() throws Exception {
         this.jsch.setKnownHosts(isA(String.class));
         expectLastCall().andThrow(new JSchException("oops!"));
         replay(this.jsch);
@@ -110,7 +110,7 @@ public class GideonDataFetcherTest {
     }
 
     @Test
-    public void testGetUpdateFilesSftpException() throws Exception {
+    void testGetUpdateFilesSftpException() throws Exception {
         this.jsch.setKnownHosts(isA(String.class));
         expectLastCall();
         expect(this.jsch.getSession(USER, HOST, 22)).andReturn(this.session);

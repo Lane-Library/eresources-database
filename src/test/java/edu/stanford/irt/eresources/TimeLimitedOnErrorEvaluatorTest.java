@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
-public class TimeLimitedOnErrorEvaluatorTest {
+class TimeLimitedOnErrorEvaluatorTest {
 
     TimeLimitedOnErrorEvaluator evaluator;
 
@@ -22,13 +22,13 @@ public class TimeLimitedOnErrorEvaluatorTest {
     Level level;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.evaluator = new TimeLimitedOnErrorEvaluator();
         this.event = mock(ILoggingEvent.class);
     }
 
     @Test
-    public final void testEvaluate() throws Exception {
+    final void testEvaluate() throws Exception {
         this.evaluator.setMessageLimit(2);
         this.evaluator.setTimeLimitMinutes(10);
         expect(this.event.getLevel()).andReturn(Level.ERROR).anyTimes();

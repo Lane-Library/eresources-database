@@ -19,14 +19,14 @@ import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
+class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
 
     ThreadPoolTaskExecutor executor;
 
     SfxFileCatalogRecordService recordService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.executor = new ThreadPoolTaskExecutor();
         this.executor.initialize();
         this.recordService = new SfxFileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/sfx",
@@ -34,7 +34,7 @@ public class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetRecordStream() {
+    final void testGetRecordStream() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         assertNotNull(rc);
         while (rc.hasNext()) {
@@ -44,7 +44,7 @@ public class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testRunRead() throws Exception {
+    final void testRunRead() throws Exception {
         byte[] expectedMarc = Files
                 .readAllBytes(Paths.get("src/test/resources/edu/stanford/irt/eresources/marc/sfx/sfx-export.marc"));
         PipedOutputStream output = new PipedOutputStream();
@@ -57,7 +57,7 @@ public class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testRunReadBadFile() throws Exception {
+    final void testRunReadBadFile() throws Exception {
         File tempFile = File.createTempFile("bad", ".xml-marc.gz");
         this.recordService = new SfxFileCatalogRecordService(tempFile.getParent(), this.executor);
         assertThrows(EresourceDatabaseException.class, () -> {
@@ -66,7 +66,7 @@ public class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetRecordStreamNullBasePath() {
+    final void testGetRecordStreamNullBasePath() {
         this.recordService = new SfxFileCatalogRecordService(null, this.executor);
         assertThrows(IllegalStateException.class, () -> {
             new RecordCollection(this.recordService.getRecordStream(0));

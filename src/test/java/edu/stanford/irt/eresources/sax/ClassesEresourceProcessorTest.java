@@ -16,7 +16,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
-public class ClassesEresourceProcessorTest {
+class ClassesEresourceProcessorTest {
 
     URI classesURI;
 
@@ -25,14 +25,14 @@ public class ClassesEresourceProcessorTest {
     ClassesEresourceProcessor processor;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         this.classesURI = new URI("file:src/test/resources/edu/stanford/irt/eresources/sax/class.xml");
         this.contentHandler = EasyMock.mock(ContentHandler.class);
         this.processor = new ClassesEresourceProcessor(this.classesURI, this.contentHandler);
     }
 
     @Test
-    public final void testProcess() throws Exception {
+    final void testProcess() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -53,7 +53,7 @@ public class ClassesEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessException() throws Exception {
+    final void testProcessException() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().andThrow(new SAXException("foo"));
         EasyMock.replay(this.contentHandler);

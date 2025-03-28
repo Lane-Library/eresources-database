@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class AugmentationUtilityTest {
+class AugmentationUtilityTest {
 
     Map<String, String> aMap;
 
@@ -33,19 +33,19 @@ public class AugmentationUtilityTest {
     String objectFile = "unit-test-augmentation-utility.obj";
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.augmentationsService = mock(AugmentationsService.class);
         this.aMap = new HashMap<>();
         this.aMap.put("key", "value");
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    void tearDown() throws Exception {
         new File(this.objectFile).delete();
     }
 
     @Test
-    public final void testFetchAugmentations() throws Exception {
+    final void testFetchAugmentations() throws Exception {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(this.objectFile));
         oos.writeObject(this.aMap);
         oos.close();
@@ -54,7 +54,7 @@ public class AugmentationUtilityTest {
     }
 
     @Test
-    public final void testFetchAugmentationsBuild() throws Exception {
+    final void testFetchAugmentationsBuild() throws Exception {
         expect(this.augmentationsService.buildAugmentations()).andReturn(this.aMap).times(2);
         replay(this.augmentationsService);
         assertTrue(AugmentationUtility.fetchAugmentations(this.objectFile, this.augmentationsService, Integer.MIN_VALUE)
@@ -69,7 +69,7 @@ public class AugmentationUtilityTest {
     }
 
     @Test
-    public final void testFetchAugmentationsIOException1() throws Exception {
+    final void testFetchAugmentationsIOException1() throws Exception {
         expect(this.augmentationsService.buildAugmentations()).andReturn(this.aMap);
         replay(this.augmentationsService);
         assertThrows(EresourceDatabaseException.class, () -> {
@@ -81,7 +81,7 @@ public class AugmentationUtilityTest {
     // failing on gitlab runner only
     @Test
     @Disabled
-    public final void testFetchAugmentationsIOException2() throws Exception {
+    final void testFetchAugmentationsIOException2() {
         expect(this.augmentationsService.buildAugmentations()).andReturn(Collections.emptyMap());
         replay(this.augmentationsService);
         AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);

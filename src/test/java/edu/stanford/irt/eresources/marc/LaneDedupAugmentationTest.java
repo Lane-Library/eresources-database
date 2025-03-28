@@ -18,24 +18,24 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class LaneDedupAugmentationTest {
+class LaneDedupAugmentationTest {
 
     AugmentationsService augmentationService;
 
     String objectFile = "/tmp/dedup-unit-test.obj";
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.augmentationService = mock(AugmentationsService.class);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    void tearDown() {
         new File(this.objectFile).delete();
     }
 
     @Test
-    public final void testLaneDedupAugmentation() {
+    final void testLaneDedupAugmentation() {
         Set<String> skips = new HashSet<>();
         skips.add("key->12345");
         Map<String, String> map = new HashMap<String, String>();

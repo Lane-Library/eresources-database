@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.marc.AbstractMarcEresource;
 
-public class SolrEresourceHandlerTest {
+class SolrEresourceHandlerTest {
 
     AbstractMarcEresource eresource;
 
@@ -29,7 +29,7 @@ public class SolrEresourceHandlerTest {
     SolrClient solrClient;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.queue = mock(BlockingQueue.class);
         this.solrClient = mock(SolrClient.class);
         this.handler = new SolrEresourceHandler(this.queue, this.solrClient, 1);
@@ -37,12 +37,12 @@ public class SolrEresourceHandlerTest {
     }
 
     @Test
-    public final void testGetCount() {
+    final void testGetCount() {
         assertEquals(0, this.handler.getCount());
     }
 
     @Test
-    public final void testHandleEresource() throws Exception {
+    final void testHandleEresource() throws Exception {
         Version v = mock(Version.class);
         Link l = mock(Link.class);
         expect(this.eresource.getVersions()).andReturn(Collections.singletonList(v));
@@ -56,7 +56,7 @@ public class SolrEresourceHandlerTest {
     }
 
     @Test
-    public final void testRun() throws Exception {
+    final void testRun() throws Exception {
         Version v = mock(Version.class);
         Link l = mock(Link.class);
         expect(this.queue.isEmpty()).andReturn(false);

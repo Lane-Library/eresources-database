@@ -17,7 +17,7 @@ import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class SulMarcLinkTest {
+class SulMarcLinkTest {
 
     private Field field;
 
@@ -28,7 +28,7 @@ public class SulMarcLinkTest {
     private Version version;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.version = mock(SulMarcVersion.class);
         this.field = mock(Field.class);
         this.link = new SulMarcLink(this.field, this.version);
@@ -36,14 +36,14 @@ public class SulMarcLinkTest {
     }
 
     @Test
-    public void testGetLabelNull() {
+    void testGetLabelNull() {
         expect(this.field.getSubfields()).andReturn(Collections.emptyList()).times(2);
         replay(this.field, this.subfield);
         assertTrue(this.link.getLabel().isEmpty());
     }
 
     @Test
-    public void testGetLabelZ() {
+    void testGetLabelZ() {
         List<Subfield> subfieldZs = new ArrayList<>();
         Subfield z1 = mock(Subfield.class);
         Subfield z2 = mock(Subfield.class);
@@ -59,7 +59,7 @@ public class SulMarcLinkTest {
     }
 
     @Test
-    public void testGetLabelZSuAffiliation() {
+    void testGetLabelZSuAffiliation() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
         expect(this.subfield.getCode()).andReturn('z').times(2);
         expect(this.subfield.getData()).andReturn("Available to Stanford-affiliated users at:");
@@ -68,7 +68,7 @@ public class SulMarcLinkTest {
     }
 
     @Test
-    public void testGetUrl() {
+    void testGetUrl() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('u');
         expect(this.subfield.getData()).andReturn("foo");
@@ -77,7 +77,7 @@ public class SulMarcLinkTest {
     }
 
     @Test
-    public void testGetUrlSulProxy() {
+    void testGetUrlSulProxy() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('u');
         expect(this.subfield.getData()).andReturn("https://stanford.idm.oclc.org/login?url=https://foo.com");

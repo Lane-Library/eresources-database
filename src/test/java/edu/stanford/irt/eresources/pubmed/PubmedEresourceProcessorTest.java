@@ -15,21 +15,21 @@ import org.xml.sax.XMLReader;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class PubmedEresourceProcessorTest {
+class PubmedEresourceProcessorTest {
 
     PubmedEresourceProcessor processor;
 
     XMLReader xmlReader;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.xmlReader = EasyMock.mock(XMLReader.class);
         this.processor = new PubmedEresourceProcessor("src/test/resources/edu/stanford/irt/eresources/pubmed",
                 this.xmlReader);
     }
 
     @Test
-    public final void testException() throws Exception {
+    final void testException() throws Exception {
         this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         this.xmlReader.parse(isA(InputSource.class));
         EasyMock.expectLastCall().andThrow(new SAXException("sax exception"));
@@ -42,7 +42,7 @@ public class PubmedEresourceProcessorTest {
     }
 
     @Test
-    public final void testNullBasePath() throws Exception {
+    final void testNullBasePath() throws Exception {
         this.processor = new PubmedEresourceProcessor(null, this.xmlReader);
         IllegalStateException ex = assertThrows(IllegalStateException.class, () -> {
             this.processor.process();
@@ -51,7 +51,7 @@ public class PubmedEresourceProcessorTest {
     }
 
     @Test
-    public final void testNullXmlReader() throws Exception {
+    final void testNullXmlReader() throws Exception {
         this.processor = new PubmedEresourceProcessor("src/test/resources/edu/stanford/irt/eresources", null);
         IllegalStateException ex = assertThrows(IllegalStateException.class, () -> {
             this.processor.process();
@@ -60,7 +60,7 @@ public class PubmedEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessor() throws Exception {
+    final void testProcessor() throws Exception {
         this.xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         EasyMock.expectLastCall().times(2);
         this.xmlReader.parse(isA(InputSource.class));

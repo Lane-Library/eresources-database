@@ -15,7 +15,7 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class AltTitleMarcEresourceTest {
+class AltTitleMarcEresourceTest {
 
     private AltTitleMarcEresource eresource;
 
@@ -26,7 +26,7 @@ public class AltTitleMarcEresourceTest {
     private Subfield subfield;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.record = mock(Record.class);
         this.eresource = new AltTitleMarcEresource(Collections.singletonList(this.record), null, 1, null);
         this.field = mock(Field.class);
@@ -34,7 +34,7 @@ public class AltTitleMarcEresourceTest {
     }
 
     @Test
-    public void testGetTitle() {
+    void testGetTitle() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("249");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));

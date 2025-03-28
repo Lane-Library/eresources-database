@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class AbstractPubmedDataFetcherTest {
+class AbstractPubmedDataFetcherTest {
 
     public class PubmedDataFetcherTest extends AbstractPubmedDataFetcher {
 
@@ -33,19 +33,19 @@ public class AbstractPubmedDataFetcherTest {
     PubmedDataFetcherTest fetcher;
 
     @AfterAll
-    public static void tearDownAfterClass() throws Exception {
+    static void tearDownAfterClass() throws Exception {
         FileUtils.forceDelete(new File(BP));
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         new File(BP).mkdir();
         this.fetcher = new PubmedDataFetcherTest();
         this.fetcher.setBasePath(BP);
     }
 
     @Test
-    public final void testPmidListToFiles() {
+    final void testPmidListToFiles() {
         assertFalse(new File(BP + "/" + TODAY + "/baseFilename1.xml").exists());
         List<String> pmids = new ArrayList<>();
         pmids.add("12345");
@@ -58,7 +58,7 @@ public class AbstractPubmedDataFetcherTest {
     }
 
     @Test
-    public final void testPmidListToFilesIOError() throws Exception {
+    final void testPmidListToFilesIOError() throws Exception {
         FileUtils.forceDelete(new File(BP));
         List<String> pmids = new ArrayList<>();
         pmids.add("12345");
@@ -73,7 +73,7 @@ public class AbstractPubmedDataFetcherTest {
     }
 
     @Test
-    public final void testSetBasePathEmpty() {
+    final void testSetBasePathEmpty() {
         PubmedDataFetcherTest myFetcher = new PubmedDataFetcherTest();
         assertThrows(IllegalArgumentException.class, () -> {
             myFetcher.setBasePath("");
@@ -81,7 +81,7 @@ public class AbstractPubmedDataFetcherTest {
     }
 
     @Test
-    public final void testSetBasePathNull() {
+    final void testSetBasePathNull() {
         PubmedDataFetcherTest myFetcher = new PubmedDataFetcherTest();
         assertThrows(IllegalArgumentException.class, () -> {
             myFetcher.setBasePath(null);

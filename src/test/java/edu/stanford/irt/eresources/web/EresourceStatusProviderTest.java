@@ -17,20 +17,20 @@ import org.junit.jupiter.api.Test;
 import edu.stanford.irt.status.Status;
 import edu.stanford.irt.status.StatusItem;
 
-public class EresourceStatusProviderTest {
+class EresourceStatusProviderTest {
 
     private JobManager manager;
 
     private EresourceStatusProvider provider;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.manager = mock(JobManager.class);
         this.provider = new EresourceStatusProvider(this.manager);
     }
 
     @Test
-    public final void testAddStatusItemsLongRunningJob() {
+    final void testAddStatusItemsLongRunningJob() {
         List<Job> runningJobs = Collections.singletonList(new Job(Job.Type.UNDEFINED, LocalDateTime.MIN));
         expect(this.manager.getRunningJobs()).andReturn(runningJobs).times(2);
         expect(this.manager.getPausedDataSources()).andReturn(Collections.emptyList());
@@ -44,7 +44,7 @@ public class EresourceStatusProviderTest {
     }
 
     @Test
-    public final void testAddStatusItemsNoRunningJob() {
+    final void testAddStatusItemsNoRunningJob() {
         expect(this.manager.getRunningJobs()).andReturn(Collections.emptyList());
         expect(this.manager.getPausedDataSources()).andReturn(Collections.emptyList());
         replay(this.manager);
@@ -54,7 +54,7 @@ public class EresourceStatusProviderTest {
     }
 
     @Test
-    public final void testAddStatusItemsRunningJob() {
+    final void testAddStatusItemsRunningJob() {
         List<Job> runningJobs = Collections.singletonList(new Job(Job.Type.UNDEFINED, LocalDateTime.now()));
         expect(this.manager.getRunningJobs()).andReturn(runningJobs).times(2);
         expect(this.manager.getPausedDataSources()).andReturn(Collections.emptyList());

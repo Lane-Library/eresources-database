@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.lane.catalog.Record;
 
-public class SfxMarcVersionTest {
+class SfxMarcVersionTest {
 
     SfxMarcVersion sfxMarcVersion;
 
@@ -22,19 +22,19 @@ public class SfxMarcVersionTest {
     Eresource eresource;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.bibRecord = mock(Record.class);
         this.eresource = mock(Eresource.class);
         this.sfxMarcVersion = new SfxMarcVersion(this.bibRecord, this.eresource);
     }
 
     @Test
-    public void testGetAdditionalText() {
+    void testGetAdditionalText() {
         assertNull(this.sfxMarcVersion.getAdditionalText());
     }
 
     @Test
-    public void testGetDates() {
+    void testGetDates() {
         expect(this.eresource.getYear()).andReturn(2027);
         replay(this.eresource);
         assertEquals("2027", this.sfxMarcVersion.getDates());
@@ -42,7 +42,7 @@ public class SfxMarcVersionTest {
     }
 
     @Test
-    public void testGetDatesNull() {
+    void testGetDatesNull() {
         expect(this.eresource.getYear()).andReturn(0);
         replay(this.eresource);
         assertNull(this.sfxMarcVersion.getDates());

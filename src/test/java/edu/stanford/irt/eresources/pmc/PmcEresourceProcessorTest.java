@@ -16,7 +16,7 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
-public class PmcEresourceProcessorTest {
+class PmcEresourceProcessorTest {
 
     ContentHandler contentHandler;
 
@@ -25,7 +25,7 @@ public class PmcEresourceProcessorTest {
     PmcEresourceProcessor processor;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
         this.laneDedupAugmentation = EasyMock.mock(LaneDedupAugmentation.class);
         this.processor = new PmcEresourceProcessor(PmcEresourceProcessorTest.class.getResource(".").toExternalForm(),
@@ -34,7 +34,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testBadEutilsUrl() throws Exception {
+    final void testBadEutilsUrl() throws Exception {
         this.processor = new PmcEresourceProcessor("file:/",
                 PmcEresourceProcessorTest.class.getResource("jlist.csv").toExternalForm(), this.contentHandler,
                 this.laneDedupAugmentation, "key");
@@ -56,7 +56,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testBadFetchUrl() throws Exception {
+    final void testBadFetchUrl() throws Exception {
         this.processor = new PmcEresourceProcessor("[]",
                 PmcEresourceProcessorTest.class.getResource("jlist.csv").toExternalForm(), this.contentHandler,
                 this.laneDedupAugmentation, "key");
@@ -78,7 +78,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testBadSearchXml() throws Exception {
+    final void testBadSearchXml() throws Exception {
         this.processor = new PmcEresourceProcessor(
                 PmcEresourceProcessorTest.class.getResource("./bad-xml/").toExternalForm(),
                 PmcEresourceProcessorTest.class.getResource("jlist.csv").toExternalForm(), this.contentHandler,
@@ -101,7 +101,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testNullContentHandler() throws Exception {
+    final void testNullContentHandler() throws Exception {
         this.processor = new PmcEresourceProcessor(null, "url", null, null, null);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
             this.processor.process();
@@ -110,7 +110,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testNullJournalsUrl() throws Exception {
+    final void testNullJournalsUrl() throws Exception {
         this.processor = new PmcEresourceProcessor(null, null, this.contentHandler, null, null);
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
             this.processor.process();
@@ -119,7 +119,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcess() throws Exception {
+    final void testProcess() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -159,7 +159,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessDup1() throws Exception {
+    final void testProcessDup1() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -176,7 +176,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessDup2() throws Exception {
+    final void testProcessDup2() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -194,7 +194,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessDup3() throws Exception {
+    final void testProcessDup3() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),

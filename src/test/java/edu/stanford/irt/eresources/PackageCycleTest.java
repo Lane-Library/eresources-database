@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import jdepend.framework.JDepend;
 
-public class PackageCycleTest {
+class PackageCycleTest {
 
     @Test
-    public void testCycles() throws IOException {
+    void testCycles() throws IOException {
         JDepend jdepend = new JDepend();
         jdepend.addDirectory("target/classes");
         jdepend.analyze();

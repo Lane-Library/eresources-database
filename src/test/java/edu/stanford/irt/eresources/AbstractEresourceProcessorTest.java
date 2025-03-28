@@ -9,9 +9,9 @@ import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AbstractEresourceProcessorTest {
+class AbstractEresourceProcessorTest {
 
-    public class EresourceProcessorTest extends AbstractEresourceProcessor {
+    class EresourceProcessorTest extends AbstractEresourceProcessor {
 
         @Override
         public void process() {
@@ -22,19 +22,19 @@ public class AbstractEresourceProcessorTest {
     EresourceProcessorTest processor;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.processor = new EresourceProcessorTest();
     }
 
     @Test
-    public final void testNull() {
+    final void testNull() {
         assertThrows(IllegalArgumentException.class, () -> {
             this.processor.setStartDate(null);
         });
     }
 
     @Test
-    public final void testProcessor() {
+    final void testProcessor() {
         LocalDateTime ldt = LocalDateTime.now();
         long time = ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         this.processor.setStartDate(ldt);

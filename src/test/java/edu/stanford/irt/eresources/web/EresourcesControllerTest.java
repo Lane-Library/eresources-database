@@ -12,20 +12,20 @@ import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class EresourcesControllerTest {
+class EresourcesControllerTest {
 
     private EresourcesController controller;
 
     private JobManager manager;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.manager = mock(JobManager.class);
         this.controller = new EresourcesController(this.manager);
     }
 
     @Test
-    public final void testGideonReload() {
+    final void testGideonReload() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.gideonReload();
@@ -33,7 +33,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testLaneMarcUpdate() {
+    final void testLaneMarcUpdate() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.laneMarcUpdate();
@@ -41,7 +41,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testLaneReload() {
+    final void testLaneReload() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.laneReload();
@@ -49,7 +49,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testLaneWebsitesUpdate() {
+    final void testLaneWebsitesUpdate() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.laneWebsitesUpdate();
@@ -57,7 +57,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testPmcReload() {
+    final void testPmcReload() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.pmcReload();
@@ -65,7 +65,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testPubmedDailyFtp() {
+    final void testPubmedDailyFtp() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.pubmedDailyFtp();
@@ -73,7 +73,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testRedivisReload() {
+    final void testRedivisReload() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.redivisReload();
@@ -81,7 +81,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testSfxReload() {
+    final void testSfxReload() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.sfxReload();
@@ -89,7 +89,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testSolrLoader() {
+    final void testSolrLoader() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.solrLoader("job", null);
@@ -97,7 +97,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testSolrLoaderCancelRunningJobs() {
+    final void testSolrLoaderCancelRunningJobs() {
         expect(this.manager.cancelRunningJobs()).andReturn(JobStatus.INTERRUPTED);
         replay(this.manager);
         this.controller.solrLoader(Job.Type.CANCEL_RUNNING_JOBS.getQualifiedName(), null);
@@ -105,7 +105,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testSulReload() {
+    final void testSulReload() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.sulReload();
@@ -113,7 +113,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testSulUpdate() {
+    final void testSulUpdate() {
         expect(this.manager.run(isA(Job.class))).andReturn(JobStatus.COMPLETE);
         replay(this.manager);
         this.controller.sulUpdate();
@@ -121,7 +121,7 @@ public class EresourcesControllerTest {
     }
 
     @Test
-    public final void testUsage() {
+    final void testUsage() {
         expect(this.manager.getRunningJobs()).andReturn(Collections.emptyList());
         expect(this.manager.getPausedDataSources()).andReturn(Collections.emptyList());
         replay(this.manager);

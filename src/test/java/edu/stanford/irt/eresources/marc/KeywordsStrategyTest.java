@@ -17,7 +17,7 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class KeywordsStrategyTest {
+class KeywordsStrategyTest {
 
     private AuthTextAugmentation augmentation;
 
@@ -34,7 +34,7 @@ public class KeywordsStrategyTest {
     private List<Field> twoFields;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.augmentation = mock(AuthTextAugmentation.class);
         this.reservesAugmentation = mock(ReservesTextAugmentation.class);
         this.strategy = new KeywordsStrategy(this.augmentation, this.reservesAugmentation);
@@ -47,7 +47,7 @@ public class KeywordsStrategyTest {
     }
 
     @Test
-    public void testGetKeywordsBib() {
+    void testGetKeywordsBib() {
         List<Subfield> subs = new ArrayList<>();
         subs.add(this.subfield);
         subs.add(this.subfield);
@@ -65,7 +65,7 @@ public class KeywordsStrategyTest {
     }
 
     @Test
-    public void testGetKeywordsBibAugmentable() {
+    void testGetKeywordsBibAugmentable() {
         expect(this.record.getFields()).andReturn(this.twoFields);
         expect(this.record.getLeaderByte(6)).andReturn((byte) 'a');
         expect(this.field.getTag()).andReturn("100").times(2);
@@ -82,7 +82,7 @@ public class KeywordsStrategyTest {
     }
 
     @Test
-    public void testGetKeywordsHolding() {
+    void testGetKeywordsHolding() {
         List<Field> fields = new ArrayList<>();
         Field f1 = mock(Field.class);
         Field f2 = mock(Field.class);

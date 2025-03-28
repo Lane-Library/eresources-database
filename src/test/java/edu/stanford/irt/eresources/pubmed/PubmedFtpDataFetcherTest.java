@@ -23,7 +23,7 @@ import org.xbib.io.ftp.client.FTPFileFilter;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class PubmedFtpDataFetcherTest {
+class PubmedFtpDataFetcherTest {
 
     PubmedFtpDataFetcher fetcher;
 
@@ -38,7 +38,7 @@ public class PubmedFtpDataFetcherTest {
     String tempFile = "eresources-unit-test-file.tmp";
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.ftpClient = mock(FTPClient.class);
         this.ftpFileFilter = mock(PubmedFtpFileFilter.class);
         this.fetcher = new PubmedFtpDataFetcher("/tmp", this.ftpClient, this.ftpFileFilter, "ftpHostname",
@@ -49,12 +49,12 @@ public class PubmedFtpDataFetcherTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         new File("/tmp/" + this.tempFile).delete();
     }
 
     @Test
-    public final void testGetUpdateFiles() throws Exception {
+    final void testGetUpdateFiles() throws Exception {
         this.ftpClient.connect("ftpHostname");
         expectLastCall();
         expect(this.ftpClient.login("ftpUsername", "ftpPassword")).andReturn(true);
@@ -73,7 +73,7 @@ public class PubmedFtpDataFetcherTest {
     }
 
     @Test
-    public final void testGetUpdateFilesConnectionExpection() throws Exception {
+    final void testGetUpdateFilesConnectionExpection() throws Exception {
         this.ftpClient.connect("ftpHostname");
         expectLastCall().andThrow(new SocketException("oops")).atLeastOnce();
         expect(this.ftpClient.getLocalPort()).andReturn(0).atLeastOnce();
@@ -90,7 +90,7 @@ public class PubmedFtpDataFetcherTest {
     }
 
     @Test
-    public final void testGetUpdateFilesFtpFileException() throws Exception {
+    final void testGetUpdateFilesFtpFileException() throws Exception {
         this.ftpClient.connect("ftpHostname");
         expectLastCall().atLeastOnce();
         expect(this.ftpClient.login("ftpUsername", "ftpPassword")).andReturn(true).atLeastOnce();
@@ -113,7 +113,7 @@ public class PubmedFtpDataFetcherTest {
     }
 
     @Test
-    public final void testGetUpdateFilesFtpFileNotFound() throws Exception {
+    final void testGetUpdateFilesFtpFileNotFound() throws Exception {
         this.ftpClient.connect("ftpHostname");
         expectLastCall();
         expect(this.ftpClient.login("ftpUsername", "ftpPassword")).andReturn(true);

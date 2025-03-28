@@ -16,35 +16,35 @@ import org.junit.jupiter.api.Test;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.irt.eresources.marc.CatalogLink.Type;
 
-public class CatalogLinkTest {
+class CatalogLinkTest {
 
     CatalogLink link;
 
     Version version;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.version = mock(Version.class);
         this.link = new CatalogLink(Type.BIB, "recordId", this.version);
     }
 
     @Test
-    public final void testCatalogLink() {
+    final void testCatalogLink() {
         assertNotNull(this.link);
     }
 
     @Test
-    public final void testGetAdditionalText() {
+    final void testGetAdditionalText() {
         assertNull(this.link.getAdditionalText());
     }
 
     @Test
-    public final void testGetLabel() {
+    final void testGetLabel() {
         assertEquals("Lane Record in SearchWorks", this.link.getLabel());
     }
 
     @Test
-    public final void testGetLinkText() {
+    final void testGetLinkText() {
         expect(this.version.getHoldingsAndDates()).andReturn("HoldingsAndDates");
         expect(this.version.getLinks()).andReturn(Collections.emptyList());
         replay(this.version);
@@ -53,7 +53,7 @@ public class CatalogLinkTest {
     }
 
     @Test
-    public final void testGetLinkTextWithHoldings() {
+    final void testGetLinkTextWithHoldings() {
         expect(this.version.getHoldingsAndDates()).andReturn("HoldingsAndDates");
         expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
         replay(this.version);
@@ -62,7 +62,7 @@ public class CatalogLinkTest {
     }
 
     @Test
-    public final void testGetUrl() {
+    final void testGetUrl() {
         assertEquals("https://searchworks.stanford.edu/view/LrecordId", this.link.getUrl());
     }
 }

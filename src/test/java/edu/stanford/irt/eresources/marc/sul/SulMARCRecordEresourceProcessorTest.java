@@ -27,7 +27,7 @@ import edu.stanford.lane.catalog.FolioRecord;
 import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
 
-public class SulMARCRecordEresourceProcessorTest {
+class SulMARCRecordEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
@@ -44,7 +44,7 @@ public class SulMARCRecordEresourceProcessorTest {
     private SulMARCRecordEresourceProcessor sulRecordEresourceProcessor;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.eresourceHandler = mock(SolrEresourceHandler.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.recordCollectionFactory = mock(RecordCollectionFactory.class);
@@ -64,7 +64,7 @@ public class SulMARCRecordEresourceProcessorTest {
     }
 
     @Test
-    public void testProcess() throws Exception {
+    void testProcess() throws Exception {
         LocalDateTime startDate = LocalDateTime.now();
         Long start = startDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         this.sulRecordEresourceProcessor.setStartDate(startDate);

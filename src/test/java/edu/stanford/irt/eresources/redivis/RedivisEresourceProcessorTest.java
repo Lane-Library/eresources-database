@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.EresourceHandler;
 
-public class RedivisEresourceProcessorTest {
+class RedivisEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
@@ -22,14 +22,14 @@ public class RedivisEresourceProcessorTest {
     private RedivisEresourceProcessor processor;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.eresourceHandler = mock(EresourceHandler.class);
         this.listEndpoint = RedivisEresourceProcessorTest.class.getResource("datasets.json").toExternalForm();
         this.processor = new RedivisEresourceProcessor(this.listEndpoint, "token", this.eresourceHandler);
     }
 
     @Test
-    public final void testProcess() {
+    final void testProcess() {
         this.eresourceHandler.handleEresource(isA(RedivisEresource.class));
         expectLastCall().times(85);
         replay(this.eresourceHandler);
@@ -38,7 +38,7 @@ public class RedivisEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessBadJson() {
+    final void testProcessBadJson() {
         this.listEndpoint = RedivisEresourceProcessorTest.class.getResource("datasets-exception.json").toExternalForm();
         this.processor = new RedivisEresourceProcessor(this.listEndpoint, "token", this.eresourceHandler);
         replay(this.eresourceHandler);

@@ -17,7 +17,7 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class AcceptableLCCallNumberStrategyTest {
+class AcceptableLCCallNumberStrategyTest {
 
     private Field field;
 
@@ -28,7 +28,7 @@ public class AcceptableLCCallNumberStrategyTest {
     private Subfield subfield;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.inclusionStrategy = new AcceptableLCCallNumberStrategy(Collections.singletonList("BF"));
         this.marcRecord = mock(Record.class);
         this.field = mock(Field.class);
@@ -36,7 +36,7 @@ public class AcceptableLCCallNumberStrategyTest {
     }
 
     @Test
-    public final void testIsAcceptableFiction() {
+    final void testIsAcceptableFiction() {
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("050");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
@@ -53,7 +53,7 @@ public class AcceptableLCCallNumberStrategyTest {
     }
 
     @Test
-    public final void testIsAcceptableNotFiction() {
+    final void testIsAcceptableNotFiction() {
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("050");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));
@@ -76,7 +76,7 @@ public class AcceptableLCCallNumberStrategyTest {
     }
 
     @Test
-    public final void testIsAcceptableTrue() {
+    final void testIsAcceptableTrue() {
         expect(this.marcRecord.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("050");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield }));

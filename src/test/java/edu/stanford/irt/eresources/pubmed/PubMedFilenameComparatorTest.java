@@ -11,17 +11,17 @@ import org.junit.jupiter.api.Test;
 /**
  * @author ryanmax
  */
-public class PubMedFilenameComparatorTest {
+class PubMedFilenameComparatorTest {
 
     private PubmedFilenameComparator comparator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.comparator = new PubmedFilenameComparator();
     }
 
     @Test
-    public void testCompare() {
+    void testCompare() {
         File f1 = new File("foo/b  ar");
         File f2 = new File("foo/bar");
         assertEquals(0, this.comparator.compare(f1, f2));

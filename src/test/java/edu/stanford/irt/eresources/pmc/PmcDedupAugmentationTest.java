@@ -24,17 +24,14 @@ import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class PmcDedupAugmentationTest {
-
-    // @Rule
-    // public ExpectedException thrown = ExpectedException.none();
+class PmcDedupAugmentationTest {
 
     PmcDedupAugmentation pmcDedupAugmentation;
 
     SolrClient solrClient;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         this.solrClient = mock(SolrClient.class);
         QueryResponse solrResponse = mock(QueryResponse.class);
         SolrDocumentList solrDocumentList = new SolrDocumentList();
@@ -54,19 +51,17 @@ public class PmcDedupAugmentationTest {
     }
 
     @Test
-    public final void testIsDuplicateString() {
+    final void testIsDuplicateString() {
         assertFalse(this.pmcDedupAugmentation.isDuplicate("not-dup"));
     }
 
     @Test
-    public final void testIsDuplicateStringString() {
+    final void testIsDuplicateStringString() {
         assertTrue(this.pmcDedupAugmentation.isDuplicate("issn", "one-issn"));
     }
 
     @Test
-    public void testSolrException() throws Exception {
-        // this.thrown.expect(EresourceDatabaseException.class);
-        // this.thrown.expectMessage("something failed");
+    void testSolrException() throws Exception {
         this.solrClient = mock(SolrClient.class);
         expect(this.solrClient.query(isA(SolrQuery.class))).andThrow(new SolrServerException("something failed"));
         replay(this.solrClient);

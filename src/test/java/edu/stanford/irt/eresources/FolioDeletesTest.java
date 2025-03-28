@@ -18,7 +18,7 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FolioDeletesTest {
+class FolioDeletesTest {
 
     FolioDeletes deletes;
 
@@ -27,7 +27,7 @@ public class FolioDeletesTest {
     SolrClient solrClient;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.deleteService = mock(HTTPCatalogRecordDeleteService.class);
         this.deletes = new FolioDeletes("", this.deleteService);
         this.solrClient = mock(SolrClient.class);
@@ -35,10 +35,10 @@ public class FolioDeletesTest {
     }
 
     @Test
-    public final void testLoad() throws Exception {
+    final void testLoad() throws Exception {
         List<String> records = new ArrayList<>();
-        records.add("deletable-record-id-123");
-        records.add("a-record-that-should-not-be-deleted-bc-not-num");
+        records.add("deletable-rec-id-123");
+        records.add("a-rec-that-should-not-be-deleted-bc-not-num");
         expect(this.deleteService.getDeletes(-1)).andReturn(records);
         expect(this.solrClient.deleteByQuery("(recordType:sul OR recordType:bib) AND recordId:123"))
                 .andReturn(new UpdateResponse());
@@ -49,7 +49,7 @@ public class FolioDeletesTest {
     }
 
     @Test
-    public final void testLoadDaily() throws Exception {
+    final void testLoadDaily() {
         this.deletes = new FolioDeletes("daily", this.deleteService);
         expect(this.deleteService.getDeletes(anyInt())).andReturn(Collections.emptyList());
         replay(this.deleteService);
@@ -58,10 +58,10 @@ public class FolioDeletesTest {
     }
 
     @Test
-    public final void testLoadException() throws Exception {
+    final void testLoadException() throws Exception {
         List<String> records = new ArrayList<>();
-        records.add("deletable-record-id-123");
-        records.add("a-record-that-should-not-be-deleted-bc-not-num");
+        records.add("deletable-rec-id-123");
+        records.add("a-rec-that-should-not-be-deleted-bc-not-num");
         expect(this.deleteService.getDeletes(-1)).andReturn(Collections.singletonList("L-1234"));
         expect(this.solrClient.deleteByQuery("recordType:bib AND recordId:1234"))
                 .andThrow(new SolrServerException("oops"));
@@ -73,7 +73,7 @@ public class FolioDeletesTest {
     }
 
     @Test
-    public final void testLoadHourly() throws Exception {
+    final void testLoadHourly() throws Exception {
         this.deletes = new FolioDeletes("hourly", this.deleteService);
         expect(this.deleteService.getDeletes(anyInt())).andReturn(Collections.emptyList());
         replay(this.deleteService);

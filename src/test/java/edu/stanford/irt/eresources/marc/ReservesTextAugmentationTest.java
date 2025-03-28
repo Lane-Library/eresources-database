@@ -12,7 +12,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ReservesTextAugmentationTest {
+class ReservesTextAugmentationTest {
 
     private ReservesTextAugmentation augmentation;
 
@@ -21,14 +21,14 @@ public class ReservesTextAugmentationTest {
     private AugmentationsService service;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         this.service = mock(AugmentationsService.class);
         this.augmentation = new ReservesTextAugmentation(this.service);
         this.augmentations = Collections.singletonMap("1", "aug1");
     }
 
     @Test
-    public final void testGetReservesAugmentations() {
+    final void testGetReservesAugmentations() {
         expect(this.service.buildAugmentations()).andReturn(this.augmentations);
         replay(this.service);
         assertEquals("aug1", this.augmentation.getReservesAugmentations("1"));

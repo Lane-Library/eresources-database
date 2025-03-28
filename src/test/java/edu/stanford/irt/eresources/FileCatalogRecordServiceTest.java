@@ -20,14 +20,14 @@ import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class FileCatalogRecordServiceTest extends MARCRecordSupport {
+class FileCatalogRecordServiceTest extends MARCRecordSupport {
 
     ThreadPoolTaskExecutor executor;
 
     FileCatalogRecordService recordService;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         this.executor = new ThreadPoolTaskExecutor();
         this.executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/sul-marc",
@@ -35,17 +35,17 @@ public class FileCatalogRecordServiceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetRecordStream() {
+    final void testGetRecordStream() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         assertNotNull(rc);
         while (rc.hasNext()) {
-            Record record = rc.next();
-            assertEquals("8208799", getRecordId(record));
+            Record r = rc.next();
+            assertEquals("8208799", getRecordId(r));
         }
     }
 
     @Test
-    public final void testGetRecordStreamNullBasePath() {
+    final void testGetRecordStreamNullBasePath() {
         this.recordService = new FileCatalogRecordService(null, this.executor);
         assertThrows(IllegalStateException.class, () -> {
             new RecordCollection(this.recordService.getRecordStream(0));
@@ -53,7 +53,7 @@ public class FileCatalogRecordServiceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testRun() throws Exception {
+    final void testRun() throws Exception {
         byte[] data1 = new byte[8192];
         byte[] file1data = Files
                 .readAllBytes(Paths.get("src/test/resources/edu/stanford/irt/eresources/sul-marc/data/8208799.marc"));

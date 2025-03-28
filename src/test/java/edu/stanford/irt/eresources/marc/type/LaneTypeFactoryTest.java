@@ -19,7 +19,7 @@ import edu.stanford.lane.catalog.RecordCollection;
  * there's only one TypeFactory now, but keep separate unit tests for SUL and
  * Lane
  */
-public class LaneTypeFactoryTest extends MARCRecordSupport {
+class LaneTypeFactoryTest extends MARCRecordSupport {
 
     RecordCollection recordCollection;
 
@@ -28,7 +28,7 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
     CatalogRecordService recordService;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/lane",
@@ -41,7 +41,7 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryType() {
+    final void testGetPrimaryType() {
         assertEquals("Journal Digital", TypeFactory.getPrimaryType(this.records.get("55")));
         assertEquals("Image", TypeFactory.getPrimaryType(this.records.get("168269")));
         assertEquals("Software", TypeFactory.getPrimaryType(this.records.get("219590")));
@@ -57,7 +57,7 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetTypes() {
+    final void testGetTypes() {
         assertTrue(TypeFactory.getTypes(this.records.get("55")).contains("Journal"));
         assertTrue(TypeFactory.getTypes(this.records.get("168269")).contains("Image"));
         assertTrue(TypeFactory.getTypes(this.records.get("287781")).contains("Article"));
