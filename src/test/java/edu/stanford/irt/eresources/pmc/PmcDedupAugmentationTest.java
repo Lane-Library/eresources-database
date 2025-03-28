@@ -67,8 +67,8 @@ class PmcDedupAugmentationTest {
         replay(this.solrClient);
         Exception e = assertThrows(EresourceDatabaseException.class, () -> {
             this.pmcDedupAugmentation = new PmcDedupAugmentation(this.solrClient);
-            verify(this.solrClient);
         });
+        verify(this.solrClient);
         assertTrue(e.getMessage().contains("something failed"));
     }
 }

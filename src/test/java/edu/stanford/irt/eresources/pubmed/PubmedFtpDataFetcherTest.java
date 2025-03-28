@@ -84,8 +84,8 @@ class PubmedFtpDataFetcherTest {
         replay(this.ftpClient);
         assertThrows(EresourceDatabaseException.class, () -> {
             this.fetcher.getUpdateFiles();
-            verify(this.ftpClient);
         });
+        verify(this.ftpClient);
 
     }
 
@@ -108,8 +108,8 @@ class PubmedFtpDataFetcherTest {
         replay(this.ftpClient, this.ftpFileFilter, this.ftpFile);
         assertThrows(EresourceDatabaseException.class, () -> {
             this.fetcher.getUpdateFiles();
-            verify(this.ftpClient, this.ftpFileFilter, this.ftpFile);
         });
+        verify(this.ftpClient, this.ftpFileFilter, this.ftpFile);
     }
 
     @Test

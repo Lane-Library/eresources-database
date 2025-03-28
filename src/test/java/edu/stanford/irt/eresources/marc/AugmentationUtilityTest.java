@@ -40,7 +40,7 @@ class AugmentationUtilityTest {
     }
 
     @AfterEach
-    void tearDown() throws Exception {
+    void tearDown() {
         new File(this.objectFile).delete();
     }
 
@@ -74,8 +74,8 @@ class AugmentationUtilityTest {
         replay(this.augmentationsService);
         assertThrows(EresourceDatabaseException.class, () -> {
             AugmentationUtility.fetchAugmentations("/", this.augmentationsService, 100);
-            verify(this.augmentationsService);
         });
+        verify(this.augmentationsService);
     }
 
     // failing on gitlab runner only

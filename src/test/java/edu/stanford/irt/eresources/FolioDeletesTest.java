@@ -68,8 +68,8 @@ class FolioDeletesTest {
         replay(this.deleteService, this.solrClient);
         assertThrows(EresourceDatabaseException.class, () -> {
             this.deletes.load();
-            verify(this.deleteService, this.solrClient);
         });
+        verify(this.deleteService, this.solrClient);
     }
 
     @Test

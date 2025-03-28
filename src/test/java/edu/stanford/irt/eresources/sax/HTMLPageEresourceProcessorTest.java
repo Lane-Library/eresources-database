@@ -65,22 +65,23 @@ class HTMLPageEresourceProcessorTest {
         EasyMock.replay(this.contentHandler);
         assertThrows(EresourceDatabaseException.class, () -> {
             this.processor.process();
-            EasyMock.verify(this.contentHandler);
         });
+        EasyMock.verify(this.contentHandler);
     }
 
     @Test
     final void testProcessNullBasepath() {
+        this.processor = new HTMLPageEresourceProcessor(null, this.contentHandler);
         assertThrows(IllegalArgumentException.class, () -> {
-            (new HTMLPageEresourceProcessor(null, this.contentHandler)).process();
+            this.processor.process();
         });
-
     }
 
     @Test
     final void testProcessNullContentHandler() {
+        this.processor = new HTMLPageEresourceProcessor("", null);
         assertThrows(IllegalArgumentException.class, () -> {
-            (new HTMLPageEresourceProcessor("", null)).process();
+            this.processor.process();
         });
     }
 }

@@ -59,7 +59,7 @@ class ClassesEresourceProcessorTest {
         EasyMock.replay(this.contentHandler);
         assertThrows(EresourceDatabaseException.class, () -> {
             this.processor.process();
-            EasyMock.verify(this.contentHandler);
         });
+        EasyMock.verify(this.contentHandler);
     }
 }

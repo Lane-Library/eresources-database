@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import edu.stanford.lane.catalog.FolioRecordCollection;
-import edu.stanford.lane.catalog.RecordCollection;
 
 class HTTPCatalogRecordServiceTest {
 
@@ -36,7 +35,7 @@ class HTTPCatalogRecordServiceTest {
     final void testGetRecordStreamNullBasePath() throws Exception {
         this.recordService = new HTTPCatalogRecordService(new URI("http://localhost:1/"), "");
         assertThrows(EresourceDatabaseException.class, () -> {
-            new RecordCollection(this.recordService.getRecordStream(0));
+            this.recordService.getRecordStream(0);
         });
     }
 }

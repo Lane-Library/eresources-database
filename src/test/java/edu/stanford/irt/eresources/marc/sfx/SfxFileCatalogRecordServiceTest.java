@@ -69,7 +69,7 @@ class SfxFileCatalogRecordServiceTest extends MARCRecordSupport {
     final void testGetRecordStreamNullBasePath() {
         this.recordService = new SfxFileCatalogRecordService(null, this.executor);
         assertThrows(IllegalStateException.class, () -> {
-            new RecordCollection(this.recordService.getRecordStream(0));
+            this.recordService.getRecordStream(0);
         });
     }
 

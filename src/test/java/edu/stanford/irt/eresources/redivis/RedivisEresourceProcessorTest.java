@@ -44,7 +44,7 @@ class RedivisEresourceProcessorTest {
         replay(this.eresourceHandler);
         assertThrows(EresourceDatabaseException.class, () -> {
             this.processor.process();
-            verify(this.eresourceHandler);
         });
+        verify(this.eresourceHandler);
     }
 }

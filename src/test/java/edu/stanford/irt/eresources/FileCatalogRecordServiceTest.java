@@ -27,7 +27,7 @@ class FileCatalogRecordServiceTest extends MARCRecordSupport {
     FileCatalogRecordService recordService;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         this.executor = new ThreadPoolTaskExecutor();
         this.executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/sul-marc",
@@ -48,7 +48,7 @@ class FileCatalogRecordServiceTest extends MARCRecordSupport {
     final void testGetRecordStreamNullBasePath() {
         this.recordService = new FileCatalogRecordService(null, this.executor);
         assertThrows(IllegalStateException.class, () -> {
-            new RecordCollection(this.recordService.getRecordStream(0));
+            this.recordService.getRecordStream(0);
         });
     }
 

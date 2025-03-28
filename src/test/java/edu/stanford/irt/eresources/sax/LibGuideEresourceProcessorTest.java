@@ -62,21 +62,23 @@ class LibGuideEresourceProcessorTest {
         EasyMock.replay(this.contentHandler);
         assertThrows(EresourceDatabaseException.class, () -> {
             this.processor.process();
-            EasyMock.verify(this.contentHandler);
         });
+        EasyMock.verify(this.contentHandler);
     }
 
     @Test
     final void testProcessNullBasepath() {
+        this.processor = new LibGuideEresourceProcessor(null, this.contentHandler);
         assertThrows(IllegalArgumentException.class, () -> {
-            (new LibGuideEresourceProcessor(null, this.contentHandler)).process();
+            this.processor.process();
         });
     }
 
     @Test
     final void testProcessNullContentHandler() {
+        this.processor = new LibGuideEresourceProcessor("", null);
         assertThrows(IllegalArgumentException.class, () -> {
-            (new LibGuideEresourceProcessor("", null)).process();
+            this.processor.process();
         });
     }
 }

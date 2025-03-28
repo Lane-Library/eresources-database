@@ -32,9 +32,10 @@ class HTTPLaneLocationsServiceTest {
     }
 
     @Test
-    final void testGetLocationsException() {
+    final void testGetLocationsException() throws Exception {
+        URI fakeUri = new URI("fake://foo");
         assertThrows(EresourceDatabaseException.class, () -> {
-            this.locationsService = new HTTPLaneLocationsService(this.mapper, new URI("fake://foo"), "");
+            this.locationsService = new HTTPLaneLocationsService(this.mapper, fakeUri, "");
         });
     }
 

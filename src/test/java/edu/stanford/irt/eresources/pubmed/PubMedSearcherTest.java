@@ -29,8 +29,7 @@ class PubMedSearcherTest {
     @Test
     final void testNullQuery() {
         assertThrows(IllegalStateException.class, () -> {
-            PubmedSearcher search = new PubmedSearcher("field", "value", null, null, "version");
-            search.getPmids();
+            new PubmedSearcher("field", "value", null, null, "version");
         });
     }
 
