@@ -230,10 +230,9 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         for (String cn : cns) {
             Integer recordId = TextParserHelper.recordIdFromLaneControlNumber(cn);
             if (null != recordId) {
-                // getting parent item counts from FOLIO is hard
-                // if (parentHasBibItems(recordId)) {
-                // return recordId.toString();
-                // }
+                // in Voyager days, this checked if the parent record had bibItems and returned the recordId if true
+                // it used the getBibsItemCount of an itemService
+                // parent item counts from FOLIO has not been implemented and no one has complained
                 recordIds.add(recordId);
             }
         }
@@ -243,10 +242,6 @@ public class MarcVersion extends MARCRecordSupport implements Version {
         }
         return null;
     }
-    // no parent item counts from FOLIO (yet?)
-    // private boolean parentHasBibItems(final Integer recordId) {
-    // return recordId != null && this.itemService.getBibsItemCount().itemCount(recordId)[0] > 0;
-    // }
 
     private void setLocationDataForRelatedRecord() {
         String parentRecordId = orderParentLinkingRecords(getSubfieldData(this.bib, "772", "w").toList());
