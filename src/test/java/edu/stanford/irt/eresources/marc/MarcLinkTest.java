@@ -10,15 +10,39 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import edu.stanford.irt.eresources.Link;
 import edu.stanford.irt.eresources.Version;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
 class MarcLinkTest {
+
+    private static Stream<Arguments> provideLabelTestCases() {
+        return Stream.of(
+                Arguments.of(Collections.singletonList(mock(Subfield.class)), 'q', "()", "()"),
+                Arguments.of(Collections.singletonList(mock(Subfield.class)), 'q', "(label", "(label"),
+                Arguments.of(Collections.singletonList(mock(Subfield.class)), 'q', "(label)", "label"),
+                Arguments.of(Collections.singletonList(mock(Subfield.class)), 'q', "q label", "q label"));
+    }
+
+    private static Stream<Arguments> provideLinkTextTestCases() {
+        return Stream.of(
+                Arguments.of(Collections.singletonList(mock(Subfield.class)), 'q', "label", "holdings and dates",
+                        Collections.singletonList(mock(MarcLink.class)), "holdings and dates"),
+                Arguments.of(Collections.singletonList(mock(Subfield.class)), 'q', "label", "holdings and dates",
+                        Collections.emptyList(), "label"),
+                Arguments.of(Collections.singletonList(mock(Subfield.class)), 'q', "label", "holdings and dates", null,
+                        "label"),
+                Arguments.of(Collections.singletonList(mock(Subfield.class)), 'q', "label", null, null, "label"));
+    }
 
     private Field field;
 
@@ -52,13 +76,17 @@ class MarcLinkTest {
         assertNull(this.link.getAdditionalText());
     }
 
-    @Test
-    void testGetLabelEmptyParens() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("()");
-        replay(this.field, this.subfield);
-        assertEquals("()", this.link.getLabel());
+    @ParameterizedTest
+    @MethodSource("provideLabelTestCases")
+    void testGetLabel(final List<Subfield> subfields, final char subfieldCode, final String subfieldData,
+            final String expectedLabel) {
+        expect(this.field.getSubfields()).andReturn(subfields);
+        Subfield subfield = subfields.get(0);
+        expect(subfield.getCode()).andReturn(subfieldCode);
+        expect(subfield.getData()).andReturn(subfieldData);
+        replay(this.field, subfield);
+        assertEquals(expectedLabel, this.link.getLabel());
+        verify(this.field, subfield);
     }
 
     @Test
@@ -66,33 +94,6 @@ class MarcLinkTest {
         expect(this.field.getSubfields()).andReturn(Collections.emptyList()).times(2);
         replay(this.field, this.subfield);
         assertNull(this.link.getLabel());
-    }
-
-    @Test
-    void testGetLabelOpenParens() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("(label");
-        replay(this.field, this.subfield);
-        assertEquals("(label", this.link.getLabel());
-    }
-
-    @Test
-    void testGetLabelParens() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("(label)");
-        replay(this.field, this.subfield);
-        assertEquals("label", this.link.getLabel());
-    }
-
-    @Test
-    void testGetLabelQ() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("q label");
-        replay(this.field, this.subfield);
-        assertEquals("q label", this.link.getLabel());
     }
 
     @Test
@@ -119,51 +120,18 @@ class MarcLinkTest {
         assertEquals("z label", this.link.getLabel());
     }
 
-    @Test
-    void testGetLinkTextHoldingsAndDates() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("label");
-        expect(this.version.getHoldingsAndDates()).andReturn("holdings and dates");
-        expect(this.version.getLinks()).andReturn(Collections.singletonList(this.link));
-        replay(this.version, this.field, this.subfield);
-        assertEquals("holdings and dates", this.link.getLinkText());
-        verify(this.version);
-    }
-
-    @Test
-    void testGetLinkTextHoldingsAndDatesNoLinks() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("label");
-        expect(this.version.getHoldingsAndDates()).andReturn("holdings and dates");
-        expect(this.version.getLinks()).andReturn(Collections.emptyList());
-        replay(this.version, this.field, this.subfield);
-        assertEquals("label", this.link.getLinkText());
-        verify(this.version);
-    }
-
-    @Test
-    void testGetLinkTextHoldingsAndDatesNullLinks() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("label");
-        expect(this.version.getHoldingsAndDates()).andReturn("holdings and dates");
-        expect(this.version.getLinks()).andReturn(null);
-        replay(this.version, this.field, this.subfield);
-        assertEquals("label", this.link.getLinkText());
-        verify(this.version);
-    }
-
-    @Test
-    void testGetLinkTextNoHoldingsAndDates() {
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getCode()).andReturn('q');
-        expect(this.subfield.getData()).andReturn("label");
-        expect(this.version.getHoldingsAndDates()).andReturn(null);
-        expect(this.version.getLinks()).andReturn(null);
-        replay(this.version, this.field, this.subfield);
-        assertEquals("label", this.link.getLinkText());
+    @ParameterizedTest
+    @MethodSource("provideLinkTextTestCases")
+    void testGetLinkText(final List<Subfield> subfields, final char subfieldCode, final String subfieldData,
+            final String holdingsAndDates, final List<Link> links, final String expectedLinkText) {
+        expect(this.field.getSubfields()).andReturn(subfields);
+        Subfield subfield = subfields.get(0);
+        expect(subfield.getCode()).andReturn(subfieldCode);
+        expect(subfield.getData()).andReturn(subfieldData);
+        expect(this.version.getHoldingsAndDates()).andReturn(holdingsAndDates);
+        expect(this.version.getLinks()).andReturn(links);
+        replay(this.version, this.field, subfield);
+        assertEquals(expectedLinkText, this.link.getLinkText());
         verify(this.version);
     }
 
