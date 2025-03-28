@@ -36,8 +36,8 @@ class PubmedEresourceProcessorTest {
         EasyMock.replay(this.xmlReader);
         assertThrows(EresourceDatabaseException.class, () -> {
             this.processor.process();
-            EasyMock.verify(this.xmlReader);
         });
+        EasyMock.verify(this.xmlReader);
 
     }
 
