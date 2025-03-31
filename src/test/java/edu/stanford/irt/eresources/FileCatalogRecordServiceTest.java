@@ -4,29 +4,30 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.PipedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class FileCatalogRecordServiceTest extends MARCRecordSupport {
+class FileCatalogRecordServiceTest extends MARCRecordSupport {
 
     ThreadPoolTaskExecutor executor;
 
     FileCatalogRecordService recordService;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.executor = new ThreadPoolTaskExecutor();
         this.executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/sul-marc",
@@ -34,23 +35,25 @@ public class FileCatalogRecordServiceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetRecordStream() {
+    final void testGetRecordStream() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         assertNotNull(rc);
         while (rc.hasNext()) {
-            Record record = rc.next();
-            assertEquals("8208799", getRecordId(record));
+            Record r = rc.next();
+            assertEquals("8208799", getRecordId(r));
         }
     }
 
-    @Test(expected = IllegalStateException.class)
-    public final void testGetRecordStreamNullBasePath() {
+    @Test
+    final void testGetRecordStreamNullBasePath() {
         this.recordService = new FileCatalogRecordService(null, this.executor);
-        new RecordCollection(this.recordService.getRecordStream(0));
+        assertThrows(IllegalStateException.class, () -> {
+            this.recordService.getRecordStream(0);
+        });
     }
 
     @Test
-    public final void testRun() throws Exception {
+    final void testRun() throws Exception {
         byte[] data1 = new byte[8192];
         byte[] file1data = Files
                 .readAllBytes(Paths.get("src/test/resources/edu/stanford/irt/eresources/sul-marc/data/8208799.marc"));

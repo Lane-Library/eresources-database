@@ -4,64 +4,64 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.lane.catalog.FolioRecord;
 
-public class FolioVersionTest {
+class FolioVersionTest {
 
     private Eresource eresource;
 
     private HTTPLaneLocationsService locationsService;
 
-    private FolioRecord record;
+    private FolioRecord rec;
 
     private FolioVersion version;
 
-    @Before
-    public void setUp() throws Exception {
-        this.record = new FolioRecord(FolioVersionTest.class.getResourceAsStream("folio-record.json").readAllBytes());
+    @BeforeEach
+    void setUp() throws Exception {
+        this.rec = new FolioRecord(FolioVersionTest.class.getResourceAsStream("folio-record.json").readAllBytes());
         this.eresource = mock(Eresource.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
-        this.version = new FolioVersion(this.record.getHoldings().get(0), this.eresource, this.locationsService);
+        this.version = new FolioVersion(this.rec.getHoldings().get(0), this.eresource, this.locationsService);
     }
 
     @Test
-    public void testGetAdditionalText() {
+    void testGetAdditionalText() {
         assertNull(this.version.getAdditionalText());
     }
 
     @Test
-    public void testGetCallNumber() {
+    void testGetCallNumber() {
         assertEquals("test CN", this.version.getCallnumber());
     }
 
     @Test
-    public void testGetDates() {
+    void testGetDates() {
         assertEquals("1900-", this.version.getDates());
     }
 
     @Test
-    public void testGetItemCount() {
+    void testGetItemCount() {
         int[] count = this.version.getItemCount();
         assertEquals(1, count[0]);
         assertEquals(1, count[1]);
     }
 
     @Test
-    public void testGetLinks() {
+    void testGetLinks() {
         assertEquals(2, this.version.getLinks().size());
         assertEquals("https://test.com", this.version.getLinks().get(0).getUrl());
     }
 
     @Test
-    public void testGetLocationName() {
+    void testGetLocationName() {
         expect(this.locationsService.getLocationName("LANE-ECOLL")).andReturn("name");
         replay(this.locationsService);
         assertEquals("name", this.version.getLocationName());
@@ -70,7 +70,7 @@ public class FolioVersionTest {
     }
 
     @Test
-    public void testGetLocationUrl() {
+    void testGetLocationUrl() {
         expect(this.locationsService.getLocationUrl("LANE-ECOLL")).andReturn("url");
         replay(this.locationsService);
         assertEquals("url", this.version.getLocationUrl());
@@ -79,17 +79,17 @@ public class FolioVersionTest {
     }
 
     @Test
-    public void testGetPublisher() {
+    void testGetPublisher() {
         assertNull(this.version.getPublisher());
     }
 
     @Test
-    public void testGetSummaryHoldings() {
+    void testGetSummaryHoldings() {
         assertEquals(this.version.getDates(), this.version.getSummaryHoldings());
     }
 
     @Test
-    public void testIsProxy() {
+    void testIsProxy() {
         assertTrue(this.version.isProxy());
     }
 }

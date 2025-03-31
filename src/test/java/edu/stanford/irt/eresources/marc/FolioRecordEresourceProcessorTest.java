@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.irt.eresources.EresourceHandler;
@@ -21,7 +21,7 @@ import edu.stanford.lane.catalog.FolioRecordCollection;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 
-public class FolioRecordEresourceProcessorTest {
+class FolioRecordEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
@@ -39,8 +39,8 @@ public class FolioRecordEresourceProcessorTest {
 
     private RecordCollectionFactory recordCollectionFactory;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.eresourceHandler = mock(EresourceHandler.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.locationsService = mock(HTTPLaneLocationsService.class);
@@ -53,7 +53,7 @@ public class FolioRecordEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessBib() {
+    final void testProcessBib() {
         Field field = mock(Field.class);
         LocalDateTime ldt = LocalDateTime.now();
         this.processor.setStartDate(ldt);

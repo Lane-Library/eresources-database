@@ -1,27 +1,27 @@
 package edu.stanford.irt.eresources.pubmed;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author ryanmax
  */
-public class PubMedFilenameComparatorTest {
+class PubMedFilenameComparatorTest {
 
     private PubmedFilenameComparator comparator;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.comparator = new PubmedFilenameComparator();
     }
 
     @Test
-    public void testCompare() {
+    void testCompare() {
         File f1 = new File("foo/b  ar");
         File f2 = new File("foo/bar");
         assertEquals(0, this.comparator.compare(f1, f2));

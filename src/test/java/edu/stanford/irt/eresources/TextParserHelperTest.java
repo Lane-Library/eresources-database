@@ -1,19 +1,19 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TextParserHelperTest {
 
     public static final String THIS_YEAR = Integer.toString(LocalDate.now(ZoneId.of("America/Los_Angeles")).getYear());
 
     @Test
-    public final void testAppendMaybeAddComma() {
+    final void testAppendMaybeAddComma() {
         StringBuilder sb = new StringBuilder("append to me");
         TextParserHelper.appendMaybeAddComma(sb, "string");
         sb.delete(0, sb.length());
@@ -25,13 +25,13 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testCleanId() {
+    final void testCleanId() {
         assertEquals("981102488", TextParserHelper.cleanId(981102488));
         assertEquals("981102488", TextParserHelper.cleanId(-981102488));
     }
 
     @Test
-    public final void testCleanOrcid() {
+    final void testCleanOrcid() {
         assertEquals("0000-0001-5769-0004", TextParserHelper.cleanOrcid("0000-0001-5769-0004"));
         assertEquals("0000-0001-5321-983X", TextParserHelper.cleanOrcid("0000-0001-5321-983x"));
         assertEquals("0000-0000-0001-5769-0004", TextParserHelper.cleanOrcid("0000-0000-0001-5769-0004"));
@@ -43,7 +43,7 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testExtractDois() {
+    final void testExtractDois() {
         String input = "this is a doi:10.1016/j.lfs.2015.10.025 and this is another doi:10.109/zas and "
                 + "this is not a doi:100.foo/ard but this one is 10.5694/j.1326-5377.1916.tb117256.x  doi "
                 + "and this one should not match 10.5694/j.1326-5377.1916.tb117256.x because missing label";
@@ -54,20 +54,20 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testMaybeStripTrailingPeriod() {
+    final void testMaybeStripTrailingPeriod() {
         assertEquals("string ", TextParserHelper.maybeStripTrailingPeriod("string "));
         assertEquals("string ", TextParserHelper.maybeStripTrailingPeriod("string ."));
     }
 
     @Test
-    public final void testMaybeStripUnbalancedBracket() {
+    final void testMaybeStripUnbalancedBracket() {
         assertEquals("string", TextParserHelper.maybeStripTrailingUnbalancedBracket("string]"));
         assertEquals("[string]", TextParserHelper.maybeStripTrailingUnbalancedBracket("[string]"));
         assertEquals("string] ", TextParserHelper.maybeStripTrailingUnbalancedBracket("string] "));
     }
 
     @Test
-    public final void testMonthAlternates() {
+    final void testMonthAlternates() {
         assertEquals("", TextParserHelper.explodeMonth(null));
         assertEquals("", TextParserHelper.explodeMonth(""));
         assertEquals("1 01 Jan January", TextParserHelper.explodeMonth("1"));
@@ -86,7 +86,7 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testMonthAlternatesFreeText() {
+    final void testMonthAlternatesFreeText() {
         assertEquals("", TextParserHelper.explodeMonthAbbreviations(null));
         assertEquals("", TextParserHelper.explodeMonthAbbreviations(""));
         assertEquals("4 04 Apr April", TextParserHelper.explodeMonthAbbreviations("1977 Apr 4"));
@@ -106,7 +106,7 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testPagesParser() {
+    final void testPagesParser() {
         assertEquals("2620-2623", TextParserHelper.parseEndPages("2620-3"));
         assertEquals("50-55", TextParserHelper.parseEndPages("50-5"));
         assertEquals("12-19", TextParserHelper.parseEndPages("12-9"));
@@ -133,7 +133,7 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testParseYear() {
+    final void testParseYear() {
         assertEquals(null, TextParserHelper.parseYear("string"));
         assertEquals(THIS_YEAR, TextParserHelper.parseYear("9999"));
         assertEquals("1990", TextParserHelper.parseYear("199u"));
@@ -145,7 +145,7 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testRecordIdFromLaneControlNumber() {
+    final void testRecordIdFromLaneControlNumber() {
         assertEquals(1234, TextParserHelper.recordIdFromLaneControlNumber("L1234").intValue());
         assertEquals(1234, TextParserHelper.recordIdFromLaneControlNumber("Q1234").intValue());
         assertEquals(1234, TextParserHelper.recordIdFromLaneControlNumber("Z1234").intValue());
@@ -155,7 +155,7 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testRemoveTrailingSlashAndSpace() {
+    final void testRemoveTrailingSlashAndSpace() {
         StringBuilder sb = new StringBuilder("remove from me / ");
         TextParserHelper.removeTrailingSlashAndSpace(sb);
         assertEquals("remove from me", sb.toString());
@@ -167,25 +167,30 @@ public class TextParserHelperTest {
     }
 
     @Test
-    public final void testToTitleCase() {
+    final void testToTitleCase() {
         assertEquals("Sound Recording", TextParserHelper.toTitleCase("sound recording"));
         assertEquals("Foo 123 Bar", TextParserHelper.toTitleCase("foo 123 bar"));
         assertEquals("e-Anatomy", TextParserHelper.toTitleCase("e-Anatomy"));
         assertEquals("Foo 123 Bar", TextParserHelper.toTitleCase("foo 123 bar"));
         assertEquals("The Atlantic", TextParserHelper.toTitleCase("The Atlantic."));
         assertEquals("NEJM AI", TextParserHelper.toTitleCase("NEJM AI."));
-        assertEquals("Red Book (American Academy of Pediatrics)", TextParserHelper.toTitleCase("Red book (American Academy of Pediatrics)"));
-        assertEquals("New York Times (National Edition)", TextParserHelper.toTitleCase("New York times (National edition)"));
+        assertEquals("Red Book (American Academy of Pediatrics)",
+                TextParserHelper.toTitleCase("Red book (American Academy of Pediatrics)"));
+        assertEquals("New York Times (National Edition)",
+                TextParserHelper.toTitleCase("New York times (National edition)"));
         assertEquals("The New York Times", TextParserHelper.toTitleCase("The New York times"));
-        assertEquals("New England Journal of Medicine", TextParserHelper.toTitleCase("New England journal of medicine"));
+        assertEquals("New England Journal of Medicine",
+                TextParserHelper.toTitleCase("New England journal of medicine"));
         assertEquals("Stream Ecology. Third Edition", TextParserHelper.toTitleCase("Stream ecology. Third edition."));
         assertEquals("aBIOTECH", TextParserHelper.toTitleCase("aBIOTECH."));
-        assertEquals("Apple iPhone Lightning USB Data Cable & Wall Charger", TextParserHelper.toTitleCase("Apple iPhone lightning USB Data Cable & Wall Charger."));
-        assertEquals("Dell External USB Ultra Slim DVD +/- RW Slot Drive", TextParserHelper.toTitleCase("Dell External USB Ultra Slim DVD +/- RW Slot Drive"));
+        assertEquals("Apple iPhone Lightning USB Data Cable & Wall Charger",
+                TextParserHelper.toTitleCase("Apple iPhone lightning USB Data Cable & Wall Charger."));
+        assertEquals("Dell External USB Ultra Slim DVD +/- RW Slot Drive",
+                TextParserHelper.toTitleCase("Dell External USB Ultra Slim DVD +/- RW Slot Drive"));
     }
 
     @Test
-    public final void testZeroPadding() {
+    final void testZeroPadding() {
         assertEquals("2620 3", TextParserHelper.unpadZeroPadded("02620-03"));
         assertEquals("1", TextParserHelper.unpadZeroPadded("2017 Jan 01"));
         assertEquals("200", TextParserHelper.unpadZeroPadded("2017 0000200"));

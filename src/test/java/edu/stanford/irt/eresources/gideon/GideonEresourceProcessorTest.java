@@ -5,14 +5,14 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -22,7 +22,7 @@ import edu.stanford.irt.eresources.DataFetcher;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
-public class GideonEresourceProcessorTest {
+class GideonEresourceProcessorTest {
 
     private String basePath;
 
@@ -32,8 +32,8 @@ public class GideonEresourceProcessorTest {
 
     private GideonEresourceProcessor processor;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.contentHandler = createMock(ContentHandler.class);
         this.basePath = new File(GideonEresourceProcessor.class.getResource("good/empty.xml").getPath()).getParent();
         this.dataFetcher = createMock(DataFetcher.class);
@@ -41,7 +41,7 @@ public class GideonEresourceProcessorTest {
     }
 
     @Test
-    public void testProcess() throws Exception {
+    void testProcess() throws Exception {
         this.contentHandler.startDocument();
         expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -63,7 +63,7 @@ public class GideonEresourceProcessorTest {
     }
 
     @Test
-    public void testProcessBadXml() throws Exception {
+    void testProcessBadXml() throws Exception {
         this.basePath = new File(GideonEresourceProcessor.class.getResource("bad/bad.xml").getPath()).getParent();
         this.contentHandler.startDocument();
         expectLastCall();
@@ -79,7 +79,7 @@ public class GideonEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessException() throws Exception {
+    final void testProcessException() throws Exception {
         this.contentHandler.startDocument();
         expectLastCall().andThrow(new SAXException("oops!"));
         replay(this.contentHandler);
@@ -91,7 +91,7 @@ public class GideonEresourceProcessorTest {
     }
 
     @Test
-    public void testProcessNullBasePath() {
+    void testProcessNullBasePath() {
         this.processor = new GideonEresourceProcessor(null, this.dataFetcher, this.contentHandler);
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             this.processor.process();
@@ -100,7 +100,7 @@ public class GideonEresourceProcessorTest {
     }
 
     @Test
-    public void testProcessNullContentHandler() {
+    void testProcessNullContentHandler() {
         this.processor = new GideonEresourceProcessor(this.basePath, this.dataFetcher, null);
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             this.processor.process();
@@ -109,7 +109,7 @@ public class GideonEresourceProcessorTest {
     }
 
     @Test
-    public void testProcessNullDataFetcher() {
+    void testProcessNullDataFetcher() {
         this.processor = new GideonEresourceProcessor(this.basePath, null, this.contentHandler);
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             this.processor.process();

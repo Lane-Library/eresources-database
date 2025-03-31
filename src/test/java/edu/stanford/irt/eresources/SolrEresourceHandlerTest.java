@@ -5,7 +5,7 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,12 +13,12 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.solr.client.solrj.SolrClient;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.marc.AbstractMarcEresource;
 
-public class SolrEresourceHandlerTest {
+class SolrEresourceHandlerTest {
 
     AbstractMarcEresource eresource;
 
@@ -28,8 +28,8 @@ public class SolrEresourceHandlerTest {
 
     SolrClient solrClient;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.queue = mock(BlockingQueue.class);
         this.solrClient = mock(SolrClient.class);
         this.handler = new SolrEresourceHandler(this.queue, this.solrClient, 1);
@@ -37,12 +37,12 @@ public class SolrEresourceHandlerTest {
     }
 
     @Test
-    public final void testGetCount() {
+    final void testGetCount() {
         assertEquals(0, this.handler.getCount());
     }
 
     @Test
-    public final void testHandleEresource() throws Exception {
+    final void testHandleEresource() throws Exception {
         Version v = mock(Version.class);
         Link l = mock(Link.class);
         expect(this.eresource.getVersions()).andReturn(Collections.singletonList(v));
@@ -56,7 +56,7 @@ public class SolrEresourceHandlerTest {
     }
 
     @Test
-    public final void testRun() throws Exception {
+    final void testRun() throws Exception {
         Version v = mock(Version.class);
         Link l = mock(Link.class);
         expect(this.queue.isEmpty()).andReturn(false);
@@ -115,7 +115,8 @@ public class SolrEresourceHandlerTest {
         expect(this.queue.isEmpty()).andReturn(true);
         expect(this.solrClient.add(isA(Collection.class))).andReturn(null);
         replay(this.eresource, this.queue, v, l, this.solrClient);
-        // clearly poor design ... have to stop before run so that keepGoing doesn't run forever
+        // clearly poor design ... have to stop before run so that keepGoing doesn't run
+        // forever
         this.handler.stop();
         this.handler.run();
         verify(this.eresource, this.queue, v, l, this.solrClient);

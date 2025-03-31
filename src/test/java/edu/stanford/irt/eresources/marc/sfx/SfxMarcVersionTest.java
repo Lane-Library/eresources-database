@@ -4,16 +4,16 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.lane.catalog.Record;
 
-public class SfxMarcVersionTest {
+class SfxMarcVersionTest {
 
     SfxMarcVersion sfxMarcVersion;
 
@@ -21,20 +21,20 @@ public class SfxMarcVersionTest {
 
     Eresource eresource;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.bibRecord = mock(Record.class);
         this.eresource = mock(Eresource.class);
         this.sfxMarcVersion = new SfxMarcVersion(this.bibRecord, this.eresource);
     }
 
     @Test
-    public void testGetAdditionalText() {
+    void testGetAdditionalText() {
         assertNull(this.sfxMarcVersion.getAdditionalText());
     }
 
     @Test
-    public void testGetDates() {
+    void testGetDates() {
         expect(this.eresource.getYear()).andReturn(2027);
         replay(this.eresource);
         assertEquals("2027", this.sfxMarcVersion.getDates());
@@ -42,7 +42,7 @@ public class SfxMarcVersionTest {
     }
 
     @Test
-    public void testGetDatesNull() {
+    void testGetDatesNull() {
         expect(this.eresource.getYear()).andReturn(0);
         replay(this.eresource);
         assertNull(this.sfxMarcVersion.getDates());

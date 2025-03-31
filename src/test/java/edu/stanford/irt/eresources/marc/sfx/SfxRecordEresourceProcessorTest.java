@@ -12,8 +12,8 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.SolrEresourceHandler;
@@ -23,20 +23,20 @@ import edu.stanford.irt.eresources.marc.RecordCollectionFactory;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class SfxRecordEresourceProcessorTest {
+class SfxRecordEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
     private KeywordsStrategy keywordsStrategy;
 
-    private RecordCollectionFactory recordCollectionFactory;
-
     private LaneDedupAugmentation laneDedupAugmentation;
+
+    private RecordCollectionFactory recordCollectionFactory;
 
     private SfxRecordEresourceProcessor sfxRecordEresourceProcessor;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         this.eresourceHandler = mock(SolrEresourceHandler.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
         this.recordCollectionFactory = mock(RecordCollectionFactory.class);
@@ -46,7 +46,7 @@ public class SfxRecordEresourceProcessorTest {
     }
 
     @Test
-    public void testProcess() throws Exception {
+    void testProcess() throws Exception {
         LocalDateTime startDate = LocalDateTime.now();
         Long start = startDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         this.sfxRecordEresourceProcessor.setStartDate(startDate);

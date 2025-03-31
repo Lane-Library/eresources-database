@@ -1,15 +1,15 @@
 package edu.stanford.irt.eresources.pubmed;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xbib.io.ftp.client.FTPFile;
 
-public class PubmedFtpFileFilterTest {
+class PubmedFtpFileFilterTest {
 
     @Test
-    public final void testPubmedFtpFileFilter() {
+    final void testPubmedFtpFileFilter() {
         PubmedFtpFileFilter filter = new PubmedFtpFileFilter("src/test/resources/edu/stanford/irt/eresources/pubmed/");
         FTPFile file = new FTPFile();
         file.setName("file.xml.gz");

@@ -5,22 +5,21 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
@@ -33,27 +32,19 @@ import edu.stanford.lane.catalog.Record.Subfield;
 import edu.stanford.lane.catalog.RecordCollection;
 import edu.stanford.lane.lcsh.LcshMapManager;
 
-@RunWith(Parameterized.class)
 public class SulMarcEresourceTest extends MARCRecordSupport {
 
-    @Parameters
-    public static Collection<String[]> testData() {
-        return Arrays.asList(new String[][] { 
-            { "505",
-              "Ch. 1 Introduction -- Ch. 2 Functional organization of the visual system -- Pt. I Development of the visual system -- ",
-              "::Contents##<br/>Ch. 1 Introduction<br/>Ch. 2 Functional organization of the visual system<br/>Pt. I Development of the visual system<br/>" },
-            { "520", "Just text", "::Summary## Just text" },
-            { "905", "Appendix I : thing -- Appendix II : thing 2.", "::Contents##<br/>Appendix I : thing<br/>Appendix II : thing 2." } });
+    public static Stream<Arguments> data() {
+        return Stream.of(
+                // get ip with callback
+                Arguments.of(
+                        "505",
+                        "Ch. 1 Introduction -- Ch. 2 Functional organization of the visual system -- Pt. I Development of the visual system -- ",
+                        "::Contents##<br/>Ch. 1 Introduction<br/>Ch. 2 Functional organization of the visual system<br/>Pt. I Development of the visual system<br/>"),
+                Arguments.of("520", "Just text", "::Summary## Just text"),
+                Arguments.of("905", "Appendix I : thing -- Appendix II : thing 2.",
+                        "::Contents##<br/>Appendix I : thing<br/>Appendix II : thing 2."));
     }
-
-    @Parameter(2)
-    public String expectedDescription;
-
-    @Parameter(1)
-    public String subfieldData;
-
-    @Parameter(0)
-    public String tag;
 
     private SulMarcEresource eresource;
 
@@ -61,7 +52,7 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
 
     private KeywordsStrategy keywordsStrategy;
 
-    private Record record;
+    private Record rec;
 
     private Subfield subfield;
 
@@ -71,11 +62,11 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
 
     CatalogRecordService recordService;
 
-    @Before
-    public void setUp() {
-        this.record = mock(Record.class);
+    @BeforeEach
+    void setUp() {
+        this.rec = mock(Record.class);
         this.keywordsStrategy = mock(KeywordsStrategy.class);
-        this.eresource = new SulMarcEresource(this.record, this.keywordsStrategy, null);
+        this.eresource = new SulMarcEresource(this.rec, this.keywordsStrategy, null);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
         // real marc to simplify testing for getYear, mesh, etc.
@@ -91,8 +82,8 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetAbbreviatedTitles() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+    final void testGetAbbreviatedTitles() {
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("246");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield }))
                 .times(2);
@@ -102,14 +93,14 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("ABBRV.");
-        replay(this.record, this.field, this.subfield);
+        replay(this.rec, this.field, this.subfield);
         assertEquals("ABBRV.", this.eresource.getAbbreviatedTitles().stream().findFirst().get());
-        verify(this.record, this.field, this.subfield);
+        verify(this.rec, this.field, this.subfield);
     }
 
     @Test
-    public final void testGetAbbreviatedTitlesMissing() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+    final void testGetAbbreviatedTitlesMissing() {
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("246");
         expect(this.field.getSubfields()).andReturn(Arrays.asList(new Subfield[] { this.subfield, this.subfield }))
                 .times(2);
@@ -119,54 +110,55 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('a');
         expect(this.subfield.getData()).andReturn("abbrv.");
-        replay(this.record, this.field, this.subfield);
+        replay(this.rec, this.field, this.subfield);
         assertTrue(this.eresource.getAbbreviatedTitles().isEmpty());
-        verify(this.record, this.field, this.subfield);
+        verify(this.rec, this.field, this.subfield);
     }
 
     @Test
-    public final void testGetDescription905And920() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+    final void testGetDescription905And920() {
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
         expect(this.field.getTag()).andReturn("920").times(3);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("920 data");
         expect(this.field.getTag()).andReturn("905").anyTimes();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getData()).andReturn("905 data");
-        replay(this.record, this.field, this.subfield);
+        replay(this.rec, this.field, this.subfield);
         assertEquals("::Summary## 920 data<br/>::Contents##<br/>905 data", this.eresource.getDescription());
-        verify(this.record, this.field, this.subfield);
+        verify(this.rec, this.field, this.subfield);
     }
 
     @Test
-    public final void testGetDescriptionEmpty() {
-        expect(this.record.getFields()).andReturn(Collections.emptyList()).anyTimes();
-        replay(this.record);
+    final void testGetDescriptionEmpty() {
+        expect(this.rec.getFields()).andReturn(Collections.emptyList()).anyTimes();
+        replay(this.rec);
         assertNull(this.eresource.getDescription());
-        verify(this.record);
+        verify(this.rec);
     }
 
-    @Test
-    public void testGetDescriptionParameterized() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
-        expect(this.field.getTag()).andReturn(this.tag).anyTimes();
+    @ParameterizedTest
+    @MethodSource("data")
+    void testGetDescriptionParameterized(String tag, String subfieldData, String expectedDescription) {
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field)).anyTimes();
+        expect(this.field.getTag()).andReturn(tag).anyTimes();
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
-        expect(this.subfield.getData()).andReturn(this.subfieldData);
-        replay(this.record, this.field, this.subfield);
-        assertEquals(this.expectedDescription, this.eresource.getDescription());
-        verify(this.record, this.field, this.subfield);
+        expect(this.subfield.getData()).andReturn(subfieldData);
+        replay(this.rec, this.field, this.subfield);
+        assertEquals(expectedDescription, this.eresource.getDescription());
+        verify(this.rec, this.field, this.subfield);
     }
 
     @Test
-    public final void testGetKeywords() {
-        expect(this.keywordsStrategy.getKeywords(this.record)).andReturn("keywords");
+    final void testGetKeywords() {
+        expect(this.keywordsStrategy.getKeywords(this.rec)).andReturn("keywords");
         replay(this.keywordsStrategy);
         assertEquals("keywords", this.eresource.getKeywords());
         verify(this.keywordsStrategy);
     }
 
     @Test
-    public final void testGetMesh() {
+    final void testGetMesh() {
         LcshMapManager lcshMapManager = mock(LcshMapManager.class);
         SulMarcEresource mesh = new SulMarcEresource(this.records.get("7811516"), this.keywordsStrategy,
                 lcshMapManager);
@@ -178,74 +170,74 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         verify(lcshMapManager);
     }
 
-//    @Test
-//    public final void testGetPrimaryType() {
-//        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("primary");
-//        replay(this.typeFactory);
-//        assertEquals("primary", this.eresource.getPrimaryType());
-//        assertEquals("primary", this.eresource.getPrimaryType());
-//        verify(this.typeFactory);
-//    }
-//
+    // @Test
+    // public final void testGetPrimaryType() {
+    // expect(this.typeFactory.getPrimaryType(this.record)).andReturn("primary");
+    // replay(this.typeFactory);
+    // assertEquals("primary", this.eresource.getPrimaryType());
+    // assertEquals("primary", this.eresource.getPrimaryType());
+    // verify(this.typeFactory);
+    // }
+    //
     @Test
-    public final void testGetRecordId() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+    final void testGetRecordId() {
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("1234");
-        replay(this.record, this.field);
+        replay(this.rec, this.field);
         assertEquals("1234", this.eresource.getRecordId());
-        verify(this.record, this.field);
+        verify(this.rec, this.field);
     }
 
     @Test
-    public final void testGetRecordIdNotNumber() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+    final void testGetRecordIdNotNumber() {
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("001");
         expect(this.field.getData()).andReturn("not a number");
-        replay(this.record, this.field);
+        replay(this.rec, this.field);
         assertEquals("", this.eresource.getRecordId());
-        verify(this.record, this.field);
+        verify(this.rec, this.field);
     }
 
     @Test
-    public final void testGetRecordType() {
+    final void testGetRecordType() {
         assertEquals("sul", this.eresource.getRecordType());
     }
 
     @Test
-    public final void testGetShortTitle() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+    final void testGetShortTitle() {
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("222");
         expect(this.field.getSubfields()).andReturn(Collections.emptyList());
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("245");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.subfield.getCode()).andReturn('a').times(2);
         expect(this.subfield.getData()).andReturn("title");
-        expect(this.record.getFields()).andReturn(Collections.emptyList());
-        replay(this.record, this.field, this.subfield);
+        expect(this.rec.getFields()).andReturn(Collections.emptyList());
+        replay(this.rec, this.field, this.subfield);
         assertEquals("title", this.eresource.getShortTitle());
     }
 
     @Test
-    public final void testGetTitleLinked() {
+    final void testGetTitleLinked() {
         SulMarcEresource linkedTitleEr = new SulMarcEresource(this.records.get("10494697"), this.keywordsStrategy,
                 null);
         assertEquals("Рост Кристаллоь / Rost Kristallov / Growth of Crystals : Volume 12", linkedTitleEr.getTitle());
     }
-//    @Test
-//    public final void testGetTypes() {
-//        List<String> types = new ArrayList<>();
-//        expect(this.typeFactory.getTypes(this.record)).andReturn(types);
-//        expect(this.typeFactory.getPrimaryType(this.record)).andReturn("Other");
-//        replay(this.typeFactory, this.record);
-//        assertTrue(this.eresource.getTypes().isEmpty());
-//    }
+    // @Test
+    // public final void testGetTypes() {
+    // List<String> types = new ArrayList<>();
+    // expect(this.typeFactory.getTypes(this.record)).andReturn(types);
+    // expect(this.typeFactory.getPrimaryType(this.record)).andReturn("Other");
+    // replay(this.typeFactory, this.record);
+    // assertTrue(this.eresource.getTypes().isEmpty());
+    // }
 
     @Test
-    public final void testGetVersions() {
-        SulMarcEresource e = new SulMarcEresource(this.record, null, null);
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
+    final void testGetVersions() {
+        SulMarcEresource e = new SulMarcEresource(this.rec, null, null);
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field)).atLeastOnce();
         expect(this.field.getTag()).andReturn("956").atLeastOnce();
         expect(this.field.getIndicator1()).andReturn('4').atLeastOnce();
         expect(this.field.getIndicator2()).andReturn('0').atLeastOnce();
@@ -253,48 +245,48 @@ public class SulMarcEresourceTest extends MARCRecordSupport {
         expect(this.subfield.getCode()).andReturn('z').atLeastOnce();
         expect(this.subfield.getData()).andReturn("label").atLeastOnce();
         byte b = 0;
-        expect(this.record.getLeaderByte(EasyMock.anyInt())).andReturn(b).atLeastOnce();
-        replay(this.record, this.field, this.subfield);
+        expect(this.rec.getLeaderByte(EasyMock.anyInt())).andReturn(b).atLeastOnce();
+        replay(this.rec, this.field, this.subfield);
         assertEquals(1, e.getVersions().size());
-        verify(this.record, this.field, this.subfield);
+        verify(this.rec, this.field, this.subfield);
     }
 
     @Test
-    public final void testGetYear() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
+    final void testGetYear() {
+        expect(this.rec.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("008");
         expect(this.field.getData()).andReturn("000000000001999");
-        replay(this.record, this.field);
+        replay(this.rec, this.field);
         assertEquals(1999, this.eresource.getYear());
         assertEquals(1999, this.eresource.getYear());
-        verify(this.record, this.field);
+        verify(this.rec, this.field);
     }
 
     @Test
-    public final void testGetYearRealMarc() {
+    final void testGetYearRealMarc() {
         SulMarcEresource badDate = new SulMarcEresource(this.records.get("90009616"), this.keywordsStrategy, null);
         assertEquals(2005, badDate.getYear());
         assertEquals("20050101", badDate.getDate());
     }
-//    @Test
-//    public final void testGetYearNo() {
-//        List<Field> fields = new ArrayList<>();
-//        fields.add(this.field);
-//        fields.add(this.field);
-//        fields.add(this.field);
-//        expect(this.record.getFields()).andReturn(fields).times(3);
-//        expect(this.field.getTag()).andReturn("008");
-//        expect(this.field.getData()).andReturn("000000000007999");
-//        expect(this.field.getTag()).andReturn("264");
-//        expect(this.field.getIndicator2()).andReturn('z').atLeastOnce();
-//        expect(this.field.getTag()).andReturn("264");
-//        expect(this.subfield.getCode()).andReturn('x');
-//        expect(this.field.getTag()).andReturn("260");
-//        expect(this.subfield.getCode()).andReturn('c');
-//        expect(this.subfield.getData()).andReturn("1999");
-//        replay(this.record, this.field, this.subfield);
-//        assertEquals(1999, this.eresource.getYear());
-//        assertEquals(1999, this.eresource.getYear());
-//        verify(this.record, this.field, this.subfield);
-//    }
+    // @Test
+    // public final void testGetYearNo() {
+    // List<Field> fields = new ArrayList<>();
+    // fields.add(this.field);
+    // fields.add(this.field);
+    // fields.add(this.field);
+    // expect(this.rec.getFields()).andReturn(fields).times(3);
+    // expect(this.field.getTag()).andReturn("008");
+    // expect(this.field.getData()).andReturn("000000000007999");
+    // expect(this.field.getTag()).andReturn("264");
+    // expect(this.field.getIndicator2()).andReturn('z').atLeastOnce();
+    // expect(this.field.getTag()).andReturn("264");
+    // expect(this.subfield.getCode()).andReturn('x');
+    // expect(this.field.getTag()).andReturn("260");
+    // expect(this.subfield.getCode()).andReturn('c');
+    // expect(this.subfield.getData()).andReturn("1999");
+    // replay(this.rec, this.field, this.subfield);
+    // assertEquals(1999, this.eresource.getYear());
+    // assertEquals(1999, this.eresource.getYear());
+    // verify(this.rec, this.field, this.subfield);
+    // }
 }

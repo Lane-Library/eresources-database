@@ -5,14 +5,15 @@ import static org.easymock.EasyMock.isA;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.EresourceHandler;
 
-public class RedivisEresourceProcessorTest {
+class RedivisEresourceProcessorTest {
 
     private EresourceHandler eresourceHandler;
 
@@ -20,15 +21,15 @@ public class RedivisEresourceProcessorTest {
 
     private RedivisEresourceProcessor processor;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.eresourceHandler = mock(EresourceHandler.class);
         this.listEndpoint = RedivisEresourceProcessorTest.class.getResource("datasets.json").toExternalForm();
         this.processor = new RedivisEresourceProcessor(this.listEndpoint, "token", this.eresourceHandler);
     }
 
     @Test
-    public final void testProcess() {
+    final void testProcess() {
         this.eresourceHandler.handleEresource(isA(RedivisEresource.class));
         expectLastCall().times(85);
         replay(this.eresourceHandler);
@@ -36,12 +37,14 @@ public class RedivisEresourceProcessorTest {
         verify(this.eresourceHandler);
     }
 
-    @Test(expected = EresourceDatabaseException.class)
-    public final void testProcessBadJson() {
+    @Test
+    final void testProcessBadJson() {
         this.listEndpoint = RedivisEresourceProcessorTest.class.getResource("datasets-exception.json").toExternalForm();
         this.processor = new RedivisEresourceProcessor(this.listEndpoint, "token", this.eresourceHandler);
         replay(this.eresourceHandler);
-        this.processor.process();
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.processor.process();
+        });
         verify(this.eresourceHandler);
     }
 }

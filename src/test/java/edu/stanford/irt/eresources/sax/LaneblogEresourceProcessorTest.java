@@ -1,13 +1,13 @@
 package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.isA;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -16,21 +16,21 @@ import org.xml.sax.helpers.AttributesImpl;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
-public class LaneblogEresourceProcessorTest {
+class LaneblogEresourceProcessorTest {
 
     ContentHandler contentHandler;
 
     LaneblogEresourceProcessor processor;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
         this.processor = new LaneblogEresourceProcessor(
                 "file:src/test/resources/edu/stanford/irt/eresources/sax/rss.xml", "user agent", this.contentHandler);
     }
 
     @Test
-    public final void testProcess() throws Exception {
+    final void testProcess() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -61,7 +61,7 @@ public class LaneblogEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessException() throws Exception {
+    final void testProcessException() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().andThrow(new SAXException("foo"));
         EasyMock.replay(this.contentHandler);
@@ -75,7 +75,7 @@ public class LaneblogEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessBadXml() {
+    final void testProcessBadXml() {
         this.processor = new LaneblogEresourceProcessor(
                 "file:src/test/resources/edu/stanford/irt/eresources/sax/rss-bad.xml", "user agent",
                 this.contentHandler);

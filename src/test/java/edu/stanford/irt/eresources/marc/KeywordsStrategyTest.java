@@ -4,20 +4,20 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class KeywordsStrategyTest {
+class KeywordsStrategyTest {
 
     private AuthTextAugmentation augmentation;
 
@@ -33,8 +33,8 @@ public class KeywordsStrategyTest {
 
     private List<Field> twoFields;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.augmentation = mock(AuthTextAugmentation.class);
         this.reservesAugmentation = mock(ReservesTextAugmentation.class);
         this.strategy = new KeywordsStrategy(this.augmentation, this.reservesAugmentation);
@@ -47,7 +47,7 @@ public class KeywordsStrategyTest {
     }
 
     @Test
-    public void testGetKeywordsBib() {
+    void testGetKeywordsBib() {
         List<Subfield> subs = new ArrayList<>();
         subs.add(this.subfield);
         subs.add(this.subfield);
@@ -65,7 +65,7 @@ public class KeywordsStrategyTest {
     }
 
     @Test
-    public void testGetKeywordsBibAugmentable() {
+    void testGetKeywordsBibAugmentable() {
         expect(this.record.getFields()).andReturn(this.twoFields);
         expect(this.record.getLeaderByte(6)).andReturn((byte) 'a');
         expect(this.field.getTag()).andReturn("100").times(2);
@@ -82,7 +82,7 @@ public class KeywordsStrategyTest {
     }
 
     @Test
-    public void testGetKeywordsHolding() {
+    void testGetKeywordsHolding() {
         List<Field> fields = new ArrayList<>();
         Field f1 = mock(Field.class);
         Field f2 = mock(Field.class);

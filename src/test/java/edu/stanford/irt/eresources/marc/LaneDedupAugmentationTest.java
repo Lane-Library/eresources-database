@@ -5,8 +5,8 @@ import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.HashMap;
@@ -14,28 +14,28 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class LaneDedupAugmentationTest {
+class LaneDedupAugmentationTest {
 
     AugmentationsService augmentationService;
 
     String objectFile = "/tmp/dedup-unit-test.obj";
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.augmentationService = mock(AugmentationsService.class);
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() {
         new File(this.objectFile).delete();
     }
 
     @Test
-    public final void testLaneDedupAugmentation() {
+    final void testLaneDedupAugmentation() {
         Set<String> skips = new HashSet<>();
         skips.add("key->12345");
         Map<String, String> map = new HashMap<String, String>();

@@ -1,16 +1,17 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class AbstractEresourceProcessorTest {
+class AbstractEresourceProcessorTest {
 
-    public class EresourceProcessorTest extends AbstractEresourceProcessor {
+    class EresourceProcessorTest extends AbstractEresourceProcessor {
 
         @Override
         public void process() {
@@ -20,18 +21,20 @@ public class AbstractEresourceProcessorTest {
 
     EresourceProcessorTest processor;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.processor = new EresourceProcessorTest();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public final void testNull() {
-        this.processor.setStartDate(null);
+    @Test
+    final void testNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.processor.setStartDate(null);
+        });
     }
 
     @Test
-    public final void testProcessor() {
+    final void testProcessor() {
         LocalDateTime ldt = LocalDateTime.now();
         long time = ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         this.processor.setStartDate(ldt);

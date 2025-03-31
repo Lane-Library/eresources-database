@@ -1,12 +1,13 @@
 package edu.stanford.irt.eresources.pmc;
 
 import static org.easymock.EasyMock.isA;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.helpers.AttributesImpl;
@@ -15,10 +16,7 @@ import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.marc.LaneDedupAugmentation;
 import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
-public class PmcEresourceProcessorTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+class PmcEresourceProcessorTest {
 
     ContentHandler contentHandler;
 
@@ -26,8 +24,8 @@ public class PmcEresourceProcessorTest {
 
     PmcEresourceProcessor processor;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
         this.laneDedupAugmentation = EasyMock.mock(LaneDedupAugmentation.class);
         this.processor = new PmcEresourceProcessor(PmcEresourceProcessorTest.class.getResource(".").toExternalForm(),
@@ -36,12 +34,10 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testBadEutilsUrl() throws Exception {
+    final void testBadEutilsUrl() throws Exception {
         this.processor = new PmcEresourceProcessor("file:/",
                 PmcEresourceProcessorTest.class.getResource("jlist.csv").toExternalForm(), this.contentHandler,
                 this.laneDedupAugmentation, "key");
-        this.thrown.expect(EresourceDatabaseException.class);
-        this.thrown.expectMessage("java.io.FileNotFoundException: /esearch.fcgi (No such file or directory)");
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -53,16 +49,17 @@ public class PmcEresourceProcessorTest {
         EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "2190572x")).andReturn(false);
         EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "21905738")).andReturn(false);
         EasyMock.replay(this.contentHandler, this.laneDedupAugmentation);
-        this.processor.process();
+        EresourceDatabaseException ex = assertThrows(EresourceDatabaseException.class, () -> {
+            this.processor.process();
+        });
+        assertEquals("java.io.FileNotFoundException: /esearch.fcgi (No such file or directory)", ex.getMessage());
     }
 
     @Test
-    public final void testBadFetchUrl() throws Exception {
+    final void testBadFetchUrl() throws Exception {
         this.processor = new PmcEresourceProcessor("[]",
                 PmcEresourceProcessorTest.class.getResource("jlist.csv").toExternalForm(), this.contentHandler,
                 this.laneDedupAugmentation, "key");
-        this.thrown.expectMessage("Illegal character");
-        this.thrown.expect(EresourceDatabaseException.class);
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -74,17 +71,18 @@ public class PmcEresourceProcessorTest {
         EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "2190572x")).andReturn(false);
         EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "21905738")).andReturn(false);
         EasyMock.replay(this.contentHandler, this.laneDedupAugmentation);
-        this.processor.process();
+        EresourceDatabaseException ex = assertThrows(EresourceDatabaseException.class, () -> {
+            this.processor.process();
+        });
+        assertTrue(ex.getLocalizedMessage().contains("Illegal character"));
     }
 
     @Test
-    public final void testBadSearchXml() throws Exception {
+    final void testBadSearchXml() throws Exception {
         this.processor = new PmcEresourceProcessor(
                 PmcEresourceProcessorTest.class.getResource("./bad-xml/").toExternalForm(),
                 PmcEresourceProcessorTest.class.getResource("jlist.csv").toExternalForm(), this.contentHandler,
                 this.laneDedupAugmentation, "key");
-        this.thrown.expectMessage("efetch.fcgi");
-        this.thrown.expect(EresourceDatabaseException.class);
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -96,27 +94,32 @@ public class PmcEresourceProcessorTest {
         EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "2190572x")).andReturn(false);
         EasyMock.expect(this.laneDedupAugmentation.isDuplicate("issn", "21905738")).andReturn(false);
         EasyMock.replay(this.contentHandler, this.laneDedupAugmentation);
-        this.processor.process();
+        EresourceDatabaseException ex = assertThrows(EresourceDatabaseException.class, () -> {
+            this.processor.process();
+        });
+        assertTrue(ex.getLocalizedMessage().contains("efetch.fcgi"));
     }
 
     @Test
-    public final void testNullContentHandler() throws Exception {
+    final void testNullContentHandler() throws Exception {
         this.processor = new PmcEresourceProcessor(null, "url", null, null, null);
-        this.thrown.expect(IllegalArgumentException.class);
-        this.thrown.expectMessage("null contentHandler");
-        this.processor.process();
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            this.processor.process();
+        });
+        assertEquals("null contentHandler", ex.getMessage());
     }
 
     @Test
-    public final void testNullJournalsUrl() throws Exception {
+    final void testNullJournalsUrl() throws Exception {
         this.processor = new PmcEresourceProcessor(null, null, this.contentHandler, null, null);
-        this.thrown.expect(IllegalArgumentException.class);
-        this.thrown.expectMessage("null allJournalsCsvUrl");
-        this.processor.process();
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            this.processor.process();
+        });
+        assertEquals("null allJournalsCsvUrl", ex.getMessage());
     }
 
     @Test
-    public final void testProcess() throws Exception {
+    final void testProcess() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -156,7 +159,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessDup1() throws Exception {
+    final void testProcessDup1() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -173,7 +176,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessDup2() throws Exception {
+    final void testProcessDup2() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -191,7 +194,7 @@ public class PmcEresourceProcessorTest {
     }
 
     @Test
-    public final void testProcessDup3() throws Exception {
+    final void testProcessDup3() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),

@@ -4,15 +4,15 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class ReservesTextAugmentationTest {
+class ReservesTextAugmentationTest {
 
     private ReservesTextAugmentation augmentation;
 
@@ -20,15 +20,15 @@ public class ReservesTextAugmentationTest {
 
     private AugmentationsService service;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.service = mock(AugmentationsService.class);
         this.augmentation = new ReservesTextAugmentation(this.service);
         this.augmentations = Collections.singletonMap("1", "aug1");
     }
 
     @Test
-    public final void testGetReservesAugmentations() {
+    final void testGetReservesAugmentations() {
         expect(this.service.buildAugmentations()).andReturn(this.augmentations);
         replay(this.service);
         assertEquals("aug1", this.augmentation.getReservesAugmentations("1"));

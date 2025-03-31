@@ -2,20 +2,21 @@ package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isA;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.Attributes;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.EresourceHandler;
 
-public class DefaultEresourceBuilderTest {
+class DefaultEresourceBuilderTest {
 
     private Attributes attributes;
 
@@ -23,8 +24,8 @@ public class DefaultEresourceBuilderTest {
 
     private EresourceHandler eresourceHandler;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         this.attributes = EasyMock.mock(Attributes.class);
         this.eresourceHandler = EasyMock.mock(EresourceHandler.class);
         this.builder = new DefaultEresourceBuilder();
@@ -33,14 +34,14 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testCharacters() throws Exception {
+    void testCharacters() throws Exception {
         assertTrue(this.builder.currentText.isEmpty());
         this.builder.characters("data".toCharArray(), 0, 4);
         assertEquals("data", this.builder.currentText.toString());
     }
 
     @Test
-    public void testEndElementDate() throws Exception {
+    void testEndElementDate() throws Exception {
         this.builder.currentText.append("date");
         this.builder.currentVersion = new SAXVersion();
         this.builder.endElement(null, null, "date");
@@ -48,7 +49,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementDescription() throws Exception {
+    void testEndElementDescription() throws Exception {
         this.builder.currentText.append("description");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "description");
@@ -56,7 +57,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementErDate() throws Exception {
+    void testEndElementErDate() throws Exception {
         this.builder.currentText.append("20140324");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "er-date");
@@ -64,7 +65,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementEresource() throws Exception {
+    void testEndElementEresource() throws Exception {
         this.eresourceHandler.handleEresource(isA(SAXEresource.class));
         expectLastCall();
         EasyMock.replay(this.eresourceHandler);
@@ -75,13 +76,13 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementEresources() throws Exception {
+    void testEndElementEresources() throws Exception {
         this.builder.endElement(null, null, "eresources");
         assertNull(this.builder.currentEresource);
     }
 
     @Test
-    public void testEndElementInstruction() throws Exception {
+    void testEndElementInstruction() throws Exception {
         this.builder.currentText.append("instruction");
         this.builder.currentLink = new SAXLink();
         this.builder.endElement(null, null, "instruction");
@@ -90,7 +91,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementIssn() throws Exception {
+    void testEndElementIssn() throws Exception {
         this.builder.currentText.append("issn");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "issn");
@@ -98,7 +99,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementKeywords() throws Exception {
+    void testEndElementKeywords() throws Exception {
         this.builder.currentText.append("keywords");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "keywords");
@@ -106,7 +107,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementLabel() throws Exception {
+    void testEndElementLabel() throws Exception {
         this.builder.currentText.append("labelData");
         this.builder.currentLink = new SAXLink();
         this.builder.endElement(null, null, "label");
@@ -115,7 +116,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementLink() throws Exception {
+    void testEndElementLink() throws Exception {
         this.builder.currentVersion = new SAXVersion();
         this.builder.currentLink = new SAXLink();
         this.builder.endElement(null, null, "link");
@@ -124,7 +125,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementMesh() throws Exception {
+    void testEndElementMesh() throws Exception {
         this.builder.currentText.append("mesh");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "mesh");
@@ -132,7 +133,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementMeshBroad() throws Exception {
+    void testEndElementMeshBroad() throws Exception {
         this.builder.currentText.append("mesh_broad");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "mesh_broad");
@@ -140,7 +141,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPrimaryType() throws Exception {
+    void testEndElementPrimaryType() throws Exception {
         this.builder.currentText.append("ptype");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "primaryType");
@@ -148,7 +149,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationAuthor() throws Exception {
+    void testEndElementPublicationAuthor() throws Exception {
         this.builder.currentText.append("author data");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationAuthor");
@@ -157,7 +158,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationAuthorFacetable() throws Exception {
+    void testEndElementPublicationAuthorFacetable() throws Exception {
         this.builder.currentText.append("publicationAuthorFacetable");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationAuthorFacetable");
@@ -166,7 +167,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationAuthorsText() throws Exception {
+    void testEndElementPublicationAuthorsText() throws Exception {
         this.builder.currentText.append("publicationAuthorsText");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationAuthorsText");
@@ -174,7 +175,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationAuthorTooLong() throws Exception {
+    void testEndElementPublicationAuthorTooLong() throws Exception {
         this.builder.currentText.append("publicationAuthor");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationAuthor");
@@ -183,7 +184,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublisher() throws Exception {
+    void testEndElementPublisher() throws Exception {
         this.builder.currentText.append("publisher");
         this.builder.currentVersion = new SAXVersion();
         this.builder.endElement(null, null, "publisher");
@@ -191,7 +192,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementSummaryHoldings() throws Exception {
+    void testEndElementSummaryHoldings() throws Exception {
         this.builder.currentText.append("summary-holdings");
         this.builder.currentVersion = new SAXVersion();
         this.builder.endElement(null, null, "summary-holdings");
@@ -199,7 +200,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementTitle() throws Exception {
+    void testEndElementTitle() throws Exception {
         this.builder.currentText.append("title");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "title");
@@ -207,7 +208,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementTitleAbbr() throws Exception {
+    void testEndElementTitleAbbr() throws Exception {
         this.builder.currentText.append("title_abbr");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "title_abbr");
@@ -215,7 +216,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementTitleAlt() throws Exception {
+    void testEndElementTitleAlt() throws Exception {
         this.builder.currentText.append("title_alt");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "title_alt");
@@ -223,7 +224,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementTitleShort() throws Exception {
+    void testEndElementTitleShort() throws Exception {
         this.builder.currentText.append("title_short");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "title_short");
@@ -231,20 +232,22 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementType() throws Exception {
+    void testEndElementType() throws Exception {
         this.builder.currentText.append("new type");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "type");
         assertEquals("new type", this.builder.currentEresource.getTypes().stream().findFirst().get());
     }
 
-    @Test(expected = EresourceDatabaseException.class)
-    public void testEndElementUnknown() throws Exception {
-        this.builder.endElement(null, null, "unknown-tag");
+    @Test
+    void testEndElementUnknown() throws Exception {
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.builder.endElement(null, null, "unknown-tag");
+        });
     }
 
     @Test
-    public void testEndElementUrl() throws Exception {
+    void testEndElementUrl() throws Exception {
         this.builder.currentText.append("urlData");
         this.builder.currentLink = new SAXLink();
         this.builder.endElement(null, null, "url");
@@ -253,7 +256,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementVersion() throws Exception {
+    void testEndElementVersion() throws Exception {
         this.builder.currentEresource = new SAXEresource();
         this.builder.currentVersion = new SAXVersion();
         this.builder.currentVersion.addLink(new SAXLink());
@@ -263,7 +266,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementVersionAdditionalText() throws Exception {
+    void testEndElementVersionAdditionalText() throws Exception {
         this.builder.currentText.append("version-additionalText");
         this.builder.currentVersion = new SAXVersion();
         this.builder.endElement(null, null, "version-additionalText");
@@ -271,21 +274,23 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementYear() throws Exception {
+    void testEndElementYear() throws Exception {
         this.builder.currentText.append("2012");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "year");
         assertEquals(2012, this.builder.currentEresource.getYear());
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testStartDocumentNullErHandler() throws Exception {
+    @Test
+    void testStartDocumentNullErHandler() throws Exception {
         this.builder.setEresourceHandler(null);
-        this.builder.startDocument();
+        assertThrows(IllegalStateException.class, () -> {
+            this.builder.startDocument();
+        });
     }
 
     @Test
-    public void testStartElementLink() throws Exception {
+    void testStartElementLink() throws Exception {
         EasyMock.replay(this.eresourceHandler);
         this.builder.startElement(null, null, "link", this.attributes);
         EasyMock.verify(this.eresourceHandler);
@@ -293,7 +298,7 @@ public class DefaultEresourceBuilderTest {
     }
 
     @Test
-    public void testStartElementVersion() throws Exception {
+    void testStartElementVersion() throws Exception {
         EasyMock.replay(this.eresourceHandler);
         this.builder.startElement(null, null, "version", this.attributes);
         EasyMock.verify(this.eresourceHandler);

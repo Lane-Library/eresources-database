@@ -1,16 +1,16 @@
 package edu.stanford.irt.eresources.sax;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.Version;
 
-public class SAXLinkTest {
+class SAXLinkTest {
 
     @Test
-    public final void testGetLinkText() {
+    final void testGetLinkText() {
         SAXLink link = new SAXLink();
         link.setLabel("label");
         SAXVersion version = new SAXVersion();
@@ -26,7 +26,7 @@ public class SAXLinkTest {
     }
 
     @Test
-    public final void testSAXLink() {
+    final void testSAXLink() {
         SAXLink link = new SAXLink();
         link.setInstruction("instruction");
         link.setLabel("label");

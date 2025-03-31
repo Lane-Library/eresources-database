@@ -1,21 +1,22 @@
 package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.Attributes;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import edu.stanford.irt.eresources.EresourceHandler;
 import edu.stanford.irt.eresources.pubmed.PubmedSpecialTypesManager;
 
-public class PubmedEresourceBuilderTest {
+class PubmedEresourceBuilderTest {
 
     private Attributes attributes;
 
@@ -25,8 +26,8 @@ public class PubmedEresourceBuilderTest {
 
     private PubmedSpecialTypesManager specialTypesManager;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         this.attributes = EasyMock.mock(Attributes.class);
         this.eresourceHandler = EasyMock.mock(EresourceHandler.class);
         this.specialTypesManager = EasyMock.mock(PubmedSpecialTypesManager.class);
@@ -37,7 +38,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationAuthor() throws Exception {
+    void testEndElementPublicationAuthor() throws Exception {
         this.builder.currentText.append("long author data".repeat(2_500));
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationAuthor");
@@ -47,7 +48,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationAuthorFacetable() throws Exception {
+    void testEndElementPublicationAuthorFacetable() throws Exception {
         this.builder.currentText.append("publicationAuthorFacetable");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationAuthorFacetable");
@@ -56,7 +57,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationAuthorsText() throws Exception {
+    void testEndElementPublicationAuthorsText() throws Exception {
         this.builder.currentText.append("publicationAuthorsText");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationAuthorsText");
@@ -64,7 +65,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationAuthorTooLong() throws Exception {
+    void testEndElementPublicationAuthorTooLong() throws Exception {
         this.builder.currentText.append("publicationAuthor");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationAuthor");
@@ -73,7 +74,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationDate() throws Exception {
+    void testEndElementPublicationDate() throws Exception {
         this.builder.currentText.append("publicationDate");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationDate");
@@ -81,7 +82,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationIssue() throws Exception {
+    void testEndElementPublicationIssue() throws Exception {
         this.builder.currentText.append("publicationIssue");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationIssue");
@@ -89,7 +90,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationLanguage() throws Exception {
+    void testEndElementPublicationLanguage() throws Exception {
         this.builder.currentText.append("spa");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationLanguage");
@@ -97,7 +98,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationPages() throws Exception {
+    void testEndElementPublicationPages() throws Exception {
         this.builder.currentText.append("publicationPages");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationPages");
@@ -105,7 +106,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationTitle() throws Exception {
+    void testEndElementPublicationTitle() throws Exception {
         this.builder.currentText.append("publicationTitle");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationTitle");
@@ -113,7 +114,7 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationType() throws Exception {
+    void testEndElementPublicationType() throws Exception {
         this.builder.currentText.append("publicationType");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationType");
@@ -121,20 +122,22 @@ public class PubmedEresourceBuilderTest {
     }
 
     @Test
-    public void testEndElementPublicationVolume() throws Exception {
+    void testEndElementPublicationVolume() throws Exception {
         this.builder.currentText.append("publicationVolume");
         this.builder.currentEresource = new SAXEresource();
         this.builder.endElement(null, null, "publicationVolume");
         assertEquals("publicationVolume", this.builder.currentEresource.getPublicationVolume());
     }
 
-    @Test(expected = EresourceDatabaseException.class)
-    public void testEndElementUnknown() throws Exception {
-        this.builder.endElement(null, null, "unknown-tag");
+    @Test
+    void testEndElementUnknown() {
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.builder.endElement(null, null, "unknown-tag");
+        });
     }
 
     @Test
-    public void testStartElementEresource() throws Exception {
+    void testStartElementEresource() throws Exception {
         expect(this.attributes.getValue("recordId")).andReturn("recordId").times(2);
         expect(this.attributes.getValue("type")).andReturn("type");
         expect(this.attributes.getValue("id")).andReturn("id");

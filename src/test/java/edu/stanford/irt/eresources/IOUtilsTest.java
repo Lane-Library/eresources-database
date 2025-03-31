@@ -1,7 +1,7 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.InputStream;
@@ -10,12 +10,12 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class IOUtilsTest {
+class IOUtilsTest {
 
     @Test
-    public final void testGetStream() throws Exception {
+    final void testGetStream() throws Exception {
         File self = new File("src/test/java/edu/stanford/irt/eresources/IOUtilsTest.java");
         InputStream is = IOUtils.getStream(new URI("file://" + self.getAbsolutePath()).toURL());
         StringWriter writer = new StringWriter();
@@ -24,7 +24,7 @@ public class IOUtilsTest {
     }
 
     @Test
-    public final void testGetUpdatedFiles() {
+    final void testGetUpdatedFiles() {
         List<File> files = IOUtils.getUpdatedFiles(new File("src/main/resources"), ".xml", 0);
         assertTrue(files.size() >= 10);
         files = IOUtils.getUpdatedFiles(new File("src/main/resources"), ".xml", Long.MAX_VALUE);

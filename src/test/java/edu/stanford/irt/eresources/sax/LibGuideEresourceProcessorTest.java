@@ -1,10 +1,11 @@
 package edu.stanford.irt.eresources.sax;
 
 import static org.easymock.EasyMock.isA;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.easymock.EasyMock;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -13,21 +14,22 @@ import org.xml.sax.helpers.AttributesImpl;
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 import net.sf.saxon.tree.util.AttributeCollectionImpl;
 
-public class LibGuideEresourceProcessorTest {
+class LibGuideEresourceProcessorTest {
 
     ContentHandler contentHandler;
 
     LibGuideEresourceProcessor processor;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         this.contentHandler = EasyMock.mock(ContentHandler.class);
-        this.processor = new LibGuideEresourceProcessor("file:src/test/resources/edu/stanford/irt/eresources/sax/oai-pmh-libguides.xml",
+        this.processor = new LibGuideEresourceProcessor(
+                "file:src/test/resources/edu/stanford/irt/eresources/sax/oai-pmh-libguides.xml",
                 this.contentHandler);
     }
 
     @Test
-    public final void testProcess() throws Exception {
+    final void testProcess() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().atLeastOnce();
         this.contentHandler.startElement(isA(String.class), isA(String.class), isA(String.class),
@@ -53,22 +55,30 @@ public class LibGuideEresourceProcessorTest {
         EasyMock.verify(this.contentHandler);
     }
 
-    @Test(expected = EresourceDatabaseException.class)
-    public final void testProcessException() throws Exception {
+    @Test
+    final void testProcessException() throws Exception {
         this.contentHandler.startDocument();
         EasyMock.expectLastCall().andThrow(new SAXException("foo"));
         EasyMock.replay(this.contentHandler);
-        this.processor.process();
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.processor.process();
+        });
         EasyMock.verify(this.contentHandler);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public final void testProcessNullBasepath() throws Exception {
-        (new LibGuideEresourceProcessor(null, this.contentHandler)).process();
+    @Test
+    final void testProcessNullBasepath() {
+        this.processor = new LibGuideEresourceProcessor(null, this.contentHandler);
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.processor.process();
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public final void testProcessNullContentHandler() throws Exception {
-        (new LibGuideEresourceProcessor("", null)).process();
+    @Test
+    final void testProcessNullContentHandler() {
+        this.processor = new LibGuideEresourceProcessor("", null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.processor.process();
+        });
     }
 }

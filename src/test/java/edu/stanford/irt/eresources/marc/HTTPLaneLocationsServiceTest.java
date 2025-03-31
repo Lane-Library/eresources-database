@@ -1,42 +1,46 @@
 package edu.stanford.irt.eresources.marc;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.URI;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.stanford.irt.eresources.EresourceDatabaseException;
 
-public class HTTPLaneLocationsServiceTest {
+class HTTPLaneLocationsServiceTest {
 
     private HTTPLaneLocationsService locationsService;
 
     private ObjectMapper mapper;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         this.mapper = new ObjectMapper();
         this.locationsService = new HTTPLaneLocationsService(this.mapper,
                 HTTPLaneLocationsServiceTest.class.getResource(".").toURI(), "locations");
     }
 
     @Test
-    public final void testGetLocationName() throws Exception {
+    final void testGetLocationName() {
         assertEquals(".Periodicals: A-Z", this.locationsService.getLocationName("LANE-PER"));
         assertEquals(null, this.locationsService.getLocationName("none"));
     }
 
-    @Test(expected = EresourceDatabaseException.class)
-    public final void testGetLocationsException() throws Exception {
-        this.locationsService = new HTTPLaneLocationsService(this.mapper, new URI("fake://foo"), "");
+    @Test
+    final void testGetLocationsException() throws Exception {
+        URI fakeUri = new URI("fake://foo");
+        assertThrows(EresourceDatabaseException.class, () -> {
+            this.locationsService = new HTTPLaneLocationsService(this.mapper, fakeUri, "");
+        });
     }
 
     @Test
-    public final void testGetLocationUrl() {
+    final void testGetLocationUrl() {
         assertEquals(null, this.locationsService.getLocationUrl("LANE-PER"));
         assertEquals(null, this.locationsService.getLocationUrl("none"));
     }

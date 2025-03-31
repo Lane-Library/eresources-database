@@ -1,21 +1,21 @@
 package edu.stanford.irt.eresources;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class JaxpXMLReaderTest {
+class JaxpXMLReaderTest {
 
     JaxpXMLReader reader;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         this.reader = new JaxpXMLReader();
     }
 
     @Test
-    public final void testJaxpXMLReader() {
+    final void testJaxpXMLReader() {
         assertNotNull(this.reader);
     }
 }

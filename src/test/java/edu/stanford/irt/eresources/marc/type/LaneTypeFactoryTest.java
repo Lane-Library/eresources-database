@@ -1,12 +1,12 @@
 package edu.stanford.irt.eresources.marc.type;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
@@ -16,9 +16,10 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
 /**
- * there's only one TypeFactory now, but keep separate unit tests for SUL and Lane
+ * there's only one TypeFactory now, but keep separate unit tests for SUL and
+ * Lane
  */
-public class LaneTypeFactoryTest extends MARCRecordSupport {
+class LaneTypeFactoryTest extends MARCRecordSupport {
 
     RecordCollection recordCollection;
 
@@ -26,8 +27,8 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
 
     CatalogRecordService recordService;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/lane",
@@ -40,7 +41,7 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryType() {
+    final void testGetPrimaryType() {
         assertEquals("Journal Digital", TypeFactory.getPrimaryType(this.records.get("55")));
         assertEquals("Image", TypeFactory.getPrimaryType(this.records.get("168269")));
         assertEquals("Software", TypeFactory.getPrimaryType(this.records.get("219590")));
@@ -56,7 +57,7 @@ public class LaneTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetTypes() {
+    final void testGetTypes() {
         assertTrue(TypeFactory.getTypes(this.records.get("55")).contains("Journal"));
         assertTrue(TypeFactory.getTypes(this.records.get("168269")).contains("Image"));
         assertTrue(TypeFactory.getTypes(this.records.get("287781")).contains("Article"));

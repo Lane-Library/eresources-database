@@ -4,18 +4,18 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class AltTitleMarcEresourceTest {
+class AltTitleMarcEresourceTest {
 
     private AltTitleMarcEresource eresource;
 
@@ -25,8 +25,8 @@ public class AltTitleMarcEresourceTest {
 
     private Subfield subfield;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.record = mock(Record.class);
         this.eresource = new AltTitleMarcEresource(Collections.singletonList(this.record), null, 1, null);
         this.field = mock(Field.class);
@@ -34,7 +34,7 @@ public class AltTitleMarcEresourceTest {
     }
 
     @Test
-    public void testGetTitle() {
+    void testGetTitle() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("249");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));

@@ -4,24 +4,24 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.mock;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import edu.stanford.irt.eresources.Eresource;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.Record.Field;
 import edu.stanford.lane.catalog.Record.Subfield;
 
-public class MarcVersionTest {
+class MarcVersionTest {
 
     private Eresource eresource;
 
@@ -35,8 +35,8 @@ public class MarcVersionTest {
 
     private MarcVersion version;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.record = mock(Record.class);
         this.field = mock(Field.class);
         this.subfield = mock(Subfield.class);
@@ -46,7 +46,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetAdditionalNoZ() {
+    void testGetAdditionalNoZ() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("866");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -58,7 +58,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetAdditionalText() {
+    void testGetAdditionalText() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("866");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -71,7 +71,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetAdditionalTextMultiple866() {
+    void testGetAdditionalTextMultiple866() {
         expect(this.record.getFields()).andReturn(Arrays.asList(new Field[] { this.field, this.field }));
         expect(this.field.getTag()).andReturn("866").times(2);
         expect(this.record.getFields()).andReturn(Collections.emptyList());
@@ -81,7 +81,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetAdditionalTextNo866() {
+    void testGetAdditionalTextNo866() {
         expect(this.record.getFields()).andReturn(Collections.emptyList()).times(2);
         replay(this.record);
         assertNull(this.version.getAdditionalText());
@@ -89,7 +89,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetAdditionalTextWith931() {
+    void testGetAdditionalTextWith931() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("866");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -106,7 +106,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetAdditionalTextWith931RelatedTitleBrowse() {
+    void testGetAdditionalTextWith931RelatedTitleBrowse() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("866");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -124,7 +124,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetCallNumber() {
+    void testGetCallNumber() {
         Subfield sf2 = mock(Subfield.class);
         List<Subfield> subs = new ArrayList<>();
         subs.add(this.subfield);
@@ -142,7 +142,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetCallNumberNull() {
+    void testGetCallNumberNull() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("856");
         replay(this.record, this.field);
@@ -151,7 +151,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetDates() {
+    void testGetDates() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("866");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
@@ -163,7 +163,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetDatesFromBib() {
+    void testGetDatesFromBib() {
         expect(this.record.getFields()).andReturn(Collections.emptyList()).times(3);
         expect(this.eresource.getPublicationText()).andReturn("");
         expect(this.eresource.getPrimaryType()).andReturn("Book");
@@ -173,7 +173,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetHoldingsAndDates() {
+    void testGetHoldingsAndDates() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("866").times(2);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
@@ -185,7 +185,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetItemCount() {
+    void testGetItemCount() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
         expect(this.field.getTag()).andReturn("888").times(3);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(3);
@@ -204,7 +204,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetItemCountNull() {
+    void testGetItemCountNull() {
         this.version = new MarcVersion(this.record, this.record, this.eresource, null);
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
         expect(this.field.getTag()).andReturn("999").times(3);
@@ -214,7 +214,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetLinks() {
+    void testGetLinks() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("856").times(2);
         replay(this.record, this.field, this.subfield);
@@ -223,7 +223,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetLocationName() {
+    void testGetLocationName() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("not-852");
         expect(this.field.getTag()).andReturn("852");
@@ -242,7 +242,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetLocationNameForBassett() {
+    void testGetLocationNameForBassett() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
         expect(this.field.getTag()).andReturn("not-852");
         expect(this.field.getTag()).andReturn("852");
@@ -268,7 +268,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetLocationNameForComponent() {
+    void testGetLocationNameForComponent() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
         expect(this.field.getTag()).andReturn("not-852");
         expect(this.field.getTag()).andReturn("852");
@@ -300,13 +300,13 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetLocationNameNull() {
+    void testGetLocationNameNull() {
         this.version = new MarcVersion(this.record, this.record, this.eresource, null);
         assertEquals(null, this.version.getLocationName());
     }
 
     @Test
-    public void testGetLocationUrl() {
+    void testGetLocationUrl() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getTag()).andReturn("852");
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(3);
@@ -325,7 +325,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetLocationUrlForComponent() {
+    void testGetLocationUrlForComponent() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(2);
         expect(this.field.getTag()).andReturn("not-852");
         expect(this.field.getTag()).andReturn("852");
@@ -356,7 +356,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetLocationUrlForRelated() {
+    void testGetLocationUrlForRelated() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(11);
         expect(this.field.getTag()).andReturn("not-852");
         expect(this.field.getTag()).andReturn("852");
@@ -394,13 +394,13 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetLocationUrlNull() {
+    void testGetLocationUrlNull() {
         this.version = new MarcVersion(this.record, this.record, this.eresource, null);
         assertEquals(null, this.version.getLocationUrl());
     }
 
     @Test
-    public void testGetPublisher() {
+    void testGetPublisher() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
         expect(this.field.getTag()).andReturn("856").times(3);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
@@ -414,7 +414,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testGetSummaryHoldings() {
+    void testGetSummaryHoldings() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(4);
         expect(this.field.getTag()).andReturn("866").times(4);
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(4);
@@ -427,7 +427,7 @@ public class MarcVersionTest {
     }
 
     @Test
-    public void testIsProxy() {
+    void testIsProxy() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
         expect(this.field.getTag()).andReturn("655");

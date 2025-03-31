@@ -1,10 +1,10 @@
 package edu.stanford.irt.eresources.marc.type;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
@@ -13,12 +13,12 @@ import edu.stanford.irt.eresources.marc.MARCRecordSupport;
 import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
-public class SulTypeFactoryHelperTest extends MARCRecordSupport {
+class SulTypeFactoryHelperTest extends MARCRecordSupport {
 
     CatalogRecordService recordService;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/sul",
@@ -26,7 +26,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetJournalPeriodicalTypes() {
+    final void testGetJournalPeriodicalTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -40,7 +40,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetDatabaseTypes() {
+    final void testGetDatabaseTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -56,7 +56,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetMapTypes() {
+    final void testGetMapTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -71,7 +71,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetArchiveManuscriptTypes() {
+    final void testGetArchiveManuscriptTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -86,7 +86,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetImageTypes() {
+    final void testGetImageTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -99,7 +99,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetVideoTypes() {
+    final void testGetVideoTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -111,7 +111,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetMusicRecordingTypes() {
+    final void testGetMusicRecordingTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -122,7 +122,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetMusicScoreTypes() {
+    final void testGetMusicScoreTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -133,7 +133,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetBookTypes() {
+    final void testGetBookTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -150,7 +150,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetSoftwareMultimediaTypes() {
+    final void testGetSoftwareMultimediaTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -161,7 +161,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetNewspaperTypes() {
+    final void testGetNewspaperTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -172,7 +172,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetObjectTypes() {
+    final void testGetObjectTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -183,7 +183,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetSoundRecordingTypes() {
+    final void testGetSoundRecordingTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();
@@ -194,7 +194,7 @@ public class SulTypeFactoryHelperTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetEmptyTypes() {
+    final void testGetEmptyTypes() {
         RecordCollection rc = new RecordCollection(this.recordService.getRecordStream(0));
         while (rc.hasNext()) {
             Record rec = rc.next();

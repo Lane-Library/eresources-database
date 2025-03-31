@@ -1,9 +1,9 @@
 package edu.stanford.irt.eresources.marc.type;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import edu.stanford.irt.eresources.CatalogRecordService;
@@ -13,16 +13,17 @@ import edu.stanford.lane.catalog.Record;
 import edu.stanford.lane.catalog.RecordCollection;
 
 /**
- * there's only one TypeFactory now, but keep separate unit tests for SUL and Lane
+ * there's only one TypeFactory now, but keep separate unit tests for SUL and
+ * Lane
  */
-public class SulTypeFactoryTest extends MARCRecordSupport {
+class SulTypeFactoryTest extends MARCRecordSupport {
 
     RecordCollection recordCollection;
 
     CatalogRecordService recordService;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.initialize();
         this.recordService = new FileCatalogRecordService("src/test/resources/edu/stanford/irt/eresources/marc/sul",
@@ -31,7 +32,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryTypeBookPrint() {
+    final void testGetPrimaryTypeBookPrint() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
             if ("355410".equals(getRecordId(rec)) || "8223791".equals(getRecordId(rec))
@@ -43,7 +44,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryTypeJournalPrint() {
+    final void testGetPrimaryTypeJournalPrint() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
             if ("2996989".equals(getRecordId(rec))) {
@@ -53,7 +54,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryTypeJournalDigital() {
+    final void testGetPrimaryTypeJournalDigital() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
             if ("8161047".equals(getRecordId(rec)) || "8208799".equals(getRecordId(rec))) {
@@ -63,7 +64,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryTypeVideo() {
+    final void testGetPrimaryTypeVideo() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
             if ("10009616".equals(getRecordId(rec)) || "9952520".equals(getRecordId(rec))) {
@@ -73,7 +74,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryTypeOther() {
+    final void testGetPrimaryTypeOther() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
             if ("10763925".equals(getRecordId(rec))) {
@@ -83,7 +84,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryTypeAudio() {
+    final void testGetPrimaryTypeAudio() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
             if ("10931045".equals(getRecordId(rec)) || "13112673".equals(getRecordId(rec))) {
@@ -93,7 +94,7 @@ public class SulTypeFactoryTest extends MARCRecordSupport {
     }
 
     @Test
-    public final void testGetPrimaryTypeBookDigital() {
+    final void testGetPrimaryTypeBookDigital() {
         while (this.recordCollection.hasNext()) {
             Record rec = this.recordCollection.next();
             if ("303511".equals(getRecordId(rec)) || "12467871".equals(getRecordId(rec))
