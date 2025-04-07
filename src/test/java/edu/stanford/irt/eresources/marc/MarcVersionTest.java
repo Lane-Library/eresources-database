@@ -414,6 +414,20 @@ class MarcVersionTest {
     }
 
     @Test
+    void testGetPublisherDuplication() {
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
+        expect(this.field.getTag()).andReturn("856").times(3);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
+        expect(this.subfield.getCode()).andReturn('y');
+        expect(this.subfield.getData()).andReturn("publisher");
+        expect(this.subfield.getCode()).andReturn('q');
+        expect(this.subfield.getData()).andReturn("publisher");
+        replay(this.record, this.field, this.subfield);
+        assertNull(this.version.getPublisher());
+        verify(this.record, this.field, this.subfield);
+    }
+
+    @Test
     void testGetSummaryHoldings() {
         expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(4);
         expect(this.field.getTag()).andReturn("866").times(4);
