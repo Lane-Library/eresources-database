@@ -401,11 +401,13 @@ class MarcVersionTest {
 
     @Test
     void testGetPublisher() {
-        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field));
-        expect(this.field.getTag()).andReturn("856");
-        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield));
+        expect(this.record.getFields()).andReturn(Collections.singletonList(this.field)).times(3);
+        expect(this.field.getTag()).andReturn("856").times(3);
+        expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
         expect(this.subfield.getCode()).andReturn('y');
         expect(this.subfield.getData()).andReturn("publisher");
+        expect(this.subfield.getCode()).andReturn('q');
+        expect(this.subfield.getData()).andReturn("not publisher");
         replay(this.record, this.field, this.subfield);
         assertEquals("publisher", this.version.getPublisher());
         verify(this.record, this.field, this.subfield);

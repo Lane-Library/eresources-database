@@ -102,8 +102,8 @@ class MarcLinkTest {
         Subfield sf2 = mock(Subfield.class);
         List<Subfield> sfs = Arrays.asList(sf1, sf2);
         expect(this.field.getSubfields()).andReturn(sfs).times(2);
-        expect(sf1.getCode()).andReturn('z').times(2);
-        expect(sf2.getCode()).andReturn('z').times(2);
+        expect(sf1.getCode()).andReturn('z').times(3);
+        expect(sf2.getCode()).andReturn('z').times(3);
         expect(sf1.getData()).andReturn("Available to Stanford-affiliated users.");
         expect(sf2.getData()).andReturn("z label");
         replay(this.field, this.subfield, sf1, sf2);
@@ -114,7 +114,7 @@ class MarcLinkTest {
     @Test
     void testGetLabelZ() {
         expect(this.field.getSubfields()).andReturn(Collections.singletonList(this.subfield)).times(2);
-        expect(this.subfield.getCode()).andReturn('z').times(2);
+        expect(this.subfield.getCode()).andReturn('z').times(3);
         expect(this.subfield.getData()).andReturn("z label");
         replay(this.field, this.subfield);
         assertEquals("z label", this.link.getLabel());
